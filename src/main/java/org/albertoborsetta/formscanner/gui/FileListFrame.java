@@ -1,5 +1,6 @@
 package org.albertoborsetta.formscanner.gui;
 
+import java.awt.Component;
 import java.awt.EventQueue;
 
 import javax.swing.ImageIcon;
@@ -26,13 +27,13 @@ public class FileListFrame extends JInternalFrame {
 	public FileListFrame(List<String> fileList) {
 		setName("fileListFrame");
 		setTitle("Images");
-		setBounds(100, 100, 450, 300);
+		setBounds(100, 100, 198, 597);
+		setLocation(10, 10);
 		
-		setFrameIcon(new ImageIcon(FormScanner.class.getResource("/com/formscanner/gui/icons/file.gif")));
+		setFrameIcon(new ImageIcon(FormScanner.class.getResource("/org/albertoborsetta/formscanner/gui/icons/file.gif")));
 		setIconifiable(true);
 		setResizable(true);
 		setMaximizable(true);
-		setSize(300, 300);
 		
 		JScrollPane scrollPane = new JScrollPane();
 		getContentPane().add(scrollPane, BorderLayout.CENTER);

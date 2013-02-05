@@ -69,7 +69,7 @@ public class ToolBar extends JPanel {
 			setMaximumSize(new Dimension(26, 26));
 			setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
 			setToolTipText("Open images");
-			setIcon(new ImageIcon(FormScanner.class.getResource("/com/formscanner/gui/icons/open.gif")));
+			setIcon(new ImageIcon(FormScanner.class.getResource("/org/albertoborsetta/formscanner/gui/icons/open.gif")));
 		}
 		
 		public void actionPerformed(ActionEvent e) {
@@ -85,7 +85,7 @@ public class ToolBar extends JPanel {
 			setPreferredSize(new Dimension(26, 26));
 			setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
 			setMaximumSize(new Dimension(26, 26));
-			setIcon(new ImageIcon(FormScanner.class.getResource("/com/formscanner/gui/icons/save.gif")));
+			setIcon(new ImageIcon(FormScanner.class.getResource("/org/albertoborsetta/formscanner/gui/icons/save.gif")));
 			setToolTipText("Save results");
 		}
 		
@@ -114,7 +114,7 @@ public class ToolBar extends JPanel {
 			setPreferredSize(new Dimension(26, 26));
 			setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
 			setMaximumSize(new Dimension(26, 26));
-			setIcon(new ImageIcon(FormScanner.class.getResource("/com/formscanner/gui/icons/edit.png")));
+			setIcon(new ImageIcon(FormScanner.class.getResource("/org/albertoborsetta/formscanner/gui/icons/edit.png")));
 			setToolTipText("Rename image files");
 		}		
 		
