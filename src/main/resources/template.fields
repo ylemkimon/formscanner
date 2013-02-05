@@ -1,0 +1,19 @@
+a row single yearsInThane 1 2 3 4 5
+b row single yearsInSlum 1 2 3 4 5
+c row single nameOnElectoral yes no
+d row single rationCard yes no
+e row single rationCardColor orange yellow
+f grid column rationCardNumber 0 1 2 3 4 5 6 7 8
+g row single voterId yes no
+h grid column dateOfBirth 0 1 2 3 4 5 6 7 8
+i column single motherTongue marathi hindi kannada other
+j column single houseType kaccha semipukka pukka house
+k column single houseOwner own rent
+l column single vehicle none 2wh bike other
+m column single garbage bin open other
+n column single disposal soakpit septic sewage
+o column single toilet own public other
+p column single water own public
+q column single electricity ownmeter borrowed other
+r column multiple comforts cable fan fridge newspaper
+s column multiple moreComforts telephone mixer tv 
