@@ -6,13 +6,15 @@ import javax.swing.JTextField;
 import javax.swing.JLabel;
 import javax.swing.JButton;
 import javax.swing.border.BevelBorder;
+import javax.swing.event.CaretEvent;
+import javax.swing.event.CaretListener;
 
 import org.albertoborsetta.formscanner.gui.font.FormScannerFont;
 import org.albertoborsetta.formscanner.model.FormScannerModel;
 
 import java.awt.BorderLayout;
-import java.awt.Dimension;
 
+import org.apache.commons.io.FilenameUtils;
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
@@ -23,6 +25,7 @@ import com.jgoodies.forms.factories.FormFactory;
 
 public class RenameFileFrame extends JInternalFrame {
 	private JTextField textField;
+	private JLabel lblext;
 	private JLabel lblNewLabel;
 	private FormScannerModel model;
 	/**
@@ -56,11 +59,16 @@ public class RenameFileFrame extends JInternalFrame {
 		JLabel lblNewName = new JLabel("New name:");
 		panel.add(lblNewName, "2, 2, right, default");
 		
-		textField = new JTextField(fileName);
+		textField = new JTextField(FilenameUtils.removeExtension(fileName));
 		panel.add(textField, "4, 2, 3, 1, fill, default");
 		textField.setColumns(10);
+		textField.addCaretListener(new CaretListener() {
+			public void caretUpdate(CaretEvent e) {
+				model.renameNextFile();				
+			}
+		});
 		
-		JLabel lblext = new JLabel(".ext");
+		lblext = new JLabel('.' + FilenameUtils.getExtension(fileName));
 		panel.add(lblext, "8, 2");		
 		
 		JButton btnNewButton = new JButton("OK");
@@ -82,22 +90,17 @@ public class RenameFileFrame extends JInternalFrame {
 		
 		lblNewLabel = new StatusBar("Renaming: " + fileName);
 		getContentPane().add(lblNewLabel, BorderLayout.SOUTH);
-		
-		/*
-		 * 
-		
-		
-		 */
-
 	}
 	
 	public void updateRenamedFile(String fileName) {
 		lblNewLabel.setText("Rename: " + fileName);
-		textField.setText(fileName);
+		textField.setText(FilenameUtils.removeExtension(fileName));
+		lblext.setText('.' + FilenameUtils.getExtension(fileName));
 	}
 	
 	public String getNewFileName() {
-		return textField.getText();
+		String fileName = textField.getText() + lblext.getText(); 
+		return fileName;
 	}
 	
 	private class StatusBar extends JLabel {
@@ -108,5 +111,4 @@ public class RenameFileFrame extends JInternalFrame {
 			setFont(FormScannerFont.getFont());
 		}
 	}
-
 }

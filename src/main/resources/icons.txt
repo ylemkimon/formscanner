@@ -1,0 +1,15 @@
+crystal
+rename = lc_editdoc.png
+open = lc_open.png
+save = lc_save.png
+
+tango
+save = lc_save.png
+open = lc_open.png
+rename = lc_editdoc.png
+results = lc05539.png
+scan = arrow.png
+exit = lc05303.png
+image = lc_graphicdraft.png/lx03140.png/lx03219.png
+annotation = lc_insertannotation.png
+table = lc_inserttable.png

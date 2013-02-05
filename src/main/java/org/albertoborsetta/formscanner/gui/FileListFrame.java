@@ -30,7 +30,6 @@ public class FileListFrame extends JInternalFrame {
 		setBounds(100, 100, 198, 597);
 		setLocation(10, 10);
 		
-		setFrameIcon(new ImageIcon(FormScanner.class.getResource("/org/albertoborsetta/formscanner/gui/icons/file.gif")));
 		setIconifiable(true);
 		setResizable(true);
 		setMaximizable(true);

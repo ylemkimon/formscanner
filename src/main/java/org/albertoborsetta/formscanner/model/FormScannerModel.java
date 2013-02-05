@@ -9,7 +9,7 @@ import java.util.Map;
 import org.albertoborsetta.formscanner.gui.FileListFrame;
 import org.albertoborsetta.formscanner.gui.FormScanner;
 import org.albertoborsetta.formscanner.gui.RenameFileFrame;
-
+import org.apache.commons.io.FilenameUtils;
 
 public class FormScannerModel {
 
@@ -26,8 +26,9 @@ public class FormScannerModel {
 
 	public void setFileList(File[] fileArray) {		
 		for (File file: fileArray) {
-			fileList.put(getFileName(file), file);
-			openedFiles.add(getFileName(file));
+			String fileName = file.getName();
+			fileList.put(fileName, file);
+			openedFiles.add(fileName);
 		}
 		if (!openedFiles.isEmpty()) {
 			fileListFrame = new FileListFrame(openedFiles);
@@ -42,8 +43,7 @@ public class FormScannerModel {
 			
 			renamedFileIndex = 0;
 			renameFileFrame = new RenameFileFrame(this, openedFiles.get(renamedFileIndex));
-			view.arrangeFrame(renameFileFrame);
-			
+			view.arrangeFrame(renameFileFrame);			
 		}		
 	}
 	
