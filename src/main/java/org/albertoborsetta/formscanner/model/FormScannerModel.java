@@ -13,8 +13,7 @@ import org.apache.commons.io.FilenameUtils;
 
 public class FormScannerModel {
 
-	private Map<String, File> fileList = new HashMap<String, File>();
-	private List<String> openedFiles = new ArrayList<String>();
+	private Map<Integer, File> openedFiles = new HashMap<Integer, File>();
 	private FileListFrame fileListFrame;
 	private RenameFileFrame renameFileFrame;
 	private FormScanner view;
@@ -24,70 +23,61 @@ public class FormScannerModel {
 		this.view = view;
 	}
 
-	public void setFileList(File[] fileArray) {		
+	public void openFiles(File[] fileArray) {
+		Integer fileIndex = 0;
 		for (File file: fileArray) {
-			String fileName = file.getName();
-			fileList.put(fileName, file);
-			openedFiles.add(fileName);
+			openedFiles.put(fileIndex++, file);
 		}
 		if (!openedFiles.isEmpty()) {
-			fileListFrame = new FileListFrame(openedFiles);
+			fileListFrame = new FileListFrame(getOpenedFileList());
 			view.arrangeFrame(fileListFrame);
 		}
 	}
 	
 	public void renameFiles() {
 		if (!openedFiles.isEmpty()) {
+			int renamedFileIndex = fileListFrame.getSelectedItemIndex();
 			fileListFrame.selectFile(renamedFileIndex);
 			view.arrangeFrame(fileListFrame);
 			
-			renamedFileIndex = 0;
-			renameFileFrame = new RenameFileFrame(this, openedFiles.get(renamedFileIndex));
+			renameFileFrame = new RenameFileFrame(this, getFileNameByIndex(renamedFileIndex)); 
 			view.arrangeFrame(renameFileFrame);			
 		}		
 	}
 	
 	public void renameNextFile() {
 		String newFileName = renameFileFrame.getNewFileName();
-		String oldFileName = openedFiles.get(renamedFileIndex);
+		String oldFileName = getFileNameByIndex(renamedFileIndex);
 		
 		if (!newFileName.equalsIgnoreCase(oldFileName)) {		
-			File newFile = renameFile(newFileName, oldFileName);
+			File newFile = renameFile(renamedFileIndex, newFileName, oldFileName);
 		
-			updateFileList(newFileName, oldFileName, newFile);
-			
-			updateOpenedFiles(newFileName);
+			updateFileList(renamedFileIndex, newFile);
 		}
 		
-		// fileListFrame = new FileListFrame(openedFiles);
-		fileListFrame.updateFileList(openedFiles);
+		fileListFrame.updateFileList(getOpenedFileList());
 		renamedFileIndex++;
 		
-		if (openedFiles.size()>renamedFileIndex) {			
+		if (openedFiles.size() > renamedFileIndex) {	
 			fileListFrame.selectFile(renamedFileIndex);
 		}
 		view.arrangeFrame(fileListFrame);
 		
 		if (openedFiles.size()>renamedFileIndex) {
-			renameFileFrame.updateRenamedFile(openedFiles.get(renamedFileIndex));
+			renameFileFrame.updateRenamedFile(getFileNameByIndex(renamedFileIndex));
 			view.arrangeFrame(renameFileFrame);
 		} else {
 			view.disposeFrame(renameFileFrame);
 		}
 	}
 
-	private void updateOpenedFiles(String newFileName) {
-		openedFiles.remove(renamedFileIndex);
-		openedFiles.add(renamedFileIndex, newFileName);
+	private void updateFileList(Integer index, File file) {
+		openedFiles.remove(index);
+		openedFiles.put(index, file);
 	}
 
-	private void updateFileList(String newFileName, String oldFileName, File newFile) {
-		fileList.remove(oldFileName);
-		fileList.put(newFileName, newFile);
-	}
-
-	private File renameFile(String newFileName, String oldFileName) {
-		File oldFile = fileList.get(oldFileName);
+	private File renameFile(int index, String newFileName, String oldFileName) {
+		File oldFile = openedFiles.get(oldFileName);
 		String absolutePath = oldFile.getPath();
 		String filePath = absolutePath.substring(0,absolutePath.lastIndexOf(File.separator));
 
@@ -109,7 +99,18 @@ public class FormScannerModel {
 		return newFile;
 	}
 	
-	private String getFileName(File file) {
-		return file.getName();		
+	private List<String> getOpenedFileList() {
+		List<String> fileList = new ArrayList<String>();
+		
+		for (int i = 0; i < openedFiles.size(); i++) {
+			fileList.add(getFileNameByIndex(i));
+		}
+		
+		return fileList;
 	}
+
+	private String getFileNameByIndex(int index) {
+		return openedFiles.get(index).getName();
+	}
+	
 }

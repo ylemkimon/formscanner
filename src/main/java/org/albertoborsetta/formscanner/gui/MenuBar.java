@@ -107,7 +107,7 @@ private class FileMenu extends JMenu {
 	}
 	
 	private void openFiles() {
-		model.setFileList(choose());
+		model.openFiles(choose());
 	}
 	
 	private void renameFiles() {

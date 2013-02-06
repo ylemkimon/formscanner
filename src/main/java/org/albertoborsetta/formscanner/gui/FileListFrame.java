@@ -6,6 +6,8 @@ import java.awt.EventQueue;
 import javax.swing.ImageIcon;
 import javax.swing.JInternalFrame;
 import javax.swing.JScrollPane;
+import javax.swing.ListSelectionModel;
+
 import java.awt.BorderLayout;
 import java.util.List;
 
@@ -39,6 +41,7 @@ public class FileListFrame extends JInternalFrame {
 		
 		list = new JList(fileList.toArray());
 		list.setFont(FormScannerFont.getFont());
+		// list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		scrollPane.setViewportView(list);
 	}
 	
@@ -50,4 +53,15 @@ public class FileListFrame extends JInternalFrame {
 		list.setSelectedIndex(index);
 	}
 	
+	public String getSelectedItem() {
+		return list.getSelectedValue().toString();
+	}
+	
+	public int getSelectedItemIndex() {
+		int index = 0;
+		if (!list.isSelectionEmpty()) {
+			index = list.getSelectedIndex(); 
+		}
+		return index;
+	}
 }
