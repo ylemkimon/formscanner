@@ -13,6 +13,7 @@ import javax.swing.JMenuItem;
 import javax.swing.KeyStroke;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
+import org.albertoborsetta.formscanner.commons.Constants;
 import org.albertoborsetta.formscanner.gui.font.FormScannerFont;
 import org.albertoborsetta.formscanner.model.FormScannerModel;
 
@@ -102,7 +103,7 @@ private class FileMenu extends JMenu {
 		}
 		
 		public void actionPerformed(ActionEvent e) {
-			renameFiles();
+			renameFiles(Constants.RENAME_FILE_FIRST);
 		}
 	}
 	
@@ -110,8 +111,8 @@ private class FileMenu extends JMenu {
 		model.openFiles(choose());
 	}
 	
-	private void renameFiles() {
-		model.renameFiles();
+	private void renameFiles(int action) {
+		model.renameFiles(action);
 	}
 	
 	private static File[] choose() {

@@ -16,6 +16,7 @@ import javax.swing.JToolBar;
 import javax.swing.border.EtchedBorder;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
+import org.albertoborsetta.formscanner.commons.Constants;
 import org.albertoborsetta.formscanner.gui.font.FormScannerFont;
 import org.albertoborsetta.formscanner.model.FormScannerModel;
 
@@ -119,7 +120,7 @@ public class ToolBar extends JPanel {
 		}		
 		
 		public void actionPerformed(ActionEvent e) {
-			renameFiles();
+			renameFiles(Constants.RENAME_FILE_FIRST);
 		}
 	}
 	
@@ -127,8 +128,8 @@ public class ToolBar extends JPanel {
 		model.openFiles(choose());
 	}
 	
-	private void renameFiles() {
-		model.renameFiles();
+	private void renameFiles(int action) {
+		model.renameFiles(action);
 	}
 	
 	private static File[] choose() {

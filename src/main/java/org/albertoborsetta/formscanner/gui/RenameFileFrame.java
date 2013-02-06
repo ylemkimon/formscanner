@@ -1,5 +1,11 @@
 package org.albertoborsetta.formscanner.gui;
 
+import org.albertoborsetta.formscanner.commons.Constants;
+import org.albertoborsetta.formscanner.gui.font.FormScannerFont;
+import org.albertoborsetta.formscanner.model.FormScannerModel;
+
+import org.apache.commons.io.FilenameUtils;
+
 import javax.swing.JInternalFrame;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
@@ -9,25 +15,23 @@ import javax.swing.border.BevelBorder;
 import javax.swing.event.CaretEvent;
 import javax.swing.event.CaretListener;
 
-import org.albertoborsetta.formscanner.gui.font.FormScannerFont;
-import org.albertoborsetta.formscanner.model.FormScannerModel;
-
 import java.awt.BorderLayout;
-
-import org.apache.commons.io.FilenameUtils;
-
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
+
 import com.jgoodies.forms.layout.FormLayout;
 import com.jgoodies.forms.layout.ColumnSpec;
 import com.jgoodies.forms.layout.RowSpec;
 import com.jgoodies.forms.factories.FormFactory;
 
 public class RenameFileFrame extends JInternalFrame {
-	private JTextField textField;
-	private JLabel lblext;
-	private JLabel lblNewLabel;
+	private JTextField fileNameField;
+	private JLabel fileExtensionField;
+	private JLabel statusBar;
 	private FormScannerModel model;
+	
 	/**
 	 * Create the frame.
 	 */
@@ -36,6 +40,7 @@ public class RenameFileFrame extends JInternalFrame {
 		
 		setBounds(100, 100, 396, 141);
 		setName("renameFileFrame");
+		setClosable(true);
 		
 		setTitle("Rename file");
 		
@@ -56,50 +61,33 @@ public class RenameFileFrame extends JInternalFrame {
 				FormFactory.RELATED_GAP_ROWSPEC,
 				FormFactory.DEFAULT_ROWSPEC,}));
 		
-		JLabel lblNewName = new JLabel("New name:");
-		panel.add(lblNewName, "2, 2, right, default");
+		JLabel newFileNameLabel = new JLabel("New name:");
+		panel.add(newFileNameLabel, "2, 2, right, default");
 		
-		textField = new JTextField(FilenameUtils.removeExtension(fileName));
-		panel.add(textField, "4, 2, 3, 1, fill, default");
-		textField.setColumns(10);
-		textField.addCaretListener(new CaretListener() {
-			public void caretUpdate(CaretEvent e) {
-				model.renameNextFile();				
-			}
-		});
+		fileNameField = new FileNameField(FilenameUtils.removeExtension(fileName));		
+		panel.add(fileNameField, "4, 2, 3, 1, fill, default");
 		
-		lblext = new JLabel('.' + FilenameUtils.getExtension(fileName));
-		panel.add(lblext, "8, 2");		
+		fileExtensionField = new JLabel('.' + FilenameUtils.getExtension(fileName));
+		panel.add(fileExtensionField, "8, 2");		
 		
-		JButton btnNewButton = new JButton("OK");
-		btnNewButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				model.renameNextFile();
-			}
-		});
-		panel.add(btnNewButton, "4, 4");
+		JButton okButton = new OKButton();
+		panel.add(okButton , "4, 4");
 		
-		JButton btnNewButton_1 = new JButton("Cancel");
-		btnNewButton_1.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				// TODO
-			}
-		});
-		panel.add(btnNewButton_1, "6, 4");
-		
-		
-		lblNewLabel = new StatusBar("Renaming: " + fileName);
-		getContentPane().add(lblNewLabel, BorderLayout.SOUTH);
+		JButton cancelButton = new CancelButton();
+		panel.add(cancelButton, "6, 4");
+				
+		statusBar = new StatusBar("Renaming: " + fileName);
+		getContentPane().add(statusBar, BorderLayout.SOUTH);
 	}
 	
 	public void updateRenamedFile(String fileName) {
-		lblNewLabel.setText("Rename: " + fileName);
-		textField.setText(FilenameUtils.removeExtension(fileName));
-		lblext.setText('.' + FilenameUtils.getExtension(fileName));
+		statusBar.setText("Rename: " + fileName);
+		fileNameField.setText(FilenameUtils.removeExtension(fileName));
+		fileExtensionField.setText('.' + FilenameUtils.getExtension(fileName));
 	}
 	
 	public String getNewFileName() {
-		String fileName = textField.getText() + lblext.getText(); 
+		String fileName = fileNameField.getText() + fileExtensionField.getText(); 
 		return fileName;
 	}
 	
@@ -110,5 +98,52 @@ public class RenameFileFrame extends JInternalFrame {
 			setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
 			setFont(FormScannerFont.getFont());
 		}
+	}
+	
+	private class OKButton extends JButton implements ActionListener {
+		
+		public OKButton() {
+			super("OK");
+			addActionListener(this);
+		}
+
+		public void actionPerformed(ActionEvent e) {
+			renameFiles(Constants.RENAME_FILE_CURRENT);
+		}
+	}
+	
+	private class CancelButton extends JButton implements ActionListener {
+		
+		public CancelButton() {
+			super("Cancel");
+			addActionListener(this);
+		}
+
+		public void actionPerformed(ActionEvent e) {
+			renameFiles(Constants.RENAME_FILE_SKIP);
+		}
+	}
+	
+	private class FileNameField extends JTextField implements FocusListener {
+		
+		public FileNameField(String text) {
+			super(text);
+			setColumns(10);
+			addFocusListener(this);
+		}
+
+		public void focusGained(FocusEvent e) {
+			// Nothing to do			
+		}
+
+		public void focusLost(FocusEvent e) {
+			// renameFiles(Constants.RENAME_FILE_CURRENT);
+		}
+		
+		
+	}
+	
+	private void renameFiles(int action) {
+		model.renameFiles(action);
 	}
 }

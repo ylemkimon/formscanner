@@ -39,9 +39,7 @@ public class FileListFrame extends JInternalFrame {
 		JScrollPane scrollPane = new JScrollPane();
 		getContentPane().add(scrollPane, BorderLayout.CENTER);
 		
-		list = new JList(fileList.toArray());
-		list.setFont(FormScannerFont.getFont());
-		// list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		list = new FileList(fileList.toArray());
 		scrollPane.setViewportView(list);
 	}
 	
@@ -57,11 +55,25 @@ public class FileListFrame extends JInternalFrame {
 		return list.getSelectedValue().toString();
 	}
 	
+	public String getItemByIndex(int index) {
+		list.setSelectedIndex(index);
+		return list.getSelectedValue().toString();
+	}
+	
 	public int getSelectedItemIndex() {
 		int index = 0;
 		if (!list.isSelectionEmpty()) {
 			index = list.getSelectedIndex(); 
 		}
 		return index;
+	}
+	
+	private class FileList extends JList {
+		
+		public FileList(Object[] list) {
+			super(list); 
+			setFont(FormScannerFont.getFont());
+			setSelectionMode(ListSelectionModel.SINGLE_SELECTION);			
+		}
 	}
 }
