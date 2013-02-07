@@ -32,9 +32,7 @@ public class ToolBar extends JPanel {
 		
 		model = formScannerModel;
 		
-		setPreferredSize(new Dimension(10, 30));
-		setMinimumSize(new Dimension(10, 50));
-		setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
+		setBorder(new EtchedBorder(EtchedBorder.RAISED, null, null));
 		setComponentOrientation(ComponentOrientation.LEFT_TO_RIGHT);
 		
 		setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
@@ -65,9 +63,6 @@ public class ToolBar extends JPanel {
 		
 		public OpenButton() {
 			addActionListener(this);
-			setMinimumSize(new Dimension(26, 26));
-			setPreferredSize(new Dimension(26, 26));
-			setMaximumSize(new Dimension(26, 26));
 			setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
 			setToolTipText("Open images");
 			setIcon(new ImageIcon(FormScanner.class.getResource("/org/albertoborsetta/formscanner/gui/icons/crystal/lc_open.png")));
@@ -82,10 +77,7 @@ public class ToolBar extends JPanel {
 		
 		public SaveButton() {
 			addActionListener(this);
-			setMinimumSize(new Dimension(26, 26));
-			setPreferredSize(new Dimension(26, 26));
 			setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
-			setMaximumSize(new Dimension(26, 26));
 			setIcon(new ImageIcon(FormScanner.class.getResource("/org/albertoborsetta/formscanner/gui/icons/crystal/lc_save.png")));
 			setToolTipText("Save results");
 		}
@@ -111,10 +103,7 @@ public class ToolBar extends JPanel {
 		
 		public RenameButton() {
 			addActionListener(this);
-			setMinimumSize(new Dimension(26, 26));
-			setPreferredSize(new Dimension(26, 26));
 			setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
-			setMaximumSize(new Dimension(26, 26));
 			setIcon(new ImageIcon(FormScanner.class.getResource("/org/albertoborsetta/formscanner/gui/icons/crystal/lc_editdoc.png")));
 			setToolTipText("Rename image files");
 		}		
