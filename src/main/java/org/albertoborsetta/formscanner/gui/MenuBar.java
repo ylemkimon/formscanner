@@ -17,7 +17,6 @@ import org.albertoborsetta.formscanner.commons.Constants;
 import org.albertoborsetta.formscanner.gui.font.FormScannerFont;
 import org.albertoborsetta.formscanner.model.FormScannerModel;
 
-
 public class MenuBar extends JMenuBar {
 	
 	private static FormScannerModel model;

@@ -1,7 +1,6 @@
 package org.albertoborsetta.formscanner.gui;
 
 import java.awt.EventQueue;
-import java.awt.Font;
 
 import javax.swing.JFrame;
 import javax.swing.JMenuBar;
@@ -14,16 +13,12 @@ import javax.swing.JPanel;
 import javax.swing.JInternalFrame;
 import javax.swing.JDesktopPane;
 
-import org.albertoborsetta.formscanner.gui.font.FormScannerFont;
 import org.albertoborsetta.formscanner.model.FormScannerModel;
 
 public class FormScanner extends JFrame {
 
-	private Font font = FormScannerFont.getFont();
 	private static FormScannerModel model;
 	private static JDesktopPane desktopPane;
-	private static JInternalFrame fileListFrame;
-	private static JInternalFrame renameFileFrame;
 
 	/**
 	 * Launch the application.

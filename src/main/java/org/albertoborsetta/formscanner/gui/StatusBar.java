@@ -7,7 +7,6 @@ import javax.swing.border.BevelBorder;
 
 import org.albertoborsetta.formscanner.model.FormScannerModel;
 
-
 public class StatusBar extends JPanel{
 	
 	private static FormScannerModel model;

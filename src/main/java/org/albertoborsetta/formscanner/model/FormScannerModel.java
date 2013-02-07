@@ -4,13 +4,20 @@ import org.albertoborsetta.formscanner.commons.Constants;
 import org.albertoborsetta.formscanner.gui.FileListFrame;
 import org.albertoborsetta.formscanner.gui.FormScanner;
 import org.albertoborsetta.formscanner.gui.RenameFileFrame;
+import org.albertoborsetta.formscanner.gui.RenameFileImageFrame;
+import org.albertoborsetta.formscanner.parser.ImageUtil;
 
+import java.awt.Image;
+import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.IOException;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import javax.imageio.ImageIO;
 
 import org.apache.commons.io.FilenameUtils;
 
@@ -19,8 +26,10 @@ public class FormScannerModel {
 	private Map<Integer, File> openedFiles = new HashMap<Integer, File>();
 	private FileListFrame fileListFrame;
 	private RenameFileFrame renameFileFrame;
+	private RenameFileImageFrame renameFileImageFrame;
 	private FormScanner view;
 	private int renamedFileIndex = 0;
+	private BufferedImage image;
     
 	public FormScannerModel(FormScanner view) {
 		this.view = view;
@@ -45,7 +54,15 @@ public class FormScannerModel {
 				fileListFrame.selectFile(renamedFileIndex);
 				
 				renameFileFrame = new RenameFileFrame(this, getFileNameByIndex(renamedFileIndex)); 
-				view.arrangeFrame(renameFileFrame);			
+				view.arrangeFrame(renameFileFrame);
+				
+				try {                
+					image = ImageIO.read(openedFiles.get(renamedFileIndex));
+				} catch (IOException ex) {
+					// handle exception...
+				}
+				
+				renameFileImageFrame = new RenameFileImageFrame(image);
 			}			
 			break;
 		case Constants.RENAME_FILE_CURRENT:
@@ -59,18 +76,6 @@ public class FormScannerModel {
 			}
 			
 			fileListFrame.updateFileList(getOpenedFileList());
-			renamedFileIndex++;
-			
-			if (openedFiles.size() > renamedFileIndex) {	
-				fileListFrame.selectFile(renamedFileIndex);
-			}
-			
-			if (openedFiles.size()>renamedFileIndex) {
-				renameFileFrame.updateRenamedFile(getFileNameByIndex(renamedFileIndex));
-			} else {
-				view.disposeFrame(renameFileFrame);
-			}
-			break;
 		case Constants.RENAME_FILE_SKIP:
 			renamedFileIndex++;
 			
@@ -129,6 +134,5 @@ public class FormScannerModel {
 
 	private String getFileNameByIndex(int index) {
 		return openedFiles.get(index).getName();
-	}
-	
+	}	
 }

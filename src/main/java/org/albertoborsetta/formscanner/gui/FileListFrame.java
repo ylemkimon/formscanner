@@ -1,9 +1,5 @@
 package org.albertoborsetta.formscanner.gui;
 
-import java.awt.Component;
-import java.awt.EventQueue;
-
-import javax.swing.ImageIcon;
 import javax.swing.JInternalFrame;
 import javax.swing.JScrollPane;
 import javax.swing.ListSelectionModel;
@@ -14,9 +10,6 @@ import java.util.List;
 import javax.swing.JList;
 
 import org.albertoborsetta.formscanner.gui.font.FormScannerFont;
-
-import java.awt.event.InputMethodListener;
-import java.awt.event.InputMethodEvent;
 
 public class FileListFrame extends JInternalFrame {
 	
