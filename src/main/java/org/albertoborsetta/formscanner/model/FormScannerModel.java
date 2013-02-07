@@ -29,7 +29,6 @@ public class FormScannerModel {
 	private RenameFileImageFrame renameFileImageFrame;
 	private FormScanner view;
 	private int renamedFileIndex = 0;
-	private BufferedImage image;
     
 	public FormScannerModel(FormScanner view) {
 		this.view = view;
@@ -55,14 +54,9 @@ public class FormScannerModel {
 				
 				renameFileFrame = new RenameFileFrame(this, getFileNameByIndex(renamedFileIndex)); 
 				view.arrangeFrame(renameFileFrame);
-				
-				try {                
-					image = ImageIO.read(openedFiles.get(renamedFileIndex));
-				} catch (IOException ex) {
-					// handle exception...
-				}
-				
-				renameFileImageFrame = new RenameFileImageFrame(image);
+
+				renameFileImageFrame = new RenameFileImageFrame(this, openedFiles.get(renamedFileIndex));
+				view.arrangeFrame(renameFileImageFrame);
 			}			
 			break;
 		case Constants.RENAME_FILE_CURRENT:

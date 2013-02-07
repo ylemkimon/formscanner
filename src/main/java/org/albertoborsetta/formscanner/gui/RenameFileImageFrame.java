@@ -1,44 +1,94 @@
 package org.albertoborsetta.formscanner.gui;
 
-import java.awt.Image;
+import java.awt.Graphics;
+import java.awt.ScrollPane;
 
+import javax.imageio.ImageIO;
 import javax.swing.JInternalFrame;
-import javax.swing.JScrollPane;
+import javax.swing.JPanel;
 
 import java.awt.BorderLayout;
 import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 
 import javax.swing.JLabel;
+import javax.swing.border.BevelBorder;
 
-import org.albertoborsetta.formscanner.model.FormScannerModel;
-
-import net.sourceforge.jiu.data.Gray8Image;
 import net.sourceforge.jiu.gui.awt.ImageCanvas;
 
+import org.albertoborsetta.formscanner.gui.font.FormScannerFont;
+import org.albertoborsetta.formscanner.model.FormScannerModel;
+
 public class RenameFileImageFrame extends JInternalFrame {
+	private JPanel imagePanel;
+	private ScrollPane imageScrollPane;
+	private ImageCanvas imageCanvas; 
+	private JLabel statusBar;
+	private FormScannerModel model;
 
 	/**
 	 * Create the frame.
 	 */
-	public RenameFileImageFrame(BufferedImage image) {
+	public RenameFileImageFrame(FormScannerModel formScannerModel, File file) {
+		BufferedImage image;
+		
 		setBounds(100, 100, 756, 268);
 		
-		JLabel lblNewLabel = new JLabel("New label");
-		getContentPane().add(lblNewLabel, BorderLayout.SOUTH);
+		// imagePanel = new ImagePanel(file);
+		imageScrollPane = new ImageScrollPane();
+		imageCanvas = new ImageCanvas(imageScrollPane);
 		
-		JScrollPane scrollPane = new JScrollPane();
-		getContentPane().add(scrollPane, BorderLayout.CENTER);
+		try {                
+			image = ImageIO.read(file);
+		} catch (IOException ex) {
+			image = null;
+		}
 		
-		scrollPane.paintComponents(g);
-		g.drawImage(image, 0, 0, null);
+		imageCanvas.setImage(image);
+		imageCanvas.update(getGraphics());
+		imageScrollPane.add(imageCanvas);
+		getContentPane().add(imageScrollPane, BorderLayout.CENTER);
+		// getContentPane().add(imagePanel, BorderLayout.CENTER);
+		
+		statusBar = new StatusBar("Renaming: " + file.getName()); 
+		getContentPane().add(statusBar, BorderLayout.SOUTH);
 	}
-
-	    @Override
+	
+	private class ImagePanel extends JPanel {
+		
+		private BufferedImage image;
+		
+		public ImagePanel(File file) {
+			super();
+			
+			try {                
+				image = ImageIO.read(file);
+			} catch (IOException ex) {
+				// handle exception...
+			}		
+		}
+		
+		@Override
 	    public void paintComponent(Graphics g) {
 	        super.paintComponent(g);
 	        g.drawImage(image, 0, 0, null); // see javadoc for more info on the parameters            
 	    }
-
 	}
-
+	
+	private class ImageScrollPane extends ScrollPane {
+		
+		public ImageScrollPane() {
+			super();		
+		}
+	}
+	
+	private class StatusBar extends JLabel {
+		
+		public StatusBar(String label) {
+			super(label);
+			setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
+			setFont(FormScannerFont.getFont());
+		}
+	}
 }
