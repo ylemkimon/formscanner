@@ -125,7 +125,7 @@ public class ToolBar extends JPanel {
 		JFileChooser fileChooser = new JFileChooser();
 		fileChooser.setFont(FormScannerFont.getFont());
 		fileChooser.setMultiSelectionEnabled(true);
-		FileNameExtensionFilter imageFilter = new FileNameExtensionFilter("Image files", "tif", "png", "bmp");
+		FileNameExtensionFilter imageFilter = new FileNameExtensionFilter("Image files", "tif", "tiff","png", "bmp", "jpg", "gif");
 		fileChooser.setFileFilter(imageFilter);
 		fileChooser.showOpenDialog(null);
 		
