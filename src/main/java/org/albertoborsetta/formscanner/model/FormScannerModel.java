@@ -47,11 +47,11 @@ public class FormScannerModel {
 				renamedFileIndex = fileListFrame.getSelectedItemIndex();
 				fileListFrame.selectFile(renamedFileIndex);
 				
-				renameFileFrame = new RenameFileFrame(this, getFileNameByIndex(renamedFileIndex)); 
-				view.arrangeFrame(renameFileFrame);
-
 				renameFileImageFrame = new RenameFileImageFrame(this, openedFiles.get(renamedFileIndex));
 				view.arrangeFrame(renameFileImageFrame);
+				
+				renameFileFrame = new RenameFileFrame(this, getFileNameByIndex(renamedFileIndex)); 
+				view.arrangeFrame(renameFileFrame);				
 			}			
 			break;
 		case Constants.RENAME_FILE_CURRENT:
@@ -77,6 +77,7 @@ public class FormScannerModel {
 				renameFileImageFrame.updateImage(openedFiles.get(renamedFileIndex));
 			} else {
 				view.disposeFrame(renameFileFrame);
+				view.disposeFrame(renameFileImageFrame);
 			}
 			break;
 		default:

@@ -11,18 +11,10 @@ import java.awt.BorderLayout;
 import java.io.File;
 import java.io.IOException;
 
-import javax.swing.JLabel;
-import javax.swing.border.BevelBorder;
-
-import net.sourceforge.jiu.gui.awt.ImageCanvas;
-
-import org.albertoborsetta.formscanner.gui.font.FormScannerFont;
 import org.albertoborsetta.formscanner.model.FormScannerModel;
 
 public class RenameFileImageFrame extends JInternalFrame {
 	private JPanel imagePanel;
-	private ImageCanvas imageCanvas; 
-	private JLabel statusBar;
 	private FormScannerModel model;
 	private Image image;
 
@@ -31,6 +23,8 @@ public class RenameFileImageFrame extends JInternalFrame {
 	 */
 	public RenameFileImageFrame(FormScannerModel formScannerModel, File file) {
 		model = formScannerModel;
+		
+		setClosable(true);
 		
 		int desktopWidth = model.getDesktopSize().width;
 		setBounds(220, 10, desktopWidth - 230, 300);
@@ -65,6 +59,6 @@ public class RenameFileImageFrame extends JInternalFrame {
 			image = null;
 		}
 		
-		validate();
+		update(getGraphics());
 	}
 }

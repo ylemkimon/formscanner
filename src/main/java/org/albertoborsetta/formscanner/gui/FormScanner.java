@@ -80,7 +80,7 @@ public class FormScanner extends JFrame {
 		if (!found) {
 			desktopPane.add(frame);
 			frame.setVisible(true);
-		} else {
+		} else {			
 			arrangeFrame(frame);
 		}
 	}

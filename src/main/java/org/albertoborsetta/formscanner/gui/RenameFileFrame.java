@@ -12,14 +12,10 @@ import javax.swing.JTextField;
 import javax.swing.JLabel;
 import javax.swing.JButton;
 import javax.swing.border.BevelBorder;
-import javax.swing.event.CaretEvent;
-import javax.swing.event.CaretListener;
 
 import java.awt.BorderLayout;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
-import java.awt.event.FocusEvent;
-import java.awt.event.FocusListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
@@ -139,28 +135,26 @@ public class RenameFileFrame extends JInternalFrame {
 
 		public void keyTyped(KeyEvent e) {
 			// TODO Auto-generated method stub
-			if (e.getKeyCode()==KeyEvent.VK_ENTER) {
-				okButton.action(new ActionEvent(this, 0, null), null);
-			}
-			enableOkButton();			
 		}
 
 		public void keyPressed(KeyEvent e) {
 			// TODO Auto-generated method stub
-			
+			if ((e.getKeyCode() == KeyEvent.VK_ENTER) && (okButton.isEnabled())) {
+				renameFiles(Constants.RENAME_FILE_CURRENT);
+			} else if ((e.getKeyCode() == KeyEvent.VK_ENTER) && (!okButton.isEnabled())) {
+				renameFiles(Constants.RENAME_FILE_SKIP);
+			} else {
+				okButton.setEnabled(true);
+			}
 		}
 
 		public void keyReleased(KeyEvent e) {
-			// TODO Auto-generated method stub
-			
+			// TODO Auto-generated method stub			
 		}		
 	}
 	
-	private void enableOkButton() {
-		okButton.setEnabled(true);
-	}
-	
 	private void renameFiles(int action) {
+		okButton.setEnabled(false);
 		model.renameFiles(action);
 	}
 }
