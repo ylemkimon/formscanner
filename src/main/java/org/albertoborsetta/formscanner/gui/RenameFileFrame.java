@@ -12,6 +12,8 @@ import javax.swing.JTextField;
 import javax.swing.JLabel;
 import javax.swing.JButton;
 import javax.swing.border.BevelBorder;
+import javax.swing.event.InternalFrameEvent;
+import javax.swing.event.InternalFrameListener;
 
 import java.awt.BorderLayout;
 import java.awt.event.ActionListener;
@@ -24,7 +26,7 @@ import com.jgoodies.forms.layout.ColumnSpec;
 import com.jgoodies.forms.layout.RowSpec;
 import com.jgoodies.forms.factories.FormFactory;
 
-public class RenameFileFrame extends JInternalFrame {
+public class RenameFileFrame extends JInternalFrame implements InternalFrameListener {
 	private JTextField fileNameField;
 	private JLabel fileExtensionField;
 	private JLabel statusBar;
@@ -41,6 +43,7 @@ public class RenameFileFrame extends JInternalFrame {
 		setBounds(220, 320, 300, 130);
 		setName("renameFileFrame");
 		setClosable(true);
+		addInternalFrameListener(this);
 		
 		setTitle("Rename file");
 		
@@ -156,5 +159,40 @@ public class RenameFileFrame extends JInternalFrame {
 	private void renameFiles(int action) {
 		okButton.setEnabled(false);
 		model.renameFiles(action);
+	}
+
+	public void internalFrameOpened(InternalFrameEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void internalFrameClosing(InternalFrameEvent e) {
+		// TODO Auto-generated method stub
+		model.disposeRelatedFrame(this);
+	}
+
+	public void internalFrameClosed(InternalFrameEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void internalFrameIconified(InternalFrameEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void internalFrameDeiconified(InternalFrameEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void internalFrameActivated(InternalFrameEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void internalFrameDeactivated(InternalFrameEvent e) {
+		// TODO Auto-generated method stub
+		
 	}
 }

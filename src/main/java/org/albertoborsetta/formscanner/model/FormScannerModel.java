@@ -14,6 +14,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.swing.JInternalFrame;
+
 import org.apache.commons.io.FilenameUtils;
 
 public class FormScannerModel {
@@ -129,5 +131,13 @@ public class FormScannerModel {
 	
 	public Dimension getDesktopSize() {
 		return view.getDesktopSize();
+	}
+	
+	public void disposeRelatedFrame(JInternalFrame frame) {
+		if (frame.getName().equals("renameFileFrame")) {
+			view.disposeFrame(renameFileImageFrame);
+		} else {
+			view.disposeFrame(renameFileFrame);
+		}
 	}
 }

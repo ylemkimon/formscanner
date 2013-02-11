@@ -1,22 +1,25 @@
 package org.albertoborsetta.formscanner.gui;
 
 import java.awt.Graphics;
-import java.awt.Image;
 
 import javax.imageio.ImageIO;
 import javax.swing.JInternalFrame;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.event.InternalFrameEvent;
+import javax.swing.event.InternalFrameListener;
 
 import java.awt.BorderLayout;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 
 import org.albertoborsetta.formscanner.model.FormScannerModel;
 
-public class RenameFileImageFrame extends JInternalFrame {
+public class RenameFileImageFrame extends JInternalFrame implements InternalFrameListener {
 	private JPanel imagePanel;
 	private FormScannerModel model;
-	private Image image;
+	private BufferedImage image;
 
 	/**
 	 * Create the frame.
@@ -25,6 +28,10 @@ public class RenameFileImageFrame extends JInternalFrame {
 		model = formScannerModel;
 		
 		setClosable(true);
+		setName("renameFileImageFrame");
+		addInternalFrameListener(this);
+		
+		setTitle("Rename file image");
 		
 		int desktopWidth = model.getDesktopSize().width;
 		setBounds(220, 10, desktopWidth - 230, 300);
@@ -42,13 +49,19 @@ public class RenameFileImageFrame extends JInternalFrame {
 				image = ImageIO.read(file);
 			} catch (IOException ex) {
 				image = null;
-			}		
+			}
+			setBounds(0, 0, image.getWidth(), image.getHeight());
 		}
 		
 		@Override
 	    public void paintComponent(Graphics g) {
 	        super.paintComponent(g);
-	        g.drawImage(image, 50, 10, 200, 200, this);            
+	        int imgWidth = image.getWidth();
+	        int imgHeight = image.getHeight();
+	        int panelWidth = getWidth();
+	        int panelHeight = getHeight();
+	        g.drawImage(image, 0, 0, panelWidth, panelHeight, 
+	        		0, 0, imgWidth, imgHeight, this);            
 	    }
 	}
 	
@@ -60,5 +73,40 @@ public class RenameFileImageFrame extends JInternalFrame {
 		}
 		
 		update(getGraphics());
+	}
+
+	public void internalFrameOpened(InternalFrameEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void internalFrameClosing(InternalFrameEvent e) {
+		// TODO Auto-generated method stub
+		model.disposeRelatedFrame(this);
+	}
+
+	public void internalFrameClosed(InternalFrameEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void internalFrameIconified(InternalFrameEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void internalFrameDeiconified(InternalFrameEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void internalFrameActivated(InternalFrameEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void internalFrameDeactivated(InternalFrameEvent e) {
+		// TODO Auto-generated method stub
+		
 	}
 }

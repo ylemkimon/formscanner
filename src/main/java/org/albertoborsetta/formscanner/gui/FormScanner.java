@@ -98,5 +98,4 @@ public class FormScanner extends JFrame {
 	public Dimension getDesktopSize() {
 		return desktopPane.getSize();
 	}
-	
 }
