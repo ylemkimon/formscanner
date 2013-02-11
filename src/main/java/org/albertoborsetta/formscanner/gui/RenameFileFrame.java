@@ -20,6 +20,8 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 
 import com.jgoodies.forms.layout.FormLayout;
 import com.jgoodies.forms.layout.ColumnSpec;
@@ -31,6 +33,8 @@ public class RenameFileFrame extends JInternalFrame {
 	private JLabel fileExtensionField;
 	private JLabel statusBar;
 	private FormScannerModel model;
+	private JButton okButton;
+	private JButton cancelButton;
 	
 	/**
 	 * Create the frame.
@@ -38,7 +42,7 @@ public class RenameFileFrame extends JInternalFrame {
 	public RenameFileFrame(FormScannerModel formScannerModel, String fileName) {
 		model = formScannerModel;
 		
-		setBounds(100, 100, 396, 141);
+		setBounds(220, 320, 300, 130);
 		setName("renameFileFrame");
 		setClosable(true);
 		
@@ -70,10 +74,10 @@ public class RenameFileFrame extends JInternalFrame {
 		fileExtensionField = new JLabel('.' + FilenameUtils.getExtension(fileName));
 		panel.add(fileExtensionField, "8, 2");		
 		
-		JButton okButton = new OKButton();
+		okButton = new OKButton();
 		panel.add(okButton , "4, 4");
 		
-		JButton cancelButton = new CancelButton();
+		cancelButton = new CancelButton();
 		panel.add(cancelButton, "6, 4");
 				
 		statusBar = new StatusBar("Renaming: " + fileName);
@@ -104,6 +108,7 @@ public class RenameFileFrame extends JInternalFrame {
 		
 		public OKButton() {
 			super("OK");
+			setEnabled(false);
 			addActionListener(this);
 		}
 
@@ -124,23 +129,35 @@ public class RenameFileFrame extends JInternalFrame {
 		}
 	}
 	
-	private class FileNameField extends JTextField implements FocusListener {
+	private class FileNameField extends JTextField implements KeyListener {
 		
 		public FileNameField(String text) {
 			super(text);
 			setColumns(10);
-			addFocusListener(this);
+			addKeyListener(this);
 		}
 
-		public void focusGained(FocusEvent e) {
-			// Nothing to do			
+		public void keyTyped(KeyEvent e) {
+			// TODO Auto-generated method stub
+			if (e.getKeyCode()==KeyEvent.VK_ENTER) {
+				okButton.action(new ActionEvent(this, 0, null), null);
+			}
+			enableOkButton();			
 		}
 
-		public void focusLost(FocusEvent e) {
-			// renameFiles(Constants.RENAME_FILE_CURRENT);
+		public void keyPressed(KeyEvent e) {
+			// TODO Auto-generated method stub
+			
 		}
-		
-		
+
+		public void keyReleased(KeyEvent e) {
+			// TODO Auto-generated method stub
+			
+		}		
+	}
+	
+	private void enableOkButton() {
+		okButton.setEnabled(true);
 	}
 	
 	private void renameFiles(int action) {

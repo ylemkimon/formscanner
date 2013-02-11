@@ -6,6 +6,7 @@ import org.albertoborsetta.formscanner.gui.FormScanner;
 import org.albertoborsetta.formscanner.gui.RenameFileFrame;
 import org.albertoborsetta.formscanner.gui.RenameFileImageFrame;
 
+import java.awt.Dimension;
 import java.io.File;
 
 import java.util.ArrayList;
@@ -34,7 +35,7 @@ public class FormScannerModel {
 			openedFiles.put(fileIndex++, file);
 		}
 		if (!openedFiles.isEmpty()) {
-			fileListFrame = new FileListFrame(getOpenedFileList());
+			fileListFrame = new FileListFrame(this, getOpenedFileList());
 			view.arrangeFrame(fileListFrame);
 		}
 	}
@@ -73,6 +74,7 @@ public class FormScannerModel {
 			
 			if (openedFiles.size()>renamedFileIndex) {
 				renameFileFrame.updateRenamedFile(getFileNameByIndex(renamedFileIndex));
+				renameFileImageFrame.updateImage(openedFiles.get(renamedFileIndex));
 			} else {
 				view.disposeFrame(renameFileFrame);
 			}
@@ -122,5 +124,9 @@ public class FormScannerModel {
 
 	private String getFileNameByIndex(int index) {
 		return openedFiles.get(index).getName();
-	}	
+	}
+	
+	public Dimension getDesktopSize() {
+		return view.getDesktopSize();
+	}
 }

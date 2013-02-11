@@ -10,20 +10,26 @@ import java.util.List;
 import javax.swing.JList;
 
 import org.albertoborsetta.formscanner.gui.font.FormScannerFont;
+import org.albertoborsetta.formscanner.model.FormScannerModel;
 
 public class FileListFrame extends JInternalFrame {
 	
 	private JScrollPane scrollPane;
 	private JList list;
+	private FormScannerModel model;
 	
 	/**
 	 * Create the frame.
 	 */
-	public FileListFrame(List<String> fileList) {
+	public FileListFrame(FormScannerModel formScannerModel, List<String> fileList) {
+		
+		model = formScannerModel;
+		int desktopHeight = model.getDesktopSize().height;
+		
+		setBounds(10, 10, 200, desktopHeight-20);
+		
 		setName("fileListFrame");
-		setTitle("Images");
-		setBounds(100, 100, 198, 597);
-		setLocation(10, 10);
+		setTitle("Images");		
 		
 		setIconifiable(true);
 		setResizable(true);

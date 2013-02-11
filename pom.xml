@@ -39,5 +39,21 @@
   		<type>jar</type>
   		<scope>compile</scope>
   	</dependency>
+  	<dependency>
+      <groupId>com.tomgibara.imageio</groupId>
+      <artifactId>imageio-tiff</artifactId>
+      <version>1.0</version>
+    </dependency>
   </dependencies>
+  <repositories>
+    <repository>
+      <id>tomgibara</id>
+      <name>Tom Gibara Maven Repository</name>
+      <layout>default</layout>
+      <url>http://www.tomgibara.com/maven/repo/</url>
+      <snapshots>
+        <enabled>false</enabled>
+      </snapshots>
+    </repository>
+  </repositories>
 </project>
