@@ -1,6 +1,7 @@
 package org.albertoborsetta.formscanner.gui;
 
 import org.albertoborsetta.formscanner.commons.Constants;
+import org.albertoborsetta.formscanner.controller.RenameFileController;
 import org.albertoborsetta.formscanner.gui.font.FormScannerFont;
 import org.albertoborsetta.formscanner.model.FormScannerModel;
 
@@ -12,38 +13,35 @@ import javax.swing.JTextField;
 import javax.swing.JLabel;
 import javax.swing.JButton;
 import javax.swing.border.BevelBorder;
-import javax.swing.event.InternalFrameEvent;
-import javax.swing.event.InternalFrameListener;
 
 import java.awt.BorderLayout;
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 
 import com.jgoodies.forms.layout.FormLayout;
 import com.jgoodies.forms.layout.ColumnSpec;
 import com.jgoodies.forms.layout.RowSpec;
 import com.jgoodies.forms.factories.FormFactory;
 
-public class RenameFileFrame extends JInternalFrame implements InternalFrameListener {
+public class RenameFileFrame extends JInternalFrame {
 	private JTextField fileNameField;
 	private JLabel fileExtensionField;
 	private JLabel statusBar;
 	private FormScannerModel model;
 	private JButton okButton;
 	private JButton cancelButton;
+	private RenameFileController controller;
 	
 	/**
 	 * Create the frame.
 	 */
 	public RenameFileFrame(FormScannerModel formScannerModel, String fileName) {
 		model = formScannerModel;
+		controller = RenameFileController.getInstance(model);
+		controller.add(this);
 		
 		setBounds(220, 320, 300, 130);
 		setName("renameFileFrame");
 		setClosable(true);
-		addInternalFrameListener(this);
+		addInternalFrameListener(controller);
 		
 		setTitle("Rename file");
 		
@@ -83,6 +81,18 @@ public class RenameFileFrame extends JInternalFrame implements InternalFrameList
 		getContentPane().add(statusBar, BorderLayout.SOUTH);
 	}
 	
+	public boolean isOkEnabled() {
+		return okButton.isEnabled();
+	}
+	
+	public boolean isCancelEnabled() {
+		return cancelButton.isEnabled();
+	}
+	
+	public void setOkEnabled(boolean value) {
+		okButton.setEnabled(value);
+	}
+	
 	public void updateRenamedFile(String fileName) {
 		statusBar.setText("Rename: " + fileName);
 		fileNameField.setText(FilenameUtils.removeExtension(fileName));
@@ -103,96 +113,31 @@ public class RenameFileFrame extends JInternalFrame implements InternalFrameList
 		}
 	}
 	
-	private class OKButton extends JButton implements ActionListener {
+	private class OKButton extends JButton {
 		
 		public OKButton() {
 			super("OK");
 			setEnabled(false);
-			addActionListener(this);
-		}
-
-		public void actionPerformed(ActionEvent e) {
-			renameFiles(Constants.RENAME_FILE_CURRENT);
+			setActionCommand(Constants.RENAME_FILE_CURRENT);
+			addActionListener(controller);
 		}
 	}
 	
-	private class CancelButton extends JButton implements ActionListener {
+	private class CancelButton extends JButton {
 		
 		public CancelButton() {
 			super("Cancel");
-			addActionListener(this);
-		}
-
-		public void actionPerformed(ActionEvent e) {
-			renameFiles(Constants.RENAME_FILE_SKIP);
+			setActionCommand(Constants.RENAME_FILE_SKIP);
+			addActionListener(controller);
 		}
 	}
 	
-	private class FileNameField extends JTextField implements KeyListener {
+	private class FileNameField extends JTextField {
 		
 		public FileNameField(String text) {
 			super(text);
 			setColumns(10);
-			addKeyListener(this);
-		}
-
-		public void keyTyped(KeyEvent e) {
-			// TODO Auto-generated method stub
-		}
-
-		public void keyPressed(KeyEvent e) {
-			// TODO Auto-generated method stub
-			if ((e.getKeyCode() == KeyEvent.VK_ENTER) && (okButton.isEnabled())) {
-				renameFiles(Constants.RENAME_FILE_CURRENT);
-			} else if ((e.getKeyCode() == KeyEvent.VK_ENTER) && (!okButton.isEnabled())) {
-				renameFiles(Constants.RENAME_FILE_SKIP);
-			} else {
-				okButton.setEnabled(true);
-			}
-		}
-
-		public void keyReleased(KeyEvent e) {
-			// TODO Auto-generated method stub			
+			addKeyListener(controller);
 		}		
-	}
-	
-	private void renameFiles(int action) {
-		okButton.setEnabled(false);
-		model.renameFiles(action);
-	}
-
-	public void internalFrameOpened(InternalFrameEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	public void internalFrameClosing(InternalFrameEvent e) {
-		// TODO Auto-generated method stub
-		model.disposeRelatedFrame(this);
-	}
-
-	public void internalFrameClosed(InternalFrameEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	public void internalFrameIconified(InternalFrameEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	public void internalFrameDeiconified(InternalFrameEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	public void internalFrameActivated(InternalFrameEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	public void internalFrameDeactivated(InternalFrameEvent e) {
-		// TODO Auto-generated method stub
-		
 	}
 }

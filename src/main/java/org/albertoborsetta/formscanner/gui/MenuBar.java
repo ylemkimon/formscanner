@@ -14,15 +14,18 @@ import javax.swing.KeyStroke;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 import org.albertoborsetta.formscanner.commons.Constants;
+import org.albertoborsetta.formscanner.controller.FormScannerController;
 import org.albertoborsetta.formscanner.gui.font.FormScannerFont;
 import org.albertoborsetta.formscanner.model.FormScannerModel;
 
 public class MenuBar extends JMenuBar {
 	
 	private static FormScannerModel model;
+	private FormScannerController controller;
 	
 	public MenuBar(final FormScannerModel formScannerModel) {
 		model = formScannerModel;
+		controller = FormScannerController.getInstance(model);
 		
 		JMenu fileMenu = new FileMenu();
 		JMenu editMenu = new EditMenu();
@@ -45,35 +48,29 @@ private class FileMenu extends JMenu {
 		}
 	}
 	
-	private class OpenMenuItem extends JMenuItem implements ActionListener {
+	private class OpenMenuItem extends JMenuItem {
 		
 		public OpenMenuItem() {
 			super("Open images");			
-			addActionListener(this);
+			setActionCommand(Constants.OPEN_IMAGES);
+			addActionListener(controller);
 			setMnemonic('O');
 			setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O, InputEvent.CTRL_MASK));
 			setToolTipText("Open image files");
 			setFont(FormScannerFont.getFont());
 		}
-		
-		public void actionPerformed(ActionEvent e) {
-			openFiles();			
-		}
 	}
 	
-	private class SaveMenuItem extends JMenuItem implements ActionListener {
+	private class SaveMenuItem extends JMenuItem {
 		
 		public SaveMenuItem() {
-			super("Save results");			
-			addActionListener(this);
+			super("Save results");	
+			setActionCommand(Constants.SAVE_RESULTS);
+			addActionListener(controller);
 			setMnemonic('S');
 			setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, InputEvent.CTRL_MASK));
 			setToolTipText("Save results file");
 			setFont(FormScannerFont.getFont());
-		}
-		
-		public void actionPerformed(ActionEvent e) {
-			// TODO
 		}
 	}
 	
@@ -90,39 +87,16 @@ private class FileMenu extends JMenu {
 		}
 	}
 	
-	private class RenameMenuItem extends JMenuItem implements ActionListener {
+	private class RenameMenuItem extends JMenuItem {
 		
 		public RenameMenuItem() {
-			super("Rename images");			
-			addActionListener(this);
+			super("Rename files");			
+			setActionCommand(Constants.RENAME_FILE_FIRST);
+			addActionListener(controller);
 			setMnemonic('R');
 			setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_R, InputEvent.CTRL_MASK));
 			setToolTipText("Rename image files");
 			setFont(FormScannerFont.getFont());
 		}
-		
-		public void actionPerformed(ActionEvent e) {
-			renameFiles(Constants.RENAME_FILE_FIRST);
-		}
-	}
-	
-	private void openFiles() {
-		model.openFiles(choose());
-	}
-	
-	private void renameFiles(int action) {
-		model.renameFiles(action);
-	}
-	
-	private static File[] choose() {
-		  
-		JFileChooser fileChooser = new JFileChooser();
-		fileChooser.setFont(FormScannerFont.getFont());
-		fileChooser.setMultiSelectionEnabled(true);
-		FileNameExtensionFilter imageFilter = new FileNameExtensionFilter("Image files", "tif", "tiff", "png", "bmp", "jpg", "gif");
-		fileChooser.setFileFilter(imageFilter);
-		fileChooser.showOpenDialog(null);
-		
-		return fileChooser.getSelectedFiles(); 
 	}
 }

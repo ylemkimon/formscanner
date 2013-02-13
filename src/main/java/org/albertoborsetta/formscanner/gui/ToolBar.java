@@ -9,20 +9,19 @@ import java.io.File;
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JFileChooser;
 import javax.swing.JPanel;
 import javax.swing.JToolBar;
 import javax.swing.border.EtchedBorder;
-import javax.swing.filechooser.FileNameExtensionFilter;
 
 import org.albertoborsetta.formscanner.commons.Constants;
-import org.albertoborsetta.formscanner.gui.font.FormScannerFont;
+import org.albertoborsetta.formscanner.controller.FormScannerController;
 import org.albertoborsetta.formscanner.model.FormScannerModel;
 
 
 public class ToolBar extends JPanel {
 
 	private static FormScannerModel model;
+	private FormScannerController controller;
 	
 	/**
 	 * Create the panel.
@@ -30,6 +29,7 @@ public class ToolBar extends JPanel {
 	public ToolBar(FormScannerModel formScannerModel) {
 		
 		model = formScannerModel;
+		controller = FormScannerController.getInstance(model);
 		
 		setBorder(new EtchedBorder(EtchedBorder.RAISED, null, null));
 		setComponentOrientation(ComponentOrientation.LEFT_TO_RIGHT);
@@ -58,31 +58,25 @@ public class ToolBar extends JPanel {
 		}
 	}
 	
-	private class OpenButton extends JButton implements ActionListener {
+	private class OpenButton extends JButton {
 		
 		public OpenButton() {
-			addActionListener(this);
+			setActionCommand(Constants.OPEN_IMAGES);
+			addActionListener(controller);
 			setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
 			setToolTipText("Open images");
 			setIcon(new ImageIcon(FormScanner.class.getResource("/org/albertoborsetta/formscanner/gui/icons/crystal/lc_open.png")));
 		}
-		
-		public void actionPerformed(ActionEvent e) {
-			openFiles();
-		}
 	}
 	
-	private class SaveButton extends JButton implements ActionListener {
+	private class SaveButton extends JButton {
 		
 		public SaveButton() {
-			addActionListener(this);
+			setActionCommand(Constants.SAVE_RESULTS);
+			addActionListener(controller);
 			setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
 			setIcon(new ImageIcon(FormScanner.class.getResource("/org/albertoborsetta/formscanner/gui/icons/crystal/lc_save.png")));
 			setToolTipText("Save results");
-		}
-		
-		public void actionPerformed(ActionEvent e) {
-			// TODO
 		}
 	}
 	
@@ -98,37 +92,14 @@ public class ToolBar extends JPanel {
 		}
 	}
 	
-	private class RenameButton extends JButton implements ActionListener {
+	private class RenameButton extends JButton {
 		
 		public RenameButton() {
-			addActionListener(this);
+			setActionCommand(Constants.RENAME_FILE_FIRST);
+			addActionListener(controller);
 			setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
 			setIcon(new ImageIcon(FormScanner.class.getResource("/org/albertoborsetta/formscanner/gui/icons/crystal/lc_editdoc.png")));
 			setToolTipText("Rename image files");
 		}		
-		
-		public void actionPerformed(ActionEvent e) {
-			renameFiles(Constants.RENAME_FILE_FIRST);
-		}
-	}
-	
-	private void openFiles() {
-		model.openFiles(choose());
-	}
-	
-	private void renameFiles(int action) {
-		model.renameFiles(action);
-	}
-	
-	private static File[] choose() {
-		  
-		JFileChooser fileChooser = new JFileChooser();
-		fileChooser.setFont(FormScannerFont.getFont());
-		fileChooser.setMultiSelectionEnabled(true);
-		FileNameExtensionFilter imageFilter = new FileNameExtensionFilter("Image files", "tif", "tiff","png", "bmp", "jpg", "gif");
-		fileChooser.setFileFilter(imageFilter);
-		fileChooser.showOpenDialog(null);
-		
-		return fileChooser.getSelectedFiles(); 
 	}
 }

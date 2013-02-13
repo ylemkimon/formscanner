@@ -1,35 +1,39 @@
 package org.albertoborsetta.formscanner.gui;
 
-import java.awt.Graphics;
+import org.albertoborsetta.formscanner.controller.RenameFileController;
+import org.albertoborsetta.formscanner.model.FormScannerModel;
 
-import javax.imageio.ImageIO;
+import java.awt.Dimension;
+import java.awt.Graphics;
+import java.awt.BorderLayout;
+import java.awt.image.BufferedImage;
+
 import javax.swing.JInternalFrame;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import javax.swing.event.InternalFrameEvent;
-import javax.swing.event.InternalFrameListener;
 
-import java.awt.BorderLayout;
-import java.awt.image.BufferedImage;
+import javax.imageio.ImageIO;
+
 import java.io.File;
 import java.io.IOException;
 
-import org.albertoborsetta.formscanner.model.FormScannerModel;
 
-public class RenameFileImageFrame extends JInternalFrame implements InternalFrameListener {
-	private JPanel imagePanel;
+public class RenameFileImageFrame extends JInternalFrame {
+	private ImagePanel imagePanel;
+	private JScrollPane scrollPane;
 	private FormScannerModel model;
-	private BufferedImage image;
+	private RenameFileController controller;
 
 	/**
 	 * Create the frame.
 	 */
 	public RenameFileImageFrame(FormScannerModel formScannerModel, File file) {
 		model = formScannerModel;
+		controller = RenameFileController.getInstance(model);
 		
 		setClosable(true);
 		setName("renameFileImageFrame");
-		addInternalFrameListener(this);
+		addInternalFrameListener(controller);
 		
 		setTitle("Rename file image");
 		
@@ -37,76 +41,51 @@ public class RenameFileImageFrame extends JInternalFrame implements InternalFram
 		setBounds(220, 10, desktopWidth - 230, 300);
 		
 		imagePanel = new ImagePanel(file);
-		getContentPane().add(imagePanel, BorderLayout.CENTER);
+		scrollPane = new JScrollPane(imagePanel);
+		scrollPane.addMouseMotionListener(controller);
+		scrollPane.addMouseListener(controller);
+		getContentPane().add(scrollPane, BorderLayout.CENTER);
 	}
 	
 	private class ImagePanel extends JPanel {
 		
+		private BufferedImage image;
+		private int x=0;
+		private int y=0;
+		
 		public ImagePanel(File file) {
 			super();
-			
+			setImage(file);
+			setPreferredSize(new Dimension(image.getWidth(), image.getHeight()));
+		}
+		
+		@Override
+	    public void paintComponent(Graphics g) {
+			setPreferredSize(new Dimension(image.getWidth(), image.getHeight()));
+	        g.drawImage(image, x, y, this);            
+	    }
+		
+		public void setImage(File file) {
 			try {		
 				image = ImageIO.read(file);
 			} catch (IOException ex) {
 				image = null;
 			}
-			setBounds(0, 0, image.getWidth(), image.getHeight());
 		}
 		
-		@Override
-	    public void paintComponent(Graphics g) {
-	        super.paintComponent(g);
-	        int imgWidth = image.getWidth();
-	        int imgHeight = image.getHeight();
-	        int panelWidth = getWidth();
-	        int panelHeight = getHeight();
-	        g.drawImage(image, 0, 0, panelWidth, panelHeight, 
-	        		0, 0, imgWidth, imgHeight, this);            
-	    }
+		public void setPosition(int x, int y) {
+			this.x = x;
+			this.y = y;
+		}
 	}
 	
 	public void updateImage(File file) {
-		try {		
-			image = ImageIO.read(file);
-		} catch (IOException ex) {
-			image = null;
-		}
-		
+		imagePanel.setImage(file);
 		update(getGraphics());
 	}
-
-	public void internalFrameOpened(InternalFrameEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	public void internalFrameClosing(InternalFrameEvent e) {
-		// TODO Auto-generated method stub
-		model.disposeRelatedFrame(this);
-	}
-
-	public void internalFrameClosed(InternalFrameEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	public void internalFrameIconified(InternalFrameEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	public void internalFrameDeiconified(InternalFrameEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	public void internalFrameActivated(InternalFrameEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	public void internalFrameDeactivated(InternalFrameEvent e) {
-		// TODO Auto-generated method stub
-		
+	
+	public void moveImage(int x, int y) {
+		imagePanel.setPosition(x, y);
+		update(getGraphics());
 	}
 }

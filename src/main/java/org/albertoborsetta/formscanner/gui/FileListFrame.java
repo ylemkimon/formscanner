@@ -35,11 +35,11 @@ public class FileListFrame extends JInternalFrame {
 		setResizable(true);
 		setMaximizable(true);
 		
-		JScrollPane scrollPane = new JScrollPane();
-		getContentPane().add(scrollPane, BorderLayout.CENTER);
-		
 		list = new FileList(fileList.toArray());
+		
+		scrollPane = new JScrollPane();	
 		scrollPane.setViewportView(list);
+		getContentPane().add(scrollPane, BorderLayout.CENTER);
 	}
 	
 	public void updateFileList(List<String> fileList) {

@@ -1,6 +1,6 @@
 package org.albertoborsetta.formscanner.model;
 
-import org.albertoborsetta.formscanner.commons.Constants;
+import org.albertoborsetta.formscanner.commons.Constants.Actions;
 import org.albertoborsetta.formscanner.gui.FileListFrame;
 import org.albertoborsetta.formscanner.gui.FormScanner;
 import org.albertoborsetta.formscanner.gui.RenameFileFrame;
@@ -26,6 +26,8 @@ public class FormScannerModel {
 	private RenameFileImageFrame renameFileImageFrame;
 	private FormScanner view;
 	private int renamedFileIndex = 0;
+	private int imagePositionX = 0;
+	private int imagePositionY = 0;
     
 	public FormScannerModel(FormScanner view) {
 		this.view = view;
@@ -42,9 +44,10 @@ public class FormScannerModel {
 		}
 	}
 	
-	public void renameFiles(int action) {
-		switch (action) {
-		case Constants.RENAME_FILE_FIRST:
+	public void renameFiles(String action) {
+		Actions act = Actions.valueOf(action);
+		switch (act) {
+		case RENAME_FILE_FIRST:
 			if (!openedFiles.isEmpty()) {
 				renamedFileIndex = fileListFrame.getSelectedItemIndex();
 				fileListFrame.selectFile(renamedFileIndex);
@@ -56,7 +59,7 @@ public class FormScannerModel {
 				view.arrangeFrame(renameFileFrame);				
 			}			
 			break;
-		case Constants.RENAME_FILE_CURRENT:
+		case RENAME_FILE_CURRENT:
 			String newFileName = renameFileFrame.getNewFileName();
 			String oldFileName = getFileNameByIndex(renamedFileIndex);
 			
@@ -67,7 +70,7 @@ public class FormScannerModel {
 			}
 			
 			fileListFrame.updateFileList(getOpenedFileList());
-		case Constants.RENAME_FILE_SKIP:
+		case RENAME_FILE_SKIP:
 			renamedFileIndex++;
 			
 			if (openedFiles.size() > renamedFileIndex) {	
@@ -139,5 +142,25 @@ public class FormScannerModel {
 		} else {
 			view.disposeFrame(renameFileFrame);
 		}
+	}
+
+	public int getImagePositionX() {
+		return imagePositionX;
+	}
+
+	public void setImagePositionX(int imagePositionX) {
+		this.imagePositionX = this.imagePositionX + imagePositionX;
+	}
+
+	public int getImagePositionY() {
+		return imagePositionY;
+	}
+
+	public void setImagePositionY(int imagePositionY) {
+		this.imagePositionY = this.imagePositionY + imagePositionY;
+	}
+	
+	public void updateImage() {
+		renameFileImageFrame.moveImage(imagePositionX, imagePositionY);
 	}
 }
