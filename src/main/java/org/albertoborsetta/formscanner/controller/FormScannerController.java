@@ -3,15 +3,12 @@ package org.albertoborsetta.formscanner.controller;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
-import java.util.List;
 
 import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 import org.albertoborsetta.formscanner.commons.Constants;
 import org.albertoborsetta.formscanner.commons.Constants.Actions;
-import org.albertoborsetta.formscanner.gui.MenuBar;
-import org.albertoborsetta.formscanner.gui.ToolBar;
 import org.albertoborsetta.formscanner.gui.font.FormScannerFont;
 import org.albertoborsetta.formscanner.model.FormScannerModel;
 
@@ -42,6 +39,8 @@ public class FormScannerController implements ActionListener {
 			break;
 		case SAVE_RESULTS:
 			System.out.println(e.getActionCommand());
+		default:
+			break;
 		}
 	}
 	

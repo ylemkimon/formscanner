@@ -2,6 +2,7 @@ package org.albertoborsetta.formscanner.gui;
 
 import org.albertoborsetta.formscanner.commons.Constants;
 import org.albertoborsetta.formscanner.controller.RenameFileController;
+import org.albertoborsetta.formscanner.controller.InternalFrameController;
 import org.albertoborsetta.formscanner.gui.font.FormScannerFont;
 import org.albertoborsetta.formscanner.model.FormScannerModel;
 
@@ -28,20 +29,23 @@ public class RenameFileFrame extends JInternalFrame {
 	private FormScannerModel model;
 	private JButton okButton;
 	private JButton cancelButton;
-	private RenameFileController controller;
+	private RenameFileController renameFileController;
+	private InternalFrameController internalFrameController;
 	
 	/**
 	 * Create the frame.
 	 */
 	public RenameFileFrame(FormScannerModel formScannerModel, String fileName) {
 		model = formScannerModel;
-		controller = RenameFileController.getInstance(model);
-		controller.add(this);
+		renameFileController = new RenameFileController(model);
+		renameFileController.add(this);
 		
 		setBounds(220, 320, 300, 130);
 		setName("renameFileFrame");
 		setClosable(true);
-		addInternalFrameListener(controller);
+		
+		internalFrameController = InternalFrameController.getInstance(model);
+		addInternalFrameListener(internalFrameController);
 		
 		setTitle("Rename file");
 		
@@ -119,7 +123,7 @@ public class RenameFileFrame extends JInternalFrame {
 			super("OK");
 			setEnabled(false);
 			setActionCommand(Constants.RENAME_FILE_CURRENT);
-			addActionListener(controller);
+			addActionListener(renameFileController);
 		}
 	}
 	
@@ -128,7 +132,7 @@ public class RenameFileFrame extends JInternalFrame {
 		public CancelButton() {
 			super("Cancel");
 			setActionCommand(Constants.RENAME_FILE_SKIP);
-			addActionListener(controller);
+			addActionListener(renameFileController);
 		}
 	}
 	
@@ -137,7 +141,7 @@ public class RenameFileFrame extends JInternalFrame {
 		public FileNameField(String text) {
 			super(text);
 			setColumns(10);
-			addKeyListener(controller);
+			addKeyListener(renameFileController);
 		}		
 	}
 }

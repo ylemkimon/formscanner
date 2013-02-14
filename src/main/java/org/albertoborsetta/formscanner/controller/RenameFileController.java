@@ -9,71 +9,18 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.awt.event.MouseMotionListener;
 
-import javax.swing.event.InternalFrameEvent;
-import javax.swing.event.InternalFrameListener;
-import javax.swing.event.MouseInputListener;
-
-public class RenameFileController implements InternalFrameListener, KeyListener, 
-	ActionListener, MouseMotionListener, MouseListener {
+public class RenameFileController implements KeyListener, ActionListener {
 	
 	private FormScannerModel model;
 	private RenameFileFrame view;
-	private static RenameFileController instance;
-	private int x1; 
-	private int y1;
 	
-	public static RenameFileController getInstance(FormScannerModel model) {
-		if (instance == null) {
-			instance = new RenameFileController(model); 
-		}
-		return instance;
-	}
-	
-	private RenameFileController(FormScannerModel model) {
+	public RenameFileController(FormScannerModel model) {
 		this.model = model;
 	}
 	
 	public void add(RenameFileFrame view) {
 		this.view = view;
-	}
-
-	// InternalFrameListener
-	public void internalFrameOpened(InternalFrameEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	public void internalFrameClosing(InternalFrameEvent e) {
-		model.disposeRelatedFrame(e.getInternalFrame());
-	}
-
-	public void internalFrameClosed(InternalFrameEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	public void internalFrameIconified(InternalFrameEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	public void internalFrameDeiconified(InternalFrameEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	public void internalFrameActivated(InternalFrameEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	public void internalFrameDeactivated(InternalFrameEvent e) {
-		// TODO Auto-generated method stub
-		
 	}
 
 	// KeyListener	
@@ -106,48 +53,8 @@ public class RenameFileController implements InternalFrameListener, KeyListener,
 		case RENAME_FILE_SKIP:
 			model.renameFiles(Constants.RENAME_FILE_SKIP);
 			break;
+		default:
+			break;
 		}
-	}
-
-	// MouseMotionListener
-	public void mouseDragged(MouseEvent e) {
-		// TODO Auto-generated method stub
-		
-		int deltaX = x1 - e.getX();
-		int deltaY = y1 - e.getY(); 
-		model.setImagePositionX(deltaX);
-		model.setImagePositionY(deltaY);
-		model.updateImage();
-	}
-
-	public void mouseMoved(MouseEvent e) {
-		// TODO Auto-generated method stub		
-	}
-
-	// MouseImputListener
-	public void mouseClicked(MouseEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	public void mousePressed(MouseEvent e) {
-		// TODO Auto-generated method stub
-		x1 = e.getX();
-		y1 = e.getY();
-	}
-
-	public void mouseReleased(MouseEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	public void mouseEntered(MouseEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	public void mouseExited(MouseEvent e) {
-		// TODO Auto-generated method stub
-		
 	}
 }

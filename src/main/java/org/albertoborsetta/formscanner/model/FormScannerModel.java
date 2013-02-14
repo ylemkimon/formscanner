@@ -26,8 +26,6 @@ public class FormScannerModel {
 	private RenameFileImageFrame renameFileImageFrame;
 	private FormScanner view;
 	private int renamedFileIndex = 0;
-	private int imagePositionX = 0;
-	private int imagePositionY = 0;
     
 	public FormScannerModel(FormScanner view) {
 		this.view = view;
@@ -143,24 +141,8 @@ public class FormScannerModel {
 			view.disposeFrame(renameFileFrame);
 		}
 	}
-
-	public int getImagePositionX() {
-		return imagePositionX;
-	}
-
-	public void setImagePositionX(int imagePositionX) {
-		this.imagePositionX = this.imagePositionX + imagePositionX;
-	}
-
-	public int getImagePositionY() {
-		return imagePositionY;
-	}
-
-	public void setImagePositionY(int imagePositionY) {
-		this.imagePositionY = this.imagePositionY + imagePositionY;
-	}
 	
-	public void updateImage() {
-		renameFileImageFrame.moveImage(imagePositionX, imagePositionY);
+	public void setScrollBars(int deltaX, int deltaY) {
+		renameFileImageFrame.setScrollBars(deltaX, deltaY);
 	}
 }

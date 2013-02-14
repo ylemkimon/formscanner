@@ -1,6 +1,7 @@
 package org.albertoborsetta.formscanner.gui;
 
-import org.albertoborsetta.formscanner.controller.RenameFileController;
+import org.albertoborsetta.formscanner.controller.InternalFrameController;
+import org.albertoborsetta.formscanner.controller.RenameImageController;
 import org.albertoborsetta.formscanner.model.FormScannerModel;
 
 import java.awt.Dimension;
@@ -19,21 +20,27 @@ import java.io.IOException;
 
 
 public class RenameFileImageFrame extends JInternalFrame {
+	
 	private ImagePanel imagePanel;
-	private JScrollPane scrollPane;
+	private ImageScrollPane scrollPane;
 	private FormScannerModel model;
-	private RenameFileController controller;
+	private RenameImageController renameImageController;
+	private InternalFrameController internalFrameController;
+	private int scrollPositionX = 0;
+	private int scrollPositionY = 0;
+	
 
 	/**
 	 * Create the frame.
 	 */
 	public RenameFileImageFrame(FormScannerModel formScannerModel, File file) {
 		model = formScannerModel;
-		controller = RenameFileController.getInstance(model);
+		renameImageController = new RenameImageController(model);
+		internalFrameController = InternalFrameController.getInstance(model);
 		
 		setClosable(true);
 		setName("renameFileImageFrame");
-		addInternalFrameListener(controller);
+		addInternalFrameListener(internalFrameController);
 		
 		setTitle("Rename file image");
 		
@@ -41,17 +48,30 @@ public class RenameFileImageFrame extends JInternalFrame {
 		setBounds(220, 10, desktopWidth - 230, 300);
 		
 		imagePanel = new ImagePanel(file);
-		scrollPane = new JScrollPane(imagePanel);
-		scrollPane.addMouseMotionListener(controller);
-		scrollPane.addMouseListener(controller);
+		scrollPane = new ImageScrollPane(imagePanel);
 		getContentPane().add(scrollPane, BorderLayout.CENTER);
+	}
+	
+	private class ImageScrollPane extends JScrollPane {
+		
+		public ImageScrollPane(JPanel imagePanel) {
+			super(imagePanel);
+			verticalScrollBar.setValue(0);
+			horizontalScrollBar.setValue(0);
+			addMouseMotionListener(renameImageController);
+			addMouseListener(renameImageController);
+			setWheelScrollingEnabled(true);
+		}
+		
+		public void setScrollBars(int deltaX, int deltaY) {
+			horizontalScrollBar.setValue(horizontalScrollBar.getValue() + deltaX);
+			verticalScrollBar.setValue(verticalScrollBar.getValue() + deltaY);			
+		}
 	}
 	
 	private class ImagePanel extends JPanel {
 		
 		private BufferedImage image;
-		private int x=0;
-		private int y=0;
 		
 		public ImagePanel(File file) {
 			super();
@@ -62,7 +82,7 @@ public class RenameFileImageFrame extends JInternalFrame {
 		@Override
 	    public void paintComponent(Graphics g) {
 			setPreferredSize(new Dimension(image.getWidth(), image.getHeight()));
-	        g.drawImage(image, x, y, this);            
+	        g.drawImage(image, 0, 0, this);            
 	    }
 		
 		public void setImage(File file) {
@@ -72,11 +92,6 @@ public class RenameFileImageFrame extends JInternalFrame {
 				image = null;
 			}
 		}
-		
-		public void setPosition(int x, int y) {
-			this.x = x;
-			this.y = y;
-		}
 	}
 	
 	public void updateImage(File file) {
@@ -84,8 +99,7 @@ public class RenameFileImageFrame extends JInternalFrame {
 		update(getGraphics());
 	}
 	
-	public void moveImage(int x, int y) {
-		imagePanel.setPosition(x, y);
-		update(getGraphics());
+	public void setScrollBars(int deltaX, int deltaY) {
+		scrollPane.setScrollBars(deltaX, deltaY);
 	}
 }
