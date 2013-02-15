@@ -26,6 +26,8 @@ public class FormScannerModel {
 	private RenameFileImageFrame renameFileImageFrame;
 	private FormScanner view;
 	private int renamedFileIndex = 0;
+	private boolean moveImage = false;
+	private boolean hilightImage = false;
     
 	public FormScannerModel(FormScanner view) {
 		this.view = view;
@@ -142,7 +144,19 @@ public class FormScannerModel {
 		}
 	}
 	
-	public void setScrollBars(int deltaX, int deltaY) {
-		renameFileImageFrame.setScrollBars(deltaX, deltaY);
+	public void setMoveImage(boolean enable) {
+		moveImage = enable;
+	}
+	
+	public void setHilightImage(boolean enable) {
+		hilightImage = enable;
+	}
+	
+	public boolean getMoveImage() {
+		return moveImage;
+	}
+	
+	public boolean getHilightImage() {
+		return hilightImage;
 	}
 }

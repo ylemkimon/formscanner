@@ -1,30 +1,39 @@
 package org.albertoborsetta.formscanner.controller;
 
+import java.awt.Cursor;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionListener;
 
 import javax.swing.event.MouseInputListener;
 
+import org.albertoborsetta.formscanner.gui.RenameFileFrame;
+import org.albertoborsetta.formscanner.gui.RenameFileImageFrame;
 import org.albertoborsetta.formscanner.model.FormScannerModel;
 
 public class RenameImageController implements MouseMotionListener, MouseInputListener {
 	
 	private FormScannerModel model;
+	private RenameFileImageFrame view;
 	private int x1; 
 	private int y1;
 	
 	public RenameImageController(FormScannerModel model) {
 		this.model = model;
 	}
+	
+	public void add(RenameFileImageFrame view) {
+		this.view = view;
+	}
 
 	// MouseMotionListener
 	public void mouseDragged(MouseEvent e) {
-		// TODO Auto-generated method stub
-		
-		int deltaX = (x1-e.getX()>0)?(x1-e.getX()):0;
-		int deltaY = (y1-e.getY()>0)?(y1-e.getY()):0;
-		
-		model.setScrollBars(deltaX, deltaY);		
+		if (model.getMoveImage()) {
+			int deltaX = x1-e.getX();
+			int deltaY = y1-e.getY();		
+			view.setScrollBars(deltaX, deltaY);
+		} else if (model.getHilightImage()) {
+			System.out.println("hilight image");
+		}
 	}
 
 	public void mouseMoved(MouseEvent e) {
@@ -38,23 +47,31 @@ public class RenameImageController implements MouseMotionListener, MouseInputLis
 	}
 
 	public void mousePressed(MouseEvent e) {
-		// TODO Auto-generated method stub
-		x1 = e.getX();
-		y1 = e.getY();
+		if (model.getMoveImage()) {
+			x1 = e.getX();
+			y1 = e.getY();
+			view.setImageCursor(Cursor.MOVE_CURSOR);
+		}
 	}
 
 	public void mouseReleased(MouseEvent e) {
-		// TODO Auto-generated method stub
+		if (model.getMoveImage()) {
+			view.setImageCursor(Cursor.HAND_CURSOR);
+		} else if (model.getHilightImage()) {
+			view.setImageCursor(Cursor.CROSSHAIR_CURSOR);
+		}
 	}
 
 	public void mouseEntered(MouseEvent e) {
-		// TODO Auto-generated method stub
-		
+		if (model.getMoveImage()) {
+			view.setImageCursor(Cursor.HAND_CURSOR);
+		} else if (model.getHilightImage()) {
+			view.setImageCursor(Cursor.CROSSHAIR_CURSOR);
+		}
 	}
 
 	public void mouseExited(MouseEvent e) {
-		// TODO Auto-generated method stub
-		
+		view.setImageCursor(Cursor.DEFAULT_CURSOR);
 	}
 
 }

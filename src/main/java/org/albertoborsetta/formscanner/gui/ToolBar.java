@@ -51,32 +51,12 @@ public class ToolBar extends JPanel {
 			setComponentOrientation(ComponentOrientation.LEFT_TO_RIGHT);
 			
 			JButton openButton = new OpenButton();
-			add(openButton);
-			
 			JButton saveButton = new SaveButton();
-			add(saveButton);	
-		}
-	}
-	
-	private class OpenButton extends JButton {
-		
-		public OpenButton() {
-			setActionCommand(Constants.OPEN_IMAGES);
-			addActionListener(controller);
-			setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
-			setToolTipText("Open images");
-			setIcon(new ImageIcon(FormScanner.class.getResource("/org/albertoborsetta/formscanner/gui/icons/crystal/lc_open.png")));
-		}
-	}
-	
-	private class SaveButton extends JButton {
-		
-		public SaveButton() {
-			setActionCommand(Constants.SAVE_RESULTS);
-			addActionListener(controller);
-			setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
-			setIcon(new ImageIcon(FormScanner.class.getResource("/org/albertoborsetta/formscanner/gui/icons/crystal/lc_save.png")));
-			setToolTipText("Save results");
+			JButton renameButton = new RenameButton();
+			
+			add(openButton);
+			add(renameButton);
+			add(saveButton);			
 		}
 	}
 	
@@ -87,8 +67,36 @@ public class ToolBar extends JPanel {
 			setAlignmentX(Component.LEFT_ALIGNMENT);
 			setComponentOrientation(ComponentOrientation.LEFT_TO_RIGHT);
 			
-			JButton renameButton = new RenameButton();
-			add(renameButton);	
+			JButton defaultButton = new DefaultButton();
+			JButton moveImageButton = new MoveImageButton();
+			JButton hilightButton = new HilightImageButton();
+			
+			add(defaultButton);
+			add(moveImageButton);
+			add(hilightButton);
+		}
+	}
+	
+	private class OpenButton extends JButton {
+		
+		public OpenButton() {
+			setActionCommand(Constants.OPEN_IMAGES);
+			addActionListener(controller);
+			setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
+			setToolTipText("Open images");
+			setIcon(new ImageIcon(FormScanner.class.getResource("/org/albertoborsetta/formscanner/gui/icons/lc_open.png")));
+		}
+	}
+	
+	private class SaveButton extends JButton {
+		
+		public SaveButton() {
+			setActionCommand(Constants.SAVE_RESULTS);
+			addActionListener(controller);
+			setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
+			setIcon(new ImageIcon(FormScanner.class.getResource("/org/albertoborsetta/formscanner/gui/icons/lc_save.png")));
+			setToolTipText("Save results");
+			setEnabled(false);
 		}
 	}
 	
@@ -98,8 +106,44 @@ public class ToolBar extends JPanel {
 			setActionCommand(Constants.RENAME_FILE_FIRST);
 			addActionListener(controller);
 			setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
-			setIcon(new ImageIcon(FormScanner.class.getResource("/org/albertoborsetta/formscanner/gui/icons/crystal/lc_editdoc.png")));
+			setIcon(new ImageIcon(FormScanner.class.getResource("/org/albertoborsetta/formscanner/gui/icons/lc_drawtext.png")));
 			setToolTipText("Rename image files");
+			setEnabled(false);
 		}		
+	}
+	
+	private class MoveImageButton extends JButton {
+		
+		public MoveImageButton() {
+			setActionCommand(Constants.MOVE_IMAGE);
+			addActionListener(controller);
+			setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
+			setToolTipText("Open images");
+			setIcon(new ImageIcon(FormScanner.class.getResource("/org/albertoborsetta/formscanner/gui/icons/lc_arrowshapes.quad-arrow.png")));
+			setEnabled(false);
+		}
+	}
+
+	private class HilightImageButton extends JButton {
+		
+		public HilightImageButton() {
+			setActionCommand(Constants.HILIGHT_IMAGE);
+			addActionListener(controller);
+			setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
+			setToolTipText("Open images");
+			setIcon(new ImageIcon(FormScanner.class.getResource("/org/albertoborsetta/formscanner/gui/icons/lc_basicshapes.rectangle.png")));
+			setEnabled(false);
+		}
+	}
+	
+	private class DefaultButton extends JButton {
+		
+		public DefaultButton() {
+			setActionCommand(Constants.DEFAULT_ACTION);
+			addActionListener(controller);
+			setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
+			setToolTipText("Open images");
+			setIcon(new ImageIcon(FormScanner.class.getResource("/org/albertoborsetta/formscanner/gui/icons/lc_drawselect.png")));
+		}
 	}
 }

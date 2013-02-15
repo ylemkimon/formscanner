@@ -4,6 +4,7 @@ import org.albertoborsetta.formscanner.controller.InternalFrameController;
 import org.albertoborsetta.formscanner.controller.RenameImageController;
 import org.albertoborsetta.formscanner.model.FormScannerModel;
 
+import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.BorderLayout;
@@ -26,8 +27,6 @@ public class RenameFileImageFrame extends JInternalFrame {
 	private FormScannerModel model;
 	private RenameImageController renameImageController;
 	private InternalFrameController internalFrameController;
-	private int scrollPositionX = 0;
-	private int scrollPositionY = 0;
 	
 
 	/**
@@ -36,6 +35,7 @@ public class RenameFileImageFrame extends JInternalFrame {
 	public RenameFileImageFrame(FormScannerModel formScannerModel, File file) {
 		model = formScannerModel;
 		renameImageController = new RenameImageController(model);
+		renameImageController.add(this);
 		internalFrameController = InternalFrameController.getInstance(model);
 		
 		setClosable(true);
@@ -60,7 +60,6 @@ public class RenameFileImageFrame extends JInternalFrame {
 			horizontalScrollBar.setValue(0);
 			addMouseMotionListener(renameImageController);
 			addMouseListener(renameImageController);
-			setWheelScrollingEnabled(true);
 		}
 		
 		public void setScrollBars(int deltaX, int deltaY) {
@@ -101,5 +100,10 @@ public class RenameFileImageFrame extends JInternalFrame {
 	
 	public void setScrollBars(int deltaX, int deltaY) {
 		scrollPane.setScrollBars(deltaX, deltaY);
+	}
+	
+	public void setImageCursor(int moveCursor) {
+		Cursor cursor = Cursor.getPredefinedCursor(moveCursor);
+		scrollPane.setCursor(cursor);
 	}
 }
