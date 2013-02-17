@@ -1,18 +1,12 @@
 package org.albertoborsetta.formscanner.gui;
 
 import java.awt.EventQueue;
-import java.awt.GraphicsDevice;
-import java.awt.GraphicsEnvironment;
 import java.awt.Toolkit;
+import java.awt.BorderLayout;
+import java.awt.Dimension;
 
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JMenuBar;
-import java.awt.BorderLayout;
-
-import java.awt.Dimension;
-import javax.swing.JPanel;
-
 import javax.swing.JInternalFrame;
 import javax.swing.JDesktopPane;
 
@@ -22,6 +16,9 @@ public class FormScanner extends JFrame {
 
 	private static FormScannerModel model;
 	private static JDesktopPane desktopPane;
+	private ToolBar toolBar;
+	private JLabel statusBar;
+	private MenuBar menuBar;
 
 	/**
 	 * Launch the application.
@@ -48,13 +45,13 @@ public class FormScanner extends JFrame {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
 		getContentPane().setLayout(new BorderLayout(0, 0));
-		JMenuBar menuBar = new MenuBar(model);
+		menuBar = new MenuBar(model);
 		setJMenuBar(menuBar);
 		
-		JPanel toolBar = new ToolBar(model);
+		toolBar = new ToolBar(model);
 		getContentPane().add(toolBar, BorderLayout.NORTH);
 		
-		JLabel statusBar = new StatusBar(model);
+		statusBar = new StatusBar(model);
 		getContentPane().add(statusBar, BorderLayout.SOUTH);
 		
 		desktopPane = new JDesktopPane();
@@ -97,5 +94,10 @@ public class FormScanner extends JFrame {
 	
 	public Dimension getDesktopSize() {
 		return desktopPane.getSize();
+	}
+	
+	public void setRenameControlersEnabled(boolean enable) {
+		toolBar.setRenameControllersEnabled(enable);
+		menuBar.setRenameControllersEnabled(enable);
 	}
 }

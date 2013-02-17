@@ -10,6 +10,9 @@ import javax.swing.JFileChooser;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JScrollPane;
+import javax.swing.JSeparator;
+import javax.swing.JSplitPane;
 import javax.swing.KeyStroke;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
@@ -23,6 +26,12 @@ public class MenuBar extends JMenuBar {
 	private static FormScannerModel model;
 	private FormScannerController controller;
 	
+	private JMenuItem openMenuItem;
+	private JMenuItem saveMenuItem;
+	private JMenuItem exitMenuItem;
+	private JMenuItem renameMenuItem;
+	
+	
 	public MenuBar(final FormScannerModel formScannerModel) {
 		model = formScannerModel;
 		controller = FormScannerController.getInstance(model);
@@ -33,7 +42,7 @@ public class MenuBar extends JMenuBar {
 		add(editMenu);
 	}
 	
-private class FileMenu extends JMenu {
+	private class FileMenu extends JMenu {
 		
 		public FileMenu() {
 			super("File");
@@ -41,10 +50,27 @@ private class FileMenu extends JMenu {
 			setToolTipText("File menu");
 			setFont(FormScannerFont.getFont());
 			
-			JMenuItem openMenuItem = new OpenMenuItem();
-			JMenuItem saveMenuItem = new SaveMenuItem();
+			openMenuItem = new OpenMenuItem();
+			saveMenuItem = new SaveMenuItem();
+			exitMenuItem = new ExitMenuItem();
+			
 			add(openMenuItem);
 			add(saveMenuItem);
+			add(new JSeparator(JSeparator.HORIZONTAL));
+			add(exitMenuItem);
+		}
+	}
+	
+	private class EditMenu extends JMenu {
+		
+		public EditMenu() {
+			super("Edit");
+			setMnemonic('E');
+			setToolTipText("Edit menu");
+			setFont(FormScannerFont.getFont());
+			
+			renameMenuItem = new RenameMenuItem();
+			add(renameMenuItem);
 		}
 	}
 	
@@ -71,19 +97,20 @@ private class FileMenu extends JMenu {
 			setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, InputEvent.CTRL_MASK));
 			setToolTipText("Save results file");
 			setFont(FormScannerFont.getFont());
+			setEnabled(false);
 		}
 	}
 	
-	private class EditMenu extends JMenu {
+	private class ExitMenuItem extends JMenuItem {
 		
-		public EditMenu() {
-			super("Edit");
-			setMnemonic('E');
-			setToolTipText("Edit menu");
+		public ExitMenuItem() {
+			super("Exit");	
+			setActionCommand(Constants.EXIT);
+			addActionListener(controller);
+			setMnemonic('X');
+			setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_X, InputEvent.CTRL_MASK));
+			setToolTipText("Exit");
 			setFont(FormScannerFont.getFont());
-			
-			JMenuItem renameMenuItem = new RenameMenuItem();
-			add(renameMenuItem);
 		}
 	}
 	
@@ -97,6 +124,11 @@ private class FileMenu extends JMenu {
 			setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_R, InputEvent.CTRL_MASK));
 			setToolTipText("Rename image files");
 			setFont(FormScannerFont.getFont());
+			setEnabled(false);
 		}
+	}
+	
+	public void setRenameControllersEnabled(boolean enable) {
+		renameMenuItem.setEnabled(enable);
 	}
 }

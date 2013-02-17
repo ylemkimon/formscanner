@@ -32,43 +32,14 @@ public class FormScannerController implements ActionListener {
 		Actions act = Actions.valueOf(e.getActionCommand());
 		switch (act) {
 		case RENAME_FILE_FIRST:
-			setMouseValues(Constants.DEFAULT_ACTION);
 			model.renameFiles(Constants.RENAME_FILE_FIRST);
 			break;
 		case OPEN_IMAGES:
-			setMouseValues(Constants.DEFAULT_ACTION);
 			model.openFiles(choose());
 			break;
 		case SAVE_RESULTS:
-			setMouseValues(Constants.DEFAULT_ACTION);
-			break;
-		case MOVE_IMAGE:
-			setMouseValues(Constants.MOVE_IMAGE);
-			break;
-		case HILIGHT_IMAGE:
-			setMouseValues(Constants.HILIGHT_IMAGE);
-			break;
-		case DEFAULT_ACTION:
-		default:
-			setMouseValues(Constants.DEFAULT_ACTION);
-			break;
-		}
-	}
-	
-	private void setMouseValues(String type) {
-		Actions act = Actions.valueOf(type);
-		switch (act) {
-		case MOVE_IMAGE:
-			model.setMoveImage(true);
-			model.setHilightImage(false);
-			break;
-		case HILIGHT_IMAGE:
-			model.setMoveImage(false);
-			model.setHilightImage(true);
 			break;
 		default:
-			model.setMoveImage(false);
-			model.setHilightImage(false);
 			break;
 		}
 	}

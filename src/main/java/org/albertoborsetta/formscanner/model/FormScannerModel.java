@@ -26,8 +26,6 @@ public class FormScannerModel {
 	private RenameFileImageFrame renameFileImageFrame;
 	private FormScanner view;
 	private int renamedFileIndex = 0;
-	private boolean moveImage = false;
-	private boolean hilightImage = false;
     
 	public FormScannerModel(FormScanner view) {
 		this.view = view;
@@ -41,6 +39,7 @@ public class FormScannerModel {
 		if (!openedFiles.isEmpty()) {
 			fileListFrame = new FileListFrame(this, getOpenedFileList());
 			view.arrangeFrame(fileListFrame);
+			view.setRenameControlersEnabled(true);
 		}
 	}
 	
@@ -56,7 +55,7 @@ public class FormScannerModel {
 				view.arrangeFrame(renameFileImageFrame);
 				
 				renameFileFrame = new RenameFileFrame(this, getFileNameByIndex(renamedFileIndex)); 
-				view.arrangeFrame(renameFileFrame);				
+				view.arrangeFrame(renameFileFrame);
 			}			
 			break;
 		case RENAME_FILE_CURRENT:
@@ -103,16 +102,10 @@ public class FormScannerModel {
 		File newFile = new File(filePath + newFileName);
  
 		if (newFile.exists()) {
-			// TODO
-			System.out.println("file already exists!");
 			newFile = oldFile;
 		}
 
-		if (oldFile.renameTo(newFile)){
-			System.out.println("Rename succesful");
-		} else {
-			// TODO
-			System.out.println("Rename failed");
+		if (!oldFile.renameTo(newFile)) {
 			newFile = oldFile;
 		}
 		return newFile;
@@ -142,21 +135,5 @@ public class FormScannerModel {
 		} else {
 			view.disposeFrame(renameFileFrame);
 		}
-	}
-	
-	public void setMoveImage(boolean enable) {
-		moveImage = enable;
-	}
-	
-	public void setHilightImage(boolean enable) {
-		hilightImage = enable;
-	}
-	
-	public boolean getMoveImage() {
-		return moveImage;
-	}
-	
-	public boolean getHilightImage() {
-		return hilightImage;
 	}
 }

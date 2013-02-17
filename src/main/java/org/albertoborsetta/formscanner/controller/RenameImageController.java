@@ -6,7 +6,6 @@ import java.awt.event.MouseMotionListener;
 
 import javax.swing.event.MouseInputListener;
 
-import org.albertoborsetta.formscanner.gui.RenameFileFrame;
 import org.albertoborsetta.formscanner.gui.RenameFileImageFrame;
 import org.albertoborsetta.formscanner.model.FormScannerModel;
 
@@ -27,13 +26,16 @@ public class RenameImageController implements MouseMotionListener, MouseInputLis
 
 	// MouseMotionListener
 	public void mouseDragged(MouseEvent e) {
-		if (model.getMoveImage()) {
-			int deltaX = x1-e.getX();
-			int deltaY = y1-e.getY();		
-			view.setScrollBars(deltaX, deltaY);
-		} else if (model.getHilightImage()) {
-			System.out.println("hilight image");
-		}
+		int x2 = e.getX();
+		int y2 = e.getY();
+		
+		int deltaX = x1 - x2;
+		int deltaY = y1 - y2;
+		
+		x1 = x2;
+		y1 = y2;
+		
+		view.setScrollBars(deltaX, deltaY);
 	}
 
 	public void mouseMoved(MouseEvent e) {
@@ -47,31 +49,21 @@ public class RenameImageController implements MouseMotionListener, MouseInputLis
 	}
 
 	public void mousePressed(MouseEvent e) {
-		if (model.getMoveImage()) {
-			x1 = e.getX();
-			y1 = e.getY();
-			view.setImageCursor(Cursor.MOVE_CURSOR);
-		}
+		x1 = e.getX();
+		y1 = e.getY();
+		view.setImageCursor(Cursor.MOVE_CURSOR);
 	}
 
 	public void mouseReleased(MouseEvent e) {
-		if (model.getMoveImage()) {
-			view.setImageCursor(Cursor.HAND_CURSOR);
-		} else if (model.getHilightImage()) {
-			view.setImageCursor(Cursor.CROSSHAIR_CURSOR);
-		}
+		view.setImageCursor(Cursor.DEFAULT_CURSOR);
 	}
 
 	public void mouseEntered(MouseEvent e) {
-		if (model.getMoveImage()) {
-			view.setImageCursor(Cursor.HAND_CURSOR);
-		} else if (model.getHilightImage()) {
-			view.setImageCursor(Cursor.CROSSHAIR_CURSOR);
-		}
+		// TODO
 	}
 
 	public void mouseExited(MouseEvent e) {
-		view.setImageCursor(Cursor.DEFAULT_CURSOR);
+		// TODO
 	}
 
 }

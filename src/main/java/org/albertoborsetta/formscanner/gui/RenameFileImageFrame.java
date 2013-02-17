@@ -41,7 +41,9 @@ public class RenameFileImageFrame extends JInternalFrame {
 		setClosable(true);
 		setName("renameFileImageFrame");
 		addInternalFrameListener(internalFrameController);
-		
+		setIconifiable(true);
+		setResizable(true);
+		setMaximizable(true);
 		setTitle("Rename file image");
 		
 		int desktopWidth = model.getDesktopSize().width;
