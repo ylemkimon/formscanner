@@ -7,6 +7,9 @@ public class Constants {
 	public static final String RENAME_FILE_SKIP = "RENAME_FILE_SKIP";
 	public static final String OPEN_IMAGES = "OPEN_IMAGES";
 	public static final String SAVE_RESULTS = "SAVE_RESULTS";
+	public static final String ANALYZE_FILE_FIRST = "ANALYZE_FILE_FIRST";
+	public static final String ANALYZE_FILE_CURRENT = "ANALYZE_FILE_NEXT";
+	public static final String ANALYZE_FILE_SKIP = "ANALYZE_FILE_SKIP";
 	public static final String EXIT = "EXIT";	
 	
 	public enum Actions {
@@ -14,6 +17,10 @@ public class Constants {
 		RENAME_FILE_CURRENT,
 		RENAME_FILE_SKIP,
 		OPEN_IMAGES,
-		SAVE_RESULTS;
+		SAVE_RESULTS,
+		ANALYZE_FILE_FIRST,
+		ANALYZE_FILE_NEXT,
+		ANALYZE_FILE_SKIP,
+		EXIT;
 	  }
 }

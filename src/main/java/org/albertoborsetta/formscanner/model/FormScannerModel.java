@@ -1,10 +1,14 @@
 package org.albertoborsetta.formscanner.model;
 
+import net.sourceforge.jiu.data.Gray8Image;
+
 import org.albertoborsetta.formscanner.commons.Constants.Actions;
 import org.albertoborsetta.formscanner.gui.FileListFrame;
 import org.albertoborsetta.formscanner.gui.FormScanner;
 import org.albertoborsetta.formscanner.gui.RenameFileFrame;
 import org.albertoborsetta.formscanner.gui.RenameFileImageFrame;
+import org.albertoborsetta.formscanner.parser.ImageManipulation;
+import org.albertoborsetta.formscanner.parser.ImageUtil;
 
 import java.awt.Dimension;
 import java.io.File;
@@ -26,6 +30,7 @@ public class FormScannerModel {
 	private RenameFileImageFrame renameFileImageFrame;
 	private FormScanner view;
 	private int renamedFileIndex = 0;
+	private int analyzedFileIndex = 0;
     
 	public FormScannerModel(FormScanner view) {
 		this.view = view;
@@ -39,7 +44,8 @@ public class FormScannerModel {
 		if (!openedFiles.isEmpty()) {
 			fileListFrame = new FileListFrame(this, getOpenedFileList());
 			view.arrangeFrame(fileListFrame);
-			view.setRenameControlersEnabled(true);
+			view.setRenameControllersEnabled(true);
+			view.setScanControllersEnabled(true);
 		}
 	}
 	
@@ -82,6 +88,61 @@ public class FormScannerModel {
 			} else {
 				view.disposeFrame(renameFileFrame);
 				view.disposeFrame(renameFileImageFrame);
+			}
+			break;
+		default:
+			break;
+		}		
+	}
+	
+	public void analyzeFiles(String action) {
+		Actions act = Actions.valueOf(action);
+		switch (act) {
+		case ANALYZE_FILE_FIRST:
+			if (!openedFiles.isEmpty()) {
+				analyzedFileIndex  = fileListFrame.getSelectedItemIndex();
+				fileListFrame.selectFile(analyzedFileIndex);
+								
+				System.out.println("Analyze current file");
+				Gray8Image grayimage = ImageUtil.readImage(getFileNameByIndex(analyzedFileIndex));
+
+		        ImageManipulation image = new ImageManipulation(grayimage);
+		        image.locateConcentricCircles();
+
+		        image.readConfig("/home/tecnoteca/workspace/formscanner-project/src/main/resources/template.config");
+		        image.readFields("/home/tecnoteca/workspace/formscanner-project/src/main/resources/template.fields");
+		        image.readAscTemplate("/home/tecnoteca/workspace/formscanner-project/src/main/resources/template.asc");
+		        image.searchMarks();
+		        image.saveData("/home/tecnoteca/Scrivania/results.dat");
+				
+				
+				System.out.println("Create/Update frames");
+				// analyzeFileImageFrame = new AnalyzeFileImageFrame(this, openedFiles.get(analyzedFileIndex));
+				// view.arrangeFrame(analyzeFileImageFrame);
+				
+				// analyzeFileGridFrame = new AnalyzeFileGridFrame(this, getFileNameByIndex(analyzedFileIndex)); 
+				// view.arrangeFrame(analyzeFileGridFrame);
+			}			
+			break;
+		case ANALYZE_FILE_NEXT:
+			System.out.println("Analyze Next file");
+			System.out.println("Update analyze frame");
+			break;
+		case ANALYZE_FILE_SKIP:
+			analyzedFileIndex++;
+			
+			if (openedFiles.size() > analyzedFileIndex) {	
+				fileListFrame.selectFile(analyzedFileIndex);
+			}
+			
+			if (openedFiles.size()>analyzedFileIndex) {
+				System.out.println("Update analyze frame");
+				// analyzeFileGridFrame.updateRenamedFile(getFileNameByIndex(analyzedFileIndex));
+				// analyzeFileImageFrame.updateImage(openedFiles.get(analyzedFileIndex));
+			} else {
+				System.out.println("Dispose analyze frame");
+				// view.disposeFrame(analyzeFileGridFrame);
+				// view.disposeFrame(analyzeFileImageFrame);
 			}
 			break;
 		default:

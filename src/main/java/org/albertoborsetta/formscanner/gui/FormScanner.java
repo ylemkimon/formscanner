@@ -96,8 +96,13 @@ public class FormScanner extends JFrame {
 		return desktopPane.getSize();
 	}
 	
-	public void setRenameControlersEnabled(boolean enable) {
+	public void setRenameControllersEnabled(boolean enable) {
 		toolBar.setRenameControllersEnabled(enable);
 		menuBar.setRenameControllersEnabled(enable);
+	}
+
+	public void setScanControllersEnabled(boolean enable) {
+		toolBar.setScanControllersEnabled(enable);
+		// menuBar.setScanControllersEnabled(enable);		
 	}
 }

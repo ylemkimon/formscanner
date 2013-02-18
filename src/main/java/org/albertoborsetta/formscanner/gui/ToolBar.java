@@ -26,6 +26,7 @@ public class ToolBar extends JPanel {
 	private JButton openButton;
 	private JButton saveButton;
 	private JButton renameButton;
+	private JButton startButton;
 	
 	/**
 	 * Create the panel.
@@ -71,8 +72,10 @@ public class ToolBar extends JPanel {
 			setComponentOrientation(ComponentOrientation.LEFT_TO_RIGHT);
 			
 			renameButton = new RenameButton();
+			startButton = new StartButton();
 			
 			add(renameButton);
+			add(startButton);
 		}
 	}
 	
@@ -111,7 +114,23 @@ public class ToolBar extends JPanel {
 		}		
 	}
 	
+	private class StartButton extends JButton {
+		
+		public StartButton() {
+			setActionCommand(Constants.ANALYZE_FILE_FIRST);
+			addActionListener(controller);
+			setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
+			setIcon(new ImageIcon(FormScanner.class.getResource("/org/albertoborsetta/formscanner/gui/icons/start.png")));
+			setToolTipText("Start analyze results");
+			setEnabled(false);
+		}		
+	}
+	
 	public void setRenameControllersEnabled(boolean enable) {
 		renameButton.setEnabled(enable);
+	}
+
+	public void setScanControllersEnabled(boolean enable) {
+		startButton.setEnabled(enable);		
 	}
 }

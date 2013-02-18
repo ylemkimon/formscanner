@@ -39,6 +39,8 @@ public class FormScannerController implements ActionListener {
 			break;
 		case SAVE_RESULTS:
 			break;
+		case ANALYZE_FILE_FIRST:
+			model.analyzeFiles(Constants.ANALYZE_FILE_FIRST);
 		default:
 			break;
 		}
