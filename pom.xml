@@ -2,33 +2,13 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.albertoborsetta</groupId>
   <artifactId>formscanner</artifactId>
+  <packaging>pom</packaging>
   <version>0.0.1-SNAPSHOT</version>
   <dependencies>
   	<dependency>
   		<groupId>com.jgoodies</groupId>
   		<artifactId>forms</artifactId>
   		<version>1.2.1</version>
-  		<type>jar</type>
-  		<scope>compile</scope>
-  	</dependency>
-  	<dependency>
-  		<groupId>junit</groupId>
-  		<artifactId>junit</artifactId>
-  		<version>4.11</version>
-  		<type>jar</type>
-  		<scope>compile</scope>
-  	</dependency>
-  	<dependency>
-  		<groupId>org.mockito</groupId>
-  		<artifactId>mockito-all</artifactId>
-  		<version>1.9.5</version>
-  		<type>jar</type>
-  		<scope>compile</scope>
-  	</dependency>
-  	<dependency>
-  		<groupId>org.hamcrest</groupId>
-  		<artifactId>hamcrest-library</artifactId>
-  		<version>1.3</version>
   		<type>jar</type>
   		<scope>compile</scope>
   	</dependency>
@@ -59,6 +39,25 @@
 	            </manifest>
 	          </archive>
 	        </configuration>
+  		</plugin>
+  		<plugin>
+  			<groupId>org.apache.maven.plugins</groupId>
+  			<artifactId>maven-assembly-plugin</artifactId>
+  			<version>2.4</version>
+  			<executions>
+					<execution>
+						<id>assembly</id>
+						<phase>package</phase>
+						<goals>
+							<goal>single</goal>
+						</goals>
+						<configuration>
+							<descriptors>
+								<descriptor>${basedir}/src/main/resources/assembly.xml</descriptor>
+							</descriptors>
+						</configuration>
+					</execution>
+				</executions>
   		</plugin>
   	</plugins>
   </build>
