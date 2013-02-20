@@ -46,10 +46,5 @@
         <enabled>false</enabled>
       </snapshots>
     </repository>
-    <repository>
-    	<id>in-project</id>
-    	<name>In Project Repository</name>
-    	<url>file://${project.basedir}/libs</url>
-	</repository>
   </repositories>
 </project>
