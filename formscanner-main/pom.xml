@@ -1,0 +1,55 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <artifactId>formscanner</artifactId>
+    <groupId>org.albertoborsetta</groupId>
+    <version>0.0.1-SNAPSHOT</version>
+  </parent>
+  <groupId>org.albertoborsetta</groupId>
+  <artifactId>formscanner-main</artifactId>
+  <name>FormScanner - Main</name>
+  <version>0.0.1-SNAPSHOT</version>
+  <dependencies>
+  	<dependency>
+  		<groupId>com.jgoodies</groupId>
+  		<artifactId>forms</artifactId>
+  		<version>1.2.1</version>
+  		<type>jar</type>
+  		<scope>compile</scope>
+  	</dependency>
+  	<dependency>
+  		<groupId>org.apache.commons</groupId>
+  		<artifactId>commons-io</artifactId>
+  		<version>1.3.2</version>
+  		<scope>compile</scope>
+  	</dependency>
+  	<dependency>
+      <groupId>com.tomgibara.imageio</groupId>
+      <artifactId>imageio-tiff</artifactId>
+      <version>1.0</version>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
+      <groupId>net.sourceforge</groupId>
+      <artifactId>jiu</artifactId>
+      <version>0.14.3</version>
+      <scope>compile</scope>
+    </dependency>
+  </dependencies>
+  <repositories>
+    <repository>
+      <id>tomgibara</id>
+      <name>Tom Gibara Maven Repository</name>
+      <layout>default</layout>
+      <url>http://www.tomgibara.com/maven/repo/</url>
+      <snapshots>
+        <enabled>false</enabled>
+      </snapshots>
+    </repository>
+    <repository>
+    	<id>in-project</id>
+    	<name>In Project Repository</name>
+    	<url>file://${project.basedir}/libs</url>
+	</repository>
+  </repositories>
+</project>
