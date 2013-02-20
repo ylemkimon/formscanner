@@ -25,7 +25,7 @@
 						</includes>
 					</fileSet>
 					<fileSet>
-						<outputDirectory>/config/template</outputDirectory>
+						<outputDirectory>/template</outputDirectory>
 						<directory>src/main/resources</directory>
 						<includes>
 							<include>template.*</include>
