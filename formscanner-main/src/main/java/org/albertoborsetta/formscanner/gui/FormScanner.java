@@ -14,6 +14,8 @@ import org.albertoborsetta.formscanner.model.FormScannerModel;
 
 public class FormScanner extends JFrame {
 
+	private static final long serialVersionUID = 1L;
+
 	private static FormScannerModel model;
 	private static JDesktopPane desktopPane;
 	private ToolBar toolBar;

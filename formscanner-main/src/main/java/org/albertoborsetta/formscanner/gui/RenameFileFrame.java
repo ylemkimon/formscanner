@@ -1,9 +1,9 @@
 package org.albertoborsetta.formscanner.gui;
 
 import org.albertoborsetta.formscanner.commons.Constants;
+import org.albertoborsetta.formscanner.commons.FormScannerFont;
 import org.albertoborsetta.formscanner.controller.RenameFileController;
 import org.albertoborsetta.formscanner.controller.InternalFrameController;
-import org.albertoborsetta.formscanner.gui.font.FormScannerFont;
 import org.albertoborsetta.formscanner.model.FormScannerModel;
 
 import org.apache.commons.io.FilenameUtils;
@@ -23,6 +23,9 @@ import com.jgoodies.forms.layout.RowSpec;
 import com.jgoodies.forms.factories.FormFactory;
 
 public class RenameFileFrame extends JInternalFrame {
+
+	private static final long serialVersionUID = 1L;
+	
 	private JTextField fileNameField;
 	private JLabel fileExtensionField;
 	private JLabel statusBar;

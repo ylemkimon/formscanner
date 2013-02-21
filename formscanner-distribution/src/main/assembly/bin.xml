@@ -19,24 +19,31 @@
 				<fileSets>
 					<fileSet>
 						<outputDirectory>/config</outputDirectory>
-						<directory>src/main/resources</directory>
+						<directory>src/main/resources/config</directory>
 						<includes>
 							<include>*.properties</include>
 						</includes>
 					</fileSet>
 					<fileSet>
 						<outputDirectory>/template</outputDirectory>
-						<directory>src/main/resources</directory>
+						<directory>src/main/resources/template</directory>
 						<includes>
 							<include>template.*</include>
 						</includes>
 					</fileSet>
 					<fileSet>
 						<outputDirectory>/bin</outputDirectory>
-						<directory>src/main/resources</directory>
+						<directory>src/main/resources/bin</directory>
 						<includes>
 							<include>*.sh</include>
 							<include>*.bat</include>
+						</includes>
+					</fileSet>
+					<fileSet>
+						<outputDirectory>/icons</outputDirectory>
+						<directory>src/main/resources/icons</directory>
+						<includes>
+							<include>*.png</include>
 						</includes>
 					</fileSet>
 				</fileSets>

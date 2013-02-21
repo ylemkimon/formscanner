@@ -9,10 +9,12 @@ import java.util.List;
 
 import javax.swing.JList;
 
-import org.albertoborsetta.formscanner.gui.font.FormScannerFont;
+import org.albertoborsetta.formscanner.commons.FormScannerFont;
 import org.albertoborsetta.formscanner.model.FormScannerModel;
 
 public class FileListFrame extends JInternalFrame {
+	
+	private static final long serialVersionUID = 1L;
 	
 	private JScrollPane scrollPane;
 	private JList list;

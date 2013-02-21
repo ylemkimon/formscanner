@@ -22,6 +22,8 @@ import java.io.IOException;
 
 public class RenameFileImageFrame extends JInternalFrame {
 	
+	private static final long serialVersionUID = 1L;
+	
 	private ImagePanel imagePanel;
 	private ImageScrollPane scrollPane;
 	private FormScannerModel model;

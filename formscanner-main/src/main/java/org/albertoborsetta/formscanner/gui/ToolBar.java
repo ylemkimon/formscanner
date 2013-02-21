@@ -2,9 +2,6 @@ package org.albertoborsetta.formscanner.gui;
 
 import java.awt.Component;
 import java.awt.ComponentOrientation;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.io.File;
 
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
@@ -20,6 +17,8 @@ import org.albertoborsetta.formscanner.model.FormScannerModel;
 
 public class ToolBar extends JPanel {
 
+	private static final long serialVersionUID = 1L;
+	
 	private static FormScannerModel model;
 	private FormScannerController controller;
 	

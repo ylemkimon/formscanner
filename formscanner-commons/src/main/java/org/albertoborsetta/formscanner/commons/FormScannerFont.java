@@ -1,4 +1,4 @@
-package org.albertoborsetta.formscanner.gui.font;
+package org.albertoborsetta.formscanner.commons;
 
 import java.awt.Font;
 import java.text.AttributedCharacterIterator.Attribute;

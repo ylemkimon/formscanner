@@ -8,8 +8,8 @@ import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 import org.albertoborsetta.formscanner.commons.Constants;
+import org.albertoborsetta.formscanner.commons.FormScannerFont;
 import org.albertoborsetta.formscanner.commons.Constants.Actions;
-import org.albertoborsetta.formscanner.gui.font.FormScannerFont;
 import org.albertoborsetta.formscanner.model.FormScannerModel;
 
 public class FormScannerController implements ActionListener {
