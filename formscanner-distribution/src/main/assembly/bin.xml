@@ -25,18 +25,17 @@
 						</includes>
 					</fileSet>
 					<fileSet>
+						<outputDirectory>/language</outputDirectory>
+						<directory>src/main/resources/language</directory>
+						<includes>
+							<include>*.lang</include>
+						</includes>
+					</fileSet>
+					<fileSet>
 						<outputDirectory>/template</outputDirectory>
 						<directory>src/main/resources/template</directory>
 						<includes>
 							<include>template.*</include>
-						</includes>
-					</fileSet>
-					<fileSet>
-						<outputDirectory>/bin</outputDirectory>
-						<directory>src/main/resources/bin</directory>
-						<includes>
-							<include>*.sh</include>
-							<include>*.bat</include>
 						</includes>
 					</fileSet>
 					<fileSet>
