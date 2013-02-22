@@ -1,6 +1,6 @@
 package org.albertoborsetta.formscanner.gui;
 
-import org.albertoborsetta.formscanner.commons.Constants;
+import org.albertoborsetta.formscanner.commons.FormScannerConstants;
 import org.albertoborsetta.formscanner.commons.FormScannerFont;
 import org.albertoborsetta.formscanner.controller.RenameFileController;
 import org.albertoborsetta.formscanner.controller.InternalFrameController;
@@ -125,7 +125,7 @@ public class RenameFileFrame extends JInternalFrame {
 		public OKButton() {
 			super("OK");
 			setEnabled(false);
-			setActionCommand(Constants.RENAME_FILE_CURRENT);
+			setActionCommand(FormScannerConstants.RENAME_FILE_CURRENT);
 			addActionListener(renameFileController);
 		}
 	}
@@ -134,7 +134,7 @@ public class RenameFileFrame extends JInternalFrame {
 		
 		public CancelButton() {
 			super("Cancel");
-			setActionCommand(Constants.RENAME_FILE_SKIP);
+			setActionCommand(FormScannerConstants.RENAME_FILE_SKIP);
 			addActionListener(renameFileController);
 		}
 	}

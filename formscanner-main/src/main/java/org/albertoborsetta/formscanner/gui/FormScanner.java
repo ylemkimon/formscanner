@@ -11,6 +11,19 @@ import javax.swing.JInternalFrame;
 import javax.swing.JDesktopPane;
 
 import org.albertoborsetta.formscanner.model.FormScannerModel;
+import org.albertoborsetta.formscanner.commons.configuration.ConfigurationException;
+import org.albertoborsetta.formscanner.commons.configuration.ConfigurationLoader;
+import org.albertoborsetta.formscanner.commons.translations.TranslationException;
+import org.albertoborsetta.formscanner.commons.translations.TranslationLoader;
+import org.albertoborsetta.formscanner.commons.FormScannerConfigurationKeys;
+import org.albertoborsetta.formscanner.commons.FormScannerConstants;
+import org.albertoborsetta.formscanner.commons.FormScannerTranslationKeys;
+
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.util.Properties;
+
+import org.apache.commons.configuration.Configuration;
 
 public class FormScanner extends JFrame {
 
@@ -28,7 +41,17 @@ public class FormScanner extends JFrame {
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
-				try {					
+				Properties properties = new Properties();
+				Properties translations = new Properties();
+				
+				try {
+					
+					properties.load(FormScanner.class.getClassLoader().getResourceAsStream("config/formscanner.properties"));
+					String language = properties.getProperty(FormScannerConfigurationKeys.LANG);
+					
+					translations.load(FormScanner.class.getClassLoader().getResourceAsStream("language/formscanner-"+language+".lang"));
+					System.out.println(translations.getProperty(FormScannerTranslationKeys.OPEN_FILES));
+					
 					FormScanner window = new FormScanner();					
 				} catch (Exception e) {
 					e.printStackTrace();

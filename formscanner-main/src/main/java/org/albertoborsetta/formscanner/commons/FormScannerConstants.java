@@ -1,6 +1,6 @@
 package org.albertoborsetta.formscanner.commons;
 
-public class Constants {
+public class FormScannerConstants {
 
 	public static final String RENAME_FILE_FIRST = "RENAME_FILE_FIRST";
 	public static final String RENAME_FILE_CURRENT = "RENAME_FILE_CURRENT";

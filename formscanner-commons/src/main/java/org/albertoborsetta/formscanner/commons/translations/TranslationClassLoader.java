@@ -1,4 +1,4 @@
-package org.albertoborsetta.formscanner.commons.configuration;
+package org.albertoborsetta.formscanner.commons.translations;
 
 import static java.lang.String.format;
 import static org.apache.commons.lang.StringUtils.EMPTY;
@@ -13,13 +13,13 @@ import java.net.URLClassLoader;
 import org.apache.commons.configuration.SystemConfiguration;
 import org.apache.commons.lang.Validate;
 
-public class ConfigurationClassLoader {
+public class TranslationClassLoader {
 
-	public static final String CONFIGURATION_PATH_PROPERTY = "org.cmdbuild.connector.configuration.path";
+	public static final String CONFIGURATION_PATH_PROPERTY = "org.albertoborsetta.formscanner.translation.path";
 
 	private final URLClassLoader urlClassLoader;
 
-	private ConfigurationClassLoader(final URL url) {
+	private TranslationClassLoader(final URL url) {
 		urlClassLoader = new URLClassLoader(new URL[] { url }, null);
 	}
 
@@ -27,38 +27,38 @@ public class ConfigurationClassLoader {
 		Validate.notEmpty(name);
 		final URL resourceURL = urlClassLoader.getResource(name);
 		if (resourceURL == null) {
-			logger.warn("resource '{}' not found", name);
+			System.out.println("resource " + name + " not found");
 		}
 		return (resourceURL == null) ? null : resourceURL.getFile();
 	}
 
-	public static ConfigurationClassLoader getInstance() throws ConfigurationException {
+	public static TranslationClassLoader getInstance() throws TranslationException {
 		final String configurationPath = getConfigurationPath();
 		try {
 			final URL url = new URL("file://" + configurationPath);
-			return new ConfigurationClassLoader(url);
+			return new TranslationClassLoader(url);
 		} catch (final MalformedURLException e) {
-			throw new ConfigurationException(e);
+			throw new TranslationException(e);
 		}
 	}
 
-	private static String getConfigurationPath() throws ConfigurationException {
+	private static String getConfigurationPath() throws TranslationException {
 		final SystemConfiguration systemConfiguration = new SystemConfiguration();
 		final String property = systemConfiguration.getString(CONFIGURATION_PATH_PROPERTY);
 		final String configurationPath = parseConfigurationPath(property);
 		if (isBlank(configurationPath)) {
 			final String message = format("missing property '%s'", CONFIGURATION_PATH_PROPERTY);
-			throw new ConfigurationException(message);
+			throw new TranslationException(message);
 		}
 		final File file = new File(configurationPath);
 		if (!file.isDirectory()) {
 			final String message = format("invalid path '%s'", configurationPath);
-			throw new ConfigurationException(message);
+			throw new TranslationException(message);
 		}
 		return configurationPath;
 	}
 
-	private static String parseConfigurationPath(final String property) throws ConfigurationException {
+	private static String parseConfigurationPath(final String property) throws TranslationException {
 		final String configurationPath;
 		if (isNotBlank(property)) {
 			configurationPath = property + (property.endsWith(File.separator) ? EMPTY : File.separator);

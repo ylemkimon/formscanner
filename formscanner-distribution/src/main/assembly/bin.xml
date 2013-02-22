@@ -45,6 +45,14 @@
 							<include>*.png</include>
 						</includes>
 					</fileSet>
+					<fileSet>
+						<outputDirectory>/bin</outputDirectory>
+						<directory>src/main/resources/bin</directory>
+						<includes>
+							<include>*.sh</include>
+							<include>*.bat</include>
+						</includes>
+					</fileSet>
 				</fileSets>
 			</sources>
 			<binaries>

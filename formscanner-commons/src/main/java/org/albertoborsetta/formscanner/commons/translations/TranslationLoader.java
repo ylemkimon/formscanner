@@ -1,4 +1,4 @@
-package org.albertoborsetta.formscanner.commons.configuration;
+package org.albertoborsetta.formscanner.commons.translations;
 
 import static java.lang.String.format;
 import static org.apache.commons.lang.StringUtils.isNotBlank;
@@ -7,7 +7,7 @@ import org.apache.commons.configuration.Configuration;
 import org.apache.commons.configuration.PropertiesConfiguration;
 import org.apache.commons.lang.Validate;
 
-public class ConfigurationLoader {
+public class TranslationLoader {
 
 	private String name;
 
@@ -15,13 +15,13 @@ public class ConfigurationLoader {
 		this.name = name;
 	}
 
-	public Configuration load() throws ConfigurationException {
+	public Configuration load() throws TranslationException {
 		try {
 			validateFields();
 			final Configuration configuration = loadConfiguration();
 			return configuration;
 		} catch (final Exception e) {
-			throw new ConfigurationException();
+			throw new TranslationException();
 		}
 	}
 
@@ -29,9 +29,9 @@ public class ConfigurationLoader {
 		Validate.isTrue(isNotBlank(name), format("invalid name '%s'", name));
 	}
 
-	private Configuration loadConfiguration() throws ConfigurationException {
+	private Configuration loadConfiguration() throws TranslationException {
 		try {
-			final ConfigurationClassLoader loader = ConfigurationClassLoader.getInstance();
+			final TranslationClassLoader loader = TranslationClassLoader.getInstance();
 			final String resource = loader.getResource(name);
 			Validate.notNull(resource, format("missing resource '%s'", name));
 			final PropertiesConfiguration propertiesConfiguration = new PropertiesConfiguration();
@@ -39,7 +39,7 @@ public class ConfigurationLoader {
 			propertiesConfiguration.load(resource);
 			return propertiesConfiguration;
 		} catch (final Exception e) {
-			throw new ConfigurationException(e);
+			throw new TranslationException(e);
 		}
 	}
 

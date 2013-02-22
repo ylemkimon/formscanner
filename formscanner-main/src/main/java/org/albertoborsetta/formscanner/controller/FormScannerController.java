@@ -7,9 +7,9 @@ import java.io.File;
 import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
-import org.albertoborsetta.formscanner.commons.Constants;
+import org.albertoborsetta.formscanner.commons.FormScannerConstants;
 import org.albertoborsetta.formscanner.commons.FormScannerFont;
-import org.albertoborsetta.formscanner.commons.Constants.Actions;
+import org.albertoborsetta.formscanner.commons.FormScannerConstants.Actions;
 import org.albertoborsetta.formscanner.model.FormScannerModel;
 
 public class FormScannerController implements ActionListener {
@@ -32,7 +32,7 @@ public class FormScannerController implements ActionListener {
 		Actions act = Actions.valueOf(e.getActionCommand());
 		switch (act) {
 		case RENAME_FILE_FIRST:
-			model.renameFiles(Constants.RENAME_FILE_FIRST);
+			model.renameFiles(FormScannerConstants.RENAME_FILE_FIRST);
 			break;
 		case OPEN_IMAGES:
 			model.openFiles(choose());
@@ -40,7 +40,7 @@ public class FormScannerController implements ActionListener {
 		case SAVE_RESULTS:
 			break;
 		case ANALYZE_FILE_FIRST:
-			model.analyzeFiles(Constants.ANALYZE_FILE_FIRST);
+			model.analyzeFiles(FormScannerConstants.ANALYZE_FILE_FIRST);
 		default:
 			break;
 		}

@@ -1,7 +1,7 @@
 package org.albertoborsetta.formscanner.controller;
 
-import org.albertoborsetta.formscanner.commons.Constants;
-import org.albertoborsetta.formscanner.commons.Constants.Actions;
+import org.albertoborsetta.formscanner.commons.FormScannerConstants;
+import org.albertoborsetta.formscanner.commons.FormScannerConstants.Actions;
 import org.albertoborsetta.formscanner.gui.RenameFileFrame;
 import org.albertoborsetta.formscanner.model.FormScannerModel;
 
@@ -31,9 +31,9 @@ public class RenameFileController implements KeyListener, ActionListener {
 	public void keyPressed(KeyEvent e) {
 		if ((e.getKeyCode() == KeyEvent.VK_ENTER) && (view.isOkEnabled())) {
 			view.setOkEnabled(false);
-			model.renameFiles(Constants.RENAME_FILE_CURRENT);
+			model.renameFiles(FormScannerConstants.RENAME_FILE_CURRENT);
 		} else if ((e.getKeyCode() == KeyEvent.VK_ENTER) && (!view.isOkEnabled())) {
-			model.renameFiles(Constants.RENAME_FILE_SKIP);
+			model.renameFiles(FormScannerConstants.RENAME_FILE_SKIP);
 		} else {
 			view.setOkEnabled(true);
 		}
@@ -48,10 +48,10 @@ public class RenameFileController implements KeyListener, ActionListener {
 		Actions act = Actions.valueOf(e.getActionCommand());
 		switch (act) {
 		case RENAME_FILE_CURRENT:
-			model.renameFiles(Constants.RENAME_FILE_CURRENT);
+			model.renameFiles(FormScannerConstants.RENAME_FILE_CURRENT);
 			break;
 		case RENAME_FILE_SKIP:
-			model.renameFiles(Constants.RENAME_FILE_SKIP);
+			model.renameFiles(FormScannerConstants.RENAME_FILE_SKIP);
 			break;
 		default:
 			break;

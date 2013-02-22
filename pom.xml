@@ -53,9 +53,6 @@
   </dependencyManagement>
   <modules>
   	<module>formscanner-main</module>
-  	<module>formscanner-extras</module>
   	<module>formscanner-distribution</module>
-  	<module>formscanner-commons</module>
-  	<module>formscanner-parser</module>
   </modules>
 </project>

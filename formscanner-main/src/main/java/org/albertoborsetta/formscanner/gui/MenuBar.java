@@ -9,7 +9,7 @@ import javax.swing.JMenuItem;
 import javax.swing.JSeparator;
 import javax.swing.KeyStroke;
 
-import org.albertoborsetta.formscanner.commons.Constants;
+import org.albertoborsetta.formscanner.commons.FormScannerConstants;
 import org.albertoborsetta.formscanner.commons.FormScannerFont;
 import org.albertoborsetta.formscanner.controller.FormScannerController;
 import org.albertoborsetta.formscanner.model.FormScannerModel;
@@ -73,7 +73,7 @@ public class MenuBar extends JMenuBar {
 		
 		public OpenMenuItem() {
 			super("Open images");			
-			setActionCommand(Constants.OPEN_IMAGES);
+			setActionCommand(FormScannerConstants.OPEN_IMAGES);
 			addActionListener(controller);
 			setMnemonic('O');
 			setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O, InputEvent.CTRL_MASK));
@@ -86,7 +86,7 @@ public class MenuBar extends JMenuBar {
 		
 		public SaveMenuItem() {
 			super("Save results");	
-			setActionCommand(Constants.SAVE_RESULTS);
+			setActionCommand(FormScannerConstants.SAVE_RESULTS);
 			addActionListener(controller);
 			setMnemonic('S');
 			setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, InputEvent.CTRL_MASK));
@@ -100,7 +100,7 @@ public class MenuBar extends JMenuBar {
 		
 		public ExitMenuItem() {
 			super("Exit");	
-			setActionCommand(Constants.EXIT);
+			setActionCommand(FormScannerConstants.EXIT);
 			addActionListener(controller);
 			setMnemonic('X');
 			setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_X, InputEvent.CTRL_MASK));
@@ -113,7 +113,7 @@ public class MenuBar extends JMenuBar {
 		
 		public RenameMenuItem() {
 			super("Rename files");			
-			setActionCommand(Constants.RENAME_FILE_FIRST);
+			setActionCommand(FormScannerConstants.RENAME_FILE_FIRST);
 			addActionListener(controller);
 			setMnemonic('R');
 			setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_R, InputEvent.CTRL_MASK));

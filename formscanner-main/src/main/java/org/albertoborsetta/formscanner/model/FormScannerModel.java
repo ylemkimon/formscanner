@@ -2,7 +2,7 @@ package org.albertoborsetta.formscanner.model;
 
 import net.sourceforge.jiu.data.Gray8Image;
 
-import org.albertoborsetta.formscanner.commons.Constants.Actions;
+import org.albertoborsetta.formscanner.commons.FormScannerConstants.Actions;
 import org.albertoborsetta.formscanner.gui.FileListFrame;
 import org.albertoborsetta.formscanner.gui.FormScanner;
 import org.albertoborsetta.formscanner.gui.RenameFileFrame;
