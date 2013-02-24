@@ -11,19 +11,10 @@ import javax.swing.JInternalFrame;
 import javax.swing.JDesktopPane;
 
 import org.albertoborsetta.formscanner.model.FormScannerModel;
-import org.albertoborsetta.formscanner.commons.configuration.ConfigurationException;
-import org.albertoborsetta.formscanner.commons.configuration.ConfigurationLoader;
-import org.albertoborsetta.formscanner.commons.translations.TranslationException;
-import org.albertoborsetta.formscanner.commons.translations.TranslationLoader;
-import org.albertoborsetta.formscanner.commons.FormScannerConfigurationKeys;
-import org.albertoborsetta.formscanner.commons.FormScannerConstants;
-import org.albertoborsetta.formscanner.commons.FormScannerTranslationKeys;
+import org.albertoborsetta.formscanner.commons.configuration.FormScannerConfigurationKeys;
+import org.albertoborsetta.formscanner.commons.translation.FormScannerTranslationKeys;
 
-import java.io.FileInputStream;
-import java.io.IOException;
 import java.util.Properties;
-
-import org.apache.commons.configuration.Configuration;
 
 public class FormScanner extends JFrame {
 

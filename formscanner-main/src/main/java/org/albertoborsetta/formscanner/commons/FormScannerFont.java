@@ -1,12 +1,15 @@
 package org.albertoborsetta.formscanner.commons;
 
 import java.awt.Font;
-import java.text.AttributedCharacterIterator.Attribute;
-import java.util.Map;
 
 public class FormScannerFont extends Font {
 	
-	static Font instance = null;
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	
+	static Font font = null;
 	
 	public FormScannerFont(String name, int style, int size) {
 		super(name, style, size);
@@ -14,10 +17,10 @@ public class FormScannerFont extends Font {
 	}
 	
 	public static Font getFont() {
-		if (instance == null) {
-			instance = new FormScannerFont(Font.SANS_SERIF, Font.PLAIN, 12); 
+		if (font == null) {
+			font = new FormScannerFont(Font.SANS_SERIF, Font.PLAIN, 12); 
 		}
-		return (Font) instance;
+		return (Font) font;
 		
 	}
 

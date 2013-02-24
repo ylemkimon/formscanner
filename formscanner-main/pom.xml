@@ -29,27 +29,12 @@
       <version>1.0</version>
       <scope>compile</scope>
     </dependency>
-  	<dependency>
-  		<groupId>${project.groupId}</groupId>
-  		<artifactId>formscanner-commons</artifactId>
-  		<version>${project.version}</version>
-  		<type>jar</type>
-  		<scope>compile</scope>
-  	</dependency>
-  	<dependency>
-  		<groupId>${project.groupId}</groupId>
-  		<artifactId>formscanner-extras</artifactId>
-  		<version>${project.version}</version>
-  		<type>pom</type>
-  		<scope>compile</scope>
-  	</dependency>
-  	<dependency>
-  		<groupId>${project.groupId}</groupId>
-  		<artifactId>formscanner-parser</artifactId>
-  		<version>${project.version}</version>
-  		<type>jar</type>
-  		<scope>compile</scope>
-  	</dependency>
+    <dependency>
+      <groupId>net.sourceforge</groupId>
+      <artifactId>jiu</artifactId>
+      <version>0.14.3</version>
+      <scope>compile</scope>
+    </dependency>
   </dependencies>
   <repositories>
     <repository>

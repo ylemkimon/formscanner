@@ -1,4 +1,4 @@
-package org.albertoborsetta.formscanner.commons;
+package org.albertoborsetta.formscanner.commons.translation;
 
 public class FormScannerTranslationKeys {
 	/*
