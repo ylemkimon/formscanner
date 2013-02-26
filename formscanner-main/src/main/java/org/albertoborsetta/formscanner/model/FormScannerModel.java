@@ -3,6 +3,9 @@ package org.albertoborsetta.formscanner.model;
 import net.sourceforge.jiu.data.Gray8Image;
 
 import org.albertoborsetta.formscanner.commons.FormScannerConstants.Actions;
+import org.albertoborsetta.formscanner.commons.configuration.FormScannerConfiguration;
+import org.albertoborsetta.formscanner.commons.configuration.FormScannerConfigurationKeys;
+import org.albertoborsetta.formscanner.commons.translation.FormScannerTranslation;
 import org.albertoborsetta.formscanner.gui.FileListFrame;
 import org.albertoborsetta.formscanner.gui.FormScanner;
 import org.albertoborsetta.formscanner.gui.RenameFileFrame;
@@ -31,9 +34,15 @@ public class FormScannerModel {
 	private FormScanner view;
 	private int renamedFileIndex = 0;
 	private int analyzedFileIndex = 0;
+	
+	private FormScannerConfiguration configurations;
+	private FormScannerTranslation translations;
     
 	public FormScannerModel(FormScanner view) {
 		this.view = view;
+		
+		configurations = FormScannerConfiguration.getConfiguration();
+		// translations = FormScannerTranslation.getTranslation(configurations.getProperty(FormScannerConfigurationKeys.LANG, FormScannerConfigurationKeys.DEFAULT_LANG));
 	}
 
 	public void openFiles(File[] fileArray) {
@@ -196,5 +205,10 @@ public class FormScannerModel {
 		} else {
 			view.disposeFrame(renameFileFrame);
 		}
+	}
+	
+	public String getTranslationFor(String key) {
+		// return translations.getProperty(key, key);
+		return key;
 	}
 }

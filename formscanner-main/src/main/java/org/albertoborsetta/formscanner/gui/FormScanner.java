@@ -35,14 +35,7 @@ public class FormScanner extends JFrame {
 				Properties properties = new Properties();
 				Properties translations = new Properties();
 				
-				try {
-					
-					properties.load(FormScanner.class.getClassLoader().getResourceAsStream("config/formscanner.properties"));
-					String language = properties.getProperty(FormScannerConfigurationKeys.LANG);
-					
-					translations.load(FormScanner.class.getClassLoader().getResourceAsStream("language/formscanner-"+language+".lang"));
-					System.out.println(translations.getProperty(FormScannerTranslationKeys.OPEN_FILES));
-					
+				try {					
 					FormScanner window = new FormScanner();					
 				} catch (Exception e) {
 					e.printStackTrace();

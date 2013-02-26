@@ -15,7 +15,7 @@ public class FormScannerConfiguration extends Properties {
 	private FormScannerConfiguration() {
 		super();
 		try {
-			load(getClass().getClassLoader().getResourceAsStream("config/formscanner.properties"));
+			load(getClass().getClassLoader().getResourceAsStream("/scrc/main/resources/config/formscanner.properties"));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

@@ -21,6 +21,6 @@ public class FormScannerConstants {
 		ANALYZE_FILE_FIRST,
 		ANALYZE_FILE_NEXT,
 		ANALYZE_FILE_SKIP,
-		EXIT;
+		EXIT
 	  }
 }
