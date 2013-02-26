@@ -11,6 +11,7 @@ import javax.swing.KeyStroke;
 
 import org.albertoborsetta.formscanner.commons.FormScannerConstants;
 import org.albertoborsetta.formscanner.commons.FormScannerFont;
+import org.albertoborsetta.formscanner.commons.translation.FormScannerTranslationKeys;
 import org.albertoborsetta.formscanner.controller.FormScannerController;
 import org.albertoborsetta.formscanner.model.FormScannerModel;
 
@@ -18,8 +19,8 @@ public class MenuBar extends JMenuBar {
 	
 	private static final long serialVersionUID = 1L;
 	
-	private static FormScannerModel model;
-	private FormScannerController controller;
+	private FormScannerModel formScannerModel;
+	private FormScannerController formScannerController;
 	
 	private JMenuItem openMenuItem;
 	private JMenuItem saveMenuItem;
@@ -28,8 +29,8 @@ public class MenuBar extends JMenuBar {
 	
 	
 	public MenuBar(final FormScannerModel formScannerModel) {
-		model = formScannerModel;
-		controller = FormScannerController.getInstance(model);
+		this.formScannerModel = formScannerModel;
+		formScannerController = FormScannerController.getInstance(formScannerModel);
 		
 		JMenu fileMenu = new FileMenu();
 		JMenu editMenu = new EditMenu();
@@ -39,10 +40,15 @@ public class MenuBar extends JMenuBar {
 	
 	private class FileMenu extends JMenu {
 		
-		public FileMenu() {
-			super("File");
-			setMnemonic('F');
-			setToolTipText("File menu");
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = 1L;
+
+		public FileMenu() {			
+			super(formScannerModel.getTranslationFor(FormScannerTranslationKeys.FILE_MENU));
+			setMnemonic(FormScannerTranslationKeys.FILE_MENU_MNEMONIC);
+			setToolTipText(formScannerModel.getTranslationFor(FormScannerTranslationKeys.FILE_MENU_TOOLTIP));
 			setFont(FormScannerFont.getFont());
 			
 			openMenuItem = new OpenMenuItem();
@@ -58,10 +64,15 @@ public class MenuBar extends JMenuBar {
 	
 	private class EditMenu extends JMenu {
 		
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = 1L;
+
 		public EditMenu() {
-			super("Edit");
+			super(formScannerModel.getTranslationFor(FormScannerTranslationKeys.EDIT_MENU));
 			setMnemonic('E');
-			setToolTipText("Edit menu");
+			setToolTipText(formScannerModel.getTranslationFor(FormScannerTranslationKeys.EDIT_MENU_TOOLTIP));
 			setFont(FormScannerFont.getFont());
 			
 			renameMenuItem = new RenameMenuItem();
@@ -74,7 +85,7 @@ public class MenuBar extends JMenuBar {
 		public OpenMenuItem() {
 			super("Open images");			
 			setActionCommand(FormScannerConstants.OPEN_IMAGES);
-			addActionListener(controller);
+			addActionListener(formScannerController);
 			setMnemonic('O');
 			setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O, InputEvent.CTRL_MASK));
 			setToolTipText("Open image files");
@@ -87,7 +98,7 @@ public class MenuBar extends JMenuBar {
 		public SaveMenuItem() {
 			super("Save results");	
 			setActionCommand(FormScannerConstants.SAVE_RESULTS);
-			addActionListener(controller);
+			addActionListener(formScannerController);
 			setMnemonic('S');
 			setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, InputEvent.CTRL_MASK));
 			setToolTipText("Save results file");
@@ -101,7 +112,7 @@ public class MenuBar extends JMenuBar {
 		public ExitMenuItem() {
 			super("Exit");	
 			setActionCommand(FormScannerConstants.EXIT);
-			addActionListener(controller);
+			addActionListener(formScannerController);
 			setMnemonic('X');
 			setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_X, InputEvent.CTRL_MASK));
 			setToolTipText("Exit");
@@ -114,7 +125,7 @@ public class MenuBar extends JMenuBar {
 		public RenameMenuItem() {
 			super("Rename files");			
 			setActionCommand(FormScannerConstants.RENAME_FILE_FIRST);
-			addActionListener(controller);
+			addActionListener(formScannerController);
 			setMnemonic('R');
 			setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_R, InputEvent.CTRL_MASK));
 			setToolTipText("Rename image files");

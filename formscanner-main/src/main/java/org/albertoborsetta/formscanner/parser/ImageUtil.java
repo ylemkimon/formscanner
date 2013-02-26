@@ -15,7 +15,6 @@ import net.sourceforge.jiu.codecs.PNGCodec;
 import net.sourceforge.jiu.color.reduction.RGBToGrayConversion;
 import net.sourceforge.jiu.data.Gray8Image;
 import net.sourceforge.jiu.data.PixelImage;
-import net.sourceforge.jiu.data.RGB24Image;
 import net.sourceforge.jiu.data.RGBImage;
 import net.sourceforge.jiu.data.GrayImage;
 

@@ -6,4 +6,5 @@ public class FormScannerConfigurationKeys {
 	 */
 	
 	public static final String LANG = "lang";
+	public static final String DEFAULT_LANG = "en";
 }

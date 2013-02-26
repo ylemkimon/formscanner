@@ -113,6 +113,11 @@ public class RenameFileFrame extends JInternalFrame {
 	
 	private class StatusBar extends JLabel {
 		
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = 1L;
+
 		public StatusBar(String label) {
 			super(label);
 			setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
@@ -122,6 +127,11 @@ public class RenameFileFrame extends JInternalFrame {
 	
 	private class OKButton extends JButton {
 		
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = 1L;
+
 		public OKButton() {
 			super("OK");
 			setEnabled(false);
@@ -132,6 +142,11 @@ public class RenameFileFrame extends JInternalFrame {
 	
 	private class CancelButton extends JButton {
 		
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = 1L;
+
 		public CancelButton() {
 			super("Cancel");
 			setActionCommand(FormScannerConstants.RENAME_FILE_SKIP);
@@ -141,6 +156,11 @@ public class RenameFileFrame extends JInternalFrame {
 	
 	private class FileNameField extends JTextField {
 		
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = 1L;
+
 		public FileNameField(String text) {
 			super(text);
 			setColumns(10);

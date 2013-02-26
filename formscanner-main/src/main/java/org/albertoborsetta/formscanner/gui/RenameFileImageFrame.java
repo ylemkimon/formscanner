@@ -58,6 +58,11 @@ public class RenameFileImageFrame extends JInternalFrame {
 	
 	private class ImageScrollPane extends JScrollPane {
 		
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = 1L;
+
 		public ImageScrollPane(JPanel imagePanel) {
 			super(imagePanel);
 			verticalScrollBar.setValue(0);
@@ -74,6 +79,10 @@ public class RenameFileImageFrame extends JInternalFrame {
 	
 	private class ImagePanel extends JPanel {
 		
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = 1L;
 		private BufferedImage image;
 		
 		public ImagePanel(File file) {

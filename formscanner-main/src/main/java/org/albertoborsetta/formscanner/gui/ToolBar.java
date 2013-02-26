@@ -11,6 +11,7 @@ import javax.swing.JToolBar;
 import javax.swing.border.EtchedBorder;
 
 import org.albertoborsetta.formscanner.commons.FormScannerConstants;
+import org.albertoborsetta.formscanner.commons.translation.FormScannerTranslationKeys;
 import org.albertoborsetta.formscanner.controller.FormScannerController;
 import org.albertoborsetta.formscanner.model.FormScannerModel;
 
@@ -19,8 +20,8 @@ public class ToolBar extends JPanel {
 
 	private static final long serialVersionUID = 1L;
 	
-	private static FormScannerModel model;
-	private FormScannerController controller;
+	private static FormScannerModel formScannerModel;
+	private FormScannerController formScannerController;
 	
 	private JButton openButton;
 	private JButton saveButton;
@@ -32,8 +33,8 @@ public class ToolBar extends JPanel {
 	 */
 	public ToolBar(FormScannerModel formScannerModel) {
 		
-		model = formScannerModel;
-		controller = FormScannerController.getInstance(model);
+		formScannerModel = formScannerModel;
+		formScannerController = FormScannerController.getInstance(formScannerModel);
 		
 		setBorder(new EtchedBorder(EtchedBorder.RAISED, null, null));
 		setComponentOrientation(ComponentOrientation.LEFT_TO_RIGHT);
@@ -61,7 +62,6 @@ public class ToolBar extends JPanel {
 			
 			openButton = new OpenButton();
 			saveButton = new SaveButton();
-			
 			
 			add(openButton);			
 			add(saveButton);			
@@ -97,9 +97,9 @@ public class ToolBar extends JPanel {
 
 		public OpenButton() {
 			setActionCommand(FormScannerConstants.OPEN_IMAGES);
-			addActionListener(controller);
+			addActionListener(formScannerController);
 			setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
-			setToolTipText("Open images");
+			setToolTipText(formScannerModel.getTranslationFor(FormScannerTranslationKeys.OPEN_IMAGES_TOOLTIP));
 			setIcon(new ImageIcon(FormScanner.class.getClassLoader().getResource("icons/open.png")));
 		}
 	}
@@ -113,10 +113,10 @@ public class ToolBar extends JPanel {
 
 		public SaveButton() {
 			setActionCommand(FormScannerConstants.SAVE_RESULTS);
-			addActionListener(controller);
+			addActionListener(formScannerController);
 			setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
+			setToolTipText(formScannerModel.getTranslationFor(FormScannerTranslationKeys.SAVE_RESULTS_TOOLTIP));
 			setIcon(new ImageIcon(FormScanner.class.getClassLoader().getResource("icons/save.png")));
-			setToolTipText("Save results");
 			setEnabled(false);
 		}
 	}
@@ -130,10 +130,10 @@ public class ToolBar extends JPanel {
 
 		public RenameButton() {
 			setActionCommand(FormScannerConstants.RENAME_FILE_FIRST);
-			addActionListener(controller);
+			addActionListener(formScannerController);
 			setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
+			setToolTipText(formScannerModel.getTranslationFor(FormScannerTranslationKeys.RENAME_FILES_TOOLTIP));
 			setIcon(new ImageIcon(FormScanner.class.getClassLoader().getResource("icons/rename.png")));
-			setToolTipText("Rename image files");
 			setEnabled(false);
 		}		
 	}
@@ -147,10 +147,10 @@ public class ToolBar extends JPanel {
 
 		public StartButton() {
 			setActionCommand(FormScannerConstants.ANALYZE_FILE_FIRST);
-			addActionListener(controller);
+			addActionListener(formScannerController);
 			setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
+			setToolTipText(formScannerModel.getTranslationFor(FormScannerTranslationKeys.ANALYZE_FILES_TOOLTIP));
 			setIcon(new ImageIcon(FormScanner.class.getClassLoader().getResource("icons/start.png")));
-			setToolTipText("Start analyze results");
 			setEnabled(false);
 		}		
 	}

@@ -71,6 +71,11 @@ public class FileListFrame extends JInternalFrame {
 	
 	private class FileList extends JList {
 		
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = 1L;
+
 		public FileList(Object[] list) {
 			super(list); 
 			setFont(FormScannerFont.getFont());
