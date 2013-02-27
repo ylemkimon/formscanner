@@ -5,6 +5,7 @@ import net.sourceforge.jiu.data.Gray8Image;
 import org.albertoborsetta.formscanner.commons.FormScannerConstants.Actions;
 import org.albertoborsetta.formscanner.commons.configuration.FormScannerConfiguration;
 import org.albertoborsetta.formscanner.commons.configuration.FormScannerConfigurationKeys;
+import org.albertoborsetta.formscanner.commons.resources.FormScannerResources;
 import org.albertoborsetta.formscanner.commons.translation.FormScannerTranslation;
 import org.albertoborsetta.formscanner.gui.FileListFrame;
 import org.albertoborsetta.formscanner.gui.FormScanner;
@@ -21,6 +22,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.swing.ImageIcon;
 import javax.swing.JInternalFrame;
 
 import org.apache.commons.io.FilenameUtils;
@@ -37,12 +39,18 @@ public class FormScannerModel {
 	
 	private FormScannerConfiguration configurations;
 	private FormScannerTranslation translations;
+	private FormScannerResources resources;
     
 	public FormScannerModel(FormScanner view) {
 		this.view = view;
 		
-		configurations = FormScannerConfiguration.getConfiguration();
-		// translations = FormScannerTranslation.getTranslation(configurations.getProperty(FormScannerConfigurationKeys.LANG, FormScannerConfigurationKeys.DEFAULT_LANG));
+		String path = System.getProperty("FormScanner_HOME");		
+		configurations = FormScannerConfiguration.getConfiguration(path);
+		
+		String lang = configurations.getProperty(FormScannerConfigurationKeys.LANG, FormScannerConfigurationKeys.DEFAULT_LANG);
+		translations = FormScannerTranslation.getTranslation(path, lang);
+		resources = FormScannerResources.getResources(path);
+		resources.setTemplate(configurations.getProperty(FormScannerConfigurationKeys.TEMPLATE, FormScannerConfigurationKeys.DEFAULT_TEMPLATE));
 	}
 
 	public void openFiles(File[] fileArray) {
@@ -117,10 +125,10 @@ public class FormScannerModel {
 
 		        ImageManipulation image = new ImageManipulation(grayimage);
 		        image.locateConcentricCircles();
-
-		        image.readConfig("/home/tecnoteca/workspace/formscanner-project/src/main/resources/template.config");
-		        image.readFields("/home/tecnoteca/workspace/formscanner-project/src/main/resources/template.fields");
-		        image.readAscTemplate("/home/tecnoteca/workspace/formscanner-project/src/main/resources/template.asc");
+		        
+		        image.readConfig(resources.getTemplateConfig());
+		        image.readFields(resources.getTemplateFields());
+		        image.readAscTemplate(resources.getTemplateAsc());
 		        image.searchMarks();
 		        image.saveData("/home/tecnoteca/Scrivania/results.dat");
 				
@@ -208,7 +216,17 @@ public class FormScannerModel {
 	}
 	
 	public String getTranslationFor(String key) {
-		// return translations.getProperty(key, key);
-		return key;
+		String value = translations.getProperty(key, key);
+		return value;
+	}
+	
+	public char getMnemonicFor(String key) {
+		char value = translations.getProperty(key).charAt(0);
+		return value;
+	}
+	
+	public ImageIcon getIconFor(String key) {
+		ImageIcon icon = resources.getIconFor(key);
+		return icon;
 	}
 }

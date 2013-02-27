@@ -1,5 +1,6 @@
 package org.albertoborsetta.formscanner.commons.configuration;
 
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.Properties;
 
@@ -12,19 +13,21 @@ public class FormScannerConfiguration extends Properties {
 	
 	private static FormScannerConfiguration configurations = null;
 
-	private FormScannerConfiguration() {
+	private FormScannerConfiguration(String path) {
 		super();
 		try {
-			load(getClass().getClassLoader().getResourceAsStream("/scrc/main/resources/config/formscanner.properties"));
+			String configFile = path + "/config/formscanner.properties";
+			final FileInputStream configInputStream = new FileInputStream(configFile);
+			load(configInputStream);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
 	
-	public static FormScannerConfiguration getConfiguration() {
+	public static FormScannerConfiguration getConfiguration(String path) {
 		if (configurations == null) {
-			configurations = new FormScannerConfiguration();
+			configurations = new FormScannerConfiguration(path);
 		}
 		return configurations;
 	}

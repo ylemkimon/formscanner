@@ -31,10 +31,7 @@ public class FormScanner extends JFrame {
 	 */
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				Properties properties = new Properties();
-				Properties translations = new Properties();
-				
+			public void run() {				
 				try {					
 					FormScanner window = new FormScanner();					
 				} catch (Exception e) {

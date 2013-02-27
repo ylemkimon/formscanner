@@ -2,6 +2,7 @@ package org.albertoborsetta.formscanner.gui;
 
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
+import java.text.Normalizer.Form;
 
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
@@ -47,7 +48,7 @@ public class MenuBar extends JMenuBar {
 
 		public FileMenu() {			
 			super(formScannerModel.getTranslationFor(FormScannerTranslationKeys.FILE_MENU));
-			setMnemonic(FormScannerTranslationKeys.FILE_MENU_MNEMONIC);
+			setMnemonic(formScannerModel.getMnemonicFor(FormScannerTranslationKeys.FILE_MENU_MNEMONIC));
 			setToolTipText(formScannerModel.getTranslationFor(FormScannerTranslationKeys.FILE_MENU_TOOLTIP));
 			setFont(FormScannerFont.getFont());
 			
@@ -71,7 +72,7 @@ public class MenuBar extends JMenuBar {
 
 		public EditMenu() {
 			super(formScannerModel.getTranslationFor(FormScannerTranslationKeys.EDIT_MENU));
-			setMnemonic('E');
+			setMnemonic(formScannerModel.getMnemonicFor(FormScannerTranslationKeys.EDIT_MENU_MNEMONIC));
 			setToolTipText(formScannerModel.getTranslationFor(FormScannerTranslationKeys.EDIT_MENU_TOOLTIP));
 			setFont(FormScannerFont.getFont());
 			
@@ -82,26 +83,36 @@ public class MenuBar extends JMenuBar {
 	
 	private class OpenMenuItem extends JMenuItem {
 		
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = 1L;
+
 		public OpenMenuItem() {
-			super("Open images");			
+			super(formScannerModel.getTranslationFor(FormScannerTranslationKeys.OPEN_IMAGES));
 			setActionCommand(FormScannerConstants.OPEN_IMAGES);
 			addActionListener(formScannerController);
-			setMnemonic('O');
+			setMnemonic(formScannerModel.getMnemonicFor(FormScannerTranslationKeys.OPEN_IMAGES_MNEMONIC));
 			setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O, InputEvent.CTRL_MASK));
-			setToolTipText("Open image files");
+			setToolTipText(formScannerModel.getTranslationFor(FormScannerTranslationKeys.OPEN_IMAGES_TOOLTIP));
 			setFont(FormScannerFont.getFont());
 		}
 	}
 	
 	private class SaveMenuItem extends JMenuItem {
 		
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = 1L;
+
 		public SaveMenuItem() {
-			super("Save results");	
+			super(formScannerModel.getTranslationFor(FormScannerTranslationKeys.SAVE_RESULTS));	
 			setActionCommand(FormScannerConstants.SAVE_RESULTS);
 			addActionListener(formScannerController);
-			setMnemonic('S');
+			setMnemonic(formScannerModel.getMnemonicFor(FormScannerTranslationKeys.SAVE_RESULTS_MNEMONIC));
 			setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, InputEvent.CTRL_MASK));
-			setToolTipText("Save results file");
+			setToolTipText(formScannerModel.getTranslationFor(FormScannerTranslationKeys.SAVE_RESULTS_TOOLTIP));
 			setFont(FormScannerFont.getFont());
 			setEnabled(false);
 		}
@@ -109,26 +120,36 @@ public class MenuBar extends JMenuBar {
 	
 	private class ExitMenuItem extends JMenuItem {
 		
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = 1L;
+
 		public ExitMenuItem() {
-			super("Exit");	
+			super(formScannerModel.getTranslationFor(FormScannerTranslationKeys.EXIT));	
 			setActionCommand(FormScannerConstants.EXIT);
 			addActionListener(formScannerController);
-			setMnemonic('X');
+			setMnemonic(formScannerModel.getMnemonicFor(FormScannerTranslationKeys.EXIT_MNEMONIC));
 			setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_X, InputEvent.CTRL_MASK));
-			setToolTipText("Exit");
+			setToolTipText(formScannerModel.getTranslationFor(FormScannerTranslationKeys.EXIT_TOOLTIP));
 			setFont(FormScannerFont.getFont());
 		}
 	}
 	
 	private class RenameMenuItem extends JMenuItem {
 		
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = 1L;
+
 		public RenameMenuItem() {
-			super("Rename files");			
+			super(formScannerModel.getTranslationFor(FormScannerTranslationKeys.RENAME_FILES));
 			setActionCommand(FormScannerConstants.RENAME_FILE_FIRST);
 			addActionListener(formScannerController);
-			setMnemonic('R');
+			setMnemonic(formScannerModel.getMnemonicFor(FormScannerTranslationKeys.RENAME_FILES_MNEMONIC));
 			setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_R, InputEvent.CTRL_MASK));
-			setToolTipText("Rename image files");
+			setToolTipText(formScannerModel.getTranslationFor(FormScannerTranslationKeys.RENAME_FILES_TOOLTIP));
 			setFont(FormScannerFont.getFont());
 			setEnabled(false);
 		}
