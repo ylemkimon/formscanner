@@ -18,4 +18,13 @@ edit.menu.tooltip=Edit Menu
 edit.menu.mnemonic=E
 exit=Exit
 exit.tooltip=Exit
+
+file.list.frame.title=Images
+
+rename.file.frame.title=Rename files
+rename.file.frame.statusbar=Renaming
+rename.file.frame.label=New name
+
+ok.button=OK
+cancel.button=Cancel
 exit.mnemonic=X

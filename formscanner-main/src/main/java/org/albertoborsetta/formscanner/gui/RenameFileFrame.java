@@ -2,6 +2,7 @@ package org.albertoborsetta.formscanner.gui;
 
 import org.albertoborsetta.formscanner.commons.FormScannerConstants;
 import org.albertoborsetta.formscanner.commons.FormScannerFont;
+import org.albertoborsetta.formscanner.commons.translation.FormScannerTranslationKeys;
 import org.albertoborsetta.formscanner.controller.RenameFileController;
 import org.albertoborsetta.formscanner.controller.InternalFrameController;
 import org.albertoborsetta.formscanner.model.FormScannerModel;
@@ -29,7 +30,7 @@ public class RenameFileFrame extends JInternalFrame {
 	private JTextField fileNameField;
 	private JLabel fileExtensionField;
 	private JLabel statusBar;
-	private FormScannerModel model;
+	private FormScannerModel formScannerModel;
 	private JButton okButton;
 	private JButton cancelButton;
 	private RenameFileController renameFileController;
@@ -39,18 +40,18 @@ public class RenameFileFrame extends JInternalFrame {
 	 * Create the frame.
 	 */
 	public RenameFileFrame(FormScannerModel formScannerModel, String fileName) {
-		model = formScannerModel;
-		renameFileController = new RenameFileController(model);
+		this.formScannerModel = formScannerModel;
+		renameFileController = new RenameFileController(formScannerModel);
 		renameFileController.add(this);
 		
-		setBounds(220, 320, 300, 130);
-		setName("renameFileFrame");
+		setName(FormScannerConstants.RENAME_FILE_FRAME_NAME);
+		setBounds(220, 320, 370, 130);
 		setClosable(true);
 		
-		internalFrameController = InternalFrameController.getInstance(model);
+		internalFrameController = InternalFrameController.getInstance(formScannerModel);
 		addInternalFrameListener(internalFrameController);
 		
-		setTitle("Rename file");
+		setTitle(formScannerModel.getTranslationFor(FormScannerTranslationKeys.RENAME_FILE_FRAME_TITLE));
 		
 		JPanel panel = new JPanel();
 		getContentPane().add(panel, BorderLayout.CENTER);
@@ -69,13 +70,13 @@ public class RenameFileFrame extends JInternalFrame {
 				FormFactory.RELATED_GAP_ROWSPEC,
 				FormFactory.DEFAULT_ROWSPEC,}));
 		
-		JLabel newFileNameLabel = new JLabel("New name:");
+		JLabel newFileNameLabel = new JLabel(formScannerModel.getTranslationFor(FormScannerTranslationKeys.RENAME_FILE_FRAME_LABEL) + ": ");
 		panel.add(newFileNameLabel, "2, 2, right, default");
 		
-		fileNameField = new FileNameField(FilenameUtils.removeExtension(fileName));		
+		fileNameField = new FileNameField();		
 		panel.add(fileNameField, "4, 2, 3, 1, fill, default");
 		
-		fileExtensionField = new JLabel('.' + FilenameUtils.getExtension(fileName));
+		fileExtensionField = new JLabel();
 		panel.add(fileExtensionField, "8, 2");		
 		
 		okButton = new OKButton();
@@ -84,7 +85,10 @@ public class RenameFileFrame extends JInternalFrame {
 		cancelButton = new CancelButton();
 		panel.add(cancelButton, "6, 4");
 				
-		statusBar = new StatusBar("Renaming: " + fileName);
+		statusBar = new StatusBar();
+		
+		updateRenamedFile(fileName);		
+		
 		getContentPane().add(statusBar, BorderLayout.SOUTH);
 	}
 	
@@ -101,7 +105,7 @@ public class RenameFileFrame extends JInternalFrame {
 	}
 	
 	public void updateRenamedFile(String fileName) {
-		statusBar.setText("Rename: " + fileName);
+		statusBar.setText(formScannerModel.getTranslationFor(FormScannerTranslationKeys.RENAME_FILE_FRAME_STATUSBAR) + ": " + fileName);
 		fileNameField.setText(FilenameUtils.removeExtension(fileName));
 		fileExtensionField.setText('.' + FilenameUtils.getExtension(fileName));
 	}
@@ -118,8 +122,8 @@ public class RenameFileFrame extends JInternalFrame {
 		 */
 		private static final long serialVersionUID = 1L;
 
-		public StatusBar(String label) {
-			super(label);
+		public StatusBar() {
+			super();
 			setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
 			setFont(FormScannerFont.getFont());
 		}
@@ -133,7 +137,7 @@ public class RenameFileFrame extends JInternalFrame {
 		private static final long serialVersionUID = 1L;
 
 		public OKButton() {
-			super("OK");
+			super(formScannerModel.getTranslationFor(FormScannerTranslationKeys.OK_BUTTON));
 			setEnabled(false);
 			setActionCommand(FormScannerConstants.RENAME_FILE_CURRENT);
 			addActionListener(renameFileController);
@@ -148,7 +152,7 @@ public class RenameFileFrame extends JInternalFrame {
 		private static final long serialVersionUID = 1L;
 
 		public CancelButton() {
-			super("Cancel");
+			super(formScannerModel.getTranslationFor(FormScannerTranslationKeys.CANCEL_BUTTON));
 			setActionCommand(FormScannerConstants.RENAME_FILE_SKIP);
 			addActionListener(renameFileController);
 		}
@@ -161,8 +165,8 @@ public class RenameFileFrame extends JInternalFrame {
 		 */
 		private static final long serialVersionUID = 1L;
 
-		public FileNameField(String text) {
-			super(text);
+		public FileNameField() {
+			super();
 			setColumns(10);
 			addKeyListener(renameFileController);
 		}		

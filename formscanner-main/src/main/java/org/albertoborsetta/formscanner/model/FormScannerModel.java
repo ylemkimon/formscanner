@@ -7,6 +7,7 @@ import org.albertoborsetta.formscanner.commons.configuration.FormScannerConfigur
 import org.albertoborsetta.formscanner.commons.configuration.FormScannerConfigurationKeys;
 import org.albertoborsetta.formscanner.commons.resources.FormScannerResources;
 import org.albertoborsetta.formscanner.commons.translation.FormScannerTranslation;
+import org.albertoborsetta.formscanner.gui.AnalyzeFileImageFrame;
 import org.albertoborsetta.formscanner.gui.FileListFrame;
 import org.albertoborsetta.formscanner.gui.FormScanner;
 import org.albertoborsetta.formscanner.gui.RenameFileFrame;
@@ -40,6 +41,7 @@ public class FormScannerModel {
 	private FormScannerConfiguration configurations;
 	private FormScannerTranslation translations;
 	private FormScannerResources resources;
+	private AnalyzeFileImageFrame analyzeFileImageFrame;
     
 	public FormScannerModel(FormScanner view) {
 		this.view = view;
@@ -120,8 +122,7 @@ public class FormScannerModel {
 				analyzedFileIndex  = fileListFrame.getSelectedItemIndex();
 				fileListFrame.selectFile(analyzedFileIndex);
 								
-				System.out.println("Analyze current file");
-				Gray8Image grayimage = ImageUtil.readImage(getFileNameByIndex(analyzedFileIndex));
+				Gray8Image grayimage = ImageUtil.readImage(openedFiles.get(renamedFileIndex).getAbsolutePath());
 
 		        ImageManipulation image = new ImageManipulation(grayimage);
 		        image.locateConcentricCircles();
@@ -132,10 +133,8 @@ public class FormScannerModel {
 		        image.searchMarks();
 		        image.saveData("/home/tecnoteca/Scrivania/results.dat");
 				
-				
-				System.out.println("Create/Update frames");
-				// analyzeFileImageFrame = new AnalyzeFileImageFrame(this, openedFiles.get(analyzedFileIndex));
-				// view.arrangeFrame(analyzeFileImageFrame);
+				analyzeFileImageFrame = new AnalyzeFileImageFrame(this, openedFiles.get(analyzedFileIndex));
+				view.arrangeFrame(analyzeFileImageFrame);
 				
 				// analyzeFileGridFrame = new AnalyzeFileGridFrame(this, getFileNameByIndex(analyzedFileIndex)); 
 				// view.arrangeFrame(analyzeFileGridFrame);
@@ -155,11 +154,11 @@ public class FormScannerModel {
 			if (openedFiles.size()>analyzedFileIndex) {
 				System.out.println("Update analyze frame");
 				// analyzeFileGridFrame.updateRenamedFile(getFileNameByIndex(analyzedFileIndex));
-				// analyzeFileImageFrame.updateImage(openedFiles.get(analyzedFileIndex));
+				analyzeFileImageFrame.updateImage(openedFiles.get(analyzedFileIndex));
 			} else {
 				System.out.println("Dispose analyze frame");
 				// view.disposeFrame(analyzeFileGridFrame);
-				// view.disposeFrame(analyzeFileImageFrame);
+				view.disposeFrame(analyzeFileImageFrame);
 			}
 			break;
 		default:

@@ -31,4 +31,13 @@ public class FormScannerTranslationKeys {
 	public static final String EXIT = "exit";
 	public static final String EXIT_MNEMONIC = "exit.mnemonic";
 	public static final String EXIT_TOOLTIP = "exit.tooltip";
+	
+	public static final String FILE_LIST_FRAME_TITLE = "file.list.frame.title";
+	
+	public static final String RENAME_FILE_FRAME_TITLE = "rename.file.frame.title";
+	public static final String RENAME_FILE_FRAME_STATUSBAR = "rename.file.frame.statusbar";
+	public static final String RENAME_FILE_FRAME_LABEL = "rename.file.frame.label";
+	
+	public static final String OK_BUTTON = "ok.button";
+	public static final String CANCEL_BUTTON = "cancel.button";
 }
