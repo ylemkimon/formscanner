@@ -8,6 +8,7 @@ import org.albertoborsetta.formscanner.commons.configuration.FormScannerConfigur
 import org.albertoborsetta.formscanner.commons.resources.FormScannerResources;
 import org.albertoborsetta.formscanner.commons.translation.FormScannerTranslation;
 import org.albertoborsetta.formscanner.gui.AnalyzeFileImageFrame;
+import org.albertoborsetta.formscanner.gui.AnalyzeFileResultsFrame;
 import org.albertoborsetta.formscanner.gui.FileListFrame;
 import org.albertoborsetta.formscanner.gui.FormScanner;
 import org.albertoborsetta.formscanner.gui.RenameFileFrame;
@@ -42,6 +43,7 @@ public class FormScannerModel {
 	private FormScannerTranslation translations;
 	private FormScannerResources resources;
 	private AnalyzeFileImageFrame analyzeFileImageFrame;
+	private AnalyzeFileResultsFrame analyzeFileResultsFrame;
     
 	public FormScannerModel(FormScanner view) {
 		this.view = view;
@@ -121,7 +123,7 @@ public class FormScannerModel {
 			if (!openedFiles.isEmpty()) {
 				analyzedFileIndex  = fileListFrame.getSelectedItemIndex();
 				fileListFrame.selectFile(analyzedFileIndex);
-								
+/*
 				Gray8Image grayimage = ImageUtil.readImage(openedFiles.get(renamedFileIndex).getAbsolutePath());
 
 		        ImageManipulation image = new ImageManipulation(grayimage);
@@ -132,12 +134,12 @@ public class FormScannerModel {
 		        image.readAscTemplate(resources.getTemplateAsc());
 		        image.searchMarks();
 		        image.saveData("/home/tecnoteca/Scrivania/results.dat");
-				
+*/				
 				analyzeFileImageFrame = new AnalyzeFileImageFrame(this, openedFiles.get(analyzedFileIndex));
 				view.arrangeFrame(analyzeFileImageFrame);
 				
-				// analyzeFileGridFrame = new AnalyzeFileGridFrame(this, getFileNameByIndex(analyzedFileIndex)); 
-				// view.arrangeFrame(analyzeFileGridFrame);
+				analyzeFileResultsFrame = new AnalyzeFileResultsFrame(this); 
+				view.arrangeFrame(analyzeFileResultsFrame);
 			}			
 			break;
 		case ANALYZE_FILE_NEXT:

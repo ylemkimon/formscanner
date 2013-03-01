@@ -26,5 +26,7 @@ rename.file.frame.title=Rinomina file
 rename.file.frame.statusbar=Sto rinominando
 rename.file.frame.label=Nuovo nome
 
+analyze.file.frame.title=Scansione file
+
 ok.button=Conferma
 cancel.button=Annulla

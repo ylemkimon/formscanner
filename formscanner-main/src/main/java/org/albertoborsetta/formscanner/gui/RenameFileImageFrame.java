@@ -90,7 +90,6 @@ public class RenameFileImageFrame extends JInternalFrame {
 		public ImagePanel(File file) {
 			super();
 			setImage(file);
-			setPreferredSize(new Dimension(image.getWidth(), image.getHeight()));
 		}
 		
 		@Override

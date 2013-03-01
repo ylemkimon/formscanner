@@ -25,6 +25,8 @@ rename.file.frame.title=Rename files
 rename.file.frame.statusbar=Renaming
 rename.file.frame.label=New name
 
+analyze.file.frame.title=Analyze file
+
 ok.button=OK
 cancel.button=Cancel
 exit.mnemonic=X

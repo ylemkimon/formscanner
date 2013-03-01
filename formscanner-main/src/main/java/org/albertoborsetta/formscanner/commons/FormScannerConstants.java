@@ -15,6 +15,7 @@ public class FormScannerConstants {
 	public static final String RENAME_FILE_FRAME_NAME = "rename.file.frame";
 	public static final String RENAME_FILE_IMAGE_FRAME_NAME = "rename.file.image.frame";
 	public static final String FILE_LIST_FRAME_NAME = "file.list.frame";
+	public static final String ANALYZE_IMAGE_FRAME_NAME = "analyze.image.frame";
 	
 	public enum Actions {
 		RENAME_FILE_FIRST,

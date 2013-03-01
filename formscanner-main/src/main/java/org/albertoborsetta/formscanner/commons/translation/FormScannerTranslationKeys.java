@@ -38,6 +38,8 @@ public class FormScannerTranslationKeys {
 	public static final String RENAME_FILE_FRAME_STATUSBAR = "rename.file.frame.statusbar";
 	public static final String RENAME_FILE_FRAME_LABEL = "rename.file.frame.label";
 	
+	public static final String ANALYZE_FILE_FRAME_TITLE = "analyze.file.frame.title";
+	
 	public static final String OK_BUTTON = "ok.button";
-	public static final String CANCEL_BUTTON = "cancel.button";
+	public static final String CANCEL_BUTTON = "cancel.button";	
 }

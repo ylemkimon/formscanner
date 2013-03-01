@@ -1,5 +1,7 @@
 package org.albertoborsetta.formscanner.gui;
 
+import org.albertoborsetta.formscanner.commons.FormScannerConstants;
+import org.albertoborsetta.formscanner.commons.translation.FormScannerTranslationKeys;
 import org.albertoborsetta.formscanner.controller.AnalyzeImageController;
 import org.albertoborsetta.formscanner.controller.InternalFrameController;
 import org.albertoborsetta.formscanner.controller.RenameImageController;
@@ -42,19 +44,20 @@ public class AnalyzeFileImageFrame extends JInternalFrame {
 		internalFrameController = InternalFrameController.getInstance(formScannerModel);
 		
 		setClosable(true);
-		setName("analyzeImageFrame");
+		setName(FormScannerConstants.ANALYZE_IMAGE_FRAME_NAME);
 		addInternalFrameListener(internalFrameController);
 		setIconifiable(true);
 		setResizable(true);
 		setMaximizable(true);
-		setTitle("Rename file image");
+		setTitle(formScannerModel.getTranslationFor(FormScannerTranslationKeys.ANALYZE_FILE_FRAME_TITLE));
 		
-		int desktopWidth = formScannerModel.getDesktopSize().width;
-		setBounds(220, 10, desktopWidth - 230, 300);
+		int desktopHeight = formScannerModel.getDesktopSize().height;		
 		
 		imagePanel = new ImagePanel(file);
 		scrollPane = new ImageScrollPane(imagePanel);
 		getContentPane().add(scrollPane, BorderLayout.CENTER);
+		
+		setBounds(220, 10, imagePanel.getWidth() + 100, desktopHeight - 20);
 	}
 	
 	private class ImageScrollPane extends JScrollPane {
@@ -80,22 +83,31 @@ public class AnalyzeFileImageFrame extends JInternalFrame {
 	
 	private class ImagePanel extends JPanel {
 		
+		private int width;
+		private int height;
+		
 		/**
 		 * 
 		 */
 		private static final long serialVersionUID = 1L;
+		
 		private BufferedImage image;
 		
 		public ImagePanel(File file) {
 			super();
 			setImage(file);
-			setPreferredSize(new Dimension(image.getWidth(), image.getHeight()));
+			double scaleFactor = (formScannerModel.getDesktopSize().height - 100) / (double) image.getHeight();
+			width = (int) Math.floor(image.getWidth() * scaleFactor);
+			height = (int) Math.floor(image.getHeight() * scaleFactor);
 		}
 		
 		@Override
 	    public void paintComponent(Graphics g) {
-			setPreferredSize(new Dimension(image.getWidth(), image.getHeight()));
-	        g.drawImage(image, 0, 0, this);            
+			double scaleFactor = (formScannerModel.getDesktopSize().height - 100) / (double) image.getHeight();
+			width = (int) Math.floor(image.getWidth() * scaleFactor);
+			height = (int) Math.floor(image.getHeight() * scaleFactor);
+			setPreferredSize(new Dimension(width, height));
+	        g.drawImage(image, 0, 0, width, height, this);            
 	    }
 		
 		public void setImage(File file) {
@@ -104,6 +116,10 @@ public class AnalyzeFileImageFrame extends JInternalFrame {
 			} catch (IOException ex) {
 				image = null;
 			}
+		}
+		
+		public int getWidth() {
+			return width;
 		}
 	}
 	
