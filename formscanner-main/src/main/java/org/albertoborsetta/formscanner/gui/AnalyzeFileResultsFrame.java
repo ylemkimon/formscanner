@@ -7,6 +7,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
+import javax.swing.table.DefaultTableModel;
 
 import org.albertoborsetta.formscanner.commons.FormScannerFont;
 import org.albertoborsetta.formscanner.model.FormScannerModel;
@@ -47,28 +48,9 @@ public class AnalyzeFileResultsFrame extends JInternalFrame {
 		partialResultsScrollPane = new JScrollPane();
 		totalResultsScrollPane = new JScrollPane();
 		
-		String[] columnNames = {"", "Result"};
+		partialResultsTable = new ResultsTable(formScannerModel.getNumFields(), 2);
 		
-		Object[][] data = new Object[20][2];
-		for (int i=0; i<data.length; i++) {
-			data[i][0] = (Object) ("Question " + ((Integer) (i+1)).toString());
-			data[i][1] = "";
-		}
-		
-		partialResultsTable = new ResultsTable(data, columnNames);
-		
-		String[] columnNames1 = new String[21];
-		columnNames1[0] = "Matricola";
-		for (int i=1; i<columnNames1.length; i++) {
-			columnNames1[i] = "Question " + ((Integer) i).toString();
-		}
-		
-		Object[][] data1 = new Object[1][21];
-		for (int i=0; i<21; i++) {
-			data1[0][i] = "";
-		}
-		
-		totalResultsTable = new ResultsTable(data1, columnNames1);
+		totalResultsTable = new ResultsTable(1, formScannerModel.getNumFields()+1);
 		
 		partialResultsScrollPane.setViewportView(partialResultsTable);
 		totalResultsScrollPane.setViewportView(totalResultsTable);
@@ -114,6 +96,12 @@ public class AnalyzeFileResultsFrame extends JInternalFrame {
 
 		public ResultsTable(Object[][] data, Object[] columnName) {
 			super(data, columnName);
+			setFont(FormScannerFont.getFont());
+			setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		}
+
+		public ResultsTable(int i, int j) {
+			super(i, j);
 			setFont(FormScannerFont.getFont());
 			setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		}

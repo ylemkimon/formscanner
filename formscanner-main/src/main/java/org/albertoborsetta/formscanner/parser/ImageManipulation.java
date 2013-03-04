@@ -30,19 +30,19 @@ import net.sourceforge.jiu.geometry.ScaleReplication;
  * @author Aaditeshwar Seth
  */
 public class ImageManipulation {    
-    Gray8Image grayimage, scaledImage;
-    int height, width;
-    ConcentricCircle topleftpos, bottomrightpos;
-    int topleftX, topleftY, bottomrightX, bottomrightY;
-    double currAngle, currDiag, realAngle, realDiag;
-    int scaleFactor;
-    int markLocations[], realMarkLocations[];   // x * 10000 + y
-    int ascTemplateLocations[];                 // same order as markLocations: x * 1000 + y
-    int[][] ascTemplate;
-    int nummarks, realNummarks;
-    int numfields;
-    Hashtable<Character, Field> fields;
-    Field[] ascTemplateFields;
+    private Gray8Image grayimage, scaledImage;
+    private int height, width;
+    private ConcentricCircle topleftpos, bottomrightpos;
+    private int topleftX, topleftY, bottomrightX, bottomrightY;
+    private double currAngle, currDiag, realAngle, realDiag;
+    private int scaleFactor;
+    private int markLocations[], realMarkLocations[];   // x * 10000 + y
+    private int ascTemplateLocations[];                 // same order as markLocations: x * 1000 + y
+    private int[][] ascTemplate;
+    private int nummarks, realNummarks;
+    private int numfields;
+    private Hashtable<Character, Field> fields;
+    private Field[] ascTemplateFields;
     
     public ImageManipulation(Gray8Image grayimage) {
         this.grayimage = grayimage;
@@ -530,7 +530,7 @@ public class ImageManipulation {
                 mark.putMarkOnImage(markedImage);
             }
         }
-        // ImageUtil.saveImage(markedImage, "marksfoundform.png");        
+        ImageUtil.saveImage(markedImage, "marksfoundform.png");        
     }
     
     public void saveData(String filename) {
@@ -548,7 +548,11 @@ public class ImageManipulation {
         }
     }
     
-    int ROW_CHOICE = 0, COLUMN_CHOICE = 1, GRID_CHOICE = 2;
+    public int getNumfields() {
+		return numfields;
+	}
+
+	int ROW_CHOICE = 0, COLUMN_CHOICE = 1, GRID_CHOICE = 2;
     int SINGLE = 0, MULTIPLE = 1, COLUMN = 2, ROW = 3;
     class Field {
         char ch;

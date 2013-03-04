@@ -44,6 +44,8 @@ public class FormScannerModel {
 	private FormScannerResources resources;
 	private AnalyzeFileImageFrame analyzeFileImageFrame;
 	private AnalyzeFileResultsFrame analyzeFileResultsFrame;
+	
+	private ImageManipulation image;
     
 	public FormScannerModel(FormScanner view) {
 		this.view = view;
@@ -123,10 +125,10 @@ public class FormScannerModel {
 			if (!openedFiles.isEmpty()) {
 				analyzedFileIndex  = fileListFrame.getSelectedItemIndex();
 				fileListFrame.selectFile(analyzedFileIndex);
-/*
+
 				Gray8Image grayimage = ImageUtil.readImage(openedFiles.get(renamedFileIndex).getAbsolutePath());
 
-		        ImageManipulation image = new ImageManipulation(grayimage);
+		        image = new ImageManipulation(grayimage);
 		        image.locateConcentricCircles();
 		        
 		        image.readConfig(resources.getTemplateConfig());
@@ -134,12 +136,12 @@ public class FormScannerModel {
 		        image.readAscTemplate(resources.getTemplateAsc());
 		        image.searchMarks();
 		        image.saveData("/home/tecnoteca/Scrivania/results.dat");
-*/				
+			
 				analyzeFileImageFrame = new AnalyzeFileImageFrame(this, openedFiles.get(analyzedFileIndex));
 				view.arrangeFrame(analyzeFileImageFrame);
 				
 				analyzeFileResultsFrame = new AnalyzeFileResultsFrame(this); 
-				view.arrangeFrame(analyzeFileResultsFrame);
+				view.arrangeFrame(analyzeFileResultsFrame);				
 			}			
 			break;
 		case ANALYZE_FILE_NEXT:
@@ -230,4 +232,8 @@ public class FormScannerModel {
 		ImageIcon icon = resources.getIconFor(key);
 		return icon;
 	}
+	
+	public int getNumFields() {
+		return image.getNumfields();
+	} 
 }
