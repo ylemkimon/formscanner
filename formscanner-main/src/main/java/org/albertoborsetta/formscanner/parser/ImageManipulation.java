@@ -87,7 +87,7 @@ public class ImageManipulation {
         ImageUtil.putMark(grayimage, bottomrightX, bottomrightY, true);
 
         System.out.println(topleftX + ":" + topleftY + ":" + bottomrightX + ":" + bottomrightY);
-//        ImageUtil.saveImage(grayimage, "grayimage.png");
+        ImageUtil.saveImage(grayimage, "grayimage.png");
         
         currAngle = Math.toDegrees(Math.atan2((bottomrightX - topleftX), 
                 (bottomrightY - topleftY)));
@@ -99,7 +99,7 @@ public class ImageManipulation {
     
     public void locateMarks() {
         rescale();
-//        Gray8Image scaledImage = ImageUtil.readImage("scaled.png");     // XXX do not read from file
+        Gray8Image scaledImage = ImageUtil.readImage("scaled.png");     // XXX do not read from file
         int scaledtopleftX = topleftX / scaleFactor;
         int scaledtopleftY = topleftY / scaleFactor;
         int scaledbottomrightX = bottomrightX / scaleFactor;
@@ -144,8 +144,8 @@ public class ImageManipulation {
             marks[i] = ((t / 1000) * scaleFactor + markdispX) * 10000 + (t % 1000) * scaleFactor + markdispY;   // XXX
             ImageUtil.putMark(markedImage, marks[i] / 10000, marks[i] % 10000, false);
         }        
-        // ImageUtil.saveImage(scaledImage, "markedscaled.png");
-        // ImageUtil.saveImage(markedImage, "marked.png");
+        ImageUtil.saveImage(scaledImage, "markedscaled.png");
+        ImageUtil.saveImage(markedImage, "marked.png");
 
         this.markLocations = marks;
         this.nummarks = nummarks;
@@ -359,7 +359,7 @@ public class ImageManipulation {
             filter.setInputImage(grayimage);
             filter.process();
             Gray8Image medianimage = (Gray8Image)(filter.getOutputImage());
-//            ImageUtil.saveImage(medianimage, "median.png");
+            ImageUtil.saveImage(medianimage, "median.png");
             
             ScaleReplication scale = new ScaleReplication();
             scale.setInputImage(medianimage);
@@ -375,7 +375,7 @@ public class ImageManipulation {
             ImageUtil.putMark((Gray8Image)scaledImage, scaledtopleftX, scaledtopleftY, true);
             ImageUtil.putMark((Gray8Image)scaledImage, scaledbottomrightX, scaledbottomrightY, true);
 
-            // ImageUtil.saveImage(scaledImage, "scaled.png");
+            ImageUtil.saveImage(scaledImage, "scaled.png");
             this.scaledImage = (Gray8Image)scaledImage;
         } catch(Exception excep) {
             excep.printStackTrace(System.out);
