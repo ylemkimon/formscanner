@@ -42,16 +42,17 @@ public class AnalyzeFileImageFrame extends JInternalFrame {
 		analyzeImageController = new AnalyzeImageController(formScannerModel);
 		analyzeImageController.add(this);
 		internalFrameController = InternalFrameController.getInstance(formScannerModel);
+		addInternalFrameListener(internalFrameController);
+		
+		int desktopHeight = formScannerModel.getDesktopSize().height;	
 		
 		setClosable(true);
-		setName(FormScannerConstants.ANALYZE_IMAGE_FRAME_NAME);
-		addInternalFrameListener(internalFrameController);
 		setIconifiable(true);
 		setResizable(true);
 		setMaximizable(true);
-		setTitle(formScannerModel.getTranslationFor(FormScannerTranslationKeys.ANALYZE_FILE_FRAME_TITLE));
 		
-		int desktopHeight = formScannerModel.getDesktopSize().height;		
+		setName(FormScannerConstants.ANALYZE_IMAGE_FRAME_NAME);	
+		setTitle(formScannerModel.getTranslationFor(FormScannerTranslationKeys.ANALYZE_FILE_FRAME_TITLE));					
 		
 		imagePanel = new ImagePanel(file);
 		scrollPane = new ImageScrollPane(imagePanel);
