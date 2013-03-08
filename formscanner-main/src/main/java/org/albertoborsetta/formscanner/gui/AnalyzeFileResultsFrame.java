@@ -7,6 +7,7 @@ import javax.swing.JTable;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.util.HashMap;
 
 import javax.swing.table.DefaultTableColumnModel;
 import javax.swing.table.DefaultTableModel;
@@ -36,13 +37,14 @@ public class AnalyzeFileResultsFrame extends JInternalFrame {
 	/**
 	 * Create the frame.
 	 */
-	public AnalyzeFileResultsFrame(FormScannerModel formScannerModel) {
+	public AnalyzeFileResultsFrame(FormScannerModel formScannerModel, HashMap<String, String> partialResults, HashMap<String, Object> totalResults) {
 		
 		this.formScannerModel = formScannerModel;
 		InternalFrameController internalFrameController = InternalFrameController.getInstance(formScannerModel);
 		addInternalFrameListener(internalFrameController);	
 		
 		int desktopHeight = formScannerModel.getDesktopSize().height;
+		int fieldsNumber = formScannerModel.getNumFields();
 		
 		setBounds(300, 10, 400, desktopHeight-20);  // change	
 		
@@ -55,18 +57,18 @@ public class AnalyzeFileResultsFrame extends JInternalFrame {
 		setTitle("results grid"); // change
 		
 		String[] partialTableColumnNames = {"Question n.", "Result"};
-		Object[][] partialTableData = new String[20][2];		
+		Object[][] partialTableData = new String[fieldsNumber][2];		
 		partialResultsTable = createTable(partialTableData, partialTableColumnNames);
 		
 		partialResultsScrollPane = new JScrollPane(partialResultsTable);
 		// partialResultsScrollPane.setViewportView(partialResultsTable);
 				
-		String[] totalTableColumnNames = new String[21];
+		String[] totalTableColumnNames = new String[fieldsNumber+1];
 		totalTableColumnNames[0] = "Matricola";
 		for (int i=1; i<totalTableColumnNames.length; i++) {
 			totalTableColumnNames[i] = "Question " + ((Integer) i).toString();
 		}
-		Object[][] totalData = new Object[1][21];
+		Object[][] totalData = new Object[1][fieldsNumber+1];
 		totalResultsTable = createTable(totalData, totalTableColumnNames);
 		
 		totalResultsScrollPane = new JScrollPane(totalResultsTable);		

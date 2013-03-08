@@ -7,11 +7,16 @@
  * and open the template in the editor.
  */
 
-package org.albertoborsetta.formscanner.parser;
+package org.albertoborsetta.formscanner.newparser;
 
+import java.awt.image.BufferedImage;
+import java.awt.image.DataBuffer;
+import java.awt.image.SampleModel;
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.util.ArrayList;
@@ -20,6 +25,10 @@ import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Map;
 import java.util.StringTokenizer;
+
+import javax.imageio.ImageIO;
+
+import org.albertoborsetta.formscanner.commons.Field;
 
 import net.sourceforge.jiu.data.Gray8Image;
 import net.sourceforge.jiu.data.MemoryGray8Image;
@@ -31,8 +40,10 @@ import net.sourceforge.jiu.geometry.ScaleReplication;
  *
  * @author Aaditeshwar Seth
  */
-public class ImageManipulation {    
-    private Gray8Image grayimage, scaledImage;
+public class ImageManipulation {
+	private ImageManipulation instance = null;
+	private BufferedImage grayimage;
+    private Gray8Image scaledImage;
     private int height, width;
     private ConcentricCircle topleftpos, bottomrightpos;
     private int topleftX, topleftY, bottomrightX, bottomrightY;
@@ -43,11 +54,22 @@ public class ImageManipulation {
     private int[][] ascTemplate;
     private int nummarks, realNummarks;
     private int numfields;
-    private Hashtable<Character, Field> fields;
+    private Map<Character, Field> fields;
     private Field[] ascTemplateFields;
     
-    public ImageManipulation(Gray8Image grayimage) {
-        this.grayimage = grayimage;
+    public ImageManipulation getInstance(File file) {
+    	if (instance == null) {
+    		instance = new ImageManipulation(file);
+    	}
+    	return instance;
+    } 
+    
+    private ImageManipulation(File file) {
+    	try {		
+    		grayimage = ImageIO.read(file);
+		} catch (IOException ex) {
+			grayimage = null;
+		}
         
         height = grayimage.getHeight();
         width = grayimage.getWidth();
@@ -60,12 +82,14 @@ public class ImageManipulation {
     public void locateConcentricCircles() {
         int[] topleft = new int[((int)(height/4) + 1) * ((int)(width/4) + 1)];
         int[] bottomright = new int[((int)(height/4) + 1) * ((int)(width/4) + 1)];
-        grayimage.getSamples(0, 0, 0, (int)(width/4) + 1, (int)(height/4) + 1, topleft, 0);
-        grayimage.getSamples(0, width - (int)(width/4) - 1, height - (int)(height/4) - 1, (int)(width/4) + 1, (int)(height/4) + 1, bottomright, 0);
+        SampleModel samplemodel = grayimage.getSampleModel();
+        DataBuffer data = samplemodel.createDataBuffer();
+        samplemodel.getSamples(0, 0, (int)(width/4)+1, (int)(height/4), 0, topleft, data);
+        samplemodel.getSamples(0, 0, (int)(width/4)+1, (int)(height/4), 0, bottomright, data);
         
-        Gray8Image topleftimg = new MemoryGray8Image((int)(width/4) + 1, (int)(height/4) + 1);
+        BufferedImage topleftimg = new BufferedImage((int)(width/4) + 1, (int)(height/4) + 1, BufferedImage.TYPE_BYTE_BINARY);
         topleftimg.putSamples(0, 0, 0, (int)(width/4) + 1, (int)(height/4) + 1, topleft, 0);
-        Gray8Image bottomrightimg = new MemoryGray8Image((int)(width/4) + 1, (int)(height/4) + 1);
+        BufferedImage bottomrightimg = new BufferedImage((int)(width/4) + 1, (int)(height/4) + 1, BufferedImage.TYPE_BYTE_BINARY);
         bottomrightimg.putSamples(0, 0, 0, (int)(width/4) + 1, (int)(height/4) + 1, bottomright, 0);
 
         topleftpos = new ConcentricCircle(topleftimg, width, height);
@@ -467,7 +491,7 @@ public class ImageManipulation {
 
     public void readFields(String filename) {
         String line;
-        fields = new Hashtable<Character, Field>();
+        fields = new HashMap<Character, Field>();
         try {
             BufferedReader in = new BufferedReader(new InputStreamReader(new FileInputStream(filename)));
             while((line = in.readLine()) != null && !line.equals("")) {

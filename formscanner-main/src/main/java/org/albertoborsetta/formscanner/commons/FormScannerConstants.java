@@ -28,4 +28,12 @@ public class FormScannerConstants {
 		ANALYZE_FILE_SKIP,
 		EXIT
 	  }
+	
+	public static final int ROW_CHOICE = 0;
+	public static final int COLUMN_CHOICE = 1;
+	public static final int GRID_CHOICE = 2;
+	public static final int SINGLE = 0;
+	public static final int MULTIPLE = 1;
+	public static final int COLUMN = 2;
+	public static final int ROW = 3;
 }

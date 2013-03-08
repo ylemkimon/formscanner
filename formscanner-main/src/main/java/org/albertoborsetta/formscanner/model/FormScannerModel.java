@@ -13,10 +13,11 @@ import org.albertoborsetta.formscanner.gui.FileListFrame;
 import org.albertoborsetta.formscanner.gui.FormScanner;
 import org.albertoborsetta.formscanner.gui.RenameFileFrame;
 import org.albertoborsetta.formscanner.gui.RenameFileImageFrame;
-import org.albertoborsetta.formscanner.parser.ImageManipulation;
-import org.albertoborsetta.formscanner.parser.ImageUtil;
+import org.albertoborsetta.formscanner.newparser.ImageManipulation;
+import org.albertoborsetta.formscanner.newparser.ImageUtil;
 
 import java.awt.Dimension;
+import java.awt.image.BufferedImage;
 import java.io.File;
 
 import java.util.ArrayList;
@@ -24,6 +25,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JInternalFrame;
 
@@ -46,6 +48,9 @@ public class FormScannerModel {
 	private AnalyzeFileResultsFrame analyzeFileResultsFrame;
 	
 	private ImageManipulation image;
+	
+	private PartialResults partialResults;
+	private Map<String, PartialResults> totalResults = new HashMap<String, PartialResults>();
     
 	public FormScannerModel(FormScanner view) {
 		this.view = view;
@@ -125,23 +130,15 @@ public class FormScannerModel {
 			if (!openedFiles.isEmpty()) {
 				analyzedFileIndex  = fileListFrame.getSelectedItemIndex();
 				fileListFrame.selectFile(analyzedFileIndex);
-
-				Gray8Image grayimage = ImageUtil.readImage(openedFiles.get(renamedFileIndex).getAbsolutePath());
-
-		        image = new ImageManipulation(grayimage);
-		        image.locateConcentricCircles();
-		        
-		        image.readConfig(resources.getTemplateConfig());
-		        image.readFields(resources.getTemplateFields());
-		        image.readAscTemplate(resources.getTemplateAsc());
-		        image.searchMarks();
-		        image.saveData("/home/tecnoteca/Scrivania/results.dat");
+			
+				partialResults = (PartialResults) analyzeForm(openedFiles.get(renamedFileIndex));
+				totalResults.put(FilenameUtils.removeExtension(getFileNameByIndex(renamedFileIndex)), partialResults);
 			
 				analyzeFileImageFrame = new AnalyzeFileImageFrame(this, openedFiles.get(analyzedFileIndex));
 				view.arrangeFrame(analyzeFileImageFrame);
 				
-				analyzeFileResultsFrame = new AnalyzeFileResultsFrame(this); 
-				view.arrangeFrame(analyzeFileResultsFrame);				
+				// analyzeFileResultsFrame = new AnalyzeFileResultsFrame(this, partialResults, totalResults); 
+				// view.arrangeFrame(analyzeFileResultsFrame);				
 			}			
 			break;
 		case ANALYZE_FILE_NEXT:
@@ -168,6 +165,25 @@ public class FormScannerModel {
 		default:
 			break;
 		}		
+	}
+	
+	private Map<String, String> analyzeForm(File file) {
+		Map<String, String> results;
+		// Gray8Image grayimage = ImageUtil.readImage(fileName);
+
+		imageScan = ImageManipulation.getInstance(file);
+		
+		imageScan.readConfig(resources.getTemplateConfig());
+        imageScan.readFields(resources.getTemplateFields());
+        imageScan.readAscTemplate(resources.getTemplateAsc());
+        
+        imageScan.locateConcentricCircles();
+        imageScan.searchMarks();
+        imageScan.saveData("/home/tecnoteca/Scrivania/results.dat");
+        
+        results = imageScan.getData();
+        
+        return results;
 	}
 
 	private void updateFileList(Integer index, File file) {
@@ -236,4 +252,12 @@ public class FormScannerModel {
 	public int getNumFields() {
 		return image.getNumfields();
 	} 
+	
+	private class PartialResults extends HashMap<String, String> {
+
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = 1L;
+	}
 }
