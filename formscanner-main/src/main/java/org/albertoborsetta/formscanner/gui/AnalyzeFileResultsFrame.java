@@ -44,7 +44,7 @@ public class AnalyzeFileResultsFrame extends JInternalFrame {
 		addInternalFrameListener(internalFrameController);	
 		
 		int desktopHeight = formScannerModel.getDesktopSize().height;
-		int fieldsNumber = formScannerModel.getNumFields();
+		int fieldsNumber = 20; // formScannerModel.getNumFields();
 		
 		setBounds(300, 10, 400, desktopHeight-20);  // change	
 		

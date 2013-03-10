@@ -35,6 +35,13 @@
       <version>0.14.3</version>
       <scope>compile</scope>
     </dependency>
+    <dependency>
+    	<groupId>gov.nih.imagej</groupId>
+    	<artifactId>imagej</artifactId>
+    	<version>1.46</version>
+    	<type>jar</type>
+    	<scope>compile</scope>
+    </dependency>
   </dependencies>
   <repositories>
     <repository>

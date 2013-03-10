@@ -1,7 +1,5 @@
 package org.albertoborsetta.formscanner.model;
 
-import net.sourceforge.jiu.data.Gray8Image;
-
 import org.albertoborsetta.formscanner.commons.FormScannerConstants.Actions;
 import org.albertoborsetta.formscanner.commons.configuration.FormScannerConfiguration;
 import org.albertoborsetta.formscanner.commons.configuration.FormScannerConfigurationKeys;
@@ -13,11 +11,8 @@ import org.albertoborsetta.formscanner.gui.FileListFrame;
 import org.albertoborsetta.formscanner.gui.FormScanner;
 import org.albertoborsetta.formscanner.gui.RenameFileFrame;
 import org.albertoborsetta.formscanner.gui.RenameFileImageFrame;
-import org.albertoborsetta.formscanner.newparser.ImageManipulation;
-import org.albertoborsetta.formscanner.newparser.ImageUtil;
 
 import java.awt.Dimension;
-import java.awt.image.BufferedImage;
 import java.io.File;
 
 import java.util.ArrayList;
@@ -25,7 +20,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JInternalFrame;
 
@@ -46,11 +40,6 @@ public class FormScannerModel {
 	private FormScannerResources resources;
 	private AnalyzeFileImageFrame analyzeFileImageFrame;
 	private AnalyzeFileResultsFrame analyzeFileResultsFrame;
-	
-	private ImageManipulation image;
-	
-	private PartialResults partialResults;
-	private Map<String, PartialResults> totalResults = new HashMap<String, PartialResults>();
     
 	public FormScannerModel(FormScanner view) {
 		this.view = view;
@@ -131,9 +120,6 @@ public class FormScannerModel {
 				analyzedFileIndex  = fileListFrame.getSelectedItemIndex();
 				fileListFrame.selectFile(analyzedFileIndex);
 			
-				partialResults = (PartialResults) analyzeForm(openedFiles.get(renamedFileIndex));
-				totalResults.put(FilenameUtils.removeExtension(getFileNameByIndex(renamedFileIndex)), partialResults);
-			
 				analyzeFileImageFrame = new AnalyzeFileImageFrame(this, openedFiles.get(analyzedFileIndex));
 				view.arrangeFrame(analyzeFileImageFrame);
 				
@@ -165,25 +151,6 @@ public class FormScannerModel {
 		default:
 			break;
 		}		
-	}
-	
-	private Map<String, String> analyzeForm(File file) {
-		Map<String, String> results;
-		// Gray8Image grayimage = ImageUtil.readImage(fileName);
-
-		imageScan = ImageManipulation.getInstance(file);
-		
-		imageScan.readConfig(resources.getTemplateConfig());
-        imageScan.readFields(resources.getTemplateFields());
-        imageScan.readAscTemplate(resources.getTemplateAsc());
-        
-        imageScan.locateConcentricCircles();
-        imageScan.searchMarks();
-        imageScan.saveData("/home/tecnoteca/Scrivania/results.dat");
-        
-        results = imageScan.getData();
-        
-        return results;
 	}
 
 	private void updateFileList(Integer index, File file) {
@@ -247,17 +214,5 @@ public class FormScannerModel {
 	public ImageIcon getIconFor(String key) {
 		ImageIcon icon = resources.getIconFor(key);
 		return icon;
-	}
-	
-	public int getNumFields() {
-		return image.getNumfields();
-	} 
-	
-	private class PartialResults extends HashMap<String, String> {
-
-		/**
-		 * 
-		 */
-		private static final long serialVersionUID = 1L;
 	}
 }

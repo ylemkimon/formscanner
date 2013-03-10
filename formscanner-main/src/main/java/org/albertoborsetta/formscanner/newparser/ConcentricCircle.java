@@ -13,10 +13,7 @@ import net.sourceforge.jiu.data.Gray8Image;
 import net.sourceforge.jiu.data.MemoryGray8Image;
 import net.sourceforge.jiu.filters.MedianFilter;
 
-/**
- *
- * @author Aaditeshwar Seth
- */
+
 public class ConcentricCircle {
     public static double a4width = 21.0;       // cm
     public static double a4height = 29.7;      // cm

@@ -51,10 +51,8 @@ public class ImageManipulation {
         
         height = grayimage.getHeight();
         width = grayimage.getWidth();
-        // 1700 x 2339 --> 426 x 560
-        // System.out.println("width = " + width + ": height = " + height);
         
-        scaleFactor = width / 340;      // 5 --> each mark becomes around 3 pixels wide
+        scaleFactor = width / 340;
     }
     
     public void locateConcentricCircles() {
