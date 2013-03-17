@@ -51,7 +51,7 @@ public class RenameFileFrame extends JInternalFrame {
 		internalFrameController = InternalFrameController.getInstance(formScannerModel);
 		addInternalFrameListener(internalFrameController);
 		
-		setTitle(formScannerModel.getTranslationFor(FormScannerTranslationKeys.RENAME_FILE_FRAME_TITLE));
+		// setTitle(formScannerModel.getTranslationFor(FormScannerTranslationKeys.RENAME_FILE_FRAME_TITLE));
 		
 		JPanel panel = new JPanel();
 		getContentPane().add(panel, BorderLayout.CENTER);
@@ -59,37 +59,48 @@ public class RenameFileFrame extends JInternalFrame {
 				FormFactory.RELATED_GAP_COLSPEC,
 				FormFactory.DEFAULT_COLSPEC,
 				FormFactory.RELATED_GAP_COLSPEC,
-				FormFactory.PREF_COLSPEC,
+				ColumnSpec.decode("pref:grow"),
 				FormFactory.RELATED_GAP_COLSPEC,
-				FormFactory.PREF_COLSPEC,
-				FormFactory.RELATED_GAP_COLSPEC,
-				FormFactory.DEFAULT_COLSPEC,},
+				FormFactory.DEFAULT_COLSPEC,
+				FormFactory.RELATED_GAP_COLSPEC,},
 			new RowSpec[] {
 				FormFactory.RELATED_GAP_ROWSPEC,
 				FormFactory.DEFAULT_ROWSPEC,
-				FormFactory.RELATED_GAP_ROWSPEC,
-				FormFactory.DEFAULT_ROWSPEC,}));
+				FormFactory.RELATED_GAP_ROWSPEC,}));
 		
 		JLabel newFileNameLabel = new JLabel(formScannerModel.getTranslationFor(FormScannerTranslationKeys.RENAME_FILE_FRAME_LABEL) + ": ");
 		panel.add(newFileNameLabel, "2, 2, right, default");
 		
 		fileNameField = new FileNameField();		
-		panel.add(fileNameField, "4, 2, 3, 1, fill, default");
+		panel.add(fileNameField, "4, 2, fill, default");
 		
 		fileExtensionField = new JLabel();
-		panel.add(fileExtensionField, "8, 2");		
+		panel.add(fileExtensionField, "6, 2");
+		
+		JPanel buttonPanel = new JPanel();
+		getContentPane().add(buttonPanel, BorderLayout.SOUTH);
+		buttonPanel.setLayout(new FormLayout(new ColumnSpec[] {
+				FormFactory.RELATED_GAP_COLSPEC,
+				FormFactory.GROWING_BUTTON_COLSPEC,
+				FormFactory.RELATED_GAP_COLSPEC,
+				FormFactory.BUTTON_COLSPEC,
+				FormFactory.RELATED_GAP_COLSPEC,},
+			new RowSpec[] {
+				FormFactory.RELATED_GAP_ROWSPEC,
+				FormFactory.PREF_ROWSPEC,
+				FormFactory.RELATED_GAP_ROWSPEC,}));
 		
 		okButton = new OKButton();
-		panel.add(okButton , "4, 4");
+		buttonPanel.add(okButton , "2, 2, right, default");
 		
 		cancelButton = new CancelButton();
-		panel.add(cancelButton, "6, 4");
+		buttonPanel.add(cancelButton, "4, 2, right, default");
 				
-		statusBar = new StatusBar();
+		// statusBar = new StatusBar();
 		
 		updateRenamedFile(fileName);		
 		
-		getContentPane().add(statusBar, BorderLayout.SOUTH);
+		// getContentPane().add(statusBar, BorderLayout.SOUTH);
 	}
 	
 	public boolean isOkEnabled() {
@@ -105,7 +116,8 @@ public class RenameFileFrame extends JInternalFrame {
 	}
 	
 	public void updateRenamedFile(String fileName) {
-		statusBar.setText(formScannerModel.getTranslationFor(FormScannerTranslationKeys.RENAME_FILE_FRAME_STATUSBAR) + ": " + fileName);
+		// statusBar.setText(formScannerModel.getTranslationFor(FormScannerTranslationKeys.RENAME_FILE_FRAME_STATUSBAR) + ": " + fileName);
+		setTitle(formScannerModel.getTranslationFor(FormScannerTranslationKeys.RENAME_FILE_FRAME_STATUSBAR) + ": " + fileName);
 		fileNameField.setText(FilenameUtils.removeExtension(fileName));
 		fileExtensionField.setText('.' + FilenameUtils.getExtension(fileName));
 	}
