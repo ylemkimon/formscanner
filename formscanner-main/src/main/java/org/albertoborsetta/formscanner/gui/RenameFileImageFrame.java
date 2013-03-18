@@ -5,6 +5,7 @@ import org.albertoborsetta.formscanner.commons.translation.FormScannerTranslatio
 import org.albertoborsetta.formscanner.controller.InternalFrameController;
 import org.albertoborsetta.formscanner.controller.RenameImageController;
 import org.albertoborsetta.formscanner.model.FormScannerModel;
+import org.apache.commons.io.FilenameUtils;
 
 import java.awt.Cursor;
 import java.awt.Dimension;
@@ -28,7 +29,7 @@ public class RenameFileImageFrame extends JInternalFrame {
 	
 	private ImagePanel imagePanel;
 	private ImageScrollPane scrollPane;
-	private FormScannerModel formScanneModel;
+	private FormScannerModel formScannerModel;
 	private RenameImageController renameImageController;
 	private InternalFrameController internalFrameController;
 	
@@ -37,10 +38,10 @@ public class RenameFileImageFrame extends JInternalFrame {
 	 * Create the frame.
 	 */
 	public RenameFileImageFrame(FormScannerModel formScannerModel, File file) {
-		this.formScanneModel = formScannerModel;
-		renameImageController = new RenameImageController(formScanneModel);
+		this.formScannerModel = formScannerModel;
+		renameImageController = new RenameImageController(formScannerModel);
 		renameImageController.add(this);
-		internalFrameController = InternalFrameController.getInstance(formScanneModel);
+		internalFrameController = InternalFrameController.getInstance(formScannerModel);
 		
 		setClosable(true);
 		setName(FormScannerConstants.RENAME_FILE_IMAGE_FRAME_NAME);
@@ -48,14 +49,15 @@ public class RenameFileImageFrame extends JInternalFrame {
 		setIconifiable(true);
 		setResizable(true);
 		setMaximizable(true);
-		setTitle(formScanneModel.getTranslationFor(FormScannerTranslationKeys.RENAME_FILE_FRAME_TITLE));
 		
-		int desktopWidth = formScanneModel.getDesktopSize().width;
+		int desktopWidth = formScannerModel.getDesktopSize().width;
 		setBounds(220, 10, desktopWidth - 230, 300);
 		
 		imagePanel = new ImagePanel(file);
 		scrollPane = new ImageScrollPane(imagePanel);
 		getContentPane().add(scrollPane, BorderLayout.CENTER);
+		
+		updateRenamedFile(file.getName());
 	}
 	
 	private class ImageScrollPane extends JScrollPane {
@@ -107,9 +109,14 @@ public class RenameFileImageFrame extends JInternalFrame {
 		}
 	}
 	
+	private void updateRenamedFile(String fileName) {
+		setTitle(formScannerModel.getTranslationFor(FormScannerTranslationKeys.RENAME_FILE_FRAME_TITLE) + ": " + fileName);
+	}
+	
 	public void updateImage(File file) {
 		imagePanel.setImage(file);
 		update(getGraphics());
+		updateRenamedFile(file.getName());
 	}
 	
 	public void setScrollBars(int deltaX, int deltaY) {

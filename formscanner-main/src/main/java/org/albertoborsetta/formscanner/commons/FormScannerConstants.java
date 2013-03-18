@@ -16,6 +16,7 @@ public class FormScannerConstants {
 	public static final String RENAME_FILE_IMAGE_FRAME_NAME = "rename.file.image.frame";
 	public static final String FILE_LIST_FRAME_NAME = "file.list.frame";
 	public static final String ANALYZE_IMAGE_FRAME_NAME = "analyze.image.frame";
+	public static final String MANAGE_TEMPLATE_FRAME_NAME = "manage.template.frame";
 	
 	public enum Actions {
 		RENAME_FILE_FIRST,
@@ -29,11 +30,17 @@ public class FormScannerConstants {
 		EXIT
 	  }
 	
-	public static final int ROW_CHOICE = 0;
-	public static final int COLUMN_CHOICE = 1;
-	public static final int GRID_CHOICE = 2;
-	public static final int SINGLE = 0;
-	public static final int MULTIPLE = 1;
-	public static final int COLUMN = 2;
-	public static final int ROW = 3;
+	public static final boolean SINGLE = false;
+	public static final boolean MULTIPLE = !SINGLE;
+	public static final String COLUMN = "column";
+	public static final String ROW = "row";
+	public static final String GRID_ROWS = "grid.by.rows";
+	public static final String GRID_COLUMNS = "grid.by.columns";
+	
+	public enum FieldType {
+		COLUMN,
+		ROW,
+		GRID_ROWS,
+		GRID_COLUMNS
+	}
 }

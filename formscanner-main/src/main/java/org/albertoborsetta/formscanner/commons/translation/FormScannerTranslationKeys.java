@@ -35,11 +35,20 @@ public class FormScannerTranslationKeys {
 	public static final String FILE_LIST_FRAME_TITLE = "file.list.frame.title";
 	
 	public static final String RENAME_FILE_FRAME_TITLE = "rename.file.frame.title";
-	public static final String RENAME_FILE_FRAME_STATUSBAR = "rename.file.frame.statusbar";
 	public static final String RENAME_FILE_FRAME_LABEL = "rename.file.frame.label";
 	
 	public static final String ANALYZE_FILE_FRAME_TITLE = "analyze.file.frame.title";
 	
+	public static final String MANAGE_TEMPLATE_FRAME_TITLE = "manage.template.frame.title";
+	public static final String FIELD_LIST_TAB_NAME = "field.list.tab.name";
+	public static final String FIELD_PROPERTIES_TAB_NAME = "field.properties.tab.name";
+	public static final String FIELD_PROPERTIES_TYPE_LABEL = "field.properties.type.label";
+	public static final String FIELD_PROPERTIES_N_ROW_COL_LABEL = "field.properties.number.rows.columns.label";
+	public static final String FIELD_PROPERTIES_N_VALUES_LABEL = "field.propertoes.number.values.label";
+	
+	
 	public static final String OK_BUTTON = "ok.button";
 	public static final String CANCEL_BUTTON = "cancel.button";	
+	public static final String ADD_BUTTON = "add.button";
+	public static final String REMOVE_BUTTON = "remove.button";	
 }

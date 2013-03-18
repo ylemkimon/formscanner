@@ -22,8 +22,7 @@ exit.mnemonic=E
 
 file.list.frame.title=Immagini
 
-rename.file.frame.title=Rinomina file
-rename.file.frame.statusbar=Sto rinominando
+rename.file.frame.title=Sto rinominando
 rename.file.frame.label=Nuovo nome
 
 analyze.file.frame.title=Scansione file

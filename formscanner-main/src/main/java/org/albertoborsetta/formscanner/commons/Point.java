@@ -1,31 +1,31 @@
-package org.albertoborsetta.formscanner.newparser;
+package org.albertoborsetta.formscanner.commons;
 
 import ij.process.ImageProcessor;
 
-public class Corner implements Comparable<Corner> {
+public class Point implements Comparable<Point> {
 	
 	private int x;
 	private int y;
 	private double dist = 0;
 
-	public Corner (int x, int y) {
+	public Point (int x, int y) {
 		this.x = x;
 		this.y = y;
 	}
 	
-	public Corner (int x, int y, double dist) {
+	public Point (int x, int y, double dist) {
 		this.x = x;
 		this.y = y;
 		this.dist = dist;
 	}
 
-	public int compareTo(Corner c2) { 
+	public int compareTo(Point c2) { 
 		if (dist < c2.getDistance()) return -1;
 		if (dist > c2.getDistance()) return 1;
 		else return 0;
 	}
 
-	public double dist2 (Corner c2) {
+	public double dist2 (Point c2) {
 		int dx = this.x - c2.x;
 		int dy = this.y - c2.y;
 		return (dx*dx)+(dy*dy);

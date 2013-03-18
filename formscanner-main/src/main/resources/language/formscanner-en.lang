@@ -21,11 +21,10 @@ exit.tooltip=Exit
 
 file.list.frame.title=Images
 
-rename.file.frame.title=Rename files
-rename.file.frame.statusbar=Renaming
+rename.file.frame.title=Renaming file
 rename.file.frame.label=New name
 
-analyze.file.frame.title=Analyze file
+analyze.file.frame.title=Analyzing file
 
 ok.button=OK
 cancel.button=Cancel

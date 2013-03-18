@@ -1,7 +1,6 @@
 package org.albertoborsetta.formscanner.gui;
 
 import org.albertoborsetta.formscanner.commons.FormScannerConstants;
-import org.albertoborsetta.formscanner.commons.FormScannerFont;
 import org.albertoborsetta.formscanner.commons.translation.FormScannerTranslationKeys;
 import org.albertoborsetta.formscanner.controller.RenameFileController;
 import org.albertoborsetta.formscanner.controller.InternalFrameController;
@@ -14,7 +13,6 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.JLabel;
 import javax.swing.JButton;
-import javax.swing.border.BevelBorder;
 
 import java.awt.BorderLayout;
 
@@ -29,7 +27,6 @@ public class RenameFileFrame extends JInternalFrame {
 	
 	private JTextField fileNameField;
 	private JLabel fileExtensionField;
-	private JLabel statusBar;
 	private FormScannerModel formScannerModel;
 	private JButton okButton;
 	private JButton cancelButton;
@@ -50,8 +47,6 @@ public class RenameFileFrame extends JInternalFrame {
 		
 		internalFrameController = InternalFrameController.getInstance(formScannerModel);
 		addInternalFrameListener(internalFrameController);
-		
-		// setTitle(formScannerModel.getTranslationFor(FormScannerTranslationKeys.RENAME_FILE_FRAME_TITLE));
 		
 		JPanel panel = new JPanel();
 		getContentPane().add(panel, BorderLayout.CENTER);
@@ -95,12 +90,8 @@ public class RenameFileFrame extends JInternalFrame {
 		
 		cancelButton = new CancelButton();
 		buttonPanel.add(cancelButton, "4, 2, right, default");
-				
-		// statusBar = new StatusBar();
 		
 		updateRenamedFile(fileName);		
-		
-		// getContentPane().add(statusBar, BorderLayout.SOUTH);
 	}
 	
 	public boolean isOkEnabled() {
@@ -116,8 +107,7 @@ public class RenameFileFrame extends JInternalFrame {
 	}
 	
 	public void updateRenamedFile(String fileName) {
-		// statusBar.setText(formScannerModel.getTranslationFor(FormScannerTranslationKeys.RENAME_FILE_FRAME_STATUSBAR) + ": " + fileName);
-		setTitle(formScannerModel.getTranslationFor(FormScannerTranslationKeys.RENAME_FILE_FRAME_STATUSBAR) + ": " + fileName);
+		setTitle(formScannerModel.getTranslationFor(FormScannerTranslationKeys.RENAME_FILE_FRAME_TITLE) + ": " + fileName);
 		fileNameField.setText(FilenameUtils.removeExtension(fileName));
 		fileExtensionField.setText('.' + FilenameUtils.getExtension(fileName));
 	}
@@ -125,20 +115,6 @@ public class RenameFileFrame extends JInternalFrame {
 	public String getNewFileName() {
 		String fileName = fileNameField.getText() + fileExtensionField.getText(); 
 		return fileName;
-	}
-	
-	private class StatusBar extends JLabel {
-		
-		/**
-		 * 
-		 */
-		private static final long serialVersionUID = 1L;
-
-		public StatusBar() {
-			super();
-			setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
-			setFont(FormScannerFont.getFont());
-		}
 	}
 	
 	private class OKButton extends JButton {

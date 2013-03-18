@@ -10,6 +10,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Vector;
 
+import org.albertoborsetta.formscanner.commons.Point;
+
 
 public class CornerDetector {
 
@@ -34,28 +36,28 @@ public class CornerDetector {
 	private FloatProcessor B;
 	private FloatProcessor C;
 	private FloatProcessor Q;
-	private List<Corner> corners;
-	private static Corner orig;
+	private List<Point> corners;
+	private static Point orig;
 
 	public CornerDetector(ImageProcessor ip, int pos) {
 		this.ipOrig = ip;
 		switch (pos) {
 		case TOP_LEFT:
-			orig = new Corner(0, 0);
+			orig = new Point(0, 0);
 			break;
 		case TOP_RIGHT:
-			orig = new Corner(ip.getWidth(), 0);
+			orig = new Point(ip.getWidth(), 0);
 			break;
 		case BOTTOM_LEFT:
-			orig = new Corner(0, ip.getHeight());
+			orig = new Point(0, ip.getHeight());
 			break;
 		case BOTTOM_RIGHT:
-			orig = new Corner(ip.getWidth(), ip.getHeight());
+			orig = new Point(ip.getWidth(), ip.getHeight());
 			break;
 	}
 	}
 
-	public Corner findCorners() {
+	public Point findCorners() {
 		makeDerivatives();
 		makeCrf(); //corner response function (CRF)
 		corners = collectCorners(border);
@@ -99,8 +101,8 @@ public class CornerDetector {
 		}
 	}
 	
-	private List<Corner> collectCorners(int border) {
-		List<Corner> cornerList = new Vector<Corner>(1000);
+	private List<Point> collectCorners(int border) {
+		List<Point> cornerList = new Vector<Point>(1000);
 		int w = Q.getWidth();
 		int h = Q.getHeight();
 		float[] Qpix = (float[]) Q.getPixels();
@@ -109,7 +111,7 @@ public class CornerDetector {
 				float q = Qpix[v*w+u];				
 				if (q>threshold && isLocalMax(Q,u,v)) {
 					double dist = orig.dist2(u, v);
-					Corner c = new Corner(u, v, dist);
+					Point c = new Point(u, v, dist);
 					cornerList.add(c);
 				}
 			}
@@ -118,15 +120,15 @@ public class CornerDetector {
 		return cornerList;
 	}
 	
-	private List<Corner> cleanupCorners(List<Corner> corners) {
+	private List<Point> cleanupCorners(List<Point> corners) {
 		double dmin2 = dmin*dmin;
 		double dmax2 = dmax*dmax;
-		Corner[] cornerArray = new Corner[corners.size()];
+		Point[] cornerArray = new Point[corners.size()];
 		cornerArray = corners.toArray(cornerArray);
-		List<Corner> goodCorners = new Vector<Corner>(corners.size());
+		List<Point> goodCorners = new Vector<Point>(corners.size());
 		for (int i=0; i<cornerArray.length; i++){
 			if (cornerArray[i] != null) {
-				Corner c1 = cornerArray[i];
+				Point c1 = cornerArray[i];
 				goodCorners.add(c1);
 				// delete all remaining corners close to c
 				for (int j=i+1; j<cornerArray.length; j++){
@@ -189,9 +191,9 @@ public class CornerDetector {
 		}
 	}
 	
-	void printCornerPoints(List<Corner> crf) {
+	void printCornerPoints(List<Point> crf) {
 		int i = 0;
-		for (Corner ipt: crf){
+		for (Point ipt: crf){
 			IJ.write((i++) + ": " + (double)ipt.getDistance() + " " + ipt.getX() + " " + ipt.getY());
 		}
 	}
@@ -204,7 +206,7 @@ public class CornerDetector {
 		}
 		ipResult.applyTable(lookupTable);
 
-		for (Corner c: corners) {
+		for (Point c: corners) {
 			c.draw(ipResult);
 		}
 		return ipResult;
