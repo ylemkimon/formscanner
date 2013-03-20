@@ -28,6 +28,9 @@ public class MenuBar extends JMenuBar {
 	private JMenuItem exitMenuItem;
 	private JMenuItem renameMenuItem;
 	
+	private JMenuItem loadTemplateMenuItem;
+	private JMenuItem useTemplateMenuItem;
+	private JMenuItem editTemplateMenuItem; 
 	
 	public MenuBar(final FormScannerModel formScannerModel) {
 		this.formScannerModel = formScannerModel;
@@ -35,8 +38,10 @@ public class MenuBar extends JMenuBar {
 		
 		JMenu fileMenu = new FileMenu();
 		JMenu editMenu = new EditMenu();
+		JMenu templateMenu = new TemplateMenu();
 		add(fileMenu);
 		add(editMenu);
+		add(templateMenu);
 	}
 	
 	private class FileMenu extends JMenu {
@@ -78,6 +83,30 @@ public class MenuBar extends JMenuBar {
 			
 			renameMenuItem = new RenameMenuItem();
 			add(renameMenuItem);
+		}
+	}
+	
+	private class TemplateMenu extends JMenu {
+		
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = 1L;
+
+		public TemplateMenu() {			
+			super(formScannerModel.getTranslationFor(FormScannerTranslationKeys.TEMPLATE_MENU));
+			setMnemonic(formScannerModel.getMnemonicFor(FormScannerTranslationKeys.TEMPLATE_MENU_MNEMONIC));
+			setToolTipText(formScannerModel.getTranslationFor(FormScannerTranslationKeys.TEMPLATE_MENU_TOOLTIP));
+			setFont(FormScannerFont.getFont());
+			
+			loadTemplateMenuItem = new LoadTemplateMenuItem();
+			// useTemplateMenuItem = new UseTemplateMenuItem();
+			// editTemplateMenuItem = new EditTemplateMenuItem();
+			
+			add(loadTemplateMenuItem);
+			// add(editTemplateMenuItem);
+			// add(new JSeparator(JSeparator.HORIZONTAL));
+			// add(useTemplateMenuItem);
 		}
 	}
 	
@@ -152,6 +181,24 @@ public class MenuBar extends JMenuBar {
 			setToolTipText(formScannerModel.getTranslationFor(FormScannerTranslationKeys.RENAME_FILES_TOOLTIP));
 			setFont(FormScannerFont.getFont());
 			setEnabled(false);
+		}
+	}
+	
+	private class LoadTemplateMenuItem extends JMenuItem {
+		
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = 1L;
+
+		public LoadTemplateMenuItem() {
+			super(formScannerModel.getTranslationFor(FormScannerTranslationKeys.LOAD_TEMPLATE));
+			setActionCommand(FormScannerConstants.LOAD_TEMPLATE);
+			addActionListener(formScannerController);
+			setMnemonic(formScannerModel.getMnemonicFor(FormScannerTranslationKeys.LOAD_TEMPLATE_MNEMONIC));
+			setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_L, InputEvent.CTRL_MASK));
+			setToolTipText(formScannerModel.getTranslationFor(FormScannerTranslationKeys.LOAD_TEMPLATE_TOOLTIP));
+			setFont(FormScannerFont.getFont());
 		}
 	}
 	

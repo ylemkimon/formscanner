@@ -35,23 +35,25 @@ public class FormScannerController implements ActionListener {
 			model.renameFiles(FormScannerConstants.RENAME_FILE_FIRST);
 			break;
 		case OPEN_IMAGES:
-			model.openFiles(choose());
+			model.openFiles(chooseImages(true));
 			break;
 		case SAVE_RESULTS:
 			break;
 		case ANALYZE_FILE_FIRST:
 			model.analyzeFiles(FormScannerConstants.ANALYZE_FILE_FIRST);
+		case LOAD_TEMPLATE:
+			model.loadTemplate(chooseImages(false));
 		default:
 			break;
 		}
 	}
 	
-	private static File[] choose() {
+	private static File[] chooseImages(boolean multiple) {
 		  
 		JFileChooser fileChooser = new JFileChooser();
 		fileChooser.setFont(FormScannerFont.getFont());
-		fileChooser.setMultiSelectionEnabled(true);
-		FileNameExtensionFilter imageFilter = new FileNameExtensionFilter("Image files", "tif", "tiff");
+		fileChooser.setMultiSelectionEnabled(multiple);
+		FileNameExtensionFilter imageFilter = new FileNameExtensionFilter("Image files", "jpg", "jpeg", "tif", "tiff");
 		fileChooser.setFileFilter(imageFilter);
 		fileChooser.showOpenDialog(null);
 		

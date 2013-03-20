@@ -10,6 +10,7 @@ public class FormScannerConstants {
 	public static final String ANALYZE_FILE_FIRST = "ANALYZE_FILE_FIRST";
 	public static final String ANALYZE_FILE_CURRENT = "ANALYZE_FILE_NEXT";
 	public static final String ANALYZE_FILE_SKIP = "ANALYZE_FILE_SKIP";
+	public static final String LOAD_TEMPLATE = "LOAD_TEMPLATE";
 	public static final String EXIT = "EXIT";	
 	
 	public static final String RENAME_FILE_FRAME_NAME = "rename.file.frame";
@@ -27,6 +28,7 @@ public class FormScannerConstants {
 		ANALYZE_FILE_FIRST,
 		ANALYZE_FILE_NEXT,
 		ANALYZE_FILE_SKIP,
+		LOAD_TEMPLATE,
 		EXIT
 	  }
 	

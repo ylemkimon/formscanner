@@ -9,6 +9,7 @@ import org.albertoborsetta.formscanner.gui.AnalyzeFileImageFrame;
 import org.albertoborsetta.formscanner.gui.AnalyzeFileResultsFrame;
 import org.albertoborsetta.formscanner.gui.FileListFrame;
 import org.albertoborsetta.formscanner.gui.FormScanner;
+import org.albertoborsetta.formscanner.gui.ManageTemplateFrame;
 import org.albertoborsetta.formscanner.gui.RenameFileFrame;
 import org.albertoborsetta.formscanner.gui.RenameFileImageFrame;
 
@@ -28,6 +29,7 @@ import org.apache.commons.io.FilenameUtils;
 public class FormScannerModel {
 
 	private Map<Integer, File> openedFiles = new HashMap<Integer, File>();
+	private File template;
 	private FileListFrame fileListFrame;
 	private RenameFileFrame renameFileFrame;
 	private RenameFileImageFrame renameFileImageFrame;
@@ -39,7 +41,8 @@ public class FormScannerModel {
 	private FormScannerTranslation translations;
 	private FormScannerResources resources;
 	private AnalyzeFileImageFrame analyzeFileImageFrame;
-	private AnalyzeFileResultsFrame analyzeFileResultsFrame;
+	// private AnalyzeFileResultsFrame analyzeFileResultsFrame;
+	private ManageTemplateFrame manageTemplateFrame;
     
 	public FormScannerModel(FormScanner view) {
 		this.view = view;
@@ -207,12 +210,19 @@ public class FormScannerModel {
 	}
 	
 	public char getMnemonicFor(String key) {
-		char value = translations.getProperty(key).charAt(0);
+		char value = translations.getProperty(key, key).charAt(0);
 		return value;
 	}
 	
 	public ImageIcon getIconFor(String key) {
 		ImageIcon icon = resources.getIconFor(key);
 		return icon;
+	}
+
+	public void loadTemplate(File[] fileArray) {
+		if (fileArray.length>0) {
+			template = fileArray[0];
+			manageTemplateFrame = new ManageTemplateFrame(this, template.getName());
+		} 		
 	}
 }

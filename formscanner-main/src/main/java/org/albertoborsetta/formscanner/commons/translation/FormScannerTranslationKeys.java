@@ -16,6 +16,10 @@ public class FormScannerTranslationKeys {
 	public static final String RENAME_FILES_MNEMONIC = "rename.files.mnemonic";
 	public static final String RENAME_FILES_TOOLTIP = "rename.files.tooltip";
 	
+	public static final String LOAD_TEMPLATE = "laod.template";
+	public static final String LOAD_TEMPLATE_MNEMONIC = "load.template.mnemonic";
+	public static final String LOAD_TEMPLATE_TOOLTIP = "load.template.tooltip";
+	
 	public static final String ANALYZE_FILES = "analyze.files";
 	public static final String ANALYZE_FILES_MNEMONIC = "analyze.files.mnemonic";
 	public static final String ANALYZE_FILES_TOOLTIP = "analyze.files.tooltip";
@@ -27,6 +31,10 @@ public class FormScannerTranslationKeys {
 	public static final String EDIT_MENU = "edit.menu";
 	public static final String EDIT_MENU_MNEMONIC = "edit.menu.mnemonic";
 	public static final String EDIT_MENU_TOOLTIP = "edit.menu.tooltip";
+	
+	public static final String TEMPLATE_MENU = "template.menu";
+	public static final String TEMPLATE_MENU_MNEMONIC = "template.menu.mnemonic";
+	public static final String TEMPLATE_MENU_TOOLTIP = "template.menu.tooltip";
 	
 	public static final String EXIT = "exit";
 	public static final String EXIT_MNEMONIC = "exit.mnemonic";
@@ -44,8 +52,8 @@ public class FormScannerTranslationKeys {
 	public static final String FIELD_PROPERTIES_TAB_NAME = "field.properties.tab.name";
 	public static final String FIELD_PROPERTIES_TYPE_LABEL = "field.properties.type.label";
 	public static final String FIELD_PROPERTIES_N_ROW_COL_LABEL = "field.properties.number.rows.columns.label";
-	public static final String FIELD_PROPERTIES_N_VALUES_LABEL = "field.propertoes.number.values.label";
-	
+	public static final String FIELD_PROPERTIES_N_VALUES_LABEL = "field.properties.number.values.label";
+	public static final String FIELD_POSITION_TAB_NAME = "field.position.tab.name";
 	
 	public static final String OK_BUTTON = "ok.button";
 	public static final String CANCEL_BUTTON = "cancel.button";	
