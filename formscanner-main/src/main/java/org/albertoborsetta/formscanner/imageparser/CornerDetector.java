@@ -10,6 +10,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Vector;
 
+import org.albertoborsetta.formscanner.commons.Point;
+
 
 
 public class CornerDetector {
@@ -18,8 +20,6 @@ public class CornerDetector {
 	public static final int DEFAULT_THRESHOLD = 20000;
 	private float alpha = DEFAULT_ALPHA;
 	private int threshold = DEFAULT_THRESHOLD;
-	// private double dmin = 10;
-	// private double dmax = 80;
 	private final int border = 20;
 
 	public static final int TOP_LEFT = 1;
@@ -120,8 +120,6 @@ public class CornerDetector {
 	}
 	
 	private List<Point> cleanupCorners(List<Point> corners) {
-		// double dmin2 = dmin*dmin;
-		// double dmax2 = dmax*dmax;
 		Point[] cornerArray = new Point[corners.size()];
 		cornerArray = corners.toArray(cornerArray);
 		List<Point> goodCorners = new Vector<Point>(corners.size());
