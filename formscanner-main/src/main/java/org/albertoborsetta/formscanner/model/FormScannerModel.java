@@ -57,15 +57,17 @@ public class FormScannerModel {
 	}
 
 	public void openFiles(File[] fileArray) {
-		Integer fileIndex = 0;
-		for (File file: fileArray) {
-			openedFiles.put(fileIndex++, file);
-		}
-		if (!openedFiles.isEmpty()) {
-			fileListFrame = new FileListFrame(this, getOpenedFileList());
-			view.arrangeFrame(fileListFrame);
-			view.setRenameControllersEnabled(true);
-			view.setScanControllersEnabled(true);
+		if (fileArray != null) {
+			Integer fileIndex = 0;
+			for (File file: fileArray) {
+				openedFiles.put(fileIndex++, file);
+			}
+			if (!openedFiles.isEmpty()) {
+				fileListFrame = new FileListFrame(this, getOpenedFileList());
+				view.arrangeFrame(fileListFrame);
+				view.setRenameControllersEnabled(true);
+				view.setScanControllersEnabled(true);
+			}
 		}
 	}
 	
@@ -219,10 +221,11 @@ public class FormScannerModel {
 		return icon;
 	}
 
-	public void loadTemplate(File[] fileArray) {
-		if (fileArray.length>0) {
-			template = fileArray[0];
+	public void loadTemplate(File template) {
+		if (template != null) {
+			this.template= template; 
 			manageTemplateFrame = new ManageTemplateFrame(this, template.getName());
-		} 		
+			view.arrangeFrame(manageTemplateFrame);
+		}
 	}
 }

@@ -54,7 +54,6 @@ public class MenuBar extends JMenuBar {
 		public FileMenu() {			
 			super(formScannerModel.getTranslationFor(FormScannerTranslationKeys.FILE_MENU));
 			setMnemonic(formScannerModel.getMnemonicFor(FormScannerTranslationKeys.FILE_MENU_MNEMONIC));
-			setToolTipText(formScannerModel.getTranslationFor(FormScannerTranslationKeys.FILE_MENU_TOOLTIP));
 			setFont(FormScannerFont.getFont());
 			
 			openMenuItem = new OpenMenuItem();
@@ -78,7 +77,6 @@ public class MenuBar extends JMenuBar {
 		public EditMenu() {
 			super(formScannerModel.getTranslationFor(FormScannerTranslationKeys.EDIT_MENU));
 			setMnemonic(formScannerModel.getMnemonicFor(FormScannerTranslationKeys.EDIT_MENU_MNEMONIC));
-			setToolTipText(formScannerModel.getTranslationFor(FormScannerTranslationKeys.EDIT_MENU_TOOLTIP));
 			setFont(FormScannerFont.getFont());
 			
 			renameMenuItem = new RenameMenuItem();
@@ -96,7 +94,6 @@ public class MenuBar extends JMenuBar {
 		public TemplateMenu() {			
 			super(formScannerModel.getTranslationFor(FormScannerTranslationKeys.TEMPLATE_MENU));
 			setMnemonic(formScannerModel.getMnemonicFor(FormScannerTranslationKeys.TEMPLATE_MENU_MNEMONIC));
-			setToolTipText(formScannerModel.getTranslationFor(FormScannerTranslationKeys.TEMPLATE_MENU_TOOLTIP));
 			setFont(FormScannerFont.getFont());
 			
 			loadTemplateMenuItem = new LoadTemplateMenuItem();
@@ -123,7 +120,6 @@ public class MenuBar extends JMenuBar {
 			addActionListener(formScannerController);
 			setMnemonic(formScannerModel.getMnemonicFor(FormScannerTranslationKeys.OPEN_IMAGES_MNEMONIC));
 			setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O, InputEvent.CTRL_MASK));
-			setToolTipText(formScannerModel.getTranslationFor(FormScannerTranslationKeys.OPEN_IMAGES_TOOLTIP));
 			setFont(FormScannerFont.getFont());
 		}
 	}
@@ -141,7 +137,6 @@ public class MenuBar extends JMenuBar {
 			addActionListener(formScannerController);
 			setMnemonic(formScannerModel.getMnemonicFor(FormScannerTranslationKeys.SAVE_RESULTS_MNEMONIC));
 			setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, InputEvent.CTRL_MASK));
-			setToolTipText(formScannerModel.getTranslationFor(FormScannerTranslationKeys.SAVE_RESULTS_TOOLTIP));
 			setFont(FormScannerFont.getFont());
 			setEnabled(false);
 		}
@@ -160,7 +155,6 @@ public class MenuBar extends JMenuBar {
 			addActionListener(formScannerController);
 			setMnemonic(formScannerModel.getMnemonicFor(FormScannerTranslationKeys.EXIT_MNEMONIC));
 			setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_X, InputEvent.CTRL_MASK));
-			setToolTipText(formScannerModel.getTranslationFor(FormScannerTranslationKeys.EXIT_TOOLTIP));
 			setFont(FormScannerFont.getFont());
 		}
 	}
@@ -178,7 +172,6 @@ public class MenuBar extends JMenuBar {
 			addActionListener(formScannerController);
 			setMnemonic(formScannerModel.getMnemonicFor(FormScannerTranslationKeys.RENAME_FILES_MNEMONIC));
 			setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_R, InputEvent.CTRL_MASK));
-			setToolTipText(formScannerModel.getTranslationFor(FormScannerTranslationKeys.RENAME_FILES_TOOLTIP));
 			setFont(FormScannerFont.getFont());
 			setEnabled(false);
 		}
@@ -197,7 +190,6 @@ public class MenuBar extends JMenuBar {
 			addActionListener(formScannerController);
 			setMnemonic(formScannerModel.getMnemonicFor(FormScannerTranslationKeys.LOAD_TEMPLATE_MNEMONIC));
 			setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_L, InputEvent.CTRL_MASK));
-			setToolTipText(formScannerModel.getTranslationFor(FormScannerTranslationKeys.LOAD_TEMPLATE_TOOLTIP));
 			setFont(FormScannerFont.getFont());
 		}
 	}

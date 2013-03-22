@@ -6,4 +6,6 @@ public class FormScannerResourcesKeys {
 	public static final String SAVE_RESULTS_ICON = "save.png";
 	public static final String RENAME_FILES_ICON = "rename.png";
 	public static final String ANALYZE_FILES_ICON = "start.png";
+	public static final String REMOVE_FIELD_BUTTON = "fewer.png";
+	public static final String ADD_FIELD_BUTTON = "more.png";
 }

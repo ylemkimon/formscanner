@@ -42,14 +42,15 @@ public class RenameFileFrame extends JInternalFrame {
 		renameFileController.add(this);
 		
 		setName(FormScannerConstants.RENAME_FILE_FRAME_NAME);
-		setBounds(220, 320, 370, 130);
+		setBounds(220, 320, 370, 100);
 		setClosable(true);
+		setLayout(new BorderLayout());
 		
 		internalFrameController = InternalFrameController.getInstance(formScannerModel);
 		addInternalFrameListener(internalFrameController);
 		
 		JPanel panel = new JPanel();
-		getContentPane().add(panel, BorderLayout.CENTER);
+		add(panel, BorderLayout.CENTER);
 		panel.setLayout(new FormLayout(new ColumnSpec[] {
 				FormFactory.RELATED_GAP_COLSPEC,
 				FormFactory.DEFAULT_COLSPEC,

@@ -16,7 +16,7 @@ public class FormScannerTranslationKeys {
 	public static final String RENAME_FILES_MNEMONIC = "rename.files.mnemonic";
 	public static final String RENAME_FILES_TOOLTIP = "rename.files.tooltip";
 	
-	public static final String LOAD_TEMPLATE = "laod.template";
+	public static final String LOAD_TEMPLATE = "load.template";
 	public static final String LOAD_TEMPLATE_MNEMONIC = "load.template.mnemonic";
 	public static final String LOAD_TEMPLATE_TOOLTIP = "load.template.tooltip";
 	
@@ -57,6 +57,8 @@ public class FormScannerTranslationKeys {
 	
 	public static final String OK_BUTTON = "ok.button";
 	public static final String CANCEL_BUTTON = "cancel.button";	
-	public static final String ADD_BUTTON = "add.button";
-	public static final String REMOVE_BUTTON = "remove.button";	
+	public static final String ADD_FIELD_BUTTON_TOOLTIP = "add.field.button.tooltip";
+	public static final String REMOVE_FIELD_BUTTON_TOOLTIP = "remove.field.button.tooltip";	
+	public static final String SAVE_TEMPLATE_BUTTON = "save.template.button";
+	public static final String CANCEL_TEMPLATE_BUTTON = "cancel.template.button";
 }

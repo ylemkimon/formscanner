@@ -3,6 +3,8 @@ package org.albertoborsetta.formscanner.gui;
 import javax.swing.JInternalFrame;
 import javax.swing.JTabbedPane;
 import java.awt.BorderLayout;
+import java.awt.Dimension;
+
 import javax.swing.JPanel;
 import javax.swing.JList;
 import javax.swing.JButton;
@@ -19,6 +21,7 @@ import javax.swing.JComboBox;
 import javax.swing.JLabel;
 
 import org.albertoborsetta.formscanner.commons.FormScannerConstants;
+import org.albertoborsetta.formscanner.commons.resources.FormScannerResourcesKeys;
 import org.albertoborsetta.formscanner.commons.translation.FormScannerTranslationKeys;
 import org.albertoborsetta.formscanner.controller.InternalFrameController;
 import org.albertoborsetta.formscanner.model.FormScannerModel;
@@ -34,8 +37,10 @@ public class ManageTemplateFrame extends JInternalFrame {
 	private JScrollPane fieldListScrollPane;
 	private JList fieldList;
 	private JPanel fieldListButtonPanel;
-	private JButton addButton;
-	private JButton removeButton;
+	private JButton addFieldButton;
+	private JButton removeFieldButton;
+	private JButton saveTemplateButton;
+	private JButton cancelTemplateButton;
 		
 	private JPanel fieldPropertiesPanel;
 	private JPanel propertiesPanel;
@@ -61,10 +66,12 @@ public class ManageTemplateFrame extends JInternalFrame {
 		// manageTemplateController = new ManageTemplateController(formScannerModel);		
 		setName(FormScannerConstants.MANAGE_TEMPLATE_FRAME_NAME);		
 		setTitle(formScannerModel.getTranslationFor(FormScannerTranslationKeys.MANAGE_TEMPLATE_FRAME_TITLE));
-		setBounds(100, 100, 450, 300);
+		setBounds(100, 100, 300, 500);
+		setMinimumSize(new Dimension(300, 500));
 		setClosable(true);
 		setMaximizable(true);
 		setIconifiable(true);
+		setResizable(true);
 		
 		InternalFrameController internalFrameController = InternalFrameController.getInstance(formScannerModel);
 		addInternalFrameListener(internalFrameController);
@@ -74,14 +81,24 @@ public class ManageTemplateFrame extends JInternalFrame {
 		
 		// Field List
 		fieldListPanel = new JPanel();
+		fieldListPanel.setLayout(new BorderLayout());
 		tabbedPane.addTab(formScannerModel.getTranslationFor(FormScannerTranslationKeys.FIELD_LIST_TAB_NAME), null, fieldListPanel, null);
 				
-		fieldList = new JList();		
+		fieldList = new JList();
 		fieldListScrollPane = new JScrollPane();	
 		fieldListScrollPane.setViewportView(fieldList);
-		fieldListPanel.add(fieldListScrollPane, BorderLayout.CENTER);	
+		fieldListPanel.add(fieldListScrollPane, BorderLayout.CENTER);
+		
+		addFieldButton = new JButton();
+		addFieldButton.setIcon(formScannerModel.getIconFor(FormScannerResourcesKeys.ADD_FIELD_BUTTON));
+		addFieldButton.setToolTipText(formScannerModel.getTranslationFor(FormScannerTranslationKeys.ADD_FIELD_BUTTON_TOOLTIP));
+		
+		removeFieldButton = new JButton();
+		removeFieldButton.setIcon(formScannerModel.getIconFor(FormScannerResourcesKeys.REMOVE_FIELD_BUTTON));
+		removeFieldButton.setToolTipText(formScannerModel.getTranslationFor(FormScannerTranslationKeys.REMOVE_FIELD_BUTTON_TOOLTIP));
 
 		fieldListButtonPanel = new JPanel();
+		fieldListPanel.add(fieldListButtonPanel, BorderLayout.SOUTH);
 		fieldListButtonPanel.setLayout(new FormLayout(new ColumnSpec[] {
 				FormFactory.RELATED_GAP_COLSPEC,
 				FormFactory.GROWING_BUTTON_COLSPEC,
@@ -93,17 +110,15 @@ public class ManageTemplateFrame extends JInternalFrame {
 				FormFactory.PREF_ROWSPEC,
 				FormFactory.RELATED_GAP_ROWSPEC,}));	
 		
-		addButton = new JButton(formScannerModel.getTranslationFor(FormScannerTranslationKeys.ADD_BUTTON));
-		fieldListButtonPanel.add(addButton, "2, 2");
+		saveTemplateButton = new JButton(formScannerModel.getTranslationFor(FormScannerTranslationKeys.SAVE_TEMPLATE_BUTTON));
+		fieldListButtonPanel.add(saveTemplateButton, "2, 2, right, default");
 		
-		removeButton = new JButton(formScannerModel.getTranslationFor(FormScannerTranslationKeys.REMOVE_BUTTON));
-		fieldListButtonPanel.add(removeButton, "4, 2");
-		
-		fieldListPanel.add(fieldListButtonPanel, BorderLayout.SOUTH);
-		
+		cancelTemplateButton = new JButton(formScannerModel.getTranslationFor(FormScannerTranslationKeys.CANCEL_TEMPLATE_BUTTON));
+		fieldListButtonPanel.add(cancelTemplateButton, "4, 2, right, default");				
 		
 		// Field Properties
 		fieldPropertiesPanel = new JPanel();
+		fieldPropertiesPanel.setLayout(new BorderLayout());
 		tabbedPane.addTab(formScannerModel.getTranslationFor(FormScannerTranslationKeys.FIELD_PROPERTIES_TAB_NAME), null, fieldPropertiesPanel, null);
 				
 		propertiesPanel = new JPanel();
@@ -166,6 +181,7 @@ public class ManageTemplateFrame extends JInternalFrame {
 		
 		// Field Positions
 		fieldPositionPanel = new JPanel();
+		fieldPositionPanel.setLayout(new BorderLayout());
 		tabbedPane.addTab(formScannerModel.getTranslationFor(FormScannerTranslationKeys.FIELD_POSITION_TAB_NAME), null, fieldPositionPanel, null);
 		
 		positionButtonPanel = new JPanel();

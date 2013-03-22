@@ -7,6 +7,7 @@ import java.io.File;
 import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
+import org.albertoborsetta.formscanner.commons.FileOpener;
 import org.albertoborsetta.formscanner.commons.FormScannerConstants;
 import org.albertoborsetta.formscanner.commons.FormScannerFont;
 import org.albertoborsetta.formscanner.commons.FormScannerConstants.Actions;
@@ -28,36 +29,49 @@ public class FormScannerController implements ActionListener {
 		this.model = model;
 	}
 	
-	public void actionPerformed(ActionEvent e) {
+	public void actionPerformed(ActionEvent e) {		
 		Actions act = Actions.valueOf(e.getActionCommand());
+		FileOpener fileOpener = FileOpener.getInstance();
 		switch (act) {
 		case RENAME_FILE_FIRST:
 			model.renameFiles(FormScannerConstants.RENAME_FILE_FIRST);
 			break;
 		case OPEN_IMAGES:
-			model.openFiles(chooseImages(true));
+			model.openFiles(fileOpener.chooseImages());
 			break;
 		case SAVE_RESULTS:
 			break;
 		case ANALYZE_FILE_FIRST:
 			model.analyzeFiles(FormScannerConstants.ANALYZE_FILE_FIRST);
 		case LOAD_TEMPLATE:
-			model.loadTemplate(chooseImages(false));
+			model.loadTemplate(fileOpener.chooseImage());
 		default:
 			break;
 		}
 	}
 	
-	private static File[] chooseImages(boolean multiple) {
-		  
+	private static File[] chooseImages() {
+		
 		JFileChooser fileChooser = new JFileChooser();
 		fileChooser.setFont(FormScannerFont.getFont());
-		fileChooser.setMultiSelectionEnabled(multiple);
+		fileChooser.setMultiSelectionEnabled(true);
 		FileNameExtensionFilter imageFilter = new FileNameExtensionFilter("Image files", "jpg", "jpeg", "tif", "tiff");
 		fileChooser.setFileFilter(imageFilter);
 		fileChooser.showOpenDialog(null);
 		
-		return fileChooser.getSelectedFiles(); 
+		return fileChooser.getSelectedFiles();
+	}
+	
+	private static File chooseImage() {
+		
+		JFileChooser fileChooser = new JFileChooser();
+		fileChooser.setFont(FormScannerFont.getFont());
+		fileChooser.setMultiSelectionEnabled(false);
+		FileNameExtensionFilter imageFilter = new FileNameExtensionFilter("Image files", "jpg", "jpeg", "tif", "tiff");
+		fileChooser.setFileFilter(imageFilter);
+		fileChooser.showOpenDialog(null);
+		
+		return fileChooser.getSelectedFile();
 	}
 
 }
