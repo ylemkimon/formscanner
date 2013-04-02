@@ -56,9 +56,14 @@ public class FormScannerTranslationKeys {
 	public static final String FIELD_POSITION_TAB_NAME = "field.position.tab.name";
 	
 	public static final String OK_BUTTON = "ok.button";
-	public static final String CANCEL_BUTTON = "cancel.button";	
+	public static final String OK_BUTTON_TOOLTIP = "ok.button.tooltip";
+	
+	public static final String CANCEL_BUTTON = "cancel.button";
+	public static final String CANCEL_BUTTON_TOOLTIP = "cancel.button.tooltip";	
+	
 	public static final String ADD_FIELD_BUTTON_TOOLTIP = "add.field.button.tooltip";
 	public static final String REMOVE_FIELD_BUTTON_TOOLTIP = "remove.field.button.tooltip";	
+	
 	public static final String SAVE_TEMPLATE_BUTTON = "save.template.button";
-	public static final String CANCEL_TEMPLATE_BUTTON = "cancel.template.button";
+	public static final String SAVE_TEMPLATE_BUTTON_TOOLTIP = "save.template.button.tooltip";
 }

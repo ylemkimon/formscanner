@@ -32,6 +32,10 @@ public class FormScannerConstants {
 		EXIT
 	  }
 	
+	public static final String CONFIRM = "confirm";
+	public static final String CANCEL = "cancel";
+	public static final String SAVE_TEMPLATE = "save.template";
+	
 	public static final boolean SINGLE = false;
 	public static final boolean MULTIPLE = !SINGLE;
 	public static final String COLUMN = "column";
