@@ -26,6 +26,7 @@ import net.sourceforge.jiu.data.MemoryGray8Image;
 import net.sourceforge.jiu.data.PixelImage;
 import net.sourceforge.jiu.filters.MedianFilter;
 import net.sourceforge.jiu.geometry.ScaleReplication;
+import org.albertoborsetta.formscanner.jiuparser.Field;
 
 /**
  *
