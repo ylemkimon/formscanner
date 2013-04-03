@@ -47,6 +47,9 @@ public class ManageTemplateFrame extends JInternalFrame {
 		
 	private JPanel fieldPropertiesPanel;
 	private JPanel propertiesPanel;
+	private JSpinner numberValues;
+	private JSpinner numberRowsCols;
+	private JComboBox typeComboBox;
 	private JPanel propertiesButtonPanel;
 	private JButton okPropertiesButton;
 	private JButton cancelPropertiesButton;
@@ -92,41 +95,276 @@ public class ManageTemplateFrame extends JInternalFrame {
 		tabbedPane.addTab(formScannerModel.getTranslationFor(FormScannerTranslationKeys.FIELD_PROPERTIES_TAB_NAME), null, fieldPropertiesPanel, null);
 		
 		// Field Positions
-		fieldPositionPanel = new JPanel();
-		fieldPositionPanel.setLayout(new BorderLayout());
+		fieldPositionPanel = new FieldPositionPanel();
 		tabbedPane.addTab(formScannerModel.getTranslationFor(FormScannerTranslationKeys.FIELD_POSITION_TAB_NAME), null, fieldPositionPanel, null);
 		
-		positionButtonPanel = new JPanel();
-		positionButtonPanel.setLayout(new FormLayout(new ColumnSpec[] {
-				FormFactory.RELATED_GAP_COLSPEC,
-				FormFactory.GROWING_BUTTON_COLSPEC,
-				FormFactory.RELATED_GAP_COLSPEC,
-				FormFactory.BUTTON_COLSPEC,
-				FormFactory.RELATED_GAP_COLSPEC,},
-			new RowSpec[] {
-				FormFactory.RELATED_GAP_ROWSPEC,
-				FormFactory.PREF_ROWSPEC,
-				FormFactory.RELATED_GAP_ROWSPEC,}));
-		
-		okPositionButton = new OKButton();
-		positionButtonPanel.add(okPositionButton, "2, 2, right, default");
-		
-		cancelPositionButton = new CancelButton();
-		positionButtonPanel.add(cancelPositionButton, "4, 2, right, default");
-		
-		fieldPositionPanel.add(positionButtonPanel, BorderLayout.SOUTH);
-		
-		fieldPositionScrollPane = new JScrollPane();
-		table = new JTable();
-		fieldPositionScrollPane.add(table);
-		fieldPositionPanel.add(fieldPositionScrollPane, BorderLayout.CENTER);
-	
 		disableUnusedTab();
 	}
 	
 	private void disableUnusedTab() {
 		for (int i=1; i<tabbedPane.getTabCount(); i++) {
 			tabbedPane.setEnabledAt(i, false);
+		}
+	}
+	
+	private class FieldListPanel extends JPanel {
+		
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = 1L;
+
+		public FieldListPanel() {
+			super();
+			setLayout(new BorderLayout());
+					
+			fieldList = new JList();
+			fieldListScrollPane = new JScrollPane();	
+			fieldListScrollPane.setViewportView(fieldList);
+			add(fieldListScrollPane, BorderLayout.CENTER);		
+
+			fieldListManageButtonPanel = new ManageListButtonPanel();
+			add(fieldListManageButtonPanel, BorderLayout.EAST);
+			
+			fieldListButtonPanel = new FieldListButtonPanel();
+			add(fieldListButtonPanel, BorderLayout.SOUTH);
+		}
+		
+	}
+	
+	private class FieldPropertiesPanel extends JPanel {
+		
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = 1L;
+
+		public FieldPropertiesPanel() {
+			super();
+			setLayout(new BorderLayout());
+			
+			propertiesPanel = new PropertiesPanel();
+			add(propertiesPanel, BorderLayout.CENTER);
+						
+			propertiesButtonPanel = new PropertiesButtonPanel();
+			add(propertiesButtonPanel, BorderLayout.SOUTH);
+		}
+		
+	}
+	
+	private class FieldPositionPanel extends JPanel {
+		
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = 1L;
+		
+		public FieldPositionPanel() {
+			
+			super();
+			setLayout(new BorderLayout());
+			
+			positionButtonPanel = new PositionButtonPanel();
+			add(positionButtonPanel, BorderLayout.SOUTH);
+			
+			fieldPositionScrollPane = new JScrollPane();
+			table = new JTable();
+			fieldPositionScrollPane.add(table);
+			add(fieldPositionScrollPane, BorderLayout.CENTER);
+		}
+	}
+	
+	private class PositionButtonPanel extends JPanel {
+		
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = 1L;
+
+		public PositionButtonPanel() {
+			super();
+			setLayout(new FormLayout(new ColumnSpec[] {
+					FormFactory.RELATED_GAP_COLSPEC,
+					FormFactory.GROWING_BUTTON_COLSPEC,
+					FormFactory.RELATED_GAP_COLSPEC,
+					FormFactory.BUTTON_COLSPEC,
+					FormFactory.RELATED_GAP_COLSPEC,},
+				new RowSpec[] {
+					FormFactory.RELATED_GAP_ROWSPEC,
+					FormFactory.PREF_ROWSPEC,
+					FormFactory.RELATED_GAP_ROWSPEC,}));
+			
+			okPositionButton = new OKButton();
+			add(okPositionButton, "2, 2, right, default");
+			
+			cancelPositionButton = new CancelButton();
+			add(cancelPositionButton, "4, 2, right, default");
+		}
+	}
+	
+	private class PropertiesButtonPanel extends JPanel {
+
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = 1L;
+		
+		public PropertiesButtonPanel() {
+			super();
+			setLayout(new FormLayout(new ColumnSpec[] {
+					FormFactory.RELATED_GAP_COLSPEC,
+					FormFactory.GROWING_BUTTON_COLSPEC,
+					FormFactory.RELATED_GAP_COLSPEC,
+					FormFactory.BUTTON_COLSPEC,
+					FormFactory.RELATED_GAP_COLSPEC,},
+				new RowSpec[] {
+					FormFactory.RELATED_GAP_ROWSPEC,
+					FormFactory.PREF_ROWSPEC,
+					FormFactory.RELATED_GAP_ROWSPEC,}));
+			
+			
+			
+			okPropertiesButton = new OKButton();
+			add(okPropertiesButton, "2, 2, right, default");
+			
+			cancelPropertiesButton = new CancelButton();
+			add(cancelPropertiesButton, "4, 2, right, default");
+		}
+	}
+	
+	private class PropertiesPanel extends JPanel {
+		
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = 1L;
+
+		public PropertiesPanel() {
+			super();
+			setLayout(new FormLayout(new ColumnSpec[] {
+					FormFactory.RELATED_GAP_COLSPEC,
+					FormFactory.DEFAULT_COLSPEC,
+					FormFactory.RELATED_GAP_COLSPEC,
+					ColumnSpec.decode("pref:grow"),
+					FormFactory.RELATED_GAP_COLSPEC,},
+				new RowSpec[] {
+					FormFactory.RELATED_GAP_ROWSPEC,
+					FormFactory.DEFAULT_ROWSPEC,
+					FormFactory.RELATED_GAP_ROWSPEC,
+					FormFactory.DEFAULT_ROWSPEC,
+					FormFactory.RELATED_GAP_ROWSPEC,
+					FormFactory.DEFAULT_ROWSPEC,
+					FormFactory.RELATED_GAP_ROWSPEC,
+					FormFactory.RELATED_GAP_ROWSPEC,
+					FormFactory.DEFAULT_ROWSPEC,}));
+			
+			JLabel lblType = new JLabel(formScannerModel.getTranslationFor(FormScannerTranslationKeys.FIELD_PROPERTIES_TYPE_LABEL));
+			add(lblType, "2, 2, right, default");
+			
+			typeComboBox = new JComboBox();
+			add(typeComboBox, "4, 2, fill, default");
+			
+			JLabel lblNumberOfRowsColumns = new JLabel(formScannerModel.getTranslationFor(FormScannerTranslationKeys.FIELD_PROPERTIES_N_ROW_COL_LABEL));
+			add(lblNumberOfRowsColumns, "2, 4, right, default");
+			
+			numberRowsCols = new JSpinner();
+			add(numberRowsCols, "4, 4");
+			
+			JLabel lblNumberOfValues = new JLabel(formScannerModel.getTranslationFor(FormScannerTranslationKeys.FIELD_PROPERTIES_N_VALUES_LABEL));
+			add(lblNumberOfValues, "2, 6, right, default");
+			
+			numberValues = new JSpinner();
+			add(numberValues, "4, 6");
+		}
+	}
+	
+	private class FieldListButtonPanel extends JPanel {
+		
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = 1L;
+
+		public FieldListButtonPanel() {
+			super();
+			setLayout(new FormLayout(new ColumnSpec[] {
+					FormFactory.RELATED_GAP_COLSPEC,
+					FormFactory.GROWING_BUTTON_COLSPEC,
+					FormFactory.RELATED_GAP_COLSPEC,
+					FormFactory.BUTTON_COLSPEC,
+					FormFactory.RELATED_GAP_COLSPEC,},
+				new RowSpec[] {
+					FormFactory.RELATED_GAP_ROWSPEC,
+					FormFactory.PREF_ROWSPEC,
+					FormFactory.RELATED_GAP_ROWSPEC,}));	
+			
+			saveTemplateButton = new SaveButton();
+			add(saveTemplateButton, "2, 2, right, default");
+			
+			cancelTemplateButton = new CancelButton();
+			add(cancelTemplateButton, "4, 2, right, default");
+		}
+	}
+	
+	private class ManageListButtonPanel extends JPanel {
+		
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = 1L;
+
+		public ManageListButtonPanel() {
+			super();
+			
+			setLayout(new FormLayout(new ColumnSpec[] {
+					FormFactory.RELATED_GAP_COLSPEC,
+					FormFactory.GROWING_BUTTON_COLSPEC,
+					FormFactory.RELATED_GAP_COLSPEC,},
+				new RowSpec[] {
+					FormFactory.RELATED_GAP_ROWSPEC,
+					FormFactory.PREF_ROWSPEC,
+					FormFactory.RELATED_GAP_ROWSPEC,
+					FormFactory.PREF_ROWSPEC,
+					FormFactory.RELATED_GAP_ROWSPEC,}));
+			
+			addFieldButton = new AddButton();			
+			add(addFieldButton, "2, 2, fill, default");
+			
+			removeFieldButton = new RemoveButton();
+			add(removeFieldButton, "2, 4, fill, default");
+		}
+	}
+	
+	private class AddButton extends JButton {
+		
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = 1L;
+
+		public AddButton() {
+			super();
+			setIcon(formScannerModel.getIconFor(FormScannerResourcesKeys.ADD_FIELD_BUTTON));
+			setToolTipText(formScannerModel.getTranslationFor(FormScannerTranslationKeys.ADD_FIELD_BUTTON_TOOLTIP));
+			setActionCommand(FormScannerConstants.ADD_FIELD);
+			addActionListener(manageTemplateController);
+		}
+	}
+
+	private class RemoveButton extends JButton {
+		
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = 1L;
+
+		public RemoveButton() {
+			super();
+			setIcon(formScannerModel.getIconFor(FormScannerResourcesKeys.REMOVE_FIELD_BUTTON));
+			setToolTipText(formScannerModel.getTranslationFor(FormScannerTranslationKeys.REMOVE_FIELD_BUTTON_TOOLTIP));
+			setEnabled(false);
+			setActionCommand(FormScannerConstants.REMOVE_FIELD);
+			addActionListener(manageTemplateController);
 		}
 	}
 	
@@ -175,139 +413,5 @@ public class ManageTemplateFrame extends JInternalFrame {
 			setActionCommand(FormScannerConstants.SAVE_TEMPLATE);
 			addActionListener(manageTemplateController);
 		}
-	}
-	
-	private class FieldListPanel extends JPanel {
-		
-		/**
-		 * 
-		 */
-		private static final long serialVersionUID = 1L;
-
-		public FieldListPanel() {
-			super();
-			setLayout(new BorderLayout());
-					
-			fieldList = new JList();
-			fieldListScrollPane = new JScrollPane();	
-			fieldListScrollPane.setViewportView(fieldList);
-			add(fieldListScrollPane, BorderLayout.CENTER);		
-
-			fieldListManageButtonPanel = new JPanel();
-			fieldListPanel.add(fieldListManageButtonPanel, BorderLayout.EAST);
-			fieldListManageButtonPanel.setLayout(new FormLayout(new ColumnSpec[] {
-					FormFactory.RELATED_GAP_COLSPEC,
-					FormFactory.GROWING_BUTTON_COLSPEC,
-					FormFactory.RELATED_GAP_COLSPEC,},
-				new RowSpec[] {
-					FormFactory.RELATED_GAP_ROWSPEC,
-					FormFactory.PREF_ROWSPEC,
-					FormFactory.RELATED_GAP_ROWSPEC,
-					FormFactory.PREF_ROWSPEC,
-					FormFactory.RELATED_GAP_ROWSPEC,}));
-			
-			addFieldButton = new JButton();
-			addFieldButton.setIcon(formScannerModel.getIconFor(FormScannerResourcesKeys.ADD_FIELD_BUTTON));
-			addFieldButton.setToolTipText(formScannerModel.getTranslationFor(FormScannerTranslationKeys.ADD_FIELD_BUTTON_TOOLTIP));
-			fieldListManageButtonPanel.add(addFieldButton, "2, 2, fill, default");
-			
-			removeFieldButton = new JButton();
-			removeFieldButton.setIcon(formScannerModel.getIconFor(FormScannerResourcesKeys.REMOVE_FIELD_BUTTON));
-			removeFieldButton.setToolTipText(formScannerModel.getTranslationFor(FormScannerTranslationKeys.REMOVE_FIELD_BUTTON_TOOLTIP));
-			removeFieldButton.setEnabled(false);
-			fieldListManageButtonPanel.add(removeFieldButton, "2, 4, fill, default");
-			
-			fieldListButtonPanel = new JPanel();
-			add(fieldListButtonPanel, BorderLayout.SOUTH);
-			
-			fieldListButtonPanel.setLayout(new FormLayout(new ColumnSpec[] {
-					FormFactory.RELATED_GAP_COLSPEC,
-					FormFactory.GROWING_BUTTON_COLSPEC,
-					FormFactory.RELATED_GAP_COLSPEC,
-					FormFactory.BUTTON_COLSPEC,
-					FormFactory.RELATED_GAP_COLSPEC,},
-				new RowSpec[] {
-					FormFactory.RELATED_GAP_ROWSPEC,
-					FormFactory.PREF_ROWSPEC,
-					FormFactory.RELATED_GAP_ROWSPEC,}));	
-			
-			saveTemplateButton = new SaveButton();
-			fieldListButtonPanel.add(saveTemplateButton, "2, 2, right, default");
-			
-			cancelTemplateButton = new CancelButton();
-			fieldListButtonPanel.add(cancelTemplateButton, "4, 2, right, default");
-		}
-		
-	}
-	
-	private class FieldPropertiesPanel extends JPanel {
-		
-		public FieldPropertiesPanel() {
-			super();
-			setLayout(new BorderLayout());
-			
-			propertiesPanel = new JPanel();
-			add(propertiesPanel, BorderLayout.CENTER);
-			
-			propertiesPanel.setLayout(new FormLayout(new ColumnSpec[] {
-					FormFactory.RELATED_GAP_COLSPEC,
-					FormFactory.DEFAULT_COLSPEC,
-					FormFactory.RELATED_GAP_COLSPEC,
-					ColumnSpec.decode("pref:grow"),
-					FormFactory.RELATED_GAP_COLSPEC,},
-				new RowSpec[] {
-					FormFactory.RELATED_GAP_ROWSPEC,
-					FormFactory.DEFAULT_ROWSPEC,
-					FormFactory.RELATED_GAP_ROWSPEC,
-					FormFactory.DEFAULT_ROWSPEC,
-					FormFactory.RELATED_GAP_ROWSPEC,
-					FormFactory.DEFAULT_ROWSPEC,
-					FormFactory.RELATED_GAP_ROWSPEC,
-					FormFactory.RELATED_GAP_ROWSPEC,
-					FormFactory.DEFAULT_ROWSPEC,}));
-			
-			JLabel lblType = new JLabel(formScannerModel.getTranslationFor(FormScannerTranslationKeys.FIELD_PROPERTIES_TYPE_LABEL));
-			propertiesPanel.add(lblType, "2, 2, right, default");
-			
-			JComboBox typeComboBox = new JComboBox();
-			propertiesPanel.add(typeComboBox, "4, 2, fill, default");
-			
-			JLabel lblNumberOfRowsColumns = new JLabel(formScannerModel.getTranslationFor(FormScannerTranslationKeys.FIELD_PROPERTIES_N_ROW_COL_LABEL));
-			propertiesPanel.add(lblNumberOfRowsColumns, "2, 4, right, default");
-			
-			JSpinner numberRowsCols = new JSpinner();
-			propertiesPanel.add(numberRowsCols, "4, 4");
-			
-			JLabel lblNumberOfValues = new JLabel(formScannerModel.getTranslationFor(FormScannerTranslationKeys.FIELD_PROPERTIES_N_VALUES_LABEL));
-			propertiesPanel.add(lblNumberOfValues, "2, 6, right, default");
-			
-			JSpinner numberValues = new JSpinner();
-			propertiesPanel.add(numberValues, "4, 6");
-						
-			propertiesButtonPanel = new JPanel();
-			propertiesButtonPanel.setLayout(new FormLayout(new ColumnSpec[] {
-					FormFactory.RELATED_GAP_COLSPEC,
-					FormFactory.GROWING_BUTTON_COLSPEC,
-					FormFactory.RELATED_GAP_COLSPEC,
-					FormFactory.BUTTON_COLSPEC,
-					FormFactory.RELATED_GAP_COLSPEC,},
-				new RowSpec[] {
-					FormFactory.RELATED_GAP_ROWSPEC,
-					FormFactory.PREF_ROWSPEC,
-					FormFactory.RELATED_GAP_ROWSPEC,}));
-			
-			add(propertiesButtonPanel, BorderLayout.SOUTH);
-			
-			okPropertiesButton = new OKButton();
-			propertiesButtonPanel.add(okPropertiesButton, "2, 2, right, default");
-			
-			cancelPropertiesButton = new CancelButton();
-			propertiesButtonPanel.add(cancelPropertiesButton, "4, 2, right, default");
-		}
-		
-	}
-	
-	private class FieldPositionPanel extends JPanel {
-		
 	}
 }

@@ -32,6 +32,8 @@ public class RenameFileFrame extends JInternalFrame {
 	private JButton cancelButton;
 	private RenameFileController renameFileController;
 	private InternalFrameController internalFrameController;
+	private JPanel buttonPanel;
+	private JPanel renamePanel;
 	
 	/**
 	 * Create the frame.
@@ -49,48 +51,11 @@ public class RenameFileFrame extends JInternalFrame {
 		internalFrameController = InternalFrameController.getInstance(formScannerModel);
 		addInternalFrameListener(internalFrameController);
 		
-		JPanel panel = new JPanel();
-		add(panel, BorderLayout.CENTER);
-		panel.setLayout(new FormLayout(new ColumnSpec[] {
-				FormFactory.RELATED_GAP_COLSPEC,
-				FormFactory.DEFAULT_COLSPEC,
-				FormFactory.RELATED_GAP_COLSPEC,
-				ColumnSpec.decode("pref:grow"),
-				FormFactory.RELATED_GAP_COLSPEC,
-				FormFactory.DEFAULT_COLSPEC,
-				FormFactory.RELATED_GAP_COLSPEC,},
-			new RowSpec[] {
-				FormFactory.RELATED_GAP_ROWSPEC,
-				FormFactory.DEFAULT_ROWSPEC,
-				FormFactory.RELATED_GAP_ROWSPEC,}));
+		renamePanel = new RenamePanel();
+		add(renamePanel, BorderLayout.CENTER);
 		
-		JLabel newFileNameLabel = new JLabel(formScannerModel.getTranslationFor(FormScannerTranslationKeys.RENAME_FILE_FRAME_LABEL) + ": ");
-		panel.add(newFileNameLabel, "2, 2, right, default");
-		
-		fileNameField = new FileNameField();		
-		panel.add(fileNameField, "4, 2, fill, default");
-		
-		fileExtensionField = new JLabel();
-		panel.add(fileExtensionField, "6, 2");
-		
-		JPanel buttonPanel = new JPanel();
+		buttonPanel = new ButtonPanel();
 		getContentPane().add(buttonPanel, BorderLayout.SOUTH);
-		buttonPanel.setLayout(new FormLayout(new ColumnSpec[] {
-				FormFactory.RELATED_GAP_COLSPEC,
-				FormFactory.GROWING_BUTTON_COLSPEC,
-				FormFactory.RELATED_GAP_COLSPEC,
-				FormFactory.BUTTON_COLSPEC,
-				FormFactory.RELATED_GAP_COLSPEC,},
-			new RowSpec[] {
-				FormFactory.RELATED_GAP_ROWSPEC,
-				FormFactory.PREF_ROWSPEC,
-				FormFactory.RELATED_GAP_ROWSPEC,}));
-		
-		okButton = new OKButton();
-		buttonPanel.add(okButton , "2, 2, right, default");
-		
-		cancelButton = new CancelButton();
-		buttonPanel.add(cancelButton, "4, 2, right, default");
 		
 		updateRenamedFile(fileName);		
 	}
@@ -116,6 +81,62 @@ public class RenameFileFrame extends JInternalFrame {
 	public String getNewFileName() {
 		String fileName = fileNameField.getText() + fileExtensionField.getText(); 
 		return fileName;
+	}
+	
+	private class ButtonPanel extends JPanel {
+		
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = 1L;
+
+		public ButtonPanel() {
+			super();
+			setLayout(new FormLayout(new ColumnSpec[] {
+					FormFactory.RELATED_GAP_COLSPEC,
+					FormFactory.GROWING_BUTTON_COLSPEC,
+					FormFactory.RELATED_GAP_COLSPEC,
+					FormFactory.BUTTON_COLSPEC,
+					FormFactory.RELATED_GAP_COLSPEC,},
+				new RowSpec[] {
+					FormFactory.RELATED_GAP_ROWSPEC,
+					FormFactory.PREF_ROWSPEC,
+					FormFactory.RELATED_GAP_ROWSPEC,}));
+			
+			okButton = new OKButton();
+			add(okButton , "2, 2, right, default");
+			
+			cancelButton = new CancelButton();
+			add(cancelButton, "4, 2, right, default");		
+		}
+	}
+	
+	private class RenamePanel extends JPanel {
+		
+		public RenamePanel() {
+			super();
+			setLayout(new FormLayout(new ColumnSpec[] {
+					FormFactory.RELATED_GAP_COLSPEC,
+					FormFactory.DEFAULT_COLSPEC,
+					FormFactory.RELATED_GAP_COLSPEC,
+					ColumnSpec.decode("pref:grow"),
+					FormFactory.RELATED_GAP_COLSPEC,
+					FormFactory.DEFAULT_COLSPEC,
+					FormFactory.RELATED_GAP_COLSPEC,},
+				new RowSpec[] {
+					FormFactory.RELATED_GAP_ROWSPEC,
+					FormFactory.DEFAULT_ROWSPEC,
+					FormFactory.RELATED_GAP_ROWSPEC,}));
+			
+			JLabel newFileNameLabel = new JLabel(formScannerModel.getTranslationFor(FormScannerTranslationKeys.RENAME_FILE_FRAME_LABEL) + ": ");
+			add(newFileNameLabel, "2, 2, right, default");
+			
+			fileNameField = new FileNameField();		
+			add(fileNameField, "4, 2, fill, default");
+			
+			fileExtensionField = new JLabel();
+			add(fileExtensionField, "6, 2");
+		}
 	}
 	
 	private class OKButton extends JButton {
