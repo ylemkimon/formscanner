@@ -103,7 +103,7 @@ public class ManageTemplateFrame extends JInternalFrame {
 	
 	private void disableUnusedTab() {
 		for (int i=1; i<tabbedPane.getTabCount(); i++) {
-			tabbedPane.setEnabledAt(i, false);
+			tabbedPane.setEnabledAt(i, true);
 		}
 	}
 	
@@ -262,18 +262,28 @@ public class ManageTemplateFrame extends JInternalFrame {
 			add(lblType, "2, 2, right, default");
 			
 			typeComboBox = new JComboBox();
+			typeComboBox.addFocusListener(manageTemplateController);
+			typeComboBox.addItemListener(manageTemplateController);
+			typeComboBox.setName("Type");
+			typeComboBox.addItem("item 1");
+			typeComboBox.addItem("item 2");
+			typeComboBox.addItem("item 3");
 			add(typeComboBox, "4, 2, fill, default");
 			
 			JLabel lblNumberOfRowsColumns = new JLabel(formScannerModel.getTranslationFor(FormScannerTranslationKeys.FIELD_PROPERTIES_N_ROW_COL_LABEL));
 			add(lblNumberOfRowsColumns, "2, 4, right, default");
 			
 			numberRowsCols = new JSpinner();
+			numberRowsCols.addChangeListener(manageTemplateController);
+			numberRowsCols.setName("RowsCols");
 			add(numberRowsCols, "4, 4");
 			
 			JLabel lblNumberOfValues = new JLabel(formScannerModel.getTranslationFor(FormScannerTranslationKeys.FIELD_PROPERTIES_N_VALUES_LABEL));
 			add(lblNumberOfValues, "2, 6, right, default");
 			
 			numberValues = new JSpinner();
+			numberValues.addChangeListener(manageTemplateController);
+			numberValues.setName("Values");
 			add(numberValues, "4, 6");
 		}
 	}
