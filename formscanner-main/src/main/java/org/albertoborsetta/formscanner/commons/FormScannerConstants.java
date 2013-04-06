@@ -11,13 +11,35 @@ public class FormScannerConstants {
 	public static final String ANALYZE_FILE_CURRENT = "ANALYZE_FILE_NEXT";
 	public static final String ANALYZE_FILE_SKIP = "ANALYZE_FILE_SKIP";
 	public static final String LOAD_TEMPLATE = "LOAD_TEMPLATE";
+	public static final String CONFIRM = "CONFIRM";
+	public static final String CANCEL = "CANCEL";
+	public static final String SAVE_TEMPLATE = "SAVE_TEMPLATE";
+	public static final String REMOVE_FIELD = "REMOVE_TEMPLATE";
+	public static final String ADD_FIELD = "ADD_FIELD";
 	public static final String EXIT = "EXIT";	
 	
-	public static final String RENAME_FILE_FRAME_NAME = "rename.file.frame";
-	public static final String RENAME_FILE_IMAGE_FRAME_NAME = "rename.file.image.frame";
-	public static final String FILE_LIST_FRAME_NAME = "file.list.frame";
-	public static final String ANALYZE_IMAGE_FRAME_NAME = "analyze.image.frame";
-	public static final String MANAGE_TEMPLATE_FRAME_NAME = "manage.template.frame";
+	public static final String RENAME_FILE_FRAME_NAME = "RENAME_FILE_FRAME_NAME";
+	public static final String RENAME_FILE_IMAGE_FRAME_NAME = "RENAME_FILE_IMAGE_FRAME_NAME";
+	public static final String FILE_LIST_FRAME_NAME = "FILE_LIST_FRAME_NAME";
+	public static final String ANALYZE_IMAGE_FRAME_NAME = "ANALYZE_IMAGE_FRAME_NAME";
+	public static final String MANAGE_TEMPLATE_FRAME_NAME = "MANAGE_TEMPLATE_FRAME_NAME";
+	
+	public static final String COLUMN = "COLUMN";
+	public static final String ROW = "ROW";
+	public static final String GRID_ROWS = "GRID_ROWS";
+	public static final String GRID_COLUMNS = "GRID_COLUMNS";
+	
+	public static final String NUMBER_VALUES = "NUMBER_VALUES";
+	public static final String NUMBER_COLS_ROWS = "NUMBER_COLS_ROWS";
+	public static final String TYPE_COMBO_BOX = "TYPE_COMBO_BOX";
+	
+	public enum Frames {
+		RENAME_FILE_FRAME_NAME,
+		RENAME_FILE_IMAGE_FRAME_NAME,
+		FILE_LIST_FRAME_NAME,
+		ANALYZE_IMAGE_FRAME_NAME,
+		MANAGE_TEMPLATE_FRAME_NAME
+	}
 	
 	public enum Actions {
 		RENAME_FILE_FIRST,
@@ -29,21 +51,13 @@ public class FormScannerConstants {
 		ANALYZE_FILE_NEXT,
 		ANALYZE_FILE_SKIP,
 		LOAD_TEMPLATE,
+		CONFIRM,
+		CANCEL,
+		SAVE_TEMPLATE,
+		REMOVE_FIELD,
+		ADD_FIELD,
 		EXIT
 	  }
-	
-	public static final String CONFIRM = "confirm";
-	public static final String CANCEL = "cancel";
-	public static final String SAVE_TEMPLATE = "save.template";
-	public static final String REMOVE_FIELD = "add.field";
-	public static final String ADD_FIELD = "remove.field";
-	
-	public static final boolean SINGLE = false;
-	public static final boolean MULTIPLE = !SINGLE;
-	public static final String COLUMN = "column";
-	public static final String ROW = "row";
-	public static final String GRID_ROWS = "grid.by.rows";
-	public static final String GRID_COLUMNS = "grid.by.columns";
 	
 	public enum FieldType {
 		COLUMN,

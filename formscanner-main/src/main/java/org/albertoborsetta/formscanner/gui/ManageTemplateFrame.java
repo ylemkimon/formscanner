@@ -73,7 +73,7 @@ public class ManageTemplateFrame extends JInternalFrame {
 		manageTemplateController.add(this);
 		setName(FormScannerConstants.MANAGE_TEMPLATE_FRAME_NAME);		
 		setTitle(formScannerModel.getTranslationFor(FormScannerTranslationKeys.MANAGE_TEMPLATE_FRAME_TITLE));
-		setBounds(100, 100, 300, 500);
+		setBounds(100, 100, 600, 500);
 		setMinimumSize(new Dimension(300, 500));
 		setClosable(true);
 		setMaximizable(true);
@@ -98,13 +98,24 @@ public class ManageTemplateFrame extends JInternalFrame {
 		fieldPositionPanel = new FieldPositionPanel();
 		tabbedPane.addTab(formScannerModel.getTranslationFor(FormScannerTranslationKeys.FIELD_POSITION_TAB_NAME), null, fieldPositionPanel, null);
 		
-		disableUnusedTab();
+		enablePropertiesPanel(false);
+		enablePositionPanel(false);
 	}
 	
-	private void disableUnusedTab() {
-		for (int i=1; i<tabbedPane.getTabCount(); i++) {
-			tabbedPane.setEnabledAt(i, true);
-		}
+	public void enablePropertiesPanel(boolean enabled) {
+		tabbedPane.setEnabledAt(1, enabled);
+	}
+	
+	public void enablePositionPanel(boolean enabled) {
+		tabbedPane.setEnabledAt(2, enabled);
+	}
+	
+	public void setPropertiesPanel() {
+		tabbedPane.setSelectedIndex(1);
+	}
+	
+	public void setPositionPanel() {
+		tabbedPane.setSelectedIndex(2);
 	}
 	
 	private class FieldListPanel extends JPanel {
@@ -262,30 +273,33 @@ public class ManageTemplateFrame extends JInternalFrame {
 			add(lblType, "2, 2, right, default");
 			
 			typeComboBox = new JComboBox();
-			typeComboBox.addFocusListener(manageTemplateController);
+			typeComboBox.setName(FormScannerConstants.TYPE_COMBO_BOX);
+			setComboItems();
 			typeComboBox.addItemListener(manageTemplateController);
-			typeComboBox.setName("Type");
-			typeComboBox.addItem("item 1");
-			typeComboBox.addItem("item 2");
-			typeComboBox.addItem("item 3");
 			add(typeComboBox, "4, 2, fill, default");
 			
 			JLabel lblNumberOfRowsColumns = new JLabel(formScannerModel.getTranslationFor(FormScannerTranslationKeys.FIELD_PROPERTIES_N_ROW_COL_LABEL));
 			add(lblNumberOfRowsColumns, "2, 4, right, default");
 			
 			numberRowsCols = new JSpinner();
+			numberRowsCols.setName(FormScannerConstants.NUMBER_COLS_ROWS);
 			numberRowsCols.addChangeListener(manageTemplateController);
-			numberRowsCols.setName("RowsCols");
 			add(numberRowsCols, "4, 4");
 			
 			JLabel lblNumberOfValues = new JLabel(formScannerModel.getTranslationFor(FormScannerTranslationKeys.FIELD_PROPERTIES_N_VALUES_LABEL));
 			add(lblNumberOfValues, "2, 6, right, default");
 			
 			numberValues = new JSpinner();
+			numberValues.setName(FormScannerConstants.NUMBER_VALUES);
 			numberValues.addChangeListener(manageTemplateController);
-			numberValues.setName("Values");
 			add(numberValues, "4, 6");
 		}
+	}
+	
+	private void setComboItems() {
+		typeComboBox.addItem("item 1");
+		typeComboBox.addItem("item 2");
+		typeComboBox.addItem("item 3");
 	}
 	
 	private class FieldListButtonPanel extends JPanel {
