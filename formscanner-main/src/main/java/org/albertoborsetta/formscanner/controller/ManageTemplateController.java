@@ -50,8 +50,8 @@ public class ManageTemplateController implements ActionListener, ChangeListener,
 
 	@Override
 	public void stateChanged(ChangeEvent e) {
-		// TODO Auto-generated method stub
-		
+		Integer a = view.getSpinnerValue(e.getSource());		
+		System.out.println(a);
 	}
 
 	@Override

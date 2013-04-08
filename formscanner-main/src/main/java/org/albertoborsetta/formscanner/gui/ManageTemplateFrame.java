@@ -118,6 +118,10 @@ public class ManageTemplateFrame extends JInternalFrame {
 		tabbedPane.setSelectedIndex(2);
 	}
 	
+	public Integer getSpinnerValue(Object spinner) {
+		return (Integer) ((JSpinner)spinner).getValue();		
+	} 
+	
 	private class FieldListPanel extends JPanel {
 		
 		/**
@@ -232,9 +236,7 @@ public class ManageTemplateFrame extends JInternalFrame {
 					FormFactory.RELATED_GAP_ROWSPEC,
 					FormFactory.PREF_ROWSPEC,
 					FormFactory.RELATED_GAP_ROWSPEC,}));
-			
-			
-			
+						
 			okPropertiesButton = new OKButton();
 			add(okPropertiesButton, "2, 2, right, default");
 			
@@ -272,27 +274,49 @@ public class ManageTemplateFrame extends JInternalFrame {
 			JLabel lblType = new JLabel(formScannerModel.getTranslationFor(FormScannerTranslationKeys.FIELD_PROPERTIES_TYPE_LABEL));
 			add(lblType, "2, 2, right, default");
 			
-			typeComboBox = new JComboBox();
-			typeComboBox.setName(FormScannerConstants.TYPE_COMBO_BOX);
-			setComboItems();
-			typeComboBox.addItemListener(manageTemplateController);
+			typeComboBox = new TypeComboBox();			
 			add(typeComboBox, "4, 2, fill, default");
 			
 			JLabel lblNumberOfRowsColumns = new JLabel(formScannerModel.getTranslationFor(FormScannerTranslationKeys.FIELD_PROPERTIES_N_ROW_COL_LABEL));
 			add(lblNumberOfRowsColumns, "2, 4, right, default");
 			
-			numberRowsCols = new JSpinner();
-			numberRowsCols.setName(FormScannerConstants.NUMBER_COLS_ROWS);
-			numberRowsCols.addChangeListener(manageTemplateController);
+			numberRowsCols = new ValuesSpinner(FormScannerConstants.NUMBER_COLS_ROWS);
 			add(numberRowsCols, "4, 4");
 			
 			JLabel lblNumberOfValues = new JLabel(formScannerModel.getTranslationFor(FormScannerTranslationKeys.FIELD_PROPERTIES_N_VALUES_LABEL));
 			add(lblNumberOfValues, "2, 6, right, default");
 			
-			numberValues = new JSpinner();
-			numberValues.setName(FormScannerConstants.NUMBER_VALUES);
-			numberValues.addChangeListener(manageTemplateController);
+			numberValues = new ValuesSpinner(FormScannerConstants.NUMBER_VALUES);
 			add(numberValues, "4, 6");
+		}
+	}
+	
+	private class TypeComboBox extends JComboBox {
+		
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = 1L;
+
+		public TypeComboBox() {
+			super();
+			setName(FormScannerConstants.TYPE_COMBO_BOX);
+			setComboItems();
+			addItemListener(manageTemplateController);
+		}
+	}
+	
+	private class ValuesSpinner extends JSpinner {
+		
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = 1L;
+
+		public ValuesSpinner(String name) {
+			super();
+			setName(name);
+			addChangeListener(manageTemplateController);
 		}
 	}
 	
