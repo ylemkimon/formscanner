@@ -4,7 +4,6 @@ import java.awt.Component;
 import java.awt.ComponentOrientation;
 
 import javax.swing.BoxLayout;
-import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JToolBar;

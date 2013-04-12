@@ -1,25 +1,26 @@
 package org.albertoborsetta.formscanner.controller;
 
+import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.util.List;
 
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-import org.albertoborsetta.formscanner.commons.FormScannerConstants;
 import org.albertoborsetta.formscanner.commons.FormScannerConstants.Actions;
 import org.albertoborsetta.formscanner.gui.ManageTemplateFrame;
 import org.albertoborsetta.formscanner.model.FormScannerModel;
 
 public class ManageTemplateController implements ActionListener, ChangeListener, ItemListener {
 	
-	private FormScannerModel model;
+	private FormScannerModel formScanneModel;
 	private ManageTemplateFrame view;
 	
 	public ManageTemplateController(FormScannerModel model) {
-		this.model = model;
+		this.formScanneModel = model;
 	}
 	
 	public void add(ManageTemplateFrame view) {
@@ -39,8 +40,39 @@ public class ManageTemplateController implements ActionListener, ChangeListener,
 		case SAVE_TEMPLATE:
 			break;
 		case CONFIRM:
+			switch (view.getCurrentTabbedPaneIndex()) {
+			case 1:
+				view.setupTable();
+				view.enablePositionPanel(true);
+				view.setPositionPanel();
+				break;
+			case 2:
+				view.enableTemplateListPanel(true);
+				view.setTemplateListPanel();
+				view.selectField(0);
+				break;
+			default:
+				break;
+			}
 			break;
 		case CANCEL:
+			switch (view.getCurrentTabbedPaneIndex()) {
+			case 1:
+				view.resetSelectedValues();
+				view.enableTemplateListPanel(true);
+				view.setTemplateListPanel();
+				view.selectField(0);
+				break;
+			case 2:
+				view.resetTable();
+				view.enablePositionPanel(false);
+				view.enablePropertiesPanel(true);
+				view.setPropertiesPanel();
+				break;
+			default:
+				view.dispose();
+				break;
+			}
 			break;
 		default:
 			break;
@@ -50,14 +82,12 @@ public class ManageTemplateController implements ActionListener, ChangeListener,
 
 	@Override
 	public void stateChanged(ChangeEvent e) {
-		Integer a = view.getSpinnerValue(e.getSource());		
-		System.out.println(a);
+		view.setAdvancement(view.verifyAdvancement());
 	}
 
 	@Override
 	public void itemStateChanged(ItemEvent e) {
-		// TODO Auto-generated method stub
-		
+		view.setAdvancement(view.verifyAdvancement());		
 	}
 
 }

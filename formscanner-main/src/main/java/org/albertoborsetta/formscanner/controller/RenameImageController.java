@@ -7,17 +7,14 @@ import java.awt.event.MouseMotionListener;
 import javax.swing.event.MouseInputListener;
 
 import org.albertoborsetta.formscanner.gui.RenameFileImageFrame;
-import org.albertoborsetta.formscanner.model.FormScannerModel;
 
 public class RenameImageController implements MouseMotionListener, MouseInputListener {
 	
-	private FormScannerModel model;
 	private RenameFileImageFrame view;
 	private int x1; 
 	private int y1;
 	
-	public RenameImageController(FormScannerModel model) {
-		this.model = model;
+	public RenameImageController() {
 	}
 	
 	public void add(RenameFileImageFrame view) {

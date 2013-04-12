@@ -1,6 +1,8 @@
 package org.albertoborsetta.formscanner.model;
 
+import org.albertoborsetta.formscanner.commons.FormScannerConstants;
 import org.albertoborsetta.formscanner.commons.FormScannerConstants.Actions;
+import org.albertoborsetta.formscanner.commons.FormScannerConstants.Frames;
 import org.albertoborsetta.formscanner.commons.configuration.FormScannerConfiguration;
 import org.albertoborsetta.formscanner.commons.configuration.FormScannerConfigurationKeys;
 import org.albertoborsetta.formscanner.commons.resources.FormScannerResources;
@@ -199,10 +201,18 @@ public class FormScannerModel {
 	}
 	
 	public void disposeRelatedFrame(JInternalFrame frame) {
-		if (frame.getName().equals("renameFileFrame")) {
+		Frames frm = Frames.valueOf(frame.getName());
+		switch (frm) {
+		case RENAME_FILE_FRAME_NAME:
 			view.disposeFrame(renameFileImageFrame);
-		} else {
+			break;
+		case RENAME_FILE_IMAGE_FRAME_NAME:
 			view.disposeFrame(renameFileFrame);
+			break;
+		case MANAGE_TEMPLATE_FRAME_NAME:
+			break;
+		default:
+			break;
 		}
 	}
 	

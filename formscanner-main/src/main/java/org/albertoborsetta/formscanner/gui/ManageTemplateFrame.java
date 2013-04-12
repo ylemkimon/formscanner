@@ -3,8 +3,10 @@ package org.albertoborsetta.formscanner.gui;
 import javax.swing.JInternalFrame;
 import javax.swing.JTabbedPane;
 import java.awt.BorderLayout;
+import java.awt.Component;
 import java.awt.Dimension;
-import java.text.Normalizer.Form;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.JPanel;
 import javax.swing.JList;
@@ -20,6 +22,11 @@ import javax.swing.JTable;
 import javax.swing.JSpinner;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
+import javax.swing.table.DefaultTableColumnModel;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableColumn;
+import javax.swing.table.TableColumnModel;
+import javax.swing.table.TableModel;
 
 import org.albertoborsetta.formscanner.commons.FormScannerConstants;
 import org.albertoborsetta.formscanner.commons.resources.FormScannerResourcesKeys;
@@ -63,14 +70,20 @@ public class ManageTemplateFrame extends JInternalFrame {
 	
 	private FormScannerModel formScannerModel;
 	private ManageTemplateController manageTemplateController;
+	private InternalFrameController internalFrameController;
 
 	/**
 	 * Create the frame.
 	 */
-	public ManageTemplateFrame(FormScannerModel formScannerModel, String fileName) {
-		this.formScannerModel = formScannerModel;
+	public ManageTemplateFrame(FormScannerModel model, String fileName) {
+		formScannerModel = model;
+		
+		internalFrameController = InternalFrameController.getInstance(formScannerModel);
+		addInternalFrameListener(internalFrameController);
+		
 		manageTemplateController = new ManageTemplateController(formScannerModel);	
 		manageTemplateController.add(this);
+		
 		setName(FormScannerConstants.MANAGE_TEMPLATE_FRAME_NAME);		
 		setTitle(formScannerModel.getTranslationFor(FormScannerTranslationKeys.MANAGE_TEMPLATE_FRAME_TITLE));
 		setBounds(100, 100, 600, 500);
@@ -102,12 +115,31 @@ public class ManageTemplateFrame extends JInternalFrame {
 		enablePositionPanel(false);
 	}
 	
+	public void setupTable() {
+		fieldPositionScrollPane.remove(table);
+		
+		// String[] columnNames = new String[((Integer) numberValues.getValue())+1];
+		Object[][] tableData = new Object[((Integer) numberRowsCols.getValue())+1][((Integer) numberValues.getValue())+1];
+		table = createTable(tableData);
+				
+		fieldPositionScrollPane.setViewportView(table);
+		table.setVisible(true);
+	}
+	
+	public void enableTemplateListPanel(boolean enabled) {
+		tabbedPane.setEnabledAt(0, enabled);
+	}
+	
 	public void enablePropertiesPanel(boolean enabled) {
 		tabbedPane.setEnabledAt(1, enabled);
 	}
 	
 	public void enablePositionPanel(boolean enabled) {
 		tabbedPane.setEnabledAt(2, enabled);
+	}
+	
+	public void setTemplateListPanel() {
+		tabbedPane.setSelectedIndex(0);
 	}
 	
 	public void setPropertiesPanel() {
@@ -118,10 +150,71 @@ public class ManageTemplateFrame extends JInternalFrame {
 		tabbedPane.setSelectedIndex(2);
 	}
 	
-	public Integer getSpinnerValue(Object spinner) {
-		return (Integer) ((JSpinner)spinner).getValue();		
-	} 
+	public void selectField(Integer i) {
+		fieldList.setSelectedIndex(0);
+		enablePositionPanel(false);
+		enablePropertiesPanel(false);
+	}
 	
+	public void resetSelectedValues() {
+		numberRowsCols.setValue(0);
+		numberValues.setValue(0);
+		typeComboBox.setSelectedIndex(0);
+	}
+	
+	public void resetTable() {
+		fieldPositionScrollPane.remove(table);
+	}
+	
+	public boolean verifyAdvancement() {
+		return (((Integer)numberValues.getValue()>0) && 
+				((Integer)numberRowsCols.getValue()>0) && 
+				(typeComboBox.getSelectedItem()!=null));
+	}
+	
+	public void setAdvancement(boolean enabled) {
+		okPropertiesButton.setEnabled(enabled);
+	}
+	
+	public Integer getCurrentTabbedPaneIndex() {
+		return tabbedPane.getSelectedIndex();
+	}
+	
+	private JTable createTable(Object[][] data) {
+		TableModel tableModel = new PersonalTableModel(data.length, data[0].length);
+		TableColumnModel columnModel = new DefaultTableColumnModel();
+		
+		for (int i=0; i<data[0].length; i++) {
+			TableColumn column = new TableColumn(i);
+			column.setMinWidth(100);
+			columnModel.addColumn(column);
+		}		
+		
+		JTable table = new JTable(tableModel, columnModel);
+		table.setValueAt((String)"Campo\\Valori", 0, 0);
+		table.setCellSelectionEnabled(true);
+		table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+		return table;
+	}
+	
+	private class PersonalTableModel extends DefaultTableModel {
+		
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = 1L;
+
+		public PersonalTableModel(int rows, int cols) {
+			super(rows, cols);
+		}
+		
+		public boolean isCellEditable(int row, int col) {
+			if (row==0 && col==0) {  
+		        return false;  
+		    } 
+		    return super.isCellEditable(row, col);
+		}
+	}
 	private class FieldListPanel extends JPanel {
 		
 		/**
@@ -184,7 +277,7 @@ public class ManageTemplateFrame extends JInternalFrame {
 			
 			fieldPositionScrollPane = new JScrollPane();
 			table = new JTable();
-			fieldPositionScrollPane.add(table);
+			fieldPositionScrollPane.setViewportView(table);
 			add(fieldPositionScrollPane, BorderLayout.CENTER);
 		}
 	}
@@ -304,6 +397,12 @@ public class ManageTemplateFrame extends JInternalFrame {
 			setComboItems();
 			addItemListener(manageTemplateController);
 		}
+		
+		private void setComboItems() {
+			addItem("item 1");
+			addItem("item 2");
+			addItem("item 3");
+		}
 	}
 	
 	private class ValuesSpinner extends JSpinner {
@@ -318,12 +417,6 @@ public class ManageTemplateFrame extends JInternalFrame {
 			setName(name);
 			addChangeListener(manageTemplateController);
 		}
-	}
-	
-	private void setComboItems() {
-		typeComboBox.addItem("item 1");
-		typeComboBox.addItem("item 2");
-		typeComboBox.addItem("item 3");
 	}
 	
 	private class FieldListButtonPanel extends JPanel {

@@ -49,29 +49,5 @@ public class FormScannerController implements ActionListener {
 			break;
 		}
 	}
-	
-	private static File[] chooseImages() {
-		
-		JFileChooser fileChooser = new JFileChooser();
-		fileChooser.setFont(FormScannerFont.getFont());
-		fileChooser.setMultiSelectionEnabled(true);
-		FileNameExtensionFilter imageFilter = new FileNameExtensionFilter("Image files", "jpg", "jpeg", "tif", "tiff");
-		fileChooser.setFileFilter(imageFilter);
-		fileChooser.showOpenDialog(null);
-		
-		return fileChooser.getSelectedFiles();
-	}
-	
-	private static File chooseImage() {
-		
-		JFileChooser fileChooser = new JFileChooser();
-		fileChooser.setFont(FormScannerFont.getFont());
-		fileChooser.setMultiSelectionEnabled(false);
-		FileNameExtensionFilter imageFilter = new FileNameExtensionFilter("Image files", "jpg", "jpeg", "tif", "tiff");
-		fileChooser.setFileFilter(imageFilter);
-		fileChooser.showOpenDialog(null);
-		
-		return fileChooser.getSelectedFile();
-	}
 
 }

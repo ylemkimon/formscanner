@@ -5,7 +5,6 @@ import org.albertoborsetta.formscanner.commons.translation.FormScannerTranslatio
 import org.albertoborsetta.formscanner.controller.InternalFrameController;
 import org.albertoborsetta.formscanner.controller.RenameImageController;
 import org.albertoborsetta.formscanner.model.FormScannerModel;
-import org.apache.commons.io.FilenameUtils;
 
 import java.awt.Cursor;
 import java.awt.Dimension;
@@ -37,11 +36,11 @@ public class RenameFileImageFrame extends JInternalFrame {
 	/**
 	 * Create the frame.
 	 */
-	public RenameFileImageFrame(FormScannerModel formScannerModel, File file) {
-		this.formScannerModel = formScannerModel;
-		renameImageController = new RenameImageController(formScannerModel);
+	public RenameFileImageFrame(FormScannerModel model, File file) {
+		formScannerModel = model;
+		renameImageController = new RenameImageController();
 		renameImageController.add(this);
-		internalFrameController = InternalFrameController.getInstance(formScannerModel);
+		internalFrameController = InternalFrameController.getInstance(model);
 		
 		setClosable(true);
 		setName(FormScannerConstants.RENAME_FILE_IMAGE_FRAME_NAME);
@@ -50,7 +49,7 @@ public class RenameFileImageFrame extends JInternalFrame {
 		setResizable(true);
 		setMaximizable(true);
 		
-		int desktopWidth = formScannerModel.getDesktopSize().width;
+		int desktopWidth = model.getDesktopSize().width;
 		setBounds(220, 10, desktopWidth - 230, 300);
 		
 		imagePanel = new ImagePanel(file);

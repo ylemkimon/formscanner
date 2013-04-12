@@ -4,7 +4,6 @@ import org.albertoborsetta.formscanner.commons.FormScannerConstants;
 import org.albertoborsetta.formscanner.commons.translation.FormScannerTranslationKeys;
 import org.albertoborsetta.formscanner.controller.AnalyzeImageController;
 import org.albertoborsetta.formscanner.controller.InternalFrameController;
-import org.albertoborsetta.formscanner.controller.RenameImageController;
 import org.albertoborsetta.formscanner.model.FormScannerModel;
 
 import java.awt.Cursor;

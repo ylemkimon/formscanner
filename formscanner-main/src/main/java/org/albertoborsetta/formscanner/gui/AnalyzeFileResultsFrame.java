@@ -6,7 +6,6 @@ import javax.swing.JTabbedPane;
 import javax.swing.JTable;
 
 import java.awt.BorderLayout;
-import java.awt.Dimension;
 import java.util.HashMap;
 
 import javax.swing.table.DefaultTableColumnModel;
@@ -15,8 +14,6 @@ import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
 import javax.swing.table.TableModel;
 
-import org.albertoborsetta.formscanner.commons.FormScannerFont;
-import org.albertoborsetta.formscanner.controller.AnalyzeImageController;
 import org.albertoborsetta.formscanner.controller.InternalFrameController;
 import org.albertoborsetta.formscanner.model.FormScannerModel;
 
@@ -37,9 +34,9 @@ public class AnalyzeFileResultsFrame extends JInternalFrame {
 	/**
 	 * Create the frame.
 	 */
-	public AnalyzeFileResultsFrame(FormScannerModel formScannerModel, HashMap<String, String> partialResults, HashMap<String, Object> totalResults) {
+	public AnalyzeFileResultsFrame(FormScannerModel model, HashMap<String, String> partialResults, HashMap<String, Object> totalResults) {
 		
-		this.formScannerModel = formScannerModel;
+		formScannerModel = model;
 		InternalFrameController internalFrameController = InternalFrameController.getInstance(formScannerModel);
 		addInternalFrameListener(internalFrameController);	
 		

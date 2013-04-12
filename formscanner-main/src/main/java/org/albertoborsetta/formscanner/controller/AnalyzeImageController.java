@@ -12,13 +12,13 @@ import org.albertoborsetta.formscanner.model.FormScannerModel;
 
 public class AnalyzeImageController implements MouseMotionListener, MouseInputListener {
 	
-	private FormScannerModel formScannerModel;
+	private FormScannerModel model;
 	private AnalyzeFileImageFrame view;
 	private int x1; 
 	private int y1;
 	
 	public AnalyzeImageController(FormScannerModel model) {
-		this.formScannerModel = model;
+		this.model = model;
 	}
 	
 	public void add(AnalyzeFileImageFrame view) {

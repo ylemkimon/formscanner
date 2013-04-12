@@ -113,6 +113,11 @@ public class RenameFileFrame extends JInternalFrame {
 	
 	private class RenamePanel extends JPanel {
 		
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = 1L;
+
 		public RenamePanel() {
 			super();
 			setLayout(new FormLayout(new ColumnSpec[] {

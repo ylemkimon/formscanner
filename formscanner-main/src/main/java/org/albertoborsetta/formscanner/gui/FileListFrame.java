@@ -20,20 +20,20 @@ public class FileListFrame extends JInternalFrame {
 	
 	private JScrollPane scrollPane;
 	private JList list;
-	private FormScannerModel formScannerModel;
+	private FormScannerModel model;
 	
 	/**
 	 * Create the frame.
 	 */
-	public FileListFrame(FormScannerModel formScannerModel, List<String> fileList) {
+	public FileListFrame(FormScannerModel model, List<String> fileList) {
 		
-		this.formScannerModel = formScannerModel;
-		int desktopHeight = formScannerModel.getDesktopSize().height;
+		this.model = model;
+		int desktopHeight = this.model.getDesktopSize().height;
 		
 		setBounds(10, 10, 200, desktopHeight-20);
 		
 		setName(FormScannerConstants.FILE_LIST_FRAME_NAME);
-		setTitle(formScannerModel.getTranslationFor(FormScannerTranslationKeys.FILE_LIST_FRAME_TITLE));		
+		setTitle(this.model.getTranslationFor(FormScannerTranslationKeys.FILE_LIST_FRAME_TITLE));		
 		
 		setIconifiable(true);
 		setResizable(true);

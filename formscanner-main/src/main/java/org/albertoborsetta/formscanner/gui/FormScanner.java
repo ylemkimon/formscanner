@@ -11,10 +11,6 @@ import javax.swing.JInternalFrame;
 import javax.swing.JDesktopPane;
 
 import org.albertoborsetta.formscanner.model.FormScannerModel;
-import org.albertoborsetta.formscanner.commons.configuration.FormScannerConfigurationKeys;
-import org.albertoborsetta.formscanner.commons.translation.FormScannerTranslationKeys;
-
-import java.util.Properties;
 
 public class FormScanner extends JFrame {
 
@@ -57,7 +53,7 @@ public class FormScanner extends JFrame {
 		toolBar = new ToolBar(model);
 		getContentPane().add(toolBar, BorderLayout.NORTH);
 		
-		statusBar = new StatusBar(model);
+		statusBar = new StatusBar();
 		getContentPane().add(statusBar, BorderLayout.SOUTH);
 		
 		desktopPane = new JDesktopPane();
@@ -89,6 +85,9 @@ public class FormScanner extends JFrame {
 	}
 	
 	public void disposeFrame(JInternalFrame frame) {
+		frame.setVisible(false);
+		desktopPane.remove(frame);
+		/*
 		for (int i = 0; i < desktopPane.getComponentCount(); i++) {
 			if (desktopPane.getComponent(i).getName() == frame.getName()) {
 				desktopPane.getComponent(i).setVisible(false);
@@ -96,6 +95,7 @@ public class FormScanner extends JFrame {
 				break;
 			}
 		}
+		*/
 	}
 	
 	public Dimension getDesktopSize() {
