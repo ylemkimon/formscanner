@@ -13,6 +13,7 @@ import org.albertoborsetta.formscanner.commons.FormScannerConstants;
 import org.albertoborsetta.formscanner.commons.FormScannerFont;
 import org.albertoborsetta.formscanner.commons.translation.FormScannerTranslationKeys;
 import org.albertoborsetta.formscanner.controller.FormScannerController;
+import org.albertoborsetta.formscanner.gui.builder.MenuItem;
 import org.albertoborsetta.formscanner.model.FormScannerModel;
 
 public class MenuBar extends JMenuBar {
@@ -55,7 +56,14 @@ public class MenuBar extends JMenuBar {
 			setMnemonic(formScannerModel.getMnemonicFor(FormScannerTranslationKeys.FILE_MENU_MNEMONIC));
 			setFont(FormScannerFont.getFont());
 			
-			openMenuItem = new OpenMenuItem();
+			//openMenuItem = new OpenMenuItem();
+			openMenuItem = new MenuItem.Builder(formScannerModel.getTranslationFor(FormScannerTranslationKeys.OPEN_IMAGES))
+				.withActionCommand(FormScannerConstants.OPEN_IMAGES)
+				.withActionListener(controller)
+				.withAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O, InputEvent.CTRL_MASK))
+				.withMnemonic(formScannerModel.getMnemonicFor(FormScannerTranslationKeys.OPEN_IMAGES_MNEMONIC))
+				.build();
+			
 			saveMenuItem = new SaveMenuItem();
 			exitMenuItem = new ExitMenuItem();
 			

@@ -33,6 +33,8 @@ import org.albertoborsetta.formscanner.commons.resources.FormScannerResourcesKey
 import org.albertoborsetta.formscanner.commons.translation.FormScannerTranslationKeys;
 import org.albertoborsetta.formscanner.controller.InternalFrameController;
 import org.albertoborsetta.formscanner.controller.ManageTemplateController;
+import org.albertoborsetta.formscanner.gui.builder.Button;
+import org.albertoborsetta.formscanner.gui.builder.TabbedPane;
 import org.albertoborsetta.formscanner.model.FormScannerModel;
 
 public class ManageTemplateFrame extends JInternalFrame {
@@ -96,20 +98,19 @@ public class ManageTemplateFrame extends JInternalFrame {
 		InternalFrameController internalFrameController = InternalFrameController.getInstance(formScannerModel);
 		addInternalFrameListener(internalFrameController);
 		
-		tabbedPane = new JTabbedPane(JTabbedPane.TOP);
-		getContentPane().add(tabbedPane, BorderLayout.CENTER);
-		
 		// Field List
-		fieldListPanel = new FieldListPanel();	
-		tabbedPane.addTab(formScannerModel.getTranslationFor(FormScannerTranslationKeys.FIELD_LIST_TAB_NAME), null, fieldListPanel, null);
-		
+		fieldListPanel = new FieldListPanel();
 		// Field Properties
 		fieldPropertiesPanel = new FieldPropertiesPanel();
-		tabbedPane.addTab(formScannerModel.getTranslationFor(FormScannerTranslationKeys.FIELD_PROPERTIES_TAB_NAME), null, fieldPropertiesPanel, null);
-		
 		// Field Positions
 		fieldPositionPanel = new FieldPositionPanel();
-		tabbedPane.addTab(formScannerModel.getTranslationFor(FormScannerTranslationKeys.FIELD_POSITION_TAB_NAME), null, fieldPositionPanel, null);
+		
+		tabbedPane = new TabbedPane.Builder(JTabbedPane.TOP)
+			.addTab(formScannerModel.getTranslationFor(FormScannerTranslationKeys.FIELD_LIST_TAB_NAME), fieldListPanel)
+			.addTab(formScannerModel.getTranslationFor(FormScannerTranslationKeys.FIELD_PROPERTIES_TAB_NAME), fieldPropertiesPanel)
+			.addTab(formScannerModel.getTranslationFor(FormScannerTranslationKeys.FIELD_POSITION_TAB_NAME), fieldPositionPanel)
+			.build();
+		getContentPane().add(tabbedPane, BorderLayout.CENTER);
 		
 		enablePropertiesPanel(false);
 		enablePositionPanel(false);
@@ -118,7 +119,6 @@ public class ManageTemplateFrame extends JInternalFrame {
 	public void setupTable() {
 		fieldPositionScrollPane.remove(table);
 		
-		// String[] columnNames = new String[((Integer) numberValues.getValue())+1];
 		Object[][] tableData = new Object[((Integer) numberRowsCols.getValue())+1][((Integer) numberValues.getValue())+1];
 		table = createTable(tableData);
 				
@@ -302,10 +302,21 @@ public class ManageTemplateFrame extends JInternalFrame {
 					FormFactory.PREF_ROWSPEC,
 					FormFactory.RELATED_GAP_ROWSPEC,}));
 			
-			okPositionButton = new OKButton();
+			okPositionButton = new Button.Builder()
+				.withText(formScannerModel.getTranslationFor(FormScannerTranslationKeys.OK_BUTTON))
+				.withToolTip(formScannerModel.getTranslationFor(FormScannerTranslationKeys.OK_BUTTON_TOOLTIP))
+				.withActionCommand(FormScannerConstants.CONFIRM)
+				.withActionListener(manageTemplateController)
+				.isEnabled(false)
+				.build();
 			add(okPositionButton, "2, 2, right, default");
 			
-			cancelPositionButton = new CancelButton();
+			cancelPositionButton = new Button.Builder()
+				.withText(formScannerModel.getTranslationFor(FormScannerTranslationKeys.CANCEL_BUTTON))
+				.withToolTip(formScannerModel.getTranslationFor(FormScannerTranslationKeys.CANCEL_BUTTON_TOOLTIP))
+				.withActionCommand(FormScannerConstants.CANCEL)
+				.withActionListener(manageTemplateController)
+				.build();
 			add(cancelPositionButton, "4, 2, right, default");
 		}
 	}
@@ -330,10 +341,21 @@ public class ManageTemplateFrame extends JInternalFrame {
 					FormFactory.PREF_ROWSPEC,
 					FormFactory.RELATED_GAP_ROWSPEC,}));
 						
-			okPropertiesButton = new OKButton();
+			okPropertiesButton = new Button.Builder()
+				.withText(formScannerModel.getTranslationFor(FormScannerTranslationKeys.OK_BUTTON))
+				.withToolTip(formScannerModel.getTranslationFor(FormScannerTranslationKeys.OK_BUTTON_TOOLTIP))
+				.withActionCommand(FormScannerConstants.CONFIRM)
+				.withActionListener(manageTemplateController)
+				.isEnabled(false)
+				.build();
 			add(okPropertiesButton, "2, 2, right, default");
 			
-			cancelPropertiesButton = new CancelButton();
+			cancelPropertiesButton = new Button.Builder()
+				.withText(formScannerModel.getTranslationFor(FormScannerTranslationKeys.CANCEL_BUTTON))
+				.withToolTip(formScannerModel.getTranslationFor(FormScannerTranslationKeys.CANCEL_BUTTON_TOOLTIP))
+				.withActionCommand(FormScannerConstants.CANCEL)
+				.withActionListener(manageTemplateController)
+				.build();
 			add(cancelPropertiesButton, "4, 2, right, default");
 		}
 	}
@@ -439,10 +461,21 @@ public class ManageTemplateFrame extends JInternalFrame {
 					FormFactory.PREF_ROWSPEC,
 					FormFactory.RELATED_GAP_ROWSPEC,}));	
 			
-			saveTemplateButton = new SaveButton();
+			saveTemplateButton = new Button.Builder()
+				.withText(formScannerModel.getTranslationFor(FormScannerTranslationKeys.SAVE_TEMPLATE_BUTTON))
+				.withToolTip(formScannerModel.getTranslationFor(FormScannerTranslationKeys.SAVE_TEMPLATE_BUTTON_TOOLTIP))
+				.withActionCommand(FormScannerConstants.SAVE_TEMPLATE)
+				.withActionListener(manageTemplateController)
+				.isEnabled(false)
+				.build();
 			add(saveTemplateButton, "2, 2, right, default");
 			
-			cancelTemplateButton = new CancelButton();
+			cancelTemplateButton = new Button.Builder()
+				.withText(formScannerModel.getTranslationFor(FormScannerTranslationKeys.CANCEL_BUTTON))
+				.withToolTip(formScannerModel.getTranslationFor(FormScannerTranslationKeys.CANCEL_BUTTON_TOOLTIP))
+				.withActionCommand(FormScannerConstants.CANCEL)
+				.withActionListener(manageTemplateController)
+				.build();
 			add(cancelTemplateButton, "4, 2, right, default");
 		}
 	}
@@ -468,91 +501,23 @@ public class ManageTemplateFrame extends JInternalFrame {
 					FormFactory.PREF_ROWSPEC,
 					FormFactory.RELATED_GAP_ROWSPEC,}));
 			
-			addFieldButton = new AddButton();			
+			addFieldButton = new Button.Builder()
+				.withIcon(formScannerModel.getIconFor(FormScannerResourcesKeys.ADD_FIELD_BUTTON))
+				.withToolTip(formScannerModel.getTranslationFor(FormScannerTranslationKeys.ADD_FIELD_BUTTON_TOOLTIP))
+				.withActionCommand(FormScannerConstants.ADD_FIELD)
+				.withActionListener(manageTemplateController)
+				.build();
+			
 			add(addFieldButton, "2, 2, fill, default");
 			
-			removeFieldButton = new RemoveButton();
+			removeFieldButton = new Button.Builder()
+				.withIcon(formScannerModel.getIconFor(FormScannerResourcesKeys.REMOVE_FIELD_BUTTON))
+				.withToolTip(formScannerModel.getTranslationFor(FormScannerTranslationKeys.REMOVE_FIELD_BUTTON_TOOLTIP))
+				.withActionCommand(FormScannerConstants.REMOVE_FIELD)
+				.withActionListener(manageTemplateController)
+				.isEnabled(false)
+				.build();
 			add(removeFieldButton, "2, 4, fill, default");
-		}
-	}
-	
-	private class AddButton extends JButton {
-		
-		/**
-		 * 
-		 */
-		private static final long serialVersionUID = 1L;
-
-		public AddButton() {
-			super();
-			setIcon(formScannerModel.getIconFor(FormScannerResourcesKeys.ADD_FIELD_BUTTON));
-			setToolTipText(formScannerModel.getTranslationFor(FormScannerTranslationKeys.ADD_FIELD_BUTTON_TOOLTIP));
-			setActionCommand(FormScannerConstants.ADD_FIELD);
-			addActionListener(manageTemplateController);
-		}
-	}
-
-	private class RemoveButton extends JButton {
-		
-		/**
-		 * 
-		 */
-		private static final long serialVersionUID = 1L;
-
-		public RemoveButton() {
-			super();
-			setIcon(formScannerModel.getIconFor(FormScannerResourcesKeys.REMOVE_FIELD_BUTTON));
-			setToolTipText(formScannerModel.getTranslationFor(FormScannerTranslationKeys.REMOVE_FIELD_BUTTON_TOOLTIP));
-			setEnabled(false);
-			setActionCommand(FormScannerConstants.REMOVE_FIELD);
-			addActionListener(manageTemplateController);
-		}
-	}
-	
-	private class OKButton extends JButton {
-		
-		/**
-		 * 
-		 */
-		private static final long serialVersionUID = 1L;
-
-		public OKButton() {
-			super(formScannerModel.getTranslationFor(FormScannerTranslationKeys.OK_BUTTON));
-			setToolTipText(formScannerModel.getTranslationFor(FormScannerTranslationKeys.OK_BUTTON_TOOLTIP));
-			setEnabled(false);
-			setActionCommand(FormScannerConstants.CONFIRM);
-			addActionListener(manageTemplateController);
-		}
-	}
-	
-	private class CancelButton extends JButton {
-		
-		/**
-		 * 
-		 */
-		private static final long serialVersionUID = 1L;
-
-		public CancelButton() {
-			super(formScannerModel.getTranslationFor(FormScannerTranslationKeys.CANCEL_BUTTON));
-			setToolTipText(formScannerModel.getTranslationFor(FormScannerTranslationKeys.CANCEL_BUTTON_TOOLTIP));
-			setActionCommand(FormScannerConstants.CANCEL);
-			addActionListener(manageTemplateController);
-		}
-	}
-	
-	private class SaveButton extends JButton {
-		
-		/**
-		 * 
-		 */
-		private static final long serialVersionUID = 1L;
-
-		public SaveButton() {
-			super(formScannerModel.getTranslationFor(FormScannerTranslationKeys.SAVE_TEMPLATE_BUTTON));
-			setToolTipText(formScannerModel.getTranslationFor(FormScannerTranslationKeys.SAVE_TEMPLATE_BUTTON_TOOLTIP));
-			setEnabled(false);
-			setActionCommand(FormScannerConstants.SAVE_TEMPLATE);
-			addActionListener(manageTemplateController);
 		}
 	}
 }

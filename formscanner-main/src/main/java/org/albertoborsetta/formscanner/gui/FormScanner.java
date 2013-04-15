@@ -87,15 +87,6 @@ public class FormScanner extends JFrame {
 	public void disposeFrame(JInternalFrame frame) {
 		frame.setVisible(false);
 		desktopPane.remove(frame);
-		/*
-		for (int i = 0; i < desktopPane.getComponentCount(); i++) {
-			if (desktopPane.getComponent(i).getName() == frame.getName()) {
-				desktopPane.getComponent(i).setVisible(false);
-				desktopPane.remove(desktopPane.getComponent(i));
-				break;
-			}
-		}
-		*/
 	}
 	
 	public Dimension getDesktopSize() {
