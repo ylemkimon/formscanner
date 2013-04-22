@@ -1,5 +1,6 @@
 package org.albertoborsetta.formscanner.gui;
 
+import java.awt.Component;
 import java.awt.EventQueue;
 import java.awt.Toolkit;
 import java.awt.BorderLayout;
@@ -67,10 +68,10 @@ public class FormScanner extends JFrame {
 	public void arrangeFrame(JInternalFrame frame) {
 		boolean found = false;
 		
-		for (int i = 0; i < desktopPane.getComponentCount(); i++) {
-			if (desktopPane.getComponent(i).getName() == frame.getName()) {
-				desktopPane.getComponent(i).setVisible(false);
-				desktopPane.remove(desktopPane.getComponent(i));
+		for (Component component: desktopPane.getComponents()) {
+			if (component.getName().equals(frame.getName())) {
+				component.setVisible(false);
+				desktopPane.remove(component);
 				found = true;
 				break;
 			}

@@ -10,10 +10,10 @@ import javax.swing.JSeparator;
 import javax.swing.KeyStroke;
 
 import org.albertoborsetta.formscanner.commons.FormScannerConstants;
-import org.albertoborsetta.formscanner.commons.FormScannerFont;
 import org.albertoborsetta.formscanner.commons.translation.FormScannerTranslationKeys;
 import org.albertoborsetta.formscanner.controller.FormScannerController;
-import org.albertoborsetta.formscanner.gui.builder.MenuItem;
+import org.albertoborsetta.formscanner.gui.builder.MenuBuilder;
+import org.albertoborsetta.formscanner.gui.builder.MenuItemBuilder;
 import org.albertoborsetta.formscanner.model.FormScannerModel;
 
 public class MenuBar extends JMenuBar {
@@ -21,7 +21,7 @@ public class MenuBar extends JMenuBar {
 	private static final long serialVersionUID = 1L;
 	
 	private FormScannerModel formScannerModel;
-	private FormScannerController controller;
+	private FormScannerController formScannerController;
 	
 	private JMenuItem openMenuItem;
 	private JMenuItem saveMenuItem;
@@ -34,171 +34,83 @@ public class MenuBar extends JMenuBar {
 	
 	public MenuBar(final FormScannerModel model) {
 		formScannerModel = model;
-		controller = FormScannerController.getInstance(formScannerModel);
+		formScannerController = FormScannerController.getInstance(formScannerModel);
 		
-		JMenu fileMenu = new FileMenu();
-		JMenu editMenu = new EditMenu();
-		JMenu templateMenu = new TemplateMenu();
+		JMenu fileMenu = getFileMenu();
+		JMenu editMenu = getEditMenu();
+		JMenu templateMenu = getTemplateMenu();
 		add(fileMenu);
 		add(editMenu);
 		add(templateMenu);
 	}
-	
-	private class FileMenu extends JMenu {
-		
-		/**
-		 * 
-		 */
-		private static final long serialVersionUID = 1L;
 
-		public FileMenu() {			
-			super(formScannerModel.getTranslationFor(FormScannerTranslationKeys.FILE_MENU));
-			setMnemonic(formScannerModel.getMnemonicFor(FormScannerTranslationKeys.FILE_MENU_MNEMONIC));
-			setFont(FormScannerFont.getFont());
-			
-			//openMenuItem = new OpenMenuItem();
-			openMenuItem = new MenuItem.Builder(formScannerModel.getTranslationFor(FormScannerTranslationKeys.OPEN_IMAGES))
-				.withActionCommand(FormScannerConstants.OPEN_IMAGES)
-				.withActionListener(controller)
-				.withAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O, InputEvent.CTRL_MASK))
-				.withMnemonic(formScannerModel.getMnemonicFor(FormScannerTranslationKeys.OPEN_IMAGES_MNEMONIC))
-				.build();
-			
-			saveMenuItem = new SaveMenuItem();
-			exitMenuItem = new ExitMenuItem();
-			
-			add(openMenuItem);
-			add(saveMenuItem);
-			add(new JSeparator(JSeparator.HORIZONTAL));
-			add(exitMenuItem);
-		}
+	private JMenu getFileMenu() {			
+		
+		openMenuItem = new MenuItemBuilder(formScannerModel.getTranslationFor(FormScannerTranslationKeys.OPEN_IMAGES))
+			.withActionCommand(FormScannerConstants.OPEN_IMAGES)
+			.withActionListener(formScannerController)
+			.withAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O, InputEvent.CTRL_MASK))
+			.withMnemonic(formScannerModel.getMnemonicFor(FormScannerTranslationKeys.OPEN_IMAGES_MNEMONIC))
+			.build();
+		
+		saveMenuItem = new MenuItemBuilder(formScannerModel.getTranslationFor(FormScannerTranslationKeys.SAVE_RESULTS))
+			.withActionCommand(FormScannerConstants.SAVE_RESULTS)
+			.withActionListener(formScannerController)
+			.withMnemonic(formScannerModel.getMnemonicFor(FormScannerTranslationKeys.SAVE_RESULTS_MNEMONIC))
+			.withAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, InputEvent.CTRL_MASK))
+			.setEnabled(false)
+			.build();
+		
+		exitMenuItem = new MenuItemBuilder(formScannerModel.getTranslationFor(FormScannerTranslationKeys.EXIT))
+			.withActionCommand(FormScannerConstants.EXIT)
+			.withActionListener(formScannerController)
+			.withMnemonic(formScannerModel.getMnemonicFor(FormScannerTranslationKeys.EXIT_MNEMONIC))
+			.withAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_X, InputEvent.CTRL_MASK))
+			.build();
+		
+		return new MenuBuilder(formScannerModel.getTranslationFor(FormScannerTranslationKeys.FILE_MENU))
+			.withMnemonic(formScannerModel.getMnemonicFor(FormScannerTranslationKeys.FILE_MENU_MNEMONIC))
+			.add(openMenuItem)
+			.add(saveMenuItem)
+			.add(new JSeparator(JSeparator.HORIZONTAL))
+			.add(exitMenuItem)
+			.build();
 	}
-	
-	private class EditMenu extends JMenu {
-		
-		/**
-		 * 
-		 */
-		private static final long serialVersionUID = 1L;
 
-		public EditMenu() {
-			super(formScannerModel.getTranslationFor(FormScannerTranslationKeys.EDIT_MENU));
-			setMnemonic(formScannerModel.getMnemonicFor(FormScannerTranslationKeys.EDIT_MENU_MNEMONIC));
-			setFont(FormScannerFont.getFont());
-			
-			renameMenuItem = new RenameMenuItem();
-			add(renameMenuItem);
-		}
+	public JMenu getEditMenu() {
+		
+		renameMenuItem = new MenuItemBuilder(formScannerModel.getTranslationFor(FormScannerTranslationKeys.RENAME_FILES))
+			.withActionCommand(FormScannerConstants.RENAME_FILE_FIRST)
+			.withActionListener(formScannerController)
+			.withMnemonic(formScannerModel.getMnemonicFor(FormScannerTranslationKeys.RENAME_FILES_MNEMONIC))
+			.withAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_R, InputEvent.CTRL_MASK))
+			.setEnabled(false)
+			.build();
+		
+		return new MenuBuilder(formScannerModel.getTranslationFor(FormScannerTranslationKeys.EDIT_MENU))
+			.withMnemonic(formScannerModel.getMnemonicFor(FormScannerTranslationKeys.EDIT_MENU_MNEMONIC))
+			.add(renameMenuItem)
+			.build();
 	}
-	
-	private class TemplateMenu extends JMenu {
-		
-		/**
-		 * 
-		 */
-		private static final long serialVersionUID = 1L;
 
-		public TemplateMenu() {			
-			super(formScannerModel.getTranslationFor(FormScannerTranslationKeys.TEMPLATE_MENU));
-			setMnemonic(formScannerModel.getMnemonicFor(FormScannerTranslationKeys.TEMPLATE_MENU_MNEMONIC));
-			setFont(FormScannerFont.getFont());
-			
-			loadTemplateMenuItem = new LoadTemplateMenuItem();
-			// useTemplateMenuItem = new UseTemplateMenuItem();
-			// editTemplateMenuItem = new EditTemplateMenuItem();
-			
-			add(loadTemplateMenuItem);
-			// add(editTemplateMenuItem);
-			// add(new JSeparator(JSeparator.HORIZONTAL));
-			// add(useTemplateMenuItem);
-		}
-	}
-	
-	private class OpenMenuItem extends JMenuItem {
+	public JMenu getTemplateMenu() {			
+				
+		loadTemplateMenuItem = new MenuItemBuilder(formScannerModel.getTranslationFor(FormScannerTranslationKeys.LOAD_TEMPLATE))
+			.withActionCommand(FormScannerConstants.LOAD_TEMPLATE)
+			.withActionListener(formScannerController)
+			.withMnemonic(formScannerModel.getMnemonicFor(FormScannerTranslationKeys.LOAD_TEMPLATE_MNEMONIC))
+			.withAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_L, InputEvent.CTRL_MASK))
+			.build();
+		// useTemplateMenuItem = new UseTemplateMenuItem();
+		// editTemplateMenuItem = new EditTemplateMenuItem();
 		
-		/**
-		 * 
-		 */
-		private static final long serialVersionUID = 1L;
-
-		public OpenMenuItem() {
-			super(formScannerModel.getTranslationFor(FormScannerTranslationKeys.OPEN_IMAGES));
-			setActionCommand(FormScannerConstants.OPEN_IMAGES);
-			addActionListener(controller);
-			setMnemonic(formScannerModel.getMnemonicFor(FormScannerTranslationKeys.OPEN_IMAGES_MNEMONIC));
-			setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O, InputEvent.CTRL_MASK));
-			setFont(FormScannerFont.getFont());
-		}
-	}
-	
-	private class SaveMenuItem extends JMenuItem {
-		
-		/**
-		 * 
-		 */
-		private static final long serialVersionUID = 1L;
-
-		public SaveMenuItem() {
-			super(formScannerModel.getTranslationFor(FormScannerTranslationKeys.SAVE_RESULTS));	
-			setActionCommand(FormScannerConstants.SAVE_RESULTS);
-			addActionListener(controller);
-			setMnemonic(formScannerModel.getMnemonicFor(FormScannerTranslationKeys.SAVE_RESULTS_MNEMONIC));
-			setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, InputEvent.CTRL_MASK));
-			setFont(FormScannerFont.getFont());
-			setEnabled(false);
-		}
-	}
-	
-	private class ExitMenuItem extends JMenuItem {
-		
-		/**
-		 * 
-		 */
-		private static final long serialVersionUID = 1L;
-
-		public ExitMenuItem() {
-			super(formScannerModel.getTranslationFor(FormScannerTranslationKeys.EXIT));	
-			setActionCommand(FormScannerConstants.EXIT);
-			addActionListener(controller);
-			setMnemonic(formScannerModel.getMnemonicFor(FormScannerTranslationKeys.EXIT_MNEMONIC));
-			setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_X, InputEvent.CTRL_MASK));
-			setFont(FormScannerFont.getFont());
-		}
-	}
-	
-	private class RenameMenuItem extends JMenuItem {
-		
-		/**
-		 * 
-		 */
-		private static final long serialVersionUID = 1L;
-
-		public RenameMenuItem() {
-			super(formScannerModel.getTranslationFor(FormScannerTranslationKeys.RENAME_FILES));
-			setActionCommand(FormScannerConstants.RENAME_FILE_FIRST);
-			addActionListener(controller);
-			setMnemonic(formScannerModel.getMnemonicFor(FormScannerTranslationKeys.RENAME_FILES_MNEMONIC));
-			setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_R, InputEvent.CTRL_MASK));
-			setFont(FormScannerFont.getFont());
-			setEnabled(false);
-		}
-	}
-	
-	private class LoadTemplateMenuItem extends JMenuItem {
-		
-		/**
-		 * 
-		 */
-		private static final long serialVersionUID = 1L;
-
-		public LoadTemplateMenuItem() {
-			super(formScannerModel.getTranslationFor(FormScannerTranslationKeys.LOAD_TEMPLATE));
-			setActionCommand(FormScannerConstants.LOAD_TEMPLATE);
-			addActionListener(controller);
-			setMnemonic(formScannerModel.getMnemonicFor(FormScannerTranslationKeys.LOAD_TEMPLATE_MNEMONIC));
-			setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_L, InputEvent.CTRL_MASK));
-			setFont(FormScannerFont.getFont());
-		}
+		return new MenuBuilder(formScannerModel.getTranslationFor(FormScannerTranslationKeys.TEMPLATE_MENU))
+			.withMnemonic(formScannerModel.getMnemonicFor(FormScannerTranslationKeys.TEMPLATE_MENU_MNEMONIC))
+			.add(loadTemplateMenuItem)
+			.build();
+		// add(editTemplateMenuItem);
+		// add(new JSeparator(JSeparator.HORIZONTAL));
+		// add(useTemplateMenuItem);
 	}
 	
 	public void setRenameControllersEnabled(boolean enable) {

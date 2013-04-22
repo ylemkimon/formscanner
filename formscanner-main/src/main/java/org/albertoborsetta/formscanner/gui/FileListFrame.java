@@ -10,8 +10,9 @@ import java.util.List;
 import javax.swing.JList;
 
 import org.albertoborsetta.formscanner.commons.FormScannerConstants;
-import org.albertoborsetta.formscanner.commons.FormScannerFont;
 import org.albertoborsetta.formscanner.commons.translation.FormScannerTranslationKeys;
+import org.albertoborsetta.formscanner.gui.builder.ListBuilder;
+import org.albertoborsetta.formscanner.gui.builder.ScrollPaneBuilder;
 import org.albertoborsetta.formscanner.model.FormScannerModel;
 
 public class FileListFrame extends JInternalFrame {
@@ -39,11 +40,8 @@ public class FileListFrame extends JInternalFrame {
 		setResizable(true);
 		setMaximizable(true);
 		
-		list = new FileList(fileList.toArray());
-		
-		scrollPane = new JScrollPane();	
-		scrollPane.setViewportView(list);
-		getContentPane().add(scrollPane, BorderLayout.CENTER);
+		scrollPane = getPanel(fileList);
+		add(scrollPane, BorderLayout.CENTER);
 	}
 	
 	public void updateFileList(List<String> fileList) {
@@ -71,17 +69,12 @@ public class FileListFrame extends JInternalFrame {
 		return index;
 	}
 	
-	private class FileList extends JList {
+	private JScrollPane getPanel(List<String> fileList) {
+		list = new ListBuilder(fileList.toArray())
+			.withSelectionMode(ListSelectionModel.SINGLE_SELECTION)
+			.build();
 		
-		/**
-		 * 
-		 */
-		private static final long serialVersionUID = 1L;
-
-		public FileList(Object[] list) {
-			super(list); 
-			setFont(FormScannerFont.getFont());
-			setSelectionMode(ListSelectionModel.SINGLE_SELECTION);			
-		}
-	}
+		return new ScrollPaneBuilder(list)
+			.build();
+	} 
 }

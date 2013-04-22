@@ -1,11 +1,9 @@
 package org.albertoborsetta.formscanner.controller;
 
-import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
-import java.util.List;
 
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
@@ -70,6 +68,7 @@ public class ManageTemplateController implements ActionListener, ChangeListener,
 				view.setPropertiesPanel();
 				break;
 			default:
+				formScanneModel.disposeRelatedFrame(view);
 				view.dispose();
 				break;
 			}
@@ -82,6 +81,7 @@ public class ManageTemplateController implements ActionListener, ChangeListener,
 
 	@Override
 	public void stateChanged(ChangeEvent e) {
+		view.verifySpinnerValues();
 		view.setAdvancement(view.verifyAdvancement());
 	}
 

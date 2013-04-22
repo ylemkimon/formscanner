@@ -7,7 +7,6 @@ import java.awt.event.MouseMotionListener;
 import javax.swing.event.MouseInputListener;
 
 import org.albertoborsetta.formscanner.gui.AnalyzeFileImageFrame;
-import org.albertoborsetta.formscanner.gui.RenameFileImageFrame;
 import org.albertoborsetta.formscanner.model.FormScannerModel;
 
 public class AnalyzeImageController implements MouseMotionListener, MouseInputListener {

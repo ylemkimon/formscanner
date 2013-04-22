@@ -13,8 +13,9 @@ import org.albertoborsetta.formscanner.commons.FormScannerConstants;
 import org.albertoborsetta.formscanner.commons.resources.FormScannerResourcesKeys;
 import org.albertoborsetta.formscanner.commons.translation.FormScannerTranslationKeys;
 import org.albertoborsetta.formscanner.controller.FormScannerController;
+import org.albertoborsetta.formscanner.gui.builder.ButtonBuilder;
+import org.albertoborsetta.formscanner.gui.builder.ToolBarBuilder;
 import org.albertoborsetta.formscanner.model.FormScannerModel;
-
 
 public class ToolBar extends JPanel {
 
@@ -41,118 +42,66 @@ public class ToolBar extends JPanel {
 		
 		setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
 		
-		JToolBar fileToolBar = new FileToolBar();
+		JToolBar fileToolBar = getFileToolBar();
 		add(fileToolBar);
 		
-		JToolBar editToolBar = new EditToolBar();
+		JToolBar editToolBar = getEditToolBar();
 		add(editToolBar);
 	}
-	
-	private class FileToolBar extends JToolBar {
 
-		/**
-		 * 
-		 */
-		private static final long serialVersionUID = 1L;
-
-		public FileToolBar() {
-			setAlignmentY(Component.CENTER_ALIGNMENT);
-			setAlignmentX(Component.LEFT_ALIGNMENT);
-			setComponentOrientation(ComponentOrientation.LEFT_TO_RIGHT);
-			
-			openButton = new OpenButton();
-			saveButton = new SaveButton();
-			
-			add(openButton);			
-			add(saveButton);			
-		}
-	}
-	
-	private class EditToolBar extends JToolBar {
+	public JToolBar getFileToolBar() {			
 		
-		/**
-		 * 
-		 */
-		private static final long serialVersionUID = 1L;
-
-		public EditToolBar() {
-			setAlignmentY(Component.CENTER_ALIGNMENT);
-			setAlignmentX(Component.LEFT_ALIGNMENT);
-			setComponentOrientation(ComponentOrientation.LEFT_TO_RIGHT);
-			
-			renameButton = new RenameButton();
-			startButton = new StartButton();
-			
-			add(renameButton);
-			add(startButton);
-		}
-	}
-	
-	private class OpenButton extends JButton {
+		openButton = new ButtonBuilder()
+			.withActionCommand(FormScannerConstants.OPEN_IMAGES)
+			.withActionListener(formScannerController)
+			.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null))
+			.withToolTip(formScannerModel.getTranslationFor(FormScannerTranslationKeys.OPEN_IMAGES_TOOLTIP))
+			.withIcon(formScannerModel.getIconFor(FormScannerResourcesKeys.OPEN_IMAGES_ICON))
+			.build();
+		saveButton = new ButtonBuilder()
+			.withActionCommand(FormScannerConstants.SAVE_RESULTS)
+			.withActionListener(formScannerController)
+			.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null))
+			.withToolTip(formScannerModel.getTranslationFor(FormScannerTranslationKeys.SAVE_RESULTS_TOOLTIP))
+			.withIcon(formScannerModel.getIconFor(FormScannerResourcesKeys.SAVE_RESULTS_ICON))
+			.setEnabled(false)
+			.build();
 		
-		/**
-		 * 
-		 */
-		private static final long serialVersionUID = 1L;
-
-		public OpenButton() {
-			setActionCommand(FormScannerConstants.OPEN_IMAGES);
-			addActionListener(formScannerController);
-			setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
-			setToolTipText(formScannerModel.getTranslationFor(FormScannerTranslationKeys.OPEN_IMAGES_TOOLTIP));
-			setIcon(formScannerModel.getIconFor(FormScannerResourcesKeys.OPEN_IMAGES_ICON));
-		}
+		return new ToolBarBuilder()
+			.withAlignmentY(Component.CENTER_ALIGNMENT)
+			.withAlignmentX(Component.LEFT_ALIGNMENT)
+			.withComponentOrientation(ComponentOrientation.LEFT_TO_RIGHT)
+			.add(openButton)
+			.add(saveButton)
+			.build();
 	}
-	
-	private class SaveButton extends JButton {
-		
-		/**
-		 * 
-		 */
-		private static final long serialVersionUID = 1L;
 
-		public SaveButton() {
-			setActionCommand(FormScannerConstants.SAVE_RESULTS);
-			addActionListener(formScannerController);
-			setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
-			setToolTipText(formScannerModel.getTranslationFor(FormScannerTranslationKeys.SAVE_RESULTS_TOOLTIP));
-			setIcon(formScannerModel.getIconFor(FormScannerResourcesKeys.SAVE_RESULTS_ICON));
-			setEnabled(false);
-		}
-	}
-	
-	private class RenameButton extends JButton {
+	public JToolBar getEditToolBar() {
 		
-		/**
-		 * 
-		 */
-		private static final long serialVersionUID = 1L;
-
-		public RenameButton() {
-			setActionCommand(FormScannerConstants.RENAME_FILE_FIRST);
-			addActionListener(formScannerController);
-			setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
-			setToolTipText(formScannerModel.getTranslationFor(FormScannerTranslationKeys.RENAME_FILES_TOOLTIP));
-			setIcon(formScannerModel.getIconFor(FormScannerResourcesKeys.RENAME_FILES_ICON));
-			setEnabled(false);
-		}		
-	}
-	
-	private class StartButton extends JButton {
+		renameButton = new ButtonBuilder()
+			.withActionCommand(FormScannerConstants.RENAME_FILE_FIRST)
+			.withActionListener(formScannerController)
+			.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null))
+			.withToolTip(formScannerModel.getTranslationFor(FormScannerTranslationKeys.RENAME_FILES_TOOLTIP))
+			.withIcon(formScannerModel.getIconFor(FormScannerResourcesKeys.RENAME_FILES_ICON))
+			.setEnabled(false)
+			.build();
+		startButton = new ButtonBuilder()
+			.withActionCommand(FormScannerConstants.ANALYZE_FILE_FIRST)
+			.withActionListener(formScannerController)
+			.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null))
+			.withToolTip(formScannerModel.getTranslationFor(FormScannerTranslationKeys.ANALYZE_FILES_TOOLTIP))
+			.withIcon(formScannerModel.getIconFor(FormScannerResourcesKeys.ANALYZE_FILES_ICON))
+			.setEnabled(false)
+			.build();
 		
-		/**
-		 * 
-		 */
-		private static final long serialVersionUID = 1L;
-
-		public StartButton() {
-			setActionCommand(FormScannerConstants.ANALYZE_FILE_FIRST);
-			addActionListener(formScannerController);
-			setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
-			setToolTipText(formScannerModel.getTranslationFor(FormScannerTranslationKeys.ANALYZE_FILES_TOOLTIP));
-			setIcon(formScannerModel.getIconFor(FormScannerResourcesKeys.ANALYZE_FILES_ICON));
-			setEnabled(false);
-		}		
+		return new ToolBarBuilder()
+			.withAlignmentY(Component.CENTER_ALIGNMENT)
+			.withAlignmentX(Component.LEFT_ALIGNMENT)
+			.withComponentOrientation(ComponentOrientation.LEFT_TO_RIGHT)
+			.add(renameButton)
+			.add(startButton)
+			.build();
 	}
 	
 	public void setRenameControllersEnabled(boolean enable) {

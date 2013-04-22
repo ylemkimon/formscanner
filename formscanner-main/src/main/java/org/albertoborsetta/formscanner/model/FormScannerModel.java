@@ -1,6 +1,5 @@
 package org.albertoborsetta.formscanner.model;
 
-import org.albertoborsetta.formscanner.commons.FormScannerConstants;
 import org.albertoborsetta.formscanner.commons.FormScannerConstants.Actions;
 import org.albertoborsetta.formscanner.commons.FormScannerConstants.Frames;
 import org.albertoborsetta.formscanner.commons.configuration.FormScannerConfiguration;
@@ -8,12 +7,13 @@ import org.albertoborsetta.formscanner.commons.configuration.FormScannerConfigur
 import org.albertoborsetta.formscanner.commons.resources.FormScannerResources;
 import org.albertoborsetta.formscanner.commons.translation.FormScannerTranslation;
 import org.albertoborsetta.formscanner.gui.AnalyzeFileImageFrame;
-import org.albertoborsetta.formscanner.gui.AnalyzeFileResultsFrame;
 import org.albertoborsetta.formscanner.gui.FileListFrame;
 import org.albertoborsetta.formscanner.gui.FormScanner;
 import org.albertoborsetta.formscanner.gui.ManageTemplateFrame;
+import org.albertoborsetta.formscanner.gui.ManageTemplateImageFrame;
 import org.albertoborsetta.formscanner.gui.RenameFileFrame;
 import org.albertoborsetta.formscanner.gui.RenameFileImageFrame;
+import org.albertoborsetta.formscanner.gui.ZoomImageFrame;
 
 import java.awt.Dimension;
 import java.io.File;
@@ -45,6 +45,8 @@ public class FormScannerModel {
 	private AnalyzeFileImageFrame analyzeFileImageFrame;
 	// private AnalyzeFileResultsFrame analyzeFileResultsFrame;
 	private ManageTemplateFrame manageTemplateFrame;
+	private ManageTemplateImageFrame manageTemplateImageFrame;
+	private ZoomImageFrame zoomImageFrame;
     
 	public FormScannerModel(FormScanner view) {
 		this.view = view;
@@ -210,7 +212,13 @@ public class FormScannerModel {
 			view.disposeFrame(renameFileFrame);
 			break;
 		case MANAGE_TEMPLATE_FRAME_NAME:
+			view.disposeFrame(manageTemplateImageFrame);
+			view.disposeFrame(zoomImageFrame);
 			break;
+		case MANAGE_TEMPLATE_IMAGE_FRAME_NAME:
+			view.disposeFrame(manageTemplateFrame);
+			view.disposeFrame(zoomImageFrame);
+			break;			
 		default:
 			break;
 		}
@@ -235,7 +243,19 @@ public class FormScannerModel {
 		if (template != null) {
 			this.template= template; 
 			manageTemplateFrame = new ManageTemplateFrame(this, template.getName());
+			manageTemplateImageFrame = new ManageTemplateImageFrame(this, template);
+			zoomImageFrame = new ZoomImageFrame(this, template);
 			view.arrangeFrame(manageTemplateFrame);
+			view.arrangeFrame(manageTemplateImageFrame);
+			view.arrangeFrame(zoomImageFrame);
 		}
+	}
+	
+	public void showZoom(int x, int y) {
+		zoomImageFrame.showImage(x, y);
+	}
+	
+	public void drawRect(int x, int y, int width, int height) {
+		manageTemplateImageFrame.drawRect(x, y, width, height);
 	}
 }

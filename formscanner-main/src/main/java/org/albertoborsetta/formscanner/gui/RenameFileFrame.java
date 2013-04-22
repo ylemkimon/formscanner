@@ -1,9 +1,14 @@
 package org.albertoborsetta.formscanner.gui;
 
 import org.albertoborsetta.formscanner.commons.FormScannerConstants;
+import org.albertoborsetta.formscanner.commons.FormScannerGridLayouts;
 import org.albertoborsetta.formscanner.commons.translation.FormScannerTranslationKeys;
 import org.albertoborsetta.formscanner.controller.RenameFileController;
 import org.albertoborsetta.formscanner.controller.InternalFrameController;
+import org.albertoborsetta.formscanner.gui.builder.ButtonBuilder;
+import org.albertoborsetta.formscanner.gui.builder.LabelBuilder;
+import org.albertoborsetta.formscanner.gui.builder.PanelBuilder;
+import org.albertoborsetta.formscanner.gui.builder.TextFieldBuilder;
 import org.albertoborsetta.formscanner.model.FormScannerModel;
 
 import org.apache.commons.io.FilenameUtils;
@@ -16,17 +21,13 @@ import javax.swing.JButton;
 
 import java.awt.BorderLayout;
 
-import com.jgoodies.forms.layout.FormLayout;
-import com.jgoodies.forms.layout.ColumnSpec;
-import com.jgoodies.forms.layout.RowSpec;
-import com.jgoodies.forms.factories.FormFactory;
-
 public class RenameFileFrame extends JInternalFrame {
 
 	private static final long serialVersionUID = 1L;
 	
 	private JTextField fileNameField;
 	private JLabel fileExtensionField;
+	private JLabel newFileNameLabel;
 	private FormScannerModel formScannerModel;
 	private JButton okButton;
 	private JButton cancelButton;
@@ -50,12 +51,12 @@ public class RenameFileFrame extends JInternalFrame {
 		
 		internalFrameController = InternalFrameController.getInstance(formScannerModel);
 		addInternalFrameListener(internalFrameController);
+
+		renamePanel = getRenamePanel();
+		buttonPanel = getButtonPanel();
 		
-		renamePanel = new RenamePanel();
 		add(renamePanel, BorderLayout.CENTER);
-		
-		buttonPanel = new ButtonPanel();
-		getContentPane().add(buttonPanel, BorderLayout.SOUTH);
+		add(buttonPanel, BorderLayout.SOUTH);
 		
 		updateRenamedFile(fileName);		
 	}
@@ -83,107 +84,43 @@ public class RenameFileFrame extends JInternalFrame {
 		return fileName;
 	}
 	
-	private class ButtonPanel extends JPanel {
+	private JPanel getRenamePanel() {
+		newFileNameLabel = new LabelBuilder(formScannerModel.getTranslationFor(FormScannerTranslationKeys.RENAME_FILE_FRAME_LABEL) + ": ")
+			.build();
 		
-		/**
-		 * 
-		 */
-		private static final long serialVersionUID = 1L;
-
-		public ButtonPanel() {
-			super();
-			setLayout(new FormLayout(new ColumnSpec[] {
-					FormFactory.RELATED_GAP_COLSPEC,
-					FormFactory.GROWING_BUTTON_COLSPEC,
-					FormFactory.RELATED_GAP_COLSPEC,
-					FormFactory.BUTTON_COLSPEC,
-					FormFactory.RELATED_GAP_COLSPEC,},
-				new RowSpec[] {
-					FormFactory.RELATED_GAP_ROWSPEC,
-					FormFactory.PREF_ROWSPEC,
-					FormFactory.RELATED_GAP_ROWSPEC,}));
-			
-			okButton = new OKButton();
-			add(okButton , "2, 2, right, default");
-			
-			cancelButton = new CancelButton();
-			add(cancelButton, "4, 2, right, default");		
-		}
+		fileNameField = new TextFieldBuilder(10)
+			.withKeyListener(renameFileController)
+			.build();
+		
+		fileExtensionField = new LabelBuilder()
+			.build();
+		
+		return new PanelBuilder()
+			.withFormLayout(FormScannerGridLayouts.renameFrameLayout())
+			.addComponent(fileNameField, "4, 2, fill, default")
+			.addComponent(fileExtensionField, "6, 2")
+			.addComponent(newFileNameLabel, "2, 2, right, default")
+			.build();
 	}
 	
-	private class RenamePanel extends JPanel {
-		
-		/**
-		 * 
-		 */
-		private static final long serialVersionUID = 1L;
-
-		public RenamePanel() {
-			super();
-			setLayout(new FormLayout(new ColumnSpec[] {
-					FormFactory.RELATED_GAP_COLSPEC,
-					FormFactory.DEFAULT_COLSPEC,
-					FormFactory.RELATED_GAP_COLSPEC,
-					ColumnSpec.decode("pref:grow"),
-					FormFactory.RELATED_GAP_COLSPEC,
-					FormFactory.DEFAULT_COLSPEC,
-					FormFactory.RELATED_GAP_COLSPEC,},
-				new RowSpec[] {
-					FormFactory.RELATED_GAP_ROWSPEC,
-					FormFactory.DEFAULT_ROWSPEC,
-					FormFactory.RELATED_GAP_ROWSPEC,}));
-			
-			JLabel newFileNameLabel = new JLabel(formScannerModel.getTranslationFor(FormScannerTranslationKeys.RENAME_FILE_FRAME_LABEL) + ": ");
-			add(newFileNameLabel, "2, 2, right, default");
-			
-			fileNameField = new FileNameField();		
-			add(fileNameField, "4, 2, fill, default");
-			
-			fileExtensionField = new JLabel();
-			add(fileExtensionField, "6, 2");
-		}
-	}
+	private JPanel getButtonPanel() {
+		okButton = new ButtonBuilder()
+			.withText(formScannerModel.getTranslationFor(FormScannerTranslationKeys.OK_BUTTON))
+			.setEnabled(false)
+			.withActionCommand(FormScannerConstants.RENAME_FILE_CURRENT)
+			.withActionListener(renameFileController)
+			.build();
 	
-	private class OKButton extends JButton {
+		cancelButton = new ButtonBuilder()
+			.withText(formScannerModel.getTranslationFor(FormScannerTranslationKeys.CANCEL_BUTTON))
+			.withActionCommand(FormScannerConstants.RENAME_FILE_SKIP)
+			.withActionListener(renameFileController)
+			.build();
 		
-		/**
-		 * 
-		 */
-		private static final long serialVersionUID = 1L;
-
-		public OKButton() {
-			super(formScannerModel.getTranslationFor(FormScannerTranslationKeys.OK_BUTTON));
-			setEnabled(false);
-			setActionCommand(FormScannerConstants.RENAME_FILE_CURRENT);
-			addActionListener(renameFileController);
-		}
-	}
-	
-	private class CancelButton extends JButton {
-		
-		/**
-		 * 
-		 */
-		private static final long serialVersionUID = 1L;
-
-		public CancelButton() {
-			super(formScannerModel.getTranslationFor(FormScannerTranslationKeys.CANCEL_BUTTON));
-			setActionCommand(FormScannerConstants.RENAME_FILE_SKIP);
-			addActionListener(renameFileController);
-		}
-	}
-	
-	private class FileNameField extends JTextField {
-		
-		/**
-		 * 
-		 */
-		private static final long serialVersionUID = 1L;
-
-		public FileNameField() {
-			super();
-			setColumns(10);
-			addKeyListener(renameFileController);
-		}		
+		return new PanelBuilder()
+			.withFormLayout(FormScannerGridLayouts.buttonsLayout())
+			.addComponent(okButton , "2, 2, right, default")
+			.addComponent(cancelButton, "4, 2, right, default")
+			.build();
 	}
 }

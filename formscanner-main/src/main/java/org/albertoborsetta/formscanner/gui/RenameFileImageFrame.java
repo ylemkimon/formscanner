@@ -1,6 +1,7 @@
 package org.albertoborsetta.formscanner.gui;
 
 import org.albertoborsetta.formscanner.commons.FormScannerConstants;
+import org.albertoborsetta.formscanner.commons.FormScannerFont;
 import org.albertoborsetta.formscanner.commons.translation.FormScannerTranslationKeys;
 import org.albertoborsetta.formscanner.controller.InternalFrameController;
 import org.albertoborsetta.formscanner.controller.RenameImageController;
@@ -59,6 +60,21 @@ public class RenameFileImageFrame extends JInternalFrame {
 		updateRenamedFile(file.getName());
 	}
 	
+	public void updateImage(File file) {
+		imagePanel.setImage(file);
+		update(getGraphics());
+		updateRenamedFile(file.getName());
+	}
+	
+	public void setScrollBars(int deltaX, int deltaY) {
+		scrollPane.setScrollBars(deltaX, deltaY);
+	}
+	
+	public void setImageCursor(int moveCursor) {
+		Cursor cursor = Cursor.getPredefinedCursor(moveCursor);
+		scrollPane.setCursor(cursor);
+	}
+	
 	private class ImageScrollPane extends JScrollPane {
 		
 		/**
@@ -91,6 +107,7 @@ public class RenameFileImageFrame extends JInternalFrame {
 		public ImagePanel(File file) {
 			super();
 			setImage(file);
+			setFont(FormScannerFont.getFont());
 		}
 		
 		@Override
@@ -110,20 +127,5 @@ public class RenameFileImageFrame extends JInternalFrame {
 	
 	private void updateRenamedFile(String fileName) {
 		setTitle(formScannerModel.getTranslationFor(FormScannerTranslationKeys.RENAME_FILE_FRAME_TITLE) + ": " + fileName);
-	}
-	
-	public void updateImage(File file) {
-		imagePanel.setImage(file);
-		update(getGraphics());
-		updateRenamedFile(file.getName());
-	}
-	
-	public void setScrollBars(int deltaX, int deltaY) {
-		scrollPane.setScrollBars(deltaX, deltaY);
-	}
-	
-	public void setImageCursor(int moveCursor) {
-		Cursor cursor = Cursor.getPredefinedCursor(moveCursor);
-		scrollPane.setCursor(cursor);
 	}
 }
