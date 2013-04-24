@@ -76,10 +76,17 @@ public class ZoomImageFrame extends JInternalFrame {
 		@Override
 	    public void paintComponent(Graphics g) {
 	        g.drawImage(image, 0-x, 0-y, this);
-	        g.setColor(Color.red);
-	        g.drawLine(0, 150, 400, 150);
-	        g.drawLine(200, 0, 200, 300);
+	        g.setColor(Color.white);
+	        g.fillRoundRect(198, 137, 4, 10, 2, 2);
+	        g.fillRoundRect(203, 148, 10, 4, 2, 2);
+	        g.fillRoundRect(198, 153, 4, 10, 2, 2);
+	        g.fillRoundRect(187, 148, 10, 4, 2, 2);
 	        g.setColor(Color.black);
+	        g.drawRoundRect(198, 137, 4, 10, 2, 2);
+	        g.drawRoundRect(203, 148, 10, 4, 2, 2);
+	        g.drawRoundRect(198, 153, 4, 10, 2, 2);
+	        g.drawRoundRect(187, 148, 10, 4, 2, 2);
+	        
 	    }
 		
 		public void setImage(File file) {

@@ -23,7 +23,7 @@ import java.io.File;
 import java.io.IOException;
 
 
-public class RenameFileImageFrame extends JInternalFrame {
+public class RenameFileImageFrame extends JInternalFrame implements ImageView {
 	
 	private static final long serialVersionUID = 1L;
 	
@@ -39,7 +39,7 @@ public class RenameFileImageFrame extends JInternalFrame {
 	 */
 	public RenameFileImageFrame(FormScannerModel model, File file) {
 		formScannerModel = model;
-		renameImageController = new RenameImageController();
+		renameImageController = new RenameImageController(model);
 		renameImageController.add(this);
 		internalFrameController = InternalFrameController.getInstance(model);
 		
@@ -60,18 +60,20 @@ public class RenameFileImageFrame extends JInternalFrame {
 		updateRenamedFile(file.getName());
 	}
 	
+	@Override
 	public void updateImage(File file) {
 		imagePanel.setImage(file);
 		update(getGraphics());
 		updateRenamedFile(file.getName());
 	}
 	
+	@Override
 	public void setScrollBars(int deltaX, int deltaY) {
 		scrollPane.setScrollBars(deltaX, deltaY);
 	}
 	
-	public void setImageCursor(int moveCursor) {
-		Cursor cursor = Cursor.getPredefinedCursor(moveCursor);
+	@Override
+	public void setImageCursor(Cursor cursor) {
 		scrollPane.setCursor(cursor);
 	}
 	

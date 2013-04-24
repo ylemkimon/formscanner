@@ -1,24 +1,26 @@
 package org.albertoborsetta.formscanner.controller;
 
-import java.awt.Cursor;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseMotionListener;
+import javax.swing.JInternalFrame;
 
-import javax.swing.event.MouseInputListener;
-
+import org.albertoborsetta.formscanner.gui.ImageView;
 import org.albertoborsetta.formscanner.gui.RenameFileImageFrame;
+import org.albertoborsetta.formscanner.model.FormScannerModel;
 
-public class RenameImageController implements MouseMotionListener, MouseInputListener {
+public class RenameImageController implements ImageController {
 	
+	private FormScannerModel model;
 	private RenameFileImageFrame view;
 	private int x1; 
 	private int y1;
 	
-	public RenameImageController() {
+	public RenameImageController(FormScannerModel model) {
+		this.model = model;
 	}
 	
-	public void add(RenameFileImageFrame view) {
-		this.view = view;
+	@Override
+	public void add(JInternalFrame view) {
+		this.view = (RenameFileImageFrame) view;
 	}
 
 	// MouseMotionListener
@@ -42,17 +44,16 @@ public class RenameImageController implements MouseMotionListener, MouseInputLis
 	// MouseImputListener
 	public void mouseClicked(MouseEvent e) {
 		// TODO Auto-generated method stub
-		
 	}
 
 	public void mousePressed(MouseEvent e) {
 		x1 = e.getX();
 		y1 = e.getY();
-		view.setImageCursor(Cursor.MOVE_CURSOR);
+		model.setMoveCursor(this);
 	}
 
 	public void mouseReleased(MouseEvent e) {
-		view.setImageCursor(Cursor.DEFAULT_CURSOR);
+		model.setDefaultCursor(this);
 	}
 
 	public void mouseEntered(MouseEvent e) {
@@ -63,4 +64,9 @@ public class RenameImageController implements MouseMotionListener, MouseInputLis
 		// TODO
 	}
 
+	@Override
+	public ImageView getView() {
+		// TODO Auto-generated method stub
+		return view;
+	}
 }

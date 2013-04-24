@@ -6,6 +6,7 @@ import org.albertoborsetta.formscanner.commons.configuration.FormScannerConfigur
 import org.albertoborsetta.formscanner.commons.configuration.FormScannerConfigurationKeys;
 import org.albertoborsetta.formscanner.commons.resources.FormScannerResources;
 import org.albertoborsetta.formscanner.commons.translation.FormScannerTranslation;
+import org.albertoborsetta.formscanner.controller.ImageController;
 import org.albertoborsetta.formscanner.gui.AnalyzeFileImageFrame;
 import org.albertoborsetta.formscanner.gui.FileListFrame;
 import org.albertoborsetta.formscanner.gui.FormScanner;
@@ -15,6 +16,7 @@ import org.albertoborsetta.formscanner.gui.RenameFileFrame;
 import org.albertoborsetta.formscanner.gui.RenameFileImageFrame;
 import org.albertoborsetta.formscanner.gui.ZoomImageFrame;
 
+import java.awt.Cursor;
 import java.awt.Dimension;
 import java.io.File;
 
@@ -257,5 +259,13 @@ public class FormScannerModel {
 	
 	public void drawRect(int x, int y, int width, int height) {
 		manageTemplateImageFrame.drawRect(x, y, width, height);
+	}
+	
+	public void setMoveCursor(ImageController controller) {
+		controller.getView().setImageCursor(new Cursor(Cursor.MOVE_CURSOR));
+	}
+	
+	public void setDefaultCursor(ImageController controller) {
+		controller.getView().setImageCursor(new Cursor(Cursor.MOVE_CURSOR));
 	}
 }
