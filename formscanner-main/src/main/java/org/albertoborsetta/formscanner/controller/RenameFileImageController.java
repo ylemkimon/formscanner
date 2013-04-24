@@ -7,14 +7,14 @@ import org.albertoborsetta.formscanner.gui.ImageView;
 import org.albertoborsetta.formscanner.gui.RenameFileImageFrame;
 import org.albertoborsetta.formscanner.model.FormScannerModel;
 
-public class RenameImageController implements ImageController {
+public class RenameFileImageController implements ImageController {
 	
 	private FormScannerModel model;
 	private RenameFileImageFrame view;
 	private int x1; 
 	private int y1;
 	
-	public RenameImageController(FormScannerModel model) {
+	public RenameFileImageController(FormScannerModel model) {
 		this.model = model;
 	}
 	

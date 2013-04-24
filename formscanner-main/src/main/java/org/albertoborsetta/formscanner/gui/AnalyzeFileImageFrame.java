@@ -2,7 +2,7 @@ package org.albertoborsetta.formscanner.gui;
 
 import org.albertoborsetta.formscanner.commons.FormScannerConstants;
 import org.albertoborsetta.formscanner.commons.translation.FormScannerTranslationKeys;
-import org.albertoborsetta.formscanner.controller.AnalyzeImageController;
+import org.albertoborsetta.formscanner.controller.AnalyzeFileImageController;
 import org.albertoborsetta.formscanner.controller.InternalFrameController;
 import org.albertoborsetta.formscanner.model.FormScannerModel;
 
@@ -29,7 +29,7 @@ public class AnalyzeFileImageFrame extends JInternalFrame {
 	private ImagePanel imagePanel;
 	private ImageScrollPane scrollPane;
 	private FormScannerModel formScannerModel;
-	private AnalyzeImageController analyzeImageController;
+	private AnalyzeFileImageController analyzeImageController;
 	private InternalFrameController internalFrameController;
 	
 
@@ -38,7 +38,7 @@ public class AnalyzeFileImageFrame extends JInternalFrame {
 	 */
 	public AnalyzeFileImageFrame(FormScannerModel formScannerModel, File file) {
 		this.formScannerModel = formScannerModel;
-		analyzeImageController = new AnalyzeImageController(formScannerModel);
+		analyzeImageController = new AnalyzeFileImageController(formScannerModel);
 		analyzeImageController.add(this);
 		internalFrameController = InternalFrameController.getInstance(formScannerModel);
 		addInternalFrameListener(internalFrameController);

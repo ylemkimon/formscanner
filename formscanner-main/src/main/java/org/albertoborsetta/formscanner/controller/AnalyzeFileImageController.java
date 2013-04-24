@@ -9,14 +9,14 @@ import javax.swing.event.MouseInputListener;
 import org.albertoborsetta.formscanner.gui.AnalyzeFileImageFrame;
 import org.albertoborsetta.formscanner.model.FormScannerModel;
 
-public class AnalyzeImageController implements MouseMotionListener, MouseInputListener {
+public class AnalyzeFileImageController implements MouseMotionListener, MouseInputListener {
 	
 	private FormScannerModel model;
 	private AnalyzeFileImageFrame view;
 	private int x1; 
 	private int y1;
 	
-	public AnalyzeImageController(FormScannerModel model) {
+	public AnalyzeFileImageController(FormScannerModel model) {
 		this.model = model;
 	}
 	

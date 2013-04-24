@@ -4,7 +4,7 @@ import org.albertoborsetta.formscanner.commons.FormScannerConstants;
 import org.albertoborsetta.formscanner.commons.FormScannerFont;
 import org.albertoborsetta.formscanner.commons.translation.FormScannerTranslationKeys;
 import org.albertoborsetta.formscanner.controller.InternalFrameController;
-import org.albertoborsetta.formscanner.controller.RenameImageController;
+import org.albertoborsetta.formscanner.controller.RenameFileImageController;
 import org.albertoborsetta.formscanner.model.FormScannerModel;
 
 import java.awt.Cursor;
@@ -30,7 +30,7 @@ public class RenameFileImageFrame extends JInternalFrame implements ImageView {
 	private ImagePanel imagePanel;
 	private ImageScrollPane scrollPane;
 	private FormScannerModel formScannerModel;
-	private RenameImageController renameImageController;
+	private RenameFileImageController renameImageController;
 	private InternalFrameController internalFrameController;
 	
 
@@ -39,7 +39,7 @@ public class RenameFileImageFrame extends JInternalFrame implements ImageView {
 	 */
 	public RenameFileImageFrame(FormScannerModel model, File file) {
 		formScannerModel = model;
-		renameImageController = new RenameImageController(model);
+		renameImageController = new RenameFileImageController(model);
 		renameImageController.add(this);
 		internalFrameController = InternalFrameController.getInstance(model);
 		
