@@ -279,4 +279,16 @@ public class FormScannerModel {
 	public void setScrollBars(ScrollableImageController controller, int deltaX, int deltaY) {
 		controller.getView().setScrollBars(deltaX, deltaY);
 	}
+	
+	public void setNextTab() {
+		manageTemplateFrame.setupNextTab();		
+	}
+	
+	public void setPrevTab() {
+		manageTemplateFrame.setupPrevTab();
+	}
+	
+	public void setAdvanceable() {
+		manageTemplateFrame.setAdvanceable();
+	}
 }

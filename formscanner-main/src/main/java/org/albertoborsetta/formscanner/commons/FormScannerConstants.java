@@ -25,7 +25,7 @@ public class FormScannerConstants {
 	public static final String FILE_LIST_FRAME_NAME = "FILE_LIST_FRAME_NAME";
 	public static final String ANALYZE_IMAGE_FRAME_NAME = "ANALYZE_IMAGE_FRAME_NAME";
 	public static final String MANAGE_TEMPLATE_FRAME_NAME = "MANAGE_TEMPLATE_FRAME_NAME";
-	public static final String MANAGE_TEMPLATE_IMAGE_FRAME_NAME = "MANAGE_TEMPLATE_IMAGE_FRAME";
+	public static final String MANAGE_TEMPLATE_IMAGE_FRAME_NAME = "MANAGE_TEMPLATE_IMAGE_FRAME_NAME";
 	public static final String ZOOM_IMAGE_FRAME_NAME = "ZOOM_IMAGE_FRAME_NAME";
 	
 	// GridType

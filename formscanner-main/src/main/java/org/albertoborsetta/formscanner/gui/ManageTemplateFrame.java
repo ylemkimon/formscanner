@@ -102,11 +102,58 @@ public class ManageTemplateFrame extends JInternalFrame {
 			.build();
 		getContentPane().add(tabbedPane, BorderLayout.CENTER);
 		
-		enablePropertiesPanel(false);
-		enablePositionPanel(false);
+		tabbedPane.setEnabledAt(1, false);
+		tabbedPane.setEnabledAt(2, false);
 	}
 	
-	public void setupTable() {
+	public void setupNextTab() {
+		int nextTab = 0;
+		if (tabbedPane.getSelectedIndex() < tabbedPane.getTabCount()) {
+			nextTab = tabbedPane.getSelectedIndex() + 1;
+		}	
+		
+		tabbedPane.setEnabledAt(nextTab, true);
+		tabbedPane.setSelectedIndex(nextTab);
+		
+		switch (nextTab) {
+		case 0:
+			resetSelectedValues();
+			resetTable();
+			break;
+		case 1:			
+			break;
+		case 2:
+			setupTable();
+			break;
+		default:
+			break;
+		}
+	}
+	
+	public void setupPrevTab() {
+		int prevTab = -1;
+		if (tabbedPane.getSelectedIndex() > 0) {
+			prevTab = tabbedPane.getSelectedIndex() - 1;
+		}	
+		
+		tabbedPane.setEnabledAt(prevTab, true);
+		tabbedPane.setSelectedIndex(prevTab);
+		
+		switch (prevTab) {
+		case 0:
+			resetSelectedValues();
+			break;
+		case 1:
+			resetTable();
+			break;
+		default:
+			formScannerModel.disposeRelatedFrame(this);
+			dispose();
+			break;
+		}
+	}
+	
+	private void setupTable() {
 		fieldPositionScrollPane.remove(table);
 		
 		table = createTable(((Integer) numberRowsCols.getValue())+1, ((Integer) numberValues.getValue())+1);
@@ -115,47 +162,22 @@ public class ManageTemplateFrame extends JInternalFrame {
 		table.setVisible(true);
 	}
 	
-	public void enableTemplateListPanel(boolean enabled) {
-		tabbedPane.setEnabledAt(0, enabled);
-	}
-	
-	public void enablePropertiesPanel(boolean enabled) {
-		tabbedPane.setEnabledAt(1, enabled);
-	}
-	
-	public void enablePositionPanel(boolean enabled) {
-		tabbedPane.setEnabledAt(2, enabled);
-	}
-	
-	public void setTemplateListPanel() {
-		tabbedPane.setSelectedIndex(0);
-	}
-	
-	public void setPropertiesPanel() {
-		tabbedPane.setSelectedIndex(1);
-	}
-	
-	public void setPositionPanel() {
-		tabbedPane.setSelectedIndex(2);
-	}
-	
-	public void selectField(Integer i) {
-		fieldList.setSelectedIndex(0);
-		enablePositionPanel(false);
-		enablePropertiesPanel(false);
-	}
-	
-	public void resetSelectedValues() {
+	private void resetSelectedValues() {
 		numberRowsCols.setValue(0);
 		numberValues.setValue(0);
 		typeComboBox.setSelectedIndex(0);
 	}
 	
-	public void resetTable() {
+	private void resetTable() {
 		fieldPositionScrollPane.remove(table);
 	}
 	
-	public void verifySpinnerValues() {
+	public void setAdvanceable() {
+		verifySpinnerValues();
+		okPropertiesButton.setEnabled(isAdvanceable());
+	}
+	
+	private void verifySpinnerValues() {
 		if ((Integer) numberValues.getValue()<0) {
 			numberValues.setValue(0);
 		}
@@ -164,18 +186,10 @@ public class ManageTemplateFrame extends JInternalFrame {
 		}
 	}
 	
-	public boolean verifyAdvancement() {		
+	private boolean isAdvanceable() {		
 		return (((Integer) numberValues.getValue()>0) && 
 				((Integer) numberRowsCols.getValue()>0) && 
 				(typeComboBox.getSelectedItem()!=null));
-	}
-	
-	public void setAdvancement(boolean enabled) {
-		okPropertiesButton.setEnabled(enabled);
-	}
-	
-	public Integer getCurrentTabbedPaneIndex() {
-		return tabbedPane.getSelectedIndex();
 	}
 	
 	private JTable createTable(int rows, int cols) {
