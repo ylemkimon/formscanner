@@ -1,15 +1,13 @@
 package org.albertoborsetta.formscanner.controller;
 
-import java.awt.Cursor;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseMotionListener;
-
-import javax.swing.event.MouseInputListener;
+import javax.swing.JInternalFrame;
 
 import org.albertoborsetta.formscanner.gui.AnalyzeFileImageFrame;
+import org.albertoborsetta.formscanner.gui.ScrollableImageView;
 import org.albertoborsetta.formscanner.model.FormScannerModel;
 
-public class AnalyzeFileImageController implements MouseMotionListener, MouseInputListener {
+public class AnalyzeFileImageController implements ScrollableImageController {
 	
 	private FormScannerModel model;
 	private AnalyzeFileImageFrame view;
@@ -20,8 +18,15 @@ public class AnalyzeFileImageController implements MouseMotionListener, MouseInp
 		this.model = model;
 	}
 	
-	public void add(AnalyzeFileImageFrame view) {
-		this.view = view;
+	@Override
+	public void add(JInternalFrame view) {
+		this.view = (AnalyzeFileImageFrame) view;
+		
+	}
+
+	@Override
+	public ScrollableImageView getView() {
+		return view;
 	}
 
 	// MouseMotionListener
@@ -51,11 +56,11 @@ public class AnalyzeFileImageController implements MouseMotionListener, MouseInp
 	public void mousePressed(MouseEvent e) {
 		x1 = e.getX();
 		y1 = e.getY();
-		view.setImageCursor(Cursor.MOVE_CURSOR);
+		model.setMoveCursor(this);
 	}
 
 	public void mouseReleased(MouseEvent e) {
-		view.setImageCursor(Cursor.DEFAULT_CURSOR);
+		model.setDefaultCursor(this);
 	}
 
 	public void mouseEntered(MouseEvent e) {

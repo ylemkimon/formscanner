@@ -8,14 +8,12 @@ import org.albertoborsetta.formscanner.model.FormScannerModel;
 
 import java.awt.Color;
 import java.awt.Cursor;
-import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.BorderLayout;
 import java.awt.image.BufferedImage;
 
 import javax.swing.JInternalFrame;
 import javax.swing.JPanel;
-import javax.swing.JScrollPane;
 
 import javax.imageio.ImageIO;
 
@@ -23,7 +21,7 @@ import java.io.File;
 import java.io.IOException;
 
 
-public class ManageTemplateImageFrame extends JInternalFrame {
+public class ManageTemplateImageFrame extends JInternalFrame implements ImageView {
 	
 	private static final long serialVersionUID = 1L;
 	
@@ -31,6 +29,7 @@ public class ManageTemplateImageFrame extends JInternalFrame {
 	private FormScannerModel formScannerModel;
 	private ManageTemplateImageController manageTemplateImageController;
 	private InternalFrameController internalFrameController;
+	private ZoomImageFrame zoom;
 	
 
 	/**
@@ -57,6 +56,14 @@ public class ManageTemplateImageFrame extends JInternalFrame {
 		getContentPane().add(imagePanel, BorderLayout.CENTER);
 		
 		setBounds(220, 10, imagePanel.getWidth() + 100, desktopHeight - 20);
+	}
+	
+	public void addZoom(ZoomImageFrame zoom) {
+		this.zoom = zoom;
+	} 
+	
+	public ZoomImageFrame getZoom() {
+		return zoom;
 	}
 	
 	private class ImagePanel extends JPanel {
@@ -123,16 +130,6 @@ public class ManageTemplateImageFrame extends JInternalFrame {
 		}
 	}
 	
-	public void updateImage(File file) {
-		imagePanel.setImage(file);
-		update(getGraphics());
-	}
-	
-	public void setImageCursor(int moveCursor) {
-		Cursor cursor = Cursor.getPredefinedCursor(moveCursor);
-		imagePanel.setCursor(cursor);
-	}
-	
 	public double getScaleFactor() {
 		return imagePanel.getScaleFactor();
 	}
@@ -141,8 +138,20 @@ public class ManageTemplateImageFrame extends JInternalFrame {
 		imagePanel.setScaleFactor(scaleFactor);
 	}
 	
+	@Override
+	public void updateImage(File file) {
+		imagePanel.setImage(file);
+		update(getGraphics());
+	}
+	
+	@Override
 	public void drawRect(int x, int y, int width, int height) {
 		imagePanel.setRect(x, y, width, height);
 		update(getGraphics());
+	}
+
+	@Override
+	public void setImageCursor(Cursor cursor) {
+		imagePanel.setCursor(cursor);
 	}
 }

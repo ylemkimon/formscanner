@@ -1,20 +1,19 @@
 package org.albertoborsetta.formscanner.controller;
 
-import java.awt.Cursor;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseMotionListener;
-import java.awt.event.MouseWheelEvent;
-import java.awt.event.MouseWheelListener;
 
-import javax.swing.event.MouseInputListener;
+import javax.swing.JInternalFrame;
 
+import org.albertoborsetta.formscanner.gui.ImageView;
 import org.albertoborsetta.formscanner.gui.ManageTemplateImageFrame;
+import org.albertoborsetta.formscanner.gui.ZoomImageFrame;
 import org.albertoborsetta.formscanner.model.FormScannerModel;
 
-public class ManageTemplateImageController implements MouseMotionListener, MouseInputListener {
+public class ManageTemplateImageController implements ImageController {
 	
 	private FormScannerModel model;
 	private ManageTemplateImageFrame view;
+	private ZoomImageFrame zoom;
 	private int x1;
 	private int y1;
 	private int x2; 
@@ -25,8 +24,14 @@ public class ManageTemplateImageController implements MouseMotionListener, Mouse
 		this.model = model;
 	}
 	
-	public void add(ManageTemplateImageFrame view) {
-		this.view = view;
+	@Override
+	public void add(JInternalFrame view) {
+		this.view = (ManageTemplateImageFrame) view;
+	}
+
+	@Override
+	public ImageView getView() {
+		return view;
 	}
 
 	// MouseMotionListener
@@ -42,15 +47,15 @@ public class ManageTemplateImageController implements MouseMotionListener, Mouse
 		int x = (int) Math.round(x2 / scaleFactor);
 		int y = (int) Math.round(y2 / scaleFactor);
 		
-		model.showZoom(x, y);				
-		view.drawRect(x1, y1, deltaX, deltaY);
+		model.showZoom(view.getZoom(), x, y);				
+		model.drawRect(this, x1, y1, deltaX, deltaY);
 	}
 
 	public void mouseMoved(MouseEvent e) {
 		scaleFactor = view.getScaleFactor();
 		int x = (int) Math.round(e.getX() / scaleFactor);
 		int y = (int) Math.round(e.getY() / scaleFactor);
-		model.showZoom(x, y);
+		model.showZoom(view.getZoom(), x, y);
 	}
 
 	// MouseImputListener
@@ -70,10 +75,10 @@ public class ManageTemplateImageController implements MouseMotionListener, Mouse
 	}
 
 	public void mouseEntered(MouseEvent e) {
-		view.setImageCursor(Cursor.CROSSHAIR_CURSOR);
+		model.setCrossCursor(this);
 	}
 
 	public void mouseExited(MouseEvent e) {
-		view.setImageCursor(Cursor.DEFAULT_CURSOR);
+		model.setDefaultCursor(this);
 	}
 }

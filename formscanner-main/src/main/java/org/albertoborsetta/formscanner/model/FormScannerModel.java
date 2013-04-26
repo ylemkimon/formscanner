@@ -7,6 +7,7 @@ import org.albertoborsetta.formscanner.commons.configuration.FormScannerConfigur
 import org.albertoborsetta.formscanner.commons.resources.FormScannerResources;
 import org.albertoborsetta.formscanner.commons.translation.FormScannerTranslation;
 import org.albertoborsetta.formscanner.controller.ImageController;
+import org.albertoborsetta.formscanner.controller.ScrollableImageController;
 import org.albertoborsetta.formscanner.gui.AnalyzeFileImageFrame;
 import org.albertoborsetta.formscanner.gui.FileListFrame;
 import org.albertoborsetta.formscanner.gui.FormScanner;
@@ -247,18 +248,20 @@ public class FormScannerModel {
 			manageTemplateFrame = new ManageTemplateFrame(this, template.getName());
 			manageTemplateImageFrame = new ManageTemplateImageFrame(this, template);
 			zoomImageFrame = new ZoomImageFrame(this, template);
+			manageTemplateImageFrame.addZoom(zoomImageFrame);
+			
 			view.arrangeFrame(manageTemplateFrame);
 			view.arrangeFrame(manageTemplateImageFrame);
 			view.arrangeFrame(zoomImageFrame);
 		}
 	}
 	
-	public void showZoom(int x, int y) {
-		zoomImageFrame.showImage(x, y);
+	public void showZoom(ZoomImageFrame view, int x, int y) {
+		view.showImage(x, y);
 	}
 	
-	public void drawRect(int x, int y, int width, int height) {
-		manageTemplateImageFrame.drawRect(x, y, width, height);
+	public void drawRect(ImageController controller, int x, int y, int width, int height) {
+		controller.getView().drawRect(x, y, width, height);
 	}
 	
 	public void setMoveCursor(ImageController controller) {
@@ -267,5 +270,13 @@ public class FormScannerModel {
 	
 	public void setDefaultCursor(ImageController controller) {
 		controller.getView().setImageCursor(new Cursor(Cursor.MOVE_CURSOR));
+	}
+	
+	public void setCrossCursor(ImageController controller) {
+		controller.getView().setImageCursor(new Cursor(Cursor.CROSSHAIR_CURSOR));
+	}
+	
+	public void setScrollBars(ScrollableImageController controller, int deltaX, int deltaY) {
+		controller.getView().setScrollBars(deltaX, deltaY);
 	}
 }

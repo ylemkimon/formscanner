@@ -23,7 +23,7 @@ import java.io.File;
 import java.io.IOException;
 
 
-public class RenameFileImageFrame extends JInternalFrame implements ImageView {
+public class RenameFileImageFrame extends JInternalFrame implements ScrollableImageView {
 	
 	private static final long serialVersionUID = 1L;
 	
@@ -129,5 +129,10 @@ public class RenameFileImageFrame extends JInternalFrame implements ImageView {
 	
 	private void updateRenamedFile(String fileName) {
 		setTitle(formScannerModel.getTranslationFor(FormScannerTranslationKeys.RENAME_FILE_FRAME_TITLE) + ": " + fileName);
+	}
+
+	@Override
+	public void drawRect(int x, int y, int width, int height) {
+		// TODO Auto-generated method stub
 	}
 }

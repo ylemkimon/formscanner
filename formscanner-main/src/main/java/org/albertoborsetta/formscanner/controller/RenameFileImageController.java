@@ -3,11 +3,11 @@ package org.albertoborsetta.formscanner.controller;
 import java.awt.event.MouseEvent;
 import javax.swing.JInternalFrame;
 
-import org.albertoborsetta.formscanner.gui.ImageView;
 import org.albertoborsetta.formscanner.gui.RenameFileImageFrame;
+import org.albertoborsetta.formscanner.gui.ScrollableImageView;
 import org.albertoborsetta.formscanner.model.FormScannerModel;
 
-public class RenameFileImageController implements ImageController {
+public class RenameFileImageController implements ScrollableImageController {
 	
 	private FormScannerModel model;
 	private RenameFileImageFrame view;
@@ -65,8 +65,7 @@ public class RenameFileImageController implements ImageController {
 	}
 
 	@Override
-	public ImageView getView() {
-		// TODO Auto-generated method stub
+	public ScrollableImageView getView() {
 		return view;
 	}
 }

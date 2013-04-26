@@ -22,7 +22,7 @@ import java.io.File;
 import java.io.IOException;
 
 
-public class AnalyzeFileImageFrame extends JInternalFrame {
+public class AnalyzeFileImageFrame extends JInternalFrame implements ScrollableImageView {
 	
 	private static final long serialVersionUID = 1L;
 	
@@ -123,17 +123,24 @@ public class AnalyzeFileImageFrame extends JInternalFrame {
 		}
 	}
 	
+	@Override
 	public void updateImage(File file) {
 		imagePanel.setImage(file);
 		update(getGraphics());
 	}
 	
+	@Override
 	public void setScrollBars(int deltaX, int deltaY) {
 		scrollPane.setScrollBars(deltaX, deltaY);
 	}
-	
-	public void setImageCursor(int moveCursor) {
-		Cursor cursor = Cursor.getPredefinedCursor(moveCursor);
+
+	@Override
+	public void setImageCursor(Cursor cursor) {
 		scrollPane.setCursor(cursor);
+	}
+
+	@Override
+	public void drawRect(int x, int y, int width, int height) {
+		// TODO Auto-generated method stub		
 	}
 }
