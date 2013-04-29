@@ -14,7 +14,7 @@ import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
 import javax.swing.table.TableModel;
 
-import org.albertoborsetta.formscanner.controller.InternalFrameController;
+import org.albertoborsetta.formscanner.gui.controller.InternalFrameController;
 import org.albertoborsetta.formscanner.model.FormScannerModel;
 
 public class AnalyzeFileResultsFrame extends JInternalFrame {

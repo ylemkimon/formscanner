@@ -6,15 +6,16 @@ import org.albertoborsetta.formscanner.commons.configuration.FormScannerConfigur
 import org.albertoborsetta.formscanner.commons.configuration.FormScannerConfigurationKeys;
 import org.albertoborsetta.formscanner.commons.resources.FormScannerResources;
 import org.albertoborsetta.formscanner.commons.translation.FormScannerTranslation;
-import org.albertoborsetta.formscanner.controller.ImageController;
-import org.albertoborsetta.formscanner.controller.ScrollableImageController;
 import org.albertoborsetta.formscanner.gui.AnalyzeFileImageFrame;
 import org.albertoborsetta.formscanner.gui.FileListFrame;
 import org.albertoborsetta.formscanner.gui.FormScanner;
+import org.albertoborsetta.formscanner.gui.ImageView;
 import org.albertoborsetta.formscanner.gui.ManageTemplateFrame;
 import org.albertoborsetta.formscanner.gui.ManageTemplateImageFrame;
 import org.albertoborsetta.formscanner.gui.RenameFileFrame;
 import org.albertoborsetta.formscanner.gui.RenameFileImageFrame;
+import org.albertoborsetta.formscanner.gui.ScrollableImageView;
+import org.albertoborsetta.formscanner.gui.TabbedView;
 import org.albertoborsetta.formscanner.gui.ZoomImageFrame;
 
 import java.awt.Cursor;
@@ -260,35 +261,35 @@ public class FormScannerModel {
 		view.showImage(x, y);
 	}
 	
-	public void drawRect(ImageController controller, int x, int y, int width, int height) {
-		controller.getView().drawRect(x, y, width, height);
+	public void drawRect(ImageView view, int x, int y, int width, int height) {
+		view.drawRect(x, y, width, height);
 	}
 	
-	public void setMoveCursor(ImageController controller) {
-		controller.getView().setImageCursor(new Cursor(Cursor.MOVE_CURSOR));
+	public void setMoveCursor(ImageView view) {
+		view.setImageCursor(new Cursor(Cursor.MOVE_CURSOR));
 	}
 	
-	public void setDefaultCursor(ImageController controller) {
-		controller.getView().setImageCursor(new Cursor(Cursor.MOVE_CURSOR));
+	public void setDefaultCursor(ImageView view) {
+		view.setImageCursor(new Cursor(Cursor.MOVE_CURSOR));
 	}
 	
-	public void setCrossCursor(ImageController controller) {
-		controller.getView().setImageCursor(new Cursor(Cursor.CROSSHAIR_CURSOR));
+	public void setCrossCursor(ImageView view) {
+		view.setImageCursor(new Cursor(Cursor.CROSSHAIR_CURSOR));
 	}
 	
-	public void setScrollBars(ScrollableImageController controller, int deltaX, int deltaY) {
-		controller.getView().setScrollBars(deltaX, deltaY);
+	public void setScrollBars(ScrollableImageView view, int deltaX, int deltaY) {
+		view.setScrollBars(deltaX, deltaY);
 	}
 	
-	public void setNextTab() {
-		manageTemplateFrame.setupNextTab();		
+	public void setNextTab(TabbedView view) {
+		view.setupNextTab();		
 	}
 	
-	public void setPrevTab() {
-		manageTemplateFrame.setupPrevTab();
+	public void setPrevTab(TabbedView view) {
+		view.setupPrevTab();
 	}
 	
-	public void setAdvanceable() {
-		manageTemplateFrame.setAdvanceable();
+	public void setAdvanceable(TabbedView view) {
+		view.setAdvanceable();
 	}
 }

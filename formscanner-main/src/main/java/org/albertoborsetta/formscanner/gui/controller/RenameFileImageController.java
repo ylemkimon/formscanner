@@ -1,13 +1,15 @@
-package org.albertoborsetta.formscanner.controller;
+package org.albertoborsetta.formscanner.gui.controller;
 
 import java.awt.event.MouseEvent;
+import java.awt.event.MouseMotionListener;
+
 import javax.swing.JInternalFrame;
+import javax.swing.event.MouseInputListener;
 
 import org.albertoborsetta.formscanner.gui.RenameFileImageFrame;
-import org.albertoborsetta.formscanner.gui.ScrollableImageView;
 import org.albertoborsetta.formscanner.model.FormScannerModel;
 
-public class RenameFileImageController implements ScrollableImageController {
+public class RenameFileImageController implements Controller, MouseMotionListener, MouseInputListener {
 	
 	private FormScannerModel model;
 	private RenameFileImageFrame view;
@@ -49,11 +51,11 @@ public class RenameFileImageController implements ScrollableImageController {
 	public void mousePressed(MouseEvent e) {
 		x1 = e.getX();
 		y1 = e.getY();
-		model.setMoveCursor(this);
+		model.setMoveCursor(view);
 	}
 
 	public void mouseReleased(MouseEvent e) {
-		model.setDefaultCursor(this);
+		model.setDefaultCursor(view);
 	}
 
 	public void mouseEntered(MouseEvent e) {
@@ -62,10 +64,5 @@ public class RenameFileImageController implements ScrollableImageController {
 
 	public void mouseExited(MouseEvent e) {
 		// TODO
-	}
-
-	@Override
-	public ScrollableImageView getView() {
-		return view;
 	}
 }

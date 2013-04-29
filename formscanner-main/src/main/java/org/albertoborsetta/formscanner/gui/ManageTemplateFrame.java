@@ -27,8 +27,6 @@ import org.albertoborsetta.formscanner.commons.FormScannerConstants;
 import org.albertoborsetta.formscanner.commons.FormScannerGridLayouts;
 import org.albertoborsetta.formscanner.commons.resources.FormScannerResourcesKeys;
 import org.albertoborsetta.formscanner.commons.translation.FormScannerTranslationKeys;
-import org.albertoborsetta.formscanner.controller.InternalFrameController;
-import org.albertoborsetta.formscanner.controller.ManageTemplateController;
 import org.albertoborsetta.formscanner.gui.builder.ButtonBuilder;
 import org.albertoborsetta.formscanner.gui.builder.ComboBoxBuilder;
 import org.albertoborsetta.formscanner.gui.builder.LabelBuilder;
@@ -37,9 +35,11 @@ import org.albertoborsetta.formscanner.gui.builder.PanelBuilder;
 import org.albertoborsetta.formscanner.gui.builder.SpinnerBuilder;
 import org.albertoborsetta.formscanner.gui.builder.TabbedPaneBuilder;
 import org.albertoborsetta.formscanner.gui.builder.ScrollPaneBuilder;
+import org.albertoborsetta.formscanner.gui.controller.InternalFrameController;
+import org.albertoborsetta.formscanner.gui.controller.ManageTemplateController;
 import org.albertoborsetta.formscanner.model.FormScannerModel;
 
-public class ManageTemplateFrame extends JInternalFrame {
+public class ManageTemplateFrame extends JInternalFrame implements TabbedView {
 	/**
 	 * 
 	 */

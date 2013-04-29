@@ -21,21 +21,21 @@ public class Field {
         ch = st.nextToken().charAt(0);
         String typestr = st.nextToken();
         if(typestr.equalsIgnoreCase("row")) {
-            type = FormScannerConstants.ROW_CHOICE;
+            // type = FormScannerConstants.ROW_CHOICE;
         } else if(typestr.equalsIgnoreCase("column")) {
-            type = FormScannerConstants.COLUMN_CHOICE;
+            // type = FormScannerConstants.COLUMN_CHOICE;
         } else if(typestr.equalsIgnoreCase("grid")) {
-            type = FormScannerConstants.GRID_CHOICE;
+            // type = FormScannerConstants.GRID_CHOICE;
         }
         String subtypestr = st.nextToken();
         if(subtypestr.equalsIgnoreCase("single")) {
-            subtype = FormScannerConstants.SINGLE;
+            // subtype = FormScannerConstants.SINGLE;
         } else if(subtypestr.equalsIgnoreCase("multiple")) {
-            subtype = FormScannerConstants.MULTIPLE;
+            // subtype = FormScannerConstants.MULTIPLE;
         } else if(subtypestr.equalsIgnoreCase("column")) {
-            subtype = FormScannerConstants.COLUMN;
+            // subtype = FormScannerConstants.COLUMN;
         } else if(subtypestr.equalsIgnoreCase("row")) {
-            subtype = FormScannerConstants.ROW;
+            // subtype = FormScannerConstants.ROW;
         }
         name = st.nextToken();
         ArrayList<String> choicearr = new ArrayList<String>();
@@ -46,6 +46,7 @@ public class Field {
         for(int i = 0; i < choicearr.size(); i++) {
             choices[i] = (String)(choicearr.get(i));
         }
+        /*
         if(type != FormScannerConstants.GRID_CHOICE) {
             values = new String[choices.length];
             singleDone = null;
@@ -53,6 +54,7 @@ public class Field {
             values = new String[100];
             singleDone = new boolean[100];
         }
+        */
         positions = new Hashtable<Integer, Integer>();
     }
     
@@ -78,6 +80,7 @@ public class Field {
 
     int currpos = 0;
     public void addPos(int i) {
+    	/*
         if(type == FormScannerConstants.ROW_CHOICE) {
             positions.put(new Integer(i), new Integer(currpos++));
         } else if(type == FormScannerConstants.COLUMN_CHOICE) {
@@ -89,18 +92,23 @@ public class Field {
             System.out.println("addpos -- " + i + ":" + currpos);
             positions.put(new Integer(i), new Integer(currpos++));
         }
+        */
     }
     
     public String getValue(int i) {
+    	return null;
+    	/*
         if(type ==FormScannerConstants.GRID_CHOICE && subtype == FormScannerConstants.COLUMN) {
             int mod = currpos / choices.length;
             return choices[((Integer)(positions.get(new Integer(i)))).intValue() / mod];
         } else {
             return choices[((Integer)(positions.get(new Integer(i)))).intValue()];
         }
+        */
     }
 
     public void putValue(int i) {
+    	/*
         if(type == FormScannerConstants.GRID_CHOICE && subtype == FormScannerConstants.COLUMN) {
             int posi = ((Integer)(positions.get(new Integer(i)))).intValue();
             System.out.println("currpos = " + currpos + ":" + choices.length + ":" + i + ":" + posi + ":" + (posi % (currpos / choices.length)) + ":" + singleDone[posi % (currpos / choices.length)]);
@@ -117,9 +125,12 @@ public class Field {
         } else {
             values[numValues++] = getValue(i);
         }
+        */
     }
     
     public String getFieldValues() {
+    	return null;
+    	/*
         if(subtype == FormScannerConstants.SINGLE) {
             return values[0];
         }
@@ -146,5 +157,6 @@ public class Field {
             }
         }
         return "";
+        */
     }
 }

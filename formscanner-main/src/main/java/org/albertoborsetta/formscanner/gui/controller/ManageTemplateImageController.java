@@ -1,22 +1,21 @@
-package org.albertoborsetta.formscanner.controller;
+package org.albertoborsetta.formscanner.gui.controller;
 
 import java.awt.event.MouseEvent;
+import java.awt.event.MouseMotionListener;
 
 import javax.swing.JInternalFrame;
+import javax.swing.event.MouseInputListener;
 
-import org.albertoborsetta.formscanner.gui.ImageView;
 import org.albertoborsetta.formscanner.gui.ManageTemplateImageFrame;
-import org.albertoborsetta.formscanner.gui.ZoomImageFrame;
 import org.albertoborsetta.formscanner.model.FormScannerModel;
 
-public class ManageTemplateImageController implements ImageController {
+public class ManageTemplateImageController implements Controller, MouseMotionListener, MouseInputListener {
 	
 	private FormScannerModel model;
 	private ManageTemplateImageFrame view;
-	private ZoomImageFrame zoom;
 	private int x1;
 	private int y1;
-	private int x2; 
+	private int x2;
 	private int y2;
 	private double scaleFactor;
 	
@@ -29,17 +28,12 @@ public class ManageTemplateImageController implements ImageController {
 		this.view = (ManageTemplateImageFrame) view;
 	}
 
-	@Override
-	public ImageView getView() {
-		return view;
-	}
-
 	// MouseMotionListener
 	public void mouseDragged(MouseEvent e) {
 		scaleFactor = view.getScaleFactor();
 		
-		int x2 = e.getX();
-		int y2 = e.getY();
+		x2 = e.getX();
+		y2 = e.getY();
 		
 		int deltaX = x2 - x1;
 		int deltaY = y2 - y1;
@@ -48,7 +42,7 @@ public class ManageTemplateImageController implements ImageController {
 		int y = (int) Math.round(y2 / scaleFactor);
 		
 		model.showZoom(view.getZoom(), x, y);				
-		model.drawRect(this, x1, y1, deltaX, deltaY);
+		model.drawRect(view, x1, y1, deltaX, deltaY);
 	}
 
 	public void mouseMoved(MouseEvent e) {
@@ -75,10 +69,10 @@ public class ManageTemplateImageController implements ImageController {
 	}
 
 	public void mouseEntered(MouseEvent e) {
-		model.setCrossCursor(this);
+		model.setCrossCursor(view);
 	}
 
 	public void mouseExited(MouseEvent e) {
-		model.setDefaultCursor(this);
+		model.setDefaultCursor(view);
 	}
 }

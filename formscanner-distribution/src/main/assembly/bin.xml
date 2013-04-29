@@ -51,6 +51,15 @@
 						<includes>
 							<include>*.sh</include>
 							<include>*.bat</include>
+							<include>*.ico</include>
+						</includes>
+					</fileSet>
+					<fileSet>
+						<outputDirectory>/</outputDirectory>
+						<directory>src/main/resources</directory>
+						<includes>
+							<include>*.sh</include>
+							<include>*.bat</include>
 						</includes>
 					</fileSet>
 				</fileSets>

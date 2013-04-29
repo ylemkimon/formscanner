@@ -3,7 +3,7 @@ package org.albertoborsetta.formscanner.gui;
 import javax.swing.JLabel;
 import javax.swing.border.BevelBorder;
 
-public class StatusBar extends JLabel {
+public class StatusBar extends JLabel implements View {
 	
 	private static final long serialVersionUID = 1L;
 	

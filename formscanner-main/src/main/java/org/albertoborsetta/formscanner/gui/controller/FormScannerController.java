@@ -1,15 +1,10 @@
-package org.albertoborsetta.formscanner.controller;
+package org.albertoborsetta.formscanner.gui.controller;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.File;
-
-import javax.swing.JFileChooser;
-import javax.swing.filechooser.FileNameExtensionFilter;
 
 import org.albertoborsetta.formscanner.commons.FileOpener;
 import org.albertoborsetta.formscanner.commons.FormScannerConstants;
-import org.albertoborsetta.formscanner.commons.FormScannerFont;
 import org.albertoborsetta.formscanner.commons.FormScannerConstants.Actions;
 import org.albertoborsetta.formscanner.model.FormScannerModel;
 

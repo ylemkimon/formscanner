@@ -11,12 +11,12 @@ import javax.swing.KeyStroke;
 
 import org.albertoborsetta.formscanner.commons.FormScannerConstants;
 import org.albertoborsetta.formscanner.commons.translation.FormScannerTranslationKeys;
-import org.albertoborsetta.formscanner.controller.FormScannerController;
 import org.albertoborsetta.formscanner.gui.builder.MenuBuilder;
 import org.albertoborsetta.formscanner.gui.builder.MenuItemBuilder;
+import org.albertoborsetta.formscanner.gui.controller.FormScannerController;
 import org.albertoborsetta.formscanner.model.FormScannerModel;
 
-public class MenuBar extends JMenuBar {
+public class MenuBar extends JMenuBar implements MenuView {
 	
 	private static final long serialVersionUID = 1L;
 	
@@ -113,7 +113,14 @@ public class MenuBar extends JMenuBar {
 		// add(useTemplateMenuItem);
 	}
 	
+	@Override
 	public void setRenameControllersEnabled(boolean enable) {
 		renameMenuItem.setEnabled(enable);
+	}
+
+	@Override
+	public void setScanControllersEnabled(boolean enable) {
+		// TODO Auto-generated method stub
+		
 	}
 }

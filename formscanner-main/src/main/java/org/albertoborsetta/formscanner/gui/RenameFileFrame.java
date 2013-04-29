@@ -3,12 +3,12 @@ package org.albertoborsetta.formscanner.gui;
 import org.albertoborsetta.formscanner.commons.FormScannerConstants;
 import org.albertoborsetta.formscanner.commons.FormScannerGridLayouts;
 import org.albertoborsetta.formscanner.commons.translation.FormScannerTranslationKeys;
-import org.albertoborsetta.formscanner.controller.RenameFileController;
-import org.albertoborsetta.formscanner.controller.InternalFrameController;
 import org.albertoborsetta.formscanner.gui.builder.ButtonBuilder;
 import org.albertoborsetta.formscanner.gui.builder.LabelBuilder;
 import org.albertoborsetta.formscanner.gui.builder.PanelBuilder;
 import org.albertoborsetta.formscanner.gui.builder.TextFieldBuilder;
+import org.albertoborsetta.formscanner.gui.controller.InternalFrameController;
+import org.albertoborsetta.formscanner.gui.controller.RenameFileController;
 import org.albertoborsetta.formscanner.model.FormScannerModel;
 
 import org.apache.commons.io.FilenameUtils;
@@ -21,7 +21,7 @@ import javax.swing.JButton;
 
 import java.awt.BorderLayout;
 
-public class RenameFileFrame extends JInternalFrame {
+public class RenameFileFrame extends JInternalFrame implements View {
 
 	private static final long serialVersionUID = 1L;
 	

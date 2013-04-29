@@ -1,6 +1,5 @@
 package org.albertoborsetta.formscanner.gui.builder;
 
-import java.awt.Component;
 import java.awt.ComponentOrientation;
 
 import javax.swing.JComponent;

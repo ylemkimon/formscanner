@@ -3,7 +3,7 @@ package org.albertoborsetta.formscanner.gui;
 import java.awt.Cursor;
 import java.io.File;
 
-public interface ImageView {
+public interface ImageView extends View {
 	
 	public void updateImage(File file);	
 	public void setImageCursor(Cursor cursor);

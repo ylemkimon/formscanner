@@ -1,4 +1,4 @@
-package org.albertoborsetta.formscanner.controller;
+package org.albertoborsetta.formscanner.gui.controller;
 
 import javax.swing.event.InternalFrameEvent;
 import javax.swing.event.InternalFrameListener;

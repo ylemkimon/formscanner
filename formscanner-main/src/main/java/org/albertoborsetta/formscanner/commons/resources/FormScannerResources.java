@@ -2,19 +2,12 @@ package org.albertoborsetta.formscanner.commons.resources;
 
 import javax.swing.ImageIcon;
 
-import org.albertoborsetta.formscanner.gui.FormScanner;
-
 public class FormScannerResources {
-	
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
 	
 	private static FormScannerResources resources = null;
 	private static String iconsPath;
 	private static String templatePath;
-	private static String template;
+	private String template;
 
 	private FormScannerResources(String path) {
 		iconsPath = path + "/icons/";

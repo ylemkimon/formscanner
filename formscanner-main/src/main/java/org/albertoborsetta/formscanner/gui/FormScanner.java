@@ -30,7 +30,8 @@ public class FormScanner extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {				
 				try {					
-					FormScanner window = new FormScanner();					
+					FormScanner window = new FormScanner();
+					window.setIconImage(null);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}

@@ -2,8 +2,8 @@ package org.albertoborsetta.formscanner.gui;
 
 import org.albertoborsetta.formscanner.commons.FormScannerConstants;
 import org.albertoborsetta.formscanner.commons.translation.FormScannerTranslationKeys;
-import org.albertoborsetta.formscanner.controller.ManageTemplateImageController;
-import org.albertoborsetta.formscanner.controller.InternalFrameController;
+import org.albertoborsetta.formscanner.gui.controller.InternalFrameController;
+import org.albertoborsetta.formscanner.gui.controller.ManageTemplateImageController;
 import org.albertoborsetta.formscanner.model.FormScannerModel;
 
 import java.awt.Color;

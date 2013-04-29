@@ -1,8 +1,9 @@
-package org.albertoborsetta.formscanner.controller;
+package org.albertoborsetta.formscanner.gui.controller;
 
 import org.albertoborsetta.formscanner.commons.FormScannerConstants;
 import org.albertoborsetta.formscanner.commons.FormScannerConstants.Actions;
 import org.albertoborsetta.formscanner.gui.RenameFileFrame;
+import org.albertoborsetta.formscanner.gui.View;
 import org.albertoborsetta.formscanner.model.FormScannerModel;
 
 import java.awt.event.ActionEvent;
@@ -10,7 +11,9 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
-public class RenameFileController implements KeyListener, ActionListener {
+import javax.swing.JInternalFrame;
+
+public class RenameFileController implements Controller, KeyListener, ActionListener {
 	
 	private FormScannerModel model;
 	private RenameFileFrame view;
@@ -19,8 +22,9 @@ public class RenameFileController implements KeyListener, ActionListener {
 		this.model = model;
 	}
 	
-	public void add(RenameFileFrame view) {
-		this.view = view;
+	@Override
+	public void add(JInternalFrame view) {
+		this.view = (RenameFileFrame) view;		
 	}
 
 	// KeyListener	

@@ -12,12 +12,12 @@ import javax.swing.border.EtchedBorder;
 import org.albertoborsetta.formscanner.commons.FormScannerConstants;
 import org.albertoborsetta.formscanner.commons.resources.FormScannerResourcesKeys;
 import org.albertoborsetta.formscanner.commons.translation.FormScannerTranslationKeys;
-import org.albertoborsetta.formscanner.controller.FormScannerController;
 import org.albertoborsetta.formscanner.gui.builder.ButtonBuilder;
 import org.albertoborsetta.formscanner.gui.builder.ToolBarBuilder;
+import org.albertoborsetta.formscanner.gui.controller.FormScannerController;
 import org.albertoborsetta.formscanner.model.FormScannerModel;
 
-public class ToolBar extends JPanel {
+public class ToolBar extends JPanel implements MenuView{
 
 	private static final long serialVersionUID = 1L;
 	

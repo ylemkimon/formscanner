@@ -2,13 +2,11 @@ package org.albertoborsetta.formscanner.gui;
 
 import org.albertoborsetta.formscanner.commons.FormScannerConstants;
 import org.albertoborsetta.formscanner.commons.translation.FormScannerTranslationKeys;
-import org.albertoborsetta.formscanner.controller.ManageTemplateImageController;
-import org.albertoborsetta.formscanner.controller.InternalFrameController;
+import org.albertoborsetta.formscanner.gui.controller.InternalFrameController;
 import org.albertoborsetta.formscanner.model.FormScannerModel;
 
 import java.awt.Color;
 import java.awt.Cursor;
-import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.BorderLayout;
 import java.awt.image.BufferedImage;
@@ -27,8 +25,6 @@ public class ZoomImageFrame extends JInternalFrame {
 	private static final long serialVersionUID = 1L;
 	
 	private ImagePanel imagePanel;
-	private FormScannerModel formScannerModel;
-	private ManageTemplateImageController templateImageController;
 	private InternalFrameController internalFrameController;
 	
 
@@ -36,9 +32,6 @@ public class ZoomImageFrame extends JInternalFrame {
 	 * Create the frame.
 	 */
 	public ZoomImageFrame(FormScannerModel formScannerModel, File file) {
-		this.formScannerModel = formScannerModel;
-		// templateImageController = new ManageTemplateImageController(formScannerModel);
-		// templateImageController.add(this);
 		internalFrameController = InternalFrameController.getInstance(formScannerModel);
 		addInternalFrameListener(internalFrameController);
 		

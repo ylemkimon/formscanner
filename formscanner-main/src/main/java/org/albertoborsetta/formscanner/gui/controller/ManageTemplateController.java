@@ -1,10 +1,11 @@
-package org.albertoborsetta.formscanner.controller;
+package org.albertoborsetta.formscanner.gui.controller;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 
+import javax.swing.JInternalFrame;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
@@ -12,7 +13,7 @@ import org.albertoborsetta.formscanner.commons.FormScannerConstants.Actions;
 import org.albertoborsetta.formscanner.gui.ManageTemplateFrame;
 import org.albertoborsetta.formscanner.model.FormScannerModel;
 
-public class ManageTemplateController implements ActionListener, ChangeListener, ItemListener {
+public class ManageTemplateController implements Controller, ActionListener, ChangeListener, ItemListener {
 	
 	private FormScannerModel formScannerModel;
 	private ManageTemplateFrame view;
@@ -21,8 +22,9 @@ public class ManageTemplateController implements ActionListener, ChangeListener,
 		this.formScannerModel = model;
 	}
 	
-	public void add(ManageTemplateFrame view) {
-		this.view = view;
+	@Override
+	public void add(JInternalFrame view) {
+		this.view = (ManageTemplateFrame) view;		
 	}
 
 	@Override
@@ -30,17 +32,17 @@ public class ManageTemplateController implements ActionListener, ChangeListener,
 		Actions act = Actions.valueOf(e.getActionCommand());
 		switch (act) {
 		case ADD_FIELD:
-			formScannerModel.setNextTab();
+			formScannerModel.setNextTab(view);
 			break;
 		case REMOVE_FIELD:
 			break;
 		case SAVE_TEMPLATE:
 			break;
 		case CONFIRM:
-			formScannerModel.setNextTab();
+			formScannerModel.setNextTab(view);
 			break;
 		case CANCEL:
-			formScannerModel.setPrevTab();
+			formScannerModel.setPrevTab(view);
 			break;
 		default:
 			break;
@@ -50,11 +52,11 @@ public class ManageTemplateController implements ActionListener, ChangeListener,
 
 	@Override
 	public void stateChanged(ChangeEvent e) {
-		formScannerModel.setAdvanceable();
+		formScannerModel.setAdvanceable(view);
 	}
 
 	@Override
 	public void itemStateChanged(ItemEvent e) {
-		formScannerModel.setAdvanceable();		
+		formScannerModel.setAdvanceable(view);		
 	}
 }
