@@ -75,14 +75,13 @@ public class ManageTemplateImageFrame extends JInternalFrame implements ImageVie
 		private int rectY = 0;
 		private int rectWidth = 0;
 		private int rectHeight = 0;
+		private BufferedImage image;
 		
 		
 		/**
 		 * 
 		 */
 		private static final long serialVersionUID = 1L;
-		
-		private BufferedImage image;
 		
 		public ImagePanel(File file) {
 			super();
