@@ -110,6 +110,7 @@ public class RenameFileImageFrame extends JInternalFrame implements ScrollableIm
 			super();
 			setImage(file);
 			setFont(FormScannerFont.getFont());
+			addMouseWheelListener(renameImageController);
 		}
 		
 		@Override
@@ -134,5 +135,16 @@ public class RenameFileImageFrame extends JInternalFrame implements ScrollableIm
 	@Override
 	public void drawRect(int x, int y, int width, int height) {
 		// TODO Auto-generated method stub
+	}
+
+	@Override
+	public void zoomImage(double zoom) {
+		// TODO Auto-generated method stub		
+	}
+
+	@Override
+	public double getScaleFactor() {
+		// TODO Auto-generated method stub
+		return 0;
 	}
 }

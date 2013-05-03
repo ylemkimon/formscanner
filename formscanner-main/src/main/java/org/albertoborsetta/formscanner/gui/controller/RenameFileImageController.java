@@ -2,6 +2,8 @@ package org.albertoborsetta.formscanner.gui.controller;
 
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionListener;
+import java.awt.event.MouseWheelEvent;
+import java.awt.event.MouseWheelListener;
 
 import javax.swing.JInternalFrame;
 import javax.swing.event.MouseInputListener;
@@ -9,7 +11,7 @@ import javax.swing.event.MouseInputListener;
 import org.albertoborsetta.formscanner.gui.RenameFileImageFrame;
 import org.albertoborsetta.formscanner.model.FormScannerModel;
 
-public class RenameFileImageController implements Controller, MouseMotionListener, MouseInputListener {
+public class RenameFileImageController implements Controller, MouseMotionListener, MouseInputListener, MouseWheelListener {
 	
 	private FormScannerModel model;
 	private RenameFileImageFrame view;
@@ -36,7 +38,7 @@ public class RenameFileImageController implements Controller, MouseMotionListene
 		x1 = x2;
 		y1 = y2;
 		
-		view.setScrollBars(deltaX, deltaY);
+		model.setScrollBars(view, deltaX, deltaY);
 	}
 
 	public void mouseMoved(MouseEvent e) {
@@ -64,5 +66,10 @@ public class RenameFileImageController implements Controller, MouseMotionListene
 
 	public void mouseExited(MouseEvent e) {
 		// TODO
+	}
+
+	@Override
+	public void mouseWheelMoved(MouseWheelEvent e) {
+		// TODO Auto-generated method stub
 	}
 }

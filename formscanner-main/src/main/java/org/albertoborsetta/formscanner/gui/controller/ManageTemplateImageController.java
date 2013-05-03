@@ -1,7 +1,10 @@
 package org.albertoborsetta.formscanner.gui.controller;
 
+import java.awt.Point;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionListener;
+import java.awt.event.MouseWheelEvent;
+import java.awt.event.MouseWheelListener;
 
 import javax.swing.JInternalFrame;
 import javax.swing.event.MouseInputListener;
@@ -9,15 +12,15 @@ import javax.swing.event.MouseInputListener;
 import org.albertoborsetta.formscanner.gui.ManageTemplateImageFrame;
 import org.albertoborsetta.formscanner.model.FormScannerModel;
 
-public class ManageTemplateImageController implements Controller, MouseMotionListener, MouseInputListener {
+public class ManageTemplateImageController implements Controller, MouseMotionListener, MouseInputListener, MouseWheelListener {
 	
 	private FormScannerModel model;
 	private ManageTemplateImageFrame view;
-	private int x1;
-	private int y1;
-	private int x2;
-	private int y2;
-	private double scaleFactor;
+	private Point p1;
+	private Point p2;
+	private Point p3;
+	private Point p4;
+	// private double scaleFactor;
 	
 	public ManageTemplateImageController(FormScannerModel model) {
 		this.model = model;
@@ -30,42 +33,58 @@ public class ManageTemplateImageController implements Controller, MouseMotionLis
 
 	// MouseMotionListener
 	public void mouseDragged(MouseEvent e) {
-		scaleFactor = view.getScaleFactor();
-		
-		x2 = e.getX();
-		y2 = e.getY();
-		
-		int deltaX = x2 - x1;
-		int deltaY = y2 - y1;
-		
-		int x = (int) Math.round(x2 / scaleFactor);
-		int y = (int) Math.round(y2 / scaleFactor);
-		
-		model.showZoom(view.getZoom(), x, y);				
-		model.drawRect(view, x1, y1, deltaX, deltaY);
+		System.out.println(e.getButton());
+		switch (e.getButton()) {
+		case MouseEvent.BUTTON1:
+			if (p1==null) {
+				p1 = e.getPoint();
+				model.drawRect(view, p1.x-5, p1.y-5, 10, 10);
+			} else {
+				p2 = e.getPoint();				
+				model.drawRect(view, p2.x-5, p2.y-5, 10, 10);
+			}
+			break;
+		case MouseEvent.BUTTON2:
+			p4 = e.getPoint();
+			
+			int deltaX = p3.x - p4.x;
+			int deltaY = p3.y - p4.y;
+			
+			p3 = p4;
+			
+			model.setScrollBars(view, deltaX, deltaY);
+			break;
+		default:
+			break;
+		}		
 	}
 
 	public void mouseMoved(MouseEvent e) {
-		scaleFactor = view.getScaleFactor();
-		int x = (int) Math.round(e.getX() / scaleFactor);
-		int y = (int) Math.round(e.getY() / scaleFactor);
-		model.showZoom(view.getZoom(), x, y);
 	}
 
 	// MouseImputListener
 	public void mouseClicked(MouseEvent e) {
-		// TODO Auto-generated method stub
-		
 	}
 
 	public void mousePressed(MouseEvent e) {
-		x1 = e.getX();
-		y1 = e.getY();
+		switch (e.getButton()) {
+		case MouseEvent.BUTTON2:
+			p3 = e.getPoint();
+			model.setMoveCursor(view);
+			break;
+		default:
+			break;
+		}
 	}
 
 	public void mouseReleased(MouseEvent e) {
-		x2 = e.getX();
-		y2 = e.getY();
+		switch (e.getButton()) {
+		case MouseEvent.BUTTON2:
+			model.setCrossCursor(view);
+			break;
+		default:
+			break;
+		}
 	}
 
 	public void mouseEntered(MouseEvent e) {
@@ -74,5 +93,10 @@ public class ManageTemplateImageController implements Controller, MouseMotionLis
 
 	public void mouseExited(MouseEvent e) {
 		model.setDefaultCursor(view);
+	}
+
+	@Override
+	public void mouseWheelMoved(MouseWheelEvent e) {
+		model.zoomImage(view, e.getWheelRotation());
 	}
 }

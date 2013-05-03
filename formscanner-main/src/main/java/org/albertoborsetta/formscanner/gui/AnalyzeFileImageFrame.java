@@ -143,4 +143,15 @@ public class AnalyzeFileImageFrame extends JInternalFrame implements ScrollableI
 	public void drawRect(int x, int y, int width, int height) {
 		// TODO Auto-generated method stub		
 	}
+
+	@Override
+	public void zoomImage(double zoom) {
+		// TODO Auto-generated method stub
+	}
+
+	@Override
+	public double getScaleFactor() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
 }

@@ -1,6 +1,7 @@
 package org.albertoborsetta.formscanner.gui;
 
 import org.albertoborsetta.formscanner.commons.FormScannerConstants;
+import org.albertoborsetta.formscanner.commons.FormScannerFont;
 import org.albertoborsetta.formscanner.commons.translation.FormScannerTranslationKeys;
 import org.albertoborsetta.formscanner.gui.controller.InternalFrameController;
 import org.albertoborsetta.formscanner.gui.controller.ManageTemplateImageController;
@@ -8,12 +9,14 @@ import org.albertoborsetta.formscanner.model.FormScannerModel;
 
 import java.awt.Color;
 import java.awt.Cursor;
+import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.BorderLayout;
 import java.awt.image.BufferedImage;
 
 import javax.swing.JInternalFrame;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 
 import javax.imageio.ImageIO;
 
@@ -21,12 +24,13 @@ import java.io.File;
 import java.io.IOException;
 
 
-public class ManageTemplateImageFrame extends JInternalFrame implements ImageView {
+public class ManageTemplateImageFrame extends JInternalFrame implements ScrollableImageView {
 	
 	private static final long serialVersionUID = 1L;
 	
 	private ImagePanel imagePanel;
 	private FormScannerModel formScannerModel;
+	private ImageScrollPane scrollPane;
 	private ManageTemplateImageController manageTemplateImageController;
 	private InternalFrameController internalFrameController;
 	private ZoomImageFrame zoom;
@@ -42,7 +46,8 @@ public class ManageTemplateImageFrame extends JInternalFrame implements ImageVie
 		internalFrameController = InternalFrameController.getInstance(formScannerModel);
 		addInternalFrameListener(internalFrameController);
 		
-		int desktopHeight = formScannerModel.getDesktopSize().height;	
+		int desktopHeight = formScannerModel.getDesktopSize().height;
+		int desktopWidth = formScannerModel.getDesktopSize().width;
 		
 		setClosable(true);
 		setIconifiable(true);
@@ -52,10 +57,11 @@ public class ManageTemplateImageFrame extends JInternalFrame implements ImageVie
 		setName(FormScannerConstants.MANAGE_TEMPLATE_IMAGE_FRAME_NAME);	
 		setTitle(formScannerModel.getTranslationFor(FormScannerTranslationKeys.MANAGE_TEMPLATE_FRAME_TITLE));					
 		
-		imagePanel = new ImagePanel(file);
-		getContentPane().add(imagePanel, BorderLayout.CENTER);
+		setBounds(320, 10, desktopWidth - 500, desktopHeight - 20);
 		
-		setBounds(220, 10, imagePanel.getWidth() + 100, desktopHeight - 20);
+		imagePanel = new ImagePanel(file);
+		scrollPane = new ImageScrollPane(imagePanel);
+		getContentPane().add(scrollPane, BorderLayout.CENTER);
 	}
 	
 	public void addZoom(ZoomImageFrame zoom) {
@@ -66,11 +72,34 @@ public class ManageTemplateImageFrame extends JInternalFrame implements ImageVie
 		return zoom;
 	}
 	
+	private class ImageScrollPane extends JScrollPane {
+		
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = 1L;
+
+		public ImageScrollPane(JPanel imagePanel) {
+			super(imagePanel);
+			verticalScrollBar.setValue(0);
+			horizontalScrollBar.setValue(0);
+			setWheelScrollingEnabled(false);
+			addMouseMotionListener(manageTemplateImageController);
+			addMouseListener(manageTemplateImageController);
+			addMouseWheelListener(manageTemplateImageController);
+		}
+		
+		public void setScrollBars(int deltaX, int deltaY) {
+			horizontalScrollBar.setValue(horizontalScrollBar.getValue() + deltaX);
+			verticalScrollBar.setValue(verticalScrollBar.getValue() + deltaY);			
+		}
+	}
+	
 	private class ImagePanel extends JPanel {
 		
 		private int width;
 		private int height;
-		private double scaleFactor;
+		private double scaleFactor = 1;
 		private int rectX = 0;
 		private int rectY = 0;
 		private int rectWidth = 0;
@@ -86,20 +115,20 @@ public class ManageTemplateImageFrame extends JInternalFrame implements ImageVie
 		public ImagePanel(File file) {
 			super();
 			setImage(file);
-			scaleFactor = (formScannerModel.getDesktopSize().height - 100) / (double) image.getHeight();
-			width = (int) Math.floor(image.getWidth() * scaleFactor);
-			height = (int) Math.floor(image.getHeight() * scaleFactor);
-			addMouseMotionListener(manageTemplateImageController);
-			addMouseListener(manageTemplateImageController);
+			setFont(FormScannerFont.getFont());
+			scaleFactor = 1;
 		}
 		
 		@Override
 	    public void paintComponent(Graphics g) {
-	        g.drawImage(image, 0, 0, width, height, this);
-	        g.setColor(Color.green);
+			width = (int) Math.floor(image.getWidth() * scaleFactor);
+			height = (int) Math.floor(image.getHeight() * scaleFactor);
+			setPreferredSize(new Dimension(width, height));
+			g.drawImage(image, 0, 0, width, height, this);
+			g.setColor(Color.green);
 	        g.drawRect(rectX, rectY, rectWidth, rectHeight);
 	        g.setColor(Color.black);
-	    }
+	    } 
 		
 		public void setImage(File file) {
 			try {		
@@ -109,10 +138,6 @@ public class ManageTemplateImageFrame extends JInternalFrame implements ImageVie
 			}
 		}
 		
-		public int getWidth() {
-			return width;
-		}
-		
 		public double getScaleFactor() {
 			return scaleFactor;
 		}
@@ -120,26 +145,18 @@ public class ManageTemplateImageFrame extends JInternalFrame implements ImageVie
 		public void setScaleFactor(double scaleFactor) {
 			this.scaleFactor = scaleFactor;
 		}
-
+		
 		public void setRect(int rectX, int rectY, int rectWidth, int rectHeight) {
 			this.rectWidth = rectWidth;
 			this.rectHeight = rectHeight;
 			this.rectX = rectX;
 			this.rectY = rectY;
 		}
-	}
-	
-	public double getScaleFactor() {
-		return imagePanel.getScaleFactor();
-	}
-	
-	public void setScaleFactor(double scaleFactor) {
-		imagePanel.setScaleFactor(scaleFactor);
+		
 	}
 	
 	@Override
 	public void updateImage(File file) {
-		imagePanel.setImage(file);
 		update(getGraphics());
 	}
 	
@@ -152,5 +169,21 @@ public class ManageTemplateImageFrame extends JInternalFrame implements ImageVie
 	@Override
 	public void setImageCursor(Cursor cursor) {
 		imagePanel.setCursor(cursor);
+	}
+
+	@Override
+	public void setScrollBars(int deltaX, int deltaY) {
+		scrollPane.setScrollBars(deltaX, deltaY);
+	}
+	
+	@Override
+	public void zoomImage(double zoom) {
+		imagePanel.setScaleFactor(imagePanel.getScaleFactor() + zoom);
+		update(getGraphics());
+	}
+
+	@Override
+	public double getScaleFactor() {
+		return imagePanel.getScaleFactor();
 	}
 }

@@ -217,11 +217,11 @@ public class FormScannerModel {
 			break;
 		case MANAGE_TEMPLATE_FRAME_NAME:
 			view.disposeFrame(manageTemplateImageFrame);
-			view.disposeFrame(zoomImageFrame);
+			// view.disposeFrame(zoomImageFrame);
 			break;
 		case MANAGE_TEMPLATE_IMAGE_FRAME_NAME:
 			view.disposeFrame(manageTemplateFrame);
-			view.disposeFrame(zoomImageFrame);
+			// view.disposeFrame(zoomImageFrame);
 			break;			
 		default:
 			break;
@@ -248,15 +248,20 @@ public class FormScannerModel {
 			this.template= template; 
 			manageTemplateFrame = new ManageTemplateFrame(this, template.getName());
 			manageTemplateImageFrame = new ManageTemplateImageFrame(this, template);
-			zoomImageFrame = new ZoomImageFrame(this, template);
-			manageTemplateImageFrame.addZoom(zoomImageFrame);
+			// zoomImageFrame = new ZoomImageFrame(this, template);
+			// manageTemplateImageFrame.addZoom(zoomImageFrame);
 			
 			view.arrangeFrame(manageTemplateFrame);
 			view.arrangeFrame(manageTemplateImageFrame);
-			view.arrangeFrame(zoomImageFrame);
+			// view.arrangeFrame(zoomImageFrame);
 		}
 	}
-	
+
+	public void zoomImage(ScrollableImageView view, int direction) {
+		if (direction>0 || ((direction<0) && (view.getScaleFactor()>0.4))) {
+			view.zoomImage((double)direction/5);
+		}
+	}
 	public void showZoom(ZoomImageFrame view, int x, int y) {
 		view.showImage(x, y);
 	}
@@ -270,7 +275,7 @@ public class FormScannerModel {
 	}
 	
 	public void setDefaultCursor(ImageView view) {
-		view.setImageCursor(new Cursor(Cursor.MOVE_CURSOR));
+		view.setImageCursor(new Cursor(Cursor.DEFAULT_CURSOR));
 	}
 	
 	public void setCrossCursor(ImageView view) {
