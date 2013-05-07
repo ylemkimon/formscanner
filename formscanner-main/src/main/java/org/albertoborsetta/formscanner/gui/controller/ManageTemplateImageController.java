@@ -26,7 +26,6 @@ public class ManageTemplateImageController implements MouseMotionListener, Mouse
 		this.model = model;
 	}
 	
-	@Override
 	public void add(ManageTemplateImageFrame view) {
 		this.view = view;
 	}

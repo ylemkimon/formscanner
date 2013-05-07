@@ -74,9 +74,4 @@ public class FormScannerTranslationKeys {
 	public static final String QUESTIONS_BY_COLS = "questions.by.cols";
 	
 	public static final String ZOOM_IMAGE_FRAME_TITLE = "zoom.image.frame.title";
-	
-	public static final String DEFAULT_CURSOR_TOOLTIP = "default.cursor.button.tooltip";
-	public static final String MOVE_CURSOR_TOOLTIP = "move.cursor.button.tooltip";
-	public static final String SELECT_CURSOR_TOOLTIP = "select.cursor.button.tooltip";
-	public static final String ZOOM_CURSOR_TOOLTIP = "zoom.cursor.button.tooltip";
 }

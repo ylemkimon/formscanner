@@ -22,7 +22,6 @@ public class RenameFileImageController implements MouseMotionListener, MouseInpu
 		this.model = model;
 	}
 	
-	@Override
 	public void add(RenameFileImageFrame view) {
 		this.view = view;
 	}
