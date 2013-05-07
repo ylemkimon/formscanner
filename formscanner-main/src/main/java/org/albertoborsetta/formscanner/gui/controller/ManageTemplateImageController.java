@@ -12,7 +12,7 @@ import javax.swing.event.MouseInputListener;
 import org.albertoborsetta.formscanner.gui.ManageTemplateImageFrame;
 import org.albertoborsetta.formscanner.model.FormScannerModel;
 
-public class ManageTemplateImageController implements Controller, MouseMotionListener, MouseInputListener, MouseWheelListener {
+public class ManageTemplateImageController implements MouseMotionListener, MouseInputListener, MouseWheelListener {
 	
 	private FormScannerModel model;
 	private ManageTemplateImageFrame view;
@@ -27,8 +27,8 @@ public class ManageTemplateImageController implements Controller, MouseMotionLis
 	}
 	
 	@Override
-	public void add(JInternalFrame view) {
-		this.view = (ManageTemplateImageFrame) view;
+	public void add(ManageTemplateImageFrame view) {
+		this.view = view;
 	}
 
 	// MouseMotionListener

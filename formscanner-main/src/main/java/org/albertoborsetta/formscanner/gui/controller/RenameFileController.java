@@ -13,7 +13,7 @@ import java.awt.event.KeyListener;
 
 import javax.swing.JInternalFrame;
 
-public class RenameFileController implements Controller, KeyListener, ActionListener {
+public class RenameFileController implements KeyListener, ActionListener {
 	
 	private FormScannerModel model;
 	private RenameFileFrame view;
@@ -22,9 +22,8 @@ public class RenameFileController implements Controller, KeyListener, ActionList
 		this.model = model;
 	}
 	
-	@Override
-	public void add(JInternalFrame view) {
-		this.view = (RenameFileFrame) view;		
+	public void add(RenameFileFrame view) {
+		this.view = view;		
 	}
 
 	// KeyListener	

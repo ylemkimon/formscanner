@@ -38,7 +38,7 @@ public class ManageTemplateImageFrame extends JInternalFrame implements Scrollab
 
 	/**
 	 * Create the frame.
-	 */
+	 */	
 	public ManageTemplateImageFrame(FormScannerModel formScannerModel, File file) {
 		this.formScannerModel = formScannerModel;
 		manageTemplateImageController = new ManageTemplateImageController(formScannerModel);

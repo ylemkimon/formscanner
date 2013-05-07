@@ -11,7 +11,7 @@ import javax.swing.event.MouseInputListener;
 import org.albertoborsetta.formscanner.gui.RenameFileImageFrame;
 import org.albertoborsetta.formscanner.model.FormScannerModel;
 
-public class RenameFileImageController implements Controller, MouseMotionListener, MouseInputListener, MouseWheelListener {
+public class RenameFileImageController implements MouseMotionListener, MouseInputListener, MouseWheelListener {
 	
 	private FormScannerModel model;
 	private RenameFileImageFrame view;
@@ -23,8 +23,8 @@ public class RenameFileImageController implements Controller, MouseMotionListene
 	}
 	
 	@Override
-	public void add(JInternalFrame view) {
-		this.view = (RenameFileImageFrame) view;
+	public void add(RenameFileImageFrame view) {
+		this.view = view;
 	}
 
 	// MouseMotionListener

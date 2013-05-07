@@ -38,8 +38,22 @@ public class FormScannerController implements ActionListener {
 			break;
 		case ANALYZE_FILE_FIRST:
 			model.analyzeFiles(FormScannerConstants.ANALYZE_FILE_FIRST);
+			break;
 		case LOAD_TEMPLATE:
 			model.loadTemplate(fileOpener.chooseImage());
+			break;
+		case DEFAULT_CURSOR:
+			model.setDefaultCursor();
+			break;
+		case MOVE_CURSOR:
+			model.setMoveCursor();
+			break;
+		case SELECT_CURSOR:
+			model.setCrossCursor();
+			break;
+		case ZOOM_CURSOR:
+			model.setZoomCursor();
+			break;
 		default:
 			break;
 		}

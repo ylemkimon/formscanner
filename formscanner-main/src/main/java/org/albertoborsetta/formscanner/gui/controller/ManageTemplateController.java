@@ -13,7 +13,7 @@ import org.albertoborsetta.formscanner.commons.FormScannerConstants.Actions;
 import org.albertoborsetta.formscanner.gui.ManageTemplateFrame;
 import org.albertoborsetta.formscanner.model.FormScannerModel;
 
-public class ManageTemplateController implements Controller, ActionListener, ChangeListener, ItemListener {
+public class ManageTemplateController implements ActionListener, ChangeListener, ItemListener {
 	
 	private FormScannerModel formScannerModel;
 	private ManageTemplateFrame view;
@@ -22,9 +22,8 @@ public class ManageTemplateController implements Controller, ActionListener, Cha
 		this.formScannerModel = model;
 	}
 	
-	@Override
-	public void add(JInternalFrame view) {
-		this.view = (ManageTemplateFrame) view;		
+	public void add(ManageTemplateFrame view) {
+		this.view = view;		
 	}
 
 	@Override

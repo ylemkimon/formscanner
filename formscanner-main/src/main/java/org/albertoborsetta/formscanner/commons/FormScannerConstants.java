@@ -18,6 +18,10 @@ public class FormScannerConstants {
 	public static final String REMOVE_FIELD = "REMOVE_TEMPLATE";
 	public static final String ADD_FIELD = "ADD_FIELD";
 	public static final String EXIT = "EXIT";	
+	public static final String DEFAULT_CURSOR = "DEFAULT_CURSOR";
+	public static final String MOVE_CURSOR = "MOVE_CURSOR";
+	public static final String SELECT_CURSOR = "SELECT_CURSOR"; 
+	public static final String ZOOM_CURSOR = "ZOOM_CURSOR";
 
 	// Frames
 	public static final String RENAME_FILE_FRAME_NAME = "RENAME_FILE_FRAME_NAME";
@@ -64,6 +68,10 @@ public class FormScannerConstants {
 		SAVE_TEMPLATE,
 		REMOVE_FIELD,
 		ADD_FIELD,
+		DEFAULT_CURSOR,
+		MOVE_CURSOR,
+		SELECT_CURSOR, 
+		ZOOM_CURSOR,
 		EXIT
 	  }
 	

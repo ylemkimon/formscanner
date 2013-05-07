@@ -10,7 +10,7 @@ import org.albertoborsetta.formscanner.gui.AnalyzeFileImageFrame;
 import org.albertoborsetta.formscanner.gui.ScrollableImageView;
 import org.albertoborsetta.formscanner.model.FormScannerModel;
 
-public class AnalyzeFileImageController implements Controller, MouseMotionListener, MouseInputListener {
+public class AnalyzeFileImageController implements MouseMotionListener, MouseInputListener {
 	
 	private FormScannerModel model;
 	private AnalyzeFileImageFrame view;
@@ -21,9 +21,8 @@ public class AnalyzeFileImageController implements Controller, MouseMotionListen
 		this.model = model;
 	}
 	
-	@Override
-	public void add(JInternalFrame view) {
-		this.view = (AnalyzeFileImageFrame) view;
+	public void add(AnalyzeFileImageFrame view) {
+		this.view = view;
 		
 	}
 
