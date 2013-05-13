@@ -4,6 +4,8 @@ public class FormScannerTranslationKeys {
 	/*
 	 * Translation keys 
 	 */
+	
+	public static final String IMAGE_FRAME_TITLE = "image.frame.title";
 	public static final String OPEN_IMAGES = "open.images";
 	public static final String OPEN_IMAGES_MNEMONIC = "open.images.mnemonic";
 	public static final String OPEN_IMAGES_TOOLTIP = "open.images.tooltip";
@@ -72,6 +74,4 @@ public class FormScannerTranslationKeys {
 	
 	public static final String QUESTIONS_BY_ROWS = "questions.by.rows";
 	public static final String QUESTIONS_BY_COLS = "questions.by.cols";
-	
-	public static final String ZOOM_IMAGE_FRAME_TITLE = "zoom.image.frame.title";
 }

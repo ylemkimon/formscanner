@@ -5,7 +5,7 @@ import java.awt.event.ActionListener;
 
 import org.albertoborsetta.formscanner.commons.FileOpener;
 import org.albertoborsetta.formscanner.commons.FormScannerConstants;
-import org.albertoborsetta.formscanner.commons.FormScannerConstants.Actions;
+import org.albertoborsetta.formscanner.commons.FormScannerConstants.Action;
 import org.albertoborsetta.formscanner.model.FormScannerModel;
 
 public class FormScannerController implements ActionListener {
@@ -25,7 +25,7 @@ public class FormScannerController implements ActionListener {
 	}
 	
 	public void actionPerformed(ActionEvent e) {		
-		Actions act = Actions.valueOf(e.getActionCommand());
+		Action act = Action.valueOf(e.getActionCommand());
 		FileOpener fileOpener = FileOpener.getInstance();
 		switch (act) {
 		case RENAME_FILE_FIRST:

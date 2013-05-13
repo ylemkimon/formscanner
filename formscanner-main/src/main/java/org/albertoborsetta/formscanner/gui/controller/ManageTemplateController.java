@@ -5,11 +5,10 @@ import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 
-import javax.swing.JInternalFrame;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-import org.albertoborsetta.formscanner.commons.FormScannerConstants.Actions;
+import org.albertoborsetta.formscanner.commons.FormScannerConstants.Action;
 import org.albertoborsetta.formscanner.gui.ManageTemplateFrame;
 import org.albertoborsetta.formscanner.model.FormScannerModel;
 
@@ -28,7 +27,7 @@ public class ManageTemplateController implements ActionListener, ChangeListener,
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		Actions act = Actions.valueOf(e.getActionCommand());
+		Action act = Action.valueOf(e.getActionCommand());
 		switch (act) {
 		case ADD_FIELD:
 			formScannerModel.setNextTab(view);

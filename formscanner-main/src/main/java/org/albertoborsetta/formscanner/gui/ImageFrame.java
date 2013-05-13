@@ -1,10 +1,11 @@
 package org.albertoborsetta.formscanner.gui;
 
 import org.albertoborsetta.formscanner.commons.FormScannerConstants;
+import org.albertoborsetta.formscanner.commons.FormScannerConstants.Mode;
 import org.albertoborsetta.formscanner.commons.FormScannerFont;
 import org.albertoborsetta.formscanner.commons.translation.FormScannerTranslationKeys;
 import org.albertoborsetta.formscanner.gui.controller.InternalFrameController;
-import org.albertoborsetta.formscanner.gui.controller.ManageTemplateImageController;
+import org.albertoborsetta.formscanner.gui.controller.ImageFrameController;
 import org.albertoborsetta.formscanner.model.FormScannerModel;
 
 import java.awt.Color;
@@ -12,6 +13,7 @@ import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.BorderLayout;
+import java.awt.Point;
 import java.awt.image.BufferedImage;
 
 import javax.swing.JInternalFrame;
@@ -22,29 +24,31 @@ import javax.imageio.ImageIO;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 
-public class ManageTemplateImageFrame extends JInternalFrame implements ScrollableImageView {
+public class ImageFrame extends JInternalFrame implements ScrollableImageView {
 	
 	private static final long serialVersionUID = 1L;
 	
-	private ImagePanel imagePanel;
 	private FormScannerModel formScannerModel;
+	private ImagePanel imagePanel;
 	private ImageScrollPane scrollPane;
-	private ManageTemplateImageController manageTemplateImageController;
-	private InternalFrameController internalFrameController;
-	private ZoomImageFrame zoom;
+	private ImageFrameController controller;
+	private InternalFrameController frameController;
+	private Mode mode;
 	
 
 	/**
 	 * Create the frame.
 	 */	
-	public ManageTemplateImageFrame(FormScannerModel formScannerModel, File file) {
-		this.formScannerModel = formScannerModel;
-		manageTemplateImageController = new ManageTemplateImageController(formScannerModel);
-		manageTemplateImageController.add(this);
-		internalFrameController = InternalFrameController.getInstance(formScannerModel);
-		addInternalFrameListener(internalFrameController);
+	public ImageFrame(FormScannerModel model, File file, Mode mode) {
+		formScannerModel = model;
+		controller = new ImageFrameController(formScannerModel);
+		controller.add(this);
+		frameController = InternalFrameController.getInstance(formScannerModel);
+		addInternalFrameListener(frameController);
 		
 		int desktopHeight = formScannerModel.getDesktopSize().height;
 		int desktopWidth = formScannerModel.getDesktopSize().width;
@@ -54,22 +58,16 @@ public class ManageTemplateImageFrame extends JInternalFrame implements Scrollab
 		setResizable(true);
 		setMaximizable(true);
 		
-		setName(FormScannerConstants.MANAGE_TEMPLATE_IMAGE_FRAME_NAME);	
-		setTitle(formScannerModel.getTranslationFor(FormScannerTranslationKeys.MANAGE_TEMPLATE_FRAME_TITLE));					
+		setName(FormScannerConstants.IMAGE_FRAME_NAME);	
+		setTitle(model.getTranslationFor(FormScannerTranslationKeys.IMAGE_FRAME_TITLE));					
 		
 		setBounds(320, 10, desktopWidth - 500, desktopHeight - 20);
 		
 		imagePanel = new ImagePanel(file);
 		scrollPane = new ImageScrollPane(imagePanel);
 		getContentPane().add(scrollPane, BorderLayout.CENTER);
-	}
-	
-	public void addZoom(ZoomImageFrame zoom) {
-		this.zoom = zoom;
-	} 
-	
-	public ZoomImageFrame getZoom() {
-		return zoom;
+		
+		this.mode = mode;
 	}
 	
 	private class ImageScrollPane extends JScrollPane {
@@ -84,14 +82,22 @@ public class ManageTemplateImageFrame extends JInternalFrame implements Scrollab
 			verticalScrollBar.setValue(0);
 			horizontalScrollBar.setValue(0);
 			setWheelScrollingEnabled(false);
-			addMouseMotionListener(manageTemplateImageController);
-			addMouseListener(manageTemplateImageController);
-			addMouseWheelListener(manageTemplateImageController);
+			addMouseMotionListener(controller);
+			addMouseListener(controller);
+			addMouseWheelListener(controller);
 		}
 		
 		public void setScrollBars(int deltaX, int deltaY) {
 			horizontalScrollBar.setValue(horizontalScrollBar.getValue() + deltaX);
 			verticalScrollBar.setValue(verticalScrollBar.getValue() + deltaY);			
+		}
+		
+		public int getHorizontalScrollBarValue() {
+			return horizontalScrollBar.getValue();
+		}
+		
+		public int getVerticalScrollBarValue() {
+			return verticalScrollBar.getValue();
 		}
 	}
 	
@@ -100,10 +106,7 @@ public class ManageTemplateImageFrame extends JInternalFrame implements Scrollab
 		private int width;
 		private int height;
 		private double scaleFactor = 1;
-		private int rectX = 0;
-		private int rectY = 0;
-		private int rectWidth = 0;
-		private int rectHeight = 0;
+		private List<Point> points = new ArrayList<Point>();
 		private BufferedImage image;
 		
 		
@@ -125,10 +128,28 @@ public class ManageTemplateImageFrame extends JInternalFrame implements Scrollab
 			height = (int) Math.floor(image.getHeight() * scaleFactor);
 			setPreferredSize(new Dimension(width, height));
 			g.drawImage(image, 0, 0, width, height, this);
-			g.setColor(Color.green);
-	        g.drawRect(rectX, rectY, rectWidth, rectHeight);
-	        g.setColor(Color.black);
 	    } 
+		
+		public void showPoints(Graphics g) {
+			g.setColor(Color.RED);
+			for (Point p: points) {
+				Point p1 = calculatePointPosition(p);
+				g.drawLine(p1.x-5, p1.y-5, p1.x+5, p1.y+5);
+				g.drawLine(p1.x-5, p1.y+5, p1.x+5, p1.y-5);
+			}
+			g.setColor(Color.BLACK);
+		}
+		
+		private Point calculatePointPosition(Point p) {
+			int dx = scrollPane.getHorizontalScrollBarValue();
+			int dy = scrollPane.getVerticalScrollBarValue();
+			
+			int x = (int) Math.floor(((p.x-dx)*scaleFactor)+5);
+			int y = (int) Math.floor(((p.y-dy)*scaleFactor)+27);
+			
+			Point p1 = new Point(x, y);
+			return p1;
+		}
 		
 		public void setImage(File file) {
 			try {		
@@ -146,24 +167,50 @@ public class ManageTemplateImageFrame extends JInternalFrame implements Scrollab
 			this.scaleFactor = scaleFactor;
 		}
 		
-		public void setRect(int rectX, int rectY, int rectWidth, int rectHeight) {
-			this.rectWidth = rectWidth;
-			this.rectHeight = rectHeight;
-			this.rectX = rectX;
-			this.rectY = rectY;
+		public void addPoint(Point p) {
+			points.add(p);
 		}
-		
+
+		public void removePoint(Point p) {
+			points.remove(p);
+		}
+
+		public void removeAllPoints() {
+			points.clear();
+		}
+
+		public List<Point> getPoints() {
+			return points;
+		}
 	}
 	
 	@Override
 	public void updateImage(File file) {
+		imagePanel.setImage(file);
 		update(getGraphics());
 	}
 	
 	@Override
-	public void drawRect(int x, int y, int width, int height) {
-		imagePanel.setRect(x, y, width, height);
-		update(getGraphics());
+	public void addPoint(Point p) {
+		Graphics g = getGraphics();
+		imagePanel.addPoint(p);
+		update(g);
+		imagePanel.showPoints(g);
+		g.dispose();
+	}
+	
+	@Override
+	public void removePoint(Point p) {
+		Graphics g = getGraphics();		
+		imagePanel.removePoint(p);
+		update(g);
+		imagePanel.showPoints(g);
+		g.dispose();
+	}
+	
+	@Override
+	public void removeAllPoints() {
+		imagePanel.removeAllPoints();
 	}
 
 	@Override
@@ -174,16 +221,44 @@ public class ManageTemplateImageFrame extends JInternalFrame implements Scrollab
 	@Override
 	public void setScrollBars(int deltaX, int deltaY) {
 		scrollPane.setScrollBars(deltaX, deltaY);
+		Graphics g = getGraphics();
+		update(g);
+		imagePanel.showPoints(g);
+		g.dispose();
 	}
 	
 	@Override
 	public void zoomImage(double zoom) {
-		imagePanel.setScaleFactor(imagePanel.getScaleFactor() + zoom);
-		update(getGraphics());
+		double scaleFactor = imagePanel.getScaleFactor();
+		imagePanel.setScaleFactor(scaleFactor + zoom);
+		Graphics g = getGraphics();
+		update(g);
+		imagePanel.showPoints(g);
+		g.dispose();
 	}
 
 	@Override
 	public double getScaleFactor() {
 		return imagePanel.getScaleFactor();
+	}
+	
+	@Override
+	public int getHorizontalScrollbarValue() {
+		return scrollPane.getHorizontalScrollBarValue();
+	}
+	
+	@Override
+	public int getVerticalScrollbarValue() {
+		return scrollPane.getVerticalScrollBarValue();
+	}
+
+	@Override
+	public Mode getMode() {
+		return mode;
+	}
+
+	@Override
+	public List<Point> getPoints() {
+		return imagePanel.getPoints();
 	}
 }

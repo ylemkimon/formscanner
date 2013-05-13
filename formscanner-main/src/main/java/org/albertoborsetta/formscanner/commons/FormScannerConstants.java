@@ -21,12 +21,9 @@ public class FormScannerConstants {
 
 	// Frames
 	public static final String RENAME_FILE_FRAME_NAME = "RENAME_FILE_FRAME_NAME";
-	public static final String RENAME_FILE_IMAGE_FRAME_NAME = "RENAME_FILE_IMAGE_FRAME_NAME";
 	public static final String FILE_LIST_FRAME_NAME = "FILE_LIST_FRAME_NAME";
-	public static final String ANALYZE_IMAGE_FRAME_NAME = "ANALYZE_IMAGE_FRAME_NAME";
 	public static final String MANAGE_TEMPLATE_FRAME_NAME = "MANAGE_TEMPLATE_FRAME_NAME";
-	public static final String MANAGE_TEMPLATE_IMAGE_FRAME_NAME = "MANAGE_TEMPLATE_IMAGE_FRAME_NAME";
-	public static final String ZOOM_IMAGE_FRAME_NAME = "ZOOM_IMAGE_FRAME_NAME";
+	public static final String IMAGE_FRAME_NAME = "IMAGE_FRAME_NAME";
 	
 	// GridType
 	public static final String COLUMN = "COLUMN";
@@ -39,17 +36,18 @@ public class FormScannerConstants {
 	public static final String NUMBER_COLS_ROWS = "NUMBER_COLS_ROWS";
 	public static final String TYPE_COMBO_BOX = "TYPE_COMBO_BOX";
 	
-	public enum Frames {
+	// Image Mode
+	public static final String VIEW = "VIEW";
+	public static final String UPDATE = "UPDATE";
+	
+	public enum Frame {
 		RENAME_FILE_FRAME_NAME,
-		RENAME_FILE_IMAGE_FRAME_NAME,
 		FILE_LIST_FRAME_NAME,
-		ANALYZE_IMAGE_FRAME_NAME,
 		MANAGE_TEMPLATE_FRAME_NAME,
-		MANAGE_TEMPLATE_IMAGE_FRAME_NAME,
-		ZOOM_IMAGE_FRAME_NAME
+		IMAGE_FRAME_NAME
 	}
 	
-	public enum Actions {
+	public enum Action {
 		RENAME_FILE_FIRST,
 		RENAME_FILE_CURRENT,
 		RENAME_FILE_SKIP,
@@ -72,5 +70,10 @@ public class FormScannerConstants {
 		ROW,
 		GRID_ROWS,
 		GRID_COLUMNS
+	}
+	
+	public enum Mode {
+		VIEW,
+		UPDATE
 	}
 }

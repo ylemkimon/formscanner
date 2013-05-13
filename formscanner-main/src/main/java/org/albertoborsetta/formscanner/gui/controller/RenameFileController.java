@@ -1,17 +1,14 @@
 package org.albertoborsetta.formscanner.gui.controller;
 
 import org.albertoborsetta.formscanner.commons.FormScannerConstants;
-import org.albertoborsetta.formscanner.commons.FormScannerConstants.Actions;
+import org.albertoborsetta.formscanner.commons.FormScannerConstants.Action;
 import org.albertoborsetta.formscanner.gui.RenameFileFrame;
-import org.albertoborsetta.formscanner.gui.View;
 import org.albertoborsetta.formscanner.model.FormScannerModel;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-
-import javax.swing.JInternalFrame;
 
 public class RenameFileController implements KeyListener, ActionListener {
 	
@@ -48,7 +45,7 @@ public class RenameFileController implements KeyListener, ActionListener {
 
 	// ActionListener
 	public void actionPerformed(ActionEvent e) {
-		Actions act = Actions.valueOf(e.getActionCommand());
+		Action act = Action.valueOf(e.getActionCommand());
 		switch (act) {
 		case RENAME_FILE_CURRENT:
 			model.renameFiles(FormScannerConstants.RENAME_FILE_CURRENT);

@@ -6,6 +6,9 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
+import java.awt.Point;
+import java.io.File;
+import java.util.List;
 
 import javax.swing.JPanel;
 import javax.swing.JList;
@@ -25,6 +28,7 @@ import javax.swing.table.TableColumnModel;
 
 import org.albertoborsetta.formscanner.commons.FormScannerConstants;
 import org.albertoborsetta.formscanner.commons.FormScannerGridLayouts;
+import org.albertoborsetta.formscanner.commons.FormScannerConstants.Mode;
 import org.albertoborsetta.formscanner.commons.resources.FormScannerResourcesKeys;
 import org.albertoborsetta.formscanner.commons.translation.FormScannerTranslationKeys;
 import org.albertoborsetta.formscanner.gui.builder.ButtonBuilder;
@@ -53,8 +57,8 @@ public class ManageTemplateFrame extends JInternalFrame implements TabbedView {
 	private JButton saveTemplateButton;
 	private JButton cancelTemplateButton;
 
-	private JSpinner numberValues;
-	private JSpinner numberRowsCols;
+	private JSpinner valuesNumber;
+	private JSpinner rowsNumber;
 	private JComboBox typeComboBox;
 	private JButton okPropertiesButton;
 	private JButton cancelPropertiesButton;
@@ -66,11 +70,14 @@ public class ManageTemplateFrame extends JInternalFrame implements TabbedView {
 	private FormScannerModel formScannerModel;
 	private ManageTemplateController manageTemplateController;
 	private InternalFrameController internalFrameController;
+	
+	private File file;
 
 	/**
 	 * Create the frame.
 	 */
-	public ManageTemplateFrame(FormScannerModel model, String fileName) {
+	public ManageTemplateFrame(FormScannerModel model, File file) {
+		this.file = file;
 		formScannerModel = model;
 		
 		internalFrameController = InternalFrameController.getInstance(formScannerModel);
@@ -124,6 +131,7 @@ public class ManageTemplateFrame extends JInternalFrame implements TabbedView {
 			break;
 		case 2:
 			setupTable();
+			formScannerModel.createImageFrame(file, Mode.UPDATE);
 			break;
 		default:
 			break;
@@ -153,18 +161,42 @@ public class ManageTemplateFrame extends JInternalFrame implements TabbedView {
 		}
 	}
 	
+	public int getRowsNumber() {
+		return (Integer)rowsNumber.getValue();
+	}
+	
+	public int getValuesNumber() {
+		return (Integer)valuesNumber.getValue();
+	}
+	
+	public void setupTable(List<Point> points) {
+		for (int i=0; i<(Integer) rowsNumber.getValue(); i++) {
+			for (int j=0; j<(Integer) valuesNumber.getValue(); j++) {
+				int index = ((Integer)valuesNumber.getValue() * i) + j;
+				Point p = points.get(index);
+				String point = "("+p.x+","+p.y+")"; 
+				table.setValueAt(point, (i+1), (j+1));
+			}
+		}
+	}
+	
+	public void clearTable() {
+		table.selectAll();
+		table.clearSelection();
+	}
+	
 	private void setupTable() {
 		fieldPositionScrollPane.remove(table);
 		
-		table = createTable(((Integer) numberRowsCols.getValue())+1, ((Integer) numberValues.getValue())+1);
+		table = createTable(((Integer) rowsNumber.getValue())+1, ((Integer) valuesNumber.getValue())+1);
 				
 		fieldPositionScrollPane.setViewportView(table);
 		table.setVisible(true);
 	}
 	
 	private void resetSelectedValues() {
-		numberRowsCols.setValue(0);
-		numberValues.setValue(0);
+		rowsNumber.setValue(0);
+		valuesNumber.setValue(0);
 		typeComboBox.setSelectedIndex(0);
 	}
 	
@@ -178,17 +210,17 @@ public class ManageTemplateFrame extends JInternalFrame implements TabbedView {
 	}
 	
 	private void verifySpinnerValues() {
-		if ((Integer) numberValues.getValue()<0) {
-			numberValues.setValue(0);
+		if ((Integer) valuesNumber.getValue()<0) {
+			valuesNumber.setValue(0);
 		}
-		if ((Integer) numberRowsCols.getValue()<0) {
-			numberRowsCols.setValue(0);
+		if ((Integer) rowsNumber.getValue()<0) {
+			rowsNumber.setValue(0);
 		}
 	}
 	
 	private boolean isAdvanceable() {		
-		return (((Integer) numberValues.getValue()>0) && 
-				((Integer) numberRowsCols.getValue()>0) && 
+		return (((Integer) valuesNumber.getValue()>0) && 
+				((Integer) rowsNumber.getValue()>0) && 
 				(typeComboBox.getSelectedItem()!=null));
 	}
 	
@@ -313,14 +345,14 @@ public class ManageTemplateFrame extends JInternalFrame implements TabbedView {
 		JLabel lblNumberOfRowsColumns = new LabelBuilder(formScannerModel.getTranslationFor(FormScannerTranslationKeys.FIELD_PROPERTIES_N_ROW_COL_LABEL))
 			.build();
 		
-		numberRowsCols = new SpinnerBuilder(FormScannerConstants.NUMBER_COLS_ROWS)
+		rowsNumber = new SpinnerBuilder(FormScannerConstants.NUMBER_COLS_ROWS)
 			.withChangeListener(manageTemplateController)
 			.build();
 		
 		JLabel lblNumberOfValues = new LabelBuilder(formScannerModel.getTranslationFor(FormScannerTranslationKeys.FIELD_PROPERTIES_N_VALUES_LABEL))
 			.build();
 		
-		numberValues = new SpinnerBuilder(FormScannerConstants.NUMBER_VALUES)
+		valuesNumber = new SpinnerBuilder(FormScannerConstants.NUMBER_VALUES)
 			.withChangeListener(manageTemplateController)
 			.build();
 		
@@ -330,9 +362,9 @@ public class ManageTemplateFrame extends JInternalFrame implements TabbedView {
 			.addComponent(lblType, "2, 2, right, default")
 			.addComponent(typeComboBox, "4, 2, fill, default")
 			.addComponent(lblNumberOfRowsColumns, "2, 4, right, default")
-			.addComponent(numberRowsCols, "4, 4")
+			.addComponent(rowsNumber, "4, 4")
 			.addComponent(lblNumberOfValues, "2, 6, right, default")
-			.addComponent(numberValues, "4, 6")
+			.addComponent(valuesNumber, "4, 6")
 			.build();
 	}
 	
@@ -430,6 +462,5 @@ public class ManageTemplateFrame extends JInternalFrame implements TabbedView {
 			.addComponent(okPositionButton, "2, 2, right, default")
 			.addComponent(cancelPositionButton, "4, 2, right, default")
 			.build();
-	} 
-	
+	}
 }

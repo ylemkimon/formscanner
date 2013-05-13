@@ -1,25 +1,24 @@
 package org.albertoborsetta.formscanner.model;
 
-import org.albertoborsetta.formscanner.commons.FormScannerConstants.Actions;
-import org.albertoborsetta.formscanner.commons.FormScannerConstants.Frames;
+import org.albertoborsetta.formscanner.commons.FormScannerConstants.Action;
+import org.albertoborsetta.formscanner.commons.FormScannerConstants.Frame;
+import org.albertoborsetta.formscanner.commons.FormScannerConstants.Mode;
 import org.albertoborsetta.formscanner.commons.configuration.FormScannerConfiguration;
 import org.albertoborsetta.formscanner.commons.configuration.FormScannerConfigurationKeys;
 import org.albertoborsetta.formscanner.commons.resources.FormScannerResources;
 import org.albertoborsetta.formscanner.commons.translation.FormScannerTranslation;
-import org.albertoborsetta.formscanner.gui.AnalyzeFileImageFrame;
 import org.albertoborsetta.formscanner.gui.FileListFrame;
 import org.albertoborsetta.formscanner.gui.FormScanner;
 import org.albertoborsetta.formscanner.gui.ImageView;
 import org.albertoborsetta.formscanner.gui.ManageTemplateFrame;
-import org.albertoborsetta.formscanner.gui.ManageTemplateImageFrame;
+import org.albertoborsetta.formscanner.gui.ImageFrame;
 import org.albertoborsetta.formscanner.gui.RenameFileFrame;
-import org.albertoborsetta.formscanner.gui.RenameFileImageFrame;
 import org.albertoborsetta.formscanner.gui.ScrollableImageView;
 import org.albertoborsetta.formscanner.gui.TabbedView;
-import org.albertoborsetta.formscanner.gui.ZoomImageFrame;
 
 import java.awt.Cursor;
 import java.awt.Dimension;
+import java.awt.Point;
 import java.io.File;
 
 import java.util.ArrayList;
@@ -38,7 +37,6 @@ public class FormScannerModel {
 	private File template;
 	private FileListFrame fileListFrame;
 	private RenameFileFrame renameFileFrame;
-	private RenameFileImageFrame renameFileImageFrame;
 	private FormScanner view;
 	private int renamedFileIndex = 0;
 	private int analyzedFileIndex = 0;
@@ -46,11 +44,9 @@ public class FormScannerModel {
 	private FormScannerConfiguration configurations;
 	private FormScannerTranslation translations;
 	private FormScannerResources resources;
-	private AnalyzeFileImageFrame analyzeFileImageFrame;
 	// private AnalyzeFileResultsFrame analyzeFileResultsFrame;
 	private ManageTemplateFrame manageTemplateFrame;
-	private ManageTemplateImageFrame manageTemplateImageFrame;
-	private ZoomImageFrame zoomImageFrame;
+	private ImageFrame imageFrame;
     
 	public FormScannerModel(FormScanner view) {
 		this.view = view;
@@ -80,17 +76,16 @@ public class FormScannerModel {
 	}
 	
 	public void renameFiles(String action) {
-		Actions act = Actions.valueOf(action);
+		Action act = Action.valueOf(action);
 		switch (act) {
 		case RENAME_FILE_FIRST:
 			if (!openedFiles.isEmpty()) {
 				renamedFileIndex = fileListFrame.getSelectedItemIndex();
 				fileListFrame.selectFile(renamedFileIndex);
 				
-				renameFileImageFrame = new RenameFileImageFrame(this, openedFiles.get(renamedFileIndex));
-				view.arrangeFrame(renameFileImageFrame);
+				createImageFrame(openedFiles.get(renamedFileIndex), Mode.VIEW);
 				
-				renameFileFrame = new RenameFileFrame(this, getFileNameByIndex(renamedFileIndex)); 
+				renameFileFrame = new RenameFileFrame(this, getFileNameByIndex(renamedFileIndex));
 				view.arrangeFrame(renameFileFrame);
 			}			
 			break;
@@ -113,11 +108,12 @@ public class FormScannerModel {
 			}
 			
 			if (openedFiles.size()>renamedFileIndex) {
+				imageFrame.updateImage(openedFiles.get(renamedFileIndex));
 				renameFileFrame.updateRenamedFile(getFileNameByIndex(renamedFileIndex));
-				renameFileImageFrame.updateImage(openedFiles.get(renamedFileIndex));
+				view.arrangeFrame(renameFileFrame);
 			} else {
 				view.disposeFrame(renameFileFrame);
-				view.disposeFrame(renameFileImageFrame);
+				view.disposeFrame(imageFrame);
 			}
 			break;
 		default:
@@ -126,15 +122,14 @@ public class FormScannerModel {
 	}
 	
 	public void analyzeFiles(String action) {
-		Actions act = Actions.valueOf(action);
+		Action act = Action.valueOf(action);
 		switch (act) {
 		case ANALYZE_FILE_FIRST:
 			if (!openedFiles.isEmpty()) {
 				analyzedFileIndex  = fileListFrame.getSelectedItemIndex();
 				fileListFrame.selectFile(analyzedFileIndex);
 			
-				analyzeFileImageFrame = new AnalyzeFileImageFrame(this, openedFiles.get(analyzedFileIndex));
-				view.arrangeFrame(analyzeFileImageFrame);
+				createImageFrame(openedFiles.get(analyzedFileIndex), Mode.VIEW);
 				
 				// analyzeFileResultsFrame = new AnalyzeFileResultsFrame(this, partialResults, totalResults); 
 				// view.arrangeFrame(analyzeFileResultsFrame);				
@@ -154,11 +149,11 @@ public class FormScannerModel {
 			if (openedFiles.size()>analyzedFileIndex) {
 				System.out.println("Update analyze frame");
 				// analyzeFileGridFrame.updateRenamedFile(getFileNameByIndex(analyzedFileIndex));
-				analyzeFileImageFrame.updateImage(openedFiles.get(analyzedFileIndex));
+				imageFrame.updateImage(openedFiles.get(analyzedFileIndex));
 			} else {
 				System.out.println("Dispose analyze frame");
 				// view.disposeFrame(analyzeFileGridFrame);
-				view.disposeFrame(analyzeFileImageFrame);
+				view.disposeFrame(imageFrame);
 			}
 			break;
 		default:
@@ -207,21 +202,17 @@ public class FormScannerModel {
 	}
 	
 	public void disposeRelatedFrame(JInternalFrame frame) {
-		Frames frm = Frames.valueOf(frame.getName());
+		Frame frm = Frame.valueOf(frame.getName());
 		switch (frm) {
 		case RENAME_FILE_FRAME_NAME:
-			view.disposeFrame(renameFileImageFrame);
+			view.disposeFrame(imageFrame);
 			break;
-		case RENAME_FILE_IMAGE_FRAME_NAME:
+		case IMAGE_FRAME_NAME:
 			view.disposeFrame(renameFileFrame);
+			view.disposeFrame(manageTemplateFrame);
 			break;
 		case MANAGE_TEMPLATE_FRAME_NAME:
-			view.disposeFrame(manageTemplateImageFrame);
-			// view.disposeFrame(zoomImageFrame);
-			break;
-		case MANAGE_TEMPLATE_IMAGE_FRAME_NAME:
-			view.disposeFrame(manageTemplateFrame);
-			// view.disposeFrame(zoomImageFrame);
+			view.disposeFrame(imageFrame);
 			break;			
 		default:
 			break;
@@ -246,40 +237,25 @@ public class FormScannerModel {
 	public void loadTemplate(File template) {
 		if (template != null) {
 			this.template= template; 
-			manageTemplateFrame = new ManageTemplateFrame(this, template.getName());
-			manageTemplateImageFrame = new ManageTemplateImageFrame(this, template);
-			// zoomImageFrame = new ZoomImageFrame(this, template);
-			// manageTemplateImageFrame.addZoom(zoomImageFrame);
+			manageTemplateFrame = new ManageTemplateFrame(this, template);
 			
-			view.arrangeFrame(manageTemplateFrame);
-			view.arrangeFrame(manageTemplateImageFrame);
-			// view.arrangeFrame(zoomImageFrame);
+			view.arrangeFrame(manageTemplateFrame);			
 		}
 	}
 
 	public void zoomImage(ScrollableImageView view, int direction) {
-		if (direction>0 || ((direction<0) && (view.getScaleFactor()>0.4))) {
-			view.zoomImage((double)direction/5);
+		if ((direction>0 && (view.getScaleFactor()<1.5)) || ((direction<0) && (view.getScaleFactor()>0.4))) {
+			view.zoomImage((double)direction/10);
 		}
 	}
-	public void showZoom(ZoomImageFrame view, int x, int y) {
-		view.showImage(x, y);
+	
+	public void createImageFrame(File file, Mode mode) {
+		imageFrame = new ImageFrame(this, file, mode);
+		view.arrangeFrame(imageFrame);
 	}
 	
-	public void drawRect(ImageView view, int x, int y, int width, int height) {
-		view.drawRect(x, y, width, height);
-	}
-	
-	public void setMoveCursor(ImageView view) {
-		view.setImageCursor(new Cursor(Cursor.MOVE_CURSOR));
-	}
-	
-	public void setDefaultCursor(ImageView view) {
-		view.setImageCursor(new Cursor(Cursor.DEFAULT_CURSOR));
-	}
-	
-	public void setCrossCursor(ImageView view) {
-		view.setImageCursor(new Cursor(Cursor.CROSSHAIR_CURSOR));
+	public void setImageCursor(ImageView view, Cursor cursor) {
+		view.setImageCursor(cursor);
 	}
 	
 	public void setScrollBars(ScrollableImageView view, int deltaX, int deltaY) {
@@ -296,5 +272,79 @@ public class FormScannerModel {
 	
 	public void setAdvanceable(TabbedView view) {
 		view.setAdvanceable();
+	}
+	
+	public void addPoint(ImageView view, Point p) {
+		if (manageTemplateFrame!=null) {
+			int rows = manageTemplateFrame.getRowsNumber();
+			int values = manageTemplateFrame.getValuesNumber();
+			
+			List<Point> points = view.getPoints();
+			
+			if (rows==1 && values==1) {
+				if (points.size() == 0) {
+					view.addPoint(p);
+					manageTemplateFrame.setupTable(view.getPoints());
+				} else {
+					view.removePoint(p);
+					manageTemplateFrame.clearTable();
+				}
+			} else {
+				if (points.size() == 0) {
+					view.addPoint(p);
+				} else {
+					Point p1 = points.get(0);
+					if (rows == 1) { // rows = 1, values > 1
+						view.removeAllPoints();
+						
+						int dx = (p.x - p1.x)/(values-1);
+						int y = p1.y + ((p.y - p1.y)/2);
+						
+						for (int i=0; i<values; i++) {
+							Point pi = new Point(p1.x+(dx*i), y);
+							view.addPoint(pi);
+						}
+						manageTemplateFrame.setupTable(view.getPoints());
+					} else if (values == 1) { // rows > 1, values =1
+						view.removeAllPoints();
+						
+						int x = p1.x + ((p.x - p1.x)/2);
+						int dy = (p.y - p1.y)/(rows-1);
+						
+						for (int i=0; i<rows; i++) {
+							Point pi = new Point(x, p1.y+(dy*i));
+							view.addPoint(pi);
+						}
+						manageTemplateFrame.setupTable(view.getPoints());
+					} else { // rows > 1, values > 1
+						view.removeAllPoints();
+						
+						int dx = (p.x - p1.x)/(values-1);
+						int dy = (p.y - p1.y)/(rows-1);					
+						
+						for (int i=0; i<rows; i++) {
+							for (int j=0; j<values; j++) {
+								Point pi = new Point(p1.x+(dx*j), p1.y+(dy*i));
+								view.addPoint(pi);
+							}						
+						}
+						manageTemplateFrame.setupTable(view.getPoints());
+					}
+				}
+			}
+		}
+	}
+	
+	public void removePoint(ImageView view, Point p) {
+		view.removePoint(p);
+	}
+
+	public void removeAllPoints(ImageView view) {
+		view.removeAllPoints();
+	}
+
+	public void calculateInternalPoints(ImageView view, Point p1, Point p2) {
+		view.addPoint(p1);
+		view.addPoint(p2);
 	}
 }
