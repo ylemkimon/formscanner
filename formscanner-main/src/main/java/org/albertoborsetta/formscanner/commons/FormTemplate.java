@@ -3,26 +3,26 @@ package org.albertoborsetta.formscanner.commons;
 import java.util.HashMap;
 import java.util.Map;
 
-public class Template {
+public class FormTemplate {
 	
 	private String name;
-	private Map<String, Field> fields;
+	private Map<String, FormField> fields;
 
-	public Template(String name, HashMap<String, Field> fields) {
+	public FormTemplate(String name, HashMap<String, FormField> fields) {
 		this.setName(name);
 		this.fields = fields;
 	}
 	
-	public Template(String name) {
+	public FormTemplate(String name) {
 		this.setName(name);
-		this.fields = new HashMap<String, Field>();
+		this.fields = new HashMap<String, FormField>();
 	}
 
-	public Field getField(String name) {
+	public FormField getField(String name) {
 		return fields.get(name);
 	}
 
-	public void setField(String name, Field field) {
+	public void setField(String name, FormField field) {
 		fields.put(name, field);
 	}
 

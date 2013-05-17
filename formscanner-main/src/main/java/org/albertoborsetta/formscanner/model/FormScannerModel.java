@@ -1,8 +1,10 @@
 package org.albertoborsetta.formscanner.model;
 
+import org.albertoborsetta.formscanner.commons.FormField;
 import org.albertoborsetta.formscanner.commons.FormScannerConstants.Action;
 import org.albertoborsetta.formscanner.commons.FormScannerConstants.Frame;
 import org.albertoborsetta.formscanner.commons.FormScannerConstants.Mode;
+import org.albertoborsetta.formscanner.commons.FormTemplate;
 import org.albertoborsetta.formscanner.commons.configuration.FormScannerConfiguration;
 import org.albertoborsetta.formscanner.commons.configuration.FormScannerConfigurationKeys;
 import org.albertoborsetta.formscanner.commons.resources.FormScannerResources;
@@ -24,7 +26,6 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import javax.swing.ImageIcon;
 import javax.swing.JInternalFrame;
@@ -33,7 +34,7 @@ import org.apache.commons.io.FilenameUtils;
 
 public class FormScannerModel {
 
-	private Map<Integer, File> openedFiles = new HashMap<Integer, File>();
+	private HashMap<Integer, File> openedFiles = new HashMap<Integer, File>();
 	private File template;
 	private FileListFrame fileListFrame;
 	private RenameFileFrame renameFileFrame;
@@ -47,6 +48,7 @@ public class FormScannerModel {
 	// private AnalyzeFileResultsFrame analyzeFileResultsFrame;
 	private ManageTemplateFrame manageTemplateFrame;
 	private ImageFrame imageFrame;
+	private FormTemplate formTemplate;
     
 	public FormScannerModel(FormScanner view) {
 		this.view = view;
@@ -239,7 +241,8 @@ public class FormScannerModel {
 			this.template= template; 
 			manageTemplateFrame = new ManageTemplateFrame(this, template);
 			
-			view.arrangeFrame(manageTemplateFrame);			
+			view.arrangeFrame(manageTemplateFrame);	
+			formTemplate = new FormTemplate(template.getName());
 		}
 	}
 
@@ -262,12 +265,8 @@ public class FormScannerModel {
 		view.setScrollBars(deltaX, deltaY);
 	}
 	
-	public void setNextTab(TabbedView view) {
-		view.setupNextTab();		
-	}
-	
-	public void setPrevTab(TabbedView view) {
-		view.setupPrevTab();
+	public void setNextTab(String action, TabbedView view) {
+		view.setupNextTab(action);		
 	}
 	
 	public void setAdvanceable(TabbedView view) {
@@ -346,5 +345,10 @@ public class FormScannerModel {
 	public void calculateInternalPoints(ImageView view, Point p1, Point p2) {
 		view.addPoint(p1);
 		view.addPoint(p2);
+	}
+	
+	public void addFields(HashMap<String, FormField> fields) {
+		for (FormField field: fields) { 
+			formTemplate.setField(field.getName(), field);
 	}
 }

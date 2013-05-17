@@ -8,12 +8,14 @@ import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Point;
 import java.io.File;
+import java.util.HashMap;
 import java.util.List;
 
 import javax.swing.JPanel;
 import javax.swing.JList;
 import javax.swing.JButton;
 
+import javax.swing.JCheckBox;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JSpinner;
@@ -26,12 +28,16 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
 
+import org.albertoborsetta.formscanner.commons.FormField;
+import org.albertoborsetta.formscanner.commons.FormPoint;
 import org.albertoborsetta.formscanner.commons.FormScannerConstants;
 import org.albertoborsetta.formscanner.commons.FormScannerGridLayouts;
+import org.albertoborsetta.formscanner.commons.FormScannerConstants.Action;
 import org.albertoborsetta.formscanner.commons.FormScannerConstants.Mode;
 import org.albertoborsetta.formscanner.commons.resources.FormScannerResourcesKeys;
 import org.albertoborsetta.formscanner.commons.translation.FormScannerTranslationKeys;
 import org.albertoborsetta.formscanner.gui.builder.ButtonBuilder;
+import org.albertoborsetta.formscanner.gui.builder.CheckBoxBuilder;
 import org.albertoborsetta.formscanner.gui.builder.ComboBoxBuilder;
 import org.albertoborsetta.formscanner.gui.builder.LabelBuilder;
 import org.albertoborsetta.formscanner.gui.builder.ListBuilder;
@@ -60,6 +66,7 @@ public class ManageTemplateFrame extends JInternalFrame implements TabbedView {
 	private JSpinner valuesNumber;
 	private JSpinner rowsNumber;
 	private JComboBox typeComboBox;
+	private JCheckBox isMultiple;
 	private JButton okPropertiesButton;
 	private JButton cancelPropertiesButton;
 	
@@ -72,6 +79,26 @@ public class ManageTemplateFrame extends JInternalFrame implements TabbedView {
 	private InternalFrameController internalFrameController;
 	
 	private File file;
+	
+	private class TemplateTableModel extends DefaultTableModel {
+		
+		/**
+		 *
+		 */
+		private static final long serialVersionUID = 1L;
+
+		public TemplateTableModel(int rows, int cols) {
+			super(rows, cols);
+			addTableModelListener(manageTemplateController);
+		}
+		
+		public boolean isCellEditable(int row, int col) {
+			if (row==0 && col==0) {  
+		        return false;  
+		    } 
+		    return super.isCellEditable(row, col);
+		}
+	}
 
 	/**
 	 * Create the frame.
@@ -113,50 +140,72 @@ public class ManageTemplateFrame extends JInternalFrame implements TabbedView {
 		tabbedPane.setEnabledAt(2, false);
 	}
 	
-	public void setupNextTab() {
+	public void setupNextTab(String action) {
+		int currTab = tabbedPane.getSelectedIndex();
 		int nextTab = 0;
-		if (tabbedPane.getSelectedIndex() < tabbedPane.getTabCount()) {
-			nextTab = tabbedPane.getSelectedIndex() + 1;
-		}	
-		
-		tabbedPane.setEnabledAt(nextTab, true);
-		tabbedPane.setSelectedIndex(nextTab);
-		
-		switch (nextTab) {
-		case 0:
-			resetSelectedValues();
-			resetTable();
+		Action act = Action.valueOf(action);
+		switch (act) {
+		case CONFIRM:
+			if (currTab < tabbedPane.getTabCount()-1) {
+				nextTab = currTab + 1;
+			}
+			tabbedPane.setEnabledAt(nextTab, true);
+			tabbedPane.setSelectedIndex(nextTab);
+			
+			switch (nextTab) {
+			case 0:
+				tabbedPane.setEnabledAt(1, false);
+				tabbedPane.setEnabledAt(2, false);
+				formScannerModel.disposeRelatedFrame(this);
+				
+				HashMap<String, FormField> fields = new HashMap<String, FormField>();
+				for (int i=1; i<(Integer)rowsNumber.getValue()+1; i++) {
+					String name = (String)table.getValueAt(i, 0);
+					FormField field = new FormField(name);
+					for (int j=1; i<(Integer)valuesNumber.getValue()+1; j++) {
+						String value = (String)table.getValueAt(0,j);
+						int x = 1; // table.getValueAt(i,j);
+						int y = 2; // table.getValueAt(i,j);
+						FormPoint p = new FormPoint(x, y);
+						field.setPoint(value, p);
+					}
+					field.setMultiple(isMultiple.isSelected());
+					fields.put(name, field);
+				}
+				formScannerModel.addFields(fields);
+				resetSelectedValues();
+				resetTable();
+				break;
+			case 2:
+				setupTable();
+				formScannerModel.createImageFrame(file, Mode.UPDATE);
+				// se non già present calcolare template corners
+				break;
+			default:
+				break;
+			}
 			break;
-		case 1:			
-			break;
-		case 2:
-			setupTable();
-			formScannerModel.createImageFrame(file, Mode.UPDATE);
+		case CANCEL:
+			nextTab = currTab - 1;
+			if (currTab > 0) {				
+				tabbedPane.setEnabledAt(currTab, false);
+				tabbedPane.setSelectedIndex(nextTab);
+			}
+			switch (nextTab) {
+			case 0:
+				resetSelectedValues();
+				break;
+			case 1:	
+				resetTable();
+				formScannerModel.disposeRelatedFrame(this);
+				break;
+			default:
+				formScannerModel.disposeRelatedFrame(this);
+				dispose();
+				break;
+			}
 			break;
 		default:
-			break;
-		}
-	}
-	
-	public void setupPrevTab() {
-		int prevTab = -1;
-		if (tabbedPane.getSelectedIndex() > 0) {
-			prevTab = tabbedPane.getSelectedIndex() - 1;
-		}	
-		
-		tabbedPane.setEnabledAt(prevTab, true);
-		tabbedPane.setSelectedIndex(prevTab);
-		
-		switch (prevTab) {
-		case 0:
-			resetSelectedValues();
-			break;
-		case 1:
-			resetTable();
-			break;
-		default:
-			formScannerModel.disposeRelatedFrame(this);
-			dispose();
 			break;
 		}
 	}
@@ -205,20 +254,30 @@ public class ManageTemplateFrame extends JInternalFrame implements TabbedView {
 	}
 	
 	public void setAdvanceable() {
-		verifySpinnerValues();
-		okPropertiesButton.setEnabled(isAdvanceable());
+		int currTab = tabbedPane.getSelectedIndex();	
+		
+		switch (currTab) {
+		case 0:
+			break;
+		case 1:
+			okPropertiesButton.setEnabled(verifySpinnerValues());
+			break;
+		case 2:
+			okPositionButton.setEnabled(true);
+			break;
+		default:
+			break;
+		}
+		
 	}
 	
-	private void verifySpinnerValues() {
+	private boolean verifySpinnerValues() {
 		if ((Integer) valuesNumber.getValue()<0) {
 			valuesNumber.setValue(0);
 		}
 		if ((Integer) rowsNumber.getValue()<0) {
 			rowsNumber.setValue(0);
 		}
-	}
-	
-	private boolean isAdvanceable() {		
 		return (((Integer) valuesNumber.getValue()>0) && 
 				((Integer) rowsNumber.getValue()>0) && 
 				(typeComboBox.getSelectedItem()!=null));
@@ -234,7 +293,7 @@ public class ManageTemplateFrame extends JInternalFrame implements TabbedView {
 			columnModel.addColumn(column);
 		}
 		
-		JTable table = new JTable(tableModel, columnModel);		
+		JTable table = new JTable(tableModel, columnModel);
 		table.setDefaultRenderer(Object.class, new DefaultTableCellRenderer() {
 		    /**
 			 * 
@@ -266,24 +325,7 @@ public class ManageTemplateFrame extends JInternalFrame implements TabbedView {
 		return table;
 	}
 	
-	private class TemplateTableModel extends DefaultTableModel {
-		
-		/**
-		 *
-		 */
-		private static final long serialVersionUID = 1L;
-
-		public TemplateTableModel(int rows, int cols) {
-			super(rows, cols);
-		}
-		
-		public boolean isCellEditable(int row, int col) {
-			if (row==0 && col==0) {  
-		        return false;  
-		    } 
-		    return super.isCellEditable(row, col);
-		}
-	}
+	
 	
 	private JPanel getFieldListPanel() {
 		fieldList = new ListBuilder()
@@ -342,6 +384,14 @@ public class ManageTemplateFrame extends JInternalFrame implements TabbedView {
 			.withItemListener(manageTemplateController)
 			.build();
 		
+		JLabel lblIsMultiple = new LabelBuilder(formScannerModel.getTranslationFor(FormScannerTranslationKeys.FIELD_PROPERTIES_IS_MULTIPLE))
+			.build();
+		
+		isMultiple = new CheckBoxBuilder(FormScannerConstants.IS_MULTIPLE)
+			.withChangeListener(manageTemplateController)
+			.setChecked(false)
+			.build();
+		
 		JLabel lblNumberOfRowsColumns = new LabelBuilder(formScannerModel.getTranslationFor(FormScannerTranslationKeys.FIELD_PROPERTIES_N_ROW_COL_LABEL))
 			.build();
 		
@@ -361,10 +411,12 @@ public class ManageTemplateFrame extends JInternalFrame implements TabbedView {
 			.withFormLayout(FormScannerGridLayouts.propertiesFormLayout())
 			.addComponent(lblType, "2, 2, right, default")
 			.addComponent(typeComboBox, "4, 2, fill, default")
-			.addComponent(lblNumberOfRowsColumns, "2, 4, right, default")
-			.addComponent(rowsNumber, "4, 4")
-			.addComponent(lblNumberOfValues, "2, 6, right, default")
-			.addComponent(valuesNumber, "4, 6")
+			.addComponent(lblIsMultiple, "2, 4, right, default")
+			.addComponent(isMultiple, "4, 4, fill, default")
+			.addComponent(lblNumberOfRowsColumns, "2, 6, right, default")
+			.addComponent(rowsNumber, "4, 6")
+			.addComponent(lblNumberOfValues, "2, 8, right, default")
+			.addComponent(valuesNumber, "4, 8")
 			.build();
 	}
 	

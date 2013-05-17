@@ -1,30 +1,31 @@
 package org.albertoborsetta.formscanner.commons;
 
 import java.util.HashMap;
-import java.util.Map;
-import org.albertoborsetta.formscanner.commons.FormScannerConstants.FieldType;
 
-public class Field {
+import org.albertoborsetta.formscanner.commons.FormScannerConstants.FieldType;
+import org.albertoborsetta.formscanner.commons.FormPoint;
+
+public class FormField {
     private String name;
     private FieldType type;
     private boolean multiple;
-    private Map<String, Point> points;
+    private HashMap<String, FormPoint> points;
     
-    public Field(String name, HashMap<String, Point> points) {
+    public FormField(String name, HashMap<String, FormPoint> points) {
     		this.name = name;
     		this.points = points;
     }
     
-    public Field(String name) {
+    public FormField(String name) {
 		this.name = name;
-		points = new HashMap<String, Point>();
+		points = new HashMap<String, FormPoint>();
     }
     
-    public void setPoint(String value, Point point) {
+    public void setPoint(String value, FormPoint point) {
     	points.put(value, point);
     }
     
-    public Point getPoint(String value) {
+    public FormPoint getPoint(String value) {
     	return points.get(value);
     }
     

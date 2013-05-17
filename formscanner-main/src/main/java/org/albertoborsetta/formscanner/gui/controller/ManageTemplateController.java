@@ -7,12 +7,15 @@ import java.awt.event.ItemListener;
 
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
+import javax.swing.event.TableModelEvent;
+import javax.swing.event.TableModelListener;
 
+import org.albertoborsetta.formscanner.commons.FormScannerConstants;
 import org.albertoborsetta.formscanner.commons.FormScannerConstants.Action;
 import org.albertoborsetta.formscanner.gui.ManageTemplateFrame;
 import org.albertoborsetta.formscanner.model.FormScannerModel;
 
-public class ManageTemplateController implements ActionListener, ChangeListener, ItemListener {
+public class ManageTemplateController implements ActionListener, ChangeListener, ItemListener, TableModelListener {
 	
 	private FormScannerModel formScannerModel;
 	private ManageTemplateFrame view;
@@ -30,17 +33,17 @@ public class ManageTemplateController implements ActionListener, ChangeListener,
 		Action act = Action.valueOf(e.getActionCommand());
 		switch (act) {
 		case ADD_FIELD:
-			formScannerModel.setNextTab(view);
+			formScannerModel.setNextTab(FormScannerConstants.CONFIRM, view);
 			break;
 		case REMOVE_FIELD:
 			break;
 		case SAVE_TEMPLATE:
 			break;
 		case CONFIRM:
-			formScannerModel.setNextTab(view);
+			formScannerModel.setNextTab(FormScannerConstants.CONFIRM, view);
 			break;
 		case CANCEL:
-			formScannerModel.setPrevTab(view);
+			formScannerModel.setNextTab(FormScannerConstants.CANCEL, view);
 			break;
 		default:
 			break;
@@ -55,6 +58,11 @@ public class ManageTemplateController implements ActionListener, ChangeListener,
 
 	@Override
 	public void itemStateChanged(ItemEvent e) {
+		formScannerModel.setAdvanceable(view);		
+	}
+
+	@Override
+	public void tableChanged(TableModelEvent e) {
 		formScannerModel.setAdvanceable(view);		
 	}
 }

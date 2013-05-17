@@ -32,6 +32,7 @@ public class FormScannerConstants {
 	public static final String GRID_COLUMNS = "GRID_COLUMNS";
 	
 	// Properties
+	public static final String IS_MULTIPLE = "IS_MULTIPLE";
 	public static final String NUMBER_VALUES = "NUMBER_VALUES";
 	public static final String NUMBER_COLS_ROWS = "NUMBER_COLS_ROWS";
 	public static final String TYPE_COMBO_BOX = "TYPE_COMBO_BOX";

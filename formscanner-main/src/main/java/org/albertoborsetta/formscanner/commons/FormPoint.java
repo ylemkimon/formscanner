@@ -2,30 +2,30 @@ package org.albertoborsetta.formscanner.commons;
 
 import ij.process.ImageProcessor;
 
-public class Point implements Comparable<Point> {
+public class FormPoint implements Comparable<FormPoint> {
 	
 	private int x;
 	private int y;
 	private double dist = 0;
 
-	public Point (int x, int y) {
+	public FormPoint (int x, int y) {
 		this.x = x;
 		this.y = y;
 	}
 	
-	public Point (int x, int y, double dist) {
+	public FormPoint (int x, int y, double dist) {
 		this.x = x;
 		this.y = y;
 		this.dist = dist;
 	}
 
-	public int compareTo(Point c2) { 
+	public int compareTo(FormPoint c2) { 
 		if (dist < c2.getDistance()) return -1;
 		if (dist > c2.getDistance()) return 1;
 		else return 0;
 	}
 
-	public double dist2 (Point c2) {
+	public double dist2 (FormPoint c2) {
 		int dx = this.x - c2.x;
 		int dy = this.y - c2.y;
 		return (dx*dx)+(dy*dy);
