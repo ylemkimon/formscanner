@@ -1,21 +1,21 @@
 package org.albertoborsetta.formscanner.commons;
 
 import java.util.HashMap;
-import java.util.Map;
+
+import org.albertoborsetta.formscanner.commons.FormScannerConstants.Corners;
 
 public class FormTemplate {
 	
 	private String name;
-	private Map<String, FormField> fields;
-
-	public FormTemplate(String name, HashMap<String, FormField> fields) {
-		this.setName(name);
-		this.fields = fields;
-	}
+	private HashMap<String, FormField> fields;
+	private HashMap<Corners, FormPoint> corners;
+	private double rotation;
 	
 	public FormTemplate(String name) {
 		this.setName(name);
-		this.fields = new HashMap<String, FormField>();
+		fields = new HashMap<String, FormField>();
+		corners = new HashMap<Corners, FormPoint>();
+		rotation = 0;
 	}
 
 	public FormField getField(String name) {
@@ -32,5 +32,25 @@ public class FormTemplate {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+	
+	public void setFields() {
+		
+	}
+
+	public void setCorners(HashMap<Corners, FormPoint> corners) {
+		this.corners = corners;
+	}
+
+	public HashMap<Corners, FormPoint> getCorners() {
+		return corners;
+	}
+
+	public double getRotation() {
+		return rotation;
+	}
+
+	public void setRotation(double rotation) {
+		this.rotation = rotation;
 	}
 }

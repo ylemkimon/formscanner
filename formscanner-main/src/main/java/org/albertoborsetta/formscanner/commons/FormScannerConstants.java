@@ -41,6 +41,19 @@ public class FormScannerConstants {
 	public static final String VIEW = "VIEW";
 	public static final String UPDATE = "UPDATE";
 	
+	// Corners
+	public static final String TOP_LEFT = "TOP_LEFT";
+	public static final String TOP_RIGHT = "TOP_RIGHT";
+	public static final String BOTTOM_LEFT = "BOTTOM_LEFT";
+	public static final String BOTTOM_RIGHT = "BOTTOM_RIGHT";
+	
+	public enum Corners {
+		TOP_LEFT,
+		TOP_RIGHT,
+		BOTTOM_LEFT,
+		BOTTOM_RIGHT
+	}
+	
 	public enum Frame {
 		RENAME_FILE_FRAME_NAME,
 		FILE_LIST_FRAME_NAME,

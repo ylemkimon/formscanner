@@ -11,8 +11,8 @@ import java.util.List;
 import java.util.Vector;
 
 import org.albertoborsetta.formscanner.commons.FormPoint;
-
-
+import org.albertoborsetta.formscanner.commons.FormScannerConstants;
+import org.albertoborsetta.formscanner.commons.FormScannerConstants.Corners;
 
 public class CornerDetector {
 
@@ -21,11 +21,6 @@ public class CornerDetector {
 	private float alpha = DEFAULT_ALPHA;
 	private int threshold = DEFAULT_THRESHOLD;
 	private final int border = 20;
-
-	public static final int TOP_LEFT = 1;
-	public static final int TOP_RIGHT = 2;
-	public static final int BOTTOM_LEFT = 3;
-	public static final int BOTTOM_RIGHT = 4;
 	
 	private final float[] pfilt = {0.223755f,0.552490f,0.223755f};
 	private final float[] dfilt = {0.453014f,0.0f,-0.453014f};
@@ -38,9 +33,9 @@ public class CornerDetector {
 	private List<FormPoint> corners;
 	private static FormPoint orig;
 
-	public CornerDetector(ImageProcessor ip, int pos) {
+	public CornerDetector(ImageProcessor ip, Corners position) {
 		this.ipOrig = ip;
-		switch (pos) {
+		switch (position) {
 		case TOP_LEFT:
 			orig = new FormPoint(0, 0);
 			break;

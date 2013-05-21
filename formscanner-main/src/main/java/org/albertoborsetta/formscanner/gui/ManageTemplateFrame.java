@@ -159,10 +159,10 @@ public class ManageTemplateFrame extends JInternalFrame implements TabbedView {
 				formScannerModel.disposeRelatedFrame(this);
 				
 				HashMap<String, FormField> fields = new HashMap<String, FormField>();
-				for (int i=1; i<(Integer)rowsNumber.getValue()+1; i++) {
+				for (int i=1; i<(Integer)rowsNumber.getValue(); i++) {
 					String name = (String)table.getValueAt(i, 0);
 					FormField field = new FormField(name);
-					for (int j=1; i<(Integer)valuesNumber.getValue()+1; j++) {
+					for (int j=1; i<(Integer)valuesNumber.getValue(); j++) {
 						String value = (String)table.getValueAt(0,j);
 						int x = 1; // table.getValueAt(i,j);
 						int y = 2; // table.getValueAt(i,j);
@@ -179,7 +179,10 @@ public class ManageTemplateFrame extends JInternalFrame implements TabbedView {
 			case 2:
 				setupTable();
 				formScannerModel.createImageFrame(file, Mode.UPDATE);
-				// se non già present calcolare template corners
+				if (formScannerModel.getTemplateCorners().isEmpty()) {
+					formScannerModel.calculateTemplateCorners();
+					formScannerModel.calculateRotation();
+				}
 				break;
 			default:
 				break;

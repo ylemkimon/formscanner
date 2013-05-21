@@ -1,7 +1,9 @@
 package org.albertoborsetta.formscanner.model;
 
 import org.albertoborsetta.formscanner.commons.FormField;
+import org.albertoborsetta.formscanner.commons.FormPoint;
 import org.albertoborsetta.formscanner.commons.FormScannerConstants.Action;
+import org.albertoborsetta.formscanner.commons.FormScannerConstants.Corners;
 import org.albertoborsetta.formscanner.commons.FormScannerConstants.Frame;
 import org.albertoborsetta.formscanner.commons.FormScannerConstants.Mode;
 import org.albertoborsetta.formscanner.commons.FormTemplate;
@@ -17,6 +19,7 @@ import org.albertoborsetta.formscanner.gui.ImageFrame;
 import org.albertoborsetta.formscanner.gui.RenameFileFrame;
 import org.albertoborsetta.formscanner.gui.ScrollableImageView;
 import org.albertoborsetta.formscanner.gui.TabbedView;
+import org.albertoborsetta.formscanner.imageparser.ScanImage;
 
 import java.awt.Cursor;
 import java.awt.Dimension;
@@ -26,6 +29,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.swing.ImageIcon;
 import javax.swing.JInternalFrame;
@@ -342,13 +346,33 @@ public class FormScannerModel {
 		view.removeAllPoints();
 	}
 
-	public void calculateInternalPoints(ImageView view, Point p1, Point p2) {
-		view.addPoint(p1);
-		view.addPoint(p2);
-	}
-	
 	public void addFields(HashMap<String, FormField> fields) {
-		for (FormField field: fields) { 
-			formTemplate.setField(field.getName(), field);
+		for (Map.Entry<String, FormField> field : fields.entrySet()) {
+			formTemplate.setField(field.getKey(), field.getValue());
+        } 
+	}
+
+	public void calculateTemplateCorners() {
+		HashMap<Corners, FormPoint> corners;
+		ScanImage imageScan = new ScanImage(template);
+        corners = imageScan.locateCorners();
+        formTemplate.setCorners(corners);
+	}
+
+	public HashMap<Corners, FormPoint> getTemplateCorners() {
+		return formTemplate.getCorners();
+	}
+
+	public void calculateRotation() {
+		HashMap<Corners, FormPoint> corners = formTemplate.getCorners();
+		
+		FormPoint topLeftPoint = corners.get(Corners.TOP_LEFT);
+		FormPoint topRightPoint = corners.get(Corners.TOP_RIGHT);
+		
+		double dx = (double) (topRightPoint.getX() - topLeftPoint.getX());
+		double dy = (double) (topRightPoint.getY() - topLeftPoint.getY());
+		
+		double rotation = Math.atan(dx/dy);
+		formTemplate.setRotation(rotation);
 	}
 }
