@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <template>
+	<rotation angle="0"></rotation>
 	<corners>
 		<corner position="topleft" x="1" y="2"></corner>
 		<corner position="topright" x="1" y="2"></corner>
@@ -7,7 +8,7 @@
 		<corner position="bottomright" x="1" y="2"></corner>
 	</corners>
 	<fields>
-		<field orientation="orizontal/vertical">
+		<field orientation="orizontal/vertical" multiple="false">
 			<name>field 01</name>
 			<values quantity="2">
 				<value number="1" x="2" y="3">A</value>
