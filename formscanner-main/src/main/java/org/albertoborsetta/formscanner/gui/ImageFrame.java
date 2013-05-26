@@ -1,5 +1,6 @@
 package org.albertoborsetta.formscanner.gui;
 
+import org.albertoborsetta.formscanner.commons.FormPoint;
 import org.albertoborsetta.formscanner.commons.FormScannerConstants;
 import org.albertoborsetta.formscanner.commons.FormScannerConstants.Mode;
 import org.albertoborsetta.formscanner.commons.FormScannerFont;
@@ -13,7 +14,6 @@ import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.BorderLayout;
-import java.awt.Point;
 import java.awt.image.BufferedImage;
 
 import javax.swing.JInternalFrame;
@@ -106,7 +106,7 @@ public class ImageFrame extends JInternalFrame implements ScrollableImageView {
 		private int width;
 		private int height;
 		private double scaleFactor = 1;
-		private List<Point> points = new ArrayList<Point>();
+		private List<FormPoint> points = new ArrayList<FormPoint>();
 		private BufferedImage image;
 		
 		
@@ -132,22 +132,22 @@ public class ImageFrame extends JInternalFrame implements ScrollableImageView {
 		
 		public void showPoints(Graphics g) {
 			g.setColor(Color.RED);
-			for (Point p: points) {
-				Point p1 = calculatePointPosition(p);
+			for (FormPoint p: points) {
+				FormPoint p1 = calculatePointPosition(p);
 				g.drawLine(p1.x-5, p1.y-5, p1.x+5, p1.y+5);
 				g.drawLine(p1.x-5, p1.y+5, p1.x+5, p1.y-5);
 			}
 			g.setColor(Color.BLACK);
 		}
 		
-		private Point calculatePointPosition(Point p) {
+		private FormPoint calculatePointPosition(FormPoint p) {
 			int dx = scrollPane.getHorizontalScrollBarValue();
 			int dy = scrollPane.getVerticalScrollBarValue();
 			
 			int x = (int) Math.floor(((p.x-dx)*scaleFactor)+5);
 			int y = (int) Math.floor(((p.y-dy)*scaleFactor)+27);
 			
-			Point p1 = new Point(x, y);
+			FormPoint p1 = new FormPoint(x, y);
 			return p1;
 		}
 		
@@ -167,11 +167,11 @@ public class ImageFrame extends JInternalFrame implements ScrollableImageView {
 			this.scaleFactor = scaleFactor;
 		}
 		
-		public void addPoint(Point p) {
+		public void addPoint(FormPoint p) {
 			points.add(p);
 		}
 
-		public void removePoint(Point p) {
+		public void removePoint(FormPoint p) {
 			points.remove(p);
 		}
 
@@ -179,7 +179,7 @@ public class ImageFrame extends JInternalFrame implements ScrollableImageView {
 			points.clear();
 		}
 
-		public List<Point> getPoints() {
+		public List<FormPoint> getPoints() {
 			return points;
 		}
 	}
@@ -191,7 +191,7 @@ public class ImageFrame extends JInternalFrame implements ScrollableImageView {
 	}
 	
 	@Override
-	public void addPoint(Point p) {
+	public void addPoint(FormPoint p) {
 		Graphics g = getGraphics();
 		imagePanel.addPoint(p);
 		update(g);
@@ -200,7 +200,7 @@ public class ImageFrame extends JInternalFrame implements ScrollableImageView {
 	}
 	
 	@Override
-	public void removePoint(Point p) {
+	public void removePoint(FormPoint p) {
 		Graphics g = getGraphics();		
 		imagePanel.removePoint(p);
 		update(g);
@@ -258,7 +258,7 @@ public class ImageFrame extends JInternalFrame implements ScrollableImageView {
 	}
 
 	@Override
-	public List<Point> getPoints() {
+	public List<FormPoint> getPoints() {
 		return imagePanel.getPoints();
 	}
 }

@@ -1,7 +1,6 @@
 package org.albertoborsetta.formscanner.gui.controller;
 
 import java.awt.Cursor;
-import java.awt.Point;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionListener;
 import java.awt.event.MouseWheelEvent;
@@ -9,6 +8,7 @@ import java.awt.event.MouseWheelListener;
 
 import javax.swing.event.MouseInputListener;
 
+import org.albertoborsetta.formscanner.commons.FormPoint;
 import org.albertoborsetta.formscanner.gui.ImageFrame;
 import org.albertoborsetta.formscanner.model.FormScannerModel;
 
@@ -16,8 +16,8 @@ public class ImageFrameController implements MouseMotionListener, MouseInputList
 	
 	private FormScannerModel model;
 	private ImageFrame view;
-	private Point p1;
-	private Point p2;
+	private FormPoint p1;
+	private FormPoint p2;
 	// private double scaleFactor;
 	
 	public ImageFrameController(FormScannerModel model) {
@@ -33,7 +33,7 @@ public class ImageFrameController implements MouseMotionListener, MouseInputList
 		switch (view.getMode()) {
 		case UPDATE:
 			if (e.isControlDown()) {
-				p2 = e.getPoint();
+				p2 = (FormPoint) e.getPoint();
 				
 				int deltaX = p1.x - p2.x;
 				int deltaY = p1.y - p2.y;
@@ -44,7 +44,7 @@ public class ImageFrameController implements MouseMotionListener, MouseInputList
 			}
 			break;
 		case VIEW:
-			p2 = e.getPoint();
+			p2 = (FormPoint) e.getPoint();
 			
 			int deltaX = p1.x - p2.x;
 			int deltaY = p1.y - p2.y;
@@ -70,7 +70,7 @@ public class ImageFrameController implements MouseMotionListener, MouseInputList
 				case MouseEvent.BUTTON1:
 					double scaleFactor = view.getScaleFactor();
 					
-					Point p = e.getPoint();
+					FormPoint p = (FormPoint) e.getPoint();
 					
 					int	dx = view.getHorizontalScrollbarValue();
 					int dy = view.getVerticalScrollbarValue();
@@ -78,7 +78,7 @@ public class ImageFrameController implements MouseMotionListener, MouseInputList
 					int x = (int) Math.floor((p.x/scaleFactor)+dx);
 					int y = (int) Math.floor((p.y/scaleFactor)+dy);
 					
-					Point p1 = new Point(x, y);
+					FormPoint p1 = new FormPoint(x, y);
 					model.addPoint(view, p1);
 					break;
 				case MouseEvent.BUTTON3:
@@ -97,12 +97,12 @@ public class ImageFrameController implements MouseMotionListener, MouseInputList
 		switch (view.getMode()) {
 		case UPDATE:
 			if (e.isControlDown()) {
-				p1 = e.getPoint();
+				p1 = (FormPoint) e.getPoint();
 				model.setImageCursor(view, new Cursor(Cursor.HAND_CURSOR));
 			}
 			break;
 		case VIEW:
-			p1 = e.getPoint();
+			p1 = (FormPoint) e.getPoint();
 			break;
 		default:
 			break;

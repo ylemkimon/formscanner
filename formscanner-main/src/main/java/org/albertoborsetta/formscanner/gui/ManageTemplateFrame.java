@@ -8,7 +8,6 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
-import java.awt.Point;
 import java.io.File;
 import java.util.HashMap;
 import java.util.List;
@@ -242,11 +241,11 @@ public class ManageTemplateFrame extends JInternalFrame implements TabbedView {
 		return (Integer) valuesNumber.getValue();
 	}
 
-	public void setupTable(List<Point> points) {
+	public void setupTable(List<FormPoint> points) {
 		for (int i = 0; i < (Integer) rowsNumber.getValue(); i++) {
 			for (int j = 0; j < (Integer) valuesNumber.getValue(); j++) {
 				int index = ((Integer) valuesNumber.getValue() * i) + j;
-				Point p = points.get(index);
+				FormPoint p = points.get(index);
 				String point = "(" + p.x + "," + p.y + ")";
 				table.setValueAt(point, (i + 1), (j + 1));
 			}

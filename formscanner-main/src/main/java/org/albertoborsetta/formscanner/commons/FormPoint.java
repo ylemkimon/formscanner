@@ -1,21 +1,24 @@
 package org.albertoborsetta.formscanner.commons;
 
+import java.awt.Point;
+
 import ij.process.ImageProcessor;
 
-public class FormPoint implements Comparable<FormPoint> {
+public class FormPoint extends Point implements Comparable<FormPoint>{
 	
-	private int x;
-	private int y;
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	
 	private double dist = 0;
 
 	public FormPoint (int x, int y) {
-		this.x = x;
-		this.y = y;
+		super(x, y);
 	}
 	
 	public FormPoint (int x, int y, double dist) {
-		this.x = x;
-		this.y = y;
+		super(x, y);
 		this.dist = dist;
 	}
 
@@ -36,21 +39,13 @@ public class FormPoint implements Comparable<FormPoint> {
 		int dy = this.y - y2;
 		return (dx*dx)+(dy*dy);
 	}
-	
-	public int getX() {
-		return x;
-	}
 
 	public void setX(int x) {
-		this.x=x;
-	}
-
-	public int getY() {
-		return y;
+		super.x = x;
 	}
 
 	public void setY(int y) {
-		this.y=y;
+		super.y=y;
 	}
 	
 	public void setDistance(double dist) {

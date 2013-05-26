@@ -277,26 +277,60 @@ public class FormScannerModel {
 		view.setAdvanceable();
 	}
 	
-	public void addPoint(ImageView view, Point p) {
+	public void addPoint(ImageView view, FormPoint p) {
 		if (manageTemplateFrame!=null) {
 			int rows = manageTemplateFrame.getRowsNumber();
 			int values = manageTemplateFrame.getValuesNumber();
 			
-			List<Point> points = view.getPoints();
-			
+			List<FormPoint> points = view.getPoints();
+			/*
 			if (rows==1 && values==1) {
 				if (points.size() == 0) {
 					view.addPoint(p);
 					manageTemplateFrame.setupTable(view.getPoints());
-				} else {
+				}
+				/*
+				else {
 					view.removePoint(p);
 					manageTemplateFrame.clearTable();
 				}
-			} else {
+				*/
+			// } else {  // rows > 1 or values > 1
 				if (points.size() == 0) {
 					view.addPoint(p);
+					manageTemplateFrame.setupTable(view.getPoints());
 				} else {
-					Point p1 = points.get(0);
+					view.removeAllPoints();
+					FormPoint p1 = points.get(0);
+					double alfa = formTemplate.getRotation();
+					
+					double x3 = p.getX();
+					double y3 = p1.getY();
+					
+					if (alfa != 0) {
+						double m1 = Math.tan(alfa);
+						double m2 = Math.tan(alfa - 90);
+						
+						double q1 = p1.getY() - (p1.getX() * m1);
+						double q2 = p.getY() - (p.getX() * m2);
+						
+						x3 = (q2 - q1) / (m1 - m2);
+						y3 = (m1 * x3) + q1;
+					}
+					
+					double rowdx = (x3 - p1.getX()) / values;
+					double rowdy = (y3 - p1.getY()) / values;
+					
+					double coldx = (x3 - p.getX()) / rows;
+					double coldy = (y3 - p.getY()) / rows;
+					
+					for (int i=0; i<rows; i++) {
+						for (int j=0; j<values; j++) {
+							FormPoint pi = new FormPoint((int) (p1.x+(coldx*i)+(rowdx*j)),(int) (p1.y+(coldy*i)+(rowdy*j)));
+							view.addPoint(pi);
+						}						
+					}
+					/*
 					if (rows == 1) { // rows = 1, values > 1
 						view.removeAllPoints();
 						
@@ -334,11 +368,12 @@ public class FormScannerModel {
 						manageTemplateFrame.setupTable(view.getPoints());
 					}
 				}
+				*/
 			}
 		}
 	}
 	
-	public void removePoint(ImageView view, Point p) {
+	public void removePoint(ImageView view, FormPoint p) {
 		view.removePoint(p);
 	}
 
