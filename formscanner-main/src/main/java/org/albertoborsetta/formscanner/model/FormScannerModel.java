@@ -282,7 +282,6 @@ public class FormScannerModel {
 			int values = manageTemplateFrame.getValuesNumber();
 			
 			List<FormPoint> points = view.getPoints();
-			/*
 			if (rows==1 && values==1) {
 				if (points.size() == 0) {
 					view.addPoint(p);
@@ -294,13 +293,12 @@ public class FormScannerModel {
 					manageTemplateFrame.clearTable();
 				}
 				*/
-			// } else {  // rows > 1 or values > 1
+			} else {  // rows > 1 or values > 1
 				if (points.size() == 0) {
 					view.addPoint(p);
-					manageTemplateFrame.setupTable(view.getPoints());
 				} else {
-					view.removeAllPoints();
 					FormPoint p1 = points.get(0);
+					view.removeAllPoints();					
 					double alfa = formTemplate.getRotation();
 					
 					double x3 = p.getX();
@@ -308,7 +306,7 @@ public class FormScannerModel {
 					
 					if (alfa != 0) {
 						double m1 = Math.tan(alfa);
-						double m2 = Math.tan(alfa - 90);
+						double m2 = Math.tan(alfa - Math.PI/2);
 						
 						double q1 = p1.getY() - (p1.getX() * m1);
 						double q2 = p.getY() - (p.getX() * m2);
@@ -317,18 +315,19 @@ public class FormScannerModel {
 						y3 = (m1 * x3) + q1;
 					}
 					
-					double rowdx = (x3 - p1.getX()) / values;
-					double rowdy = (y3 - p1.getY()) / values;
+					double rowDx = (x3 - p1.getX()) / values;
+					double rowDy = (y3 - p1.getY()) / values;
 					
-					double coldx = (x3 - p.getX()) / rows;
-					double coldy = (y3 - p.getY()) / rows;
+					double colDx = (x3 - p.getX()) / rows;
+					double colDy = (y3 - p.getY()) / rows;
 					
 					for (int i=0; i<rows; i++) {
 						for (int j=0; j<values; j++) {
-							FormPoint pi = new FormPoint((int) (p1.x+(coldx*i)+(rowdx*j)),(int) (p1.y+(coldy*i)+(rowdy*j)));
+							FormPoint pi = new FormPoint((int) (p1.x+(colDx*i)+(rowDx*j)),(int) (p1.y+(colDy*i)+(rowDy*j)));
 							view.addPoint(pi);
 						}						
 					}
+					manageTemplateFrame.setupTable(view.getPoints());
 					/*
 					if (rows == 1) { // rows = 1, values > 1
 						view.removeAllPoints();
@@ -366,8 +365,8 @@ public class FormScannerModel {
 						}
 						manageTemplateFrame.setupTable(view.getPoints());
 					}
+					*/
 				}
-				*/
 			}
 		}
 	}

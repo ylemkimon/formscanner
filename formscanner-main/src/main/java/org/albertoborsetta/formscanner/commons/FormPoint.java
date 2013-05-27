@@ -12,6 +12,10 @@ public class FormPoint extends Point implements Comparable<FormPoint>{
 	private static final long serialVersionUID = 1L;
 	
 	private double dist = 0;
+	
+	public FormPoint (Point p) {
+		super(p);
+	}
 
 	public FormPoint (int x, int y) {
 		super(x, y);

@@ -33,7 +33,7 @@ public class ImageFrameController implements MouseMotionListener, MouseInputList
 		switch (view.getMode()) {
 		case UPDATE:
 			if (e.isControlDown()) {
-				p2 = (FormPoint) e.getPoint();
+				p2 = new FormPoint(e.getPoint());
 				
 				int deltaX = p1.x - p2.x;
 				int deltaY = p1.y - p2.y;
@@ -44,7 +44,7 @@ public class ImageFrameController implements MouseMotionListener, MouseInputList
 			}
 			break;
 		case VIEW:
-			p2 = (FormPoint) e.getPoint();
+			p2 =  new FormPoint(e.getPoint());
 			
 			int deltaX = p1.x - p2.x;
 			int deltaY = p1.y - p2.y;
@@ -70,7 +70,7 @@ public class ImageFrameController implements MouseMotionListener, MouseInputList
 				case MouseEvent.BUTTON1:
 					double scaleFactor = view.getScaleFactor();
 					
-					FormPoint p = (FormPoint) e.getPoint();
+					FormPoint p = new FormPoint(e.getPoint());
 					
 					int	dx = view.getHorizontalScrollbarValue();
 					int dy = view.getVerticalScrollbarValue();
@@ -97,12 +97,12 @@ public class ImageFrameController implements MouseMotionListener, MouseInputList
 		switch (view.getMode()) {
 		case UPDATE:
 			if (e.isControlDown()) {
-				p1 = (FormPoint) e.getPoint();
+				p1 = new FormPoint(e.getPoint());
 				model.setImageCursor(view, new Cursor(Cursor.HAND_CURSOR));
 			}
 			break;
 		case VIEW:
-			p1 = (FormPoint) e.getPoint();
+			p1 = new FormPoint(e.getPoint());
 			break;
 		default:
 			break;
