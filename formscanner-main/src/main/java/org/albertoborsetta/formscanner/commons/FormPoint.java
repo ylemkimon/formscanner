@@ -59,14 +59,4 @@ public class FormPoint extends Point implements Comparable<FormPoint>{
 	public double getDistance() {
 		return dist;		
 	}
-	
-	public void draw(ImageProcessor ip) {
-		// draw this corner as a black cross in ip
-		int paintvalue = 0; // black
-		int size = 5;
-		ip.setValue(paintvalue);
-		ip.drawLine(x-size,y,x+size,y);
-		ip.drawLine(x,y-size,x,y+size);
-	}	
-
 }

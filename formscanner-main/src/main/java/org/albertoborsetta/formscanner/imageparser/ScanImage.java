@@ -47,10 +47,6 @@ public class ScanImage {
     	int x;
     	int y;
     	
-    	// To Be Deleted
-    	ImageProcessor result;
-    	ImagePlus win;
-    	
     	int subImageHeight = height/8;
         int subImageWidth = width/8;
         
@@ -81,12 +77,9 @@ public class ScanImage {
         	imageProcessor = imagePlus.getProcessor();
         	cornerDetector = new CornerDetector(imageProcessor, position);
         	corner = cornerDetector.findCorners();
+        	corner.setX((int) (x+corner.getX()));
+        	corner.setY((int) (y+corner.getY()));
         	corners.put(position, corner);
-        	
-        	// To Be Deleted
-        	result = cornerDetector.showCornerPoints(imageProcessor);
-        	win = new ImagePlus("Corners from ", result);
-        	win.show();
         }
         
 		return corners;
