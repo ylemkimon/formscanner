@@ -16,7 +16,6 @@ import java.util.HashMap;
 import javax.imageio.ImageIO;
 
 import org.albertoborsetta.formscanner.commons.FormPoint;
-import org.albertoborsetta.formscanner.commons.FormScannerConstants;
 import org.albertoborsetta.formscanner.commons.FormScannerConstants.Corners;
 
 import ij.ImagePlus;

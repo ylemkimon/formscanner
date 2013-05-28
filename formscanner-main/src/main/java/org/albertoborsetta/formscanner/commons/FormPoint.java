@@ -2,8 +2,6 @@ package org.albertoborsetta.formscanner.commons;
 
 import java.awt.Point;
 
-import ij.process.ImageProcessor;
-
 public class FormPoint extends Point implements Comparable<FormPoint>{
 	
 	/**
