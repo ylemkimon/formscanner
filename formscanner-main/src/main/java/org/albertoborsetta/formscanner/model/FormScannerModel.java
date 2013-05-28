@@ -308,18 +308,18 @@ public class FormScannerModel {
 						double m1 = Math.tan(alfa);
 						double m2 = Math.tan(alfa - Math.PI/2);
 						
-						double q1 = p1.getY() - (p1.getX() * m1);
-						double q2 = p.getY() - (p.getX() * m2);
+						double q1 = p1.getY() + (p1.getX() * m1);
+						double q2 = p.getY() + (p.getX() * m2);
 						
-						x3 = (q2 - q1) / (m1 - m2);
-						y3 = (m1 * x3) + q1;
+						x3 = (q1 - q2) / (m1 - m2);
+						y3 = q1 - (m1 * x3);
 					}
 					
-					double rowDx = (x3 - p1.getX()) / values;
-					double rowDy = (y3 - p1.getY()) / values;
+					double rowDx = (x3 - p1.getX()) / (values-1);
+					double rowDy = (y3 - p1.getY()) / (values-1);
 					
-					double colDx = (x3 - p.getX()) / rows;
-					double colDy = (y3 - p.getY()) / rows;
+					double colDx = (p.getX() - x3) / (rows-1);
+					double colDy = (p.getY() - y3) / (rows-1);
 					
 					for (int i=0; i<rows; i++) {
 						for (int j=0; j<values; j++) {
@@ -328,44 +328,6 @@ public class FormScannerModel {
 						}						
 					}
 					manageTemplateFrame.setupTable(view.getPoints());
-					/*
-					if (rows == 1) { // rows = 1, values > 1
-						view.removeAllPoints();
-						
-						int dx = (p.x - p1.x)/(values-1);
-						int y = p1.y + ((p.y - p1.y)/2);
-						
-						for (int i=0; i<values; i++) {
-							Point pi = new Point(p1.x+(dx*i), y);
-							view.addPoint(pi);
-						}
-						manageTemplateFrame.setupTable(view.getPoints());
-					} else if (values == 1) { // rows > 1, values =1
-						view.removeAllPoints();
-						
-						int x = p1.x + ((p.x - p1.x)/2);
-						int dy = (p.y - p1.y)/(rows-1);
-						
-						for (int i=0; i<rows; i++) {
-							Point pi = new Point(x, p1.y+(dy*i));
-							view.addPoint(pi);
-						}
-						manageTemplateFrame.setupTable(view.getPoints());
-					} else { // rows > 1, values > 1
-						view.removeAllPoints();
-						
-						int dx = (p.x - p1.x)/(values-1);
-						int dy = (p.y - p1.y)/(rows-1);					
-						
-						for (int i=0; i<rows; i++) {
-							for (int j=0; j<values; j++) {
-								Point pi = new Point(p1.x+(dx*j), p1.y+(dy*i));
-								view.addPoint(pi);
-							}						
-						}
-						manageTemplateFrame.setupTable(view.getPoints());
-					}
-					*/
 				}
 			}
 		}
@@ -403,9 +365,9 @@ public class FormScannerModel {
 		FormPoint topRightPoint = corners.get(Corners.TOP_RIGHT);
 		
 		double dx = (double) (topRightPoint.getX() - topLeftPoint.getX());
-		double dy = (double) (topRightPoint.getY() - topLeftPoint.getY());
+		double dy = (double) (topLeftPoint.getY() - topRightPoint.getY());
 		
-		double rotation = Math.atan(dx/dy);
+		double rotation = Math.atan(dy/dx);
 		formTemplate.setRotation(rotation);
 	}
 }
