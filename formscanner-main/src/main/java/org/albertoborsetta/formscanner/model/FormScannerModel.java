@@ -287,12 +287,6 @@ public class FormScannerModel {
 					view.addPoint(p);
 					manageTemplateFrame.setupTable(view.getPoints());
 				}
-				/*
-				else {
-					view.removePoint(p);
-					manageTemplateFrame.clearTable();
-				}
-				*/
 			} else {  // rows > 1 or values > 1
 				if (points.size() == 0) {
 					view.addPoint(p);
@@ -315,11 +309,20 @@ public class FormScannerModel {
 						y3 = q1 - (m1 * x3);
 					}
 					
-					double rowDx = (x3 - p1.getX()) / (values-1);
-					double rowDy = (y3 - p1.getY()) / (values-1);
+					double rowDx = (x3 - p1.getX());
+					double rowDy = (y3 - p1.getY());
 					
-					double colDx = (p.getX() - x3) / (rows-1);
-					double colDy = (p.getY() - y3) / (rows-1);
+					double colDx = (p.getX() - x3);
+					double colDy = (p.getY() - y3);
+					
+					if (values > 1) {
+						rowDx = rowDx / (values - 1);
+						rowDy = rowDy / (values - 1);
+					}
+					if (rows > 1) {
+						colDx = colDx / (rows-1);
+						colDy = colDy / (rows-1);
+					}
 					
 					for (int i=0; i<rows; i++) {
 						for (int j=0; j<values; j++) {

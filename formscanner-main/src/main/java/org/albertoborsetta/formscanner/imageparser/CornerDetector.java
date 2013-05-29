@@ -190,23 +190,8 @@ public class CornerDetector {
 		}
 	}
 	
-	public ImageProcessor showCornerPoints(ImageProcessor ip) {
-		ImageProcessor ipResult = ip.duplicate();
-		/*
-		int[] lookupTable = new int[256];
-		for (int i=0; i<256; i++){
-			lookupTable[i] = 128 + (i/2);
-		}
-		ipResult.applyTable(lookupTable);
-		*/
-		for (FormPoint c: corners) {
-			c.draw(ipResult);
-		}
-		return ipResult;
-	}
-
-	void showProcessor(ImageProcessor ip, String title) {
-		ImagePlus win = new ImagePlus(title,ip);
-		win.show();
-	}
+//	void showProcessor(ImageProcessor ip, String title) {
+//		ImagePlus win = new ImagePlus(title,ip);
+//		win.show();
+//	}
 }
