@@ -1,0 +1,287 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="form" language="groovy" columnCount="2" pageWidth="612" pageHeight="792" whenNoDataType="AllSectionsNoDetail" columnWidth="286" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20">
+	<property name="ireport.zoom" value="2.0"/>
+	<property name="ireport.x" value="555"/>
+	<property name="ireport.y" value="96"/>
+	<style name="Crosstab Data Text" isDefault="false" hAlign="Center"/>
+	<queryString>
+		<![CDATA[select
+	i as domanda
+from
+	generate_series(1,40) as i]]>
+	</queryString>
+	<field name="domanda" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<background>
+		<band height="752" splitType="Stretch">
+			<frame>
+				<reportElement x="0" y="0" width="20" height="20"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+				</box>
+			</frame>
+			<frame>
+				<reportElement x="552" y="0" width="20" height="20"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+			</frame>
+			<frame>
+				<reportElement x="552" y="732" width="20" height="20"/>
+				<box>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+			</frame>
+			<frame>
+				<reportElement x="0" y="732" width="20" height="20"/>
+				<box>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+				</box>
+			</frame>
+		</band>
+	</background>
+	<pageHeader>
+		<band height="113" splitType="Stretch">
+			<staticText>
+				<reportElement x="20" y="20" width="532" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Bottom">
+					<font fontName="Times New Roman" size="12" isItalic="true"/>
+				</textElement>
+				<text><![CDATA[Foglio delle risposte]]></text>
+			</staticText>
+			<frame>
+				<reportElement x="20" y="40" width="531" height="20"/>
+				<staticText>
+					<reportElement x="0" y="0" width="30" height="20"/>
+					<textElement textAlignment="Right" verticalAlignment="Bottom">
+						<font fontName="Times New Roman" size="12"/>
+					</textElement>
+					<text><![CDATA[Data]]></text>
+				</staticText>
+				<line>
+					<reportElement x="30" y="19" width="100" height="1"/>
+				</line>
+				<staticText>
+					<reportElement x="131" y="0" width="40" height="20"/>
+					<textElement textAlignment="Right" verticalAlignment="Bottom">
+						<font fontName="Times New Roman" size="12"/>
+					</textElement>
+					<text><![CDATA[Nome]]></text>
+				</staticText>
+				<line>
+					<reportElement x="171" y="19" width="150" height="1"/>
+				</line>
+				<staticText>
+					<reportElement x="321" y="0" width="57" height="20"/>
+					<textElement textAlignment="Right" verticalAlignment="Bottom">
+						<font fontName="Times New Roman" size="12"/>
+					</textElement>
+					<text><![CDATA[Cognome]]></text>
+				</staticText>
+				<line>
+					<reportElement x="378" y="19" width="150" height="1"/>
+				</line>
+			</frame>
+			<frame>
+				<reportElement x="42" y="75" width="131" height="20"/>
+				<rectangle>
+					<reportElement x="101" y="0" width="15" height="20"/>
+				</rectangle>
+				<rectangle>
+					<reportElement x="116" y="0" width="15" height="20"/>
+				</rectangle>
+				<rectangle>
+					<reportElement x="86" y="0" width="15" height="20"/>
+				</rectangle>
+				<rectangle>
+					<reportElement x="71" y="0" width="15" height="20"/>
+				</rectangle>
+				<staticText>
+					<reportElement x="0" y="0" width="71" height="20"/>
+					<textElement verticalAlignment="Bottom">
+						<font fontName="Times New Roman" size="12" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Test numero]]></text>
+				</staticText>
+			</frame>
+			<frame>
+				<reportElement x="392" y="75" width="159" height="20"/>
+				<staticText>
+					<reportElement x="6" y="0" width="61" height="20"/>
+					<textElement verticalAlignment="Bottom">
+						<font fontName="Times New Roman" size="12" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Matricola]]></text>
+				</staticText>
+				<rectangle>
+					<reportElement x="127" y="0" width="15" height="20"/>
+				</rectangle>
+				<rectangle>
+					<reportElement x="142" y="0" width="15" height="20"/>
+				</rectangle>
+				<rectangle>
+					<reportElement x="97" y="0" width="15" height="20"/>
+				</rectangle>
+				<rectangle>
+					<reportElement x="112" y="0" width="15" height="20"/>
+				</rectangle>
+				<rectangle>
+					<reportElement x="82" y="0" width="15" height="20"/>
+				</rectangle>
+				<rectangle>
+					<reportElement x="67" y="0" width="15" height="20"/>
+				</rectangle>
+			</frame>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="40">
+			<frame>
+				<reportElement x="143" y="0" width="120" height="40"/>
+				<staticText>
+					<reportElement x="0" y="20" width="30" height="20"/>
+					<box>
+						<topPen lineWidth="1.0"/>
+						<leftPen lineWidth="1.0"/>
+						<bottomPen lineWidth="1.0"/>
+						<rightPen lineWidth="1.0"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Times New Roman" size="12" isBold="true"/>
+					</textElement>
+					<text><![CDATA[A]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="30" y="20" width="30" height="20"/>
+					<box>
+						<topPen lineWidth="1.0"/>
+						<leftPen lineWidth="1.0"/>
+						<bottomPen lineWidth="1.0"/>
+						<rightPen lineWidth="1.0"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Times New Roman" size="12" isBold="true"/>
+					</textElement>
+					<text><![CDATA[B]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="90" y="20" width="30" height="20"/>
+					<box>
+						<topPen lineWidth="1.0"/>
+						<leftPen lineWidth="1.0"/>
+						<bottomPen lineWidth="1.0"/>
+						<rightPen lineWidth="1.0"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Times New Roman" size="12" isBold="true"/>
+					</textElement>
+					<text><![CDATA[D]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="60" y="20" width="30" height="20"/>
+					<box>
+						<topPen lineWidth="1.0"/>
+						<leftPen lineWidth="1.0"/>
+						<bottomPen lineWidth="1.0"/>
+						<rightPen lineWidth="1.0"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Times New Roman" size="12" isBold="true"/>
+					</textElement>
+					<text><![CDATA[C]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="0" y="0" width="120" height="20"/>
+					<box>
+						<topPen lineWidth="1.0"/>
+						<leftPen lineWidth="1.0"/>
+						<bottomPen lineWidth="1.0"/>
+						<rightPen lineWidth="1.0"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Times New Roman" size="12" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Risposte]]></text>
+				</staticText>
+			</frame>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="20" splitType="Stretch">
+			<break type="Column">
+				<reportElement x="0" y="0" width="100" height="1">
+					<printWhenExpression><![CDATA[$F{domanda} == 20]]></printWhenExpression>
+				</reportElement>
+			</break>
+			<frame>
+				<reportElement x="143" y="0" width="30" height="20"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<ellipse>
+					<reportElement x="8" y="3" width="14" height="14"/>
+				</ellipse>
+			</frame>
+			<frame>
+				<reportElement x="173" y="0" width="30" height="20"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<ellipse>
+					<reportElement x="8" y="3" width="14" height="14"/>
+				</ellipse>
+			</frame>
+			<frame>
+				<reportElement x="203" y="0" width="30" height="20"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<ellipse>
+					<reportElement x="8" y="3" width="14" height="14"/>
+				</ellipse>
+			</frame>
+			<frame>
+				<reportElement x="233" y="0" width="30" height="20"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<ellipse>
+					<reportElement x="8" y="3" width="14" height="14"/>
+				</ellipse>
+			</frame>
+			<textField>
+				<reportElement x="42" y="0" width="101" height="20"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+					<font fontName="Times New Roman" size="12"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA["Domanda: " + $F{domanda}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="1"/>
+	</columnFooter>
+</jasperReport>
