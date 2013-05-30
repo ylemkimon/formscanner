@@ -260,7 +260,7 @@ public class FormScannerModel {
 		view.setAdvanceable();
 	}
 	
-	public void addPoint(ImageView view, FormPoint p) {
+	public void addPoint(ImageView view, FormPoint p2) {
 		if (manageTemplateFrame!=null) {
 			int rows = manageTemplateFrame.getRowsNumber();
 			int values = manageTemplateFrame.getValuesNumber();
@@ -268,23 +268,44 @@ public class FormScannerModel {
 			List<FormPoint> points = view.getPoints();
 			if (rows==1 && values==1) {
 				if (points.size() == 0) {
-					view.addPoint(p);
+					view.addPoint(p2);
 					manageTemplateFrame.setupTable(view.getPoints());
 				}
 			} else {
 				if (points.size() == 0) {
-					view.addPoint(p);
+					view.addPoint(p2);
 				} else {
 					FormPoint p1 = points.get(0);
 					view.removeAllPoints();					
 					
-					FormPoint p3 = claculateThirdPoint(p, p1);
+					FormPoint p3 = claculateThirdPoint(p2, p1);
 					
-					double rowDx = (p3.getX() - p1.getX()) / ((values > 1)?(values - 1):1);
-					double rowDy = (p3.getY() - p1.getY()) / ((values > 1)?(values - 1):1);
+					double rowDx = 0;
+					double rowDy = 0;					
+					double colDx = 0;
+					double colDy = 0;
 					
-					double colDx = (p.getX() - p3.getX()) / ((rows > 1)?(rows - 1):1);
-					double colDy = (p.getY() - p3.getY()) / ((rows > 1)?(rows - 1):1);
+					int rowDivider = ((values > 1)?(values - 1):1);
+					int colDivider = ((rows > 1)?(rows - 1):1);
+					
+					switch (manageTemplateFrame.getFieldType()) {
+					case QUESTIONS_BY_ROWS:
+						rowDx = (p3.getX() - p1.getX()) / rowDivider;
+						rowDy = (p3.getY() - p1.getY()) / rowDivider;
+						
+						colDx = (p2.getX() - p3.getX()) / colDivider;
+						colDy = (p2.getY() - p3.getY()) / colDivider;
+						break;
+					case QUESTIONS_BY_COLS:
+						rowDx = (p2.getX() - p3.getX()) / rowDivider;
+						rowDy = (p2.getY() - p3.getY()) / rowDivider;
+						
+						colDx = (p3.getX() - p1.getX()) / colDivider;
+						colDy = (p3.getY() - p1.getY()) / colDivider;
+						break;
+					default:
+						break;	
+					}
 					
 					for (int i=0; i<rows; i++) {
 						for (int j=0; j<values; j++) {
@@ -292,6 +313,7 @@ public class FormScannerModel {
 							view.addPoint(pi);
 						}						
 					}
+					
 					manageTemplateFrame.setupTable(view.getPoints());
 				}
 			}
