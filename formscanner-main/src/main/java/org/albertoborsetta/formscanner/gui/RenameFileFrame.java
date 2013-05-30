@@ -2,6 +2,7 @@ package org.albertoborsetta.formscanner.gui;
 
 import org.albertoborsetta.formscanner.commons.FormScannerConstants;
 import org.albertoborsetta.formscanner.commons.FormScannerGridLayouts;
+import org.albertoborsetta.formscanner.commons.translation.FormScannerTranslation;
 import org.albertoborsetta.formscanner.commons.translation.FormScannerTranslationKeys;
 import org.albertoborsetta.formscanner.gui.builder.ButtonBuilder;
 import org.albertoborsetta.formscanner.gui.builder.LabelBuilder;
@@ -74,7 +75,7 @@ public class RenameFileFrame extends JInternalFrame implements View {
 	}
 	
 	public void updateRenamedFile(String fileName) {
-		setTitle(formScannerModel.getTranslationFor(FormScannerTranslationKeys.RENAME_FILE_FRAME_TITLE) + ": " + fileName);
+		setTitle(FormScannerTranslation.getTranslationFor(FormScannerTranslationKeys.RENAME_FILE_FRAME_TITLE) + ": " + fileName);
 		fileNameField.setText(FilenameUtils.removeExtension(fileName));
 		fileExtensionField.setText('.' + FilenameUtils.getExtension(fileName));
 	}
@@ -85,7 +86,7 @@ public class RenameFileFrame extends JInternalFrame implements View {
 	}
 	
 	private JPanel getRenamePanel() {
-		newFileNameLabel = new LabelBuilder(formScannerModel.getTranslationFor(FormScannerTranslationKeys.RENAME_FILE_FRAME_LABEL) + ": ")
+		newFileNameLabel = new LabelBuilder(FormScannerTranslation.getTranslationFor(FormScannerTranslationKeys.RENAME_FILE_FRAME_LABEL) + ": ")
 			.build();
 		
 		fileNameField = new TextFieldBuilder(10)
@@ -105,14 +106,14 @@ public class RenameFileFrame extends JInternalFrame implements View {
 	
 	private JPanel getButtonPanel() {
 		okButton = new ButtonBuilder()
-			.withText(formScannerModel.getTranslationFor(FormScannerTranslationKeys.OK_BUTTON))
+			.withText(FormScannerTranslation.getTranslationFor(FormScannerTranslationKeys.OK_BUTTON))
 			.setEnabled(false)
 			.withActionCommand(FormScannerConstants.RENAME_FILE_CURRENT)
 			.withActionListener(renameFileController)
 			.build();
 	
 		cancelButton = new ButtonBuilder()
-			.withText(formScannerModel.getTranslationFor(FormScannerTranslationKeys.CANCEL_BUTTON))
+			.withText(FormScannerTranslation.getTranslationFor(FormScannerTranslationKeys.CANCEL_BUTTON))
 			.withActionCommand(FormScannerConstants.RENAME_FILE_SKIP)
 			.withActionListener(renameFileController)
 			.build();

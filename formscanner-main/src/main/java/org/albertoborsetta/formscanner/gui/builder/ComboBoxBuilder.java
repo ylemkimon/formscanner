@@ -2,6 +2,7 @@ package org.albertoborsetta.formscanner.gui.builder;
 
 import java.awt.event.ItemListener;
 
+import javax.swing.ComboBoxModel;
 import javax.swing.JComboBox;
 
 import org.albertoborsetta.formscanner.commons.FormScannerFont;
@@ -18,6 +19,11 @@ public class ComboBoxBuilder {
 	
 	public ComboBoxBuilder withItemListener(ItemListener listener) {
 		comboBox.addItemListener(listener);
+		return this;
+	}
+	
+	public ComboBoxBuilder withModel(ComboBoxModel model) {
+		comboBox.setModel(model);
 		return this;
 	}
 	

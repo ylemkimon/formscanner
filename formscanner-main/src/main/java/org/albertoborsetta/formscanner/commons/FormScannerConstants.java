@@ -1,5 +1,8 @@
 package org.albertoborsetta.formscanner.commons;
 
+import org.albertoborsetta.formscanner.commons.translation.FormScannerTranslation;
+import org.albertoborsetta.formscanner.commons.translation.FormScannerTranslationKeys;
+
 public class FormScannerConstants {
 
 	// Actions
@@ -26,10 +29,8 @@ public class FormScannerConstants {
 	public static final String IMAGE_FRAME_NAME = "IMAGE_FRAME_NAME";
 	
 	// GridType
-	public static final String COLUMN = "COLUMN";
-	public static final String ROW = "ROW";
-	public static final String GRID_ROWS = "GRID_ROWS";
-	public static final String GRID_COLUMNS = "GRID_COLUMNS";
+	public static final String QUESTIONS_BY_ROWS = "QUESTIONS_BY_ROWS";
+	public static final String QUESTIONS_BY_COLS = "QUESTIONS_BY_COLS";
 	
 	// Properties
 	public static final String IS_MULTIPLE = "IS_MULTIPLE";
@@ -51,14 +52,14 @@ public class FormScannerConstants {
 		TOP_LEFT,
 		TOP_RIGHT,
 		BOTTOM_LEFT,
-		BOTTOM_RIGHT
+		BOTTOM_RIGHT;
 	}
 	
 	public enum Frame {
 		RENAME_FILE_FRAME_NAME,
 		FILE_LIST_FRAME_NAME,
 		MANAGE_TEMPLATE_FRAME_NAME,
-		IMAGE_FRAME_NAME
+		IMAGE_FRAME_NAME;
 	}
 	
 	public enum Action {
@@ -76,18 +77,27 @@ public class FormScannerConstants {
 		SAVE_TEMPLATE,
 		REMOVE_FIELD,
 		ADD_FIELD,
-		EXIT
-	  }
-	
-	public enum FieldType {
-		COLUMN,
-		ROW,
-		GRID_ROWS,
-		GRID_COLUMNS
+		EXIT;
 	}
 	
 	public enum Mode {
 		VIEW,
-		UPDATE
+		UPDATE;
+	}
+	
+	public enum FieldType {
+		QUESTIONS_BY_ROWS(FormScannerTranslation.getTranslationFor(FormScannerTranslationKeys.QUESTIONS_BY_ROWS)),
+		QUESTIONS_BY_COLS(FormScannerTranslation.getTranslationFor(FormScannerTranslationKeys.QUESTIONS_BY_COLS));
+		
+		private String value; 
+
+		FieldType(String value) { 
+			this.value = value;
+		}
+		
+		@Override
+		public String toString() {
+			return value;
+		}
 	}
 }
