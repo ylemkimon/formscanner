@@ -10,6 +10,7 @@ import javax.swing.JSeparator;
 import javax.swing.KeyStroke;
 
 import org.albertoborsetta.formscanner.commons.FormScannerConstants;
+import org.albertoborsetta.formscanner.commons.translation.FormScannerTranslation;
 import org.albertoborsetta.formscanner.commons.translation.FormScannerTranslationKeys;
 import org.albertoborsetta.formscanner.gui.builder.MenuBuilder;
 import org.albertoborsetta.formscanner.gui.builder.MenuItemBuilder;
@@ -46,30 +47,30 @@ public class MenuBar extends JMenuBar implements MenuView {
 
 	private JMenu getFileMenu() {			
 		
-		openMenuItem = new MenuItemBuilder(formScannerModel.getTranslationFor(FormScannerTranslationKeys.OPEN_IMAGES))
+		openMenuItem = new MenuItemBuilder(FormScannerTranslation.getTranslationFor(FormScannerTranslationKeys.OPEN_IMAGES))
 			.withActionCommand(FormScannerConstants.OPEN_IMAGES)
 			.withActionListener(formScannerController)
 			.withAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O, InputEvent.CTRL_MASK))
-			.withMnemonic(formScannerModel.getMnemonicFor(FormScannerTranslationKeys.OPEN_IMAGES_MNEMONIC))
+			.withMnemonic(FormScannerTranslation.getMnemonicFor(FormScannerTranslationKeys.OPEN_IMAGES_MNEMONIC))
 			.build();
 		
-		saveMenuItem = new MenuItemBuilder(formScannerModel.getTranslationFor(FormScannerTranslationKeys.SAVE_RESULTS))
+		saveMenuItem = new MenuItemBuilder(FormScannerTranslation.getTranslationFor(FormScannerTranslationKeys.SAVE_RESULTS))
 			.withActionCommand(FormScannerConstants.SAVE_RESULTS)
 			.withActionListener(formScannerController)
-			.withMnemonic(formScannerModel.getMnemonicFor(FormScannerTranslationKeys.SAVE_RESULTS_MNEMONIC))
+			.withMnemonic(FormScannerTranslation.getMnemonicFor(FormScannerTranslationKeys.SAVE_RESULTS_MNEMONIC))
 			.withAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, InputEvent.CTRL_MASK))
 			.setEnabled(false)
 			.build();
 		
-		exitMenuItem = new MenuItemBuilder(formScannerModel.getTranslationFor(FormScannerTranslationKeys.EXIT))
+		exitMenuItem = new MenuItemBuilder(FormScannerTranslation.getTranslationFor(FormScannerTranslationKeys.EXIT))
 			.withActionCommand(FormScannerConstants.EXIT)
 			.withActionListener(formScannerController)
-			.withMnemonic(formScannerModel.getMnemonicFor(FormScannerTranslationKeys.EXIT_MNEMONIC))
+			.withMnemonic(FormScannerTranslation.getMnemonicFor(FormScannerTranslationKeys.EXIT_MNEMONIC))
 			.withAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_X, InputEvent.CTRL_MASK))
 			.build();
 		
-		return new MenuBuilder(formScannerModel.getTranslationFor(FormScannerTranslationKeys.FILE_MENU))
-			.withMnemonic(formScannerModel.getMnemonicFor(FormScannerTranslationKeys.FILE_MENU_MNEMONIC))
+		return new MenuBuilder(FormScannerTranslation.getTranslationFor(FormScannerTranslationKeys.FILE_MENU))
+			.withMnemonic(FormScannerTranslation.getMnemonicFor(FormScannerTranslationKeys.FILE_MENU_MNEMONIC))
 			.add(openMenuItem)
 			.add(saveMenuItem)
 			.add(new JSeparator(JSeparator.HORIZONTAL))
@@ -79,33 +80,33 @@ public class MenuBar extends JMenuBar implements MenuView {
 
 	public JMenu getEditMenu() {
 		
-		renameMenuItem = new MenuItemBuilder(formScannerModel.getTranslationFor(FormScannerTranslationKeys.RENAME_FILES))
+		renameMenuItem = new MenuItemBuilder(FormScannerTranslation.getTranslationFor(FormScannerTranslationKeys.RENAME_FILES))
 			.withActionCommand(FormScannerConstants.RENAME_FILE_FIRST)
 			.withActionListener(formScannerController)
-			.withMnemonic(formScannerModel.getMnemonicFor(FormScannerTranslationKeys.RENAME_FILES_MNEMONIC))
+			.withMnemonic(FormScannerTranslation.getMnemonicFor(FormScannerTranslationKeys.RENAME_FILES_MNEMONIC))
 			.withAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_R, InputEvent.CTRL_MASK))
 			.setEnabled(false)
 			.build();
 		
-		return new MenuBuilder(formScannerModel.getTranslationFor(FormScannerTranslationKeys.EDIT_MENU))
-			.withMnemonic(formScannerModel.getMnemonicFor(FormScannerTranslationKeys.EDIT_MENU_MNEMONIC))
+		return new MenuBuilder(FormScannerTranslation.getTranslationFor(FormScannerTranslationKeys.EDIT_MENU))
+			.withMnemonic(FormScannerTranslation.getMnemonicFor(FormScannerTranslationKeys.EDIT_MENU_MNEMONIC))
 			.add(renameMenuItem)
 			.build();
 	}
 
 	public JMenu getTemplateMenu() {			
 				
-		loadTemplateMenuItem = new MenuItemBuilder(formScannerModel.getTranslationFor(FormScannerTranslationKeys.LOAD_TEMPLATE))
+		loadTemplateMenuItem = new MenuItemBuilder(FormScannerTranslation.getTranslationFor(FormScannerTranslationKeys.LOAD_TEMPLATE))
 			.withActionCommand(FormScannerConstants.LOAD_TEMPLATE)
 			.withActionListener(formScannerController)
-			.withMnemonic(formScannerModel.getMnemonicFor(FormScannerTranslationKeys.LOAD_TEMPLATE_MNEMONIC))
+			.withMnemonic(FormScannerTranslation.getMnemonicFor(FormScannerTranslationKeys.LOAD_TEMPLATE_MNEMONIC))
 			.withAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_L, InputEvent.CTRL_MASK))
 			.build();
 		// useTemplateMenuItem = new UseTemplateMenuItem();
 		// editTemplateMenuItem = new EditTemplateMenuItem();
 		
-		return new MenuBuilder(formScannerModel.getTranslationFor(FormScannerTranslationKeys.TEMPLATE_MENU))
-			.withMnemonic(formScannerModel.getMnemonicFor(FormScannerTranslationKeys.TEMPLATE_MENU_MNEMONIC))
+		return new MenuBuilder(FormScannerTranslation.getTranslationFor(FormScannerTranslationKeys.TEMPLATE_MENU))
+			.withMnemonic(FormScannerTranslation.getMnemonicFor(FormScannerTranslationKeys.TEMPLATE_MENU_MNEMONIC))
 			.add(loadTemplateMenuItem)
 			.build();
 		// add(editTemplateMenuItem);

@@ -10,6 +10,7 @@ import java.util.List;
 import javax.swing.JList;
 
 import org.albertoborsetta.formscanner.commons.FormScannerConstants;
+import org.albertoborsetta.formscanner.commons.translation.FormScannerTranslation;
 import org.albertoborsetta.formscanner.commons.translation.FormScannerTranslationKeys;
 import org.albertoborsetta.formscanner.gui.builder.ListBuilder;
 import org.albertoborsetta.formscanner.gui.builder.ScrollPaneBuilder;
@@ -34,7 +35,7 @@ public class FileListFrame extends JInternalFrame {
 		setBounds(10, 10, 200, desktopHeight-20);
 		
 		setName(FormScannerConstants.FILE_LIST_FRAME_NAME);
-		setTitle(this.model.getTranslationFor(FormScannerTranslationKeys.FILE_LIST_FRAME_TITLE));		
+		setTitle(FormScannerTranslation.getTranslationFor(FormScannerTranslationKeys.FILE_LIST_FRAME_TITLE));		
 		
 		setIconifiable(true);
 		setResizable(true);

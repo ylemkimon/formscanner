@@ -4,30 +4,30 @@ import javax.swing.ImageIcon;
 
 public class FormScannerResources {
 	
-	private static FormScannerResources resources = null;
 	private static String iconsPath;
 	private static String templatePath;
-	private String template;
+	private static String template;
 
+	/*
 	private FormScannerResources(String path) {
 		iconsPath = path + "/icons/";
 		templatePath = path + "/template/";
 	}
+	*/
 	
-	public static FormScannerResources getResources(String path) {
-		if (resources == null) {
-			resources = new FormScannerResources(path);
-		}
-		return resources;
+	public static void setResources(String path) {
+		// new FormScannerResources(path);
+		iconsPath = path + "/icons/";
+		templatePath = path + "/template/";
 	}
 	
-	public ImageIcon getIconFor(String key) {
+	public static ImageIcon getIconFor(String key) {
 		ImageIcon icon = new ImageIcon(iconsPath + key);
 		return icon;
 	}
 	
-	public void setTemplate(String template) {
-		this.template = template;
+	public static void setTemplate(String tpl) {
+		template = tpl;
 	}
 
 	public String getTemplateConfig() {

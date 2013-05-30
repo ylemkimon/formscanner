@@ -10,7 +10,9 @@ import javax.swing.JToolBar;
 import javax.swing.border.EtchedBorder;
 
 import org.albertoborsetta.formscanner.commons.FormScannerConstants;
+import org.albertoborsetta.formscanner.commons.resources.FormScannerResources;
 import org.albertoborsetta.formscanner.commons.resources.FormScannerResourcesKeys;
+import org.albertoborsetta.formscanner.commons.translation.FormScannerTranslation;
 import org.albertoborsetta.formscanner.commons.translation.FormScannerTranslationKeys;
 import org.albertoborsetta.formscanner.gui.builder.ButtonBuilder;
 import org.albertoborsetta.formscanner.gui.builder.ToolBarBuilder;
@@ -55,15 +57,15 @@ public class ToolBar extends JPanel implements MenuView{
 			.withActionCommand(FormScannerConstants.OPEN_IMAGES)
 			.withActionListener(formScannerController)
 			.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null))
-			.withToolTip(formScannerModel.getTranslationFor(FormScannerTranslationKeys.OPEN_IMAGES_TOOLTIP))
-			.withIcon(formScannerModel.getIconFor(FormScannerResourcesKeys.OPEN_IMAGES_ICON))
+			.withToolTip(FormScannerTranslation.getTranslationFor(FormScannerTranslationKeys.OPEN_IMAGES_TOOLTIP))
+			.withIcon(FormScannerResources.getIconFor(FormScannerResourcesKeys.OPEN_IMAGES_ICON))
 			.build();
 		saveButton = new ButtonBuilder()
 			.withActionCommand(FormScannerConstants.SAVE_RESULTS)
 			.withActionListener(formScannerController)
 			.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null))
-			.withToolTip(formScannerModel.getTranslationFor(FormScannerTranslationKeys.SAVE_RESULTS_TOOLTIP))
-			.withIcon(formScannerModel.getIconFor(FormScannerResourcesKeys.SAVE_RESULTS_ICON))
+			.withToolTip(FormScannerTranslation.getTranslationFor(FormScannerTranslationKeys.SAVE_RESULTS_TOOLTIP))
+			.withIcon(FormScannerResources.getIconFor(FormScannerResourcesKeys.SAVE_RESULTS_ICON))
 			.setEnabled(false)
 			.build();
 		
@@ -82,16 +84,16 @@ public class ToolBar extends JPanel implements MenuView{
 			.withActionCommand(FormScannerConstants.RENAME_FILE_FIRST)
 			.withActionListener(formScannerController)
 			.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null))
-			.withToolTip(formScannerModel.getTranslationFor(FormScannerTranslationKeys.RENAME_FILES_TOOLTIP))
-			.withIcon(formScannerModel.getIconFor(FormScannerResourcesKeys.RENAME_FILES_ICON))
+			.withToolTip(FormScannerTranslation.getTranslationFor(FormScannerTranslationKeys.RENAME_FILES_TOOLTIP))
+			.withIcon(FormScannerResources.getIconFor(FormScannerResourcesKeys.RENAME_FILES_ICON))
 			.setEnabled(false)
 			.build();
 		startButton = new ButtonBuilder()
 			.withActionCommand(FormScannerConstants.ANALYZE_FILE_FIRST)
 			.withActionListener(formScannerController)
 			.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null))
-			.withToolTip(formScannerModel.getTranslationFor(FormScannerTranslationKeys.ANALYZE_FILES_TOOLTIP))
-			.withIcon(formScannerModel.getIconFor(FormScannerResourcesKeys.ANALYZE_FILES_ICON))
+			.withToolTip(FormScannerTranslation.getTranslationFor(FormScannerTranslationKeys.ANALYZE_FILES_TOOLTIP))
+			.withIcon(FormScannerResources.getIconFor(FormScannerResourcesKeys.ANALYZE_FILES_ICON))
 			.setEnabled(false)
 			.build();
 		

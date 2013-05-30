@@ -25,11 +25,17 @@ public class FormScannerTranslation extends Properties {
 		}
 	}
 	
-	public static FormScannerTranslation getTranslation(String path, String language) {
-		if (translations == null) {
-			translations = new FormScannerTranslation(path, language);
-		}
-		return translations;
+	public static void setTranslation(String path, String language) {
+		translations = new FormScannerTranslation(path, language);
 	}
 
+	public static String getTranslationFor(String key) {
+		String value = translations.getProperty(key, key);
+		return value;
+	}
+	
+	public static char getMnemonicFor(String key) {
+		char value = translations.getProperty(key, key).charAt(0);
+		return value;
+	}
 }

@@ -29,8 +29,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Vector;
 
-import javax.swing.ImageIcon;
 import javax.swing.JInternalFrame;
 
 import org.apache.commons.io.FilenameUtils;
@@ -46,8 +47,6 @@ public class FormScannerModel {
 	private int analyzedFileIndex = 0;
 	
 	private FormScannerConfiguration configurations;
-	private FormScannerTranslation translations;
-	private FormScannerResources resources;
 	// private AnalyzeFileResultsFrame analyzeFileResultsFrame;
 	private ManageTemplateFrame manageTemplateFrame;
 	private ImageFrame imageFrame;
@@ -60,9 +59,9 @@ public class FormScannerModel {
 		configurations = FormScannerConfiguration.getConfiguration(path);
 		
 		String lang = configurations.getProperty(FormScannerConfigurationKeys.LANG, FormScannerConfigurationKeys.DEFAULT_LANG);
-		translations = FormScannerTranslation.getTranslation(path, lang);
-		resources = FormScannerResources.getResources(path);
-		resources.setTemplate(configurations.getProperty(FormScannerConfigurationKeys.TEMPLATE, FormScannerConfigurationKeys.DEFAULT_TEMPLATE));
+		FormScannerTranslation.setTranslation(path, lang);
+		FormScannerResources.setResources(path);
+		FormScannerResources.setTemplate(configurations.getProperty(FormScannerConfigurationKeys.TEMPLATE, FormScannerConfigurationKeys.DEFAULT_TEMPLATE));
 	}
 
 	public void openFiles(File[] fileArray) {
@@ -223,21 +222,6 @@ public class FormScannerModel {
 			break;
 		}
 	}
-	
-	public String getTranslationFor(String key) {
-		String value = translations.getProperty(key, key);
-		return value;
-	}
-	
-	public char getMnemonicFor(String key) {
-		char value = translations.getProperty(key, key).charAt(0);
-		return value;
-	}
-	
-	public ImageIcon getIconFor(String key) {
-		ImageIcon icon = resources.getIconFor(key);
-		return icon;
-	}
 
 	public void loadTemplate(File template) {
 		if (template != null) {
@@ -287,42 +271,20 @@ public class FormScannerModel {
 					view.addPoint(p);
 					manageTemplateFrame.setupTable(view.getPoints());
 				}
-			} else {  // rows > 1 or values > 1
+			} else {
 				if (points.size() == 0) {
 					view.addPoint(p);
 				} else {
 					FormPoint p1 = points.get(0);
 					view.removeAllPoints();					
-					double alfa = formTemplate.getRotation();
 					
-					double x3 = p.getX();
-					double y3 = p1.getY();
+					FormPoint p3 = claculateThirdPoint(p, p1);
 					
-					if (alfa != 0) {
-						double m1 = Math.tan(alfa);
-						double m2 = Math.tan(alfa - Math.PI/2);
-						
-						double q1 = p1.getY() + (p1.getX() * m1);
-						double q2 = p.getY() + (p.getX() * m2);
-						
-						x3 = (q1 - q2) / (m1 - m2);
-						y3 = q1 - (m1 * x3);
-					}
+					double rowDx = (p3.getX() - p1.getX()) / ((values > 1)?(values - 1):1);
+					double rowDy = (p3.getY() - p1.getY()) / ((values > 1)?(values - 1):1);
 					
-					double rowDx = (x3 - p1.getX());
-					double rowDy = (y3 - p1.getY());
-					
-					double colDx = (p.getX() - x3);
-					double colDy = (p.getY() - y3);
-					
-					if (values > 1) {
-						rowDx = rowDx / (values - 1);
-						rowDy = rowDy / (values - 1);
-					}
-					if (rows > 1) {
-						colDx = colDx / (rows-1);
-						colDy = colDy / (rows-1);
-					}
+					double colDx = (p.getX() - p3.getX()) / ((rows > 1)?(rows - 1):1);
+					double colDy = (p.getY() - p3.getY()) / ((rows > 1)?(rows - 1):1);
 					
 					for (int i=0; i<rows; i++) {
 						for (int j=0; j<values; j++) {
@@ -335,6 +297,27 @@ public class FormScannerModel {
 			}
 		}
 	}
+
+	private FormPoint claculateThirdPoint(FormPoint p, FormPoint p1) {
+		double alfa = formTemplate.getRotation();
+		
+		double x3 = p.getX();
+		double y3 = p1.getY();
+		
+		if (alfa != 0) {
+			double m1 = Math.tan(alfa);
+			double m2 = Math.tan(alfa - Math.PI/2);
+			
+			double q1 = p1.getY() + (p1.getX() * m1);
+			double q2 = p.getY() + (p.getX() * m2);
+			
+			x3 = (q1 - q2) / (m1 - m2);
+			y3 = q1 - (m1 * x3);
+		}
+		
+		FormPoint p3 = new FormPoint((int) x3, (int) y3);
+		return p3;
+	}
 	
 	public void removePoint(ImageView view, FormPoint p) {
 		view.removePoint(p);
@@ -345,9 +328,7 @@ public class FormScannerModel {
 	}
 
 	public void addFields(HashMap<String, FormField> fields) {
-		for (Map.Entry<String, FormField> field : fields.entrySet()) {
-			formTemplate.setField(field.getKey(), field.getValue());
-        } 
+		formTemplate.setFields(fields); 
 	}
 
 	public void calculateTemplateCorners() {
@@ -372,5 +353,14 @@ public class FormScannerModel {
 		
 		double rotation = Math.atan(dy/dx);
 		formTemplate.setRotation(rotation);
+	}
+
+	public List<String> getFieldList() {
+		HashMap<String, FormField> fields = formTemplate.getFields();
+		List<String> fieldList = new ArrayList<String>();
+		for (Entry<String, FormField> field : fields.entrySet()) {
+			fieldList.add(field.getKey());
+        }
+		return fieldList;
 	}
 }
