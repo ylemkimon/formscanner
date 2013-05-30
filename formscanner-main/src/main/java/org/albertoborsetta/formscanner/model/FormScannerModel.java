@@ -37,6 +37,11 @@ import javax.swing.JInternalFrame;
 import org.apache.commons.io.FilenameUtils;
 
 public class FormScannerModel {
+	
+	public static final String COL_DX = "COL_DX";
+	public static final String COL_DY = "COL_DY";
+	public static final String ROW_DX = "ROW_DX";
+	public static final String ROW_DY = "ROW_DY";
 
 	private HashMap<Integer, File> openedFiles = new HashMap<Integer, File>();
 	private File template;
@@ -280,36 +285,11 @@ public class FormScannerModel {
 					
 					FormPoint p3 = claculateThirdPoint(p2, p1);
 					
-					double rowDx = 0;
-					double rowDy = 0;					
-					double colDx = 0;
-					double colDy = 0;
-					
-					int rowDivider = ((values > 1)?(values - 1):1);
-					int colDivider = ((rows > 1)?(rows - 1):1);
-					
-					switch (manageTemplateFrame.getFieldType()) {
-					case QUESTIONS_BY_ROWS:
-						rowDx = (p3.getX() - p1.getX()) / rowDivider;
-						rowDy = (p3.getY() - p1.getY()) / rowDivider;
-						
-						colDx = (p2.getX() - p3.getX()) / colDivider;
-						colDy = (p2.getY() - p3.getY()) / colDivider;
-						break;
-					case QUESTIONS_BY_COLS:
-						rowDx = (p2.getX() - p3.getX()) / rowDivider;
-						rowDy = (p2.getY() - p3.getY()) / rowDivider;
-						
-						colDx = (p3.getX() - p1.getX()) / colDivider;
-						colDy = (p3.getY() - p1.getY()) / colDivider;
-						break;
-					default:
-						break;	
-					}
+					HashMap<String, Double> delta = calculateDelta(p1, p2, p3);
 					
 					for (int i=0; i<rows; i++) {
 						for (int j=0; j<values; j++) {
-							FormPoint pi = new FormPoint((int) (p1.x+(colDx*i)+(rowDx*j)),(int) (p1.y+(colDy*i)+(rowDy*j)));
+							FormPoint pi = new FormPoint((int) (p1.x+(delta.get(COL_DX)*i)+(delta.get(ROW_DX)*j)),(int) (p1.y+(delta.get(COL_DY)*i)+(delta.get(ROW_DY)*j)));
 							view.addPoint(pi);
 						}						
 					}
@@ -318,6 +298,36 @@ public class FormScannerModel {
 				}
 			}
 		}
+	}
+
+	private HashMap<String, Double> calculateDelta(FormPoint p1, FormPoint p2, FormPoint p3) {
+		int rows = manageTemplateFrame.getRowsNumber();
+		int values = manageTemplateFrame.getValuesNumber();
+		
+		HashMap<String, Double> delta = new HashMap<String, Double>();
+		
+		int rowDivider = ((values > 1)?(values - 1):1);
+		int colDivider = ((rows > 1)?(rows - 1):1);
+		
+		switch (manageTemplateFrame.getFieldType()) {
+		case QUESTIONS_BY_ROWS:
+			delta.put(ROW_DX, (p3.getX() - p1.getX()) / rowDivider);
+			delta.put(ROW_DY, (p3.getY() - p1.getY()) / rowDivider);
+
+			delta.put(COL_DX, (p2.getX() - p3.getX()) / colDivider);
+			delta.put(COL_DY, (p2.getY() - p3.getY()) / colDivider);
+			break;
+		case QUESTIONS_BY_COLS:
+			delta.put(ROW_DX, (p2.getX() - p3.getX()) / rowDivider);
+			delta.put(ROW_DY, (p2.getY() - p3.getY()) / rowDivider);
+
+			delta.put(COL_DX, (p3.getX() - p1.getX()) / colDivider);
+			delta.put(COL_DY, (p3.getY() - p1.getY()) / colDivider);
+			break;
+		default:
+			break;	
+		}
+		return delta;
 	}
 
 	private FormPoint claculateThirdPoint(FormPoint p, FormPoint p1) {
