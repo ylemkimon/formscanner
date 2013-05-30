@@ -4,6 +4,7 @@ import org.albertoborsetta.formscanner.commons.FormPoint;
 import org.albertoborsetta.formscanner.commons.FormScannerConstants;
 import org.albertoborsetta.formscanner.commons.FormScannerConstants.Mode;
 import org.albertoborsetta.formscanner.commons.FormScannerFont;
+import org.albertoborsetta.formscanner.commons.translation.FormScannerTranslation;
 import org.albertoborsetta.formscanner.commons.translation.FormScannerTranslationKeys;
 import org.albertoborsetta.formscanner.gui.controller.InternalFrameController;
 import org.albertoborsetta.formscanner.gui.controller.ImageFrameController;
@@ -59,7 +60,7 @@ public class ImageFrame extends JInternalFrame implements ScrollableImageView {
 		setMaximizable(true);
 		
 		setName(FormScannerConstants.IMAGE_FRAME_NAME);	
-		setTitle(model.getTranslationFor(FormScannerTranslationKeys.IMAGE_FRAME_TITLE));					
+		setTitle(FormScannerTranslation.getTranslationFor(FormScannerTranslationKeys.IMAGE_FRAME_TITLE));					
 		
 		setBounds(320, 10, desktopWidth - 500, desktopHeight - 20);
 		
@@ -107,6 +108,7 @@ public class ImageFrame extends JInternalFrame implements ScrollableImageView {
 		private int height;
 		private double scaleFactor = 1;
 		private List<FormPoint> points = new ArrayList<FormPoint>();
+		private List<FormPoint> corners = new ArrayList<FormPoint>();
 		private BufferedImage image;
 		
 		
@@ -128,6 +130,8 @@ public class ImageFrame extends JInternalFrame implements ScrollableImageView {
 			height = (int) Math.floor(image.getHeight() * scaleFactor);
 			setPreferredSize(new Dimension(width, height));
 			g.drawImage(image, 0, 0, width, height, this);
+			showPoints(g);
+			showCorners(g);
 	    } 
 		
 		public void showPoints(Graphics g) {
@@ -140,12 +144,22 @@ public class ImageFrame extends JInternalFrame implements ScrollableImageView {
 			g.setColor(Color.BLACK);
 		}
 		
+		public void showCorners(Graphics g) {
+			g.setColor(Color.GREEN);
+			for (FormPoint p: corners) {
+				FormPoint p1 = calculatePointPosition(p);
+				g.drawLine(p1.x-5, p1.y-5, p1.x+5, p1.y+5);
+				g.drawLine(p1.x-5, p1.y+5, p1.x+5, p1.y-5);
+			}
+			g.setColor(Color.BLACK);
+		}
+		
 		private FormPoint calculatePointPosition(FormPoint p) {
 			int dx = scrollPane.getHorizontalScrollBarValue();
 			int dy = scrollPane.getVerticalScrollBarValue();
 			
-			int x = (int) Math.floor(((p.x-dx)*scaleFactor)+5);
-			int y = (int) Math.floor(((p.y-dy)*scaleFactor)+27);
+			int x = (int) Math.floor((p.x-dx)*scaleFactor);
+			int y = (int) Math.floor((p.y-dy)*scaleFactor);
 			
 			FormPoint p1 = new FormPoint(x, y);
 			return p1;
@@ -195,7 +209,7 @@ public class ImageFrame extends JInternalFrame implements ScrollableImageView {
 		Graphics g = getGraphics();
 		imagePanel.addPoint(p);
 		update(g);
-		imagePanel.showPoints(g);
+		// imagePanel.showPoints(g);
 		g.dispose();
 	}
 	
@@ -204,7 +218,7 @@ public class ImageFrame extends JInternalFrame implements ScrollableImageView {
 		Graphics g = getGraphics();		
 		imagePanel.removePoint(p);
 		update(g);
-		imagePanel.showPoints(g);
+		// imagePanel.showPoints(g);
 		g.dispose();
 	}
 	
@@ -233,7 +247,7 @@ public class ImageFrame extends JInternalFrame implements ScrollableImageView {
 		imagePanel.setScaleFactor(scaleFactor + zoom);
 		Graphics g = getGraphics();
 		update(g);
-		imagePanel.showPoints(g);
+		// imagePanel.showPoints(g);
 		g.dispose();
 	}
 
