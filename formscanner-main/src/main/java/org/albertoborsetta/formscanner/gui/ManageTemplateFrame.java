@@ -24,7 +24,6 @@ import javax.swing.JTable;
 import javax.swing.JSpinner;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
-import javax.swing.ListModel;
 import javax.swing.ListSelectionModel;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableColumnModel;
@@ -183,10 +182,6 @@ public class ManageTemplateFrame extends JInternalFrame implements TabbedView {
 			case 2:
 				setupTable();
 				formScannerModel.createImageFrame(file, Mode.UPDATE);
-				if (formScannerModel.getTemplateCorners().isEmpty()) {
-					formScannerModel.calculateTemplateCorners();
-					formScannerModel.calculateRotation();
-				}
 				break;
 			default:
 				break;
@@ -219,10 +214,10 @@ public class ManageTemplateFrame extends JInternalFrame implements TabbedView {
 
 	private HashMap<String, FormField> createFields() {
 		HashMap<String, FormField> fields = new HashMap<String, FormField>();
-		for (int i = 1; i < (Integer) rowsNumber.getValue(); i++) {
+		for (int i = 1; i < (Integer) rowsNumber.getValue()+1; i++) {
 			String name = (String) table.getValueAt(i, 0);
 			FormField field = new FormField(name);
-			for (int j = 1; j < (Integer) valuesNumber.getValue(); j++) {
+			for (int j = 1; j < (Integer) valuesNumber.getValue()+1; j++) {
 				String value = (String) table.getValueAt(0, j);
 				FormPoint p = getPointFromTable(i, j);
 				field.setPoint(value, p);

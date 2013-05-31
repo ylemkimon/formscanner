@@ -2,6 +2,7 @@ package org.albertoborsetta.formscanner.gui;
 
 import org.albertoborsetta.formscanner.commons.FormPoint;
 import org.albertoborsetta.formscanner.commons.FormScannerConstants;
+import org.albertoborsetta.formscanner.commons.FormScannerConstants.Corners;
 import org.albertoborsetta.formscanner.commons.FormScannerConstants.Mode;
 import org.albertoborsetta.formscanner.commons.FormScannerFont;
 import org.albertoborsetta.formscanner.commons.translation.FormScannerTranslation;
@@ -18,15 +19,19 @@ import java.awt.BorderLayout;
 import java.awt.image.BufferedImage;
 
 import javax.swing.JInternalFrame;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.border.BevelBorder;
 
 import javax.imageio.ImageIO;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map.Entry;
 
 
 public class ImageFrame extends JInternalFrame implements ScrollableImageView {
@@ -39,6 +44,9 @@ public class ImageFrame extends JInternalFrame implements ScrollableImageView {
 	private ImageFrameController controller;
 	private InternalFrameController frameController;
 	private Mode mode;
+	private double rotation;
+
+	private ImageStatusBar statusBar;
 	
 
 	/**
@@ -66,9 +74,27 @@ public class ImageFrame extends JInternalFrame implements ScrollableImageView {
 		
 		imagePanel = new ImagePanel(file);
 		scrollPane = new ImageScrollPane(imagePanel);
-		getContentPane().add(scrollPane, BorderLayout.CENTER);
+		statusBar = new ImageStatusBar();
+		getContentPane().add(statusBar, BorderLayout.SOUTH);
+		getContentPane().add(scrollPane, BorderLayout.CENTER);		
 		
 		this.mode = mode;
+	}
+	
+	private class ImageStatusBar extends JPanel {
+		
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = 1L;
+
+		public ImageStatusBar() {
+			super();
+			setFont(FormScannerFont.getFont());
+			JLabel label = new JLabel("pippo");
+			setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
+			add(label);
+		}
 	}
 	
 	private class ImageScrollPane extends JScrollPane {
@@ -108,7 +134,7 @@ public class ImageFrame extends JInternalFrame implements ScrollableImageView {
 		private int height;
 		private double scaleFactor = 1;
 		private List<FormPoint> points = new ArrayList<FormPoint>();
-		private List<FormPoint> corners = new ArrayList<FormPoint>();
+		private HashMap<Corners, FormPoint> corners;
 		private BufferedImage image;
 		
 		
@@ -121,7 +147,7 @@ public class ImageFrame extends JInternalFrame implements ScrollableImageView {
 			super();
 			setImage(file);
 			setFont(FormScannerFont.getFont());
-			scaleFactor = 1;
+			scaleFactor = 0.5;
 		}
 		
 		@Override
@@ -146,8 +172,8 @@ public class ImageFrame extends JInternalFrame implements ScrollableImageView {
 		
 		public void showCorners(Graphics g) {
 			g.setColor(Color.GREEN);
-			for (FormPoint p: corners) {
-				FormPoint p1 = calculatePointPosition(p);
+			for (Entry<Corners, FormPoint> corner: corners.entrySet()) {
+				FormPoint p1 = calculatePointPosition(corner.getValue());
 				g.drawLine(p1.x-5, p1.y-5, p1.x+5, p1.y+5);
 				g.drawLine(p1.x-5, p1.y+5, p1.x+5, p1.y-5);
 			}
@@ -196,6 +222,26 @@ public class ImageFrame extends JInternalFrame implements ScrollableImageView {
 		public List<FormPoint> getPoints() {
 			return points;
 		}
+
+		public void addCorner(Corners position, FormPoint corner) {
+			corners.put(position, corner);			
+		}
+
+		public void addCorners(HashMap<Corners, FormPoint> corners) {
+			this.corners = corners;
+		}
+
+		public void addPoints(List<FormPoint> points) {
+			this.points = points;
+		}
+		
+		public int getImageWidth() {
+			return width;
+		}
+		
+		public int getImageHeight() {
+			return height;
+		}
 	}
 	
 	@Override
@@ -205,21 +251,15 @@ public class ImageFrame extends JInternalFrame implements ScrollableImageView {
 	}
 	
 	@Override
-	public void addPoint(FormPoint p) {
-		Graphics g = getGraphics();
-		imagePanel.addPoint(p);
-		update(g);
-		// imagePanel.showPoints(g);
-		g.dispose();
+	public void addPoint(FormPoint point) {
+		imagePanel.addPoint(point);
+		update(getGraphics());
 	}
 	
 	@Override
-	public void removePoint(FormPoint p) {
-		Graphics g = getGraphics();		
-		imagePanel.removePoint(p);
-		update(g);
-		// imagePanel.showPoints(g);
-		g.dispose();
+	public void removePoint(FormPoint point) {
+		imagePanel.removePoint(point);
+		update(getGraphics());
 	}
 	
 	@Override
@@ -235,20 +275,14 @@ public class ImageFrame extends JInternalFrame implements ScrollableImageView {
 	@Override
 	public void setScrollBars(int deltaX, int deltaY) {
 		scrollPane.setScrollBars(deltaX, deltaY);
-		Graphics g = getGraphics();
-		update(g);
-		imagePanel.showPoints(g);
-		g.dispose();
+		update(getGraphics());
 	}
 	
 	@Override
 	public void zoomImage(double zoom) {
 		double scaleFactor = imagePanel.getScaleFactor();
 		imagePanel.setScaleFactor(scaleFactor + zoom);
-		Graphics g = getGraphics();
-		update(g);
-		// imagePanel.showPoints(g);
-		g.dispose();
+		update(getGraphics());
 	}
 
 	@Override
@@ -275,4 +309,40 @@ public class ImageFrame extends JInternalFrame implements ScrollableImageView {
 	public List<FormPoint> getPoints() {
 		return imagePanel.getPoints();
 	}
+
+	@Override
+	public void addCorner(Corners position, FormPoint corner) {
+		imagePanel.addCorner(position, corner);
+		update(getGraphics());
+	}
+
+
+	@Override
+	public void addCorners(HashMap<Corners, FormPoint> corners) {
+		imagePanel.addCorners(corners);
+		update(getGraphics());
+	}
+
+	@Override
+	public void addPoints(List<FormPoint> points) {
+		imagePanel.addPoints(points);
+		update(getGraphics());
+	}
+	
+	@Override
+	public void setRotation(double rotation) {
+		this.rotation = rotation;
+	}
+	
+	@Override
+	public Dimension getImageSize() {
+		return new Dimension(imagePanel.getImageWidth(), imagePanel.getImageHeight());
+	}
+	
+	private void updateGraphics() {
+		Graphics g = getGraphics();		
+		update(g);
+		g.dispose();
+	}
+
 }

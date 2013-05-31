@@ -1,5 +1,6 @@
 package org.albertoborsetta.formscanner.commons;
 
+import java.awt.Dimension;
 import java.util.HashMap;
 import java.util.Map.Entry;
 
@@ -11,6 +12,7 @@ public class FormTemplate {
 	private HashMap<String, FormField> fields;
 	private HashMap<Corners, FormPoint> corners;
 	private double rotation;
+	private Dimension size;
 	
 	public FormTemplate(String name) {
 		this.setName(name);
@@ -59,5 +61,13 @@ public class FormTemplate {
 
 	public void setRotation(double rotation) {
 		this.rotation = rotation;
+	}
+	
+	public void setSize(Dimension size) {
+		this.size = size;
+	}
+	
+	public Dimension getSize() {
+		return size;
 	}
 }

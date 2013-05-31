@@ -28,9 +28,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Map.Entry;
-import java.util.Vector;
 
 import javax.swing.JInternalFrame;
 
@@ -247,6 +245,11 @@ public class FormScannerModel {
 	public void createImageFrame(File file, Mode mode) {
 		imageFrame = new ImageFrame(this, file, mode);
 		view.arrangeFrame(imageFrame);
+		if (getTemplateCorners().isEmpty()) {
+			calculateTemplateCorners(imageFrame);
+			calculateTemplateRotation(imageFrame);
+			calculateTemplateSize(imageFrame);
+		}
 	}
 	
 	public void setImageCursor(ImageView view, Cursor cursor) {
@@ -363,18 +366,19 @@ public class FormScannerModel {
 		formTemplate.setFields(fields); 
 	}
 
-	public void calculateTemplateCorners() {
+	public void calculateTemplateCorners(ImageView view) {
 		HashMap<Corners, FormPoint> corners;
 		ScanImage imageScan = new ScanImage(template);
         corners = imageScan.locateCorners();
         formTemplate.setCorners(corners);
+        view.addCorners(corners);
 	}
 
 	public HashMap<Corners, FormPoint> getTemplateCorners() {
 		return formTemplate.getCorners();
 	}
 
-	public void calculateRotation() {
+	public void calculateTemplateRotation(ImageView view) {
 		HashMap<Corners, FormPoint> corners = formTemplate.getCorners();
 		
 		FormPoint topLeftPoint = corners.get(Corners.TOP_LEFT);
@@ -385,6 +389,7 @@ public class FormScannerModel {
 		
 		double rotation = Math.atan(dy/dx);
 		formTemplate.setRotation(rotation);
+		view.setRotation(rotation);
 	}
 
 	public List<String> getFieldList() {
@@ -394,5 +399,9 @@ public class FormScannerModel {
 			fieldList.add(field.getKey());
         }
 		return fieldList;
+	}
+	
+	public void calculateTemplateSize(ImageView view) {
+		formTemplate.setSize(view.getImageSize());
 	}
 }
