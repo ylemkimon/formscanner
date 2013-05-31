@@ -10,6 +10,9 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JInternalFrame;
 import javax.swing.JDesktopPane;
+import javax.swing.UIManager;
+import javax.swing.UIManager.LookAndFeelInfo;
+import javax.swing.UnsupportedLookAndFeelException;
 
 import org.albertoborsetta.formscanner.model.FormScannerModel;
 
@@ -28,9 +31,17 @@ public class FormScanner extends JFrame {
 	 */
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
-			public void run() {				
-				try {					
-					FormScanner window = new FormScanner();
+			public void run() {
+				try {
+//			    	UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+			    	UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
+//				    for (LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
+//				        if ("Nimbus".equals(info.getName())) {
+//				            UIManager.setLookAndFeel(info.getClassName());
+//				            break;
+//				        }
+//				    }
+				    FormScanner window = new FormScanner();
 					window.setIconImage(null);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -70,7 +81,7 @@ public class FormScanner extends JFrame {
 		boolean found = false;
 		
 		for (Component component: desktopPane.getComponents()) {
-			if (component.getName().equals(frame.getName())) {
+			if (frame.getName().equals(component.getName())) {
 				component.setVisible(false);
 				desktopPane.remove(component);
 				found = true;
