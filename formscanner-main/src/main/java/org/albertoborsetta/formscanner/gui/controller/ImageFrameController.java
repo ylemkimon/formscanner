@@ -140,7 +140,6 @@ public class ImageFrameController implements MouseMotionListener, MouseInputList
 		model.setImageCursor(view, new Cursor(Cursor.DEFAULT_CURSOR));
 	}
 
-	@Override
 	public void mouseWheelMoved(MouseWheelEvent e) {
 		model.zoomImage(view, e.getWheelRotation());
 	}
