@@ -2,3 +2,5 @@ target
 
 .project
 .settings
+formscanner-main/.classpath
+formscanner-main/.settings
