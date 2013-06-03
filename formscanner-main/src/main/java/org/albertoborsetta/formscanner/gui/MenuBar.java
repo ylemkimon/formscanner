@@ -114,12 +114,10 @@ public class MenuBar extends JMenuBar implements MenuView {
 		// add(useTemplateMenuItem);
 	}
 	
-	@Override
 	public void setRenameControllersEnabled(boolean enable) {
 		renameMenuItem.setEnabled(enable);
 	}
 
-	@Override
 	public void setScanControllersEnabled(boolean enable) {
 		// TODO Auto-generated method stub
 		

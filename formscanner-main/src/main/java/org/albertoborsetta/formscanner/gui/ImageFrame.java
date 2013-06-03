@@ -15,17 +15,23 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.Cursor;
 import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.Graphics;
 import java.awt.BorderLayout;
 import java.awt.SystemColor;
 import java.awt.image.BufferedImage;
 
+import javax.swing.BoxLayout;
 import javax.swing.Icon;
 import javax.swing.JInternalFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JSeparator;
+import javax.swing.JTextField;
+import javax.swing.SwingConstants;
 import javax.swing.border.BevelBorder;
+import javax.swing.border.SoftBevelBorder;
 
 import javax.imageio.ImageIO;
 
@@ -112,12 +118,10 @@ public class ImageFrame extends JInternalFrame implements ScrollableImageView {
 			    g.setColor(GRAY_LINE_COLOR);
 			    g.drawLine(1, 12, 12, 1);
 			    g.drawLine(2, 12, 12, 2);
-			    g.drawLine(3, 12, 12, 3);
-
+			    
 			    g.drawLine(6, 12, 12, 6);
 			    g.drawLine(7, 12, 12, 7);
-			    g.drawLine(8, 12, 12, 8);
-
+			    
 			    g.drawLine(11, 12, 12, 11);
 			    g.drawLine(12, 12, 12, 12);
 
@@ -131,16 +135,43 @@ public class ImageFrame extends JInternalFrame implements ScrollableImageView {
 		public ImageStatusBar() {
 			super();
 			setFont(FormScannerFont.getFont());
-			setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
 			setLayout(new BorderLayout());
 		    setPreferredSize(new Dimension(10, 23));
 
 		    JPanel rightPanel = new JPanel(new BorderLayout());
+		    rightPanel.setBorder(new SoftBevelBorder(BevelBorder.LOWERED, null, null, null, null));
 		    rightPanel.add(new JLabel(new AngledLinesWindowsCornerIcon()), BorderLayout.SOUTH);
 		    rightPanel.setOpaque(false);
 
 		    add(rightPanel, BorderLayout.EAST);
-		    // setBackground(SystemColor.control);
+		    
+		    JPanel centerPanel = new JPanel(new BorderLayout());
+		    // centerPanel.setLayout(new BoxLayout(centerPanel, BoxLayout.X_AXIS));
+		    centerPanel.setLayout(new FlowLayout(FlowLayout.LEFT, 5, 0));
+		    centerPanel.setBorder(new SoftBevelBorder(BevelBorder.LOWERED, null, null, null, null));
+		    JLabel lblNewLabel = new JLabel("New label");
+		    centerPanel.add(lblNewLabel);
+			
+			JTextField textField = new JTextField("uno");
+			textField.setColumns(10);
+			centerPanel.add(textField);
+			
+			JSeparator separator = new JSeparator();
+			separator.setOrientation(SwingConstants.VERTICAL);
+			centerPanel.add(separator);
+			
+			JLabel lblNewLabel_1 = new JLabel("New label");
+			centerPanel.add(lblNewLabel_1);
+			
+			JTextField textField_1 = new JTextField("due");
+			textField_1.setColumns(10);
+			centerPanel.add(textField_1);
+			
+			JSeparator separator_1 = new JSeparator();
+			separator_1.setOrientation(SwingConstants.VERTICAL);
+			centerPanel.add(separator_1);
+			
+			add(centerPanel, BorderLayout.CENTER);
 		}
 	}
 	
@@ -291,97 +322,79 @@ public class ImageFrame extends JInternalFrame implements ScrollableImageView {
 		}
 	}
 	
-	@Override
 	public void updateImage(File file) {
 		imagePanel.setImage(file);
 		update(getGraphics());
 	}
 	
-	@Override
 	public void addPoint(FormPoint point) {
 		imagePanel.addPoint(point);
 		update(getGraphics());
 	}
 	
-	@Override
 	public void removePoint(FormPoint point) {
 		imagePanel.removePoint(point);
 		update(getGraphics());
 	}
 	
-	@Override
 	public void removeAllPoints() {
 		imagePanel.removeAllPoints();
 	}
 
-	@Override
 	public void setImageCursor(Cursor cursor) {
 		imagePanel.setCursor(cursor);
 	}
 
-	@Override
 	public void setScrollBars(int deltaX, int deltaY) {
 		scrollPane.setScrollBars(deltaX, deltaY);
 		update(getGraphics());
 	}
 	
-	@Override
 	public void zoomImage(double zoom) {
 		double scaleFactor = imagePanel.getScaleFactor();
 		imagePanel.setScaleFactor(scaleFactor + zoom);
 		update(getGraphics());
 	}
 
-	@Override
 	public double getScaleFactor() {
 		return imagePanel.getScaleFactor();
 	}
 	
-	@Override
 	public int getHorizontalScrollbarValue() {
 		return scrollPane.getHorizontalScrollBarValue();
 	}
 	
-	@Override
 	public int getVerticalScrollbarValue() {
 		return scrollPane.getVerticalScrollBarValue();
 	}
 
-	@Override
 	public Mode getMode() {
 		return mode;
 	}
 
-	@Override
 	public List<FormPoint> getPoints() {
 		return imagePanel.getPoints();
 	}
 
-	@Override
 	public void addCorner(Corners position, FormPoint corner) {
 		imagePanel.addCorner(position, corner);
 		update(getGraphics());
 	}
 
-
-	@Override
 	public void addCorners(HashMap<Corners, FormPoint> corners) {
 		imagePanel.addCorners(corners);
 		update(getGraphics());
 	}
 
-	@Override
 	public void addPoints(List<FormPoint> points) {
 		imagePanel.addPoints(points);
 		update(getGraphics());
 	}
 	
-	@Override
 	public void setRotation(double rotation) {
 		this.rotation = rotation;
 	}
 	
-	@Override
 	public Dimension getImageSize() {
 		return new Dimension(imagePanel.getImageWidth(), imagePanel.getImageHeight());
 	}

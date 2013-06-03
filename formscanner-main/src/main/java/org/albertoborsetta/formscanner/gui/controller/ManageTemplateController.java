@@ -28,7 +28,6 @@ public class ManageTemplateController implements ActionListener, ChangeListener,
 		this.view = view;		
 	}
 
-	@Override
 	public void actionPerformed(ActionEvent e) {
 		Action act = Action.valueOf(e.getActionCommand());
 		switch (act) {
@@ -51,17 +50,14 @@ public class ManageTemplateController implements ActionListener, ChangeListener,
 		
 	}
 
-	@Override
 	public void stateChanged(ChangeEvent e) {
 		formScannerModel.setAdvanceable(view);
 	}
 
-	@Override
 	public void itemStateChanged(ItemEvent e) {
 		formScannerModel.setAdvanceable(view);		
 	}
 
-	@Override
 	public void tableChanged(TableModelEvent e) {
 		formScannerModel.setAdvanceable(view);		
 	}
