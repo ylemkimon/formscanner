@@ -245,11 +245,10 @@ public class FormScannerModel {
 	public void createImageFrame(File file, Mode mode) {
 		imageFrame = new ImageFrame(this, file, mode);
 		view.arrangeFrame(imageFrame);
-		if (getTemplateCorners().isEmpty()) {
-			calculateTemplateCorners(imageFrame);
-			calculateTemplateRotation(imageFrame);
-			calculateTemplateSize(imageFrame);
-		}
+		
+		imageFrame.addCorners(calculateImageCorners(imageFrame));
+		imageFrame.setRotation(calculateImageRotation(imageFrame));
+		calculateImageSize(imageFrame);
 	}
 	
 	public void setImageCursor(ImageView view, Cursor cursor) {
@@ -366,30 +365,38 @@ public class FormScannerModel {
 		formTemplate.setFields(fields); 
 	}
 
-	public void calculateTemplateCorners(ImageView view) {
+	public HashMap<Corners, FormPoint> calculateImageCorners(ImageView view) {
 		HashMap<Corners, FormPoint> corners;
-		ScanImage imageScan = new ScanImage(template);
-        corners = imageScan.locateCorners();
-        formTemplate.setCorners(corners);
-        view.addCorners(corners);
+		
+		if (formTemplate.getCorners().isEmpty()) {
+			ScanImage imageScan = new ScanImage(template);
+	        corners = imageScan.locateCorners();
+	        formTemplate.setCorners(corners);
+		} else {
+			corners = formTemplate.getCorners();
+		}
+		
+		return corners;
 	}
 
-	public HashMap<Corners, FormPoint> getTemplateCorners() {
-		return formTemplate.getCorners();
-	}
-
-	public void calculateTemplateRotation(ImageView view) {
-		HashMap<Corners, FormPoint> corners = formTemplate.getCorners();
+	public double calculateImageRotation(ImageView view) {
+		double rotation;
 		
-		FormPoint topLeftPoint = corners.get(Corners.TOP_LEFT);
-		FormPoint topRightPoint = corners.get(Corners.TOP_RIGHT);
-		
-		double dx = (double) (topRightPoint.getX() - topLeftPoint.getX());
-		double dy = (double) (topLeftPoint.getY() - topRightPoint.getY());
-		
-		double rotation = Math.atan(dy/dx);
-		formTemplate.setRotation(rotation);
-		view.setRotation(rotation);
+		if (formTemplate.getRotation() == 0.0) {
+			HashMap<Corners, FormPoint> corners = formTemplate.getCorners();
+			
+			FormPoint topLeftPoint = corners.get(Corners.TOP_LEFT);
+			FormPoint topRightPoint = corners.get(Corners.TOP_RIGHT);
+			
+			double dx = (double) (topRightPoint.getX() - topLeftPoint.getX());
+			double dy = (double) (topLeftPoint.getY() - topRightPoint.getY());
+			
+			rotation = Math.atan(dy/dx);
+			formTemplate.setRotation(rotation);
+		} else {
+			rotation = formTemplate.getRotation();
+		}
+		return rotation;
 	}
 
 	public List<String> getFieldList() {
@@ -401,7 +408,14 @@ public class FormScannerModel {
 		return fieldList;
 	}
 	
-	public void calculateTemplateSize(ImageView view) {
-		formTemplate.setSize(view.getImageSize());
+	public Dimension calculateImageSize(ImageView view) {
+		Dimension size;
+		if (formTemplate.getSize() == null ) {
+			size = view.getImageSize();
+			formTemplate.setSize(size);
+		} else {
+			size = formTemplate.getSize();
+		}
+		return size;
 	}
 }
