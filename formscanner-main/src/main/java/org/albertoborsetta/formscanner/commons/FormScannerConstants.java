@@ -49,10 +49,21 @@ public class FormScannerConstants {
 	public static final String BOTTOM_RIGHT = "BOTTOM_RIGHT";
 	
 	public enum Corners {
-		TOP_LEFT,
-		TOP_RIGHT,
-		BOTTOM_LEFT,
-		BOTTOM_RIGHT;
+		TOP_LEFT(FormScannerTranslation.getTranslationFor(FormScannerTranslationKeys.TOP_LEFT_CORNER)),
+		TOP_RIGHT(FormScannerTranslation.getTranslationFor(FormScannerTranslationKeys.TOP_RIGHT_CORNER)),
+		BOTTOM_LEFT(FormScannerTranslation.getTranslationFor(FormScannerTranslationKeys.BOTTOM_LEFT_CORNER)),
+		BOTTOM_RIGHT(FormScannerTranslation.getTranslationFor(FormScannerTranslationKeys.BOTTOM_RIGHT_CORNER));
+		
+		private String value; 
+
+		Corners(String value) { 
+			this.value = value;
+		}
+		
+		@Override
+		public String toString() {
+			return value;
+		}
 	}
 	
 	public enum Frame {

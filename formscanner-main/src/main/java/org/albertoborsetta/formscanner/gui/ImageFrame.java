@@ -7,6 +7,9 @@ import org.albertoborsetta.formscanner.commons.FormScannerConstants.Mode;
 import org.albertoborsetta.formscanner.commons.FormScannerFont;
 import org.albertoborsetta.formscanner.commons.translation.FormScannerTranslation;
 import org.albertoborsetta.formscanner.commons.translation.FormScannerTranslationKeys;
+import org.albertoborsetta.formscanner.gui.builder.LabelBuilder;
+import org.albertoborsetta.formscanner.gui.builder.PanelBuilder;
+import org.albertoborsetta.formscanner.gui.builder.StatusBarBuilder;
 import org.albertoborsetta.formscanner.gui.controller.InternalFrameController;
 import org.albertoborsetta.formscanner.gui.controller.ImageFrameController;
 import org.albertoborsetta.formscanner.model.FormScannerModel;
@@ -15,21 +18,15 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.Cursor;
 import java.awt.Dimension;
-import java.awt.FlowLayout;
 import java.awt.Graphics;
 import java.awt.BorderLayout;
-import java.awt.SystemColor;
 import java.awt.image.BufferedImage;
 
-import javax.swing.BoxLayout;
 import javax.swing.Icon;
 import javax.swing.JInternalFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import javax.swing.JSeparator;
-import javax.swing.JTextField;
-import javax.swing.SwingConstants;
 import javax.swing.border.BevelBorder;
 import javax.swing.border.SoftBevelBorder;
 
@@ -84,94 +81,67 @@ public class ImageFrame extends JInternalFrame implements ScrollableImageView {
 		imagePanel = new ImagePanel(file);
 		scrollPane = new ImageScrollPane(imagePanel);
 		statusBar = new ImageStatusBar();
-		getContentPane().add(statusBar, BorderLayout.SOUTH);
+		getContentPane().add(statusBar.getStatusBar(), BorderLayout.SOUTH);
 		getContentPane().add(scrollPane, BorderLayout.CENTER);		
 		
 		this.mode = mode;
 	}
 	
-	private class ImageStatusBar extends JPanel {
+	private class ImageStatusBar {
 		
-		private class AngledLinesWindowsCornerIcon implements Icon {
-			  private Color WHITE_LINE_COLOR = new Color(255, 255, 255);
-
-			  private Color GRAY_LINE_COLOR = new Color(172, 168, 153);
-			  private static final int WIDTH = 13;
-
-			  private static final int HEIGHT = 13;
-
-			  public int getIconHeight() {
-			    return WIDTH;
-			  }
-
-			  public int getIconWidth() {
-			    return HEIGHT;
-			  }
-
-			  public void paintIcon(Component c, Graphics g, int x, int y) {
-
-			    g.setColor(WHITE_LINE_COLOR);
-			    g.drawLine(0, 12, 12, 0);
-			    g.drawLine(5, 12, 12, 5);
-			    g.drawLine(10, 12, 12, 10);
-
-			    g.setColor(GRAY_LINE_COLOR);
-			    g.drawLine(1, 12, 12, 1);
-			    g.drawLine(2, 12, 12, 2);
-			    
-			    g.drawLine(6, 12, 12, 6);
-			    g.drawLine(7, 12, 12, 7);
-			    
-			    g.drawLine(11, 12, 12, 11);
-			    g.drawLine(12, 12, 12, 12);
-
-			  }
-			}
-		/**
-		 * 
-		 */
-		private static final long serialVersionUID = 1L;
-
+		private JLabel rotationValue;
+		private HashMap<Corners, JLabel> cornerValues = new HashMap<Corners, JLabel>();
+		private JPanel statusBar;
+		
 		public ImageStatusBar() {
-			super();
-			setFont(FormScannerFont.getFont());
-			setLayout(new BorderLayout());
-		    setPreferredSize(new Dimension(10, 23));
-
-		    JPanel rightPanel = new JPanel(new BorderLayout());
-		    rightPanel.setBorder(new SoftBevelBorder(BevelBorder.LOWERED, null, null, null, null));
-		    rightPanel.add(new JLabel(new AngledLinesWindowsCornerIcon()), BorderLayout.SOUTH);
-		    rightPanel.setOpaque(false);
-
-		    add(rightPanel, BorderLayout.EAST);
-		    
-		    JPanel centerPanel = new JPanel(new BorderLayout());
-		    // centerPanel.setLayout(new BoxLayout(centerPanel, BoxLayout.X_AXIS));
-		    centerPanel.setLayout(new FlowLayout(FlowLayout.LEFT, 5, 0));
-		    centerPanel.setBorder(new SoftBevelBorder(BevelBorder.LOWERED, null, null, null, null));
-		    JLabel lblNewLabel = new JLabel("New label");
-		    centerPanel.add(lblNewLabel);
+			JLabel rotationLabel = new LabelBuilder(FormScannerTranslation.getTranslationFor(FormScannerTranslationKeys.ROTATION_LABEL) + ": ")
+					.build();
+			rotationValue = new LabelBuilder(rotation + "")
+					.withName("rotation")
+					.withBorder(new SoftBevelBorder(BevelBorder.LOWERED, null, null, null, null))
+					.build();
 			
-			JTextField textField = new JTextField("uno");
-			textField.setColumns(10);
-			centerPanel.add(textField);
+			JPanel rotationField = new PanelBuilder().withBorderLayout()
+					.add(rotationLabel, BorderLayout.WEST)
+					.add(rotationValue, BorderLayout.CENTER)
+					.build();
 			
-			JSeparator separator = new JSeparator();
-			separator.setOrientation(SwingConstants.VERTICAL);
-			centerPanel.add(separator);
+			JLabel cornerLabel = new LabelBuilder("corners: ")
+					.build();
 			
-			JLabel lblNewLabel_1 = new JLabel("New label");
-			centerPanel.add(lblNewLabel_1);
+			StatusBarBuilder statusBarBuilder = new StatusBarBuilder();
 			
-			JTextField textField_1 = new JTextField("due");
-			textField_1.setColumns(10);
-			centerPanel.add(textField_1);
-			
-			JSeparator separator_1 = new JSeparator();
-			separator_1.setOrientation(SwingConstants.VERTICAL);
-			centerPanel.add(separator_1);
-			
-			add(centerPanel, BorderLayout.CENTER);
+			for (int index=Corners.values().length-1; index>=0; index--) {
+				double xCoord = imagePanel.getCorner(Corners.values()[index]).getX();
+				double yCoord = imagePanel.getCorner(Corners.values()[index]).getY();
+				String position = "(" + xCoord + "," + yCoord + ")";
+				JLabel cornerValue = new LabelBuilder(position)
+						.withName(Corners.values()[index].name())
+						.withBorder(new SoftBevelBorder(BevelBorder.LOWERED, null, null, null, null))
+						.build();
+				cornerValues.put(Corners.values()[index], cornerValue);
+				statusBarBuilder.add(cornerValue);
+			}
+			statusBarBuilder.add(cornerLabel);
+			statusBarBuilder.add(rotationValue);
+			statusBar = statusBarBuilder.add(rotationField).build();
+		}
+		
+		public JPanel getStatusBar() {
+			return statusBar;
+		}
+		
+		public void updateRotation() {
+			rotationValue.setText(rotation + "");
+		}
+		
+		public void updateCorners() {
+			for (Corners corner: Corners.values()) {
+				double xCoord = imagePanel.getCorner(corner).getX();
+				double yCoord = imagePanel.getCorner(corner).getY();
+				String position = "(" + xCoord + "," + yCoord + ")";
+				cornerValues.get(corner).setText(position);
+			}
 		}
 	}
 	
@@ -212,7 +182,7 @@ public class ImageFrame extends JInternalFrame implements ScrollableImageView {
 		private int height;
 		private double scaleFactor = 1;
 		private List<FormPoint> points = new ArrayList<FormPoint>();
-		private HashMap<Corners, FormPoint> corners;
+		private HashMap<Corners, FormPoint> corners = new HashMap<Corners, FormPoint>();
 		private BufferedImage image;
 		
 		
@@ -228,6 +198,18 @@ public class ImageFrame extends JInternalFrame implements ScrollableImageView {
 			scaleFactor = 0.5;
 		}
 		
+		public HashMap<Corners, FormPoint> getCorners() {
+			return corners;
+		}
+		
+		public FormPoint getCorner(Corners position) {
+			FormPoint p = new FormPoint(0, 0); 
+			if (!corners.isEmpty()) {
+				p = corners.get(position);
+			} 
+			return p;
+		}
+
 		@Override
 	    public void paintComponent(Graphics g) {
 			width = (int) Math.floor(image.getWidth() * scaleFactor);
@@ -384,6 +366,7 @@ public class ImageFrame extends JInternalFrame implements ScrollableImageView {
 	public void addCorners(HashMap<Corners, FormPoint> corners) {
 		imagePanel.addCorners(corners);
 		update(getGraphics());
+		statusBar.updateCorners();
 	}
 
 	public void addPoints(List<FormPoint> points) {
@@ -393,8 +376,9 @@ public class ImageFrame extends JInternalFrame implements ScrollableImageView {
 	
 	public void setRotation(double rotation) {
 		this.rotation = rotation;
+		statusBar.updateRotation();
 	}
-	
+
 	public Dimension getImageSize() {
 		return new Dimension(imagePanel.getImageWidth(), imagePanel.getImageHeight());
 	}
@@ -404,5 +388,4 @@ public class ImageFrame extends JInternalFrame implements ScrollableImageView {
 		update(g);
 		g.dispose();
 	}
-
 }
