@@ -6,6 +6,7 @@ import org.albertoborsetta.formscanner.commons.FormScannerConstants.Action;
 import org.albertoborsetta.formscanner.commons.FormScannerConstants.Corners;
 import org.albertoborsetta.formscanner.commons.FormScannerConstants.Frame;
 import org.albertoborsetta.formscanner.commons.FormScannerConstants.Mode;
+import org.albertoborsetta.formscanner.commons.FormScannerConstants.Zoom;
 import org.albertoborsetta.formscanner.commons.FormTemplate;
 import org.albertoborsetta.formscanner.commons.configuration.FormScannerConfiguration;
 import org.albertoborsetta.formscanner.commons.configuration.FormScannerConfigurationKeys;
@@ -237,8 +238,11 @@ public class FormScannerModel {
 	}
 
 	public void zoomImage(ScrollableImageView view, int direction) {
-		if ((direction>0 && (view.getScaleFactor()<1.5)) || ((direction<0) && (view.getScaleFactor()>0.4))) {
-			view.zoomImage((double)direction/10);
+		Zoom zoom = view.getScaleFactor();
+		Integer actualZoom = zoom.ordinal();
+		Integer maxZoom = Zoom.values().length;
+		if ((direction>0 && (actualZoom<(maxZoom-1))) || ((direction<0) && (actualZoom>0))) {
+			view.zoomImage(Zoom.values()[actualZoom + direction]);
 		}
 	}
 	

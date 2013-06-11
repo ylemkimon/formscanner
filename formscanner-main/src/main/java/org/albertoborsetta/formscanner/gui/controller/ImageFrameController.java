@@ -9,6 +9,7 @@ import java.awt.event.MouseWheelListener;
 import javax.swing.event.MouseInputListener;
 
 import org.albertoborsetta.formscanner.commons.FormPoint;
+import org.albertoborsetta.formscanner.commons.FormScannerConstants.Zoom;
 import org.albertoborsetta.formscanner.gui.ImageFrame;
 import org.albertoborsetta.formscanner.model.FormScannerModel;
 
@@ -68,15 +69,15 @@ public class ImageFrameController implements MouseMotionListener, MouseInputList
 			if (!e.isControlDown()) {
 				switch (e.getButton()) {
 				case MouseEvent.BUTTON1:
-					double scaleFactor = view.getScaleFactor();
+					Zoom scaleFactor = view.getScaleFactor();
 					
 					FormPoint p = new FormPoint(e.getPoint());
 					
 					int	dx = view.getHorizontalScrollbarValue();
 					int dy = view.getVerticalScrollbarValue();
 					
-					int x = (int) Math.floor((p.x/scaleFactor)+dx);
-					int y = (int) Math.floor((p.y/scaleFactor)+dy);
+					int x = (int) Math.floor((p.x/scaleFactor.getValue())+dx);
+					int y = (int) Math.floor((p.y/scaleFactor.getValue())+dy);
 					
 					FormPoint p1 = new FormPoint(x, y);
 					model.addPoint(view, p1);
