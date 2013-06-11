@@ -32,6 +32,11 @@ public class PanelBuilder {
 		return this;
 	}
 	
+	public PanelBuilder withPreferredSize(Dimension size) {
+		panel.setPreferredSize(size);
+		return this;
+	}
+	
 	public PanelBuilder addComponent(JComponent component, String position) {
 		panel.add(component, position);
 		return this;

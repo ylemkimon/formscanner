@@ -10,6 +10,8 @@ import javax.swing.Icon;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JSeparator;
+import javax.swing.SwingConstants;
 import javax.swing.border.BevelBorder;
 import javax.swing.border.SoftBevelBorder;
 
@@ -69,16 +71,33 @@ public class StatusBarBuilder extends JPanel {
 	public StatusBarBuilder add(JComponent component) {
 		
 		internalPanel = new PanelBuilder().withBorderLayout()
-				.add(component, BorderLayout.WEST)
-				.add(internalPanel, BorderLayout.CENTER)
+				.add(component, BorderLayout.CENTER)
+				.add(internalPanel, BorderLayout.EAST)
 				.build();
+		return this;
+	}
+	
+	public StatusBarBuilder addSeparator() {
+		
+		JPanel separator = new PanelBuilder()
+				.withBorderLayout()
+				.add(new PanelBuilder().withPreferredSize(new Dimension(10,23)).build(), BorderLayout.EAST)
+				.add(new JSeparator(SwingConstants.VERTICAL), BorderLayout.CENTER)
+				.add(new PanelBuilder().withPreferredSize(new Dimension(10,23)).build(), BorderLayout.WEST)
+				.build();
+		
+		internalPanel = new PanelBuilder().withBorderLayout()
+				.add(separator, BorderLayout.CENTER)
+				.add(internalPanel, BorderLayout.EAST)
+				.build();
+		
 		return this;
 	}
 	
 	public JPanel build() {
 		
 		JPanel rightPanel = new PanelBuilder().withBorderLayout()
-				.add(new JLabel(new AngledLinesWindowsCornerIcon()), BorderLayout.EAST)
+				.add(new JLabel(new AngledLinesWindowsCornerIcon()), BorderLayout.SOUTH)
 				.withBorder(new SoftBevelBorder(BevelBorder.LOWERED, null, null, null, null))
 				.build();
 		

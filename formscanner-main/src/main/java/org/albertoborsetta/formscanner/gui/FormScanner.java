@@ -66,8 +66,8 @@ public class FormScanner extends JFrame {
 		toolBar = new ToolBar(model);
 		getContentPane().add(toolBar, BorderLayout.NORTH);
 		
-		statusBar = new StatusBar();
-		getContentPane().add(statusBar, BorderLayout.SOUTH);
+		// statusBar = new StatusBar();
+		// getContentPane().add(statusBar, BorderLayout.SOUTH);
 		
 		desktopPane = new JDesktopPane();
 		getContentPane().add(desktopPane, BorderLayout.CENTER);	

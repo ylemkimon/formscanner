@@ -111,4 +111,24 @@ public class FormScannerConstants {
 			return value;
 		}
 	}
+	public enum Zoom {
+		
+		PERCENT_25(25),
+		PERCENT_50(50),
+		PERCENT_75(75),
+		PERCENT_100(100),
+		PERCENT_125(125),
+		PERCENT_150(150),
+		PERCENT_200(200);
+		
+		private Integer value;
+		
+		Zoom(Integer value) {
+			this.value = value;
+		}
+		
+		public double getValue() {
+			return value/100.0;
+		}
+	}
 }

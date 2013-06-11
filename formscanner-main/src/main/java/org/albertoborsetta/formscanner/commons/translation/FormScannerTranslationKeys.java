@@ -77,6 +77,7 @@ public class FormScannerTranslationKeys {
 	public static final String QUESTIONS_BY_COLS = "questions.by.cols";
 	
 	public static final String ROTATION_LABEL = "rotation.label";
+	public static final String ZOOM_LABEL = "zoom.label";
 	
 	public static final String TOP_LEFT_CORNER = "top.left.corner";
 	public static final String TOP_RIGHT_CORNER = "top.right.corner";
