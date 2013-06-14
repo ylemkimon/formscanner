@@ -29,6 +29,10 @@ public class FormField {
     	return points.get(value);
     }
     
+    public HashMap<String, FormPoint> getPoints() {
+    	return points;
+    }
+    
     public void setType(FieldType type) {
     	this.type = type;
     }

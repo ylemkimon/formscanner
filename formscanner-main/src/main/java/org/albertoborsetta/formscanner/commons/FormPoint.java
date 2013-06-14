@@ -2,6 +2,8 @@ package org.albertoborsetta.formscanner.commons;
 
 import java.awt.Point;
 
+import org.apache.commons.lang3.StringUtils;
+
 public class FormPoint extends Point implements Comparable<FormPoint>{
 	
 	/**
@@ -56,5 +58,20 @@ public class FormPoint extends Point implements Comparable<FormPoint>{
 	
 	public double getDistance() {
 		return dist;		
+	}
+	
+	public String toString() {
+		return "["+x+","+y+"]";
+	}
+	
+	public static FormPoint toPoint(String str) {
+		String vals = StringUtils.remove(str, '[');
+		vals = StringUtils.remove(vals, ']');
+		String[] coords = StringUtils.split(vals, ',');
+		
+		int x = Integer.parseInt(coords[0]);
+		int y = Integer.parseInt(coords[1]);
+		
+		return new FormPoint(x, y);
 	}
 }

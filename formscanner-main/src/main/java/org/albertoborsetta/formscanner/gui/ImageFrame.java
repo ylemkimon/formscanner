@@ -117,10 +117,8 @@ public class ImageFrame extends JInternalFrame implements ScrollableImageView {
 			StatusBarBuilder statusBarBuilder = new StatusBarBuilder();
 			
 			for (int index=Corners.values().length-1; index>=0; index--) {
-				double xCoord = imagePanel.getCorner(Corners.values()[index]).getX();
-				double yCoord = imagePanel.getCorner(Corners.values()[index]).getY();
-				String position = "(" + xCoord + "," + yCoord + ")";
-				JLabel cornerValue = new LabelBuilder(position)
+				FormPoint p = imagePanel.getCorner(Corners.values()[index]);
+				JLabel cornerValue = new LabelBuilder(p.toString())
 						.withBorder(new SoftBevelBorder(BevelBorder.LOWERED, null, null, null, null))
 						.build();
 				cornerValues.put(Corners.values()[index], cornerValue);
@@ -147,10 +145,8 @@ public class ImageFrame extends JInternalFrame implements ScrollableImageView {
 		
 		public void updateCorners() {
 			for (Corners corner: Corners.values()) {
-				double xCoord = imagePanel.getCorner(corner).getX();
-				double yCoord = imagePanel.getCorner(corner).getY();
-				String position = "(" + xCoord + "," + yCoord + ")";
-				cornerValues.get(corner).setText(position);
+				FormPoint p = imagePanel.getCorner(corner);
+				cornerValues.get(corner).setText(p.toString());
 			}
 		}
 		
@@ -240,7 +236,7 @@ public class ImageFrame extends JInternalFrame implements ScrollableImageView {
 			for (FormPoint p: points) {
 				FormPoint p1 = calculatePointPosition(p);
 				for (int i=0; i<2; i++) {
-					int d = (int) (Math.pow(-1, i) * 7);
+					int d = (int) (Math.pow(-1, i) * 10);
 					g.drawLine(p1.x-d, p1.y+d, p1.x+d, p1.y+d);
 					g.drawLine(p1.x+d, p1.y+d, p1.x+d, p1.y-d);
 				}
