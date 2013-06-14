@@ -231,21 +231,22 @@ public class ManageTemplateFrame extends JInternalFrame implements TabbedView {
 
 	private void updateFieldList() {
 		DefaultListModel listModel = (DefaultListModel) fieldList.getModel();
-		for (Object element: formScannerModel.getFieldList().toArray()) {
+		for (Object element: formScannerModel.getFields().toArray()) {
 			listModel.addElement((String) element);
 		}
 	}
 
 	private FormPoint getPointFromTable(int i, int j) {
-		String vals = (String)table.getValueAt(i,j);
-		vals = StringUtils.remove(vals, '(');
-		vals = StringUtils.remove(vals, ')');
-		String[] coords = StringUtils.split(vals, ',');
-		
-		int x = Integer.parseInt(coords[0]);
-		int y = Integer.parseInt(coords[1]);
+//		String vals = (String)table.getValueAt(i,j);
+//		vals = StringUtils.remove(vals, '(');
+//		vals = StringUtils.remove(vals, ')');
+//		String[] coords = StringUtils.split(vals, ',');
+//		
+//		int x = Integer.parseInt(coords[0]);
+//		int y = Integer.parseInt(coords[1]);
 
-		return new FormPoint(x, y);
+//		return new FormPoint(x, y);
+		return FormPoint.toPoint((String)table.getValueAt(i,j));
 	}
 
 	public int getRowsNumber() {
@@ -261,8 +262,7 @@ public class ManageTemplateFrame extends JInternalFrame implements TabbedView {
 			for (int j = 0; j < (Integer) valuesNumber.getValue(); j++) {
 				int index = ((Integer) valuesNumber.getValue() * i) + j;
 				FormPoint p = points.get(index);
-				String point = "(" + p.x + "," + p.y + ")";
-				table.setValueAt(point, (i + 1), (j + 1));
+				table.setValueAt(p.toString(), (i + 1), (j + 1));
 			}
 		}
 	}

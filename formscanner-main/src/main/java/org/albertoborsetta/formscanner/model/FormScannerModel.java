@@ -250,9 +250,10 @@ public class FormScannerModel {
 		imageFrame = new ImageFrame(this, file, mode);
 		view.arrangeFrame(imageFrame);
 		
-		imageFrame.addCorners(calculateImageCorners(imageFrame));
-		imageFrame.setRotation(calculateImageRotation(imageFrame));
-		calculateImageSize(imageFrame);
+		imageFrame.addCorners(getCorners());
+		imageFrame.setRotation(getRotation());
+		imageFrame.addPoints(getPoints());
+		getImageSize(imageFrame);
 	}
 	
 	public void setImageCursor(ImageView view, Cursor cursor) {
@@ -369,7 +370,7 @@ public class FormScannerModel {
 		formTemplate.setFields(fields); 
 	}
 
-	public HashMap<Corners, FormPoint> calculateImageCorners(ImageView view) {
+	public HashMap<Corners, FormPoint> getCorners() {
 		HashMap<Corners, FormPoint> corners;
 		
 		if (formTemplate.getCorners().isEmpty()) {
@@ -383,7 +384,7 @@ public class FormScannerModel {
 		return corners;
 	}
 
-	public double calculateImageRotation(ImageView view) {
+	public double getRotation() {
 		double rotation;
 		
 		if (formTemplate.getRotation() == 0.0) {
@@ -403,7 +404,7 @@ public class FormScannerModel {
 		return rotation;
 	}
 
-	public List<String> getFieldList() {
+	public List<String> getFields() {
 		HashMap<String, FormField> fields = formTemplate.getFields();
 		List<String> fieldList = new ArrayList<String>();
 		for (Entry<String, FormField> field : fields.entrySet()) {
@@ -412,7 +413,18 @@ public class FormScannerModel {
 		return fieldList;
 	}
 	
-	public Dimension calculateImageSize(ImageView view) {
+	public List<FormPoint> getPoints() {
+		HashMap<String, FormField> fields = formTemplate.getFields();
+		List<FormPoint> pointList = new ArrayList<FormPoint>();
+		for (Entry<String, FormField> field : fields.entrySet()) {			
+			for (Entry<String, FormPoint> point : field.getValue().getPoints().entrySet()) {
+				pointList.add(point.getValue());
+			}
+        }
+		return pointList;
+	}
+	
+	public Dimension getImageSize(ImageView view) {
 		Dimension size;
 		if (formTemplate.getSize() == null ) {
 			size = view.getImageSize();
