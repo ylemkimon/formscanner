@@ -195,7 +195,7 @@ public class ImageFrame extends JInternalFrame implements ScrollableImageView {
 		
 		private int width;
 		private int height;
-		private Zoom scaleFactor = Zoom.PERCENT_50;
+		private Zoom scaleFactor = Zoom.PERCENT_25;
 		private List<FormPoint> points = new ArrayList<FormPoint>();
 		private HashMap<Corners, FormPoint> corners = new HashMap<Corners, FormPoint>();
 		private BufferedImage image;
@@ -239,19 +239,25 @@ public class ImageFrame extends JInternalFrame implements ScrollableImageView {
 			g.setColor(Color.RED);
 			for (FormPoint p: points) {
 				FormPoint p1 = calculatePointPosition(p);
-				g.drawLine(p1.x-5, p1.y-5, p1.x+5, p1.y+5);
-				g.drawLine(p1.x-5, p1.y+5, p1.x+5, p1.y-5);
+				for (int i=0; i<2; i++) {
+					int d = (int) (Math.pow(-1, i) * 7);
+					g.drawLine(p1.x-d, p1.y+d, p1.x+d, p1.y+d);
+					g.drawLine(p1.x+d, p1.y+d, p1.x+d, p1.y-d);
+				}
 			}
 			g.setColor(Color.BLACK);
 		}
 		
 		public void showCorners(Graphics g) {
 			g.setColor(Color.GREEN);
-			for (Entry<Corners, FormPoint> corner: corners.entrySet()) {
-				FormPoint p1 = calculatePointPosition(corner.getValue());
-				g.drawLine(p1.x-5, p1.y-5, p1.x+5, p1.y+5);
-				g.drawLine(p1.x-5, p1.y+5, p1.x+5, p1.y-5);
+			
+			for (int i=0; i<Corners.values().length; i++) {
+				FormPoint p1 = calculatePointPosition(corners.get(Corners.values()[i%Corners.values().length]));
+				FormPoint p2 = calculatePointPosition(corners.get(Corners.values()[(i+1)%Corners.values().length]));
+				
+				g.drawLine(p1.x, p1.y, p2.x, p2.y);
 			}
+			
 			g.setColor(Color.BLACK);
 		}
 		
