@@ -72,8 +72,9 @@ public class FormScanner extends JFrame {
 		desktopPane = new JDesktopPane();
 		getContentPane().add(desktopPane, BorderLayout.CENTER);	
 		
-		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize(); 
-		setSize(screenSize);
+		// Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize(); 
+		// setSize(screenSize);
+		setSize(new Dimension(1200, 800));
 		setVisible(true);
 	}
 	
