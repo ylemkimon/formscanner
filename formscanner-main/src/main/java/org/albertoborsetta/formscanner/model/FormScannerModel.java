@@ -277,20 +277,19 @@ public class FormScannerModel {
 			int rows = manageTemplateFrame.getRowsNumber();
 			int values = manageTemplateFrame.getValuesNumber();
 			
-			List<FormPoint> points = view.getPoints();
+			FormPoint p1 = view.getTemporaryPoint();
 			if (rows==1 && values==1) {
-				if (points.size() == 0) {
+				if (p1 == null) {
 					view.addPoint(p2);
 					manageTemplateFrame.setupTable(view.getPoints());
 				}
 			} else {
-				if (points.size() == 0) {
-					view.addPoint(p2);
+				if (p1 == null) {
+					view.addTemporaryPoint(p2);
 				} else {
-					FormPoint p1 = points.get(0);
-					view.removeAllPoints();					
+					view.removeTemporaryPoint();					
 					
-					FormPoint p3 = claculateThirdPoint(p2, p1);
+					FormPoint p3 = calculateThirdPoint(p2, p1);
 					
 					HashMap<String, Double> delta = calculateDelta(p1, p2, p3);
 					
@@ -337,7 +336,7 @@ public class FormScannerModel {
 		return delta;
 	}
 
-	private FormPoint claculateThirdPoint(FormPoint p, FormPoint p1) {
+	private FormPoint calculateThirdPoint(FormPoint p, FormPoint p1) {
 		double alfa = formTemplate.getRotation();
 		
 		double x3 = p.getX();
@@ -362,8 +361,8 @@ public class FormScannerModel {
 		view.removePoint(p);
 	}
 
-	public void removeAllPoints(ImageView view) {
-		view.removeAllPoints();
+	public void removeTemporaryPoint(ImageView view) {
+		view.removeTemporaryPoint();
 	}
 
 	public void addFields(HashMap<String, FormField> fields) {

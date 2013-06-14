@@ -1,7 +1,5 @@
 package org.albertoborsetta.formscanner.gui;
 
-import org.apache.commons.lang3.StringUtils;
-
 import javax.swing.JInternalFrame;
 import javax.swing.JTabbedPane;
 import java.awt.BorderLayout;

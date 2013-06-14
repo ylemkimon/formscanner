@@ -24,4 +24,7 @@ public interface ImageView extends View {
 	public void setRotation(double rotation);
 	public Mode getMode();
 	public Dimension getImageSize();
+	public void addTemporaryPoint(FormPoint p2);
+	public void removeTemporaryPoint();
+	public FormPoint getTemporaryPoint();
 }

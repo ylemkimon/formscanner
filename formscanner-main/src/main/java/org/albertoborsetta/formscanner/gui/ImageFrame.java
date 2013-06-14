@@ -9,27 +9,21 @@ import org.albertoborsetta.formscanner.commons.FormScannerFont;
 import org.albertoborsetta.formscanner.commons.translation.FormScannerTranslation;
 import org.albertoborsetta.formscanner.commons.translation.FormScannerTranslationKeys;
 import org.albertoborsetta.formscanner.gui.builder.LabelBuilder;
-import org.albertoborsetta.formscanner.gui.builder.PanelBuilder;
-import org.albertoborsetta.formscanner.gui.builder.StatusBarBuilder;
 import org.albertoborsetta.formscanner.gui.controller.InternalFrameController;
 import org.albertoborsetta.formscanner.gui.controller.ImageFrameController;
 import org.albertoborsetta.formscanner.model.FormScannerModel;
 
 import java.awt.Color;
-import java.awt.Component;
 import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.BorderLayout;
 import java.awt.image.BufferedImage;
 
-import javax.swing.Icon;
 import javax.swing.JInternalFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import javax.swing.JSeparator;
-import javax.swing.SwingConstants;
 import javax.swing.border.BevelBorder;
 import javax.swing.border.SoftBevelBorder;
 
@@ -40,7 +34,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map.Entry;
 
 public class ImageFrame extends JInternalFrame implements ScrollableImageView {
 	
@@ -90,69 +83,22 @@ public class ImageFrame extends JInternalFrame implements ScrollableImageView {
 	
 	private class ImageStatusBar {
 		
-		private JLabel rotationValue;
-		private JLabel zoomValue;
-		private HashMap<Corners, JLabel> cornerValues = new HashMap<Corners, JLabel>();
-		private JPanel statusBar;
+		private JLabel statusBar;
+		private String zoomLabel = FormScannerTranslation.getTranslationFor(FormScannerTranslationKeys.ZOOM_LABEL);
 		
 		public ImageStatusBar() {
-			
-			JLabel zoomLabel = new LabelBuilder(FormScannerTranslation.getTranslationFor(FormScannerTranslationKeys.ZOOM_LABEL) + ": ")
-					.build();
-			double zoom = imagePanel.getScaleFactor().getValue()*100;
-			zoomValue = new LabelBuilder(zoom + "%")
-					.withBorder(new SoftBevelBorder(BevelBorder.LOWERED, null, null, null, null))
-					.build();
-			
-			JLabel rotationLabel = new LabelBuilder(FormScannerTranslation.getTranslationFor(FormScannerTranslationKeys.ROTATION_LABEL) + ": ")
-					.build();
-			double rotation = imagePanel.getRotation();
-			rotationValue = new LabelBuilder(rotation + "")
-					.withBorder(new SoftBevelBorder(BevelBorder.LOWERED, null, null, null, null))
-					.build();
-			
-			JLabel cornerLabel = new LabelBuilder("corners: ")
-					.build();
-			
-			StatusBarBuilder statusBarBuilder = new StatusBarBuilder();
-			
-			for (int index=Corners.values().length-1; index>=0; index--) {
-				FormPoint p = imagePanel.getCorner(Corners.values()[index]);
-				JLabel cornerValue = new LabelBuilder(p.toString())
-						.withBorder(new SoftBevelBorder(BevelBorder.LOWERED, null, null, null, null))
-						.build();
-				cornerValues.put(Corners.values()[index], cornerValue);
-				statusBarBuilder.add(cornerValue);
-			}
-			statusBar = statusBarBuilder.add(cornerLabel)
-					.addSeparator()
-					.add(rotationValue)
-					.add(rotationLabel)
-					.addSeparator()
-					.add(zoomValue)
-					.add(zoomLabel)
+			double zoomValue = imagePanel.getScaleFactor().getValue()*100;
+			statusBar = new LabelBuilder(zoomLabel + ": " + zoomValue + "%")
 					.build();
 		}
 		
-		public JPanel getStatusBar() {
+		public JLabel getStatusBar() {
 			return statusBar;
 		}
 		
-		public void updateRotation() {
-			double rotation = imagePanel.getRotation();
-			rotationValue.setText(rotation + "");
-		}
-		
-		public void updateCorners() {
-			for (Corners corner: Corners.values()) {
-				FormPoint p = imagePanel.getCorner(corner);
-				cornerValues.get(corner).setText(p.toString());
-			}
-		}
-		
 		public void updateZoom() {
-			double zoom = imagePanel.getScaleFactor().getValue() * 100;
-			zoomValue.setText(zoom + "%");
+			double zoomValue = imagePanel.getScaleFactor().getValue()*100; 
+			statusBar.setText(zoomLabel + ": " + zoomValue + "%");
 		} 
 	}
 	
@@ -192,7 +138,9 @@ public class ImageFrame extends JInternalFrame implements ScrollableImageView {
 		private int width;
 		private int height;
 		private Zoom scaleFactor = Zoom.PERCENT_25;
+		private int marker = (int) Math.floor(40 * scaleFactor.getValue());
 		private List<FormPoint> points = new ArrayList<FormPoint>();
+		private FormPoint tempPoint;
 		private HashMap<Corners, FormPoint> corners = new HashMap<Corners, FormPoint>();
 		private BufferedImage image;
 		private double rotation;
@@ -229,6 +177,7 @@ public class ImageFrame extends JInternalFrame implements ScrollableImageView {
 			g.drawImage(image, 0, 0, width, height, this);
 			showPoints(g);
 			showCorners(g);
+			showTemporaryPoint(g);
 	    } 
 		
 		public void showPoints(Graphics g) {
@@ -242,6 +191,21 @@ public class ImageFrame extends JInternalFrame implements ScrollableImageView {
 				}
 			}
 			g.setColor(Color.BLACK);
+		}
+		
+		public void showTemporaryPoint(Graphics g) {
+			if (tempPoint != null) {
+				g.setColor(Color.RED);
+				
+				FormPoint p1 = calculatePointPosition(tempPoint);
+				for (int i=0; i<2; i++) {
+					int d = (int) (Math.pow(-1, i) * 10);
+					g.drawLine(p1.x-d, p1.y+d, p1.x+d, p1.y+d);
+					g.drawLine(p1.x+d, p1.y+d, p1.x+d, p1.y-d);
+				}
+	
+				g.setColor(Color.BLACK);
+			}
 		}
 		
 		public void showCorners(Graphics g) {
@@ -327,6 +291,18 @@ public class ImageFrame extends JInternalFrame implements ScrollableImageView {
 		public double getRotation() {
 			return rotation;
 		}
+
+		public void addTemporaryPoint(FormPoint point) {
+			tempPoint = point;
+		}
+
+		public void removeTemporaryPoint() {
+			tempPoint = null;
+		}
+
+		public FormPoint getTemporaryPoint() {
+			return tempPoint;
+		}
 	}
 	
 	public void updateImage(File file) {
@@ -339,6 +315,11 @@ public class ImageFrame extends JInternalFrame implements ScrollableImageView {
 		update(getGraphics());
 	}
 	
+	public void addTemporaryPoint(FormPoint point) {
+		imagePanel.addTemporaryPoint(point);
+		update(getGraphics());
+	}
+	
 	public void removePoint(FormPoint point) {
 		imagePanel.removePoint(point);
 		update(getGraphics());
@@ -348,6 +329,9 @@ public class ImageFrame extends JInternalFrame implements ScrollableImageView {
 		imagePanel.removeAllPoints();
 	}
 
+	public void removeTemporaryPoint() {
+		imagePanel.removeTemporaryPoint();
+	}
 	public void setImageCursor(Cursor cursor) {
 		imagePanel.setCursor(cursor);
 	}
@@ -391,7 +375,6 @@ public class ImageFrame extends JInternalFrame implements ScrollableImageView {
 	public void addCorners(HashMap<Corners, FormPoint> corners) {
 		imagePanel.addCorners(corners);
 		update(getGraphics());
-		statusBar.updateCorners();
 	}
 
 	public void addPoints(List<FormPoint> points) {
@@ -401,7 +384,6 @@ public class ImageFrame extends JInternalFrame implements ScrollableImageView {
 	
 	public void setRotation(double rotation) {
 		imagePanel.setRotation(rotation);
-		statusBar.updateRotation();
 	}
 
 	public Dimension getImageSize() {
@@ -412,5 +394,9 @@ public class ImageFrame extends JInternalFrame implements ScrollableImageView {
 		Graphics g = getGraphics();		
 		update(g);
 		g.dispose();
+	}
+
+	public FormPoint getTemporaryPoint() {
+		return imagePanel.getTemporaryPoint();
 	}
 }

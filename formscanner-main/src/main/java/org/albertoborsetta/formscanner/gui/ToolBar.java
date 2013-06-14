@@ -2,8 +2,8 @@ package org.albertoborsetta.formscanner.gui;
 
 import java.awt.Component;
 import java.awt.ComponentOrientation;
+import java.awt.FlowLayout;
 
-import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JToolBar;
@@ -42,7 +42,8 @@ public class ToolBar extends JPanel implements MenuView{
 		setBorder(new EtchedBorder(EtchedBorder.RAISED, null, null));
 		setComponentOrientation(ComponentOrientation.LEFT_TO_RIGHT);
 		
-		setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
+//		setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
+		setLayout(new FlowLayout(FlowLayout.LEFT));
 		
 		JToolBar fileToolBar = getFileToolBar();
 		add(fileToolBar);

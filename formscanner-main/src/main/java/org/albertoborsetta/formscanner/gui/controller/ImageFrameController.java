@@ -19,7 +19,6 @@ public class ImageFrameController implements MouseMotionListener, MouseInputList
 	private ImageFrame view;
 	private FormPoint p1;
 	private FormPoint p2;
-	// private double scaleFactor;
 	
 	public ImageFrameController(FormScannerModel model) {
 		this.model = model;
@@ -83,7 +82,7 @@ public class ImageFrameController implements MouseMotionListener, MouseInputList
 					model.addPoint(view, p1);
 					break;
 				case MouseEvent.BUTTON3:
-					model.removeAllPoints(view);
+					model.removeTemporaryPoint(view);
 					break;
 				}			
 			}
