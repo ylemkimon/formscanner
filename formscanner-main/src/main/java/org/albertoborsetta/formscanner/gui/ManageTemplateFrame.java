@@ -36,6 +36,7 @@ import org.albertoborsetta.formscanner.commons.FormScannerConstants.FieldType;
 import org.albertoborsetta.formscanner.commons.FormScannerGridLayouts;
 import org.albertoborsetta.formscanner.commons.FormScannerConstants.Action;
 import org.albertoborsetta.formscanner.commons.FormScannerConstants.Mode;
+import org.albertoborsetta.formscanner.commons.FormTemplate;
 import org.albertoborsetta.formscanner.commons.resources.FormScannerResources;
 import org.albertoborsetta.formscanner.commons.resources.FormScannerResourcesKeys;
 import org.albertoborsetta.formscanner.commons.translation.FormScannerTranslation;
@@ -82,7 +83,7 @@ public class ManageTemplateFrame extends JInternalFrame implements TabbedView {
 	private ManageTemplateController manageTemplateController;
 	private InternalFrameController internalFrameController;
 
-	private File file;
+	private FormTemplate template;
 
 	private class TemplateTableModel extends DefaultTableModel {
 
@@ -107,8 +108,8 @@ public class ManageTemplateFrame extends JInternalFrame implements TabbedView {
 	/**
 	 * Create the frame.
 	 */
-	public ManageTemplateFrame(FormScannerModel model, File file) {
-		this.file = file;
+	public ManageTemplateFrame(FormScannerModel model, FormTemplate template) {
+		this.template = template;
 		formScannerModel = model;
 
 		internalFrameController = InternalFrameController
@@ -172,14 +173,14 @@ public class ManageTemplateFrame extends JInternalFrame implements TabbedView {
 				formScannerModel.disposeRelatedFrame(this);
 
 				HashMap<String, FormField> fields = createFields();
-				formScannerModel.addFields(fields);
+				template.setFields(fields);
 				resetSelectedValues();
 				resetTable();
 				updateFieldList();
 				break;
 			case 2:
 				setupTable();
-				formScannerModel.createImageFrame(file, Mode.UPDATE);
+				formScannerModel.createImageFrame(template, Mode.UPDATE);
 				break;
 			default:
 				break;
@@ -229,21 +230,13 @@ public class ManageTemplateFrame extends JInternalFrame implements TabbedView {
 
 	private void updateFieldList() {
 		DefaultListModel listModel = (DefaultListModel) fieldList.getModel();
-		for (Object element: formScannerModel.getFields().toArray()) {
+		listModel.clear();
+		for (Object element: template.getFieldsName().toArray()) {
 			listModel.addElement((String) element);
 		}
 	}
 
 	private FormPoint getPointFromTable(int i, int j) {
-//		String vals = (String)table.getValueAt(i,j);
-//		vals = StringUtils.remove(vals, '(');
-//		vals = StringUtils.remove(vals, ')');
-//		String[] coords = StringUtils.split(vals, ',');
-//		
-//		int x = Integer.parseInt(coords[0]);
-//		int y = Integer.parseInt(coords[1]);
-
-//		return new FormPoint(x, y);
 		return FormPoint.toPoint((String)table.getValueAt(i,j));
 	}
 
