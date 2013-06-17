@@ -43,7 +43,6 @@ public class FormScannerModel {
 	public static final String ROW_DY = "ROW_DY";
 
 	private HashMap<Integer, File> openedFiles = new HashMap<Integer, File>();
-	private File template;
 	private FileListFrame fileListFrame;
 	private RenameFileFrame renameFileFrame;
 	private FormScanner view;
@@ -90,8 +89,9 @@ public class FormScannerModel {
 			if (!openedFiles.isEmpty()) {
 				renamedFileIndex = fileListFrame.getSelectedItemIndex();
 				fileListFrame.selectFile(renamedFileIndex);
+				formTemplate = new FormTemplate(openedFiles.get(renamedFileIndex));
 				
-				createImageFrame(openedFiles.get(renamedFileIndex), Mode.VIEW);
+				createImageFrame(formTemplate, Mode.VIEW);
 				
 				renameFileFrame = new RenameFileFrame(this, getFileNameByIndex(renamedFileIndex));
 				view.arrangeFrame(renameFileFrame);
@@ -136,8 +136,9 @@ public class FormScannerModel {
 			if (!openedFiles.isEmpty()) {
 				analyzedFileIndex  = fileListFrame.getSelectedItemIndex();
 				fileListFrame.selectFile(analyzedFileIndex);
+				formTemplate = new FormTemplate(openedFiles.get(analyzedFileIndex));
 			
-				createImageFrame(openedFiles.get(analyzedFileIndex), Mode.VIEW);
+				createImageFrame(formTemplate, Mode.VIEW);
 				
 				// analyzeFileResultsFrame = new AnalyzeFileResultsFrame(this, partialResults, totalResults); 
 				// view.arrangeFrame(analyzeFileResultsFrame);				
@@ -229,31 +230,16 @@ public class FormScannerModel {
 
 	public void loadTemplate(File template) {
 		if (template != null) {
-			this.template= template; 
-			manageTemplateFrame = new ManageTemplateFrame(this, template);
+			formTemplate = new FormTemplate(template);
+			manageTemplateFrame = new ManageTemplateFrame(this, formTemplate);
 			
 			view.arrangeFrame(manageTemplateFrame);	
-			formTemplate = new FormTemplate(template.getName());
-		}
-	}
-
-	public void zoomImage(ScrollableImageView view, int direction) {
-		Zoom zoom = view.getScaleFactor();
-		Integer actualZoom = zoom.ordinal();
-		Integer maxZoom = Zoom.values().length;
-		if ((direction>0 && (actualZoom<(maxZoom-1))) || ((direction<0) && (actualZoom>0))) {
-			view.zoomImage(Zoom.values()[actualZoom + direction]);
 		}
 	}
 	
-	public void createImageFrame(File file, Mode mode) {
-		imageFrame = new ImageFrame(this, file, mode);
+	public void createImageFrame(FormTemplate template, Mode mode) {
+		imageFrame = new ImageFrame(this, template, mode);
 		view.arrangeFrame(imageFrame);
-		
-		imageFrame.addCorners(getCorners());
-		imageFrame.setRotation(getRotation());
-		imageFrame.addPoints(getPoints());
-		getImageSize(imageFrame);
 	}
 	
 	public void setImageCursor(ImageView view, Cursor cursor) {
@@ -363,74 +349,5 @@ public class FormScannerModel {
 
 	public void removeTemporaryPoint(ImageView view) {
 		view.removeTemporaryPoint();
-	}
-
-	public void addFields(HashMap<String, FormField> fields) {
-		formTemplate.setFields(fields); 
-	}
-
-	public HashMap<Corners, FormPoint> getCorners() {
-		HashMap<Corners, FormPoint> corners;
-		
-		if (formTemplate.getCorners().isEmpty()) {
-			ScanImage imageScan = new ScanImage(template);
-	        corners = imageScan.locateCorners();
-	        formTemplate.setCorners(corners);
-		} else {
-			corners = formTemplate.getCorners();
-		}
-		
-		return corners;
-	}
-
-	public double getRotation() {
-		double rotation;
-		
-		if (formTemplate.getRotation() == 0.0) {
-			HashMap<Corners, FormPoint> corners = formTemplate.getCorners();
-			
-			FormPoint topLeftPoint = corners.get(Corners.TOP_LEFT);
-			FormPoint topRightPoint = corners.get(Corners.TOP_RIGHT);
-			
-			double dx = (double) (topRightPoint.getX() - topLeftPoint.getX());
-			double dy = (double) (topLeftPoint.getY() - topRightPoint.getY());
-			
-			rotation = Math.atan(dy/dx);
-			formTemplate.setRotation(rotation);
-		} else {
-			rotation = formTemplate.getRotation();
-		}
-		return rotation;
-	}
-
-	public List<String> getFields() {
-		HashMap<String, FormField> fields = formTemplate.getFields();
-		List<String> fieldList = new ArrayList<String>();
-		for (Entry<String, FormField> field : fields.entrySet()) {
-			fieldList.add(field.getKey());
-        }
-		return fieldList;
-	}
-	
-	public List<FormPoint> getPoints() {
-		HashMap<String, FormField> fields = formTemplate.getFields();
-		List<FormPoint> pointList = new ArrayList<FormPoint>();
-		for (Entry<String, FormField> field : fields.entrySet()) {			
-			for (Entry<String, FormPoint> point : field.getValue().getPoints().entrySet()) {
-				pointList.add(point.getValue());
-			}
-        }
-		return pointList;
-	}
-	
-	public Dimension getImageSize(ImageView view) {
-		Dimension size;
-		if (formTemplate.getSize() == null ) {
-			size = view.getImageSize();
-			formTemplate.setSize(size);
-		} else {
-			size = formTemplate.getSize();
-		}
-		return size;
 	}
 }
