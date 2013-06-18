@@ -30,34 +30,31 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map.Entry;
 
 public class ImageFrame extends JInternalFrame implements ScrollableImageView {
 	
 	private static final long serialVersionUID = 1L;
 	
-	private FormScannerModel formScannerModel;
+	private FormScannerModel model;
 	private ImagePanel imagePanel;
 	private ImageScrollPane scrollPane;
 	private ImageFrameController controller;
 	private InternalFrameController frameController;
 	private Mode mode;
 
-	// private ImageStatusBar statusBar;
-	
-
 	/**
 	 * Create the frame.
 	 */	
 	public ImageFrame(FormScannerModel model, FormTemplate template, Mode mode) {
-		formScannerModel = model;
-		controller = new ImageFrameController(formScannerModel);
+		this.model = model;
+		this.mode = mode;
+		controller = new ImageFrameController(this.model);
 		controller.add(this);
-		frameController = InternalFrameController.getInstance(formScannerModel);
+		frameController = InternalFrameController.getInstance(this.model);
 		addInternalFrameListener(frameController);
 		
-		int desktopHeight = formScannerModel.getDesktopSize().height;
-		int desktopWidth = formScannerModel.getDesktopSize().width;
+		int desktopHeight = model.getDesktopSize().height;
+		int desktopWidth = model.getDesktopSize().width;
 		
 		setClosable(true);
 		setIconifiable(true);
@@ -69,11 +66,9 @@ public class ImageFrame extends JInternalFrame implements ScrollableImageView {
 		
 		setBounds(320, 10, desktopWidth - 500, desktopHeight - 20);
 		
-		imagePanel = new ImagePanel(template.getImage());
+		imagePanel = new ImagePanel(template);
 		scrollPane = new ImageScrollPane(imagePanel);
 		getContentPane().add(scrollPane, BorderLayout.CENTER);		
-		
-		this.mode = mode;
 	}
 	
 	private class ImageScrollPane extends JScrollPane {
@@ -111,9 +106,8 @@ public class ImageFrame extends JInternalFrame implements ScrollableImageView {
 		private int width;
 		private int height;
 		private int marker = 20;
-		private FormTemplate template;
-		private FormPoint tempPoint;
 		private BufferedImage image;
+		private FormTemplate template;
 		
 		
 		/**
@@ -121,9 +115,10 @@ public class ImageFrame extends JInternalFrame implements ScrollableImageView {
 		 */
 		private static final long serialVersionUID = 1L;
 		
-		public ImagePanel(File file) {
+		public ImagePanel(FormTemplate template) {
 			super();
-			setImage(file);
+			this.template = template;
+			setImage(this.template.getImage());
 			setFont(FormScannerFont.getFont());
 		}
 		
@@ -135,37 +130,30 @@ public class ImageFrame extends JInternalFrame implements ScrollableImageView {
 			g.drawImage(image, 0, 0, width, height, this);
 			showPoints(g);
 			showCorners(g);
-			showTemporaryPoint(g);
 	    } 
 		
 		public void showPoints(Graphics g) {
-			g.setColor(Color.RED);
+			g.setColor(Color.RED); 
 			
 			for (FormPoint point: template.getFieldPoints()) {			
-				FormPoint p1 = calculatePointPosition(point);
 				for (int i=0; i<2; i++) {
 					int d = (int) (Math.pow(-1, i) * marker);
-					g.drawLine(p1.x-d, p1.y+d, p1.x+d, p1.y+d);
-					g.drawLine(p1.x+d, p1.y+d, p1.x+d, p1.y-d);
+					g.drawLine(point.x-d, point.y+d, point.x+d, point.y+d);
+					g.drawLine(point.x+d, point.y+d, point.x+d, point.y-d);
+				}
+			}
+			
+			if (!model.getPoints().isEmpty()) {
+				for (FormPoint point: model.getPoints()) {			
+					for (int i=0; i<2; i++) {
+						int d = (int) (Math.pow(-1, i) * marker);
+						g.drawLine(point.x-d, point.y+d, point.x+d, point.y+d);
+						g.drawLine(point.x+d, point.y+d, point.x+d, point.y-d);
+					}
 				}
 			}
 			
 			g.setColor(Color.BLACK);
-		}
-		
-		public void showTemporaryPoint(Graphics g) {
-			if (tempPoint != null) {
-				g.setColor(Color.RED);
-				
-				FormPoint p1 = calculatePointPosition(tempPoint);
-				for (int i=0; i<2; i++) {
-					int d = (int) (Math.pow(-1, i) * 10);
-					g.drawLine(p1.x-d, p1.y+d, p1.x+d, p1.y+d);
-					g.drawLine(p1.x+d, p1.y+d, p1.x+d, p1.y-d);
-				}
-	
-				g.setColor(Color.BLACK);
-			}
 		}
 		
 		public void showCorners(Graphics g) {
@@ -173,24 +161,13 @@ public class ImageFrame extends JInternalFrame implements ScrollableImageView {
 			g.setColor(Color.GREEN);
 			
 			for (int i=0; i<Corners.values().length; i++) {
-				FormPoint p1 = calculatePointPosition(corners.get(Corners.values()[i%Corners.values().length]));
-				FormPoint p2 = calculatePointPosition(corners.get(Corners.values()[(i+1)%Corners.values().length]));
+				FormPoint p1 = corners.get(Corners.values()[i%Corners.values().length]);
+				FormPoint p2 = corners.get(Corners.values()[(i+1)%Corners.values().length]);
 				
 				g.drawLine(p1.x, p1.y, p2.x, p2.y);
 			}
 			
 			g.setColor(Color.BLACK);
-		}
-		
-		private FormPoint calculatePointPosition(FormPoint p) {
-			int dx = scrollPane.getHorizontalScrollBarValue();
-			int dy = scrollPane.getVerticalScrollBarValue();
-			
-			int x = p.x-dx;
-			int y = p.y-dy;
-			
-			FormPoint p1 = new FormPoint(x, y);
-			return p1;
 		}
 		
 		public void setImage(File file) {
@@ -209,18 +186,6 @@ public class ImageFrame extends JInternalFrame implements ScrollableImageView {
 			return height;
 		}
 
-		public void addTemporaryPoint(FormPoint point) {
-			tempPoint = point;
-		}
-
-		public void removeTemporaryPoint() {
-			tempPoint = null;
-		}
-
-		public FormPoint getTemporaryPoint() {
-			return tempPoint;
-		}
-
 		public void setTemplate(FormTemplate template) {
 			this.template = template;
 		}
@@ -228,24 +193,16 @@ public class ImageFrame extends JInternalFrame implements ScrollableImageView {
 	
 	public void updateImage(File file) {
 		imagePanel.setImage(file);
-		update(getGraphics());
+		update();
 	}
 	
-	public void addTemporaryPoint(FormPoint point) {
-		imagePanel.addTemporaryPoint(point);
-		update(getGraphics());
-	}
-
-	public void removeTemporaryPoint() {
-		imagePanel.removeTemporaryPoint();
-	}
 	public void setImageCursor(Cursor cursor) {
 		imagePanel.setCursor(cursor);
 	}
 
 	public void setScrollBars(int deltaX, int deltaY) {
 		scrollPane.setScrollBars(deltaX, deltaY);
-		update(getGraphics());
+		update();
 	}
 	
 	public int getHorizontalScrollbarValue() {
@@ -264,11 +221,11 @@ public class ImageFrame extends JInternalFrame implements ScrollableImageView {
 		return new Dimension(imagePanel.getImageWidth(), imagePanel.getImageHeight());
 	}
 	
-	public FormPoint getTemporaryPoint() {
-		return imagePanel.getTemporaryPoint();
-	}
-
 	public void setTemplate(FormTemplate template) {
 		imagePanel.setTemplate(template);
+	}
+
+	public void update() {
+		update(getGraphics());		
 	}
 }

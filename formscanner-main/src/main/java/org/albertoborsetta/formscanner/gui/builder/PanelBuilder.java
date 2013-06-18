@@ -7,7 +7,6 @@ import java.awt.FlowLayout;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
 import javax.swing.border.Border;
-import javax.swing.border.SoftBevelBorder;
 
 import org.albertoborsetta.formscanner.commons.FormScannerFont;
 

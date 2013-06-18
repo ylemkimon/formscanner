@@ -23,7 +23,6 @@ public class FormScanner extends JFrame {
 	private static FormScannerModel model;
 	private static JDesktopPane desktopPane;
 	private ToolBar toolBar;
-	private JLabel statusBar;
 	private MenuBar menuBar;
 
 	/**
@@ -65,9 +64,6 @@ public class FormScanner extends JFrame {
 		
 		toolBar = new ToolBar(model);
 		getContentPane().add(toolBar, BorderLayout.NORTH);
-		
-		// statusBar = new StatusBar();
-		// getContentPane().add(statusBar, BorderLayout.SOUTH);
 		
 		desktopPane = new JDesktopPane();
 		getContentPane().add(desktopPane, BorderLayout.CENTER);	

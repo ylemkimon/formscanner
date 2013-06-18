@@ -18,7 +18,7 @@ public class FormScannerConstants {
 	public static final String CONFIRM = "CONFIRM";
 	public static final String CANCEL = "CANCEL";
 	public static final String SAVE_TEMPLATE = "SAVE_TEMPLATE";
-	public static final String REMOVE_FIELD = "REMOVE_TEMPLATE";
+	public static final String REMOVE_FIELD = "REMOVE_FIELD";
 	public static final String ADD_FIELD = "ADD_FIELD";
 	public static final String EXIT = "EXIT";	
 

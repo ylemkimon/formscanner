@@ -3,17 +3,13 @@ package org.albertoborsetta.formscanner.gui.controller;
 import java.awt.Cursor;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionListener;
-import java.awt.event.MouseWheelEvent;
-import java.awt.event.MouseWheelListener;
 
 import javax.swing.event.MouseInputListener;
 
 import org.albertoborsetta.formscanner.commons.FormPoint;
-import org.albertoborsetta.formscanner.commons.FormScannerConstants.Zoom;
 import org.albertoborsetta.formscanner.gui.ImageFrame;
 import org.albertoborsetta.formscanner.model.FormScannerModel;
 
-//public class ImageFrameController implements MouseMotionListener, MouseInputListener, MouseWheelListener {
 public class ImageFrameController implements MouseMotionListener, MouseInputListener {
 	
 	private FormScannerModel model;
@@ -69,15 +65,11 @@ public class ImageFrameController implements MouseMotionListener, MouseInputList
 			if (!e.isControlDown()) {
 				switch (e.getButton()) {
 				case MouseEvent.BUTTON1:
-					// Zoom scaleFactor = view.getScaleFactor();
-					
 					FormPoint p = new FormPoint(e.getPoint());
 					
 					int	dx = view.getHorizontalScrollbarValue();
 					int dy = view.getVerticalScrollbarValue();
 					
-//					int x = (int) Math.floor((p.x/scaleFactor.getValue())+dx);
-//					int y = (int) Math.floor((p.y/scaleFactor.getValue())+dy);
 					int x = p.x+dx;
 					int y = p.y+dy;
 					
@@ -85,7 +77,6 @@ public class ImageFrameController implements MouseMotionListener, MouseInputList
 					model.addPoint(view, p1);
 					break;
 				case MouseEvent.BUTTON3:
-					model.removeTemporaryPoint(view);
 					break;
 				}			
 			}

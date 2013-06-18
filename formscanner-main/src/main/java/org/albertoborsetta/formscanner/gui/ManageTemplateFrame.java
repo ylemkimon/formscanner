@@ -6,7 +6,6 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
-import java.io.File;
 import java.util.HashMap;
 import java.util.List;
 
@@ -53,6 +52,7 @@ import org.albertoborsetta.formscanner.gui.builder.ScrollPaneBuilder;
 import org.albertoborsetta.formscanner.gui.controller.InternalFrameController;
 import org.albertoborsetta.formscanner.gui.controller.ManageTemplateController;
 import org.albertoborsetta.formscanner.model.FormScannerModel;
+import org.apache.commons.lang3.StringUtils;
 
 public class ManageTemplateFrame extends JInternalFrame implements TabbedView {
 	/**
@@ -160,23 +160,23 @@ public class ManageTemplateFrame extends JInternalFrame implements TabbedView {
 		Action act = Action.valueOf(action);
 		switch (act) {
 		case CONFIRM:
-			if (currTab < tabbedPane.getTabCount() - 1) {
-				nextTab = currTab + 1;
-			}
+			nextTab = (currTab + 1) % tabbedPane.getTabCount();
+			
 			tabbedPane.setEnabledAt(nextTab, true);
 			tabbedPane.setSelectedIndex(nextTab);
 
 			switch (nextTab) {
 			case 0:
-				tabbedPane.setEnabledAt(1, false);
-				tabbedPane.setEnabledAt(2, false);
+				for (int i = nextTab + 1; i < tabbedPane.getTabCount(); i++) {
+					tabbedPane.setEnabledAt(i, false);
+				}
 				formScannerModel.disposeRelatedFrame(this);
 
 				HashMap<String, FormField> fields = createFields();
-				template.setFields(fields);
+				formScannerModel.updateTemplate(fields);
+				saveTemplateButton.setEnabled(true);
 				resetSelectedValues();
 				resetTable();
-				updateFieldList();
 				break;
 			case 2:
 				setupTable();
@@ -201,7 +201,6 @@ public class ManageTemplateFrame extends JInternalFrame implements TabbedView {
 				formScannerModel.disposeRelatedFrame(this);
 				break;
 			default:
-				formScannerModel.disposeRelatedFrame(this);
 				dispose();
 				break;
 			}
@@ -213,8 +212,11 @@ public class ManageTemplateFrame extends JInternalFrame implements TabbedView {
 
 	private HashMap<String, FormField> createFields() {
 		HashMap<String, FormField> fields = new HashMap<String, FormField>();
+		DefaultListModel listModel = (DefaultListModel) fieldList.getModel();
+		
 		for (int i = 1; i < (Integer) rowsNumber.getValue()+1; i++) {
 			String name = (String) table.getValueAt(i, 0);
+			listModel.addElement(name);
 			FormField field = new FormField(name);
 			for (int j = 1; j < (Integer) valuesNumber.getValue()+1; j++) {
 				String value = (String) table.getValueAt(0, j);
@@ -226,14 +228,6 @@ public class ManageTemplateFrame extends JInternalFrame implements TabbedView {
 			fields.put(name, field);
 		}
 		return fields;
-	}
-
-	private void updateFieldList() {
-		DefaultListModel listModel = (DefaultListModel) fieldList.getModel();
-		listModel.clear();
-		for (Object element: template.getFieldsName().toArray()) {
-			listModel.addElement((String) element);
-		}
 	}
 
 	private FormPoint getPointFromTable(int i, int j) {
@@ -350,11 +344,11 @@ public class ManageTemplateFrame extends JInternalFrame implements TabbedView {
 		});
 
 		for (int i = 1; i < cols; i++) {
-			table.setValueAt((String) FormScannerTranslation.getTranslationFor(FormScannerTranslationKeys.RESPONSE) + " " + i, 0, i);
+			table.setValueAt((String) FormScannerTranslation.getTranslationFor(FormScannerTranslationKeys.RESPONSE) + " " + StringUtils.leftPad(""+i, 2, "0"), 0, i);
 		}
 
 		for (int i = 1; i < rows; i++) {
-			table.setValueAt((String) FormScannerTranslation.getTranslationFor(FormScannerTranslationKeys.QUESTION) + " " + i, i, 0);
+			table.setValueAt((String) FormScannerTranslation.getTranslationFor(FormScannerTranslationKeys.QUESTION) + " " + StringUtils.leftPad(""+i, 2, "0"), i, 0);
 		}
 		table.setCellSelectionEnabled(true);
 		table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
@@ -366,6 +360,7 @@ public class ManageTemplateFrame extends JInternalFrame implements TabbedView {
 		fieldList = new ListBuilder()
 			.withListModel(new DefaultListModel())
 			.withSelectionMode(ListSelectionModel.SINGLE_SELECTION)
+			.withListSelectionListener(manageTemplateController)
 			.build();
 
 		JScrollPane fieldListScrollPane = new ScrollPaneBuilder(fieldList)
@@ -532,5 +527,23 @@ public class ManageTemplateFrame extends JInternalFrame implements TabbedView {
 				.addComponent(okPositionButton, "2, 2, right, default")
 				.addComponent(cancelPositionButton, "4, 2, right, default")
 				.build();
+	}
+
+	public String getSelectedItem() {
+		String fieldName = (String) fieldList.getSelectedValue();
+		return fieldName;
+	}
+
+	public void enableRemoveFields() {
+		removeFieldButton.setEnabled(true);
+	}
+
+	public void removeFieldByName(String fieldName) {
+		DefaultListModel listModel = (DefaultListModel) fieldList.getModel();
+		listModel.removeElement(fieldName);
+		if (listModel.isEmpty()) {
+			removeFieldButton.setEnabled(false);
+			saveTemplateButton.setEnabled(false);
+		}
 	}
 }

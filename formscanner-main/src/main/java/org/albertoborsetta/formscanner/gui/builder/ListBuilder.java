@@ -2,6 +2,7 @@ package org.albertoborsetta.formscanner.gui.builder;
 
 import javax.swing.JList;
 import javax.swing.ListModel;
+import javax.swing.event.ListSelectionListener;
 
 import org.albertoborsetta.formscanner.commons.FormScannerFont;
 
@@ -30,6 +31,11 @@ public class ListBuilder {
 
 	public ListBuilder withListModel(ListModel listModel) {
 		list.setModel(listModel);
+		return this;
+	}
+
+	public ListBuilder withListSelectionListener(ListSelectionListener listener) {
+		list.addListSelectionListener(listener);
 		return this;
 	}
 }
