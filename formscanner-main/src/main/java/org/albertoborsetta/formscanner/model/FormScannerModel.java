@@ -3,10 +3,8 @@ package org.albertoborsetta.formscanner.model;
 import org.albertoborsetta.formscanner.commons.FormField;
 import org.albertoborsetta.formscanner.commons.FormPoint;
 import org.albertoborsetta.formscanner.commons.FormScannerConstants.Action;
-import org.albertoborsetta.formscanner.commons.FormScannerConstants.Corners;
 import org.albertoborsetta.formscanner.commons.FormScannerConstants.Frame;
 import org.albertoborsetta.formscanner.commons.FormScannerConstants.Mode;
-import org.albertoborsetta.formscanner.commons.FormScannerConstants.Zoom;
 import org.albertoborsetta.formscanner.commons.FormTemplate;
 import org.albertoborsetta.formscanner.commons.configuration.FormScannerConfiguration;
 import org.albertoborsetta.formscanner.commons.configuration.FormScannerConfigurationKeys;
@@ -20,7 +18,6 @@ import org.albertoborsetta.formscanner.gui.ImageFrame;
 import org.albertoborsetta.formscanner.gui.RenameFileFrame;
 import org.albertoborsetta.formscanner.gui.ScrollableImageView;
 import org.albertoborsetta.formscanner.gui.TabbedView;
-import org.albertoborsetta.formscanner.imageparser.ScanImage;
 
 import java.awt.Cursor;
 import java.awt.Dimension;
@@ -29,7 +26,6 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map.Entry;
 
 import javax.swing.JInternalFrame;
 
@@ -41,7 +37,8 @@ public class FormScannerModel {
 	public static final String COL_DY = "COL_DY";
 	public static final String ROW_DX = "ROW_DX";
 	public static final String ROW_DY = "ROW_DY";
-
+	
+	private String path;
 	private HashMap<Integer, File> openedFiles = new HashMap<Integer, File>();
 	private FileListFrame fileListFrame;
 	private RenameFileFrame renameFileFrame;
@@ -54,11 +51,13 @@ public class FormScannerModel {
 	private ManageTemplateFrame manageTemplateFrame;
 	private ImageFrame imageFrame;
 	private FormTemplate formTemplate;
+	
+	private ArrayList<FormPoint> points = new ArrayList<FormPoint>();
     
 	public FormScannerModel(FormScanner view) {
 		this.view = view;
 		
-		String path = System.getProperty("FormScanner_HOME");		
+		path = System.getProperty("FormScanner_HOME");		
 		configurations = FormScannerConfiguration.getConfiguration(path);
 		
 		String lang = configurations.getProperty(FormScannerConfigurationKeys.LANG, FormScannerConfigurationKeys.DEFAULT_LANG);
@@ -263,17 +262,20 @@ public class FormScannerModel {
 			int rows = manageTemplateFrame.getRowsNumber();
 			int values = manageTemplateFrame.getValuesNumber();
 			
-			FormPoint p1 = view.getTemporaryPoint();
 			if (rows==1 && values==1) {
-				if (p1 == null) {
-					view.addPoint(p2);
-					manageTemplateFrame.setupTable(view.getPoints());
+				if (points.isEmpty()) {
+					points.add(p2);
+					view.update();
+					manageTemplateFrame.setupTable(points);
+					manageTemplateFrame.toFront();
 				}
 			} else {
-				if (p1 == null) {
-					view.addTemporaryPoint(p2);
+				if (points.isEmpty()) {
+					points.add(p2);
+					view.update();
 				} else {
-					view.removeTemporaryPoint();					
+					FormPoint p1 = points.get(0);
+					points.clear();		
 					
 					FormPoint p3 = calculateThirdPoint(p2, p1);
 					
@@ -282,11 +284,12 @@ public class FormScannerModel {
 					for (int i=0; i<rows; i++) {
 						for (int j=0; j<values; j++) {
 							FormPoint pi = new FormPoint((int) (p1.x+(delta.get(COL_DX)*i)+(delta.get(ROW_DX)*j)),(int) (p1.y+(delta.get(COL_DY)*i)+(delta.get(ROW_DY)*j)));
-							view.addPoint(pi);
+							points.add(pi);
 						}						
 					}
-					
-					manageTemplateFrame.setupTable(view.getPoints());
+					view.update();
+					manageTemplateFrame.setupTable(points);
+					manageTemplateFrame.toFront();
 				}
 			}
 		}
@@ -342,12 +345,28 @@ public class FormScannerModel {
 		FormPoint p3 = new FormPoint((int) x3, (int) y3);
 		return p3;
 	}
-	
-	public void removePoint(ImageView view, FormPoint p) {
-		view.removePoint(p);
+
+	public void updateTemplate(HashMap<String, FormField> fields) {
+		formTemplate.setFields(fields);
+		points.clear();		
 	}
 
-	public void removeTemporaryPoint(ImageView view) {
-		view.removeTemporaryPoint();
+	public ArrayList<FormPoint> getPoints() {
+		return points;
+	}
+
+	public void removeField(TabbedView view) {
+		String fieldName = view.getSelectedItem();
+		formTemplate.removeFieldByName(fieldName);
+		view.removeFieldByName(fieldName);
+	}
+
+	public void enableRemoveFields(TabbedView view) {
+		view.enableRemoveFields();
+	}
+
+	public void saveTemplate(TabbedView view) {
+		formTemplate.saveToFile(path);
+		view.dispose();
 	}
 }
