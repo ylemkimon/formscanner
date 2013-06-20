@@ -42,7 +42,6 @@ public class ToolBar extends JPanel implements MenuView{
 		setBorder(new EtchedBorder(EtchedBorder.RAISED, null, null));
 		setComponentOrientation(ComponentOrientation.LEFT_TO_RIGHT);
 		
-//		setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
 		setLayout(new FlowLayout(FlowLayout.LEFT));
 		
 		JToolBar fileToolBar = getFileToolBar();

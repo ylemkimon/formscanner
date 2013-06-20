@@ -181,7 +181,7 @@ public class FormTemplate {
 			transformer.setOutputProperty(OutputKeys.METHOD, "xml");
 			transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "4");
 			DOMSource source = new DOMSource(doc);
-			StreamResult result = new StreamResult(new File(path + "/template/" + FilenameUtils.removeExtension(image.getName()) + ".xml"));
+			StreamResult result = new StreamResult(new File(path + "/template/" + FilenameUtils.removeExtension(image.getName()) + ".xtmpl"));
 	 
 			transformer.transform(source, result);
 	 

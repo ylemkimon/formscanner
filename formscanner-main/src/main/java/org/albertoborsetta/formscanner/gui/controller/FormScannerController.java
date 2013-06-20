@@ -2,13 +2,15 @@ package org.albertoborsetta.formscanner.gui.controller;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 
 import org.albertoborsetta.formscanner.commons.FileOpener;
 import org.albertoborsetta.formscanner.commons.FormScannerConstants;
 import org.albertoborsetta.formscanner.commons.FormScannerConstants.Action;
 import org.albertoborsetta.formscanner.model.FormScannerModel;
 
-public class FormScannerController implements ActionListener {
+public class FormScannerController implements ActionListener, WindowListener {
 	
 	private FormScannerModel model;
 	private static FormScannerController instance;
@@ -42,9 +44,50 @@ public class FormScannerController implements ActionListener {
 		case LOAD_TEMPLATE:
 			model.loadTemplate(fileOpener.chooseImage());
 			break;
+		case USE_TEMPLATE:
+			model.openTemplate(fileOpener.chooseTemplate());
+			break;
+		case EXIT:
+			model.exitFormScanner();
+			break;
 		default:
 			break;
 		}
+	}
+
+	public void windowOpened(WindowEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void windowClosing(WindowEvent e) {
+		e.getWindow().dispose();
+		System.exit(0);
+	}
+
+	public void windowClosed(WindowEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void windowIconified(WindowEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void windowDeiconified(WindowEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void windowActivated(WindowEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void windowDeactivated(WindowEvent e) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

@@ -5,6 +5,9 @@ import java.io.File;
 import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
+import org.albertoborsetta.formscanner.commons.translation.FormScannerTranslation;
+import org.albertoborsetta.formscanner.commons.translation.FormScannerTranslationKeys;
+
 public class FileOpener extends JFileChooser {
 
 	/**
@@ -25,10 +28,18 @@ public class FileOpener extends JFileChooser {
 		setFont(FormScannerFont.getFont());
 	}
 	
-	public File[] chooseImages() {
+	private File chooseFile() {
+		File file = null;
+		int returnValue = showOpenDialog(null);
+		
+		if (returnValue == JFileChooser.APPROVE_OPTION) {
+			file = getSelectedFile();
+        }
+		return file;
+	}
+	
+	private File[] chooseFiles() {
 		File[] files = null;
-		setMultiSelectionEnabled(true);
-		setImagesFilter();
 		int returnValue = showOpenDialog(null);
 		
 		if (returnValue == JFileChooser.APPROVE_OPTION) {
@@ -37,32 +48,55 @@ public class FileOpener extends JFileChooser {
 		return files;
 	}
 	
+	public File[] chooseImages() {
+		setMultiSelectionEnabled(true);
+		setImagesFilter();
+		return chooseFiles();
+	}
+	
 	public File chooseImage() {
-		File file = null;
 		setMultiSelectionEnabled(false);
 		setImagesFilter();
-		int returnValue = showOpenDialog(null);
-		
-		if (returnValue == JFileChooser.APPROVE_OPTION) {
-			file = getSelectedFile();
-        }
-		
-		return file;		
+		return chooseFile();
+	}
+	
+	public File chooseTemplate() {
+		setMultiSelectionEnabled(false);
+		setTemplateFilter();
+		return chooseFile();
 	}
 	
 	private void setImagesFilter() {
 		resetChoosableFileFilters();
 		
-		FileNameExtensionFilter allImagesFilter = new FileNameExtensionFilter("Tutte le immagini", "jpg", "jpeg", "tif", "tiff", "png", "bmp");
-		FileNameExtensionFilter pmbImagesFilter = new FileNameExtensionFilter("Immagine BMP (*.bmp)", "pmb");
-		FileNameExtensionFilter pngImagesFilter = new FileNameExtensionFilter("Immagine PNG (*.png)", "png");
-		FileNameExtensionFilter jpegImagesFilter = new FileNameExtensionFilter("Immagine JPEG (*.jpg, *.jpeg)", "jpg", "jpeg");
-		FileNameExtensionFilter tiffImagesFilter = new FileNameExtensionFilter("Immagine TIFF (*.tif, *.tiff)", "tif", "tiff");
+		FileNameExtensionFilter allImagesFilter = new FileNameExtensionFilter(
+				FormScannerTranslation.getTranslationFor(FormScannerTranslationKeys.ALL_IMAGES),
+				"jpg", "jpeg", "tif", "tiff", "png", "bmp");
+		FileNameExtensionFilter pmbImagesFilter = new FileNameExtensionFilter(
+				FormScannerTranslation.getTranslationFor(FormScannerTranslationKeys.BMP_IMAGES),
+				"bmp");
+		FileNameExtensionFilter pngImagesFilter = new FileNameExtensionFilter(
+				FormScannerTranslation.getTranslationFor(FormScannerTranslationKeys.PNG_IMAGES),
+				"png");
+		FileNameExtensionFilter jpegImagesFilter = new FileNameExtensionFilter(
+				FormScannerTranslation.getTranslationFor(FormScannerTranslationKeys.JPEG_IMAGES),
+				"jpg", "jpeg");
+		FileNameExtensionFilter tiffImagesFilter = new FileNameExtensionFilter(
+				FormScannerTranslation.getTranslationFor(FormScannerTranslationKeys.TIFF_IMAGES),
+				"tif", "tiff");
 		
 		setFileFilter(pmbImagesFilter);
 		setFileFilter(pngImagesFilter);
 		setFileFilter(jpegImagesFilter);
 		setFileFilter(tiffImagesFilter);
 		setFileFilter(allImagesFilter);
+	}
+	
+	private void setTemplateFilter() {
+		resetChoosableFileFilters();
+		FileNameExtensionFilter templateFilter = new FileNameExtensionFilter(
+				FormScannerTranslation.getTranslationFor(FormScannerTranslationKeys.TEMPLATE_FILE),
+				"xtmpl");
+		setFileFilter(templateFilter);
 	}
 }

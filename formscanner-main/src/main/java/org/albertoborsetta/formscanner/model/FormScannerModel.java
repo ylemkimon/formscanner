@@ -369,4 +369,14 @@ public class FormScannerModel {
 		formTemplate.saveToFile(path);
 		view.dispose();
 	}
+	
+	public void exitFormScanner() {
+		view.dispose();
+		System.exit(0);
+	}
+
+	public void openTemplate(File chooseTemplate) {
+		System.out.println("Open template file");
+		// TODO: open tempalte file.
+	}
 }

@@ -30,8 +30,8 @@ public class MenuBar extends JMenuBar implements MenuView {
 	private JMenuItem renameMenuItem;
 	
 	private JMenuItem loadTemplateMenuItem;
-	// private JMenuItem useTemplateMenuItem;
-	// private JMenuItem editTemplateMenuItem; 
+	private JMenuItem useTemplateMenuItem;
+	private JMenuItem editTemplateMenuItem; 
 	
 	public MenuBar(final FormScannerModel model) {
 		formScannerModel = model;
@@ -102,16 +102,27 @@ public class MenuBar extends JMenuBar implements MenuView {
 			.withMnemonic(FormScannerTranslation.getMnemonicFor(FormScannerTranslationKeys.LOAD_TEMPLATE_MNEMONIC))
 			.withAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_L, InputEvent.CTRL_MASK))
 			.build();
-		// useTemplateMenuItem = new UseTemplateMenuItem();
-		// editTemplateMenuItem = new EditTemplateMenuItem();
+		useTemplateMenuItem = new MenuItemBuilder(FormScannerTranslation.getTranslationFor(FormScannerTranslationKeys.USE_TEMPLATE))
+			.withActionCommand(FormScannerConstants.USE_TEMPLATE)
+			.withActionListener(formScannerController)
+			.withMnemonic(FormScannerTranslation.getMnemonicFor(FormScannerTranslationKeys.USE_TEMPLATE_MNEMONIC))
+			.withAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_U, InputEvent.CTRL_MASK))
+			.build();
+		editTemplateMenuItem = new MenuItemBuilder(FormScannerTranslation.getTranslationFor(FormScannerTranslationKeys.EDIT_TEMPLATE))
+			.withActionCommand(FormScannerConstants.EDIT_TEMPLATE)
+			.withActionListener(formScannerController)
+			.withMnemonic(FormScannerTranslation.getMnemonicFor(FormScannerTranslationKeys.EDIT_TEMPLATE_MNEMONIC))
+			.withAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_E, InputEvent.CTRL_MASK))
+			.build();
 		
 		return new MenuBuilder(FormScannerTranslation.getTranslationFor(FormScannerTranslationKeys.TEMPLATE_MENU))
 			.withMnemonic(FormScannerTranslation.getMnemonicFor(FormScannerTranslationKeys.TEMPLATE_MENU_MNEMONIC))
 			.add(loadTemplateMenuItem)
+			.add(editTemplateMenuItem)
+			.add(new JSeparator(JSeparator.HORIZONTAL))
+			.add(useTemplateMenuItem)
 			.build();
-		// add(editTemplateMenuItem);
-		// add(new JSeparator(JSeparator.HORIZONTAL));
-		// add(useTemplateMenuItem);
+		
 	}
 	
 	public void setRenameControllersEnabled(boolean enable) {
