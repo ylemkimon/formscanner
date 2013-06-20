@@ -15,6 +15,8 @@ public class FormScannerConstants {
 	public static final String ANALYZE_FILE_CURRENT = "ANALYZE_FILE_NEXT";
 	public static final String ANALYZE_FILE_SKIP = "ANALYZE_FILE_SKIP";
 	public static final String LOAD_TEMPLATE = "LOAD_TEMPLATE";
+	public static final String USE_TEMPLATE = "USE_TEMPLATE";
+	public static final String EDIT_TEMPLATE = "EDIT_TEMPLATE";
 	public static final String CONFIRM = "CONFIRM";
 	public static final String CANCEL = "CANCEL";
 	public static final String SAVE_TEMPLATE = "SAVE_TEMPLATE";
@@ -83,6 +85,8 @@ public class FormScannerConstants {
 		ANALYZE_FILE_NEXT,
 		ANALYZE_FILE_SKIP,
 		LOAD_TEMPLATE,
+		USE_TEMPLATE,
+		EDIT_TEMPLATE,
 		CONFIRM,
 		CANCEL,
 		SAVE_TEMPLATE,

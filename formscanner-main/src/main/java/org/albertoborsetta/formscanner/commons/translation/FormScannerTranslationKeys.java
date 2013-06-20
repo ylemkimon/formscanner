@@ -22,6 +22,14 @@ public class FormScannerTranslationKeys {
 	public static final String LOAD_TEMPLATE_MNEMONIC = "load.template.mnemonic";
 	public static final String LOAD_TEMPLATE_TOOLTIP = "load.template.tooltip";
 	
+	public static final String USE_TEMPLATE = "use.template";
+	public static final String USE_TEMPLATE_MNEMONIC = "use.template.mnemonic";
+	public static final String USE_TEMPLATE_TOOLTIP = "use.template.tooltip";
+	
+	public static final String EDIT_TEMPLATE = "edit.template";
+	public static final String EDIT_TEMPLATE_MNEMONIC = "edit.template.mnemonic";
+	public static final String EDIT_TEMPLATE_TOOLTIP = "edit.template.tooltip";
+	
 	public static final String ANALYZE_FILES = "analyze.files";
 	public static final String ANALYZE_FILES_MNEMONIC = "analyze.files.mnemonic";
 	public static final String ANALYZE_FILES_TOOLTIP = "analyze.files.tooltip";
@@ -83,4 +91,12 @@ public class FormScannerTranslationKeys {
 	public static final String TOP_RIGHT_CORNER = "top.right.corner";
 	public static final String BOTTOM_LEFT_CORNER = "bottom.left.corner";
 	public static final String BOTTOM_RIGHT_CORNER = "bottom.right.corner";
+	
+	public static final String ALL_IMAGES = "all.images";
+	public static final String BMP_IMAGES = "bmp.images";
+	public static final String PNG_IMAGES = "png.images";
+	public static final String JPEG_IMAGES = "jpeg.images";
+	public static final String TIFF_IMAGES = "tiff.images";
+	
+	public static final String TEMPLATE_FILE = "template.file";
 }
