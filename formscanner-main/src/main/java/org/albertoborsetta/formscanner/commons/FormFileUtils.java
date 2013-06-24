@@ -4,26 +4,34 @@ import java.io.File;
 
 import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileNameExtensionFilter;
+import javax.xml.transform.OutputKeys;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
 
 import org.albertoborsetta.formscanner.commons.translation.FormScannerTranslation;
 import org.albertoborsetta.formscanner.commons.translation.FormScannerTranslationKeys;
+import org.apache.commons.io.FilenameUtils;
+import org.w3c.dom.Document;
 
-public class FileOpener extends JFileChooser {
+public class FormFileUtils extends JFileChooser {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	private static FileOpener instance;
+	private static FormFileUtils instance;
 
-	public static FileOpener getInstance() {
+	public static FormFileUtils getInstance() {
 		if (instance == null) {
-			instance = new FileOpener();
+			instance = new FormFileUtils();
 		}
 		return instance;
 	}
 	
-	private FileOpener() {
+	private FormFileUtils() {
 		super();
 		setFont(FormScannerFont.getFont());
 	}
@@ -98,5 +106,30 @@ public class FileOpener extends JFileChooser {
 				FormScannerTranslation.getTranslationFor(FormScannerTranslationKeys.TEMPLATE_FILE),
 				"xtmpl");
 		setFileFilter(templateFilter);
+	}
+
+	public File saveTemplateAs(File file, Document doc) {
+		try {
+			TransformerFactory transformerFactory = TransformerFactory.newInstance();
+			Transformer transformer = transformerFactory.newTransformer();
+			transformer.setOutputProperty(OutputKeys.INDENT, "yes");
+			transformer.setOutputProperty(OutputKeys.METHOD, "xml");
+			transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "4");
+			DOMSource source = new DOMSource(doc);
+
+			setMultiSelectionEnabled(false);
+			setTemplateFilter();
+			setSelectedFile(file);
+			
+			int returnValue = showSaveDialog(null);
+			if (returnValue == JFileChooser.APPROVE_OPTION) {
+				file = getSelectedFile();
+				StreamResult result = new StreamResult(file);
+				transformer.transform(source, result);
+	        }
+		} catch (TransformerException tfe) {
+			tfe.printStackTrace();
+		}	
+		return file;
 	}
 }
