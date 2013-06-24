@@ -1,6 +1,7 @@
 package org.albertoborsetta.formscanner.model;
 
 import org.albertoborsetta.formscanner.commons.FormField;
+import org.albertoborsetta.formscanner.commons.FormFileUtils;
 import org.albertoborsetta.formscanner.commons.FormPoint;
 import org.albertoborsetta.formscanner.commons.FormScannerConstants.Action;
 import org.albertoborsetta.formscanner.commons.FormScannerConstants.Frame;
@@ -51,6 +52,7 @@ public class FormScannerModel {
 	private ManageTemplateFrame manageTemplateFrame;
 	private ImageFrame imageFrame;
 	private FormTemplate formTemplate;
+	FormFileUtils fileUtils = FormFileUtils.getInstance();
 	
 	private ArrayList<FormPoint> points = new ArrayList<FormPoint>();
     
@@ -66,7 +68,8 @@ public class FormScannerModel {
 		FormScannerResources.setTemplate(configurations.getProperty(FormScannerConfigurationKeys.TEMPLATE, FormScannerConfigurationKeys.DEFAULT_TEMPLATE));
 	}
 
-	public void openFiles(File[] fileArray) {
+	public void openImages() {
+		File[] fileArray = fileUtils.chooseImages();
 		if (fileArray != null) {
 			Integer fileIndex = 0;
 			for (File file: fileArray) {
@@ -227,7 +230,8 @@ public class FormScannerModel {
 		}
 	}
 
-	public void loadTemplate(File template) {
+	public void loadTemplate() {
+		File template = fileUtils.chooseImage();
 		if (template != null) {
 			formTemplate = new FormTemplate(template);
 			manageTemplateFrame = new ManageTemplateFrame(this, formTemplate);
@@ -375,8 +379,10 @@ public class FormScannerModel {
 		System.exit(0);
 	}
 
-	public void openTemplate(File chooseTemplate) {
+	public void openTemplate() {
 		System.out.println("Open template file");
-		// TODO: open tempalte file.
+		File template = fileUtils.chooseTemplate();
+		System.out.println("Parse template XML");
+		System.out.println("Setup template");
 	}
 }

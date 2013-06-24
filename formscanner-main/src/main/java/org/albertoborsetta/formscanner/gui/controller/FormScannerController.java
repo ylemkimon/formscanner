@@ -5,7 +5,6 @@ import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 
-import org.albertoborsetta.formscanner.commons.FileOpener;
 import org.albertoborsetta.formscanner.commons.FormScannerConstants;
 import org.albertoborsetta.formscanner.commons.FormScannerConstants.Action;
 import org.albertoborsetta.formscanner.model.FormScannerModel;
@@ -28,13 +27,12 @@ public class FormScannerController implements ActionListener, WindowListener {
 	
 	public void actionPerformed(ActionEvent e) {		
 		Action act = Action.valueOf(e.getActionCommand());
-		FileOpener fileOpener = FileOpener.getInstance();
 		switch (act) {
 		case RENAME_FILE_FIRST:
 			model.renameFiles(FormScannerConstants.RENAME_FILE_FIRST);
 			break;
 		case OPEN_IMAGES:
-			model.openFiles(fileOpener.chooseImages());
+			model.openImages();
 			break;
 		case SAVE_RESULTS:
 			break;
@@ -42,10 +40,10 @@ public class FormScannerController implements ActionListener, WindowListener {
 			model.analyzeFiles(FormScannerConstants.ANALYZE_FILE_FIRST);
 			break;
 		case LOAD_TEMPLATE:
-			model.loadTemplate(fileOpener.chooseImage());
+			model.loadTemplate();
 			break;
 		case USE_TEMPLATE:
-			model.openTemplate(fileOpener.chooseTemplate());
+			model.openTemplate();
 			break;
 		case EXIT:
 			model.exitFormScanner();
