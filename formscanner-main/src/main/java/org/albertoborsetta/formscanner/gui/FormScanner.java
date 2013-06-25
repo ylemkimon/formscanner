@@ -7,7 +7,6 @@ import java.awt.BorderLayout;
 import java.awt.Dimension;
 
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JInternalFrame;
 import javax.swing.JDesktopPane;
 import javax.swing.UIManager;

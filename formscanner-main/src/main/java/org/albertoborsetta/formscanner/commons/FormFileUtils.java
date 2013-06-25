@@ -13,7 +13,6 @@ import javax.xml.transform.stream.StreamResult;
 
 import org.albertoborsetta.formscanner.commons.translation.FormScannerTranslation;
 import org.albertoborsetta.formscanner.commons.translation.FormScannerTranslationKeys;
-import org.apache.commons.io.FilenameUtils;
 import org.w3c.dom.Document;
 
 public class FormFileUtils extends JFileChooser {
