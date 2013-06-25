@@ -18,13 +18,13 @@ public class FormScannerTranslationKeys {
 	public static final String RENAME_FILES_MNEMONIC = "rename.files.mnemonic";
 	public static final String RENAME_FILES_TOOLTIP = "rename.files.tooltip";
 	
+	public static final String CREATE_TEMPLATE = "create.template";
+	public static final String CREATE_TEMPLATE_MNEMONIC = "create.template.mnemonic";
+	public static final String CREATE_TEMPLATE_TOOLTIP = "create.template.tooltip";
+	
 	public static final String LOAD_TEMPLATE = "load.template";
 	public static final String LOAD_TEMPLATE_MNEMONIC = "load.template.mnemonic";
 	public static final String LOAD_TEMPLATE_TOOLTIP = "load.template.tooltip";
-	
-	public static final String USE_TEMPLATE = "use.template";
-	public static final String USE_TEMPLATE_MNEMONIC = "use.template.mnemonic";
-	public static final String USE_TEMPLATE_TOOLTIP = "use.template.tooltip";
 	
 	public static final String EDIT_TEMPLATE = "edit.template";
 	public static final String EDIT_TEMPLATE_MNEMONIC = "edit.template.mnemonic";

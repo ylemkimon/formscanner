@@ -29,7 +29,6 @@ public class RenameFileFrame extends JInternalFrame implements View {
 	private JTextField fileNameField;
 	private JLabel fileExtensionField;
 	private JLabel newFileNameLabel;
-	private FormScannerModel formScannerModel;
 	private JButton okButton;
 	private JButton cancelButton;
 	private RenameFileController renameFileController;
@@ -41,7 +40,6 @@ public class RenameFileFrame extends JInternalFrame implements View {
 	 * Create the frame.
 	 */
 	public RenameFileFrame(FormScannerModel formScannerModel, String fileName) {
-		this.formScannerModel = formScannerModel;
 		renameFileController = new RenameFileController(formScannerModel);
 		renameFileController.add(this);
 		

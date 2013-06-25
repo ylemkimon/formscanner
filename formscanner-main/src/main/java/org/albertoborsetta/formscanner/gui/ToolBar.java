@@ -23,7 +23,6 @@ public class ToolBar extends JPanel implements MenuView{
 
 	private static final long serialVersionUID = 1L;
 	
-	private FormScannerModel formScannerModel;
 	private FormScannerController formScannerController;
 	
 	private JButton openButton;
@@ -36,7 +35,6 @@ public class ToolBar extends JPanel implements MenuView{
 	 */
 	public ToolBar(FormScannerModel formScannerModel) {
 		
-		this.formScannerModel = formScannerModel;
 		formScannerController = FormScannerController.getInstance(formScannerModel);
 		
 		setBorder(new EtchedBorder(EtchedBorder.RAISED, null, null));

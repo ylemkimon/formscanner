@@ -27,9 +27,7 @@ import javax.imageio.ImageIO;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
 public class ImageFrame extends JInternalFrame implements ScrollableImageView {
 	
@@ -45,7 +43,7 @@ public class ImageFrame extends JInternalFrame implements ScrollableImageView {
 	/**
 	 * Create the frame.
 	 */	
-	public ImageFrame(FormScannerModel model, FormTemplate template, Mode mode) {
+	public ImageFrame(FormScannerModel model, File image, Mode mode) {
 		this.model = model;
 		this.mode = mode;
 		controller = new ImageFrameController(this.model);
@@ -66,7 +64,7 @@ public class ImageFrame extends JInternalFrame implements ScrollableImageView {
 		
 		setBounds(320, 10, desktopWidth - 500, desktopHeight - 20);
 		
-		imagePanel = new ImagePanel(template);
+		imagePanel = new ImagePanel(image);
 		scrollPane = new ImageScrollPane(imagePanel);
 		getContentPane().add(scrollPane, BorderLayout.CENTER);		
 	}
@@ -115,10 +113,9 @@ public class ImageFrame extends JInternalFrame implements ScrollableImageView {
 		 */
 		private static final long serialVersionUID = 1L;
 		
-		public ImagePanel(FormTemplate template) {
+		public ImagePanel(File image) {
 			super();
-			this.template = template;
-			setImage(this.template.getImage());
+			setImage(image);
 			setFont(FormScannerFont.getFont());
 		}
 		
@@ -170,7 +167,7 @@ public class ImageFrame extends JInternalFrame implements ScrollableImageView {
 			g.setColor(Color.BLACK);
 		}
 		
-		public void setImage(File file) {
+		private void setImage(File file) {
 			try {		
 				image = ImageIO.read(file);
 			} catch (IOException ex) {

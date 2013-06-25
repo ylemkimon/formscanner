@@ -52,6 +52,7 @@ public class FormScannerModel {
 	private ManageTemplateFrame manageTemplateFrame;
 	private ImageFrame imageFrame;
 	private FormTemplate formTemplate;
+	private File templateImage;
 	FormFileUtils fileUtils = FormFileUtils.getInstance();
 	
 	private ArrayList<FormPoint> points = new ArrayList<FormPoint>();
@@ -91,9 +92,11 @@ public class FormScannerModel {
 			if (!openedFiles.isEmpty()) {
 				renamedFileIndex = fileListFrame.getSelectedItemIndex();
 				fileListFrame.selectFile(renamedFileIndex);
-				formTemplate = new FormTemplate(openedFiles.get(renamedFileIndex));
+				File imageFile = openedFiles.get(renamedFileIndex);
+				FormTemplate template = new FormTemplate(FilenameUtils.removeExtension(imageFile.getName()));
+				template.findCorners(imageFile);
 				
-				createImageFrame(formTemplate, Mode.VIEW);
+				createFormImageFrame(imageFile, template, Mode.VIEW);
 				
 				renameFileFrame = new RenameFileFrame(this, getFileNameByIndex(renamedFileIndex));
 				view.arrangeFrame(renameFileFrame);
@@ -138,9 +141,11 @@ public class FormScannerModel {
 			if (!openedFiles.isEmpty()) {
 				analyzedFileIndex  = fileListFrame.getSelectedItemIndex();
 				fileListFrame.selectFile(analyzedFileIndex);
-				formTemplate = new FormTemplate(openedFiles.get(analyzedFileIndex));
+				File imageFile = openedFiles.get(analyzedFileIndex);
+				FormTemplate template = new FormTemplate(FilenameUtils.removeExtension(imageFile.getName()));
+				template.findCorners(imageFile);
 			
-				createImageFrame(formTemplate, Mode.VIEW);
+				createFormImageFrame(imageFile, template, Mode.VIEW);
 				
 				// analyzeFileResultsFrame = new AnalyzeFileResultsFrame(this, partialResults, totalResults); 
 				// view.arrangeFrame(analyzeFileResultsFrame);				
@@ -231,17 +236,25 @@ public class FormScannerModel {
 	}
 
 	public void loadTemplate() {
-		File template = fileUtils.chooseImage();
-		if (template != null) {
-			formTemplate = new FormTemplate(template);
-			manageTemplateFrame = new ManageTemplateFrame(this, formTemplate);
+		templateImage = fileUtils.chooseImage();
+		if (templateImage != null) {
+			formTemplate = new FormTemplate(FilenameUtils.removeExtension(templateImage.getName()));
+			formTemplate.findCorners(templateImage);
+			manageTemplateFrame = new ManageTemplateFrame(this);
 			
 			view.arrangeFrame(manageTemplateFrame);	
 		}
 	}
 	
-	public void createImageFrame(FormTemplate template, Mode mode) {
-		imageFrame = new ImageFrame(this, template, mode);
+	public void createTemplateImageFrame() {
+		imageFrame = new ImageFrame(this, templateImage, Mode.UPDATE);
+		imageFrame.setTemplate(formTemplate);
+		view.arrangeFrame(imageFrame);
+	}
+	
+	public void createFormImageFrame(File image, FormTemplate template, Mode mode) {
+		imageFrame = new ImageFrame(this, image, mode);
+		imageFrame.setTemplate(template);
 		view.arrangeFrame(imageFrame);
 	}
 	
@@ -382,7 +395,9 @@ public class FormScannerModel {
 	public void openTemplate() {
 		System.out.println("Open template file");
 		File template = fileUtils.chooseTemplate();
+		formTemplate = new FormTemplate(FilenameUtils.removeExtension(template.getName()));
 		System.out.println("Parse template XML");
 		System.out.println("Setup template");
+		formTemplate.presetFromTemplate(template);
 	}
 }

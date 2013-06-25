@@ -1,7 +1,5 @@
 package org.albertoborsetta.formscanner.imageparser;
 
-import ij.IJ;
-import ij.ImagePlus;
 import ij.plugin.filter.Convolver;
 import ij.process.Blitter;
 import ij.process.FloatProcessor;
@@ -11,7 +9,6 @@ import java.util.List;
 import java.util.Vector;
 
 import org.albertoborsetta.formscanner.commons.FormPoint;
-import org.albertoborsetta.formscanner.commons.FormScannerConstants;
 import org.albertoborsetta.formscanner.commons.FormScannerConstants.Corners;
 
 public class CornerDetector {
@@ -122,14 +119,8 @@ public class CornerDetector {
 			if (cornerArray[i] != null) {
 				FormPoint c1 = cornerArray[i];
 				goodCorners.add(c1);
-				// delete all remaining corners close to c
 				for (int j=i+1; j<cornerArray.length; j++){
-					// if (cornerArray[j] != null) {
-						// Corner c2 = cornerArray[j];
-						// if ((c1.dist2(c2)<dmin2) || (c1.dist2(c2)>dmax2)) {
-							cornerArray[j] = null; //delete corner
-						// }
-					// }
+					cornerArray[j] = null;
 				}
 			}
 		}
@@ -182,16 +173,4 @@ public class CornerDetector {
 					cp > pix[i2] && cp > pix[i2+1] ;
 		}
 	}
-	
-	void printCornerPoints(List<FormPoint> crf) {
-		int i = 0;
-		for (FormPoint ipt: crf){
-			IJ.write((i++) + ": " + (double)ipt.getDistance() + " " + ipt.getX() + " " + ipt.getY());
-		}
-	}
-	
-//	void showProcessor(ImageProcessor ip, String title) {
-//		ImagePlus win = new ImagePlus(title,ip);
-//		win.show();
-//	}
 }

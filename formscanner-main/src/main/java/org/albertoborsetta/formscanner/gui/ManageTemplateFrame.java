@@ -34,8 +34,6 @@ import org.albertoborsetta.formscanner.commons.FormScannerConstants;
 import org.albertoborsetta.formscanner.commons.FormScannerConstants.FieldType;
 import org.albertoborsetta.formscanner.commons.FormScannerGridLayouts;
 import org.albertoborsetta.formscanner.commons.FormScannerConstants.Action;
-import org.albertoborsetta.formscanner.commons.FormScannerConstants.Mode;
-import org.albertoborsetta.formscanner.commons.FormTemplate;
 import org.albertoborsetta.formscanner.commons.resources.FormScannerResources;
 import org.albertoborsetta.formscanner.commons.resources.FormScannerResourcesKeys;
 import org.albertoborsetta.formscanner.commons.translation.FormScannerTranslation;
@@ -83,8 +81,6 @@ public class ManageTemplateFrame extends JInternalFrame implements TabbedView {
 	private ManageTemplateController manageTemplateController;
 	private InternalFrameController internalFrameController;
 
-	private FormTemplate template;
-
 	private class TemplateTableModel extends DefaultTableModel {
 
 		/**
@@ -108,8 +104,7 @@ public class ManageTemplateFrame extends JInternalFrame implements TabbedView {
 	/**
 	 * Create the frame.
 	 */
-	public ManageTemplateFrame(FormScannerModel model, FormTemplate template) {
-		this.template = template;
+	public ManageTemplateFrame(FormScannerModel model) {
 		formScannerModel = model;
 
 		internalFrameController = InternalFrameController
@@ -180,7 +175,7 @@ public class ManageTemplateFrame extends JInternalFrame implements TabbedView {
 				break;
 			case 2:
 				setupTable();
-				formScannerModel.createImageFrame(template, Mode.UPDATE);
+				formScannerModel.createTemplateImageFrame();
 				break;
 			default:
 				break;

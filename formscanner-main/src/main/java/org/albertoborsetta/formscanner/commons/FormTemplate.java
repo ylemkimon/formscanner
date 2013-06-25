@@ -7,7 +7,6 @@ import java.util.Map.Entry;
 
 import org.albertoborsetta.formscanner.commons.FormScannerConstants.Corners;
 import org.albertoborsetta.formscanner.imageparser.ScanImage;
-import org.apache.commons.io.FilenameUtils;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -15,30 +14,31 @@ import javax.xml.parsers.ParserConfigurationException;
  
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
 public class FormTemplate {
 	
-	private File image;
+	private String name;
 	private HashMap<String, FormField> fields;
 	private HashMap<Corners, FormPoint> corners;
 	private double rotation;
 	private ArrayList<FormPoint> pointList;
 	
-	public FormTemplate(File image) {
-		this.image = image;
-		
-		ScanImage imageScan = new ScanImage(image);
-        corners = imageScan.locateCorners();
-        
-        rotation = calculateRotation();        
-        fields = new HashMap<String, FormField>();        
+	public FormTemplate(String name) {
+		this.name = name;
+		corners = new HashMap<Corners, FormPoint>();
+		rotation = 0; 
+		fields = new HashMap<String, FormField>();        
 		pointList = new ArrayList<FormPoint>();
 	}
 	
-	public String getName() {
-		return image.getName();
-	}
-
+	public void findCorners(File image) {
+		ScanImage imageScan = new ScanImage(image);
+        corners = imageScan.locateCorners();
+        rotation = calculateRotation();
+	} 
+	
 	public FormField getField(String name) {
 		return fields.get(name);
 	}
@@ -90,10 +90,6 @@ public class FormTemplate {
 		return Math.atan(dy/dx);
 	}
 	
-	public File getImage() {
-		return image;
-	}
-
 	public void removeFieldByName(String fieldName) {
 
 		FormField field = fields.get(fieldName);
@@ -167,11 +163,50 @@ public class FormTemplate {
 				fieldElement.appendChild(valuesElement);				
 				fieldsElement.appendChild(fieldElement);
 	        }
-			File outputFile = new File(path + "/template/" + FilenameUtils.removeExtension(image.getName()) + ".xtmpl");
+			File outputFile = new File(path + "/template/" + name + ".xtmpl");
 			FormFileUtils.getInstance().saveTemplateAs(outputFile, doc);
 	 
 		  } catch (ParserConfigurationException pce) {
 			pce.printStackTrace();
 		  } 	
+	}
+
+	public void presetFromTemplate(File template) {
+		try {
+			DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+			DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
+			Document doc = dBuilder.parse(template);
+			doc.getDocumentElement().normalize();
+			 
+			System.out.println("Root element :" + doc.getDocumentElement().getNodeName());
+		 
+			NodeList nList = doc.getElementsByTagName("template");
+		 
+			System.out.println("----------------------------");
+		 
+			for (int temp = 0; temp < nList.getLength(); temp++) {
+		 
+				Node nNode = nList.item(temp);
+		 
+				System.out.println("\nCurrent Element :" + nNode.getNodeName());
+		 
+				if (nNode.getNodeType() == Node.ELEMENT_NODE) {
+		 
+					Element eElement = (Element) nNode;
+					
+					System.out.println(nNode.getLocalName());
+		 
+//					System.out.println("Staff id : " + eElement.getAttribute("id"));
+//					System.out.println("First Name : " + eElement.getElementsByTagName("firstname").item(0).getTextContent());
+//					System.out.println("Last Name : " + eElement.getElementsByTagName("lastname").item(0).getTextContent());
+//					System.out.println("Nick Name : " + eElement.getElementsByTagName("nickname").item(0).getTextContent());
+//					System.out.println("Salary : " + eElement.getElementsByTagName("salary").item(0).getTextContent());
+		 
+				}
+			}
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 }
