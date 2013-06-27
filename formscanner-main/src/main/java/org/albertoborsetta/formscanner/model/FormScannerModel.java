@@ -69,6 +69,7 @@ public class FormScannerModel {
 		FormScannerTranslation.setTranslation(path, lang);
 		FormScannerResources.setResources(path);
 		FormScannerResources.setTemplate(configurations.getProperty(FormScannerConfigurationKeys.TEMPLATE, FormScannerConfigurationKeys.DEFAULT_TEMPLATE));
+		openTemplate(FormScannerResources.getTemplate(), false);
 	}
 
 	public void openImages() {
@@ -385,8 +386,11 @@ public class FormScannerModel {
 	}
 
 	public void saveTemplate(TabbedView view) {
-		formTemplate.saveToFile(path);
+		File template = formTemplate.saveToFile(path);
 		JOptionPane.showMessageDialog(null, FormScannerTranslation.getTranslationFor(FormScannerTranslationKeys.TEMPLATE_SAVED));
+		String templateName = FilenameUtils.removeExtension(template.getName());
+		configurations.setProperty(FormScannerConfigurationKeys.TEMPLATE, templateName);
+		configurations.store();
 		view.dispose();
 	}
 	
@@ -396,9 +400,18 @@ public class FormScannerModel {
 	}
 
 	public void openTemplate() {
-		File template = fileUtils.chooseTemplate();
-		formTemplate = new FormTemplate(FilenameUtils.removeExtension(template.getName()));
+		openTemplate(fileUtils.chooseTemplate(), true);
+	}
+	
+	private void openTemplate(File template, boolean notify) {
+		String templateName = FilenameUtils.removeExtension(template.getName());
+		formTemplate = new FormTemplate(templateName);
 		formTemplate.presetFromTemplate(template);
-		JOptionPane.showMessageDialog(null, FormScannerTranslation.getTranslationFor(FormScannerTranslationKeys.TEMPLATE_LOADED));
+		if (notify) {
+			JOptionPane.showMessageDialog(null, FormScannerTranslation.getTranslationFor(FormScannerTranslationKeys.TEMPLATE_LOADED));
+			configurations.setProperty(FormScannerConfigurationKeys.TEMPLATE, templateName);
+			configurations.store();
+		}
+		System.out.println(formTemplate.toString());
 	}
 }

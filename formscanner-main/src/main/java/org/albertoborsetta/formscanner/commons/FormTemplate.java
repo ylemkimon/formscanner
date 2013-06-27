@@ -100,7 +100,9 @@ public class FormTemplate {
 		fields.remove(fieldName);
 	}
 
-	public void saveToFile(String path) {
+	public File saveToFile(String path) {
+		File outputFile = new File(path + "/template/" + name + ".xtmpl");
+		
 		try {
 			 
 			DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
@@ -163,12 +165,13 @@ public class FormTemplate {
 				fieldElement.appendChild(valuesElement);				
 				fieldsElement.appendChild(fieldElement);
 	        }
-			File outputFile = new File(path + "/template/" + name + ".xtmpl");
+			
 			FormFileUtils.getInstance().saveTemplateAs(outputFile, doc);
 	 
 		  } catch (ParserConfigurationException pce) {
 			pce.printStackTrace();
-		  } 	
+		  } 
+		return outputFile;
 	}
 
 	public void presetFromTemplate(File template) {
