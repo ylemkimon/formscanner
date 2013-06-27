@@ -1,10 +1,14 @@
 package org.albertoborsetta.formscanner.commons.configuration;
 
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Properties;
 
 public class FormScannerConfiguration extends Properties {
+	
+	private String configFile;
 	
 	/**
 	 * 
@@ -16,11 +20,9 @@ public class FormScannerConfiguration extends Properties {
 	private FormScannerConfiguration(String path) {
 		super();
 		try {
-			String configFile = path + "/config/formscanner.properties";
-			final FileInputStream configInputStream = new FileInputStream(configFile);
-			load(configInputStream);
+			configFile = path + "/config/formscanner.properties";
+			load(new FileInputStream(configFile));
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
@@ -31,5 +33,14 @@ public class FormScannerConfiguration extends Properties {
 		}
 		return configurations;
 	}
-
+	
+	public void store() {
+		try {
+			store(new FileOutputStream(configFile), null);
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
 }

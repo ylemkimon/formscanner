@@ -1,5 +1,7 @@
 package org.albertoborsetta.formscanner.commons.resources;
 
+import java.io.File;
+
 import javax.swing.ImageIcon;
 
 public class FormScannerResources {
@@ -8,15 +10,7 @@ public class FormScannerResources {
 	private static String templatePath;
 	private static String template;
 
-	/*
-	private FormScannerResources(String path) {
-		iconsPath = path + "/icons/";
-		templatePath = path + "/template/";
-	}
-	*/
-	
 	public static void setResources(String path) {
-		// new FormScannerResources(path);
 		iconsPath = path + "/icons/";
 		templatePath = path + "/template/";
 	}
@@ -30,18 +24,7 @@ public class FormScannerResources {
 		template = tpl;
 	}
 
-	public String getTemplateConfig() {
-		String templateConfig = templatePath + template + ".config";
-		return templateConfig;
-	}
-	
-	public String getTemplateFields() {
-		String templateFields = templatePath + template + ".fields";
-		return templateFields;
-	}
-	
-	public String getTemplateAsc() {
-		String templateAsc = templatePath + template + ".asc";
-		return templateAsc;
+	public static File getTemplate() {
+		return new File(templatePath + template + ".xtmpl");
 	}
 }
