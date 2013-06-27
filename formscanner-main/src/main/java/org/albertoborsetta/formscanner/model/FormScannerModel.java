@@ -11,6 +11,7 @@ import org.albertoborsetta.formscanner.commons.configuration.FormScannerConfigur
 import org.albertoborsetta.formscanner.commons.configuration.FormScannerConfigurationKeys;
 import org.albertoborsetta.formscanner.commons.resources.FormScannerResources;
 import org.albertoborsetta.formscanner.commons.translation.FormScannerTranslation;
+import org.albertoborsetta.formscanner.commons.translation.FormScannerTranslationKeys;
 import org.albertoborsetta.formscanner.gui.FileListFrame;
 import org.albertoborsetta.formscanner.gui.FormScanner;
 import org.albertoborsetta.formscanner.gui.ImageView;
@@ -29,6 +30,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import javax.swing.JInternalFrame;
+import javax.swing.JOptionPane;
 
 import org.apache.commons.io.FilenameUtils;
 
@@ -384,6 +386,7 @@ public class FormScannerModel {
 
 	public void saveTemplate(TabbedView view) {
 		formTemplate.saveToFile(path);
+		JOptionPane.showMessageDialog(null, FormScannerTranslation.getTranslationFor(FormScannerTranslationKeys.TEMPLATE_SAVED));
 		view.dispose();
 	}
 	
@@ -393,11 +396,9 @@ public class FormScannerModel {
 	}
 
 	public void openTemplate() {
-		System.out.println("Open template file");
 		File template = fileUtils.chooseTemplate();
 		formTemplate = new FormTemplate(FilenameUtils.removeExtension(template.getName()));
-		System.out.println("Parse template XML");
-		System.out.println("Setup template");
 		formTemplate.presetFromTemplate(template);
+		JOptionPane.showMessageDialog(null, FormScannerTranslation.getTranslationFor(FormScannerTranslationKeys.TEMPLATE_LOADED));
 	}
 }

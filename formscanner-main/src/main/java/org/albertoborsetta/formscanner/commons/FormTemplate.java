@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.Map.Entry;
 
 import org.albertoborsetta.formscanner.commons.FormScannerConstants.Corners;
+import org.albertoborsetta.formscanner.commons.FormScannerConstants.FieldType;
 import org.albertoborsetta.formscanner.imageparser.ScanImage;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -14,7 +15,6 @@ import javax.xml.parsers.ParserConfigurationException;
  
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
-import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 public class FormTemplate {
@@ -178,35 +178,102 @@ public class FormTemplate {
 			Document doc = dBuilder.parse(template);
 			doc.getDocumentElement().normalize();
 			 
-			System.out.println("Root element :" + doc.getDocumentElement().getNodeName());
-		 
-			NodeList nList = doc.getElementsByTagName("template");
-		 
-			System.out.println("----------------------------");
-		 
-			for (int temp = 0; temp < nList.getLength(); temp++) {
-		 
-				Node nNode = nList.item(temp);
-		 
-				System.out.println("\nCurrent Element :" + nNode.getNodeName());
-		 
-				if (nNode.getNodeType() == Node.ELEMENT_NODE) {
-		 
-					Element eElement = (Element) nNode;
-					
-					System.out.println(nNode.getLocalName());
-		 
-//					System.out.println("Staff id : " + eElement.getAttribute("id"));
-//					System.out.println("First Name : " + eElement.getElementsByTagName("firstname").item(0).getTextContent());
-//					System.out.println("Last Name : " + eElement.getElementsByTagName("lastname").item(0).getTextContent());
-//					System.out.println("Nick Name : " + eElement.getElementsByTagName("nickname").item(0).getTextContent());
-//					System.out.println("Salary : " + eElement.getElementsByTagName("salary").item(0).getTextContent());
-		 
-				}
+			Element templateElement = (Element) doc.getDocumentElement(); 
+			Element rotationElement = (Element) templateElement.getElementsByTagName("rotation").item(0);
+			rotation = Double.parseDouble(rotationElement.getAttribute("angle"));
+			
+			Element cornersElement = (Element) templateElement.getElementsByTagName("corners").item(0);
+			NodeList cornerList = cornersElement.getElementsByTagName("corner");
+			for (int i=0; i<cornerList.getLength(); i++) {
+				Element cornerElement = (Element) cornerList.item(i);
+				String postion = cornerElement.getAttribute("position");
+				String xCoord = cornerElement.getAttribute("x");
+				String yCoord = cornerElement.getAttribute("y");
+				
+				FormPoint cornerPoint = new FormPoint(Integer.parseInt(xCoord), Integer.parseInt(yCoord));
+				corners.put(Corners.valueOf(postion), cornerPoint);
 			}
 			
+			Element fieldsElement = (Element) templateElement.getElementsByTagName("fields").item(0);
+			NodeList fieldList = fieldsElement.getElementsByTagName("field");
+			for (int i=0; i<fieldList.getLength(); i++) {
+				Element fieldElement = (Element) fieldList.item(i);
+				Element nameElement = (Element) fieldElement.getElementsByTagName("name").item(0);
+				String fieldName = nameElement.getTextContent();
+				FormField field = new FormField(fieldName);
+				field.setMultiple(Boolean.parseBoolean(fieldElement.getAttribute("multiple")));
+				field.setType(FieldType.valueOf(fieldElement.getAttribute("orientation")));
+				
+				Element valuesElement = (Element) fieldElement.getElementsByTagName("values").item(0);
+				NodeList valueList = valuesElement.getElementsByTagName("value");
+				for (int j=0; j<valueList.getLength(); j++) {
+					Element valueElement = (Element) valueList.item(j);
+					String xCoord = valueElement.getAttribute("x");
+					String yCoord = valueElement.getAttribute("y");
+					
+					FormPoint point = new FormPoint(Integer.parseInt(xCoord), Integer.parseInt(yCoord));
+					field.setPoint(valueElement.getTextContent(), point);
+				}				
+				fields.put(fieldName, field);
+			}			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+	
+	public String toString() {
+		StringBuilder builder = new StringBuilder();
+		
+		builder = builder.append("[[Rotation:")
+			.append(rotation)
+			.append("]")
+			.append(" [Corners: ");
+						 
+			// corner elements
+			for (Entry<Corners, FormPoint> corner : corners.entrySet()) {
+				Corners cornerPosition = corner.getKey();
+				FormPoint cornerValue = corner.getValue();
+						
+				builder = builder.append(" [position:")
+					.append(cornerPosition.name())
+					.append(" x coord:")
+					.append(cornerValue.x)
+					.append(" y coord:")
+					.append(cornerValue.y)
+					.append("]");
+	        }
+			
+			builder = builder.append("]")
+					.append(" [Fields: ");
+
+			// field elements
+			for (Entry<String, FormField> field : fields.entrySet()) {
+				FormField fieldValue = field.getValue();
+				
+				builder = builder.append(" [name:")
+						.append(fieldValue.getName())
+						.append(" is multiple:")
+						.append(fieldValue.isMultiple())
+						.append(" orientation:")
+						.append(fieldValue.getType().name())
+						.append(" values: ");
+				
+				// value elements
+				for (Entry<String, FormPoint> point : fieldValue.getPoints().entrySet()) {
+					FormPoint pointValue = point.getValue();
+					
+					builder = builder.append(" [response:")
+							.append(point.getKey())
+							.append(" x coord:")
+							.append(pointValue.x)
+							.append(" y coord:")
+							.append(pointValue.y)
+							.append("]");
+				}
+				
+				builder = builder.append("]");
+	        }
+
+			return builder.append("]").append("]").toString();
 	}
 }
