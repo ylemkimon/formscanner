@@ -31,7 +31,7 @@ public class MenuBar extends JMenuBar implements MenuView {
 	
 	private JMenuItem createTemplateMenuItem;
 	private JMenuItem loadTemplateMenuItem;
-	private JMenuItem editTemplateMenuItem; 
+//	private JMenuItem editTemplateMenuItem; 
 	
 	public MenuBar(final FormScannerModel model) {
 		formScannerModel = model;
@@ -108,17 +108,17 @@ public class MenuBar extends JMenuBar implements MenuView {
 			.withMnemonic(FormScannerTranslation.getMnemonicFor(FormScannerTranslationKeys.LOAD_TEMPLATE_MNEMONIC))
 			.withAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_L, InputEvent.CTRL_MASK))
 			.build();
-		editTemplateMenuItem = new MenuItemBuilder(FormScannerTranslation.getTranslationFor(FormScannerTranslationKeys.EDIT_TEMPLATE))
-			.withActionCommand(FormScannerConstants.EDIT_TEMPLATE)
-			.withActionListener(formScannerController)
-			.withMnemonic(FormScannerTranslation.getMnemonicFor(FormScannerTranslationKeys.EDIT_TEMPLATE_MNEMONIC))
-			.withAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_E, InputEvent.CTRL_MASK))
-			.build();
+//		editTemplateMenuItem = new MenuItemBuilder(FormScannerTranslation.getTranslationFor(FormScannerTranslationKeys.EDIT_TEMPLATE))
+//			.withActionCommand(FormScannerConstants.EDIT_TEMPLATE)
+//			.withActionListener(formScannerController)
+//			.withMnemonic(FormScannerTranslation.getMnemonicFor(FormScannerTranslationKeys.EDIT_TEMPLATE_MNEMONIC))
+//			.withAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_E, InputEvent.CTRL_MASK))
+//			.build();
 		
 		return new MenuBuilder(FormScannerTranslation.getTranslationFor(FormScannerTranslationKeys.TEMPLATE_MENU))
 			.withMnemonic(FormScannerTranslation.getMnemonicFor(FormScannerTranslationKeys.TEMPLATE_MENU_MNEMONIC))
 			.add(createTemplateMenuItem)
-			.add(editTemplateMenuItem)
+//			.add(editTemplateMenuItem)
 			.add(new JSeparator(JSeparator.HORIZONTAL))
 			.add(loadTemplateMenuItem)
 			.build();

@@ -99,4 +99,6 @@ public class FormScannerTranslationKeys {
 	public static final String TIFF_IMAGES = "tiff.images";
 	
 	public static final String TEMPLATE_FILE = "template.file";
+	public static final String TEMPLATE_LOADED = "template.loaded";
+	public static final String TEMPLATE_SAVED = "template.saved";
 }
