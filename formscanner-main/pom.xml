@@ -3,12 +3,12 @@
   <parent>
     <artifactId>formscanner</artifactId>
     <groupId>org.albertoborsetta</groupId>
-    <version>0.4.0</version>
+    <version>0.4.1-SNAPSHOT</version>
   </parent>
   <groupId>org.albertoborsetta</groupId>
   <artifactId>formscanner-main</artifactId>
   <name>FormScanner - Main</name>
-  <version>0.4.0</version>
+  <version>0.4.1-SNAPSHOT</version>
   <dependencies>
   	<dependency>
   		<groupId>com.jgoodies</groupId>
