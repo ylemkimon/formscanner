@@ -216,6 +216,7 @@ public class FormTemplate {
 					
 					FormPoint point = new FormPoint(Integer.parseInt(xCoord), Integer.parseInt(yCoord));
 					field.setPoint(valueElement.getTextContent(), point);
+					pointList.add(point);
 				}				
 				fields.put(fieldName, field);
 			}			
@@ -278,5 +279,18 @@ public class FormTemplate {
 	        }
 
 			return builder.append("]").append("]").toString();
+	}
+
+	public void findPoints(File imageFile, FormTemplate formTemplate) {
+		HashMap<String, FormField> fields = formTemplate.getFields();
+		for (Entry <String, FormField> field: fields.entrySet()) {
+			String fieldName = field.getKey();
+			HashMap<String, FormPoint> points = field.getValue().getPoints(); 
+			for (Entry <String, FormPoint> point: points.entrySet()) {
+				String resultName = point.getKey();
+				FormPoint resultPoint = point.getValue();
+				
+			}
+		}
 	}
 }

@@ -83,4 +83,8 @@ public class ScanImage {
         
 		return corners;
     }
+    
+    public boolean isFilledd(FormPoint point) {
+    	return true;
+    }
 }

@@ -96,10 +96,10 @@ public class FormScannerModel {
 				renamedFileIndex = fileListFrame.getSelectedItemIndex();
 				fileListFrame.selectFile(renamedFileIndex);
 				File imageFile = openedFiles.get(renamedFileIndex);
-				FormTemplate template = new FormTemplate(FilenameUtils.removeExtension(imageFile.getName()));
-				template.findCorners(imageFile);
+				FormTemplate filledForm = new FormTemplate(FilenameUtils.removeExtension(imageFile.getName()));
+				// filledForm.findCorners(imageFile);
 				
-				createFormImageFrame(imageFile, template, Mode.VIEW);
+				createFormImageFrame(imageFile, filledForm, Mode.VIEW);
 				
 				renameFileFrame = new RenameFileFrame(this, getFileNameByIndex(renamedFileIndex));
 				view.arrangeFrame(renameFileFrame);
@@ -145,10 +145,11 @@ public class FormScannerModel {
 				analyzedFileIndex  = fileListFrame.getSelectedItemIndex();
 				fileListFrame.selectFile(analyzedFileIndex);
 				File imageFile = openedFiles.get(analyzedFileIndex);
-				FormTemplate template = new FormTemplate(FilenameUtils.removeExtension(imageFile.getName()));
-				template.findCorners(imageFile);
+				FormTemplate filledForm = new FormTemplate(FilenameUtils.removeExtension(imageFile.getName()));
+				filledForm.findCorners(imageFile);
+				filledForm.findPoints(imageFile, formTemplate);
 			
-				createFormImageFrame(imageFile, template, Mode.VIEW);
+				createFormImageFrame(imageFile, filledForm, Mode.VIEW);
 				
 				// analyzeFileResultsFrame = new AnalyzeFileResultsFrame(this, partialResults, totalResults); 
 				// view.arrangeFrame(analyzeFileResultsFrame);				
@@ -404,14 +405,15 @@ public class FormScannerModel {
 	}
 	
 	private void openTemplate(File template, boolean notify) {
-		String templateName = FilenameUtils.removeExtension(template.getName());
-		formTemplate = new FormTemplate(templateName);
-		formTemplate.presetFromTemplate(template);
-		if (notify) {
-			JOptionPane.showMessageDialog(null, FormScannerTranslation.getTranslationFor(FormScannerTranslationKeys.TEMPLATE_LOADED));
-			configurations.setProperty(FormScannerConfigurationKeys.TEMPLATE, templateName);
-			configurations.store();
+		if (template != null) {
+			String templateName = FilenameUtils.removeExtension(template.getName());
+			formTemplate = new FormTemplate(templateName);
+			formTemplate.presetFromTemplate(template);
+			if (notify) {
+				JOptionPane.showMessageDialog(null, FormScannerTranslation.getTranslationFor(FormScannerTranslationKeys.TEMPLATE_LOADED));
+				configurations.setProperty(FormScannerConfigurationKeys.TEMPLATE, templateName);
+				configurations.store();
+			}
 		}
-		System.out.println(formTemplate.toString());
 	}
 }
