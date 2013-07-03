@@ -44,14 +44,6 @@ public class FormPoint extends Point implements Comparable<FormPoint>{
 		return (dx*dx)+(dy*dy);
 	}
 
-	public void setX(int x) {
-		super.x = x;
-	}
-
-	public void setY(int y) {
-		super.y=y;
-	}
-	
 	public void setDistance(double dist) {
 		this.dist = dist;		
 	}

@@ -2,24 +2,55 @@
 <template>
     <rotation angle="0.0"/>
     <corners>
-        <corner position="BOTTOM_LEFT" x="81" y="3218"/>
-        <corner position="TOP_RIGHT" x="2468" y="81"/>
-        <corner position="BOTTOM_RIGHT" x="2468" y="3218"/>
         <corner position="TOP_LEFT" x="81" y="81"/>
+        <corner position="TOP_RIGHT" x="2468" y="81"/>
+        <corner position="BOTTOM_LEFT" x="81" y="3218"/>
+        <corner position="BOTTOM_RIGHT" x="2468" y="3218"/>
     </corners>
     <fields>
         <field multiple="false" orientation="QUESTIONS_BY_ROWS">
+            <name>question 04</name>
+            <values>
+                <value x="743" y="1413">response 01</value>
+                <value x="867" y="1413">response 02</value>
+                <value x="992" y="1413">response 03</value>
+                <value x="1117" y="1413">response 04</value>
+            </values>
+        </field>
+        <field multiple="true" orientation="QUESTIONS_BY_ROWS">
+            <name>question 05</name>
+            <values>
+                <value x="741" y="1496">response 01</value>
+                <value x="866" y="1496">response 02</value>
+                <value x="991" y="1496">response 03</value>
+                <value x="1117" y="1496">response 04</value>
+            </values>
+        </field>
+        <field multiple="false" orientation="QUESTIONS_BY_ROWS">
             <name>question 02</name>
             <values>
-                <value x="745" y="1248">response 01</value>
-                <value x="867" y="1248">response 02</value>
+                <value x="743" y="1245">response 01</value>
+                <value x="867" y="1245">response 02</value>
+                <value x="992" y="1245">response 03</value>
+                <value x="1117" y="1245">response 04</value>
+            </values>
+        </field>
+        <field multiple="false" orientation="QUESTIONS_BY_ROWS">
+            <name>question 03</name>
+            <values>
+                <value x="743" y="1329">response 01</value>
+                <value x="867" y="1329">response 02</value>
+                <value x="992" y="1329">response 03</value>
+                <value x="1117" y="1329">response 04</value>
             </values>
         </field>
         <field multiple="false" orientation="QUESTIONS_BY_ROWS">
             <name>question 01</name>
             <values>
-                <value x="745" y="1158">response 01</value>
-                <value x="867" y="1158">response 02</value>
+                <value x="743" y="1162">response 01</value>
+                <value x="867" y="1162">response 02</value>
+                <value x="992" y="1162">response 03</value>
+                <value x="1117" y="1162">response 04</value>
             </values>
         </field>
     </fields>

@@ -1,6 +1,8 @@
 package org.albertoborsetta.formscanner.commons;
 
+import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map.Entry;
@@ -9,6 +11,7 @@ import org.albertoborsetta.formscanner.commons.FormScannerConstants.Corners;
 import org.albertoborsetta.formscanner.commons.FormScannerConstants.FieldType;
 import org.albertoborsetta.formscanner.imageparser.ScanImage;
 
+import javax.imageio.ImageIO;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -282,15 +285,55 @@ public class FormTemplate {
 	}
 
 	public void findPoints(File imageFile, FormTemplate formTemplate) {
-		HashMap<String, FormField> fields = formTemplate.getFields();
-		for (Entry <String, FormField> field: fields.entrySet()) {
-			String fieldName = field.getKey();
-			HashMap<String, FormPoint> points = field.getValue().getPoints(); 
-			for (Entry <String, FormPoint> point: points.entrySet()) {
-				String resultName = point.getKey();
-				FormPoint resultPoint = point.getValue();
+		BufferedImage image;
+		
+		try {		
+			image = ImageIO.read(imageFile);
+		} catch (IOException ex) {
+			image = null;
+		}
+		
+		HashMap<String, FormField> templateFields = formTemplate.getFields();
+		for (Entry <String, FormField> templateField: templateFields.entrySet()) {
+			String fieldName = templateField.getKey();
+			HashMap<String, FormPoint> templatePoints = templateField.getValue().getPoints(); 
+			for (Entry <String, FormPoint> templatePoint: templatePoints.entrySet()) {
+				String responseName = templatePoint.getKey();
+				FormPoint responsePoint = templatePoint.getValue();
+				int density = calcDensity(image, responsePoint);
 				
+				if (density > 0.9) {
+					FormField filledField = new FormField(responseName);
+					filledField.setPoint(responseName, responsePoint);
+					fields.put(fieldName, filledField);
+					pointList.add(responsePoint);
+					if (!templateField.getValue().isMultiple()) {
+						break;
+					}
+				}
 			}
 		}
 	}
+
+	private int calcDensity(BufferedImage image, FormPoint responsePoint) {
+		int IThreshold = 127;
+		int offset = 0;
+		int delta = 5;
+		int width = 2*delta;
+		int height = 2*delta;
+		int count = 0;
+		int total = width * height;
+		int[] rgbArray = new int[total];
+		
+		int xCoord = (int) responsePoint.getX();
+		int yCoord = (int) responsePoint.getY();
+		
+		image.getRGB(xCoord-delta, yCoord-delta, width, height, rgbArray, offset, width);
+		for (int i=0; i<width*height; i++) {
+			if ((rgbArray[i] & (0xFF)) < IThreshold) {
+				count++;
+			}
+		}
+		return count / total;
+	}	
 }

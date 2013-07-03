@@ -76,8 +76,7 @@ public class ScanImage {
         	imageProcessor = imagePlus.getProcessor();
         	cornerDetector = new CornerDetector(imageProcessor, position);
         	corner = cornerDetector.findCorners();
-        	corner.setX((int) (x+corner.getX()));
-        	corner.setY((int) (y+corner.getY()));
+        	corner.setLocation((x+corner.getX()), (y+corner.getY()));
         	corners.put(position, corner);
         }
         
