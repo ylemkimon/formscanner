@@ -1,6 +1,9 @@
 package org.albertoborsetta.formscanner.commons;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.Map.Entry;
 
 import org.albertoborsetta.formscanner.commons.FormScannerConstants.FieldType;
 import org.albertoborsetta.formscanner.commons.FormPoint;
@@ -55,5 +58,11 @@ public class FormField {
 
 	public void setMultiple(boolean multiple) {
 		this.multiple = multiple;
+	}
+	
+	public String getValues() {
+		ArrayList<String> results = new ArrayList<String>(points.keySet());
+		Collections.sort(results);
+		return results.toString();
 	}
 }
