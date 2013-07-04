@@ -4,11 +4,14 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map.Entry;
 
 import org.albertoborsetta.formscanner.commons.FormScannerConstants.Corners;
 import org.albertoborsetta.formscanner.commons.FormScannerConstants.FieldType;
+import org.albertoborsetta.formscanner.commons.translation.FormScannerTranslation;
+import org.albertoborsetta.formscanner.commons.translation.FormScannerTranslationKeys;
 import org.albertoborsetta.formscanner.imageparser.ScanImage;
 
 import javax.imageio.ImageIO;
@@ -19,6 +22,8 @@ import javax.xml.parsers.ParserConfigurationException;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
+
+import org.supercsv.prefs.CsvPreference;
 
 public class FormTemplate {
 	
@@ -283,9 +288,15 @@ public class FormTemplate {
 
 			return builder.append("]").append("]").toString();
 	}
+	
+	private static CsvPreference csvPreference() {
+		final CsvPreference csvPreference = CsvPreference.EXCEL_PREFERENCE;
+		return csvPreference;
+	}
 
 	public void findPoints(File imageFile, FormTemplate formTemplate) {
 		BufferedImage image;
+		boolean found;
 		
 		try {		
 			image = ImageIO.read(imageFile);
@@ -296,23 +307,37 @@ public class FormTemplate {
 		HashMap<String, FormField> templateFields = formTemplate.getFields();
 		for (Entry <String, FormField> templateField: templateFields.entrySet()) {
 			String fieldName = templateField.getKey();
-			HashMap<String, FormPoint> templatePoints = templateField.getValue().getPoints(); 
+			HashMap<String, FormPoint> templatePoints = templateField.getValue().getPoints();
+			found = false;
+			
 			for (Entry <String, FormPoint> templatePoint: templatePoints.entrySet()) {
 				String responseName = templatePoint.getKey();
 				FormPoint responsePoint = templatePoint.getValue();
 				int density = calcDensity(image, responsePoint);
 				
 				if (density > 0.9) {
-					FormField filledField = new FormField(responseName);
-					filledField.setPoint(responseName, responsePoint);
-					fields.put(fieldName, filledField);
+					found = true;
+					fields.put(fieldName, addResponse(fieldName, responseName, responsePoint));
 					pointList.add(responsePoint);
 					if (!templateField.getValue().isMultiple()) {
 						break;
 					}
 				}
 			}
+			
+			if (!found) {				
+				fields.put(fieldName, addResponse(fieldName, "", null));
+			}
 		}
+	}
+
+	private FormField addResponse(String fieldName, String responseName, FormPoint responsePoint) {
+		FormField filledField = fields.get(fieldName);
+		if (filledField == null) {
+			 filledField = new FormField(fieldName);
+		}
+		filledField.setPoint(responseName, responsePoint);
+		return filledField;		
 	}
 
 	private int calcDensity(BufferedImage image, FormPoint responsePoint) {
@@ -335,5 +360,23 @@ public class FormTemplate {
 			}
 		}
 		return count / total;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public String[] getHeader() {
+		String[] header = new String[fields.size() + 1];
+		int i = 0;
+		header[i++] = FormScannerTranslation.getTranslationFor(FormScannerTranslationKeys.FIRST_CSV_COLUMN);
+		
+		ArrayList<String> keys = new ArrayList<String>(fields.keySet());
+		Collections.sort(keys);
+		for (String key: keys) {
+			header[i++] = key;
+		}
+		
+		return header;
 	}	
 }
