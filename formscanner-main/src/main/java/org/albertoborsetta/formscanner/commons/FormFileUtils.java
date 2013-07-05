@@ -4,10 +4,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Map.Entry;
 
 import javax.swing.JFileChooser;
@@ -123,6 +120,15 @@ public class FormFileUtils extends JFileChooser {
 				"xtmpl");
 		setFileFilter(templateFilter);
 	}
+	
+	private void setCsvFilter() {
+		resetChoosableFileFilters();
+		FileNameExtensionFilter templateFilter = new FileNameExtensionFilter(
+				FormScannerTranslation
+						.getTranslationFor(FormScannerTranslationKeys.CSV_FILE),
+				"csv");
+		setFileFilter(templateFilter);
+	}
 
 	public File saveTemplateAs(File file, Document doc) {
 		try {
@@ -160,7 +166,7 @@ public class FormFileUtils extends JFileChooser {
 		try {
 			try {
 				setMultiSelectionEnabled(false);
-				setTemplateFilter();
+				setCsvFilter();
 				setSelectedFile(file);
 	
 				int returnValue = showSaveDialog(null);

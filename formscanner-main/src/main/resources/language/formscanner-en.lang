@@ -29,3 +29,79 @@ analyze.file.frame.title=Analyzing file
 ok.button=OK
 cancel.button=Cancel
 exit.mnemonic=X
+
+image.frame.title=Immagine
+open.images=Apri immagini
+open.images.tooltip=Apri immagini
+open.images.mnemonic=A
+save.results=Salva risultati
+save.results.tooltip=Salva risultati
+save.results.mnemonic=S
+rename.file.frame.title=Sto rinominando
+rename.file.frame.label=Nuovo nome
+rename.files=Rinomina immagini
+rename.files.tooltip=Rinomina immagini
+rename.files.mnemonic=R
+create.template=Crea template da immagine
+create.template.mnemonic=C
+create.template.tooltip=Crea template da immagine
+load.template=Carica template salvato
+load.template.mnemonic=T
+load.template.tooltip=Carica template salvato
+edit.menu=Modifica
+edit.menu.tooltip=Menu modifica
+edit.menu.mnemonic=M
+analyze.file.frame.title=Scansione file
+analyze.files=Avvia scansione immagini
+analyze.files.tooltip=Avvia scansione immagini
+analyze.files.mnemonic=I
+analyze.files.tooltip=Avvia scansione immagini
+file.menu=File
+file.menu.tooltip=Menu file
+file.menu.mnemonic=F
+edit.menu=Edit
+edit.menu.mnemonic=E
+edit.menu.tooltip=Edit menu
+template.menu=Template
+template.menu.mnemonic=
+template.menu.tooltip
+exit=Esci
+exit.tooltip=Esci
+exit.mnemonic=E
+file.list.frame.title=Immagini
+manage.template.frame.title
+field.list.tab.name
+field.properties.tab.name
+field.properties.type.label
+field.properties.is.multiple
+field.properties.number.rows.columns.label
+field.properties.number.values.label
+field.position.tab.name
+ok.button=Conferma
+ok.button.tooltip=Conferma
+cancel.button=Annulla
+cancel.button.tooltip=Annulla
+add.field.button.tooltip
+remove.field.button.tooltip	
+save.template.button
+save.template.button.tooltip
+response
+question
+questions.by.rows
+questions.by.cols
+rotation.label
+zoom.label
+top.left.corner
+top.right.corner
+bottom.left.corner
+bottom.right.corner
+all.images
+bmp.images
+png.images
+jpeg.images
+tiff.images
+template.file
+template.loaded
+template.saved
+first.csv.column
+results.default.file

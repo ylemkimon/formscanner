@@ -102,4 +102,6 @@ public class FormScannerTranslationKeys {
 	public static final String TEMPLATE_LOADED = "template.loaded";
 	public static final String TEMPLATE_SAVED = "template.saved";
 	public static final String FIRST_CSV_COLUMN = "first.csv.column";
+	public static final String RESULTS_DEFAULT_FILE = "results.default.file";
+	public static final String CSV_FILE = "csv.file";
 }

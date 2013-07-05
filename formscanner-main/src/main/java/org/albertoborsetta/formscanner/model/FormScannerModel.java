@@ -25,17 +25,17 @@ import java.awt.Cursor;
 import java.awt.Dimension;
 import java.io.File;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.Hashtable;
 import java.util.List;
+import java.util.Map.Entry;
 
 import javax.swing.JInternalFrame;
 import javax.swing.JOptionPane;
 
-import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 
 public class FormScannerModel {
@@ -146,19 +146,23 @@ public class FormScannerModel {
 		switch (act) {
 		case ANALYZE_FILE_FIRST:
 			if (!openedFiles.isEmpty()) {
-				analyzedFileIndex  = fileListFrame.getSelectedItemIndex();
-				fileListFrame.selectFile(analyzedFileIndex);
-				File imageFile = openedFiles.get(analyzedFileIndex);
-				FormTemplate filledForm = new FormTemplate(FilenameUtils.removeExtension(imageFile.getName()));
-				filledForm.findCorners(imageFile);
-				filledForm.findPoints(imageFile, formTemplate);
-				filledForms.put(filledForm.getName(), filledForm);
+				for (Entry<Integer, File> openedFile: openedFiles.entrySet()) {
+					// analyzedFileIndex  = fileListFrame.getSelectedItemIndex();
+					analyzedFileIndex = openedFile.getKey();
+					fileListFrame.selectFile(analyzedFileIndex);
+					File imageFile = openedFiles.get(analyzedFileIndex);
+					FormTemplate filledForm = new FormTemplate(FilenameUtils.removeExtension(imageFile.getName()));
+					filledForm.findCorners(imageFile);
+					filledForm.findPoints(imageFile, formTemplate);
+					filledForms.put(filledForm.getName(), filledForm);
+				}
 			
-				createFormImageFrame(imageFile, filledForm, Mode.VIEW);				
+				// createFormImageFrame(imageFile, filledForm, Mode.VIEW);				
 				// analyzeFileResultsFrame = new AnalyzeFileResultsFrame(this, partialResults, totalResults); 
 				// view.arrangeFrame(analyzeFileResultsFrame);
 				Date today = Calendar.getInstance().getTime();
-				File outputFile = new File(path + "/results/results_" + today.toString() + ".csv");
+				SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss"); 
+				File outputFile = new File(path + "/results/" + FormScannerTranslation.getTranslationFor(FormScannerTranslationKeys.RESULTS_DEFAULT_FILE) + "_" + sdf.format(today) + ".csv");
 				fileUtils.saveCsvAs(outputFile, filledForms);
 			}			
 			break;
@@ -184,10 +188,9 @@ public class FormScannerModel {
 				// analyzeFileResultsFrame = new AnalyzeFileResultsFrame(this, partialResults, totalResults); 
 				// view.arrangeFrame(analyzeFileResultsFrame);	
 			} else {
-				System.out.println("Dispose analyze frame");
-				
 				Date today = Calendar.getInstance().getTime();
-				File outputFile = new File(path + "/results/results_" + today.toString() + ".csv");
+				SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss"); 
+				File outputFile = new File(path + "/results/" + FormScannerTranslation.getTranslationFor(FormScannerTranslationKeys.RESULTS_DEFAULT_FILE) + "_" + sdf.format(today) + ".csv");
 				
 				fileUtils.saveCsvAs(outputFile, filledForms);
 			}
