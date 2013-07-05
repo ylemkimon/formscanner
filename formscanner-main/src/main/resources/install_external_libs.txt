@@ -1,2 +1,0 @@
-mvn install:install-file -Dfile=[path]/jiu-0.14.3.jar -DgroupId=net.sourceforge -DartifactId=jiu -Dversion=0.14.3 -Dpackaging=jar -DlocalRepositoryPath=[project path]/libs -DcreateChecksum=true
-mvn install:install-file -Dfile=[path]/jiu-0.14.3.jar -DgroupId=net.sourceforge -DartifactId=jiu -Dversion=0.14.3 -Dpackaging=jar

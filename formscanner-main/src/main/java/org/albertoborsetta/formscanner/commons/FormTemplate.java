@@ -23,8 +23,6 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
-import org.supercsv.prefs.CsvPreference;
-
 public class FormTemplate {
 	
 	private String name;
@@ -289,11 +287,6 @@ public class FormTemplate {
 			return builder.append("]").append("]").toString();
 	}
 	
-	private static CsvPreference csvPreference() {
-		final CsvPreference csvPreference = CsvPreference.EXCEL_PREFERENCE;
-		return csvPreference;
-	}
-
 	public void findPoints(File imageFile, FormTemplate formTemplate) {
 		BufferedImage image;
 		boolean found;
@@ -310,14 +303,14 @@ public class FormTemplate {
 			HashMap<String, FormPoint> templatePoints = templateField.getValue().getPoints();
 			found = false;
 			
-			for (Entry <String, FormPoint> templatePoint: templatePoints.entrySet()) {
-				String responseName = templatePoint.getKey();
-				FormPoint responsePoint = templatePoint.getValue();
+			for (Entry<String, FormPoint> templatePoint: templatePoints.entrySet()) {
+				FormPoint responsePoint = calcTranslatedPoint(templatePoint.getValue(), formTemplate);
+				
 				int density = calcDensity(image, responsePoint);
 				
 				if (density > 0.9) {
 					found = true;
-					fields.put(fieldName, addResponse(fieldName, responseName, responsePoint));
+					fields.put(fieldName, addResponse(templateField, templatePoint));
 					pointList.add(responsePoint);
 					if (!templateField.getValue().isMultiple()) {
 						break;
@@ -326,17 +319,39 @@ public class FormTemplate {
 			}
 			
 			if (!found) {				
-				fields.put(fieldName, addResponse(fieldName, "", null));
+				fields.put(fieldName, addResponse(templateField, null));
 			}
 		}
 	}
 
-	private FormField addResponse(String fieldName, String responseName, FormPoint responsePoint) {
+	private FormPoint calcTranslatedPoint(FormPoint value, FormTemplate formTemplate) {
+		Corners corner = Corners.TOP_LEFT;
+		FormPoint templateCorner = formTemplate.getCorners().get(corner);
+		FormPoint localCorner = corners.get(corner);
+		
+		double deltaX = templateCorner.getX() - localCorner.getX();
+		double deltaY = templateCorner.getY() - localCorner.getY();
+		
+		// x1 = deltaX + (X * cos(alfa) - Y * sen(alfa))
+		// y1 = deltaY + (X * sen(alfa) + Y * cos(alfa))
+		
+		return value;
+	}
+
+	private FormField addResponse(Entry<String, FormField> field, Entry<String, FormPoint> point) {
+		String fieldName = field.getKey();
 		FormField filledField = fields.get(fieldName);
+		
 		if (filledField == null) {
 			 filledField = new FormField(fieldName);
+			 filledField.setMultiple(field.getValue().isMultiple());
 		}
-		filledField.setPoint(responseName, responsePoint);
+		
+		if (point == null) {
+			filledField.setPoint("", null);
+		} else {
+			filledField.setPoint(point.getKey(), point.getValue());
+		}
 		return filledField;		
 	}
 
