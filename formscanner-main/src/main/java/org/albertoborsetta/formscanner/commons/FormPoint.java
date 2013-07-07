@@ -66,4 +66,22 @@ public class FormPoint extends Point implements Comparable<FormPoint>{
 		
 		return new FormPoint(x, y);
 	}
+	
+	public void rotate(double alfa) {
+		x = (int) ((x * Math.cos(alfa)) - (y * Math.sin(alfa)));
+		y = (int) ((x * Math.sin(alfa)) + (y * Math.cos(alfa)));
+	}
+	
+	public void rotoTranslate(FormPoint orig, double alfa, int direct) {
+		 translate(direct * orig.x, direct * orig.y);
+		 rotate(direct * alfa);
+	}
+	
+	public void relativePositionTo(FormPoint orig, double alfa) {
+		rotoTranslate(orig, alfa, -1);
+	}
+	
+	public void originalPositionFrom(FormPoint orig, double alfa) {
+		rotoTranslate(orig, alfa, 1);
+	}
 }

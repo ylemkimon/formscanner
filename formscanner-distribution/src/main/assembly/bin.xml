@@ -49,9 +49,15 @@
 						<outputDirectory>/bin</outputDirectory>
 						<directory>src/main/resources/bin</directory>
 						<includes>
-							<include>*.sh</include>
-							<include>*.bat</include>
 							<include>*.ico</include>
+							<include>*.png</include>
+						</includes>
+					</fileSet>
+					<fileSet>
+						<outputDirectory>/results</outputDirectory>
+						<directory>src/main/resources/results</directory>
+						<includes>
+							<include>*.csv</include>
 						</includes>
 					</fileSet>
 					<fileSet>
