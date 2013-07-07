@@ -4,6 +4,7 @@ import org.albertoborsetta.formscanner.commons.FormField;
 import org.albertoborsetta.formscanner.commons.FormFileUtils;
 import org.albertoborsetta.formscanner.commons.FormPoint;
 import org.albertoborsetta.formscanner.commons.FormScannerConstants.Action;
+import org.albertoborsetta.formscanner.commons.FormScannerConstants.Corners;
 import org.albertoborsetta.formscanner.commons.FormScannerConstants.Frame;
 import org.albertoborsetta.formscanner.commons.FormScannerConstants.Mode;
 import org.albertoborsetta.formscanner.commons.FormTemplate;
@@ -315,7 +316,12 @@ public class FormScannerModel {
 					view.update();
 				} else {
 					FormPoint p1 = points.get(0);
-					points.clear();		
+					points.clear();	
+					
+					FormPoint _p1 = (FormPoint) p1.clone();
+					FormPoint _p2 = (FormPoint) p2.clone();
+					
+					_p1.relativePositionTo(formTemplate.getCorners().get(Corners.TOP_LEFT), formTemplate.getRotation());
 					
 					FormPoint p3 = calculateThirdPoint(p2, p1);
 					
