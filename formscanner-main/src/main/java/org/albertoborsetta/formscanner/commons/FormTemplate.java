@@ -304,13 +304,14 @@ public class FormTemplate {
 			found = false;
 			
 			for (Entry<String, FormPoint> templatePoint: templatePoints.entrySet()) {
-				FormPoint responsePoint = calcTranslatedPoint(templatePoint.getValue(), formTemplate);
+				FormPoint responsePoint = (FormPoint) templatePoint.getValue().clone();
+				calcResponsePoint(formTemplate, responsePoint);
 				
 				int density = calcDensity(image, responsePoint);
 				
 				if (density > 0.9) {
 					found = true;
-					fields.put(fieldName, addResponse(templateField, templatePoint));
+					fields.put(fieldName, addResponse(templateField, templatePoint.getKey(), responsePoint));
 					pointList.add(responsePoint);
 					if (!templateField.getValue().isMultiple()) {
 						break;
@@ -319,9 +320,17 @@ public class FormTemplate {
 			}
 			
 			if (!found) {				
-				fields.put(fieldName, addResponse(templateField, null));
+				fields.put(fieldName, addResponse(templateField, "", null));
 			}
 		}
+	}
+
+	private void calcResponsePoint(FormTemplate formTemplate, FormPoint responsePoint) {
+		FormPoint templateOrigin = formTemplate.getCorners().get(Corners.TOP_LEFT);
+		double templateRotation = formTemplate.getRotation();
+				
+		responsePoint.relativePositionTo(templateOrigin, templateRotation);
+		responsePoint.originalPositionFrom(corners.get(Corners.TOP_LEFT), rotation);
 	}
 
 	private FormPoint calcTranslatedPoint(FormPoint value, FormTemplate formTemplate) {
@@ -332,13 +341,10 @@ public class FormTemplate {
 		double deltaX = templateCorner.getX() - localCorner.getX();
 		double deltaY = templateCorner.getY() - localCorner.getY();
 		
-		// x1 = deltaX + (X * cos(alfa) - Y * sen(alfa))
-		// y1 = deltaY + (X * sen(alfa) + Y * cos(alfa))
-		
 		return value;
 	}
 
-	private FormField addResponse(Entry<String, FormField> field, Entry<String, FormPoint> point) {
+	private FormField addResponse(Entry<String, FormField> field, String pointName, FormPoint pointValue) {
 		String fieldName = field.getKey();
 		FormField filledField = fields.get(fieldName);
 		
@@ -347,11 +353,7 @@ public class FormTemplate {
 			 filledField.setMultiple(field.getValue().isMultiple());
 		}
 		
-		if (point == null) {
-			filledField.setPoint("", null);
-		} else {
-			filledField.setPoint(point.getKey(), point.getValue());
-		}
+		filledField.setPoint(pointName, pointValue);
 		return filledField;		
 	}
 
