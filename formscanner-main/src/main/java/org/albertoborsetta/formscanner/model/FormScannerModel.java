@@ -316,20 +316,23 @@ public class FormScannerModel {
 					view.update();
 				} else {
 					FormPoint p1 = points.get(0);
-					points.clear();	
+					points.clear();
+					
+					FormPoint orig = formTemplate.getCorners().get(Corners.TOP_LEFT);
+					double rotation = formTemplate.getRotation();
 					
 					FormPoint _p1 = (FormPoint) p1.clone();
 					FormPoint _p2 = (FormPoint) p2.clone();
 					
-					_p1.relativePositionTo(formTemplate.getCorners().get(Corners.TOP_LEFT), formTemplate.getRotation());
+					_p1.relativePositionTo(orig, rotation);
+					_p2.relativePositionTo(orig, rotation);
 					
-					FormPoint p3 = calculateThirdPoint(p2, p1);
-					
-					HashMap<String, Double> delta = calculateDelta(p1, p2, p3);
+					HashMap<String, Double> delta = calcDelta(rows, values, _p1, _p2);
 					
 					for (int i=0; i<rows; i++) {
 						for (int j=0; j<values; j++) {
-							FormPoint pi = new FormPoint((int) (p1.x+(delta.get(COL_DX)*i)+(delta.get(ROW_DX)*j)),(int) (p1.y+(delta.get(COL_DY)*i)+(delta.get(ROW_DY)*j)));
+							FormPoint pi = new FormPoint((int) (_p1.x+delta.get("x")*j),(int) (_p1.y+delta.get("y")*i));
+							pi.originalPositionFrom(orig, rotation);
 							points.add(pi);
 						}						
 					}
@@ -341,57 +344,30 @@ public class FormScannerModel {
 		}
 	}
 
-	private HashMap<String, Double> calculateDelta(FormPoint p1, FormPoint p2, FormPoint p3) {
-		int rows = manageTemplateFrame.getRowsNumber();
-		int values = manageTemplateFrame.getValuesNumber();
+	private HashMap<String, Double> calcDelta(int rows, int values, FormPoint _p1, FormPoint _p2) {
+		double dX = Math.abs((_p2.getX()-_p1.getX()));
+		double dY = Math.abs((_p2.getY()-_p1.getY()));
+		
+		int valuesDivider = ((values > 1)?(values - 1):1);
+		int questionDivider = ((rows > 1)?(rows - 1):1);
 		
 		HashMap<String, Double> delta = new HashMap<String, Double>();
 		
-		int rowDivider = ((values > 1)?(values - 1):1);
-		int colDivider = ((rows > 1)?(rows - 1):1);
-		
 		switch (manageTemplateFrame.getFieldType()) {
 		case QUESTIONS_BY_ROWS:
-			delta.put(ROW_DX, (p3.getX() - p1.getX()) / rowDivider);
-			delta.put(ROW_DY, (p3.getY() - p1.getY()) / rowDivider);
-
-			delta.put(COL_DX, (p2.getX() - p3.getX()) / colDivider);
-			delta.put(COL_DY, (p2.getY() - p3.getY()) / colDivider);
+			delta.put("x", dX / valuesDivider);
+			delta.put("y", dY / questionDivider);
 			break;
 		case QUESTIONS_BY_COLS:
-			delta.put(ROW_DX, (p2.getX() - p3.getX()) / rowDivider);
-			delta.put(ROW_DY, (p2.getY() - p3.getY()) / rowDivider);
-
-			delta.put(COL_DX, (p3.getX() - p1.getX()) / colDivider);
-			delta.put(COL_DY, (p3.getY() - p1.getY()) / colDivider);
+			delta.put("x", dX / questionDivider);
+			delta.put("y", dY / valuesDivider);
 			break;
 		default:
 			break;	
 		}
 		return delta;
 	}
-
-	private FormPoint calculateThirdPoint(FormPoint p, FormPoint p1) {
-		double alfa = formTemplate.getRotation();
-		
-		double x3 = p.getX();
-		double y3 = p1.getY();
-		
-		if (alfa != 0) {
-			double m1 = Math.tan(alfa);
-			double m2 = Math.tan(alfa - Math.PI/2);
-			
-			double q1 = p1.getY() + (p1.getX() * m1);
-			double q2 = p.getY() + (p.getX() * m2);
-			
-			x3 = (q1 - q2) / (m1 - m2);
-			y3 = q1 - (m1 * x3);
-		}
-		
-		FormPoint p3 = new FormPoint((int) x3, (int) y3);
-		return p3;
-	}
-
+	
 	public void updateTemplate(HashMap<String, FormField> fields) {
 		formTemplate.setFields(fields);
 		points.clear();		
