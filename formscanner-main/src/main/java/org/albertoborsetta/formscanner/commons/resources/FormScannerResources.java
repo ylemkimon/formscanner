@@ -4,6 +4,9 @@ import java.io.File;
 
 import javax.swing.ImageIcon;
 
+import org.albertoborsetta.formscanner.commons.configuration.FormScannerConfigurationKeys;
+import org.apache.commons.lang3.StringUtils;
+
 public class FormScannerResources {
 	
 	private static String iconsPath;
@@ -22,9 +25,13 @@ public class FormScannerResources {
 	
 	public static void setTemplate(String tpl) {
 		template = tpl;
+		
+		if (StringUtils.isEmpty(template)) {
+			template = templatePath + FormScannerConfigurationKeys.DEFAULT_TEMPLATE;
+		}
 	}
 
 	public static File getTemplate() {
-		return new File(templatePath + template + ".xtmpl");
+		return new File(template);
 	}
 }

@@ -1,107 +1,75 @@
+image.frame.title=Image
 open.images=Open images
 open.images.tooltip=Open images
 open.images.mnemonic=O
 save.results=Save results
 save.results.tooltip=Save results
 save.results.mnemonic=S
-rename.files=Rename files
-rename.files.tooltip=Rename files
+rename.file.frame.title=Renaming
+rename.file.frame.label=New name
+rename.files=Rename images
+rename.files.tooltip=Rename images
 rename.files.mnemonic=R
-analyze.files=Start scan forms
-analyze.files.tooltip=Start scan form
-analyze.files.mnemonic=A
+create.template=Create template from image
+create.template.mnemonic=C
+create.template.tooltip=Create template from image
+load.template=Load saved template
+load.template.mnemonic=L
+load.template.tooltip=Load saved template
+edit.menu=Modify
+edit.menu.tooltip=Modify menu
+edit.menu.mnemonic=M
+analyze.file.frame.title=Scan files
+analyze.files=Start image scan
+analyze.files.tooltip=Start image scan
+analyze.files.mnemonic=I
 file.menu=File
 file.menu.tooltip=File menu
-file.menu.mnemonic=F
-edit.menu=Edit
-edit.menu.tooltip=Edit Menu
-edit.menu.mnemonic=E
-exit=Exit
-exit.tooltip=Exit
-
-file.list.frame.title=Images
-
-rename.file.frame.title=Renaming file
-rename.file.frame.label=New name
-
-analyze.file.frame.title=Analyzing file
-
-ok.button=OK
-cancel.button=Cancel
-exit.mnemonic=X
-
-image.frame.title=Immagine
-open.images=Apri immagini
-open.images.tooltip=Apri immagini
-open.images.mnemonic=A
-save.results=Salva risultati
-save.results.tooltip=Salva risultati
-save.results.mnemonic=S
-rename.file.frame.title=Sto rinominando
-rename.file.frame.label=Nuovo nome
-rename.files=Rinomina immagini
-rename.files.tooltip=Rinomina immagini
-rename.files.mnemonic=R
-create.template=Crea template da immagine
-create.template.mnemonic=C
-create.template.tooltip=Crea template da immagine
-load.template=Carica template salvato
-load.template.mnemonic=T
-load.template.tooltip=Carica template salvato
-edit.menu=Modifica
-edit.menu.tooltip=Menu modifica
-edit.menu.mnemonic=M
-analyze.file.frame.title=Scansione file
-analyze.files=Avvia scansione immagini
-analyze.files.tooltip=Avvia scansione immagini
-analyze.files.mnemonic=I
-analyze.files.tooltip=Avvia scansione immagini
-file.menu=File
-file.menu.tooltip=Menu file
 file.menu.mnemonic=F
 edit.menu=Edit
 edit.menu.mnemonic=E
 edit.menu.tooltip=Edit menu
 template.menu=Template
-template.menu.mnemonic=
-template.menu.tooltip
-exit=Esci
-exit.tooltip=Esci
-exit.mnemonic=E
-file.list.frame.title=Immagini
-manage.template.frame.title
-field.list.tab.name
-field.properties.tab.name
-field.properties.type.label
-field.properties.is.multiple
-field.properties.number.rows.columns.label
-field.properties.number.values.label
-field.position.tab.name
-ok.button=Conferma
-ok.button.tooltip=Conferma
-cancel.button=Annulla
-cancel.button.tooltip=Annulla
-add.field.button.tooltip
-remove.field.button.tooltip	
-save.template.button
-save.template.button.tooltip
-response
-question
-questions.by.rows
-questions.by.cols
-rotation.label
-zoom.label
-top.left.corner
-top.right.corner
-bottom.left.corner
-bottom.right.corner
-all.images
-bmp.images
-png.images
-jpeg.images
-tiff.images
-template.file
-template.loaded
-template.saved
-first.csv.column
-results.default.file
+template.menu.mnemonic=T
+template.menu.tooltip=Template menu
+exit=Exit
+exit.tooltip=Exit
+exit.mnemonic=X
+file.list.frame.title=Images
+manage.template.frame.title=Create template
+field.list.tab.name=Field list
+field.properties.tab.name=Field properties
+field.properties.type.label=Field type
+field.properties.is.multiple=Multiple choice
+field.properties.number.rows.columns.label=Number of questions
+field.properties.number.values.label=Number of responses
+field.position.tab.name=Postion of responses
+ok.button=Confirm
+ok.button.tooltip=Confirm
+cancel.button=Cancel
+cancel.button.tooltip=Cancel
+add.field.button.tooltip=Add fields
+remove.field.button.tooltip=Delete fields
+save.template.button=Save template
+save.template.button.tooltip=Save template
+response=Response
+question=Question
+questions.by.rows=Questions by rows
+questions.by.cols=Questions by colums
+rotation.label=Rotation
+zoom.label=Zoom
+top.left.corner=Top Left corner
+top.right.corner=Top Right corner
+bottom.left.corner=Bottom Left corner
+bottom.right.corner=Bottom Right corner
+all.images=All images
+bmp.images=BMP image (*.bmp)
+png.images=PNG image (*.png)
+jpeg.images=JPEG image (*.jpg, *.jpeg)
+tiff.images=TIFF image (*.tif, *.tiff)
+template.file=FormScanner template (.xtmpl)
+template.loaded=Template loaded successfully
+template.saved=Template saved successfully
+first.csv.column=File name
+results.default.file=scan_results
+csv.file=CSV file (*.csv)

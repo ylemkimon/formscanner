@@ -74,7 +74,7 @@ public class FormScannerModel {
 		String lang = configurations.getProperty(FormScannerConfigurationKeys.LANG, FormScannerConfigurationKeys.DEFAULT_LANG);
 		FormScannerTranslation.setTranslation(path, lang);
 		FormScannerResources.setResources(path);
-		FormScannerResources.setTemplate(configurations.getProperty(FormScannerConfigurationKeys.TEMPLATE, FormScannerConfigurationKeys.DEFAULT_TEMPLATE));
+		FormScannerResources.setTemplate(configurations.getProperty(FormScannerConfigurationKeys.TEMPLATE, null));
 		openTemplate(FormScannerResources.getTemplate(), false);
 	}
 
@@ -156,9 +156,9 @@ public class FormScannerModel {
 					filledForm.findCorners(imageFile);
 					filledForm.findPoints(imageFile, formTemplate);
 					filledForms.put(filledForm.getName(), filledForm);
+					createFormImageFrame(imageFile, filledForm, Mode.VIEW);				
 				}
 			
-				// createFormImageFrame(imageFile, filledForm, Mode.VIEW);				
 				// analyzeFileResultsFrame = new AnalyzeFileResultsFrame(this, partialResults, totalResults); 
 				// view.arrangeFrame(analyzeFileResultsFrame);
 				Date today = Calendar.getInstance().getTime();
@@ -390,8 +390,8 @@ public class FormScannerModel {
 	public void saveTemplate(TabbedView view) {
 		File template = formTemplate.saveToFile(path);
 		JOptionPane.showMessageDialog(null, FormScannerTranslation.getTranslationFor(FormScannerTranslationKeys.TEMPLATE_SAVED));
-		String templateName = FilenameUtils.removeExtension(template.getName());
-		configurations.setProperty(FormScannerConfigurationKeys.TEMPLATE, templateName);
+		String templatePath = template.getAbsolutePath();
+		configurations.setProperty(FormScannerConfigurationKeys.TEMPLATE, templatePath);
 		configurations.store();
 		view.dispose();
 	}
@@ -412,7 +412,7 @@ public class FormScannerModel {
 			formTemplate.presetFromTemplate(template);
 			if (notify) {
 				JOptionPane.showMessageDialog(null, FormScannerTranslation.getTranslationFor(FormScannerTranslationKeys.TEMPLATE_LOADED));
-				configurations.setProperty(FormScannerConfigurationKeys.TEMPLATE, templateName);
+				configurations.setProperty(FormScannerConfigurationKeys.TEMPLATE, template.getAbsolutePath());
 				configurations.store();
 			}
 		}
