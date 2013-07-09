@@ -108,26 +108,27 @@ public class FormTemplate {
 
 	public File saveToFile(String path) {
 		File outputFile = new File(path + "/template/" + name + ".xtmpl");
-		
+
 		try {
-			 
-			DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
+
+			DocumentBuilderFactory docFactory = DocumentBuilderFactory
+					.newInstance();
 			DocumentBuilder docBuilder = docFactory.newDocumentBuilder();
-			
+
 			// root element
 			Document doc = docBuilder.newDocument();
 			Element templateElement = doc.createElement("template");
-			
+
 			// rotation element
 			doc.appendChild(templateElement);
 			Element rotationElement = doc.createElement("rotation");
 			rotationElement.setAttribute("angle", String.valueOf(rotation));
 			templateElement.appendChild(rotationElement);
-	 
+
 			// corners element
 			Element cornersElement = doc.createElement("corners");
 			templateElement.appendChild(cornersElement);
-	 
+
 			// corner elements
 			for (Entry<Corners, FormPoint> corner : corners.entrySet()) {
 				Element cornerElement = doc.createElement("corner");
@@ -137,46 +138,53 @@ public class FormTemplate {
 				cornerElement.setAttribute("x", String.valueOf(cornerValue.x));
 				cornerElement.setAttribute("y", String.valueOf(cornerValue.y));
 				cornersElement.appendChild(cornerElement);
-	        }
-			
+			}
+
 			// fields element
 			Element fieldsElement = doc.createElement("fields");
 			templateElement.appendChild(fieldsElement);
-				
+
 			// field elements
 			for (Entry<String, FormField> field : fields.entrySet()) {
 				Element fieldElement = doc.createElement("field");
 				FormField fieldValue = field.getValue();
-				fieldElement.setAttribute("orientation", fieldValue.getType().name());
-				fieldElement.setAttribute("multiple", String.valueOf(fieldValue.isMultiple()));
-				
+				fieldElement.setAttribute("orientation", fieldValue.getType()
+						.name());
+				fieldElement.setAttribute("multiple",
+						String.valueOf(fieldValue.isMultiple()));
+
 				// name element
 				Element fieldNameElement = doc.createElement("name");
-				fieldNameElement.appendChild(doc.createTextNode(fieldValue.getName()));
+				fieldNameElement.appendChild(doc.createTextNode(fieldValue
+						.getName()));
 				fieldElement.appendChild(fieldNameElement);
-				
+
 				// values element
 				Element valuesElement = doc.createElement("values");
-				
+
 				// value elements
-				for (Entry<String, FormPoint> point : fieldValue.getPoints().entrySet()) {
+				for (Entry<String, FormPoint> point : fieldValue.getPoints()
+						.entrySet()) {
 					Element valueElement = doc.createElement("value");
 					FormPoint pointValue = point.getValue();
-					valueElement.setAttribute("x", String.valueOf(pointValue.x));
-					valueElement.setAttribute("y", String.valueOf(pointValue.y));
-					valueElement.appendChild(doc.createTextNode(point.getKey()));
+					valueElement
+							.setAttribute("x", String.valueOf(pointValue.x));
+					valueElement
+							.setAttribute("y", String.valueOf(pointValue.y));
+					valueElement
+							.appendChild(doc.createTextNode(point.getKey()));
 					valuesElement.appendChild(valueElement);
 				}
-				
-				fieldElement.appendChild(valuesElement);				
+
+				fieldElement.appendChild(valuesElement);
 				fieldsElement.appendChild(fieldElement);
-	        }
-			
+			}
+
 			FormFileUtils.getInstance().saveTemplateAs(outputFile, doc);
-	 
-		  } catch (ParserConfigurationException pce) {
+
+		} catch (ParserConfigurationException pce) {
 			pce.printStackTrace();
-		  } 
+		}
 		return outputFile;
 	}
 
@@ -298,29 +306,39 @@ public class FormTemplate {
 		}
 		
 		HashMap<String, FormField> templateFields = formTemplate.getFields();
-		for (Entry <String, FormField> templateField: templateFields.entrySet()) {
-			String fieldName = templateField.getKey();
-			HashMap<String, FormPoint> templatePoints = templateField.getValue().getPoints();
+		ArrayList<String> fieldNames = new ArrayList<String>(templateFields.keySet()); 
+		Collections.sort(fieldNames);
+		
+		for (String fieldName: fieldNames) { 
+			FormField templateField = templateFields.get(fieldName);
+			HashMap<String, FormPoint> templatePoints = templateField.getPoints();
+			
+			ArrayList<String> pointNames = new ArrayList<String>(templatePoints.keySet()); 
+			Collections.sort(pointNames);
 			found = false;
 			
-			for (Entry<String, FormPoint> templatePoint: templatePoints.entrySet()) {
-				FormPoint responsePoint = (FormPoint) templatePoint.getValue().clone();
+			for (String pointName: pointNames) {
+				FormPoint responsePoint = (FormPoint) templatePoints.get(pointName).clone();
 				calcResponsePoint(formTemplate, responsePoint);
 				
 				int density = calcDensity(image, responsePoint);
 				
 				if (density > 0.9) {
 					found = true;
-					fields.put(fieldName, addResponse(templateField, templatePoint.getKey(), responsePoint));
+					FormField filledField = getField(templateField, fieldName);
+					filledField.setPoint(pointName, responsePoint);
+					fields.put(fieldName, filledField);
 					pointList.add(responsePoint);
-					if (!templateField.getValue().isMultiple()) {
+					if (!templateField.isMultiple()) {
 						break;
 					}
 				}
 			}
 			
-			if (!found) {				
-				fields.put(fieldName, addResponse(templateField, "", null));
+			if (!found) {
+				FormField filledField = getField(templateField, fieldName);
+				filledField.setPoint("", null);
+				fields.put(fieldName, filledField);
 			}
 		}
 	}
@@ -333,27 +351,14 @@ public class FormTemplate {
 		responsePoint.originalPositionFrom(corners.get(Corners.TOP_LEFT), rotation);
 	}
 
-	private FormPoint calcTranslatedPoint(FormPoint value, FormTemplate formTemplate) {
-		Corners corner = Corners.TOP_LEFT;
-		FormPoint templateCorner = formTemplate.getCorners().get(corner);
-		FormPoint localCorner = corners.get(corner);
-		
-		double deltaX = templateCorner.getX() - localCorner.getX();
-		double deltaY = templateCorner.getY() - localCorner.getY();
-		
-		return value;
-	}
-
-	private FormField addResponse(Entry<String, FormField> field, String pointName, FormPoint pointValue) {
-		String fieldName = field.getKey();
+	private FormField getField(FormField field, String fieldName) {
 		FormField filledField = fields.get(fieldName);
 		
 		if (filledField == null) {
 			 filledField = new FormField(fieldName);
-			 filledField.setMultiple(field.getValue().isMultiple());
+			 filledField.setMultiple(field.isMultiple());
 		}
 		
-		filledField.setPoint(pointName, pointValue);
 		return filledField;		
 	}
 
