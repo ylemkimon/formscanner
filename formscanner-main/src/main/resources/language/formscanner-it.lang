@@ -71,5 +71,5 @@ template.file=FormScanner template (.xtmpl)
 template.loaded=Template caricato correttamente
 template.saved=Template salvato correttamente
 first.csv.column=Nome file
-results.default.file=risulati_scansione
+results.default.file=risultati_scansione
 csv.file=File CSV (*.csv)

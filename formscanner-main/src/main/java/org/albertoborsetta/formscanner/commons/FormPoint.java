@@ -1,6 +1,8 @@
 package org.albertoborsetta.formscanner.commons;
 
 import java.awt.Point;
+import java.text.NumberFormat;
+import java.text.ParseException;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -13,16 +15,19 @@ public class FormPoint extends Point implements Comparable<FormPoint>{
 	
 	private double dist = 0;
 	
-	public FormPoint (Point p) {
-		super(p);
+	public FormPoint(Point p) {
+		super();
+		setLocation(p.getX(), p.getY());
 	}
-
-	public FormPoint (int x, int y) {
-		super(x, y);
+	
+	public FormPoint (double x, double y) {
+		super();
+		setLocation(x, y);
 	}
 	
 	public FormPoint (int x, int y, double dist) {
-		super(x, y);
+		super();
+		setLocation(x, y);
 		this.dist = dist;
 	}
 
@@ -33,14 +38,14 @@ public class FormPoint extends Point implements Comparable<FormPoint>{
 	}
 
 	public double dist2 (FormPoint c2) {
-		int dx = this.x - c2.x;
-		int dy = this.y - c2.y;
+		double dx = this.getX() - c2.getX();
+		double dy = this.getY() - c2.getY();
 		return (dx*dx)+(dy*dy);
 	}
 	
-	public double dist2 (int x2, int y2) {
-		int dx = this.x - x2;
-		int dy = this.y - y2;
+	public double dist2 (double x2, double y2) {
+		double dx = this.getX() - x2;
+		double dy = this.getY() - y2;
 		return (dx*dx)+(dy*dy);
 	}
 
@@ -53,35 +58,47 @@ public class FormPoint extends Point implements Comparable<FormPoint>{
 	}
 	
 	public String toString() {
-		return "["+x+","+y+"]";
+		return "["+x+", "+y+"]";
 	}
 	
 	public static FormPoint toPoint(String str) {
-		String vals = StringUtils.remove(str, '[');
-		vals = StringUtils.remove(vals, ']');
-		String[] coords = StringUtils.split(vals, ',');
-		
-		int x = Integer.parseInt(coords[0]);
-		int y = Integer.parseInt(coords[1]);
-		
-		return new FormPoint(x, y);
+		try {
+			String vals = StringUtils.remove(str, '[');
+			vals = StringUtils.remove(vals, ']');
+			String[] coords = StringUtils.split(vals, ',');
+			
+			NumberFormat nf = NumberFormat.getInstance();
+			Number a = nf.parse(coords[0]);
+			Number b = nf.parse(coords[1]);
+			
+			double x = a.doubleValue();
+			double y = b.doubleValue();
+			
+			return new FormPoint(x, y);
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null;
+		}
 	}
 	
 	public void rotate(double alfa) {
-		x = (int) ((x * Math.cos(alfa)) - (y * Math.sin(alfa)));
-		y = (int) ((x * Math.sin(alfa)) + (y * Math.cos(alfa)));
+		double x = ((getX() * Math.cos(alfa)) - (getY() * Math.sin(alfa)));
+		double y = ((getX() * Math.sin(alfa)) + (getY() * Math.cos(alfa)));
+		setLocation(x, y);
 	}
 	
-	public void rotoTranslate(FormPoint orig, double alfa, int direct) {
-		 translate(direct * orig.x, direct * orig.y);
-		 rotate(-1 * direct * alfa);
+	public void translate(double dx, double dy) {
+		setLocation(getX()+dx, getY()+dy);
 	}
 	
 	public void relativePositionTo(FormPoint orig, double alfa) {
-		rotoTranslate(orig, alfa, -1);
+		translate(0-orig.getX(), 0-orig.getY());
+		rotate(alfa);
 	}
 	
 	public void originalPositionFrom(FormPoint orig, double alfa) {
-		rotoTranslate(orig, alfa, 1);
+		rotate(0-alfa);
+		translate(orig.getX(), orig.getY());
 	}
 }

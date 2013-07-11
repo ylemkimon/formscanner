@@ -321,9 +321,9 @@ public class FormTemplate {
 				FormPoint responsePoint = (FormPoint) templatePoints.get(pointName).clone();
 				calcResponsePoint(formTemplate, responsePoint);
 				
-				int density = calcDensity(image, responsePoint);
+				double density = calcDensity(image, responsePoint);
 				
-				if (density > 0.9) {
+				if (density > 0.6) {
 					found = true;
 					FormField filledField = getField(templateField, fieldName);
 					filledField.setPoint(pointName, responsePoint);
@@ -362,7 +362,7 @@ public class FormTemplate {
 		return filledField;		
 	}
 
-	private int calcDensity(BufferedImage image, FormPoint responsePoint) {
+	private double calcDensity(BufferedImage image, FormPoint responsePoint) {
 		int IThreshold = 127;
 		int offset = 0;
 		int delta = 5;
@@ -381,7 +381,7 @@ public class FormTemplate {
 				count++;
 			}
 		}
-		return count / total;
+		return count / (double) total;
 	}
 
 	public String getName() {

@@ -321,17 +321,14 @@ public class FormScannerModel {
 					FormPoint orig = formTemplate.getCorners().get(Corners.TOP_LEFT);
 					double rotation = formTemplate.getRotation();
 					
-					FormPoint _p1 = (FormPoint) p1.clone();
-					FormPoint _p2 = (FormPoint) p2.clone();
+					p1.relativePositionTo(orig, rotation);
+					p2.relativePositionTo(orig, rotation);
 					
-					_p1.relativePositionTo(orig, rotation);
-					_p2.relativePositionTo(orig, rotation);
-					
-					HashMap<String, Double> delta = calcDelta(rows, values, _p1, _p2);
+					HashMap<String, Double> delta = calcDelta(rows, values, p1, p2);
 					
 					for (int i=0; i<rows; i++) {
 						for (int j=0; j<values; j++) {
-							FormPoint pi = new FormPoint((int) (_p1.x+delta.get("x")*j),(int) (_p1.y+delta.get("y")*i));
+							FormPoint pi = new FormPoint((int) (p1.x+delta.get("x")*j),(int) (p1.y+delta.get("y")*i));
 							pi.originalPositionFrom(orig, rotation);
 							points.add(pi);
 						}						
@@ -344,9 +341,9 @@ public class FormScannerModel {
 		}
 	}
 
-	private HashMap<String, Double> calcDelta(int rows, int values, FormPoint _p1, FormPoint _p2) {
-		double dX = Math.abs((_p2.getX()-_p1.getX()));
-		double dY = Math.abs((_p2.getY()-_p1.getY()));
+	private HashMap<String, Double> calcDelta(int rows, int values, FormPoint p1, FormPoint p2) {
+		double dX = Math.abs((p2.getX()-p1.getX()));
+		double dY = Math.abs((p2.getY()-p1.getY()));
 		
 		int valuesDivider = ((values > 1)?(values - 1):1);
 		int questionDivider = ((rows > 1)?(rows - 1):1);
