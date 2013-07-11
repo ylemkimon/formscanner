@@ -24,4 +24,4 @@ for /f "delims=" %%f in ('dir /s /b /a-d "%INSTALL_DIR%"\lib\formscanner*') do (
 	set FS_EXECUTABLE=%%~f
 )
 
-echo "%JAVA_PATH%"java -jar -DFormScanner_HOME="%INSTALL_DIR%" "%FS_EXECUTABLE%" > %INSTALL_DIR%"\bin\run.bat"
+echo "%JAVA_PATH%java" -jar -DFormScanner_HOME="%INSTALL_DIR%" "%FS_EXECUTABLE%" > "%INSTALL_DIR%\bin\run.bat"
