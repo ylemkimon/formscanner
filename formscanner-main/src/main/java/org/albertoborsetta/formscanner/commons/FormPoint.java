@@ -1,12 +1,13 @@
 package org.albertoborsetta.formscanner.commons;
 
 import java.awt.Point;
-import java.text.NumberFormat;
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
 import java.text.ParseException;
 
 import org.apache.commons.lang3.StringUtils;
 
-public class FormPoint extends Point implements Comparable<FormPoint>{
+public class FormPoint implements Comparable<FormPoint>{
 	
 	/**
 	 * 
@@ -14,20 +15,22 @@ public class FormPoint extends Point implements Comparable<FormPoint>{
 	private static final long serialVersionUID = 1L;
 	
 	private double dist = 0;
+	private double x;
+	private double y;
 	
 	public FormPoint(Point p) {
-		super();
-		setLocation(p.getX(), p.getY());
+		this.x = p.getX();
+		this.y = p.getY();
 	}
 	
 	public FormPoint (double x, double y) {
-		super();
-		setLocation(x, y);
+		this.x = x;
+		this.y = y;
 	}
 	
-	public FormPoint (int x, int y, double dist) {
-		super();
-		setLocation(x, y);
+	public FormPoint (double x, double y, double dist) {
+		this.x = x;
+		this.y = y;
 		this.dist = dist;
 	}
 
@@ -38,14 +41,14 @@ public class FormPoint extends Point implements Comparable<FormPoint>{
 	}
 
 	public double dist2 (FormPoint c2) {
-		double dx = this.getX() - c2.getX();
-		double dy = this.getY() - c2.getY();
+		double dx = x - c2.getX();
+		double dy = y - c2.getY();
 		return (dx*dx)+(dy*dy);
 	}
 	
 	public double dist2 (double x2, double y2) {
-		double dx = this.getX() - x2;
-		double dy = this.getY() - y2;
+		double dx = x - x2;
+		double dy = y - y2;
 		return (dx*dx)+(dy*dy);
 	}
 
@@ -58,7 +61,7 @@ public class FormPoint extends Point implements Comparable<FormPoint>{
 	}
 	
 	public String toString() {
-		return "["+x+", "+y+"]";
+		return "["+getX()+","+getY()+"]";
 	}
 	
 	public static FormPoint toPoint(String str) {
@@ -67,9 +70,13 @@ public class FormPoint extends Point implements Comparable<FormPoint>{
 			vals = StringUtils.remove(vals, ']');
 			String[] coords = StringUtils.split(vals, ',');
 			
-			NumberFormat nf = NumberFormat.getInstance();
-			Number a = nf.parse(coords[0]);
-			Number b = nf.parse(coords[1]);
+			DecimalFormat formatter = (DecimalFormat) DecimalFormat.getInstance();
+			DecimalFormatSymbols decimalFormatSymbols = new DecimalFormatSymbols();
+		    decimalFormatSymbols.setDecimalSeparator('.');
+		    formatter.setDecimalFormatSymbols(decimalFormatSymbols);
+		    
+			Number a = formatter.parse(coords[0]);
+			Number b = formatter.parse(coords[1]);
 			
 			double x = a.doubleValue();
 			double y = b.doubleValue();
@@ -83,22 +90,47 @@ public class FormPoint extends Point implements Comparable<FormPoint>{
 	}
 	
 	public void rotate(double alfa) {
-		double x = ((getX() * Math.cos(alfa)) - (getY() * Math.sin(alfa)));
-		double y = ((getX() * Math.sin(alfa)) + (getY() * Math.cos(alfa)));
-		setLocation(x, y);
+		x = ((x * Math.cos(alfa)) - (y * Math.sin(alfa)));
+		y = ((x * Math.sin(alfa)) + (y * Math.cos(alfa)));
 	}
 	
 	public void translate(double dx, double dy) {
-		setLocation(getX()+dx, getY()+dy);
+		x = x + dx;
+		y = y + dy;
 	}
 	
-	public void relativePositionTo(FormPoint orig, double alfa) {
-		translate(0-orig.getX(), 0-orig.getY());
+	public void relativePositionTo(FormPoint o, double alfa) {
+		translate(0-o.getX(), 0-o.getY());
 		rotate(alfa);
 	}
 	
-	public void originalPositionFrom(FormPoint orig, double alfa) {
+	public void originalPositionFrom(FormPoint o, double alfa) {
 		rotate(0-alfa);
-		translate(orig.getX(), orig.getY());
+		translate(o.getX(), o.getY());
+	}
+
+	public void setLocation(double x, double y) {
+		this.x = x;
+		this.y = y;
+	}
+	
+	public double getX() {
+		return x;
+	}
+
+	public void setX(double x) {
+		this.x = x;
+	}
+
+	public double getY() {
+		return y;
+	}
+
+	public void setY(double y) {
+		this.y = y;
+	}
+	
+	public FormPoint clone() {
+		return new FormPoint(x, y, dist);
 	}
 }
