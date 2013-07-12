@@ -328,7 +328,7 @@ public class FormScannerModel {
 					
 					for (int i=0; i<rows; i++) {
 						for (int j=0; j<values; j++) {
-							FormPoint pi = new FormPoint((int) (p1.x+delta.get("x")*j),(int) (p1.y+delta.get("y")*i));
+							FormPoint pi = new FormPoint((int) (p1.getX()+delta.get("x")*j),(int) (p1.getY()+delta.get("y")*i));
 							pi.originalPositionFrom(orig, rotation);
 							points.add(pi);
 						}						
@@ -345,8 +345,8 @@ public class FormScannerModel {
 		double dX = Math.abs((p2.getX()-p1.getX()));
 		double dY = Math.abs((p2.getY()-p1.getY()));
 		
-		int valuesDivider = ((values > 1)?(values - 1):1);
-		int questionDivider = ((rows > 1)?(rows - 1):1);
+		double valuesDivider = ((values > 1)?(values - 1):1);
+		double questionDivider = ((rows > 1)?(rows - 1):1);
 		
 		HashMap<String, Double> delta = new HashMap<String, Double>();
 		

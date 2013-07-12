@@ -135,8 +135,8 @@ public class FormTemplate {
 				Corners cornerPosition = corner.getKey();
 				FormPoint cornerValue = corner.getValue();
 				cornerElement.setAttribute("position", cornerPosition.name());
-				cornerElement.setAttribute("x", String.valueOf(cornerValue.x));
-				cornerElement.setAttribute("y", String.valueOf(cornerValue.y));
+				cornerElement.setAttribute("x", String.valueOf(cornerValue.getX()));
+				cornerElement.setAttribute("y", String.valueOf(cornerValue.getY()));
 				cornersElement.appendChild(cornerElement);
 			}
 
@@ -168,9 +168,9 @@ public class FormTemplate {
 					Element valueElement = doc.createElement("value");
 					FormPoint pointValue = point.getValue();
 					valueElement
-							.setAttribute("x", String.valueOf(pointValue.x));
+							.setAttribute("x", String.valueOf(pointValue.getX()));
 					valueElement
-							.setAttribute("y", String.valueOf(pointValue.y));
+							.setAttribute("y", String.valueOf(pointValue.getY()));
 					valueElement
 							.appendChild(doc.createTextNode(point.getKey()));
 					valuesElement.appendChild(valueElement);
@@ -207,7 +207,7 @@ public class FormTemplate {
 				String xCoord = cornerElement.getAttribute("x");
 				String yCoord = cornerElement.getAttribute("y");
 				
-				FormPoint cornerPoint = new FormPoint(Integer.parseInt(xCoord), Integer.parseInt(yCoord));
+				FormPoint cornerPoint = new FormPoint(Double.parseDouble(xCoord), Double.parseDouble(yCoord));
 				corners.put(Corners.valueOf(postion), cornerPoint);
 			}
 			
@@ -228,7 +228,7 @@ public class FormTemplate {
 					String xCoord = valueElement.getAttribute("x");
 					String yCoord = valueElement.getAttribute("y");
 					
-					FormPoint point = new FormPoint(Integer.parseInt(xCoord), Integer.parseInt(yCoord));
+					FormPoint point = new FormPoint(Double.parseDouble(xCoord), Double.parseDouble(yCoord));
 					field.setPoint(valueElement.getTextContent(), point);
 					pointList.add(point);
 				}				
@@ -255,9 +255,9 @@ public class FormTemplate {
 				builder = builder.append(" [position:")
 					.append(cornerPosition.name())
 					.append(" x coord:")
-					.append(cornerValue.x)
+					.append(cornerValue.getX())
 					.append(" y coord:")
-					.append(cornerValue.y)
+					.append(cornerValue.getY())
 					.append("]");
 	        }
 			
@@ -283,9 +283,9 @@ public class FormTemplate {
 					builder = builder.append(" [response:")
 							.append(point.getKey())
 							.append(" x coord:")
-							.append(pointValue.x)
+							.append(pointValue.getX())
 							.append(" y coord:")
-							.append(pointValue.y)
+							.append(pointValue.getY())
 							.append("]");
 				}
 				
@@ -318,7 +318,7 @@ public class FormTemplate {
 			found = false;
 			
 			for (String pointName: pointNames) {
-				FormPoint responsePoint = (FormPoint) templatePoints.get(pointName).clone();
+				FormPoint responsePoint = templatePoints.get(pointName).clone();
 				calcResponsePoint(formTemplate, responsePoint);
 				
 				double density = calcDensity(image, responsePoint);
@@ -367,14 +367,14 @@ public class FormTemplate {
 		int offset = 0;
 		int delta = 5;
 		int width = 2*delta;
-		int height = 2*delta;
-		int count = 0;
+		int height =2*delta;
 		int total = width * height;
 		int[] rgbArray = new int[total];
+		int count = 0;
 		
 		int xCoord = (int) responsePoint.getX();
 		int yCoord = (int) responsePoint.getY();
-		
+
 		image.getRGB(xCoord-delta, yCoord-delta, width, height, rgbArray, offset, width);
 		for (int i=0; i<width*height; i++) {
 			if ((rgbArray[i] & (0xFF)) < IThreshold) {

@@ -136,10 +136,10 @@ public class ImageFrame extends JInternalFrame implements ScrollableImageView {
 			for (FormPoint point : template.getFieldPoints()) {
 				for (int i = 0; i < 2; i++) {
 					int d = (int) (Math.pow(-1, i) * marker);
-					g.drawLine(point.x - d, point.y + d, point.x + d, point.y
-							+ d);
-					g.drawLine(point.x + d, point.y + d, point.x + d, point.y
-							- d);
+					g.drawLine((int) point.getX()-d, (int) point.getY()+d, (int) point.getX()+d, 
+							(int) point.getY()+d);
+					g.drawLine((int) point.getX()+d, (int) point.getY()+d, (int) point.getX()+d, 
+							(int) point.getY()-d);
 				}
 			}
 
@@ -147,10 +147,10 @@ public class ImageFrame extends JInternalFrame implements ScrollableImageView {
 				for (FormPoint point : model.getPoints()) {
 					for (int i = 0; i < 2; i++) {
 						int d = (int) (Math.pow(-1, i) * marker);
-						g.drawLine(point.x - d, point.y + d, point.x + d,
-								point.y + d);
-						g.drawLine(point.x + d, point.y + d, point.x + d,
-								point.y - d);
+						g.drawLine((int) point.getX()-d, (int) point.getY()+d, (int) point.getX()+d,
+								(int) point.getY()+d);
+						g.drawLine((int) point.getX()+d, (int) point.getY()+d, (int) point.getX()+d,
+								(int) point.getY()-d);
 					}
 				}
 			}
@@ -171,7 +171,7 @@ public class ImageFrame extends JInternalFrame implements ScrollableImageView {
 				FormPoint p2 = corners.get(Corners.values()[(i + 1)
 						% Corners.values().length]);
 
-				g.drawLine(p1.x, p1.y, p2.x, p2.y);
+				g.drawLine((int) p1.getX(), (int) p1.getY(), (int) p2.getX(), (int) p2.getY());
 			}
 
 			g.setColor(Color.BLACK);
