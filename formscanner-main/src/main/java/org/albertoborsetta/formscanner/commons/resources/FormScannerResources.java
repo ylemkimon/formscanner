@@ -11,11 +11,13 @@ public class FormScannerResources {
 	
 	private static String iconsPath;
 	private static String templatePath;
+	private static String licensePath;
 	private static String template;
 
 	public static void setResources(String path) {
 		iconsPath = path + "/icons/";
 		templatePath = path + "/template/";
+		licensePath = path + "/license/";
 	}
 	
 	public static ImageIcon getIconFor(String key) {
@@ -33,5 +35,9 @@ public class FormScannerResources {
 
 	public static File getTemplate() {
 		return new File(template);
+	}
+	
+	public static File getLicense() {
+		return new File(licensePath + "license.txt");
 	}
 }

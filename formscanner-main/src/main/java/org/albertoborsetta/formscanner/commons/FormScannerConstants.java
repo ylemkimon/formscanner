@@ -23,12 +23,16 @@ public class FormScannerConstants {
 	public static final String REMOVE_FIELD = "REMOVE_FIELD";
 	public static final String ADD_FIELD = "ADD_FIELD";
 	public static final String EXIT = "EXIT";	
-
+	public static final String HELP = "HELP";
+	public static final String ABOUT = "ABOUT";
+	public static final String LANGUAGE = "LANGUAGE";
+	
 	// Frames
 	public static final String RENAME_FILE_FRAME_NAME = "RENAME_FILE_FRAME_NAME";
 	public static final String FILE_LIST_FRAME_NAME = "FILE_LIST_FRAME_NAME";
 	public static final String MANAGE_TEMPLATE_FRAME_NAME = "MANAGE_TEMPLATE_FRAME_NAME";
 	public static final String IMAGE_FRAME_NAME = "IMAGE_FRAME_NAME";
+	public static final String ABOUT_FRAME_NAME = "ABOUT_FORM_SCANNER";
 	
 	// GridType
 	public static final String QUESTIONS_BY_ROWS = "QUESTIONS_BY_ROWS";
@@ -49,6 +53,13 @@ public class FormScannerConstants {
 	public static final String TOP_RIGHT = "TOP_RIGHT";
 	public static final String BOTTOM_LEFT = "BOTTOM_LEFT";
 	public static final String BOTTOM_RIGHT = "BOTTOM_RIGHT";
+	
+	// Languages
+	public static final String ENGLISH = "ENGLISH";
+	public static final String ITALIAN = "ITALIAN";
+
+	// support
+	public static final String WIKI_PAGE = "http://sourceforge.net/p/formscanner/wiki/Home/";
 	
 	public enum Corners {
 		TOP_LEFT(FormScannerTranslation.getTranslationFor(FormScannerTranslationKeys.TOP_LEFT_CORNER)),
@@ -92,6 +103,9 @@ public class FormScannerConstants {
 		SAVE_TEMPLATE,
 		REMOVE_FIELD,
 		ADD_FIELD,
+		HELP,
+		ABOUT,
+		LANGUAGE,
 		EXIT;
 	}
 	
@@ -115,6 +129,7 @@ public class FormScannerConstants {
 			return value;
 		}
 	}
+	
 	public enum Zoom {
 		
 		PERCENT_25(25),
@@ -134,5 +149,26 @@ public class FormScannerConstants {
 		public double getValue() {
 			return value/100.0;
 		}
+	}
+	
+	public enum Language {
+		ENGLISH("en", FormScannerTranslation.getTranslationFor(FormScannerTranslationKeys.ENGLISH)),
+		ITALIAN("it", FormScannerTranslation.getTranslationFor(FormScannerTranslationKeys.ITALIAN));
+		
+		private String value;
+		private String translation;
+		
+		Language(String value, String translation) {
+			this.value = value;
+			this.translation = translation;
+		}
+		
+		public String getValue() {
+			return value;
+		}
+		
+		public String getTranslation() {
+			return translation;
+		} 
 	}
 }

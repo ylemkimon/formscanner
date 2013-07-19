@@ -20,6 +20,17 @@ public class FormScannerGridLayouts {
 				FormFactory.RELATED_GAP_ROWSPEC,}); 
 	} 
 	
+	public static FormLayout singleButtonLayout() {
+		return new FormLayout(new ColumnSpec[] {
+				FormFactory.RELATED_GAP_COLSPEC,
+				FormFactory.GROWING_BUTTON_COLSPEC,
+				FormFactory.RELATED_GAP_COLSPEC,},
+			new RowSpec[] {
+				FormFactory.RELATED_GAP_ROWSPEC,
+				FormFactory.PREF_ROWSPEC,
+				FormFactory.RELATED_GAP_ROWSPEC,}); 
+	}
+	
 	public static FormLayout renameFrameLayout() {
 		return new FormLayout(new ColumnSpec[] {
 				FormFactory.RELATED_GAP_COLSPEC,
