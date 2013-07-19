@@ -26,7 +26,7 @@ public class ToolBar extends JPanel implements MenuView{
 	private FormScannerController formScannerController;
 	
 	private JButton openButton;
-	private JButton saveButton;
+	// private JButton saveButton;
 	private JButton renameButton;
 	private JButton startButton;
 	
@@ -58,21 +58,21 @@ public class ToolBar extends JPanel implements MenuView{
 			.withToolTip(FormScannerTranslation.getTranslationFor(FormScannerTranslationKeys.OPEN_IMAGES_TOOLTIP))
 			.withIcon(FormScannerResources.getIconFor(FormScannerResourcesKeys.OPEN_IMAGES_ICON))
 			.build();
-		saveButton = new ButtonBuilder()
-			.withActionCommand(FormScannerConstants.SAVE_RESULTS)
-			.withActionListener(formScannerController)
-			.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null))
-			.withToolTip(FormScannerTranslation.getTranslationFor(FormScannerTranslationKeys.SAVE_RESULTS_TOOLTIP))
-			.withIcon(FormScannerResources.getIconFor(FormScannerResourcesKeys.SAVE_RESULTS_ICON))
-			.setEnabled(false)
-			.build();
+//		saveButton = new ButtonBuilder()
+//			.withActionCommand(FormScannerConstants.SAVE_RESULTS)
+//			.withActionListener(formScannerController)
+//			.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null))
+//			.withToolTip(FormScannerTranslation.getTranslationFor(FormScannerTranslationKeys.SAVE_RESULTS_TOOLTIP))
+//			.withIcon(FormScannerResources.getIconFor(FormScannerResourcesKeys.SAVE_RESULTS_ICON))
+//			.setEnabled(false)
+//			.build();
 		
 		return new ToolBarBuilder()
 			.withAlignmentY(Component.CENTER_ALIGNMENT)
 			.withAlignmentX(Component.LEFT_ALIGNMENT)
 			.withComponentOrientation(ComponentOrientation.LEFT_TO_RIGHT)
 			.add(openButton)
-			.add(saveButton)
+//			.add(saveButton)
 			.build();
 	}
 
