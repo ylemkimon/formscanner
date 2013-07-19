@@ -5,6 +5,8 @@ import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 
+import javax.swing.JRadioButtonMenuItem;
+
 import org.albertoborsetta.formscanner.commons.FormScannerConstants;
 import org.albertoborsetta.formscanner.commons.FormScannerConstants.Action;
 import org.albertoborsetta.formscanner.model.FormScannerModel;
@@ -47,6 +49,16 @@ public class FormScannerController implements ActionListener, WindowListener {
 			break;
 		case EXIT:
 			model.exitFormScanner();
+			break;
+		case HELP:
+			model.linkToHelp();
+			break;
+		case ABOUT:
+			model.showAboutForm();
+			break;
+		case LANGUAGE:
+			JRadioButtonMenuItem object = (JRadioButtonMenuItem) e.getSource();
+			model.setLanguage(object.getName());
 			break;
 		default:
 			break;

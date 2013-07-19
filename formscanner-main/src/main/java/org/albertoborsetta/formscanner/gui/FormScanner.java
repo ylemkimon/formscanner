@@ -31,14 +31,14 @@ public class FormScanner extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+//					UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 //			    	UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
-//				    for (LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
-//				        if ("Nimbus".equals(info.getName())) {
-//				            UIManager.setLookAndFeel(info.getClassName());
-//				            break;
-//				        }
-//				    }
+				    for (LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
+				        if ("Nimbus".equals(info.getName())) {
+				            UIManager.setLookAndFeel(info.getClassName());
+				            break;
+				        }
+				    }
 				    FormScanner window = new FormScanner();
 					window.setIconImage(null);
 				} catch (Exception e) {

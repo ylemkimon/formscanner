@@ -8,4 +8,5 @@ public class FormScannerResourcesKeys {
 	public static final String ANALYZE_FILES_ICON = "start.png";
 	public static final String REMOVE_FIELD_BUTTON = "fewer.png";
 	public static final String ADD_FIELD_BUTTON = "more.png";
+	public static final String FORMSCANNER_ICON = "formscanner_icon.png";
 }

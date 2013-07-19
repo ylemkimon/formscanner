@@ -104,4 +104,22 @@ public class FormScannerTranslationKeys {
 	public static final String FIRST_CSV_COLUMN = "first.csv.column";
 	public static final String RESULTS_DEFAULT_FILE = "results.default.file";
 	public static final String CSV_FILE = "csv.file";
+	
+	public static final String HELP = "help";
+	public static final String ABOUT = "about";
+	public static final String HELP_MENU = "help.menu";
+	public static final String HELP_MENU_MNEMONIC = "help.menu.mnemonic";
+	public static final String LANGUAGE = "language";
+	public static final String SETTINGS_MENU = "settings.menu";
+	public static final String SETTINGS_MENU_MNEMONIC = "settings.menu.mnemonic";
+	public static final String ABOUT_FRAME_TITLE = "about.formscanner";
+	public static final String ABOUT_TAB_NAME = "about.tab.name";
+	public static final String LICENSE_TAB_NAME = "license.tab.name";
+	public static final String ENGLISH = "english.label";
+	public static final String ITALIAN = "italian.label";
+	public static final String LANGUAGE_CHANGED = "language.changed";
+	public static final String SETTINGS_POPUP = "settings.popup.title";
+	public static final String TEMPLATE_SAVED_POPUP = "template.saved.popup.title";
+	public static final String TEMPLATE_LOADED_POPUP = "template.loaded.popup.title";
+	public static final String ABOUT_TEXT = "<html><h2 align=\"center\">FormScanner - Free OMR Software</h2><h3 align=\"center\">Version 0.5.0</h3><p align=\"center\">Copyright 2013 Alberto Borsetta</p><p align=\"center\">Visit <a href=\"http://sourceforge.net/projects/formscanner/\">Project HomePage</a> for more information about the product</p></html>";
 }
