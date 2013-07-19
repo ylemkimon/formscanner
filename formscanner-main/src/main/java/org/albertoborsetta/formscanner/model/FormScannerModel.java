@@ -3,6 +3,7 @@ package org.albertoborsetta.formscanner.model;
 import org.albertoborsetta.formscanner.commons.FormField;
 import org.albertoborsetta.formscanner.commons.FormFileUtils;
 import org.albertoborsetta.formscanner.commons.FormPoint;
+import org.albertoborsetta.formscanner.commons.FormScannerConstants;
 import org.albertoborsetta.formscanner.commons.FormScannerConstants.Action;
 import org.albertoborsetta.formscanner.commons.FormScannerConstants.Corners;
 import org.albertoborsetta.formscanner.commons.FormScannerConstants.Frame;
@@ -13,6 +14,7 @@ import org.albertoborsetta.formscanner.commons.configuration.FormScannerConfigur
 import org.albertoborsetta.formscanner.commons.resources.FormScannerResources;
 import org.albertoborsetta.formscanner.commons.translation.FormScannerTranslation;
 import org.albertoborsetta.formscanner.commons.translation.FormScannerTranslationKeys;
+import org.albertoborsetta.formscanner.gui.AboutFrame;
 import org.albertoborsetta.formscanner.gui.FileListFrame;
 import org.albertoborsetta.formscanner.gui.FormScanner;
 import org.albertoborsetta.formscanner.gui.ImageView;
@@ -34,7 +36,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map.Entry;
 
+import javax.swing.JFrame;
 import javax.swing.JInternalFrame;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 
 import org.apache.commons.io.FilenameUtils;
@@ -64,6 +68,7 @@ public class FormScannerModel {
 	HashMap<String, FormTemplate> filledForms = new HashMap<String, FormTemplate>(); 
 	
 	private ArrayList<FormPoint> points = new ArrayList<FormPoint>();
+	private String lang;
     
 	public FormScannerModel(FormScanner view) {
 		this.view = view;
@@ -71,7 +76,7 @@ public class FormScannerModel {
 		path = System.getProperty("FormScanner_HOME");		
 		configurations = FormScannerConfiguration.getConfiguration(path);
 		
-		String lang = configurations.getProperty(FormScannerConfigurationKeys.LANG, FormScannerConfigurationKeys.DEFAULT_LANG);
+		lang = configurations.getProperty(FormScannerConfigurationKeys.LANG, FormScannerConfigurationKeys.DEFAULT_LANG);
 		FormScannerTranslation.setTranslation(path, lang);
 		FormScannerResources.setResources(path);
 		FormScannerResources.setTemplate(configurations.getProperty(FormScannerConfigurationKeys.TEMPLATE, null));
@@ -386,7 +391,10 @@ public class FormScannerModel {
 
 	public void saveTemplate(TabbedView view) {
 		File template = formTemplate.saveToFile(path);
-		JOptionPane.showMessageDialog(null, FormScannerTranslation.getTranslationFor(FormScannerTranslationKeys.TEMPLATE_SAVED));
+		JOptionPane.showMessageDialog(null, 
+				FormScannerTranslation.getTranslationFor(FormScannerTranslationKeys.TEMPLATE_SAVED),
+				FormScannerTranslation.getTranslationFor(FormScannerTranslationKeys.TEMPLATE_SAVED_POPUP),
+				JOptionPane.INFORMATION_MESSAGE);
 		String templatePath = template.getAbsolutePath();
 		configurations.setProperty(FormScannerConfigurationKeys.TEMPLATE, templatePath);
 		configurations.store();
@@ -408,10 +416,60 @@ public class FormScannerModel {
 			formTemplate = new FormTemplate(templateName);
 			formTemplate.presetFromTemplate(template);
 			if (notify) {
-				JOptionPane.showMessageDialog(null, FormScannerTranslation.getTranslationFor(FormScannerTranslationKeys.TEMPLATE_LOADED));
+				JOptionPane.showMessageDialog(null, 
+						FormScannerTranslation.getTranslationFor(FormScannerTranslationKeys.TEMPLATE_LOADED),
+						FormScannerTranslation.getTranslationFor(FormScannerTranslationKeys.TEMPLATE_LOADED_POPUP),
+						JOptionPane.INFORMATION_MESSAGE);
 				configurations.setProperty(FormScannerConfigurationKeys.TEMPLATE, template.getAbsolutePath());
 				configurations.store();
 			}
 		}
+	}
+	
+	public void linkToHelp() {
+		String osName = System.getProperty("os.name");
+		try {
+
+			if (osName.startsWith("Windows")) {
+				Runtime.getRuntime()
+						.exec((new StringBuilder())
+								.append("rundll32   url.dll,FileProtocolHandler ")
+								.append(FormScannerConstants.WIKI_PAGE).toString());
+			} else {
+				String browsers[] = { "firefox", "opera", "konqueror", "epiphany", "mozilla", "netscape" };
+				String browser = null;
+				for (int i = 0; i < browsers.length && browser == null; i++) {
+					if (Runtime.getRuntime().exec(new String[] {"which", browsers[i]}).waitFor() == 0) {
+						browser = browsers[i];
+					}
+				}
+
+				if (browser == null) {
+					throw new Exception("Could not find web browser");
+				}
+				
+				Runtime.getRuntime().exec(new String[] {browser, FormScannerConstants.WIKI_PAGE});
+			}
+		} catch (Exception exception) {
+			System.out.println("An error occured while trying to open the web browser!\n");
+		}
+	}
+
+	public void showAboutForm() {
+		JFrame aboutFrame = new AboutFrame(this);
+		aboutFrame.setVisible(true);
+	}
+
+	public String getLanguage() {
+		return lang;
+	}
+
+	public void setLanguage(String name) {
+		configurations.setProperty(FormScannerConfigurationKeys.LANG, name);
+		configurations.store();
+		JOptionPane.showMessageDialog(null, 
+				FormScannerTranslation.getTranslationFor(FormScannerTranslationKeys.LANGUAGE_CHANGED),
+				FormScannerTranslation.getTranslationFor(FormScannerTranslationKeys.SETTINGS_POPUP),
+				JOptionPane.INFORMATION_MESSAGE);
 	}
 }

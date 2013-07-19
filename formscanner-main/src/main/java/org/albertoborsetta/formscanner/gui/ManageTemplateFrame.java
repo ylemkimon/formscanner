@@ -125,10 +125,6 @@ public class ManageTemplateFrame extends JInternalFrame implements TabbedView {
 		setIconifiable(true);
 		setResizable(true);
 
-		InternalFrameController internalFrameController = InternalFrameController
-				.getInstance(formScannerModel);
-		addInternalFrameListener(internalFrameController);
-
 		JPanel fieldListPanel = getFieldListPanel();
 		JPanel fieldPropertiesPanel = getFieldPropertiesPanel();
 		JPanel fieldPositionPanel = getFieldPositionPanel();
