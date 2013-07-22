@@ -2,7 +2,6 @@ package org.albertoborsetta.formscanner.gui;
 
 import java.awt.Component;
 import java.awt.EventQueue;
-import java.awt.Toolkit;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 
@@ -11,7 +10,6 @@ import javax.swing.JInternalFrame;
 import javax.swing.JDesktopPane;
 import javax.swing.UIManager;
 import javax.swing.UIManager.LookAndFeelInfo;
-import javax.swing.UnsupportedLookAndFeelException;
 
 import org.albertoborsetta.formscanner.model.FormScannerModel;
 

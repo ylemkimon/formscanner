@@ -27,6 +27,7 @@ import org.albertoborsetta.formscanner.gui.TabbedView;
 import java.awt.Cursor;
 import java.awt.Dimension;
 import java.io.File;
+import java.net.URL;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -38,7 +39,6 @@ import java.util.Map.Entry;
 
 import javax.swing.JFrame;
 import javax.swing.JInternalFrame;
-import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 
 import org.apache.commons.io.FilenameUtils;
@@ -426,7 +426,7 @@ public class FormScannerModel {
 		}
 	}
 	
-	public void linkToHelp() {
+	public void linkToHelp(URL url) {
 		String osName = System.getProperty("os.name");
 		try {
 
@@ -434,7 +434,7 @@ public class FormScannerModel {
 				Runtime.getRuntime()
 						.exec((new StringBuilder())
 								.append("rundll32   url.dll,FileProtocolHandler ")
-								.append(FormScannerConstants.WIKI_PAGE).toString());
+								.append(url).toString());
 			} else {
 				String browsers[] = { "firefox", "opera", "konqueror", "epiphany", "mozilla", "netscape" };
 				String browser = null;
