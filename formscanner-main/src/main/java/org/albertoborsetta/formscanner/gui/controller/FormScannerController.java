@@ -4,6 +4,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
+import java.net.MalformedURLException;
+import java.net.URL;
 
 import javax.swing.JRadioButtonMenuItem;
 
@@ -51,7 +53,12 @@ public class FormScannerController implements ActionListener, WindowListener {
 			model.exitFormScanner();
 			break;
 		case HELP:
-			model.linkToHelp();
+			try {
+				model.linkToHelp(new URL(FormScannerConstants.WIKI_PAGE));
+			} catch (MalformedURLException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
 			break;
 		case ABOUT:
 			model.showAboutForm();
