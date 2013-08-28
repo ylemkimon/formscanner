@@ -121,5 +121,5 @@ public class FormScannerTranslationKeys {
 	public static final String SETTINGS_POPUP = "settings.popup.title";
 	public static final String TEMPLATE_SAVED_POPUP = "template.saved.popup.title";
 	public static final String TEMPLATE_LOADED_POPUP = "template.loaded.popup.title";
-	public static final String ABOUT_TEXT = "<html><h2 align=\"center\">FormScanner - Free OMR Software</h2><h3 align=\"center\">Version 0.5.0</h3><p align=\"center\">Copyright 2013 Alberto Borsetta</p><p align=\"center\">Visit <a href=\"http://sourceforge.net/projects/formscanner/\">Project HomePage</a> for more information about the product</p></html>";
+	public static final String ABOUT_TEXT = "about.text";
 }
