@@ -62,6 +62,13 @@
 						</includes>
 					</fileSet>
 					<fileSet>
+						<outputDirectory>/license</outputDirectory>
+	-						<directory>src/main/resources/license</directory>
+	-						<includes>
+	-							<include>*.txt</include>
+	-						</includes>
+	-					</fileSet>
+					<fileSet>
 						<outputDirectory>/</outputDirectory>
 						<directory>src/main/resources</directory>
 						<includes>
