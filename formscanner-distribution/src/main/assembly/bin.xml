@@ -36,6 +36,7 @@
 						<directory>src/main/resources/template</directory>
 						<includes>
 							<include>template.*</include>
+							<include>filled_form*.*</include>
 						</includes>
 					</fileSet>
 					<fileSet>
@@ -58,6 +59,13 @@
 						<directory>src/main/resources/results</directory>
 						<includes>
 							<include>*.csv</include>
+						</includes>
+					</fileSet>
+					<fileSet>
+						<outputDirectory>/license</outputDirectory>
+						<directory>src/main/resources/license</directory>
+						<includes>
+							<include>*.txt</include>
 						</includes>
 					</fileSet>
 					<fileSet>
