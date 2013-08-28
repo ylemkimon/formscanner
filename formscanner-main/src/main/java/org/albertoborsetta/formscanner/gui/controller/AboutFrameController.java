@@ -37,7 +37,9 @@ public class AboutFrameController implements ActionListener, HyperlinkListener {
 
 	@Override
 	public void hyperlinkUpdate(HyperlinkEvent e) {
-		formScannerModel.linkToHelp();
+		if (HyperlinkEvent.EventType.ACTIVATED.equals(e.getEventType())) {
+			formScannerModel.linkToHelp();
+		}
 	}
 
 }
