@@ -23,6 +23,7 @@ public class AboutFrameController implements ActionListener, HyperlinkListener {
 		 this.aboutFrame = aboutFrame;
 	}
 
+	@Override
 	public void actionPerformed(ActionEvent e) {
 		Action act = Action.valueOf(e.getActionCommand());
 		switch (act) {
@@ -34,8 +35,11 @@ public class AboutFrameController implements ActionListener, HyperlinkListener {
 		}
 	}
 
+	@Override
 	public void hyperlinkUpdate(HyperlinkEvent e) {
-		formScannerModel.linkToHelp(e.getURL());
+		if (HyperlinkEvent.EventType.ACTIVATED.equals(e.getEventType())) {
+			formScannerModel.linkToHelp(e.getURL());
+		}
 	}
 
 }
