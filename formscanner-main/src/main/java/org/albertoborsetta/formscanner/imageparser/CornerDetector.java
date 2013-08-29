@@ -4,6 +4,7 @@ import ij.plugin.filter.Convolver;
 import ij.process.Blitter;
 import ij.process.FloatProcessor;
 import ij.process.ImageProcessor;
+
 import java.util.Collections;
 import java.util.List;
 import java.util.Vector;

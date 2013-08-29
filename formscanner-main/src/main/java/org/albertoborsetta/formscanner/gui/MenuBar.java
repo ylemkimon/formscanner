@@ -2,7 +2,6 @@ package org.albertoborsetta.formscanner.gui;
 
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
-import java.util.ArrayList;
 
 import javax.swing.ButtonGroup;
 import javax.swing.JMenu;
@@ -13,7 +12,6 @@ import javax.swing.JSeparator;
 import javax.swing.KeyStroke;
 
 import org.albertoborsetta.formscanner.commons.FormScannerConstants;
-import org.albertoborsetta.formscanner.commons.FormScannerConstants.Action;
 import org.albertoborsetta.formscanner.commons.FormScannerConstants.Language;
 import org.albertoborsetta.formscanner.commons.translation.FormScannerTranslation;
 import org.albertoborsetta.formscanner.commons.translation.FormScannerTranslationKeys;
