@@ -472,4 +472,8 @@ public class FormScannerModel {
 				FormScannerTranslation.getTranslationFor(FormScannerTranslationKeys.SETTINGS_POPUP),
 				JOptionPane.INFORMATION_MESSAGE);
 	}
+
+	public void resetPoints() {
+		points.clear();
+	}
 }

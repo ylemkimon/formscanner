@@ -31,10 +31,6 @@ public class ImageFrameController implements MouseMotionListener, MouseInputList
 	public void mouseDragged(MouseEvent e) {
 		switch (view.getMode()) {
 		case UPDATE:
-			if (!e.isControlDown()) {
-				break;
-			}
-			// model.setImageCursor(view, new Cursor(Cursor.HAND_CURSOR));
 		case VIEW:
 			p2 =  new FormPoint(e.getPoint());
 			
@@ -61,24 +57,16 @@ public class ImageFrameController implements MouseMotionListener, MouseInputList
 	public void mouseClicked(MouseEvent e) {
 		switch (view.getMode()) {
 		case UPDATE:
-			if (!e.isControlDown()) {
-				switch (e.getButton()) {
-				case MouseEvent.BUTTON1:
-					FormPoint p = new FormPoint(e.getPoint());
-					
-					int	dx = view.getHorizontalScrollbarValue();
-					int dy = view.getVerticalScrollbarValue();
-					
-					double x = p.getX()+dx;
-					double y = p.getY()+dy;
-					
-					FormPoint p1 = new FormPoint(x, y);
-					model.addPoint(view, p1);
-					break;
-				case MouseEvent.BUTTON3:
-					break;
-				}			
-			}
+			FormPoint p = new FormPoint(e.getPoint());
+			
+			int	dx = view.getHorizontalScrollbarValue();
+			int dy = view.getVerticalScrollbarValue();
+			
+			double x = p.getX()+dx;
+			double y = p.getY()+dy;
+			
+			FormPoint p1 = new FormPoint(x, y);
+			model.addPoint(view, p1);
 			break;
 		case VIEW:
 		default:
@@ -89,14 +77,9 @@ public class ImageFrameController implements MouseMotionListener, MouseInputList
 	public void mousePressed(MouseEvent e) {
 		switch (view.getMode()) {
 		case UPDATE:
-			if (e.isControlDown()) {
-				p1 = new FormPoint(e.getPoint());
-				model.setImageCursor(view, new Cursor(Cursor.HAND_CURSOR));
-			}
-			break;
 		case VIEW:
 			p1 = new FormPoint(e.getPoint());
-			break;
+			model.setImageCursor(view, new Cursor(Cursor.HAND_CURSOR));
 		default:
 			break;
 		}
@@ -106,27 +89,15 @@ public class ImageFrameController implements MouseMotionListener, MouseInputList
 	public void mouseReleased(MouseEvent e) {
 		switch (view.getMode()) {
 		case UPDATE:
-			if (e.isControlDown()) {
-				model.setImageCursor(view, new Cursor(Cursor.CROSSHAIR_CURSOR));
-			}
-			break;
 		case VIEW:
+			model.setImageCursor(view, new Cursor(Cursor.CROSSHAIR_CURSOR));
 		default:
 			break;
 		}
 	}
 
 	public void mouseEntered(MouseEvent e) {
-		switch (view.getMode()) {
-		case UPDATE:
-			model.setImageCursor(view, new Cursor(Cursor.CROSSHAIR_CURSOR));
-			break;
-		case VIEW:
-			model.setImageCursor(view, new Cursor(Cursor.HAND_CURSOR));
-			break;
-		default:
-			break;
-		}
+		model.setImageCursor(view, new Cursor(Cursor.CROSSHAIR_CURSOR));
 	}
 
 	public void mouseExited(MouseEvent e) {
