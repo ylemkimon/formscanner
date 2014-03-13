@@ -14,5 +14,5 @@ public interface ImageView extends View {
 	public void setTemplate(FormTemplate template);
 	public Mode getMode();
 	public Dimension getImageSize();
-	public void update();
+	public void repaint();
 }

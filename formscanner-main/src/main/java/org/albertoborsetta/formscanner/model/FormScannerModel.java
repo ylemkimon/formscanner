@@ -311,14 +311,14 @@ public class FormScannerModel {
 			if (rows==1 && values==1) {
 				if (points.isEmpty()) {
 					points.add(p2);
-					view.update();
+					view.repaint();
 					manageTemplateFrame.setupTable(points);
 					manageTemplateFrame.toFront();
 				}
 			} else {
 				if (points.isEmpty()) {
 					points.add(p2);
-					view.update();
+					view.repaint();
 				} else {
 					FormPoint p1 = points.get(0);
 					points.clear();
@@ -338,7 +338,7 @@ public class FormScannerModel {
 							points.add(pi);
 						}						
 					}
-					view.update();
+					view.repaint();
 					manageTemplateFrame.setupTable(points);
 					manageTemplateFrame.toFront();
 				}

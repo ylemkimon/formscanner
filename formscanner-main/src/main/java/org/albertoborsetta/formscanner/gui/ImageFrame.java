@@ -84,6 +84,7 @@ public class ImageFrame extends JInternalFrame implements ScrollableImageView {
 			setWheelScrollingEnabled(false);
 			addMouseMotionListener(controller);
 			addMouseListener(controller);
+			addMouseWheelListener(controller);
 		}
 
 		public void setScrollBars(int deltaX, int deltaY) {
@@ -200,7 +201,7 @@ public class ImageFrame extends JInternalFrame implements ScrollableImageView {
 
 	public void updateImage(File file) {
 		imagePanel.setImage(file);
-		update();
+		repaint();
 	}
 
 	public void setImageCursor(Cursor cursor) {
@@ -209,7 +210,7 @@ public class ImageFrame extends JInternalFrame implements ScrollableImageView {
 
 	public void setScrollBars(int deltaX, int deltaY) {
 		scrollPane.setScrollBars(deltaX, deltaY);
-		update();
+		repaint();
 	}
 
 	public int getHorizontalScrollbarValue() {
@@ -231,9 +232,5 @@ public class ImageFrame extends JInternalFrame implements ScrollableImageView {
 
 	public void setTemplate(FormTemplate template) {
 		imagePanel.setTemplate(template);
-	}
-
-	public void update() {
-		update(getGraphics());
 	}
 }
