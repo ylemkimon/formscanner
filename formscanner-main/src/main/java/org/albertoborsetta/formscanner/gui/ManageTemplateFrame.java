@@ -189,6 +189,7 @@ public class ManageTemplateFrame extends JInternalFrame implements TabbedView {
 				break;
 			case 1:
 				resetTable();
+				formScannerModel.resetPoints();
 				formScannerModel.disposeRelatedFrame(this);
 				break;
 			default:
