@@ -9,6 +9,11 @@ import org.apache.commons.lang3.StringUtils;
 
 public class FormPoint implements Comparable<FormPoint>{
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	
 	private double dist = 0;
 	private double x;
 	private double y;
@@ -56,7 +61,7 @@ public class FormPoint implements Comparable<FormPoint>{
 	}
 	
 	public String toString() {
-		return "["+getX()+","+getY()+"]";
+		return "["+(int) getX()+","+(int) getY()+"]";
 	}
 	
 	public static FormPoint toPoint(String str) {
