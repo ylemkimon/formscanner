@@ -89,4 +89,6 @@ language.changed=Riavvia FormScanner per rendere attive le nuove impostazioni
 settings.popup.title=Impostazioni
 template.saved.popup.title=Template
 template.loaded.popup.title=Template
+x.cursor.position.label=X:
+y.cursor.position.label=Y:
 about.text=<html><h2 align=\"center\">FormScanner - Free OMR Software</h2><h3 align=\"center\">Version 0.5.1-SNAPSHOT</h3><p align=\"center\">Copyright 2013 Alberto Borsetta</p><p align=\"center\">Visit <a href=\"http://sourceforge.net/projects/formscanner/\">Project HomePage</a> for more information about the product</p></html>

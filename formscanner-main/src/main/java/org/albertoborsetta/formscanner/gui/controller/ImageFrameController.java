@@ -32,17 +32,16 @@ public class ImageFrameController implements MouseMotionListener, MouseInputList
 		switch (view.getMode()) {
 		case UPDATE:
 		case VIEW:
-			p2 =  new FormPoint(e.getPoint());
+			p2 = new FormPoint(e.getPoint());
 			
 			if (p1.dist2(p2) >= 10) {
-				double deltaX = (p1.getX() - p2.getX())*2;
-				double deltaY = (p1.getY() - p2.getY())*2;
+				double deltaX = (p1.getX() - p2.getX());
+				double deltaY = (p1.getY() - p2.getY());
 				
 				p1 = p2;
 				
 				model.setScrollBars(view, (int) deltaX, (int) deltaY);
 			}			
-			break;
 		default:
 			break;
 		}
@@ -50,23 +49,18 @@ public class ImageFrameController implements MouseMotionListener, MouseInputList
 	}
 
 	public void mouseMoved(MouseEvent e) {
-		System.out.println(e.getX() + ", " + e.getY());
+		FormPoint p = getCursorPoint(e);
+		
+		model.showCursorPosition(view, p);
 	}
+
 
 	// MouseInputListener
 	public void mouseClicked(MouseEvent e) {
 		switch (view.getMode()) {
 		case UPDATE:
-			FormPoint p = new FormPoint(e.getPoint());
-			
-			int	dx = view.getHorizontalScrollbarValue();
-			int dy = view.getVerticalScrollbarValue();
-			
-			double x = p.getX()+dx;
-			double y = p.getY()+dy;
-			
-			FormPoint p1 = new FormPoint(x, y);
-			model.addPoint(view, p1);
+			FormPoint p = getCursorPoint(e);
+			model.addPoint(view, p);
 			break;
 		case VIEW:
 		default:
@@ -112,5 +106,19 @@ public class ImageFrameController implements MouseMotionListener, MouseInputList
 		} else {
 			model.setScrollBars(view, 0, delta);
 		}
+		
+		FormPoint p = getCursorPoint(e);
+		model.showCursorPosition(view, p);
+	}
+	
+	private FormPoint getCursorPoint(MouseEvent e) {
+		int	dx = view.getHorizontalScrollbarValue();
+		int dy = view.getVerticalScrollbarValue();
+		
+		int x = e.getX()+dx;
+		int y = e.getY()+dy;
+		
+		FormPoint p1 = new FormPoint(x, y);
+		return p1;
 	}
 }

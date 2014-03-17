@@ -8,21 +8,29 @@ import org.albertoborsetta.formscanner.commons.FormScannerFont;
 import org.albertoborsetta.formscanner.commons.FormTemplate;
 import org.albertoborsetta.formscanner.commons.translation.FormScannerTranslation;
 import org.albertoborsetta.formscanner.commons.translation.FormScannerTranslationKeys;
+import org.albertoborsetta.formscanner.gui.builder.LabelBuilder;
 import org.albertoborsetta.formscanner.gui.controller.InternalFrameController;
 import org.albertoborsetta.formscanner.gui.controller.ImageFrameController;
 import org.albertoborsetta.formscanner.model.FormScannerModel;
 
+import com.l2fprod.common.swing.StatusBar;
+
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.BorderLayout;
 import java.awt.image.BufferedImage;
 
+import javax.swing.BorderFactory;
 import javax.swing.JInternalFrame;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-
+import javax.swing.border.BevelBorder;
+import javax.swing.border.Border;
+import javax.swing.border.EmptyBorder;
 import javax.imageio.ImageIO;
 
 import java.io.File;
@@ -38,6 +46,7 @@ public class ImageFrame extends JInternalFrame implements ScrollableImageView {
 	private ImageScrollPane scrollPane;
 	private ImageFrameController controller;
 	private InternalFrameController frameController;
+	private ImageStatusBar statusBar;
 	private Mode mode;
 
 	/**
@@ -67,7 +76,60 @@ public class ImageFrame extends JInternalFrame implements ScrollableImageView {
 
 		imagePanel = new ImagePanel(image);
 		scrollPane = new ImageScrollPane(imagePanel);
+		statusBar = new ImageStatusBar();
 		getContentPane().add(scrollPane, BorderLayout.CENTER);
+		getContentPane().add(statusBar, BorderLayout.SOUTH);
+	}
+
+	private class ImageStatusBar extends StatusBar {
+
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = 1L;
+
+		private static final String X_POSITION_LABEL = "X_LABEL";
+		private static final String Y_POSITION_LABEL = "Y_LABEL";
+		private static final String X_POSITION_VALUE = "X_VALUE";
+		private static final String Y_POSITION_VALUE = "Y_VALUE";
+		private static final String REMAINING_LABEL = "Remaining";
+
+		public ImageStatusBar() {
+			super();
+			setZoneBorder(BorderFactory.createEmptyBorder());
+			JLabel XPositionLabel = new LabelBuilder(
+					FormScannerTranslation
+							.getTranslationFor(FormScannerTranslationKeys.X_CURSOR_POSITION_LABEL))
+					.withBorder(BorderFactory.createEmptyBorder()).build();
+			JLabel YPositionLabel = new LabelBuilder(
+					FormScannerTranslation
+							.getTranslationFor(FormScannerTranslationKeys.Y_CURSOR_POSITION_LABEL))
+					.withBorder(BorderFactory.createEmptyBorder()).build();
+			JLabel XPositionValue = new LabelBuilder().withBorder(
+					BorderFactory.createBevelBorder(BevelBorder.LOWERED))
+					.build();
+			JLabel YPositionValue = new LabelBuilder().withBorder(
+					BorderFactory.createBevelBorder(BevelBorder.LOWERED))
+					.build();
+			JLabel remaining = new LabelBuilder().withBorder(
+					BorderFactory.createEmptyBorder()).build();
+			setZones(new String[] { X_POSITION_LABEL, X_POSITION_VALUE,
+					Y_POSITION_LABEL, Y_POSITION_VALUE, REMAINING_LABEL },
+					new Component[] { XPositionLabel, XPositionValue,
+							YPositionLabel, YPositionValue, remaining },
+					new String[] { "5%", "10%", "5%", "10%", "*" });
+		}
+
+		private void setZone(String id, String value) {
+			((JLabel) getZone(id)).setText(value);
+		}
+
+		public void setCursorPosition(FormPoint p) {
+			setZone(X_POSITION_VALUE, "" + (int) p.getX());
+			setZone(Y_POSITION_VALUE, "" + (int) p.getY());
+		}
+
+		
 	}
 
 	private class ImageScrollPane extends JScrollPane {
@@ -137,10 +199,10 @@ public class ImageFrame extends JInternalFrame implements ScrollableImageView {
 			for (FormPoint point : template.getFieldPoints()) {
 				for (int i = 0; i < 2; i++) {
 					int d = (int) (Math.pow(-1, i) * marker);
-					g.drawLine((int) point.getX()-d, (int) point.getY()+d, (int) point.getX()+d, 
-							(int) point.getY()+d);
-					g.drawLine((int) point.getX()+d, (int) point.getY()+d, (int) point.getX()+d, 
-							(int) point.getY()-d);
+					g.drawLine((int) point.getX() - d, (int) point.getY() + d,
+							(int) point.getX() + d, (int) point.getY() + d);
+					g.drawLine((int) point.getX() + d, (int) point.getY() + d,
+							(int) point.getX() + d, (int) point.getY() - d);
 				}
 			}
 
@@ -148,10 +210,12 @@ public class ImageFrame extends JInternalFrame implements ScrollableImageView {
 				for (FormPoint point : model.getPoints()) {
 					for (int i = 0; i < 2; i++) {
 						int d = (int) (Math.pow(-1, i) * marker);
-						g.drawLine((int) point.getX()-d, (int) point.getY()+d, (int) point.getX()+d,
-								(int) point.getY()+d);
-						g.drawLine((int) point.getX()+d, (int) point.getY()+d, (int) point.getX()+d,
-								(int) point.getY()-d);
+						g.drawLine((int) point.getX() - d, (int) point.getY()
+								+ d, (int) point.getX() + d, (int) point.getY()
+								+ d);
+						g.drawLine((int) point.getX() + d, (int) point.getY()
+								+ d, (int) point.getX() + d, (int) point.getY()
+								- d);
 					}
 				}
 			}
@@ -172,7 +236,8 @@ public class ImageFrame extends JInternalFrame implements ScrollableImageView {
 				FormPoint p2 = corners.get(Corners.values()[(i + 1)
 						% Corners.values().length]);
 
-				g.drawLine((int) p1.getX(), (int) p1.getY(), (int) p2.getX(), (int) p2.getY());
+				g.drawLine((int) p1.getX(), (int) p1.getY(), (int) p2.getX(),
+						(int) p2.getY());
 			}
 
 			g.setColor(Color.BLACK);
@@ -232,5 +297,10 @@ public class ImageFrame extends JInternalFrame implements ScrollableImageView {
 
 	public void setTemplate(FormTemplate template) {
 		imagePanel.setTemplate(template);
+	}
+
+	@Override
+	public void showCursorPosition(FormPoint p) {
+		statusBar.setCursorPosition(p);
 	}
 }
