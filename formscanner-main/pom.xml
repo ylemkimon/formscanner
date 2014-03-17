@@ -3,7 +3,7 @@
   <parent>
     <artifactId>formscanner</artifactId>
     <groupId>org.albertoborsetta</groupId>
-    <version>0.5.1-SNAPSHOT</version>
+    <version>0.5.1</version>
   </parent>
   <artifactId>formscanner-main</artifactId>
   <name>FormScanner - Main</name>
