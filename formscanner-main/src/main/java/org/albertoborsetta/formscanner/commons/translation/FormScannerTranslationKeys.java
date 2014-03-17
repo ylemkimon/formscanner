@@ -122,4 +122,7 @@ public class FormScannerTranslationKeys {
 	public static final String TEMPLATE_SAVED_POPUP = "template.saved.popup.title";
 	public static final String TEMPLATE_LOADED_POPUP = "template.loaded.popup.title";
 	public static final String ABOUT_TEXT = "about.text";
+	
+	public static final String X_CURSOR_POSITION_LABEL = "x.cursor.position.label";
+	public static final String Y_CURSOR_POSITION_LABEL = "y.cursor.position.label";
 }

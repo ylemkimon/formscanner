@@ -476,4 +476,8 @@ public class FormScannerModel {
 	public void resetPoints() {
 		points.clear();
 	}
+
+	public void showCursorPosition(ScrollableImageView view, FormPoint p) {
+		view.showCursorPosition(p);
+	}
 }
