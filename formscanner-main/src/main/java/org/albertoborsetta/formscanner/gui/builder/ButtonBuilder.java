@@ -4,6 +4,7 @@ import java.awt.event.ActionListener;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.SwingConstants;
 import javax.swing.border.EtchedBorder;
 
 import org.albertoborsetta.formscanner.commons.FormScannerFont;
@@ -37,6 +38,16 @@ public class ButtonBuilder {
 		return this;
 	}
 	
+	public ButtonBuilder withSelectedIcon(ImageIcon icon) {
+		button.setSelectedIcon(icon);
+		return this;
+	}
+	
+	public ButtonBuilder withLeftAlignment() {
+		button.setHorizontalAlignment(SwingConstants.LEFT);
+		return this;
+	}
+
 	public ButtonBuilder withText(String text) {
 		button.setText(text);
 		return this;
@@ -44,6 +55,11 @@ public class ButtonBuilder {
 	
 	public ButtonBuilder setEnabled(boolean enabled) {
 		button.setEnabled(enabled);
+		return this;
+	}
+	
+	public ButtonBuilder setSelected(boolean selected) {
+		button.setSelected(selected);
 		return this;
 	}
 	

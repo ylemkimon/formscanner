@@ -20,7 +20,7 @@ public class CheckBoxBuilder {
 		return this;
 	}
 	
-	public CheckBoxBuilder withChangeListener(ChangeListener listener) {
+	public CheckBoxBuilder withActionListener(ChangeListener listener) {
 		chkBox.addChangeListener(listener);
 		return this;
 	}

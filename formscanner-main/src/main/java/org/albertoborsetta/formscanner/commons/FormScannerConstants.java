@@ -106,7 +106,11 @@ public class FormScannerConstants {
 		HELP,
 		ABOUT,
 		LANGUAGE,
-		EXIT;
+		EXIT,
+		TOP_LEFT,
+		TOP_RIGHT,
+		BOTTOM_LEFT,
+		BOTTOM_RIGHT;
 	}
 	
 	public enum Mode {

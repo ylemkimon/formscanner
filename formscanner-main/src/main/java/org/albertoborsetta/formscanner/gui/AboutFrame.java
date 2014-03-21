@@ -16,9 +16,9 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextArea;
+import javax.swing.SpringLayout;
 
 import org.albertoborsetta.formscanner.commons.FormScannerConstants;
-import org.albertoborsetta.formscanner.commons.FormScannerGridLayouts;
 import org.albertoborsetta.formscanner.commons.resources.FormScannerResources;
 import org.albertoborsetta.formscanner.commons.translation.FormScannerTranslation;
 import org.albertoborsetta.formscanner.commons.translation.FormScannerTranslationKeys;
@@ -73,7 +73,7 @@ public class AboutFrame extends JFrame {
 	private JPanel getlicensePanel() {
 		JScrollPane licenseTextPanel = getLiceseTextPanel();
 
-		return new PanelBuilder().withBorderLayout()
+		return new PanelBuilder().withLayout(new BorderLayout())
 				.addComponent(licenseTextPanel, BorderLayout.CENTER).build();
 	}
 
@@ -117,14 +117,14 @@ public class AboutFrame extends JFrame {
 	}
 
 	private JPanel getAboutPanel() {
-//		JLabel logo = new JLabel(
-//				FormScannerResources
-//						.getIconFor(FormScannerResourcesKeys.FORMSCANNER_ICON));
+		// JLabel logo = new JLabel(
+		// FormScannerResources
+		// .getIconFor(FormScannerResourcesKeys.FORMSCANNER_ICON));
 
 		JEditorPane aboutTextPanel = getAboutTextPanel();
 
-		return new PanelBuilder().withBorderLayout()
-				// .addComponent(logo, BorderLayout.WEST)
+		return new PanelBuilder().withLayout(new BorderLayout())
+		// .addComponent(logo, BorderLayout.WEST)
 				.addComponent(aboutTextPanel, BorderLayout.CENTER).build();
 	}
 
@@ -154,8 +154,7 @@ public class AboutFrame extends JFrame {
 				.withActionListener(aboutFrameController).setEnabled(true)
 				.build();
 
-		return new PanelBuilder()
-				.withFormLayout(FormScannerGridLayouts.singleButtonLayout())
-				.addComponent(okButton, "2, 2, center, default").build();
+		return new PanelBuilder().withLayout(new SpringLayout())
+				.addComponent(okButton).withGrid(1, 1).build();
 	}
 }

@@ -92,6 +92,11 @@ public class FormScannerTranslationKeys {
 	public static final String BOTTOM_LEFT_CORNER = "bottom.left.corner";
 	public static final String BOTTOM_RIGHT_CORNER = "bottom.right.corner";
 	
+	public static final String TOP_LEFT_CORNER_TOOLTIP = "top.left.corner.tooltip";
+	public static final String TOP_RIGHT_CORNER_TOOLTIP = "top.right.corner.tooltip";
+	public static final String BOTTOM_LEFT_CORNER_TOOLTIP = "bottom.left.corner.tooltip";
+	public static final String BOTTOM_RIGHT_CORNER_TOOLTIP = "bottom.right.corner.tooltip";
+	
 	public static final String ALL_IMAGES = "all.images";
 	public static final String BMP_IMAGES = "bmp.images";
 	public static final String PNG_IMAGES = "png.images";
@@ -125,4 +130,8 @@ public class FormScannerTranslationKeys {
 	
 	public static final String X_CURSOR_POSITION_LABEL = "x.cursor.position.label";
 	public static final String Y_CURSOR_POSITION_LABEL = "y.cursor.position.label";
+	public static final String TOP_LEFT_CORNER_LABEL = "top.left.corner.label";
+	public static final String BOTTOM_LEFT_CORNER_LABEL = "bottom.left.corner.label";
+	public static final String TOP_RIGHT_CORNER_LABEL = "top.right.corner.label";
+	public static final String BOTTOM_RIGHT_CORNER_LABEL = "bottom.right.corner.label";
 }

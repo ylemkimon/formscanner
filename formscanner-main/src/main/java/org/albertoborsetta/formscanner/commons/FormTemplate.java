@@ -18,7 +18,7 @@ import javax.imageio.ImageIO;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
- 
+
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
@@ -42,7 +42,7 @@ public class FormTemplate {
 	public void findCorners(File image) {
 		ScanImage imageScan = new ScanImage(image);
         corners = imageScan.locateCorners();
-        rotation = calculateRotation();
+        calculateRotation();
 	} 
 	
 	public FormField getField(String name) {
@@ -68,6 +68,12 @@ public class FormTemplate {
 
 	public void setCorners(HashMap<Corners, FormPoint> corners) {
 		this.corners = corners;
+		calculateRotation();
+	}
+	
+	public void setCorner(Corners corner, FormPoint point) {
+		corners.put(corner, point);
+		calculateRotation();
 	}
 
 	public HashMap<Corners, FormPoint> getCorners() {		
@@ -86,14 +92,14 @@ public class FormTemplate {
 		return pointList;
 	}
 	
-	private double calculateRotation() {
+	private void calculateRotation() {
 		FormPoint topLeftPoint = corners.get(Corners.TOP_LEFT);
 		FormPoint topRightPoint = corners.get(Corners.TOP_RIGHT);
 		
 		double dx = (double) (topRightPoint.getX() - topLeftPoint.getX());
 		double dy = (double) (topLeftPoint.getY() - topRightPoint.getY());
 		
-		return Math.atan(dy/dx);
+		rotation = Math.atan(dy/dx);
 	}
 	
 	public void removeFieldByName(String fieldName) {
@@ -400,5 +406,9 @@ public class FormTemplate {
 		}
 		
 		return header;
+	}
+
+	public FormPoint getCorner(Corners corner) {
+		return corners.get(corner);
 	}	
 }

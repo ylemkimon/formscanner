@@ -6,9 +6,11 @@ import java.awt.FlowLayout;
 
 import javax.swing.JComponent;
 import javax.swing.JPanel;
+import javax.swing.SpringLayout;
 import javax.swing.border.Border;
 
 import org.albertoborsetta.formscanner.commons.FormScannerFont;
+import org.uncommons.swing.SpringUtilities;
 
 import com.jgoodies.forms.layout.FormLayout;
 
@@ -21,13 +23,23 @@ public class PanelBuilder {
 		panel.setFont(FormScannerFont.getFont());
 	}
 	
-	public PanelBuilder withBorderLayout() {
-		panel.setLayout(new BorderLayout());
+	public PanelBuilder withLayout(BorderLayout layout) {
+		panel.setLayout(layout);
 		return this;
 	}
 	
-	public PanelBuilder withFormLayout(FormLayout layout) {
+	public PanelBuilder withLayout(FormLayout layout) {
 		panel.setLayout(layout);
+		return this;
+	}
+	
+	public PanelBuilder withLayout(SpringLayout layout) {
+		panel.setLayout(layout);
+		return this;
+	}
+	
+	public PanelBuilder withGrid(int rows, int cols) {
+		SpringUtilities.makeCompactGrid(panel, rows, cols, 3, 3, 3, 3);
 		return this;
 	}
 	
@@ -49,8 +61,8 @@ public class PanelBuilder {
 		return panel;
 	}
 	
-	public PanelBuilder withFlowLayout(int align, int hgap, int vgap) {
-		panel.setLayout(new FlowLayout(align, hgap, vgap));
+	public PanelBuilder withLayout(FlowLayout layout) {
+		panel.setLayout(layout);
 		return this;
 	}
 	
