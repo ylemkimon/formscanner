@@ -111,8 +111,7 @@ public class FormScannerModel {
 				renamedFileIndex = fileListFrame.getSelectedItemIndex();
 				fileListFrame.selectFile(renamedFileIndex);
 				File imageFile = openedFiles.get(renamedFileIndex);
-				FormTemplate filledForm = new FormTemplate(
-						FilenameUtils.removeExtension(imageFile.getName()));
+				FormTemplate filledForm = new FormTemplate(imageFile, formTemplate);
 
 				createFormImageFrame(imageFile, filledForm, Mode.VIEW);
 
@@ -165,10 +164,10 @@ public class FormScannerModel {
 					analyzedFileIndex = openedFile.getKey();
 					fileListFrame.selectFile(analyzedFileIndex);
 					File imageFile = openedFiles.get(analyzedFileIndex);
-					FormTemplate filledForm = new FormTemplate(
-							FilenameUtils.removeExtension(imageFile.getName()));
-					filledForm.findCorners(imageFile);
-					filledForm.findPoints(imageFile, formTemplate);
+
+					FormTemplate filledForm = new FormTemplate(imageFile, formTemplate);
+					filledForm.findCorners();
+					filledForm.findPoints();
 					filledForms.put(filledForm.getName(), filledForm);
 					createFormImageFrame(imageFile, filledForm, Mode.VIEW);
 				}
@@ -200,10 +199,9 @@ public class FormScannerModel {
 
 			if (openedFiles.size() > analyzedFileIndex) {
 				File imageFile = openedFiles.get(analyzedFileIndex);
-				FormTemplate filledForm = new FormTemplate(
-						FilenameUtils.removeExtension(imageFile.getName()));
-				filledForm.findCorners(imageFile);
-				filledForm.findPoints(imageFile, formTemplate);
+				FormTemplate filledForm = new FormTemplate(imageFile, formTemplate);
+				filledForm.findCorners();
+				filledForm.findPoints();
 				filledForms.put(filledForm.getName(), filledForm);
 
 				// createFormImageFrame(imageFile, filledForm, Mode.VIEW);
@@ -289,9 +287,8 @@ public class FormScannerModel {
 	public void loadTemplate() {
 		templateImage = fileUtils.chooseImage();
 		if (templateImage != null) {
-			formTemplate = new FormTemplate(
-					FilenameUtils.removeExtension(templateImage.getName()));
-			formTemplate.findCorners(templateImage);
+			formTemplate = new FormTemplate(templateImage);
+			formTemplate.findCorners();
 			manageTemplateFrame = new ManageTemplateFrame(this);
 
 			view.arrangeFrame(manageTemplateFrame);
@@ -449,7 +446,7 @@ public class FormScannerModel {
 		if (template != null) {
 			String templateName = FilenameUtils.removeExtension(template
 					.getName());
-			formTemplate = new FormTemplate(templateName);
+			formTemplate = new FormTemplate(template);
 			formTemplate.presetFromTemplate(template);
 			if (notify) {
 				JOptionPane
