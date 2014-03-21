@@ -2,7 +2,6 @@ package org.albertoborsetta.formscanner.commons;
 
 import java.awt.image.BufferedImage;
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -12,7 +11,8 @@ import org.albertoborsetta.formscanner.commons.FormScannerConstants.Corners;
 import org.albertoborsetta.formscanner.commons.FormScannerConstants.FieldType;
 import org.albertoborsetta.formscanner.commons.translation.FormScannerTranslation;
 import org.albertoborsetta.formscanner.commons.translation.FormScannerTranslationKeys;
-import org.albertoborsetta.formscanner.imageparser.ScanImage;
+import org.albertoborsetta.formscanner.imageparser.ImageUtils;
+import org.apache.commons.io.FilenameUtils;
 
 import javax.imageio.ImageIO;
 import javax.xml.parsers.DocumentBuilder;
@@ -25,26 +25,33 @@ import org.w3c.dom.NodeList;
 
 public class FormTemplate {
 	
+	private BufferedImage image;
 	private String name;
 	private HashMap<String, FormField> fields;
 	private HashMap<Corners, FormPoint> corners;
-	private double rotation;
 	private ArrayList<FormPoint> pointList;
+	private double rotation;
+	private FormTemplate formTemplate;
 	
-	public FormTemplate(String name) {
-		this.name = name;
-		corners = new HashMap<Corners, FormPoint>();
-		rotation = 0; 
-		fields = new HashMap<String, FormField>();        
-		pointList = new ArrayList<FormPoint>();
+	public FormTemplate(File imageFile) {
+		new FormTemplate(imageFile, null);
 	}
 	
-	public void findCorners(File image) {
-		ScanImage imageScan = new ScanImage(image);
-        corners = imageScan.locateCorners();
-        calculateRotation();
-	} 
-	
+	public FormTemplate(File imageFile, FormTemplate formTemplate) {
+		try {
+        	image = ImageIO.read(imageFile);
+        } catch (Exception e) {
+        	image = null;
+        }
+		
+        this.formTemplate = formTemplate;
+		this.name = FilenameUtils.removeExtension(imageFile.getName());
+		corners = new HashMap<Corners, FormPoint>();
+		rotation = 0;
+		fields = new HashMap<String, FormField>();
+		pointList = new ArrayList<FormPoint>();
+	}
+
 	public FormField getField(String name) {
 		return fields.get(name);
 	}
@@ -301,93 +308,16 @@ public class FormTemplate {
 			return builder.append("]").append("]").toString();
 	}
 	
-	public void findPoints(File imageFile, FormTemplate formTemplate) {
-		BufferedImage image;
-		boolean found;
-		
-		try {		
-			image = ImageIO.read(imageFile);
-		} catch (IOException ex) {
-			image = null;
-		}
-		
-		HashMap<String, FormField> templateFields = formTemplate.getFields();
-		ArrayList<String> fieldNames = new ArrayList<String>(templateFields.keySet()); 
-		Collections.sort(fieldNames);
-		
-		for (String fieldName: fieldNames) { 
-			FormField templateField = templateFields.get(fieldName);
-			HashMap<String, FormPoint> templatePoints = templateField.getPoints();
-			
-			ArrayList<String> pointNames = new ArrayList<String>(templatePoints.keySet()); 
-			Collections.sort(pointNames);
-			found = false;
-			
-			for (String pointName: pointNames) {
-				FormPoint responsePoint = templatePoints.get(pointName).clone();
-				calcResponsePoint(formTemplate, responsePoint);
-				
-				double density = calcDensity(image, responsePoint);
-				
-				if (density > 0.6) {
-					found = true;
-					FormField filledField = getField(templateField, fieldName);
-					filledField.setPoint(pointName, responsePoint);
-					fields.put(fieldName, filledField);
-					pointList.add(responsePoint);
-					if (!templateField.isMultiple()) {
-						break;
-					}
-				}
-			}
-			
-			if (!found) {
-				FormField filledField = getField(templateField, fieldName);
-				filledField.setPoint("", null);
-				fields.put(fieldName, filledField);
-			}
-		}
-	}
-
-	private void calcResponsePoint(FormTemplate formTemplate, FormPoint responsePoint) {
-		FormPoint templateOrigin = formTemplate.getCorners().get(Corners.TOP_LEFT);
-		double templateRotation = formTemplate.getRotation();
-				
-		responsePoint.relativePositionTo(templateOrigin, templateRotation);
-		responsePoint.originalPositionFrom(corners.get(Corners.TOP_LEFT), rotation);
-	}
-
-	private FormField getField(FormField field, String fieldName) {
-		FormField filledField = fields.get(fieldName);
-		
-		if (filledField == null) {
-			 filledField = new FormField(fieldName);
-			 filledField.setMultiple(field.isMultiple());
-		}
-		
-		return filledField;		
-	}
-
-	private double calcDensity(BufferedImage image, FormPoint responsePoint) {
-		int IThreshold = 127;
-		int offset = 0;
-		int delta = 5;
-		int width = 2*delta;
-		int height =2*delta;
-		int total = width * height;
-		int[] rgbArray = new int[total];
-		int count = 0;
-		
-		int xCoord = (int) responsePoint.getX();
-		int yCoord = (int) responsePoint.getY();
-
-		image.getRGB(xCoord-delta, yCoord-delta, width, height, rgbArray, offset, width);
-		for (int i=0; i<width*height; i++) {
-			if ((rgbArray[i] & (0xFF)) < IThreshold) {
-				count++;
-			}
-		}
-		return count / (double) total;
+	public void findCorners() {
+        corners = ImageUtils.locateCorners(this);
+        rotation = ImageUtils.calculateRotation(this);
+        // calculateRotation();
+	} 
+	
+	public void findPoints() {
+		imageUtils.findPoints(formTemplate);
+        pointList = imageUtils.getPoints();
+        fields = imageUtils.getFields();
 	}
 
 	public String getName() {
@@ -410,5 +340,9 @@ public class FormTemplate {
 
 	public FormPoint getCorner(Corners corner) {
 		return corners.get(corner);
+	}
+
+	public BufferedImage getImage() {
+		return image;
 	}	
 }
