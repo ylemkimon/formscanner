@@ -19,11 +19,6 @@ public class LabelBuilder {
 		label.setFont(FormScannerFont.getFont());
 	}
 	
-	public LabelBuilder withName(String name) {
-		label.setName(name);
-		return this;
-	}
-	
 	public LabelBuilder withBorder(Border border) {
 		label.setBorder(border);
 		return this;

@@ -17,7 +17,7 @@ public class ComboBoxBuilder {
 		comboBox.setFont(FormScannerFont.getFont());
 	}
 	
-	public ComboBoxBuilder withItemListener(ItemListener listener) {
+	public ComboBoxBuilder withActionListener(ItemListener listener) {
 		comboBox.addItemListener(listener);
 		return this;
 	}

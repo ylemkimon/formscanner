@@ -1,7 +1,6 @@
 package org.albertoborsetta.formscanner.gui;
 
 import org.albertoborsetta.formscanner.commons.FormScannerConstants;
-import org.albertoborsetta.formscanner.commons.FormScannerGridLayouts;
 import org.albertoborsetta.formscanner.commons.translation.FormScannerTranslation;
 import org.albertoborsetta.formscanner.commons.translation.FormScannerTranslationKeys;
 import org.albertoborsetta.formscanner.gui.builder.ButtonBuilder;
@@ -11,7 +10,6 @@ import org.albertoborsetta.formscanner.gui.builder.TextFieldBuilder;
 import org.albertoborsetta.formscanner.gui.controller.InternalFrameController;
 import org.albertoborsetta.formscanner.gui.controller.RenameFileController;
 import org.albertoborsetta.formscanner.model.FormScannerModel;
-
 import org.apache.commons.io.FilenameUtils;
 
 import javax.swing.JInternalFrame;
@@ -19,107 +17,109 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.JLabel;
 import javax.swing.JButton;
+import javax.swing.SpringLayout;
 
 import java.awt.BorderLayout;
 
 public class RenameFileFrame extends JInternalFrame implements View {
 
 	private static final long serialVersionUID = 1L;
-	
+
 	private JTextField fileNameField;
 	private JLabel fileExtensionField;
-	private JLabel newFileNameLabel;
 	private JButton okButton;
 	private JButton cancelButton;
 	private RenameFileController renameFileController;
 	private InternalFrameController internalFrameController;
 	private JPanel buttonPanel;
 	private JPanel renamePanel;
-	
+
 	/**
 	 * Create the frame.
 	 */
 	public RenameFileFrame(FormScannerModel formScannerModel, String fileName) {
 		renameFileController = new RenameFileController(formScannerModel);
 		renameFileController.add(this);
-		
+
 		setName(FormScannerConstants.RENAME_FILE_FRAME_NAME);
 		setBounds(220, 320, 370, 100);
 		setClosable(true);
 		setLayout(new BorderLayout());
-		
-		internalFrameController = InternalFrameController.getInstance(formScannerModel);
+
+		internalFrameController = InternalFrameController
+				.getInstance(formScannerModel);
 		addInternalFrameListener(internalFrameController);
 
 		renamePanel = getRenamePanel();
 		buttonPanel = getButtonPanel();
-		
-		add(renamePanel, BorderLayout.CENTER);
+
+		add(renamePanel, BorderLayout.NORTH);
 		add(buttonPanel, BorderLayout.SOUTH);
-		
-		updateRenamedFile(fileName);		
+
+		updateRenamedFile(fileName);
 	}
-	
+
 	public boolean isOkEnabled() {
 		return okButton.isEnabled();
 	}
-	
+
 	public boolean isCancelEnabled() {
 		return cancelButton.isEnabled();
 	}
-	
+
 	public void setOkEnabled(boolean value) {
 		okButton.setEnabled(value);
 	}
-	
+
 	public void updateRenamedFile(String fileName) {
-		setTitle(FormScannerTranslation.getTranslationFor(FormScannerTranslationKeys.RENAME_FILE_FRAME_TITLE) + ": " + fileName);
+		setTitle(FormScannerTranslation
+				.getTranslationFor(FormScannerTranslationKeys.RENAME_FILE_FRAME_TITLE)
+				+ ": " + fileName);
 		fileNameField.setText(FilenameUtils.removeExtension(fileName));
 		fileExtensionField.setText('.' + FilenameUtils.getExtension(fileName));
 	}
-	
+
 	public String getNewFileName() {
-		String fileName = fileNameField.getText() + fileExtensionField.getText(); 
+		String fileName = fileNameField.getText()
+				+ fileExtensionField.getText();
 		return fileName;
 	}
-	
+
 	private JPanel getRenamePanel() {
-		newFileNameLabel = new LabelBuilder(FormScannerTranslation.getTranslationFor(FormScannerTranslationKeys.RENAME_FILE_FRAME_LABEL) + ": ")
-			.build();
-		
-		fileNameField = new TextFieldBuilder(10)
-			.withKeyListener(renameFileController)
-			.build();
-		
-		fileExtensionField = new LabelBuilder()
-			.build();
-		
+		fileNameField = new TextFieldBuilder(10).withActionListener(
+				renameFileController).build();
+
+		fileExtensionField = new LabelBuilder().build();
+
 		return new PanelBuilder()
-			.withFormLayout(FormScannerGridLayouts.renameFrameLayout())
-			.addComponent(fileNameField, "4, 2, fill, default")
-			.addComponent(fileExtensionField, "6, 2")
-			.addComponent(newFileNameLabel, "2, 2, right, default")
-			.build();
+				.withLayout(new SpringLayout())
+				.add(getLabel(FormScannerTranslationKeys.RENAME_FILE_FRAME_LABEL))
+				.add(fileNameField).add(fileExtensionField).withGrid(1, 3)
+				.build();
 	}
-	
+
+	private JLabel getLabel(String value) {
+		return new LabelBuilder(FormScannerTranslation.getTranslationFor(value)
+				+ ": ").build();
+	}
+
 	private JPanel getButtonPanel() {
 		okButton = new ButtonBuilder()
-			.withText(FormScannerTranslation.getTranslationFor(FormScannerTranslationKeys.OK_BUTTON))
-			.setEnabled(false)
-			.withActionCommand(FormScannerConstants.RENAME_FILE_CURRENT)
-			.withActionListener(renameFileController)
-			.build();
-	
+				.withText(
+						FormScannerTranslation
+								.getTranslationFor(FormScannerTranslationKeys.OK_BUTTON))
+				.setEnabled(false)
+				.withActionCommand(FormScannerConstants.RENAME_FILE_CURRENT)
+				.withActionListener(renameFileController).build();
+
 		cancelButton = new ButtonBuilder()
-			.withText(FormScannerTranslation.getTranslationFor(FormScannerTranslationKeys.CANCEL_BUTTON))
-			.withActionCommand(FormScannerConstants.RENAME_FILE_SKIP)
-			.withActionListener(renameFileController)
-			.build();
-		
-		return new PanelBuilder()
-			.withFormLayout(FormScannerGridLayouts.buttonsLayout())
-			.addComponent(okButton , "2, 2, right, default")
-			.addComponent(cancelButton, "4, 2, right, default")
-			.build();
+				.withText(
+						FormScannerTranslation
+								.getTranslationFor(FormScannerTranslationKeys.CANCEL_BUTTON))
+				.withActionCommand(FormScannerConstants.RENAME_FILE_SKIP)
+				.withActionListener(renameFileController).build();
+
+		return new PanelBuilder().withLayout(new SpringLayout()).add(okButton)
+				.add(cancelButton).withGrid(1, 2).build();
 	}
 }

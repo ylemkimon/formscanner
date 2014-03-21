@@ -6,17 +6,19 @@ import org.albertoborsetta.formscanner.commons.FormScannerConstants.Corners;
 import org.albertoborsetta.formscanner.commons.FormScannerConstants.Mode;
 import org.albertoborsetta.formscanner.commons.FormScannerFont;
 import org.albertoborsetta.formscanner.commons.FormTemplate;
+import org.albertoborsetta.formscanner.commons.resources.FormScannerResources;
+import org.albertoborsetta.formscanner.commons.resources.FormScannerResourcesKeys;
 import org.albertoborsetta.formscanner.commons.translation.FormScannerTranslation;
 import org.albertoborsetta.formscanner.commons.translation.FormScannerTranslationKeys;
+import org.albertoborsetta.formscanner.gui.builder.ButtonBuilder;
 import org.albertoborsetta.formscanner.gui.builder.LabelBuilder;
+import org.albertoborsetta.formscanner.gui.builder.TextFieldBuilder;
 import org.albertoborsetta.formscanner.gui.controller.InternalFrameController;
 import org.albertoborsetta.formscanner.gui.controller.ImageFrameController;
 import org.albertoborsetta.formscanner.model.FormScannerModel;
-
-import com.l2fprod.common.swing.StatusBar;
+import org.uncommons.swing.SpringUtilities;
 
 import java.awt.Color;
-import java.awt.Component;
 import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Graphics;
@@ -24,18 +26,20 @@ import java.awt.BorderLayout;
 import java.awt.image.BufferedImage;
 
 import javax.swing.BorderFactory;
+import javax.swing.JButton;
 import javax.swing.JInternalFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import javax.swing.border.BevelBorder;
-import javax.swing.border.Border;
-import javax.swing.border.EmptyBorder;
+import javax.swing.JTextField;
+import javax.swing.SpringLayout;
+import javax.swing.UIManager;
 import javax.imageio.ImageIO;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.Map.Entry;
 
 public class ImageFrame extends JInternalFrame implements ScrollableImageView {
 
@@ -48,6 +52,7 @@ public class ImageFrame extends JInternalFrame implements ScrollableImageView {
 	private InternalFrameController frameController;
 	private ImageStatusBar statusBar;
 	private Mode mode;
+	private FormTemplate template;
 
 	/**
 	 * Create the frame.
@@ -81,55 +86,171 @@ public class ImageFrame extends JInternalFrame implements ScrollableImageView {
 		getContentPane().add(statusBar, BorderLayout.SOUTH);
 	}
 
-	private class ImageStatusBar extends StatusBar {
+	private class ImageStatusBar extends JPanel {
 
 		/**
 		 * 
 		 */
 		private static final long serialVersionUID = 1L;
 
-		private static final String X_POSITION_LABEL = "X_LABEL";
-		private static final String Y_POSITION_LABEL = "Y_LABEL";
-		private static final String X_POSITION_VALUE = "X_VALUE";
-		private static final String Y_POSITION_VALUE = "Y_VALUE";
-		private static final String REMAINING_LABEL = "Remaining";
+		private JTextField XPositionValue;
+		private JTextField YPositionValue;
+		private HashMap<Corners, JButton> cornerButtons = new HashMap<Corners, JButton>();
+		private HashMap<Corners, JTextField> cornerPositions = new HashMap<Corners, JTextField>();
 
 		public ImageStatusBar() {
 			super();
-			setZoneBorder(BorderFactory.createEmptyBorder());
-			JLabel XPositionLabel = new LabelBuilder(
-					FormScannerTranslation
-							.getTranslationFor(FormScannerTranslationKeys.X_CURSOR_POSITION_LABEL))
-					.withBorder(BorderFactory.createEmptyBorder()).build();
-			JLabel YPositionLabel = new LabelBuilder(
-					FormScannerTranslation
-							.getTranslationFor(FormScannerTranslationKeys.Y_CURSOR_POSITION_LABEL))
-					.withBorder(BorderFactory.createEmptyBorder()).build();
-			JLabel XPositionValue = new LabelBuilder().withBorder(
-					BorderFactory.createBevelBorder(BevelBorder.LOWERED))
-					.build();
-			JLabel YPositionValue = new LabelBuilder().withBorder(
-					BorderFactory.createBevelBorder(BevelBorder.LOWERED))
-					.build();
-			JLabel remaining = new LabelBuilder().withBorder(
-					BorderFactory.createEmptyBorder()).build();
-			setZones(new String[] { X_POSITION_LABEL, X_POSITION_VALUE,
-					Y_POSITION_LABEL, Y_POSITION_VALUE, REMAINING_LABEL },
-					new Component[] { XPositionLabel, XPositionValue,
-							YPositionLabel, YPositionValue, remaining },
-					new String[] { "5%", "10%", "5%", "10%", "*" });
+			SpringLayout layout = new SpringLayout();
+			setLayout(layout);
+
+			XPositionValue = getTextField();
+			YPositionValue = getTextField();
+
+			setCornerPositions();
+			setCornerButtons();
+
+			add(getLabel(FormScannerTranslationKeys.X_CURSOR_POSITION_LABEL));
+			add(XPositionValue);
+			add(cornerButtons.get(Corners.TOP_LEFT));
+			add(cornerPositions.get(Corners.TOP_LEFT));
+			add(cornerButtons.get(Corners.TOP_RIGHT));
+			add(cornerPositions.get(Corners.TOP_RIGHT));
+			add(getLabel(FormScannerTranslationKeys.Y_CURSOR_POSITION_LABEL));
+			add(YPositionValue);
+			add(cornerButtons.get(Corners.BOTTOM_LEFT));
+			add(cornerPositions.get(Corners.BOTTOM_LEFT));
+			add(cornerButtons.get(Corners.BOTTOM_RIGHT));
+			add(cornerPositions.get(Corners.BOTTOM_RIGHT));
+
+			SpringUtilities.makeCompactGrid(this, 2, 6, 3, 3, 3, 3);
 		}
 
-		private void setZone(String id, String value) {
-			((JLabel) getZone(id)).setText(value);
+		private void setCornerButtons() {
+
+			cornerButtons
+					.put(Corners.TOP_LEFT,
+							getButtonBuilder()
+									.withText(
+											FormScannerTranslation
+													.getTranslationFor(FormScannerTranslationKeys.TOP_LEFT_CORNER))
+									.withToolTip(
+											FormScannerTranslation
+													.getTranslationFor(FormScannerTranslationKeys.TOP_LEFT_CORNER_TOOLTIP))
+									.withActionCommand(
+											FormScannerConstants.TOP_LEFT)
+									.build());
+			cornerButtons
+					.put(Corners.BOTTOM_LEFT,
+							getButtonBuilder()
+									.withText(
+											FormScannerTranslation
+													.getTranslationFor(FormScannerTranslationKeys.BOTTOM_LEFT_CORNER))
+									.withToolTip(
+											FormScannerTranslation
+													.getTranslationFor(FormScannerTranslationKeys.BOTTOM_LEFT_CORNER_TOOLTIP))
+									.withActionCommand(
+											FormScannerConstants.BOTTOM_LEFT)
+									.build());
+			cornerButtons
+					.put(Corners.TOP_RIGHT,
+							getButtonBuilder()
+									.withText(
+											FormScannerTranslation
+													.getTranslationFor(FormScannerTranslationKeys.TOP_RIGHT_CORNER))
+									.withToolTip(
+											FormScannerTranslation
+													.getTranslationFor(FormScannerTranslationKeys.TOP_RIGHT_CORNER_TOOLTIP))
+									.withActionCommand(
+											FormScannerConstants.TOP_RIGHT)
+									.build());
+			cornerButtons
+					.put(Corners.BOTTOM_RIGHT,
+							getButtonBuilder()
+									.withText(
+											FormScannerTranslation
+													.getTranslationFor(FormScannerTranslationKeys.BOTTOM_RIGHT_CORNER))
+									.withToolTip(
+											FormScannerTranslation
+													.getTranslationFor(FormScannerTranslationKeys.BOTTOM_RIGHT_CORNER_TOOLTIP))
+									.withActionCommand(
+											FormScannerConstants.BOTTOM_RIGHT)
+									.build());
+		}
+
+		private void setCornerPositions() {
+			cornerPositions.put(Corners.TOP_LEFT, getTextField());
+			cornerPositions.put(Corners.BOTTOM_LEFT, getTextField());
+			cornerPositions.put(Corners.TOP_RIGHT, getTextField());
+			cornerPositions.put(Corners.BOTTOM_RIGHT, getTextField());
+		}
+
+		private JTextField getTextField() {
+			return new TextFieldBuilder(10).setEditable(false).build();
+		}
+
+		private ButtonBuilder getButtonBuilder() {
+			return new ButtonBuilder()
+					.withActionListener(controller)
+					.withIcon(
+							FormScannerResources
+									.getIconFor(FormScannerResourcesKeys.DISABLED_BUTTON))
+					.withSelectedIcon(
+							FormScannerResources
+									.getIconFor(FormScannerResourcesKeys.ENABLED_BUTTON))
+					.withLeftAlignment().setSelected(false);
+		}
+
+		private JLabel getLabel(String value) {
+			return new LabelBuilder(
+					FormScannerTranslation.getTranslationFor(value))
+					.withBorder(BorderFactory.createEmptyBorder()).build();
 		}
 
 		public void setCursorPosition(FormPoint p) {
-			setZone(X_POSITION_VALUE, "" + (int) p.getX());
-			setZone(Y_POSITION_VALUE, "" + (int) p.getY());
+			XPositionValue.setText("" + (int) p.getX());
+			YPositionValue.setText("" + (int) p.getY());
 		}
 
-		
+		public void toggleCornerButton(Corners corner) {
+			for (Entry<Corners, JButton> entryCorner : cornerButtons.entrySet()) {
+				JButton button = entryCorner.getValue();
+
+				if (entryCorner.getKey().equals(corner)) {
+					button.setSelected(!button.isSelected());
+				} else {
+					if (button.isSelected()) {
+						button.setSelected(false);
+					}
+				}
+			}
+		}
+
+		public Corners getSelectedButton() {
+			for (Entry<Corners, JButton> entryCorner : cornerButtons.entrySet()) {
+				JButton button = entryCorner.getValue();
+
+				if (button.isSelected()) {
+					return entryCorner.getKey();
+				}
+			}
+			return null;
+		}
+
+		public void resetCornerButtons() {
+			for (Entry<Corners, JButton> entryCorner : cornerButtons.entrySet()) {
+				JButton button = entryCorner.getValue();
+
+				button.setSelected(false);
+			}
+		}
+
+		public void showCornerPosition() {
+			for (Entry<Corners, JTextField> entryCorner : cornerPositions.entrySet()) {
+				JTextField cornerPosition = entryCorner.getValue();
+
+				cornerPosition.setText(template.getCorner(entryCorner.getKey()).toString());
+			}
+		}
 	}
 
 	private class ImageScrollPane extends JScrollPane {
@@ -166,21 +287,25 @@ public class ImageFrame extends JInternalFrame implements ScrollableImageView {
 
 	private class ImagePanel extends JPanel {
 
-		private int width;
-		private int height;
-		private int marker = 20;
-		private BufferedImage image;
-		private FormTemplate template;
-
 		/**
 		 * 
 		 */
 		private static final long serialVersionUID = 1L;
 
+		private int width;
+		private int height;
+		private int marker = 20;
+		private int d = 0;
+		private BufferedImage image;
+		private FormPoint temporaryPoint;
+
 		public ImagePanel(File image) {
 			super();
 			setImage(image);
 			setFont(FormScannerFont.getFont());
+			if ("Nimbus".equals(UIManager.getLookAndFeel().getName())) {
+				d = 4;
+			}
 		}
 
 		@Override
@@ -193,34 +318,31 @@ public class ImageFrame extends JInternalFrame implements ScrollableImageView {
 			showCorners(g);
 		}
 
-		public void showPoints(Graphics g) {
-			g.setColor(Color.RED);
+		private void showPoints(Graphics g) {
 
 			for (FormPoint point : template.getFieldPoints()) {
-				for (int i = 0; i < 2; i++) {
-					int d = (int) (Math.pow(-1, i) * marker);
-					g.drawLine((int) point.getX() - d, (int) point.getY() + d,
-							(int) point.getX() + d, (int) point.getY() + d);
-					g.drawLine((int) point.getX() + d, (int) point.getY() + d,
-							(int) point.getX() + d, (int) point.getY() - d);
-				}
+				showPoint(g, point);
 			}
 
 			if (!model.getPoints().isEmpty()) {
 				for (FormPoint point : model.getPoints()) {
-					for (int i = 0; i < 2; i++) {
-						int d = (int) (Math.pow(-1, i) * marker);
-						g.drawLine((int) point.getX() - d, (int) point.getY()
-								+ d, (int) point.getX() + d, (int) point.getY()
-								+ d);
-						g.drawLine((int) point.getX() + d, (int) point.getY()
-								+ d, (int) point.getX() + d, (int) point.getY()
-								- d);
-					}
+					showPoint(g, point);
 				}
 			}
 
-			g.setColor(Color.BLACK);
+			showPoint(g, temporaryPoint);
+		}
+
+		private void showPoint(Graphics g, FormPoint point) {
+			if (point != null) {
+				int x = (int) point.getX() - d;
+				int y = (int) point.getY() - d;
+
+				g.setColor(Color.RED);
+				g.fillArc(x - marker, y - marker, 2 * marker, 2 * marker, 0,
+						360);
+				g.setColor(Color.BLACK);
+			}
 		}
 
 		public void showCorners(Graphics g) {
@@ -259,8 +381,8 @@ public class ImageFrame extends JInternalFrame implements ScrollableImageView {
 			return height;
 		}
 
-		public void setTemplate(FormTemplate template) {
-			this.template = template;
+		public void setTemporaryPoint(FormPoint p) {
+			temporaryPoint = p;
 		}
 	}
 
@@ -296,11 +418,30 @@ public class ImageFrame extends JInternalFrame implements ScrollableImageView {
 	}
 
 	public void setTemplate(FormTemplate template) {
-		imagePanel.setTemplate(template);
+		this.template = template;
 	}
 
-	@Override
 	public void showCursorPosition(FormPoint p) {
 		statusBar.setCursorPosition(p);
+	}
+
+	public void setTemporaryPoint(FormPoint p) {
+		imagePanel.setTemporaryPoint(p);
+	}
+
+	public void toggleCornerButton(Corners corner) {
+		statusBar.toggleCornerButton(corner);
+	}
+
+	public Corners getSelectedButton() {
+		return statusBar.getSelectedButton();
+	}
+
+	public void resetCornerButtons() {
+		statusBar.resetCornerButtons();
+	}
+
+	public void showCornerPosition() {
+		statusBar.showCornerPosition();
 	}
 }

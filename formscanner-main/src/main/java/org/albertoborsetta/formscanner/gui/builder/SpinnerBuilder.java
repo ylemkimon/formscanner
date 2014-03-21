@@ -15,7 +15,7 @@ public class SpinnerBuilder {
 		spinner.setFont(FormScannerFont.getFont());
 	}
 	
-	public SpinnerBuilder withChangeListener(ChangeListener listener) {
+	public SpinnerBuilder withActionListener(ChangeListener listener) {
 		spinner.addChangeListener(listener);
 		return this;
 	}
