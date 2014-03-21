@@ -182,6 +182,7 @@ public class ImageFrame extends JInternalFrame implements ScrollableImageView {
 			cornerPositions.put(Corners.BOTTOM_LEFT, getTextField());
 			cornerPositions.put(Corners.TOP_RIGHT, getTextField());
 			cornerPositions.put(Corners.BOTTOM_RIGHT, getTextField());
+			showCornerPosition();
 		}
 
 		private JTextField getTextField() {
