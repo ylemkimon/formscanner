@@ -130,8 +130,4 @@ public class FormScannerTranslationKeys {
 	
 	public static final String X_CURSOR_POSITION_LABEL = "x.cursor.position.label";
 	public static final String Y_CURSOR_POSITION_LABEL = "y.cursor.position.label";
-	public static final String TOP_LEFT_CORNER_LABEL = "top.left.corner.label";
-	public static final String BOTTOM_LEFT_CORNER_LABEL = "bottom.left.corner.label";
-	public static final String TOP_RIGHT_CORNER_LABEL = "top.right.corner.label";
-	public static final String BOTTOM_RIGHT_CORNER_LABEL = "bottom.right.corner.label";
 }
