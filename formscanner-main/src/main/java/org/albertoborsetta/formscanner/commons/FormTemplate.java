@@ -75,12 +75,12 @@ public class FormTemplate {
 
 	public void setCorners(HashMap<Corners, FormPoint> corners) {
 		this.corners = corners;
-		calculateRotation();
+		rotation = ImageUtils.calculateRotation(this);
 	}
 	
 	public void setCorner(Corners corner, FormPoint point) {
 		corners.put(corner, point);
-		calculateRotation();
+		rotation = ImageUtils.calculateRotation(this);
 	}
 
 	public HashMap<Corners, FormPoint> getCorners() {		
@@ -97,16 +97,6 @@ public class FormTemplate {
 	
 	public ArrayList<FormPoint> getFieldPoints() {
 		return pointList;
-	}
-	
-	private void calculateRotation() {
-		FormPoint topLeftPoint = corners.get(Corners.TOP_LEFT);
-		FormPoint topRightPoint = corners.get(Corners.TOP_RIGHT);
-		
-		double dx = (double) (topRightPoint.getX() - topLeftPoint.getX());
-		double dy = (double) (topLeftPoint.getY() - topRightPoint.getY());
-		
-		rotation = Math.atan(dy/dx);
 	}
 	
 	public void removeFieldByName(String fieldName) {
@@ -311,7 +301,6 @@ public class FormTemplate {
 	public void findCorners() {
         corners = ImageUtils.locateCorners(this);
         rotation = ImageUtils.calculateRotation(this);
-        // calculateRotation();
 	} 
 	
 	public void findPoints() {
