@@ -28,7 +28,6 @@ import ij.process.ImageProcessor;
 public class ImageUtils {
 	private HashMap<String, FormField> fields;
 	private ArrayList<FormPoint> pointList;
-	private static HashMap<Corners, FormPoint> corners;
     
     public static HashMap<Corners, FormPoint> locateCorners(FormTemplate template) {
     	ImagePlus imagePlus = new ImagePlus();
@@ -163,14 +162,16 @@ public class ImageUtils {
 		return count / (double) total;
 	}
 	
-	private static void calculateRotation() {
+	public static double calculateRotation(FormTemplate template) {
+		HashMap<Corners, FormPoint> corners = template.getCorners();
+		
 		FormPoint topLeftPoint = corners.get(Corners.TOP_LEFT);
 		FormPoint topRightPoint = corners.get(Corners.TOP_RIGHT);
 		
 		double dx = (double) (topRightPoint.getX() - topLeftPoint.getX());
 		double dy = (double) (topLeftPoint.getY() - topRightPoint.getY());
 		
-		rotation = Math.atan(dy/dx);
+		return Math.atan(dy/dx);
 	}
 
 	public ArrayList<FormPoint> getPoints() {
