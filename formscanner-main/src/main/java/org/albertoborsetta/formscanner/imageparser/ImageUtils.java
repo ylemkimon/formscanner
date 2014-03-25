@@ -26,10 +26,8 @@ import ij.ImagePlus;
 import ij.process.ImageProcessor;
 
 public class ImageUtils {
-	private HashMap<String, FormField> fields;
-	private ArrayList<FormPoint> pointList;
-    
-    public static HashMap<Corners, FormPoint> locateCorners(FormTemplate template) {
+	    
+    public static HashMap<Corners, FormPoint> findCorners(FormTemplate template) {
     	ImagePlus imagePlus = new ImagePlus();
     	CornerDetector cornerDetector;
     	ImageProcessor imageProcessor;
@@ -77,11 +75,11 @@ public class ImageUtils {
         return corners;
     }
     
-    public HashMap<Corners, FormPoint> getCorners() {
-    	return corners;
-    }
-    
-    public void findPoints(FormTemplate formTemplate) {
+    public static void findPoints(FormTemplate formTemplate, FormTemplate currentForm) {
+    	HashMap<String, FormField> fields = new HashMap<String, FormField>();
+    	ArrayList<FormPoint> pointList = new ArrayList<FormPoint>();    	
+    	
+    	BufferedImage image = currentForm.getImage();
 		boolean found;
 		HashMap<String, FormField> templateFields = formTemplate.getFields();
 		ArrayList<String> fieldNames = new ArrayList<String>(templateFields.keySet()); 
@@ -96,14 +94,13 @@ public class ImageUtils {
 			found = false;
 			
 			for (String pointName: pointNames) {
-				FormPoint responsePoint = templatePoints.get(pointName).clone();
-				calcResponsePoint(formTemplate, responsePoint);
+				FormPoint responsePoint = calcResponsePoint(formTemplate, currentForm, templatePoints.get(pointName));
 				
 				double density = calcDensity(image, responsePoint);
 				
 				if (density > 0.6) {
 					found = true;
-					FormField filledField = getField(templateField, fieldName);
+					FormField filledField = getField(fields, templateField, fieldName);
 					filledField.setPoint(pointName, responsePoint);
 					fields.put(fieldName, filledField);
 					pointList.add(responsePoint);
@@ -114,22 +111,26 @@ public class ImageUtils {
 			}
 			
 			if (!found) {
-				FormField filledField = getField(templateField, fieldName);
+				FormField filledField = getField(fields, templateField, fieldName);
 				filledField.setPoint("", null);
 				fields.put(fieldName, filledField);
 			}
 		}
 	}
     
-    private void calcResponsePoint(FormTemplate formTemplate, FormPoint responsePoint) {
-		FormPoint templateOrigin = formTemplate.getCorners().get(Corners.TOP_LEFT);
+    private static FormPoint calcResponsePoint(FormTemplate formTemplate, FormTemplate currentForm, FormPoint responsePoint) {
+    	FormPoint point = responsePoint;
+    	FormPoint templateOrigin = formTemplate.getCorners().get(Corners.TOP_LEFT);
+		FormPoint currentOrigin = currentForm.getCorners().get(Corners.TOP_LEFT);
 		double templateRotation = formTemplate.getRotation();
+		double currentRotation = currentForm.getRotation();
 				
-		responsePoint.relativePositionTo(templateOrigin, templateRotation);
-		responsePoint.originalPositionFrom(corners.get(Corners.TOP_LEFT), rotation);
+		point.relativePositionTo(templateOrigin, templateRotation);
+		point.originalPositionFrom(currentOrigin, currentRotation);
+		return point;
 	}
 
-	private FormField getField(FormField field, String fieldName) {
+	private static FormField getField(HashMap<String, FormField> fields, FormField field, String fieldName) {
 		FormField filledField = fields.get(fieldName);
 		
 		if (filledField == null) {
@@ -140,7 +141,7 @@ public class ImageUtils {
 		return filledField;		
 	}
 
-	private double calcDensity(BufferedImage image, FormPoint responsePoint) {
+	private static double calcDensity(BufferedImage image, FormPoint responsePoint) {
 		int IThreshold = 127;
 		int offset = 0;
 		int delta = 5;
@@ -172,17 +173,5 @@ public class ImageUtils {
 		double dy = (double) (topLeftPoint.getY() - topRightPoint.getY());
 		
 		return Math.atan(dy/dx);
-	}
-
-	public ArrayList<FormPoint> getPoints() {
-		return pointList;
-	}
-
-	public HashMap<String, FormField> getFields() {
-		return fields;
-	}
-	
-	public double getRotation() {
-		return rotation;
 	}
 }

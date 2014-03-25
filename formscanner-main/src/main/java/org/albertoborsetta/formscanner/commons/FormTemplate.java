@@ -34,7 +34,7 @@ public class FormTemplate {
 	private FormTemplate formTemplate;
 	
 	public FormTemplate(File imageFile) {
-		new FormTemplate(imageFile, null);
+		this(imageFile, null);
 	}
 	
 	public FormTemplate(File imageFile, FormTemplate formTemplate) {
@@ -299,14 +299,12 @@ public class FormTemplate {
 	}
 	
 	public void findCorners() {
-        corners = ImageUtils.locateCorners(this);
+        corners = ImageUtils.findCorners(this);
         rotation = ImageUtils.calculateRotation(this);
 	} 
 	
 	public void findPoints() {
-		imageUtils.findPoints(formTemplate);
-        pointList = imageUtils.getPoints();
-        fields = imageUtils.getFields();
+		ImageUtils.findPoints(formTemplate, this);
 	}
 
 	public String getName() {
