@@ -182,7 +182,6 @@ public class ImageFrame extends JInternalFrame implements ScrollableImageView {
 			cornerPositions.put(Corners.BOTTOM_LEFT, getTextField());
 			cornerPositions.put(Corners.TOP_RIGHT, getTextField());
 			cornerPositions.put(Corners.BOTTOM_RIGHT, getTextField());
-			showCornerPosition();
 		}
 
 		private JTextField getTextField() {
@@ -420,6 +419,7 @@ public class ImageFrame extends JInternalFrame implements ScrollableImageView {
 
 	public void setTemplate(FormTemplate template) {
 		this.template = template;
+		statusBar.showCornerPosition();
 	}
 
 	public void showCursorPosition(FormPoint p) {
