@@ -2,23 +2,23 @@
 <template>
     <rotation angle="0.0"/>
     <corners>
-        <corner position="TOP_RIGHT" x="2468.0" y="81.0"/>
         <corner position="BOTTOM_LEFT" x="81.0" y="3218.0"/>
         <corner position="TOP_LEFT" x="81.0" y="81.0"/>
         <corner position="BOTTOM_RIGHT" x="2468.0" y="3218.0"/>
+        <corner position="TOP_RIGHT" x="2468.0" y="81.0"/>
     </corners>
     <fields>
         <field multiple="false" orientation="QUESTIONS_BY_ROWS">
             <name>Question 01</name>
             <values>
-                <value x="867.0" y="1162.0">Response 02</value>
+                <value x="866.0" y="1162.0">Response 02</value>
                 <value x="741.0" y="1162.0">Response 01</value>
             </values>
         </field>
         <field multiple="false" orientation="QUESTIONS_BY_ROWS">
             <name>Question 02</name>
             <values>
-                <value x="867.0" y="1246.0">Response 02</value>
+                <value x="866.0" y="1246.0">Response 02</value>
                 <value x="741.0" y="1246.0">Response 01</value>
             </values>
         </field>

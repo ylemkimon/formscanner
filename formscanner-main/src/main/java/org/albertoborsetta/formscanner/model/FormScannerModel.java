@@ -38,7 +38,6 @@ import java.util.Map.Entry;
 
 import javax.swing.JFrame;
 import javax.swing.JInternalFrame;
-import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 
 import org.apache.commons.io.FilenameUtils;
@@ -296,15 +295,13 @@ public class FormScannerModel {
 	}
 
 	public void createTemplateImageFrame() {
-		imageFrame = new ImageFrame(this, templateImage, Mode.UPDATE);
-		imageFrame.setTemplate(formTemplate);
+		imageFrame = new ImageFrame(this, templateImage, formTemplate, Mode.UPDATE);
 		view.arrangeFrame(imageFrame);
 	}
 
 	public void createFormImageFrame(File image, FormTemplate template,
 			Mode mode) {
-		imageFrame = new ImageFrame(this, image, mode);
-		imageFrame.setTemplate(template);
+		imageFrame = new ImageFrame(this, image, template, mode);
 		view.arrangeFrame(imageFrame);
 	}
 
@@ -444,10 +441,8 @@ public class FormScannerModel {
 
 	private void openTemplate(File template, boolean notify) {
 		if (template != null) {
-			String templateName = FilenameUtils.removeExtension(template
-					.getName());
 			formTemplate = new FormTemplate(template);
-			formTemplate.presetFromTemplate(template);
+			formTemplate.presetFromTemplate();
 			if (notify) {
 				JOptionPane
 						.showMessageDialog(
