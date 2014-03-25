@@ -1,5 +1,8 @@
 package org.albertoborsetta.formscanner.commons;
 
+import ij.ImagePlus;
+import ij.process.ImageProcessor;
+
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.util.ArrayList;
@@ -11,7 +14,7 @@ import org.albertoborsetta.formscanner.commons.FormScannerConstants.Corners;
 import org.albertoborsetta.formscanner.commons.FormScannerConstants.FieldType;
 import org.albertoborsetta.formscanner.commons.translation.FormScannerTranslation;
 import org.albertoborsetta.formscanner.commons.translation.FormScannerTranslationKeys;
-import org.albertoborsetta.formscanner.imageparser.ImageUtils;
+import org.albertoborsetta.formscanner.imageparser.CornerDetector;
 import org.apache.commons.io.FilenameUtils;
 
 import javax.imageio.ImageIO;
@@ -31,21 +34,32 @@ public class FormTemplate {
 	private HashMap<Corners, FormPoint> corners;
 	private ArrayList<FormPoint> pointList;
 	private double rotation;
-	private FormTemplate formTemplate;
+	private FormTemplate template;
+	private File file;
+	private int height;
+	private int width;
 	
-	public FormTemplate(File imageFile) {
-		this(imageFile, null);
+	public FormTemplate(File file) {
+		this(file, null);
 	}
 	
-	public FormTemplate(File imageFile, FormTemplate formTemplate) {
+	public FormTemplate(File file, FormTemplate template) {
 		try {
-        	image = ImageIO.read(imageFile);
+        	image = ImageIO.read(file);
+        	
+        	height = image.getHeight();
+        	width = image.getWidth();
         } catch (Exception e) {
         	image = null;
+        	
+        	height = 0;
+        	width = 0;
         }
 		
-        this.formTemplate = formTemplate;
-		this.name = FilenameUtils.removeExtension(imageFile.getName());
+		this.file = file;
+        this.template = template;
+		this.name = FilenameUtils.removeExtension(this.file.getName());
+		
 		corners = new HashMap<Corners, FormPoint>();
 		rotation = 0;
 		fields = new HashMap<String, FormField>();
@@ -75,12 +89,12 @@ public class FormTemplate {
 
 	public void setCorners(HashMap<Corners, FormPoint> corners) {
 		this.corners = corners;
-		rotation = ImageUtils.calculateRotation(this);
+		rotation = calculateRotation();
 	}
 	
 	public void setCorner(Corners corner, FormPoint point) {
 		corners.put(corner, point);
-		rotation = ImageUtils.calculateRotation(this);
+		rotation = calculateRotation();
 	}
 
 	public HashMap<Corners, FormPoint> getCorners() {		
@@ -191,11 +205,11 @@ public class FormTemplate {
 		return outputFile;
 	}
 
-	public void presetFromTemplate(File template) {
+	public void presetFromTemplate() {
 		try {
 			DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
 			DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
-			Document doc = dBuilder.parse(template);
+			Document doc = dBuilder.parse(file);
 			doc.getDocumentElement().normalize();
 			 
 			Element templateElement = (Element) doc.getDocumentElement(); 
@@ -297,15 +311,6 @@ public class FormTemplate {
 
 			return builder.append("]").append("]").toString();
 	}
-	
-	public void findCorners() {
-        corners = ImageUtils.findCorners(this);
-        rotation = ImageUtils.calculateRotation(this);
-	} 
-	
-	public void findPoints() {
-		ImageUtils.findPoints(formTemplate, this);
-	}
 
 	public String getName() {
 		return name;
@@ -331,5 +336,140 @@ public class FormTemplate {
 
 	public BufferedImage getImage() {
 		return image;
-	}	
+	}
+	
+	public void findCorners() {
+    	ImagePlus imagePlus = new ImagePlus();
+    	CornerDetector cornerDetector;
+    	ImageProcessor imageProcessor;
+    	FormPoint corner;
+    	
+    	int x;
+    	int y;
+    	int subImageWidth = width/8;
+    	int subImageHeight = height/8;
+    	int x1 = (width - (subImageWidth + 1)); 
+    	int y1 = (height - (subImageHeight + 1));
+        
+        for (Corners position: Corners.values()) {
+        	x = 0;
+        	y = 0;
+        	
+        	switch (position) {
+        	case TOP_RIGHT:
+        		x = x1;
+        		break;
+        	case BOTTOM_LEFT:
+        		y = y1;
+        		break;
+        	case BOTTOM_RIGHT:
+        		x = x1;
+        		y = y1;
+        		break;
+        	default:
+        		break;
+        	}
+        	
+        	BufferedImage cornerImage = image.getSubimage(x, y, subImageWidth, subImageHeight); 	
+        	imagePlus.setImage(cornerImage);
+        	imageProcessor = imagePlus.getProcessor();
+        	cornerDetector = new CornerDetector(imageProcessor, position);
+        	corner = cornerDetector.findCorners();
+        	corner.setLocation((x+corner.getX()), (y+corner.getY()));
+			corners.put(position, corner);
+        }
+        rotation = calculateRotation();
+    }
+    
+    public void findPoints() {
+		boolean found;
+		HashMap<String, FormField> templateFields = template.getFields();
+		ArrayList<String> fieldNames = new ArrayList<String>(templateFields.keySet()); 
+		Collections.sort(fieldNames);
+		
+		for (String fieldName: fieldNames) { 
+			FormField templateField = templateFields.get(fieldName);
+			HashMap<String, FormPoint> templatePoints = templateField.getPoints();
+			
+			ArrayList<String> pointNames = new ArrayList<String>(templatePoints.keySet()); 
+			Collections.sort(pointNames);
+			found = false;
+			
+			for (String pointName: pointNames) {
+				FormPoint responsePoint = calcResponsePoint(template, templatePoints.get(pointName));
+				
+				double density = calcDensity(responsePoint);
+				
+				if (density > 0.6) {
+					found = true;
+					FormField filledField = getField(templateField, fieldName);
+					filledField.setPoint(pointName, responsePoint);
+					fields.put(fieldName, filledField);
+					pointList.add(responsePoint);
+					if (!templateField.isMultiple()) {
+						break;
+					}
+				}
+			}
+			
+			if (!found) {
+				FormField filledField = getField(templateField, fieldName);
+				filledField.setPoint("", null);
+				fields.put(fieldName, filledField);
+			}
+		}
+	}
+    
+    private FormPoint calcResponsePoint(FormTemplate template, FormPoint responsePoint) {
+    	FormPoint point = responsePoint;
+    	FormPoint templateOrigin = template.getCorner(Corners.TOP_LEFT);
+		double templateRotation = template.getRotation();
+				
+		point.relativePositionTo(templateOrigin, templateRotation);
+		point.originalPositionFrom(corners.get(Corners.TOP_LEFT), rotation);
+		return point;
+	}
+
+	private FormField getField(FormField field, String fieldName) {
+		FormField filledField = fields.get(fieldName);
+		
+		if (filledField == null) {
+			 filledField = new FormField(fieldName);
+			 filledField.setMultiple(field.isMultiple());
+		}
+		
+		return filledField;		
+	}
+
+	private double calcDensity(FormPoint responsePoint) {
+		int IThreshold = 127;
+		int offset = 0;
+		int delta = 5;
+		int width = 2*delta;
+		int height =2*delta;
+		int total = width * height;
+		int[] rgbArray = new int[total];
+		int count = 0;
+		
+		int xCoord = (int) responsePoint.getX();
+		int yCoord = (int) responsePoint.getY();
+
+		image.getRGB(xCoord-delta, yCoord-delta, width, height, rgbArray, offset, width);
+		for (int i=0; i<width*height; i++) {
+			if ((rgbArray[i] & (0xFF)) < IThreshold) {
+				count++;
+			}
+		}
+		return count / (double) total;
+	}
+	
+	public double calculateRotation() {
+		FormPoint topLeftPoint = corners.get(Corners.TOP_LEFT);
+		FormPoint topRightPoint = corners.get(Corners.TOP_RIGHT);
+		
+		double dx = (double) (topRightPoint.getX() - topLeftPoint.getX());
+		double dy = (double) (topLeftPoint.getY() - topRightPoint.getY());
+		
+		return Math.atan(dy/dx);
+	}
 }

@@ -57,9 +57,10 @@ public class ImageFrame extends JInternalFrame implements ScrollableImageView {
 	/**
 	 * Create the frame.
 	 */
-	public ImageFrame(FormScannerModel model, File image, Mode mode) {
+	public ImageFrame(FormScannerModel model, File image, FormTemplate template, Mode mode) {
 		this.model = model;
 		this.mode = mode;
+		this.template = template;
 		controller = new ImageFrameController(this.model);
 		controller.add(this);
 		frameController = InternalFrameController.getInstance(this.model);
@@ -107,6 +108,8 @@ public class ImageFrame extends JInternalFrame implements ScrollableImageView {
 			YPositionValue = getTextField();
 
 			setCornerPositions();
+			showCornerPosition();
+			
 			setCornerButtons();
 
 			add(getLabel(FormScannerTranslationKeys.X_CURSOR_POSITION_LABEL));
@@ -417,6 +420,7 @@ public class ImageFrame extends JInternalFrame implements ScrollableImageView {
 				imagePanel.getImageHeight());
 	}
 
+	@Deprecated
 	public void setTemplate(FormTemplate template) {
 		this.template = template;
 		statusBar.showCornerPosition();
