@@ -165,7 +165,8 @@ public class FormScannerModel {
 					File imageFile = openedFiles.get(analyzedFileIndex);
 
 					FormTemplate filledForm = new FormTemplate(imageFile, formTemplate);
-					filledForm.findCorners();
+					// filledForm.findCorners();
+					filledForm.findCircleCorners();
 					filledForm.findPoints();
 					filledForms.put(filledForm.getName(), filledForm);
 					createFormImageFrame(imageFile, filledForm, Mode.VIEW);
@@ -199,7 +200,8 @@ public class FormScannerModel {
 			if (openedFiles.size() > analyzedFileIndex) {
 				File imageFile = openedFiles.get(analyzedFileIndex);
 				FormTemplate filledForm = new FormTemplate(imageFile, formTemplate);
-				filledForm.findCorners();
+				// filledForm.findCorners();
+				filledForm.findCircleCorners();
 				filledForm.findPoints();
 				filledForms.put(filledForm.getName(), filledForm);
 
@@ -287,7 +289,8 @@ public class FormScannerModel {
 		templateImage = fileUtils.chooseImage();
 		if (templateImage != null) {
 			formTemplate = new FormTemplate(templateImage);
-			formTemplate.findCorners();
+			// formTemplate.findCorners();
+			formTemplate.findCircleCorners();
 			manageTemplateFrame = new ManageTemplateFrame(this);
 
 			view.arrangeFrame(manageTemplateFrame);

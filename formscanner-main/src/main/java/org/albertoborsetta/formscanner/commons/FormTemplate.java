@@ -380,26 +380,25 @@ public class FormTemplate {
 				break;
 			}
 
-			image.getRGB(x, y, subImageWidth, subImageHeight, rgbArray, 0, width);
+			image.getRGB(x, y, subImageWidth, subImageHeight, rgbArray, 0, subImageWidth);
 			
 			for (int yi = 0; yi < subImageHeight; yi++) {				
 				stato = 0;
-				int pixel = 0;
+				int pixel = WHITE;
 				int old_pixel = pixel;
 				
+				int whites = WINDOW_SIZE;
 				for (int xi = 0; xi < subImageWidth; xi++) {
-					
-					int whites = 0;
 
-					if (xi < 5) {
-						if ((rgbArray[yi+xi] & (0xFF)) < IThreshold) {
-							whites++;
-						}
-					} else {
-						if ((rgbArray[yi+xi-WINDOW_SIZE] & (0xFF)) < IThreshold) {
+					if (xi < WINDOW_SIZE) {
+						if ((rgbArray[(yi*subImageWidth)+xi] & (0xFF)) < IThreshold) {
 							whites--;
 						}
-						if ((rgbArray[yi+xi] & (0xFF)) < IThreshold) {
+					} else {
+						if ((rgbArray[(yi*subImageWidth)+xi-WINDOW_SIZE] & (0xFF)) > IThreshold) {
+							whites--;
+						}
+						if ((rgbArray[(yi*subImageWidth)+xi] & (0xFF)) > IThreshold) {
 							whites++;
 						}
 					}
@@ -415,14 +414,14 @@ public class FormTemplate {
 						old_pixel = pixel;
 						switch (stato) {
 						case 1:
-							points[1] = new FormPoint(xi-2, yi);							
+							points[0] = new FormPoint(xi-2, yi);							
 						case 3:
-							points[3] = new FormPoint(xi-2, yi);
+							points[1] = new FormPoint(xi-2, yi);
 							break;
 						case 2:
 							points[2] = new FormPoint(xi-3, yi);
 						case 4:
-							points[4] = new FormPoint(xi-3, yi);
+							points[3] = new FormPoint(xi-3, yi);
 							break;
 						default:
 							break;
@@ -433,8 +432,8 @@ public class FormTemplate {
 				switch (stato) {
 				case 2:
 				case 4:
-					int Xc1 = (int) ((points[1].getX() + points[4].getX()) / 2);
-					int Xc2 = (int) ((points[2].getX() + points[3].getX()) / 2);
+					int Xc1 = (int) ((points[0].getX() + points[3].getX()) / 2);
+					int Xc2 = (int) ((points[1].getX() + points[2].getX()) / 2);
 					int Xc = (Xc1 + Xc2)/2;
 					int Yc = (int) points[1].getY();
 					centralPoints.add(new FormPoint(Xc, Yc));
@@ -574,7 +573,7 @@ public class FormTemplate {
 	private double calcDensity(FormPoint responsePoint) {
 		int IThreshold = 127;
 		int offset = 0;
-		int delta = 5;
+		int delta = 150;
 		int width = 2 * delta;
 		int height = 2 * delta;
 		int total = width * height;
