@@ -20,6 +20,7 @@ import org.albertoborsetta.formscanner.gui.FormScanner;
 import org.albertoborsetta.formscanner.gui.ImageView;
 import org.albertoborsetta.formscanner.gui.ManageTemplateFrame;
 import org.albertoborsetta.formscanner.gui.ImageFrame;
+import org.albertoborsetta.formscanner.gui.OptionsFrame;
 import org.albertoborsetta.formscanner.gui.RenameFileFrame;
 import org.albertoborsetta.formscanner.gui.ScrollableImageView;
 import org.albertoborsetta.formscanner.gui.TabbedView;
@@ -65,20 +66,26 @@ public class FormScannerModel {
 	private File templateImage;
 	private FormFileUtils fileUtils = FormFileUtils.getInstance();
 	private HashMap<String, FormTemplate> filledForms = new HashMap<String, FormTemplate>();
-	// private Corners selectedCorner;
 
 	private ArrayList<FormPoint> points = new ArrayList<FormPoint>();
 	private String lang;
+	private int threshold;
+	private int density;
 
 	public FormScannerModel(FormScanner view) {
 		this.view = view;
 
 		path = System.getProperty("FormScanner_HOME");
 		configurations = FormScannerConfiguration.getConfiguration(path);
-		// selectedCorner = null;
 
 		lang = configurations.getProperty(FormScannerConfigurationKeys.LANG,
 				FormScannerConfigurationKeys.DEFAULT_LANG);
+		threshold = Integer.valueOf(configurations.getProperty(
+				FormScannerConfigurationKeys.THRESHOLD,
+				FormScannerConfigurationKeys.DEFAULT_THRESHOLD));
+		density = Integer.valueOf(configurations.getProperty(
+				FormScannerConfigurationKeys.DENSITY,
+				FormScannerConfigurationKeys.DEFAULT_DENSITY));
 		FormScannerTranslation.setTranslation(path, lang);
 		FormScannerResources.setResources(path);
 		FormScannerResources.setTemplate(configurations.getProperty(
@@ -110,7 +117,8 @@ public class FormScannerModel {
 				renamedFileIndex = fileListFrame.getSelectedItemIndex();
 				fileListFrame.selectFile(renamedFileIndex);
 				File imageFile = openedFiles.get(renamedFileIndex);
-				FormTemplate filledForm = new FormTemplate(imageFile, formTemplate);
+				FormTemplate filledForm = new FormTemplate(imageFile,
+						formTemplate);
 
 				createFormImageFrame(imageFile, filledForm, Mode.VIEW);
 
@@ -164,10 +172,10 @@ public class FormScannerModel {
 					fileListFrame.selectFile(analyzedFileIndex);
 					File imageFile = openedFiles.get(analyzedFileIndex);
 
-					FormTemplate filledForm = new FormTemplate(imageFile, formTemplate);
-					// filledForm.findCorners();
-					filledForm.findCircleCorners();
-					filledForm.findPoints();
+					FormTemplate filledForm = new FormTemplate(imageFile,
+							formTemplate);
+					filledForm.findCorners(threshold);
+					filledForm.findPoints(threshold, density);
 					filledForms.put(filledForm.getName(), filledForm);
 					createFormImageFrame(imageFile, filledForm, Mode.VIEW);
 				}
@@ -199,10 +207,10 @@ public class FormScannerModel {
 
 			if (openedFiles.size() > analyzedFileIndex) {
 				File imageFile = openedFiles.get(analyzedFileIndex);
-				FormTemplate filledForm = new FormTemplate(imageFile, formTemplate);
-				// filledForm.findCorners();
-				filledForm.findCircleCorners();
-				filledForm.findPoints();
+				FormTemplate filledForm = new FormTemplate(imageFile,
+						formTemplate);
+				filledForm.findCorners(threshold);
+				filledForm.findPoints(threshold, density);
 				filledForms.put(filledForm.getName(), filledForm);
 
 				// createFormImageFrame(imageFile, filledForm, Mode.VIEW);
@@ -289,8 +297,7 @@ public class FormScannerModel {
 		templateImage = fileUtils.chooseImage();
 		if (templateImage != null) {
 			formTemplate = new FormTemplate(templateImage);
-			// formTemplate.findCorners();
-			formTemplate.findCircleCorners();
+			formTemplate.findCorners(threshold);
 			manageTemplateFrame = new ManageTemplateFrame(this);
 
 			view.arrangeFrame(manageTemplateFrame);
@@ -298,7 +305,8 @@ public class FormScannerModel {
 	}
 
 	public void createTemplateImageFrame() {
-		imageFrame = new ImageFrame(this, templateImage, formTemplate, Mode.UPDATE);
+		imageFrame = new ImageFrame(this, templateImage, formTemplate,
+				Mode.UPDATE);
 		view.arrangeFrame(imageFrame);
 	}
 
@@ -498,7 +506,7 @@ public class FormScannerModel {
 		}
 	}
 
-	public void showAboutForm() {
+	public void showAboutFrame() {
 		JFrame aboutFrame = new AboutFrame(this);
 		aboutFrame.setVisible(true);
 	}
@@ -537,7 +545,7 @@ public class FormScannerModel {
 		view.toggleCornerButton(corner);
 	}
 
-	public void setCorner(ImageFrame view, Corners corner, FormPoint point) {
+	public void setCorner(ImageView view, Corners corner, FormPoint point) {
 		formTemplate.setCorner(corner, point);
 		view.showCornerPosition();
 		view.repaint();
@@ -545,5 +553,10 @@ public class FormScannerModel {
 
 	public void resetCornerButtons(ImageFrame view) {
 		view.resetCornerButtons();
+	}
+
+	public void showOptionsFrame() {
+		JFrame optionsFrame = new OptionsFrame(this);
+		optionsFrame.setVisible(true);
 	}
 }

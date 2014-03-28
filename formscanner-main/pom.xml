@@ -29,13 +29,6 @@
 			<scope>compile</scope>
 		</dependency>
 		<dependency>
-			<groupId>gov.nih.imagej</groupId>
-			<artifactId>imagej</artifactId>
-			<version>${imagej.version}</version>
-			<type>jar</type>
-			<scope>compile</scope>
-		</dependency>
-		<dependency>
 			<groupId>org.apache.commons</groupId>
 			<artifactId>commons-lang3</artifactId>
 			<version>${commons-lang.version}</version>
@@ -48,11 +41,6 @@
 			<version>${super-csv.version}</version>
 			<type>jar</type>
 			<scope>compile</scope>
-		</dependency>
-		<dependency>
-			<groupId>com.l2fprod.common</groupId>
-			<artifactId>l2fprod-common-shared</artifactId>
-			<version>6.9.1</version>
 		</dependency>
 		<dependency>
 			<groupId>org.uncommons.watchmaker</groupId>

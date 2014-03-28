@@ -26,6 +26,7 @@ public class FormScannerConstants {
 	public static final String HELP = "HELP";
 	public static final String ABOUT = "ABOUT";
 	public static final String LANGUAGE = "LANGUAGE";
+	public static final String OPTIONS = "OPTIONS";
 	
 	// Frames
 	public static final String RENAME_FILE_FRAME_NAME = "RENAME_FILE_FRAME_NAME";
@@ -110,7 +111,8 @@ public class FormScannerConstants {
 		TOP_LEFT,
 		TOP_RIGHT,
 		BOTTOM_LEFT,
-		BOTTOM_RIGHT;
+		BOTTOM_RIGHT, 
+		OPTIONS;
 	}
 	
 	public enum Mode {
