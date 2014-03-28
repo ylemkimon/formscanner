@@ -15,4 +15,5 @@ public interface ImageView extends View {
 	public Mode getMode();
 	public Dimension getImageSize();
 	public void repaint();
+	public void showCornerPosition();
 }
