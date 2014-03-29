@@ -54,7 +54,7 @@ public class AboutFrame extends JFrame {
 		setResizable(false);
 
 		JPanel aboutPanel = getAboutPanel();
-		JPanel licensePanel = getlicensePanel();
+		JPanel licensePanel = getLicensePanel();
 		JPanel buttonPanel = getButtonPanel();
 
 		JTabbedPane tabbedPane = new TabbedPaneBuilder(JTabbedPane.TOP)
@@ -70,7 +70,7 @@ public class AboutFrame extends JFrame {
 		tabbedPane.setEnabledAt(1, true);
 	}
 
-	private JPanel getlicensePanel() {
+	private JPanel getLicensePanel() {
 		JScrollPane licenseTextPanel = getLiceseTextPanel();
 
 		return new PanelBuilder().withLayout(new BorderLayout())

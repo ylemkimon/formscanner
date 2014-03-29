@@ -559,4 +559,18 @@ public class FormScannerModel {
 		JFrame optionsFrame = new OptionsFrame(this);
 		optionsFrame.setVisible(true);
 	}
+
+	public int getThreshold() {
+		return threshold;
+	}
+
+	public int getDensity() {
+		return density;
+	}
+
+	public void saveOptions(OptionsFrame view) {
+		threshold = view.getThresholdValue();
+		density = view.getDensityValue();
+		// TODO: save values
+	}
 }

@@ -3,6 +3,8 @@ package org.albertoborsetta.formscanner.gui.controller;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import javax.swing.event.HyperlinkEvent;
 import javax.swing.event.HyperlinkListener;
 
@@ -10,7 +12,7 @@ import org.albertoborsetta.formscanner.commons.FormScannerConstants.Action;
 import org.albertoborsetta.formscanner.gui.OptionsFrame;
 import org.albertoborsetta.formscanner.model.FormScannerModel;
 
-public class OptionsFrameController implements ActionListener, HyperlinkListener {
+public class OptionsFrameController implements ActionListener, ChangeListener {
 	
 	private FormScannerModel formScannerModel;
 	private OptionsFrame optionsFrame;
@@ -27,7 +29,9 @@ public class OptionsFrameController implements ActionListener, HyperlinkListener
 	public void actionPerformed(ActionEvent e) {
 		Action act = Action.valueOf(e.getActionCommand());
 		switch (act) {
-		case CONFIRM:
+		case SAVE_OPTIONS:
+			formScannerModel.saveOptions(optionsFrame);
+		case CANCEL:
 			optionsFrame.dispose();
 			break;
 		default:
@@ -36,10 +40,8 @@ public class OptionsFrameController implements ActionListener, HyperlinkListener
 	}
 
 	@Override
-	public void hyperlinkUpdate(HyperlinkEvent e) {
-		if (HyperlinkEvent.EventType.ACTIVATED.equals(e.getEventType())) {
-			formScannerModel.linkToHelp(e.getURL());
-		}
+	public void stateChanged(ChangeEvent e) {
+		optionsFrame.serSaveEnabled();
 	}
 
 }
