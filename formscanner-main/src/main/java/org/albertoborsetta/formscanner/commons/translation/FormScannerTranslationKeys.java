@@ -131,4 +131,9 @@ public class FormScannerTranslationKeys {
 	
 	public static final String X_CURSOR_POSITION_LABEL = "x.cursor.position.label";
 	public static final String Y_CURSOR_POSITION_LABEL = "y.cursor.position.label";
+	public static final String OPTIONS_FRAME_TITLE = "options.frame.title";
+	public static final String THRESHOLD_OPTION_LABEL = "threshold.option.label";
+	public static final String DENSITY_OPTION_LABEL = "density.option.label";
+	public static final String SAVE_OPTIONS_BUTTON = "save.options.button";
+	public static final String SAVE_OPTIONS_BUTTON_TOOLTIP = "save.options.tooltip";
 }

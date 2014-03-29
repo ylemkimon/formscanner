@@ -68,7 +68,9 @@ public class ImageFrame extends JInternalFrame implements ScrollableImageView {
 
 		int desktopHeight = model.getDesktopSize().height;
 		int desktopWidth = model.getDesktopSize().width;
-
+		
+		setBounds(100, 100, 600, 500);
+		setMinimumSize(new Dimension(300, 500));
 		setClosable(true);
 		setIconifiable(true);
 		setResizable(true);
