@@ -1,6 +1,5 @@
 package org.albertoborsetta.formscanner.gui.builder;
 
-import java.awt.event.FocusListener;
 import java.awt.event.KeyListener;
 
 import javax.swing.JTextField;

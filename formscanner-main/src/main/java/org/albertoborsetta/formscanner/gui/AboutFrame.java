@@ -43,7 +43,7 @@ public class AboutFrame extends JFrame {
 	public AboutFrame(FormScannerModel model) {
 		this.model = model;
 
-		aboutFrameController = new AboutFrameController(model);
+		aboutFrameController = new AboutFrameController(this.model);
 		aboutFrameController.add(this);
 
 		setName(FormScannerConstants.ABOUT_FRAME_NAME);

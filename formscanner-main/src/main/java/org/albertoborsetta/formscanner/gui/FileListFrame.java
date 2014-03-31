@@ -21,7 +21,7 @@ public class FileListFrame extends JInternalFrame {
 	private static final long serialVersionUID = 1L;
 	
 	private JScrollPane scrollPane;
-	private JList list;
+	private JList<String> list;
 	private FormScannerModel model;
 	
 	/**
@@ -46,7 +46,7 @@ public class FileListFrame extends JInternalFrame {
 	}
 	
 	public void updateFileList(List<String> fileList) {
-		list.setListData(fileList.toArray());
+		list.setListData((String[]) fileList.toArray());
 	}
 	
 	public void selectFile(int index) {
@@ -71,7 +71,7 @@ public class FileListFrame extends JInternalFrame {
 	}
 	
 	private JScrollPane getPanel(List<String> fileList) {
-		list = new ListBuilder(fileList.toArray())
+		list = new ListBuilder((String[]) fileList.toArray())
 			.withSelectionMode(ListSelectionModel.SINGLE_SELECTION)
 			.build();
 		
