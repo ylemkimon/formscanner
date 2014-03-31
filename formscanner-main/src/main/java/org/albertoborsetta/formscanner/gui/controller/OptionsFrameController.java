@@ -5,8 +5,6 @@ import java.awt.event.ActionListener;
 
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
-import javax.swing.event.HyperlinkEvent;
-import javax.swing.event.HyperlinkListener;
 
 import org.albertoborsetta.formscanner.commons.FormScannerConstants.Action;
 import org.albertoborsetta.formscanner.gui.OptionsFrame;
@@ -41,7 +39,7 @@ public class OptionsFrameController implements ActionListener, ChangeListener {
 
 	@Override
 	public void stateChanged(ChangeEvent e) {
-		optionsFrame.serSaveEnabled();
+		optionsFrame.setSaveEnabled();
 	}
 
 }

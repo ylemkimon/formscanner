@@ -1,7 +1,6 @@
 package org.albertoborsetta.formscanner.gui;
 
 import java.awt.BorderLayout;
-import java.awt.Dimension;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -31,6 +30,8 @@ public class OptionsFrame extends JFrame {
 	private OptionsFrameController optionsFrameController;
 	private JSpinner thresholdValue;
 	private JSpinner densityValue;
+	private JButton saveButton;
+	private JButton cancelButton;
 
 	/**
 	 * Create the frame.
@@ -49,20 +50,26 @@ public class OptionsFrame extends JFrame {
 
 		JPanel optionsPanel = getOptionsPanel();
 		JPanel buttonPanel = getButtonPanel();
+		setDefaultValues();
 
 		getContentPane().add(optionsPanel, BorderLayout.NORTH);
 		getContentPane().add(buttonPanel, BorderLayout.SOUTH);
 	}
 
+	private void setDefaultValues() {
+		thresholdValue.setValue(model.getThreshold());
+		densityValue.setValue(model.getDensity());
+	}
+
 	private JPanel getOptionsPanel() {
 		thresholdValue = new SpinnerBuilder(FormScannerConstants.THRESHOLD)
 				.withActionListener(optionsFrameController)
-				.withStartValue(model.getThreshold()).build();
+				.build();
 
 		densityValue = new SpinnerBuilder(FormScannerConstants.DENSITY)
 				.withActionListener(optionsFrameController)
-				.withStartValue(model.getDensity()).build();
-
+				.build();
+		
 		return new PanelBuilder()
 				.withLayout(new SpringLayout())
 				.add(getLabel(FormScannerTranslationKeys.THRESHOLD_OPTION_LABEL))
@@ -77,7 +84,7 @@ public class OptionsFrame extends JFrame {
 	}
 
 	private JPanel getButtonPanel() {
-		JButton saveButton = new ButtonBuilder()
+		saveButton = new ButtonBuilder()
 				.withText(
 						FormScannerTranslation
 								.getTranslationFor(FormScannerTranslationKeys.SAVE_OPTIONS_BUTTON))
@@ -88,7 +95,7 @@ public class OptionsFrame extends JFrame {
 				.withActionListener(optionsFrameController).setEnabled(false)
 				.build();
 
-		JButton cancelButton = new ButtonBuilder()
+		cancelButton = new ButtonBuilder()
 				.withText(
 						FormScannerTranslation
 								.getTranslationFor(FormScannerTranslationKeys.CANCEL_BUTTON))
@@ -110,7 +117,26 @@ public class OptionsFrame extends JFrame {
 		return (Integer) densityValue.getValue();
 	}
 
-	public void serSaveEnabled() {
-		saveButton.
+	public void setSaveEnabled() {
+		saveButton.setEnabled(verifySpinnerValues());
+	}
+
+	private boolean verifySpinnerValues() {
+		if ((Integer) thresholdValue.getValue() < 0) {
+			thresholdValue.setValue(0);
+		}
+		if ((Integer) thresholdValue.getValue() > 255) {
+			thresholdValue.setValue(255);
+		}
+		
+		if ((Integer) densityValue.getValue() < 0) {
+			densityValue.setValue(0);
+		}
+		if ((Integer) densityValue.getValue() > 100) {
+			densityValue.setValue(100);
+		}
+		
+		return (((Integer) thresholdValue.getValue() != model.getThreshold())
+				|| ((Integer) densityValue.getValue() != model.getDensity()));
 	}
 }

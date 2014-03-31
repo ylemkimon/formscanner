@@ -8,15 +8,15 @@ import org.albertoborsetta.formscanner.commons.FormScannerFont;
 
 public class ListBuilder {
 	
-	private JList list;
+	private JList<String> list;
 	
-	public ListBuilder(Object[] objectList) {
-		list = new JList(objectList);
+	public ListBuilder(String[] objectList) {
+		list = new JList<String>(objectList);
 		list.setFont(FormScannerFont.getFont());
 	}
 	
 	public ListBuilder() {
-		list = new JList();
+		list = new JList<String>();
 		list.setFont(FormScannerFont.getFont());
 	}
 	
@@ -25,11 +25,11 @@ public class ListBuilder {
 		return this;
 	}	
 	
-	public JList build() {
+	public JList<String> build() {
 		return list;
 	}
 
-	public ListBuilder withListModel(ListModel listModel) {
+	public ListBuilder withListModel(ListModel<String> listModel) {
 		list.setModel(listModel);
 		return this;
 	}

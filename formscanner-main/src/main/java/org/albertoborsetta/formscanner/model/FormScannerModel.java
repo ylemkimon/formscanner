@@ -571,6 +571,9 @@ public class FormScannerModel {
 	public void saveOptions(OptionsFrame view) {
 		threshold = view.getThresholdValue();
 		density = view.getDensityValue();
-		// TODO: save values
+		
+		configurations.setProperty(FormScannerConfigurationKeys.THRESHOLD, String.valueOf(view.getThresholdValue()));
+		configurations.setProperty(FormScannerConfigurationKeys.DENSITY, String.valueOf(view.getDensityValue()));
+		configurations.store();
 	}
 }
