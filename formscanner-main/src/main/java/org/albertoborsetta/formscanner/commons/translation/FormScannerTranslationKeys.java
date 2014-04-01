@@ -136,4 +136,6 @@ public class FormScannerTranslationKeys {
 	public static final String DENSITY_OPTION_LABEL = "density.option.label";
 	public static final String SAVE_OPTIONS_BUTTON = "save.options.button";
 	public static final String SAVE_OPTIONS_BUTTON_TOOLTIP = "save.options.tooltip";
+	public static final String TEMPLATE_NOT_LOADED = "template.not.loaded";
+	public static final String TEMPLATE_NOT_LOADED_POPUP = "template.not.loaded.popup.title";
 }

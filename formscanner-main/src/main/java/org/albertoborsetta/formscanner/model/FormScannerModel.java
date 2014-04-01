@@ -34,7 +34,6 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map.Entry;
 
 import javax.swing.JFrame;
@@ -42,6 +41,7 @@ import javax.swing.JInternalFrame;
 import javax.swing.JOptionPane;
 
 import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.lang3.StringUtils;
 
 public class FormScannerModel {
 
@@ -88,9 +88,12 @@ public class FormScannerModel {
 				FormScannerConfigurationKeys.DEFAULT_DENSITY));
 		FormScannerTranslation.setTranslation(path, lang);
 		FormScannerResources.setResources(path);
-		FormScannerResources.setTemplate(configurations.getProperty(
-				FormScannerConfigurationKeys.TEMPLATE, null));
-		openTemplate(FormScannerResources.getTemplate(), false);
+		String tmpl = configurations.getProperty(
+				FormScannerConfigurationKeys.TEMPLATE, null);
+		if (!StringUtils.isEmpty(tmpl)) {
+			FormScannerResources.setTemplate(tmpl);
+			openTemplate(FormScannerResources.getTemplate(), false);
+		}
 	}
 
 	public void openImages() {
@@ -172,6 +175,9 @@ public class FormScannerModel {
 					fileListFrame.selectFile(analyzedFileIndex);
 					File imageFile = openedFiles.get(analyzedFileIndex);
 
+					if (formTemplate == null) {
+						openTemplate();
+					}
 					FormTemplate filledForm = new FormTemplate(imageFile,
 							formTemplate);
 					filledForm.findCorners(threshold);
@@ -257,11 +263,11 @@ public class FormScannerModel {
 		return newFile;
 	}
 
-	private List<String> getOpenedFileList() {
-		List<String> fileList = new ArrayList<String>();
+	private String[] getOpenedFileList() {
+		String[] fileList = new String[openedFiles.size()];
 
 		for (int i = 0; i < openedFiles.size(); i++) {
-			fileList.add(getFileNameByIndex(i));
+			fileList[i] = getFileNameByIndex(i);
 		}
 
 		return fileList;
@@ -453,8 +459,8 @@ public class FormScannerModel {
 	private void openTemplate(File template, boolean notify) {
 		if (template != null) {
 			formTemplate = new FormTemplate(template);
-			formTemplate.presetFromTemplate();
-			if (notify) {
+			if (formTemplate.presetFromTemplate()) {
+				if (notify) {
 				JOptionPane
 						.showMessageDialog(
 								null,
@@ -463,10 +469,20 @@ public class FormScannerModel {
 								FormScannerTranslation
 										.getTranslationFor(FormScannerTranslationKeys.TEMPLATE_LOADED_POPUP),
 								JOptionPane.INFORMATION_MESSAGE);
+				}
 				configurations.setProperty(
 						FormScannerConfigurationKeys.TEMPLATE,
 						template.getAbsolutePath());
 				configurations.store();
+			} else {
+				JOptionPane
+				.showMessageDialog(
+						null,
+						FormScannerTranslation
+								.getTranslationFor(FormScannerTranslationKeys.TEMPLATE_NOT_LOADED),
+						FormScannerTranslation
+								.getTranslationFor(FormScannerTranslationKeys.TEMPLATE_NOT_LOADED_POPUP),
+						JOptionPane.ERROR_MESSAGE);
 			}
 		}
 	}
@@ -571,9 +587,11 @@ public class FormScannerModel {
 	public void saveOptions(OptionsFrame view) {
 		threshold = view.getThresholdValue();
 		density = view.getDensityValue();
-		
-		configurations.setProperty(FormScannerConfigurationKeys.THRESHOLD, String.valueOf(view.getThresholdValue()));
-		configurations.setProperty(FormScannerConfigurationKeys.DENSITY, String.valueOf(view.getDensityValue()));
+
+		configurations.setProperty(FormScannerConfigurationKeys.THRESHOLD,
+				String.valueOf(view.getThresholdValue()));
+		configurations.setProperty(FormScannerConfigurationKeys.DENSITY,
+				String.valueOf(view.getDensityValue()));
 		configurations.store();
 	}
 }
