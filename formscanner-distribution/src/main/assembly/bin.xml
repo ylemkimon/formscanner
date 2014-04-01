@@ -35,8 +35,8 @@
 						<outputDirectory>/template</outputDirectory>
 						<directory>src/main/resources/template</directory>
 						<includes>
-							<include>template.*</include>
 							<include>*.jpg</include>
+							<include>*.xtmpl</include>
 						</includes>
 					</fileSet>
 					<fileSet>

@@ -61,11 +61,14 @@ public class FormScannerController implements ActionListener, WindowListener {
 			}
 			break;
 		case ABOUT:
-			model.showAboutForm();
+			model.showAboutFrame();
 			break;
 		case LANGUAGE:
 			JRadioButtonMenuItem object = (JRadioButtonMenuItem) e.getSource();
 			model.setLanguage(object.getName());
+			break;
+		case OPTIONS:
+			model.showOptionsFrame();
 			break;
 		default:
 			break;

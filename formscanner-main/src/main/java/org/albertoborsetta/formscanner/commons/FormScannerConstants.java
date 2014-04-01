@@ -26,6 +26,7 @@ public class FormScannerConstants {
 	public static final String HELP = "HELP";
 	public static final String ABOUT = "ABOUT";
 	public static final String LANGUAGE = "LANGUAGE";
+	public static final String OPTIONS = "OPTIONS";
 	
 	// Frames
 	public static final String RENAME_FILE_FRAME_NAME = "RENAME_FILE_FRAME_NAME";
@@ -60,6 +61,10 @@ public class FormScannerConstants {
 
 	// support
 	public static final String WIKI_PAGE = "http://sourceforge.net/p/formscanner/wiki/Home/";
+	public static final String OPTIONS_FRAME_NAME = "OPTIONS";
+	public static final String THRESHOLD = "THRESHOLD";
+	public static final String DENSITY = "DENSITY";
+	public static final String SAVE_OPTIONS = "SAVE_OPTIONS";
 	
 	public enum Corners {
 		TOP_LEFT(FormScannerTranslation.getTranslationFor(FormScannerTranslationKeys.TOP_LEFT_CORNER)),
@@ -110,7 +115,9 @@ public class FormScannerConstants {
 		TOP_LEFT,
 		TOP_RIGHT,
 		BOTTOM_LEFT,
-		BOTTOM_RIGHT;
+		BOTTOM_RIGHT, 
+		OPTIONS,
+		SAVE_OPTIONS;
 	}
 	
 	public enum Mode {

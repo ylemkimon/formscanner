@@ -20,6 +20,7 @@ import org.albertoborsetta.formscanner.gui.FormScanner;
 import org.albertoborsetta.formscanner.gui.ImageView;
 import org.albertoborsetta.formscanner.gui.ManageTemplateFrame;
 import org.albertoborsetta.formscanner.gui.ImageFrame;
+import org.albertoborsetta.formscanner.gui.OptionsFrame;
 import org.albertoborsetta.formscanner.gui.RenameFileFrame;
 import org.albertoborsetta.formscanner.gui.ScrollableImageView;
 import org.albertoborsetta.formscanner.gui.TabbedView;
@@ -38,7 +39,6 @@ import java.util.Map.Entry;
 
 import javax.swing.JFrame;
 import javax.swing.JInternalFrame;
-import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 
 import org.apache.commons.io.FilenameUtils;
@@ -66,20 +66,26 @@ public class FormScannerModel {
 	private File templateImage;
 	private FormFileUtils fileUtils = FormFileUtils.getInstance();
 	private HashMap<String, FormTemplate> filledForms = new HashMap<String, FormTemplate>();
-	// private Corners selectedCorner;
 
 	private ArrayList<FormPoint> points = new ArrayList<FormPoint>();
 	private String lang;
+	private int threshold;
+	private int density;
 
 	public FormScannerModel(FormScanner view) {
 		this.view = view;
 
 		path = System.getProperty("FormScanner_HOME");
 		configurations = FormScannerConfiguration.getConfiguration(path);
-		// selectedCorner = null;
 
 		lang = configurations.getProperty(FormScannerConfigurationKeys.LANG,
 				FormScannerConfigurationKeys.DEFAULT_LANG);
+		threshold = Integer.valueOf(configurations.getProperty(
+				FormScannerConfigurationKeys.THRESHOLD,
+				FormScannerConfigurationKeys.DEFAULT_THRESHOLD));
+		density = Integer.valueOf(configurations.getProperty(
+				FormScannerConfigurationKeys.DENSITY,
+				FormScannerConfigurationKeys.DEFAULT_DENSITY));
 		FormScannerTranslation.setTranslation(path, lang);
 		FormScannerResources.setResources(path);
 		FormScannerResources.setTemplate(configurations.getProperty(
@@ -111,8 +117,8 @@ public class FormScannerModel {
 				renamedFileIndex = fileListFrame.getSelectedItemIndex();
 				fileListFrame.selectFile(renamedFileIndex);
 				File imageFile = openedFiles.get(renamedFileIndex);
-				FormTemplate filledForm = new FormTemplate(
-						FilenameUtils.removeExtension(imageFile.getName()));
+				FormTemplate filledForm = new FormTemplate(imageFile,
+						formTemplate);
 
 				createFormImageFrame(imageFile, filledForm, Mode.VIEW);
 
@@ -165,10 +171,11 @@ public class FormScannerModel {
 					analyzedFileIndex = openedFile.getKey();
 					fileListFrame.selectFile(analyzedFileIndex);
 					File imageFile = openedFiles.get(analyzedFileIndex);
-					FormTemplate filledForm = new FormTemplate(
-							FilenameUtils.removeExtension(imageFile.getName()));
-					filledForm.findCorners(imageFile);
-					filledForm.findPoints(imageFile, formTemplate);
+
+					FormTemplate filledForm = new FormTemplate(imageFile,
+							formTemplate);
+					filledForm.findCorners(threshold);
+					filledForm.findPoints(threshold, density);
 					filledForms.put(filledForm.getName(), filledForm);
 					createFormImageFrame(imageFile, filledForm, Mode.VIEW);
 				}
@@ -200,10 +207,10 @@ public class FormScannerModel {
 
 			if (openedFiles.size() > analyzedFileIndex) {
 				File imageFile = openedFiles.get(analyzedFileIndex);
-				FormTemplate filledForm = new FormTemplate(
-						FilenameUtils.removeExtension(imageFile.getName()));
-				filledForm.findCorners(imageFile);
-				filledForm.findPoints(imageFile, formTemplate);
+				FormTemplate filledForm = new FormTemplate(imageFile,
+						formTemplate);
+				filledForm.findCorners(threshold);
+				filledForm.findPoints(threshold, density);
 				filledForms.put(filledForm.getName(), filledForm);
 
 				// createFormImageFrame(imageFile, filledForm, Mode.VIEW);
@@ -289,9 +296,8 @@ public class FormScannerModel {
 	public void loadTemplate() {
 		templateImage = fileUtils.chooseImage();
 		if (templateImage != null) {
-			formTemplate = new FormTemplate(
-					FilenameUtils.removeExtension(templateImage.getName()));
-			formTemplate.findCorners(templateImage);
+			formTemplate = new FormTemplate(templateImage);
+			formTemplate.findCorners(threshold);
 			manageTemplateFrame = new ManageTemplateFrame(this);
 
 			view.arrangeFrame(manageTemplateFrame);
@@ -299,15 +305,14 @@ public class FormScannerModel {
 	}
 
 	public void createTemplateImageFrame() {
-		imageFrame = new ImageFrame(this, templateImage, Mode.UPDATE);
-		imageFrame.setTemplate(formTemplate);
+		imageFrame = new ImageFrame(this, templateImage, formTemplate,
+				Mode.UPDATE);
 		view.arrangeFrame(imageFrame);
 	}
 
 	public void createFormImageFrame(File image, FormTemplate template,
 			Mode mode) {
-		imageFrame = new ImageFrame(this, image, mode);
-		imageFrame.setTemplate(template);
+		imageFrame = new ImageFrame(this, image, template, mode);
 		view.arrangeFrame(imageFrame);
 	}
 
@@ -447,10 +452,8 @@ public class FormScannerModel {
 
 	private void openTemplate(File template, boolean notify) {
 		if (template != null) {
-			String templateName = FilenameUtils.removeExtension(template
-					.getName());
-			formTemplate = new FormTemplate(templateName);
-			formTemplate.presetFromTemplate(template);
+			formTemplate = new FormTemplate(template);
+			formTemplate.presetFromTemplate();
 			if (notify) {
 				JOptionPane
 						.showMessageDialog(
@@ -503,7 +506,7 @@ public class FormScannerModel {
 		}
 	}
 
-	public void showAboutForm() {
+	public void showAboutFrame() {
 		JFrame aboutFrame = new AboutFrame(this);
 		aboutFrame.setVisible(true);
 	}
@@ -542,7 +545,7 @@ public class FormScannerModel {
 		view.toggleCornerButton(corner);
 	}
 
-	public void setCorner(ImageFrame view, Corners corner, FormPoint point) {
+	public void setCorner(ImageView view, Corners corner, FormPoint point) {
 		formTemplate.setCorner(corner, point);
 		view.showCornerPosition();
 		view.repaint();
@@ -550,5 +553,27 @@ public class FormScannerModel {
 
 	public void resetCornerButtons(ImageFrame view) {
 		view.resetCornerButtons();
+	}
+
+	public void showOptionsFrame() {
+		JFrame optionsFrame = new OptionsFrame(this);
+		optionsFrame.setVisible(true);
+	}
+
+	public int getThreshold() {
+		return threshold;
+	}
+
+	public int getDensity() {
+		return density;
+	}
+
+	public void saveOptions(OptionsFrame view) {
+		threshold = view.getThresholdValue();
+		density = view.getDensityValue();
+		
+		configurations.setProperty(FormScannerConfigurationKeys.THRESHOLD, String.valueOf(view.getThresholdValue()));
+		configurations.setProperty(FormScannerConfigurationKeys.DENSITY, String.valueOf(view.getDensityValue()));
+		configurations.store();
 	}
 }

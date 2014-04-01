@@ -61,7 +61,7 @@ public class ManageTemplateFrame extends JInternalFrame implements TabbedView {
 	private JTabbedPane tabbedPane;
 	private JScrollPane fieldPositionScrollPane;
 
-	private JList fieldList;
+	private JList<String> fieldList;
 	private JButton addFieldButton;
 	private JButton removeFieldButton;
 	private JButton saveTemplateButton;
@@ -69,7 +69,7 @@ public class ManageTemplateFrame extends JInternalFrame implements TabbedView {
 
 	private JSpinner valuesNumber;
 	private JSpinner rowsNumber;
-	private JComboBox typeComboBox;
+	private JComboBox<FieldType> typeComboBox;
 	private JCheckBox isMultiple;
 	private JButton okPropertiesButton;
 	private JButton cancelPropertiesButton;
@@ -206,7 +206,7 @@ public class ManageTemplateFrame extends JInternalFrame implements TabbedView {
 
 	private HashMap<String, FormField> createFields() {
 		HashMap<String, FormField> fields = new HashMap<String, FormField>();
-		DefaultListModel listModel = (DefaultListModel) fieldList.getModel();
+		DefaultListModel<String> listModel = (DefaultListModel<String>) fieldList.getModel();
 
 		for (int i = 1; i < (Integer) rowsNumber.getValue() + 1; i++) {
 			String name = (String) table.getValueAt(i, 0);
@@ -357,7 +357,7 @@ public class ManageTemplateFrame extends JInternalFrame implements TabbedView {
 
 	private JPanel getFieldListPanel() {
 
-		fieldList = new ListBuilder().withListModel(new DefaultListModel())
+		fieldList = new ListBuilder().withListModel(new DefaultListModel<String>())
 				.withSelectionMode(ListSelectionModel.SINGLE_SELECTION)
 				.withListSelectionListener(manageTemplateController).build();
 
@@ -400,7 +400,7 @@ public class ManageTemplateFrame extends JInternalFrame implements TabbedView {
 	private JPanel getPropertiesPanel() {
 
 		typeComboBox = new ComboBoxBuilder(FormScannerConstants.TYPE_COMBO_BOX)
-				.withModel(new DefaultComboBoxModel(FieldType.values()))
+				.withModel(new DefaultComboBoxModel<FieldType>(FieldType.values()))
 				.withActionListener(manageTemplateController).build();
 
 		isMultiple = new CheckBoxBuilder(FormScannerConstants.IS_MULTIPLE)
@@ -552,7 +552,7 @@ public class ManageTemplateFrame extends JInternalFrame implements TabbedView {
 	}
 
 	public void removeFieldByName(String fieldName) {
-		DefaultListModel listModel = (DefaultListModel) fieldList.getModel();
+		DefaultListModel<String> listModel = (DefaultListModel<String>) fieldList.getModel();
 		listModel.removeElement(fieldName);
 		if (listModel.isEmpty()) {
 			removeFieldButton.setEnabled(false);
