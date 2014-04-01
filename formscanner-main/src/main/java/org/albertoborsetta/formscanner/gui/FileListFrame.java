@@ -5,7 +5,6 @@ import javax.swing.JScrollPane;
 import javax.swing.ListSelectionModel;
 
 import java.awt.BorderLayout;
-import java.util.List;
 
 import javax.swing.JList;
 
@@ -27,7 +26,7 @@ public class FileListFrame extends JInternalFrame {
 	/**
 	 * Create the frame.
 	 */
-	public FileListFrame(FormScannerModel model, List<String> fileList) {
+	public FileListFrame(FormScannerModel model, String[] fileList) {
 		
 		this.model = model;
 		int desktopHeight = this.model.getDesktopSize().height;
@@ -45,8 +44,8 @@ public class FileListFrame extends JInternalFrame {
 		add(scrollPane, BorderLayout.CENTER);
 	}
 	
-	public void updateFileList(List<String> fileList) {
-		list.setListData((String[]) fileList.toArray());
+	public void updateFileList(String[] fileList) {
+		list.setListData(fileList);
 	}
 	
 	public void selectFile(int index) {
@@ -70,8 +69,8 @@ public class FileListFrame extends JInternalFrame {
 		return index;
 	}
 	
-	private JScrollPane getPanel(List<String> fileList) {
-		list = new ListBuilder((String[]) fileList.toArray())
+	private JScrollPane getPanel(String[] fileList) {
+		list = new ListBuilder(fileList)
 			.withSelectionMode(ListSelectionModel.SINGLE_SELECTION)
 			.build();
 		

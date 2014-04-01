@@ -215,7 +215,7 @@ public class FormTemplate {
 		return outputFile;
 	}
 
-	public void presetFromTemplate() {
+	public boolean presetFromTemplate() {
 		try {
 			DocumentBuilderFactory dbFactory = DocumentBuilderFactory
 					.newInstance();
@@ -274,8 +274,9 @@ public class FormTemplate {
 				fields.put(fieldName, field);
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			return false;
 		}
+		return true;
 	}
 
 	public String toString() {
