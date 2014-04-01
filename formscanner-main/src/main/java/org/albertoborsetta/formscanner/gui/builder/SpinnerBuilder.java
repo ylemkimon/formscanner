@@ -20,6 +20,11 @@ public class SpinnerBuilder {
 		return this;
 	}
 	
+	public SpinnerBuilder withStartValue(int value) {
+		spinner.setValue(value);
+		return this;
+	}
+	
 	public JSpinner build() {
 		return spinner;
 	}

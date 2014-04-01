@@ -12,8 +12,6 @@ import javax.swing.border.Border;
 import org.albertoborsetta.formscanner.commons.FormScannerFont;
 import org.uncommons.swing.SpringUtilities;
 
-import com.jgoodies.forms.layout.FormLayout;
-
 public class PanelBuilder {
 	
 	protected JPanel panel;
@@ -24,11 +22,6 @@ public class PanelBuilder {
 	}
 	
 	public PanelBuilder withLayout(BorderLayout layout) {
-		panel.setLayout(layout);
-		return this;
-	}
-	
-	public PanelBuilder withLayout(FormLayout layout) {
 		panel.setLayout(layout);
 		return this;
 	}
