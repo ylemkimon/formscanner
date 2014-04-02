@@ -383,15 +383,27 @@ public class FormScannerModel {
 					HashMap<String, Double> delta = calcDelta(rows, values, p1,
 							p2);
 
+					double rowsMultiplier;
+					double colsMultiplier;
 					for (int i = 0; i < rows; i++) {
 						for (int j = 0; j < values; j++) {
-							FormPoint pi = new FormPoint(
-									(int) (p1.getX() + delta.get("x") * j),
-									(int) (p1.getY() + delta.get("y") * i));
+							switch (manageTemplateFrame.getFieldType()) {
+							case QUESTIONS_BY_COLS:
+								rowsMultiplier = j;
+								colsMultiplier = i;
+								break;
+							case QUESTIONS_BY_ROWS:
+							default:
+								rowsMultiplier = i;
+								colsMultiplier = j;
+								break;
+							}
+							FormPoint pi = new FormPoint((p1.getX() + (delta.get("x") * colsMultiplier)), (p1.getY() + (delta.get("y") * rowsMultiplier)));
 							pi.originalPositionFrom(orig, rotation);
 							points.add(pi);
 						}
 					}
+
 					view.repaint();
 					manageTemplateFrame.setupTable(points);
 					manageTemplateFrame.toFront();
