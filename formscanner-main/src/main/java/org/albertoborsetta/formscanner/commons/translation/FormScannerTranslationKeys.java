@@ -138,4 +138,6 @@ public class FormScannerTranslationKeys {
 	public static final String SAVE_OPTIONS_BUTTON_TOOLTIP = "save.options.tooltip";
 	public static final String TEMPLATE_NOT_LOADED = "template.not.loaded";
 	public static final String TEMPLATE_NOT_LOADED_POPUP = "template.not.loaded.popup.title";
+	public static final String TEMPLATE_NOT_FOUND = "template.not.found";
+	public static final String TEMPLATE_NOT_FOUND_POPUP = "template.not.found.popup.title";
 }

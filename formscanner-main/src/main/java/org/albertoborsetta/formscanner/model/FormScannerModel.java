@@ -120,8 +120,7 @@ public class FormScannerModel {
 				renamedFileIndex = fileListFrame.getSelectedItemIndex();
 				fileListFrame.selectFile(renamedFileIndex);
 				File imageFile = openedFiles.get(renamedFileIndex);
-				FormTemplate filledForm = new FormTemplate(imageFile,
-						formTemplate);
+				FormTemplate filledForm = new FormTemplate(imageFile);
 
 				createFormImageFrame(imageFile, filledForm, Mode.VIEW);
 
@@ -165,79 +164,94 @@ public class FormScannerModel {
 	}
 
 	public void analyzeFiles(String action) {
-		Action act = Action.valueOf(action);
-		switch (act) {
-		case ANALYZE_FILE_FIRST:
-			if (!openedFiles.isEmpty()) {
-				for (Entry<Integer, File> openedFile : openedFiles.entrySet()) {
-					// analyzedFileIndex = fileListFrame.getSelectedItemIndex();
-					analyzedFileIndex = openedFile.getKey();
-					fileListFrame.selectFile(analyzedFileIndex);
-					File imageFile = openedFiles.get(analyzedFileIndex);
+		if (formTemplate != null) {
 
-					if (formTemplate == null) {
-						openTemplate();
+			Action act = Action.valueOf(action);
+			switch (act) {
+			case ANALYZE_FILE_FIRST:
+				if (!openedFiles.isEmpty()) {
+					for (Entry<Integer, File> openedFile : openedFiles
+							.entrySet()) {
+						// analyzedFileIndex =
+						// fileListFrame.getSelectedItemIndex();
+						analyzedFileIndex = openedFile.getKey();
+						fileListFrame.selectFile(analyzedFileIndex);
+						File imageFile = openedFiles.get(analyzedFileIndex);
+
+						FormTemplate filledForm = new FormTemplate(imageFile,
+								formTemplate);
+						filledForm.findCorners(threshold);
+						filledForm.findPoints(threshold, density);
+						filledForms.put(filledForm.getName(), filledForm);
+						createFormImageFrame(imageFile, filledForm, Mode.VIEW);
 					}
+
+					// analyzeFileResultsFrame = new
+					// AnalyzeFileResultsFrame(this,
+					// partialResults, totalResults);
+					// view.arrangeFrame(analyzeFileResultsFrame);
+					Date today = Calendar.getInstance().getTime();
+					SimpleDateFormat sdf = new SimpleDateFormat(
+							"yyyyMMddHHmmss");
+					File outputFile = new File(
+							path
+									+ "/results/"
+									+ FormScannerTranslation
+											.getTranslationFor(FormScannerTranslationKeys.RESULTS_DEFAULT_FILE)
+									+ "_" + sdf.format(today) + ".csv");
+					fileUtils.saveCsvAs(outputFile, filledForms);
+				}
+				break;
+			case ANALYZE_FILE_NEXT:
+				System.out.println("Analyze Next file");
+				System.out.println("Update analyze frame");
+				break;
+			case ANALYZE_FILE_SKIP:
+				analyzedFileIndex++;
+
+				if (openedFiles.size() > analyzedFileIndex) {
+					fileListFrame.selectFile(analyzedFileIndex);
+				}
+
+				if (openedFiles.size() > analyzedFileIndex) {
+					File imageFile = openedFiles.get(analyzedFileIndex);
 					FormTemplate filledForm = new FormTemplate(imageFile,
 							formTemplate);
 					filledForm.findCorners(threshold);
 					filledForm.findPoints(threshold, density);
 					filledForms.put(filledForm.getName(), filledForm);
-					createFormImageFrame(imageFile, filledForm, Mode.VIEW);
+
+					// createFormImageFrame(imageFile, filledForm, Mode.VIEW);
+					// analyzeFileResultsFrame = new
+					// AnalyzeFileResultsFrame(this,
+					// partialResults, totalResults);
+					// view.arrangeFrame(analyzeFileResultsFrame);
+				} else {
+					Date today = Calendar.getInstance().getTime();
+					SimpleDateFormat sdf = new SimpleDateFormat(
+							"yyyyMMddHHmmss");
+					File outputFile = new File(
+							path
+									+ "/results/"
+									+ FormScannerTranslation
+											.getTranslationFor(FormScannerTranslationKeys.RESULTS_DEFAULT_FILE)
+									+ "_" + sdf.format(today) + ".csv");
+
+					fileUtils.saveCsvAs(outputFile, filledForms);
 				}
-
-				// analyzeFileResultsFrame = new AnalyzeFileResultsFrame(this,
-				// partialResults, totalResults);
-				// view.arrangeFrame(analyzeFileResultsFrame);
-				Date today = Calendar.getInstance().getTime();
-				SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
-				File outputFile = new File(
-						path
-								+ "/results/"
-								+ FormScannerTranslation
-										.getTranslationFor(FormScannerTranslationKeys.RESULTS_DEFAULT_FILE)
-								+ "_" + sdf.format(today) + ".csv");
-				fileUtils.saveCsvAs(outputFile, filledForms);
+				break;
+			default:
+				break;
 			}
-			break;
-		case ANALYZE_FILE_NEXT:
-			System.out.println("Analyze Next file");
-			System.out.println("Update analyze frame");
-			break;
-		case ANALYZE_FILE_SKIP:
-			analyzedFileIndex++;
-
-			if (openedFiles.size() > analyzedFileIndex) {
-				fileListFrame.selectFile(analyzedFileIndex);
-			}
-
-			if (openedFiles.size() > analyzedFileIndex) {
-				File imageFile = openedFiles.get(analyzedFileIndex);
-				FormTemplate filledForm = new FormTemplate(imageFile,
-						formTemplate);
-				filledForm.findCorners(threshold);
-				filledForm.findPoints(threshold, density);
-				filledForms.put(filledForm.getName(), filledForm);
-
-				// createFormImageFrame(imageFile, filledForm, Mode.VIEW);
-				// analyzeFileResultsFrame = new AnalyzeFileResultsFrame(this,
-				// partialResults, totalResults);
-				// view.arrangeFrame(analyzeFileResultsFrame);
-			} else {
-				Date today = Calendar.getInstance().getTime();
-				SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
-				File outputFile = new File(
-						path
-								+ "/results/"
-								+ FormScannerTranslation
-										.getTranslationFor(FormScannerTranslationKeys.RESULTS_DEFAULT_FILE)
-								+ "_" + sdf.format(today) + ".csv");
-
-				fileUtils.saveCsvAs(outputFile, filledForms);
-			}
-			break;
-		default:
-			break;
+		} else {
+			JOptionPane
+					.showMessageDialog(
+							null,
+							FormScannerTranslation
+									.getTranslationFor(FormScannerTranslationKeys.TEMPLATE_NOT_FOUND),
+							FormScannerTranslation
+									.getTranslationFor(FormScannerTranslationKeys.TEMPLATE_NOT_FOUND_POPUP),
+							JOptionPane.WARNING_MESSAGE);
 		}
 	}
 
@@ -452,39 +466,43 @@ public class FormScannerModel {
 		System.exit(0);
 	}
 
-	public void openTemplate() {
-		openTemplate(fileUtils.chooseTemplate(), true);
+	public boolean openTemplate() {
+		return openTemplate(fileUtils.chooseTemplate(), true);
 	}
 
-	private void openTemplate(File template, boolean notify) {
-		if (template != null) {
-			formTemplate = new FormTemplate(template);
-			if (formTemplate.presetFromTemplate()) {
-				if (notify) {
-				JOptionPane
-						.showMessageDialog(
-								null,
-								FormScannerTranslation
-										.getTranslationFor(FormScannerTranslationKeys.TEMPLATE_LOADED),
-								FormScannerTranslation
-										.getTranslationFor(FormScannerTranslationKeys.TEMPLATE_LOADED_POPUP),
-								JOptionPane.INFORMATION_MESSAGE);
-				}
-				configurations.setProperty(
-						FormScannerConfigurationKeys.TEMPLATE,
-						template.getAbsolutePath());
-				configurations.store();
-			} else {
-				JOptionPane
-				.showMessageDialog(
-						null,
-						FormScannerTranslation
-								.getTranslationFor(FormScannerTranslationKeys.TEMPLATE_NOT_LOADED),
-						FormScannerTranslation
-								.getTranslationFor(FormScannerTranslationKeys.TEMPLATE_NOT_LOADED_POPUP),
-						JOptionPane.ERROR_MESSAGE);
-			}
+	private boolean openTemplate(File template, boolean notify) {
+		if (template == null) {
+			return false;
 		}
+
+		formTemplate = new FormTemplate(template);
+
+		if (!formTemplate.presetFromTemplate()) {
+			JOptionPane
+					.showMessageDialog(
+							null,
+							FormScannerTranslation
+									.getTranslationFor(FormScannerTranslationKeys.TEMPLATE_NOT_LOADED),
+							FormScannerTranslation
+									.getTranslationFor(FormScannerTranslationKeys.TEMPLATE_NOT_LOADED_POPUP),
+							JOptionPane.ERROR_MESSAGE);
+			return false;
+		}
+
+		if (notify) {
+			JOptionPane
+					.showMessageDialog(
+							null,
+							FormScannerTranslation
+									.getTranslationFor(FormScannerTranslationKeys.TEMPLATE_LOADED),
+							FormScannerTranslation
+									.getTranslationFor(FormScannerTranslationKeys.TEMPLATE_LOADED_POPUP),
+							JOptionPane.INFORMATION_MESSAGE);
+		}
+		configurations.setProperty(FormScannerConfigurationKeys.TEMPLATE,
+				template.getAbsolutePath());
+		configurations.store();
+		return true;
 	}
 
 	public void linkToHelp(URL url) {
