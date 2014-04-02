@@ -57,7 +57,8 @@ public class ImageFrame extends JInternalFrame implements ScrollableImageView {
 	/**
 	 * Create the frame.
 	 */
-	public ImageFrame(FormScannerModel model, File image, FormTemplate template, Mode mode) {
+	public ImageFrame(FormScannerModel model, File image,
+			FormTemplate template, Mode mode) {
 		this.model = model;
 		this.mode = mode;
 		this.template = template;
@@ -68,7 +69,7 @@ public class ImageFrame extends JInternalFrame implements ScrollableImageView {
 
 		int desktopHeight = model.getDesktopSize().height;
 		int desktopWidth = model.getDesktopSize().width;
-		
+
 		setBounds(100, 100, 600, 500);
 		setMinimumSize(new Dimension(300, 500));
 		setClosable(true);
@@ -84,7 +85,7 @@ public class ImageFrame extends JInternalFrame implements ScrollableImageView {
 
 		imagePanel = new ImagePanel(image);
 		scrollPane = new ImageScrollPane(imagePanel);
-		statusBar = new ImageStatusBar();
+		statusBar = new ImageStatusBar(this.mode);
 		getContentPane().add(scrollPane, BorderLayout.CENTER);
 		getContentPane().add(statusBar, BorderLayout.SOUTH);
 	}
@@ -101,7 +102,7 @@ public class ImageFrame extends JInternalFrame implements ScrollableImageView {
 		private HashMap<Corners, JButton> cornerButtons = new HashMap<Corners, JButton>();
 		private HashMap<Corners, JTextField> cornerPositions = new HashMap<Corners, JTextField>();
 
-		public ImageStatusBar() {
+		public ImageStatusBar(Mode mode) {
 			super();
 			SpringLayout layout = new SpringLayout();
 			setLayout(layout);
@@ -111,8 +112,8 @@ public class ImageFrame extends JInternalFrame implements ScrollableImageView {
 
 			setCornerPositions();
 			showCornerPosition();
-			
-			setCornerButtons();
+
+			setCornerButtons(mode);
 
 			add(getLabel(FormScannerTranslationKeys.X_CURSOR_POSITION_LABEL));
 			add(XPositionValue);
@@ -130,11 +131,11 @@ public class ImageFrame extends JInternalFrame implements ScrollableImageView {
 			SpringUtilities.makeCompactGrid(this, 2, 6, 3, 3, 3, 3);
 		}
 
-		private void setCornerButtons() {
+		private void setCornerButtons(Mode mode) {
 
 			cornerButtons
 					.put(Corners.TOP_LEFT,
-							getButtonBuilder()
+							getButtonBuilder(mode)
 									.withText(
 											FormScannerTranslation
 													.getTranslationFor(FormScannerTranslationKeys.TOP_LEFT_CORNER))
@@ -146,7 +147,7 @@ public class ImageFrame extends JInternalFrame implements ScrollableImageView {
 									.build());
 			cornerButtons
 					.put(Corners.BOTTOM_LEFT,
-							getButtonBuilder()
+							getButtonBuilder(mode)
 									.withText(
 											FormScannerTranslation
 													.getTranslationFor(FormScannerTranslationKeys.BOTTOM_LEFT_CORNER))
@@ -158,7 +159,7 @@ public class ImageFrame extends JInternalFrame implements ScrollableImageView {
 									.build());
 			cornerButtons
 					.put(Corners.TOP_RIGHT,
-							getButtonBuilder()
+							getButtonBuilder(mode)
 									.withText(
 											FormScannerTranslation
 													.getTranslationFor(FormScannerTranslationKeys.TOP_RIGHT_CORNER))
@@ -170,7 +171,7 @@ public class ImageFrame extends JInternalFrame implements ScrollableImageView {
 									.build());
 			cornerButtons
 					.put(Corners.BOTTOM_RIGHT,
-							getButtonBuilder()
+							getButtonBuilder(mode)
 									.withText(
 											FormScannerTranslation
 													.getTranslationFor(FormScannerTranslationKeys.BOTTOM_RIGHT_CORNER))
@@ -193,7 +194,7 @@ public class ImageFrame extends JInternalFrame implements ScrollableImageView {
 			return new TextFieldBuilder(10).setEditable(false).build();
 		}
 
-		private ButtonBuilder getButtonBuilder() {
+		private ButtonBuilder getButtonBuilder(Mode mode) {
 			return new ButtonBuilder()
 					.withActionListener(controller)
 					.withIcon(
@@ -202,7 +203,8 @@ public class ImageFrame extends JInternalFrame implements ScrollableImageView {
 					.withSelectedIcon(
 							FormScannerResources
 									.getIconFor(FormScannerResourcesKeys.ENABLED_BUTTON))
-					.withLeftAlignment().setSelected(false);
+					.withLeftAlignment().setEnabled(mode == Mode.UPDATE)
+					.setSelected(false);
 		}
 
 		private JLabel getLabel(String value) {
@@ -250,10 +252,12 @@ public class ImageFrame extends JInternalFrame implements ScrollableImageView {
 		}
 
 		public void showCornerPosition() {
-			for (Entry<Corners, JTextField> entryCorner : cornerPositions.entrySet()) {
+			for (Entry<Corners, JTextField> entryCorner : cornerPositions
+					.entrySet()) {
 				JTextField cornerPosition = entryCorner.getValue();
 
-				cornerPosition.setText(template.getCorner(entryCorner.getKey()).toString());
+				cornerPosition.setText(template.getCorner(entryCorner.getKey())
+						.toString());
 			}
 		}
 	}

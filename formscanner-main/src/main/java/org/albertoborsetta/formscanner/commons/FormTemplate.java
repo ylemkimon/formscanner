@@ -23,7 +23,7 @@ import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
 public class FormTemplate {
-	
+
 	private static final int WHITE = 1;
 	private static final int BLACK = 0;
 	private static final int WINDOW_SIZE = 5;
@@ -60,7 +60,7 @@ public class FormTemplate {
 			height = 0;
 			width = 0;
 		}
-		
+
 		subImageWidth = width / WIDTH_SIZE;
 		subImageHeight = height / HEIGHT_SIZE;
 
@@ -69,9 +69,39 @@ public class FormTemplate {
 		this.name = FilenameUtils.removeExtension(this.file.getName());
 
 		corners = new HashMap<Corners, FormPoint>();
+		setDefaultCornerPosition();
+		new HashMap<Corners, FormPoint>();
 		rotation = 0;
 		fields = new HashMap<String, FormField>();
 		pointList = new ArrayList<FormPoint>();
+	}
+
+	private void setDefaultCornerPosition() {
+		int x;
+		int y;
+
+		for (Corners position : Corners.values()) {
+			x = 0;
+			y = 0;
+
+			switch (position) {
+			case TOP_RIGHT:
+				x = width;
+				break;
+			case BOTTOM_LEFT:
+				y = height;
+				break;
+			case BOTTOM_RIGHT:
+				x = width;
+				y = height;
+				break;
+			default:
+				break;
+			}
+
+			FormPoint corner = new FormPoint(x, y);
+			corners.put(position, corner);
+		}
 	}
 
 	public FormField getField(String name) {
@@ -356,7 +386,6 @@ public class FormTemplate {
 		int y;
 		int x1 = (width - (subImageWidth + 1));
 		int y1 = (height - (subImageHeight + 1));
-		
 
 		for (Corners position : Corners.values()) {
 			x = 0;
@@ -377,7 +406,10 @@ public class FormTemplate {
 				break;
 			}
 
-			corners.put(position, getCircleCenter(threshold, x, y));
+			FormPoint corner = getCircleCenter(threshold, x, y);
+			if (corner != null) {
+				corners.put(position, corner);
+			}
 		}
 	}
 
@@ -401,7 +433,7 @@ public class FormTemplate {
 			pixel = WHITE;
 			old_pixel = pixel;
 			whites = WINDOW_SIZE;
-			
+
 			for (int xi = 0; xi < subImageWidth; xi++) {
 
 				currentPixelIndex = (yi * subImageWidth) + xi;
@@ -418,7 +450,7 @@ public class FormTemplate {
 					}
 				}
 
-				pixel = (whites > 2) ? WHITE : BLACK; 
+				pixel = (whites > 2) ? WHITE : BLACK;
 
 				if (pixel != old_pixel) {
 					stato++;
@@ -458,6 +490,9 @@ public class FormTemplate {
 			}
 		}
 
+		if (centralPoints == 0) {
+			return null;
+		}
 		Xc = Xc / centralPoints;
 		Yc = Yc / centralPoints;
 		FormPoint p = new FormPoint(x + Xc, y + Yc);
@@ -536,8 +571,8 @@ public class FormTemplate {
 		int xCoord = (int) responsePoint.getX();
 		int yCoord = (int) responsePoint.getY();
 
-		image.getRGB(xCoord - POINT_SIZE, yCoord - POINT_SIZE, width, height, rgbArray,
-				0, width);
+		image.getRGB(xCoord - POINT_SIZE, yCoord - POINT_SIZE, width, height,
+				rgbArray, 0, width);
 		for (int i = 0; i < total; i++) {
 			if ((rgbArray[i] & (0xFF)) < threshold) {
 				count++;

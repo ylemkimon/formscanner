@@ -103,3 +103,5 @@ save.options.button=Save options
 save.options.tooltip=Save options
 template.not.loaded=Error while loading template
 template.not.loaded.popup.title=Template
+template.not.found=Load a tamplate before scan forms
+template.not.found.popup.title=Template
