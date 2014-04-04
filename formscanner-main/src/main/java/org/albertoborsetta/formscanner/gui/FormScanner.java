@@ -97,10 +97,21 @@ public class FormScanner extends JFrame {
 			frame.setVisible(false);
 			desktopPane.remove(frame);
 		}
+		setDefaultControllersEnabled();
 	}
 	
 	public Dimension getDesktopSize() {
 		return desktopPane.getSize();
+	}
+	
+	public void setDefaultControllersEnabled() {
+		toolBar.setRenameControllersEnabled(true);
+		toolBar.setScanControllersEnabled(true);
+		toolBar.setScanAllControllersEnabled(true);
+		toolBar.setScanCurrentControllersEnabled(false);
+		menuBar.setRenameControllersEnabled(true);
+		menuBar.setScanControllersEnabled(true);
+		menuBar.setScanAllControllersEnabled(true);
 	}
 	
 	public void setRenameControllersEnabled(boolean enable) {
@@ -110,6 +121,15 @@ public class FormScanner extends JFrame {
 
 	public void setScanControllersEnabled(boolean enable) {
 		toolBar.setScanControllersEnabled(enable);
-		// menuBar.setScanControllersEnabled(enable);		
+		menuBar.setScanControllersEnabled(enable);
+	}
+	
+	public void setScanAllControllersEnabled(boolean enable) {
+		toolBar.setScanAllControllersEnabled(enable);
+		menuBar.setScanAllControllersEnabled(enable);
+	}
+	
+	public void setScanCurrentControllersEnabled(boolean enable) {
+		toolBar.setScanCurrentControllersEnabled(enable);
 	}
 }

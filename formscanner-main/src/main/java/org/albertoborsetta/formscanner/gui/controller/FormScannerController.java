@@ -32,16 +32,22 @@ public class FormScannerController implements ActionListener, WindowListener {
 	public void actionPerformed(ActionEvent e) {		
 		Action act = Action.valueOf(e.getActionCommand());
 		switch (act) {
-		case RENAME_FILE_FIRST:
-			model.renameFiles(FormScannerConstants.RENAME_FILE_FIRST);
+		case RENAME_FILES_FIRST:
+			model.renameFiles(FormScannerConstants.RENAME_FILES_FIRST);
 			break;
 		case OPEN_IMAGES:
 			model.openImages();
 			break;
 		case SAVE_RESULTS:
 			break;
-		case ANALYZE_FILE_FIRST:
-			model.analyzeFiles(FormScannerConstants.ANALYZE_FILE_FIRST);
+		case ANALYZE_FILES_ALL:
+			model.analyzeFiles(FormScannerConstants.ANALYZE_FILES_ALL);
+			break;
+		case ANALYZE_FILES_FIRST:
+			model.analyzeFiles(FormScannerConstants.ANALYZE_FILES_FIRST);
+			break;
+		case ANALYZE_FILES_CURRENT:
+			model.analyzeFiles(FormScannerConstants.ANALYZE_FILES_CURRENT);
 			break;
 		case LOAD_TEMPLATE:
 			model.loadTemplate();
@@ -56,7 +62,6 @@ public class FormScannerController implements ActionListener, WindowListener {
 			try {
 				model.linkToHelp(new URL(FormScannerConstants.WIKI_PAGE));
 			} catch (MalformedURLException e1) {
-				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
 			break;
@@ -76,8 +81,6 @@ public class FormScannerController implements ActionListener, WindowListener {
 	}
 
 	public void windowOpened(WindowEvent e) {
-		// TODO Auto-generated method stub
-		
 	}
 
 	public void windowClosing(WindowEvent e) {
@@ -86,28 +89,18 @@ public class FormScannerController implements ActionListener, WindowListener {
 	}
 
 	public void windowClosed(WindowEvent e) {
-		// TODO Auto-generated method stub
-		
 	}
 
 	public void windowIconified(WindowEvent e) {
-		// TODO Auto-generated method stub
-		
 	}
 
 	public void windowDeiconified(WindowEvent e) {
-		// TODO Auto-generated method stub
-		
 	}
 
 	public void windowActivated(WindowEvent e) {
-		// TODO Auto-generated method stub
-		
 	}
 
 	public void windowDeactivated(WindowEvent e) {
-		// TODO Auto-generated method stub
-		
 	}
 
 }
