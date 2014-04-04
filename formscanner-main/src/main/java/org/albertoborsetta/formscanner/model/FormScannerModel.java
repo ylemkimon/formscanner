@@ -57,6 +57,7 @@ public class FormScannerModel {
 	private FormScanner view;
 	private int renamedFileIndex = 0;
 	private int analyzedFileIndex = 0;
+	private boolean firstPass = true;
 
 	private FormScannerConfiguration configurations;
 	// private AnalyzeFileResultsFrame analyzeFileResultsFrame;
@@ -108,6 +109,8 @@ public class FormScannerModel {
 				view.arrangeFrame(fileListFrame);
 				view.setRenameControllersEnabled(true);
 				view.setScanControllersEnabled(true);
+				view.setScanAllControllersEnabled(true);
+				view.setScanCurrentControllersEnabled(false);
 			}
 		}
 	}
@@ -115,8 +118,13 @@ public class FormScannerModel {
 	public void renameFiles(String action) {
 		Action act = Action.valueOf(action);
 		switch (act) {
-		case RENAME_FILE_FIRST:
+		case RENAME_FILES_FIRST:
 			if (!openedFiles.isEmpty()) {
+				view.setRenameControllersEnabled(false);
+				view.setScanControllersEnabled(false);
+				view.setScanAllControllersEnabled(false);
+				view.setScanCurrentControllersEnabled(false);
+				
 				renamedFileIndex = fileListFrame.getSelectedItemIndex();
 				fileListFrame.selectFile(renamedFileIndex);
 				File imageFile = openedFiles.get(renamedFileIndex);
@@ -129,7 +137,7 @@ public class FormScannerModel {
 				view.arrangeFrame(renameFileFrame);
 			}
 			break;
-		case RENAME_FILE_CURRENT:
+		case RENAME_FILES_CURRENT:
 			String newFileName = renameFileFrame.getNewFileName();
 			String oldFileName = getFileNameByIndex(renamedFileIndex);
 
@@ -141,14 +149,11 @@ public class FormScannerModel {
 			}
 
 			fileListFrame.updateFileList(getOpenedFileList());
-		case RENAME_FILE_SKIP:
+		case RENAME_FILES_SKIP:
 			renamedFileIndex++;
 
 			if (openedFiles.size() > renamedFileIndex) {
 				fileListFrame.selectFile(renamedFileIndex);
-			}
-
-			if (openedFiles.size() > renamedFileIndex) {
 				imageFrame.updateImage(openedFiles.get(renamedFileIndex));
 				renameFileFrame
 						.updateRenamedFile(getFileNameByIndex(renamedFileIndex));
@@ -156,6 +161,11 @@ public class FormScannerModel {
 			} else {
 				view.disposeFrame(renameFileFrame);
 				view.disposeFrame(imageFrame);
+				
+				view.setRenameControllersEnabled(true);
+				view.setScanControllersEnabled(true);
+				view.setScanAllControllersEnabled(true);
+				view.setScanCurrentControllersEnabled(false);
 			}
 			break;
 		default:
@@ -168,12 +178,15 @@ public class FormScannerModel {
 
 			Action act = Action.valueOf(action);
 			switch (act) {
-			case ANALYZE_FILE_FIRST:
+			case ANALYZE_FILES_ALL:
 				if (!openedFiles.isEmpty()) {
+					view.setRenameControllersEnabled(false);
+					view.setScanControllersEnabled(false);
+					view.setScanAllControllersEnabled(false);
+					view.setScanCurrentControllersEnabled(false);
+					
 					for (Entry<Integer, File> openedFile : openedFiles
 							.entrySet()) {
-						// analyzedFileIndex =
-						// fileListFrame.getSelectedItemIndex();
 						analyzedFileIndex = openedFile.getKey();
 						fileListFrame.selectFile(analyzedFileIndex);
 						File imageFile = openedFiles.get(analyzedFileIndex);
@@ -183,13 +196,8 @@ public class FormScannerModel {
 						filledForm.findCorners(threshold);
 						filledForm.findPoints(threshold, density);
 						filledForms.put(filledForm.getName(), filledForm);
-						createFormImageFrame(imageFile, filledForm, Mode.VIEW);
 					}
 
-					// analyzeFileResultsFrame = new
-					// AnalyzeFileResultsFrame(this,
-					// partialResults, totalResults);
-					// view.arrangeFrame(analyzeFileResultsFrame);
 					Date today = Calendar.getInstance().getTime();
 					SimpleDateFormat sdf = new SimpleDateFormat(
 							"yyyyMMddHHmmss");
@@ -200,45 +208,65 @@ public class FormScannerModel {
 											.getTranslationFor(FormScannerTranslationKeys.RESULTS_DEFAULT_FILE)
 									+ "_" + sdf.format(today) + ".csv");
 					fileUtils.saveCsvAs(outputFile, filledForms);
+					
+					view.setRenameControllersEnabled(true);
+					view.setScanControllersEnabled(true);
+					view.setScanAllControllersEnabled(true);
+					view.setScanCurrentControllersEnabled(false);
+					resetFirstPass();
 				}
 				break;
-			case ANALYZE_FILE_NEXT:
-				System.out.println("Analyze Next file");
-				System.out.println("Update analyze frame");
+			case ANALYZE_FILES_FIRST:
+				if (!openedFiles.isEmpty()) {
+					view.setRenameControllersEnabled(false);
+					view.setScanAllControllersEnabled(false);
+					view.setScanControllersEnabled(true);
+					view.setScanCurrentControllersEnabled(true);
+					
+					if (firstPass) {
+						analyzedFileIndex = fileListFrame.getSelectedItemIndex();
+						firstPass = false;
+					} else {
+						analyzedFileIndex++;
+					}
+					
+					if (openedFiles.size() > analyzedFileIndex) {
+						fileListFrame.selectFile(analyzedFileIndex);
+						File imageFile = openedFiles.get(analyzedFileIndex);
+						
+						FormTemplate filledForm = new FormTemplate(imageFile,
+								formTemplate);
+						filledForm.findCorners(threshold);
+						filledForm.findPoints(threshold, density);
+						filledForms.put(filledForm.getName(), filledForm);
+						createFormImageFrame(imageFile, filledForm, Mode.UPDATE);
+					} else {
+						Date today = Calendar.getInstance().getTime();
+						SimpleDateFormat sdf = new SimpleDateFormat(
+								"yyyyMMddHHmmss");
+						File outputFile = new File(
+								path
+										+ "/results/"
+										+ FormScannerTranslation
+												.getTranslationFor(FormScannerTranslationKeys.RESULTS_DEFAULT_FILE)
+										+ "_" + sdf.format(today) + ".csv");
+						fileUtils.saveCsvAs(outputFile, filledForms);
+						
+						
+						// view.disposeFrame(renameFileFrame);
+						view.disposeFrame(imageFrame);
+						
+						view.setRenameControllersEnabled(true);
+						view.setScanControllersEnabled(true);
+						view.setScanAllControllersEnabled(true);
+						view.setScanCurrentControllersEnabled(false);
+						resetFirstPass();
+					}
+				}
 				break;
-			case ANALYZE_FILE_SKIP:
-				analyzedFileIndex++;
-
-				if (openedFiles.size() > analyzedFileIndex) {
-					fileListFrame.selectFile(analyzedFileIndex);
-				}
-
-				if (openedFiles.size() > analyzedFileIndex) {
-					File imageFile = openedFiles.get(analyzedFileIndex);
-					FormTemplate filledForm = new FormTemplate(imageFile,
-							formTemplate);
-					filledForm.findCorners(threshold);
-					filledForm.findPoints(threshold, density);
-					filledForms.put(filledForm.getName(), filledForm);
-
-					// createFormImageFrame(imageFile, filledForm, Mode.VIEW);
-					// analyzeFileResultsFrame = new
-					// AnalyzeFileResultsFrame(this,
-					// partialResults, totalResults);
-					// view.arrangeFrame(analyzeFileResultsFrame);
-				} else {
-					Date today = Calendar.getInstance().getTime();
-					SimpleDateFormat sdf = new SimpleDateFormat(
-							"yyyyMMddHHmmss");
-					File outputFile = new File(
-							path
-									+ "/results/"
-									+ FormScannerTranslation
-											.getTranslationFor(FormScannerTranslationKeys.RESULTS_DEFAULT_FILE)
-									+ "_" + sdf.format(today) + ".csv");
-
-					fileUtils.saveCsvAs(outputFile, filledForms);
-				}
+			case ANALYZE_FILES_CURRENT:
+				analyzedFileIndex--;
+				analyzeFiles(FormScannerConstants.ANALYZE_FILES_FIRST);
 				break;
 			default:
 				break;
@@ -298,7 +326,7 @@ public class FormScannerModel {
 	public void disposeRelatedFrame(JInternalFrame frame) {
 		Frame frm = Frame.valueOf(frame.getName());
 		switch (frm) {
-		case RENAME_FILE_FRAME_NAME:
+		case RENAME_FILES_FRAME_NAME:
 			view.disposeFrame(imageFrame);
 			break;
 		case IMAGE_FRAME_NAME:
@@ -398,7 +426,9 @@ public class FormScannerModel {
 								colsMultiplier = j;
 								break;
 							}
-							FormPoint pi = new FormPoint((p1.getX() + (delta.get("x") * colsMultiplier)), (p1.getY() + (delta.get("y") * rowsMultiplier)));
+							FormPoint pi = new FormPoint(
+									(p1.getX() + (delta.get("x") * colsMultiplier)),
+									(p1.getY() + (delta.get("y") * rowsMultiplier)));
 							pi.originalPositionFrom(orig, rotation);
 							points.add(pi);
 						}
@@ -623,5 +653,13 @@ public class FormScannerModel {
 		configurations.setProperty(FormScannerConfigurationKeys.DENSITY,
 				String.valueOf(view.getDensityValue()));
 		configurations.store();
+	}
+
+	public void setScanControllersEnabled(boolean b) {
+				
+	}
+
+	public void resetFirstPass() {
+		firstPass = true;
 	}
 }
