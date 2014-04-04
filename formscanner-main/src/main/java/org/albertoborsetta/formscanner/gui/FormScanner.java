@@ -98,6 +98,7 @@ public class FormScanner extends JFrame {
 			desktopPane.remove(frame);
 		}
 		setDefaultControllersEnabled();
+		model.resetFirstPass();
 	}
 	
 	public Dimension getDesktopSize() {
