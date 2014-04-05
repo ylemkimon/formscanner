@@ -11,7 +11,7 @@ import java.io.IOException;
 
 import javax.swing.JButton;
 import javax.swing.JEditorPane;
-import javax.swing.JFrame;
+import javax.swing.JInternalFrame;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
@@ -28,7 +28,7 @@ import org.albertoborsetta.formscanner.gui.builder.TabbedPaneBuilder;
 import org.albertoborsetta.formscanner.gui.controller.AboutFrameController;
 import org.albertoborsetta.formscanner.model.FormScannerModel;
 
-public class AboutFrame extends JFrame {
+public class AboutFrame extends JInternalFrame {
 
 	/**
 	 * 

@@ -11,4 +11,6 @@ public class FormScannerResourcesKeys {
 	public static final String FORMSCANNER_ICON = "formscanner_icon.png";
 	public static final String DISABLED_BUTTON = "disabled.png";
 	public static final String ENABLED_BUTTON = "enabled.png";
+	public static final String ANALYZE_FILES_ALL_ICON = "start_all.png";
+	public static final String ANALYZE_FILES_CURRENT_ICON = "reload.png";
 }
