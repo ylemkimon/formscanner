@@ -22,6 +22,7 @@ import org.albertoborsetta.formscanner.gui.ManageTemplateFrame;
 import org.albertoborsetta.formscanner.gui.ImageFrame;
 import org.albertoborsetta.formscanner.gui.OptionsFrame;
 import org.albertoborsetta.formscanner.gui.RenameFileFrame;
+import org.albertoborsetta.formscanner.gui.ResultsGridFrame;
 import org.albertoborsetta.formscanner.gui.ScrollableImageView;
 import org.albertoborsetta.formscanner.gui.TabbedView;
 
@@ -36,7 +37,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map.Entry;
 
-import javax.swing.JFrame;
 import javax.swing.JInternalFrame;
 import javax.swing.JOptionPane;
 
@@ -72,6 +72,7 @@ public class FormScannerModel {
 	private String lang;
 	private int threshold;
 	private int density;
+	private ResultsGridFrame resultsGrid;
 
 	public FormScannerModel(FormScanner view) {
 		this.view = view;
@@ -239,7 +240,8 @@ public class FormScannerModel {
 						filledForm.findCorners(threshold);
 						filledForm.findPoints(threshold, density);
 						filledForms.put(filledForm.getName(), filledForm);
-						createFormImageFrame(imageFile, filledForm, Mode.UPDATE);
+						createFormImageFrame(imageFile, filledForm, Mode.VIEW);
+						createResultsGridFrame(filledForm, formTemplate);
 					} else {
 						Date today = Calendar.getInstance().getTime();
 						SimpleDateFormat sdf = new SimpleDateFormat(
@@ -252,8 +254,6 @@ public class FormScannerModel {
 										+ "_" + sdf.format(today) + ".csv");
 						fileUtils.saveCsvAs(outputFile, filledForms);
 						
-						
-						// view.disposeFrame(renameFileFrame);
 						view.disposeFrame(imageFrame);
 						
 						view.setRenameControllersEnabled(true);
@@ -281,6 +281,11 @@ public class FormScannerModel {
 									.getTranslationFor(FormScannerTranslationKeys.TEMPLATE_NOT_FOUND_POPUP),
 							JOptionPane.WARNING_MESSAGE);
 		}
+	}
+
+	public void createResultsGridFrame(FormTemplate form, FormTemplate template) {
+		resultsGrid = new ResultsGridFrame(this, form, template);
+		view.arrangeFrame(resultsGrid);
 	}
 
 	private void updateFileList(Integer index, File file) {
@@ -583,7 +588,7 @@ public class FormScannerModel {
 	}
 
 	public void showAboutFrame() {
-		JFrame aboutFrame = new AboutFrame(this);
+		JInternalFrame aboutFrame = new AboutFrame(this);
 		aboutFrame.setVisible(true);
 	}
 
@@ -632,7 +637,7 @@ public class FormScannerModel {
 	}
 
 	public void showOptionsFrame() {
-		JFrame optionsFrame = new OptionsFrame(this);
+		JInternalFrame optionsFrame = new OptionsFrame(this);
 		optionsFrame.setVisible(true);
 	}
 
@@ -653,10 +658,6 @@ public class FormScannerModel {
 		configurations.setProperty(FormScannerConfigurationKeys.DENSITY,
 				String.valueOf(view.getDensityValue()));
 		configurations.store();
-	}
-
-	public void setScanControllersEnabled(boolean b) {
-				
 	}
 
 	public void resetFirstPass() {
