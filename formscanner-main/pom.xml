@@ -4,7 +4,7 @@
 	<parent>
 		<artifactId>formscanner</artifactId>
 		<groupId>org.albertoborsetta</groupId>
-		<version>0.6-NEW_CORNER_DETECTION</version>
+		<version>0.7-SNAPSHOT</version>
 	</parent>
 	<artifactId>formscanner-main</artifactId>
 	<name>FormScanner - Main</name>
