@@ -65,6 +65,7 @@ public class FormScannerConstants {
 	public static final String THRESHOLD = "THRESHOLD";
 	public static final String DENSITY = "DENSITY";
 	public static final String SAVE_OPTIONS = "SAVE_OPTIONS";
+	public static final String RESULTS_GRID_FRAME_NAME = "RESULTS_GRID_FRAME_NAME";
 	
 	public enum Corners {
 		TOP_LEFT(FormScannerTranslation.getTranslationFor(FormScannerTranslationKeys.TOP_LEFT_CORNER)),
@@ -88,7 +89,8 @@ public class FormScannerConstants {
 		RENAME_FILES_FRAME_NAME,
 		FILE_LIST_FRAME_NAME,
 		MANAGE_TEMPLATE_FRAME_NAME,
-		IMAGE_FRAME_NAME;
+		IMAGE_FRAME_NAME,
+		RESULTS_GRID_FRAME_NAME;
 	}
 	
 	public enum Action {
