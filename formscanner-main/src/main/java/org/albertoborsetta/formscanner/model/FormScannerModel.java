@@ -255,6 +255,7 @@ public class FormScannerModel {
 						fileUtils.saveCsvAs(outputFile, filledForms);
 						
 						view.disposeFrame(imageFrame);
+						view.disposeFrame(resultsGrid);
 						
 						view.setRenameControllersEnabled(true);
 						view.setScanControllersEnabled(true);
@@ -589,7 +590,7 @@ public class FormScannerModel {
 
 	public void showAboutFrame() {
 		JInternalFrame aboutFrame = new AboutFrame(this);
-		aboutFrame.setVisible(true);
+		view.arrangeFrame(aboutFrame);
 	}
 
 	public String getLanguage() {
@@ -638,7 +639,7 @@ public class FormScannerModel {
 
 	public void showOptionsFrame() {
 		JInternalFrame optionsFrame = new OptionsFrame(this);
-		optionsFrame.setVisible(true);
+		view.arrangeFrame(optionsFrame);
 	}
 
 	public int getThreshold() {

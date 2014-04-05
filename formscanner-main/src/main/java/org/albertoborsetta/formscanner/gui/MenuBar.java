@@ -145,7 +145,7 @@ public class MenuBar extends JMenuBar implements MenuView {
 						FormScannerTranslation
 								.getMnemonicFor(FormScannerTranslationKeys.ANALYZE_FILES_MNEMONIC))
 				.withAccelerator(
-						KeyStroke.getKeyStroke(KeyEvent.VK_C,
+						KeyStroke.getKeyStroke(KeyEvent.VK_I,
 								InputEvent.CTRL_MASK)).setEnabled(false)
 				.build();
 
