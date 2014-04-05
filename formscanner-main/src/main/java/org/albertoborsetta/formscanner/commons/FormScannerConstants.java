@@ -6,14 +6,14 @@ import org.albertoborsetta.formscanner.commons.translation.FormScannerTranslatio
 public class FormScannerConstants {
 
 	// Actions
-	public static final String RENAME_FILE_FIRST = "RENAME_FILE_FIRST";
-	public static final String RENAME_FILE_CURRENT = "RENAME_FILE_CURRENT";
-	public static final String RENAME_FILE_SKIP = "RENAME_FILE_SKIP";
+	public static final String RENAME_FILES_FIRST = "RENAME_FILES_FIRST";
+	public static final String RENAME_FILES_CURRENT = "RENAME_FILES_CURRENT";
+	public static final String RENAME_FILES_SKIP = "RENAME_FILES_SKIP";
 	public static final String OPEN_IMAGES = "OPEN_IMAGES";
 	public static final String SAVE_RESULTS = "SAVE_RESULTS";
-	public static final String ANALYZE_FILE_FIRST = "ANALYZE_FILE_FIRST";
-	public static final String ANALYZE_FILE_CURRENT = "ANALYZE_FILE_NEXT";
-	public static final String ANALYZE_FILE_SKIP = "ANALYZE_FILE_SKIP";
+	public static final String ANALYZE_FILES_ALL = "ANALYZE_FILES_ALL";
+	public static final String ANALYZE_FILES_FIRST = "ANALYZE_FILES_FIRST";
+	public static final String ANALYZE_FILES_CURRENT = "ANALYZE_FILES_CURRENT";
 	public static final String CREATE_TEMPLATE = "LOAD_TEMPLATE";
 	public static final String LOAD_TEMPLATE = "USE_TEMPLATE";
 	public static final String EDIT_TEMPLATE = "EDIT_TEMPLATE";
@@ -29,7 +29,7 @@ public class FormScannerConstants {
 	public static final String OPTIONS = "OPTIONS";
 	
 	// Frames
-	public static final String RENAME_FILE_FRAME_NAME = "RENAME_FILE_FRAME_NAME";
+	public static final String RENAME_FILES_FRAME_NAME = "RENAME_FILES_FRAME_NAME";
 	public static final String FILE_LIST_FRAME_NAME = "FILE_LIST_FRAME_NAME";
 	public static final String MANAGE_TEMPLATE_FRAME_NAME = "MANAGE_TEMPLATE_FRAME_NAME";
 	public static final String IMAGE_FRAME_NAME = "IMAGE_FRAME_NAME";
@@ -65,6 +65,7 @@ public class FormScannerConstants {
 	public static final String THRESHOLD = "THRESHOLD";
 	public static final String DENSITY = "DENSITY";
 	public static final String SAVE_OPTIONS = "SAVE_OPTIONS";
+	public static final String RESULTS_GRID_FRAME_NAME = "RESULTS_GRID_FRAME_NAME";
 	
 	public enum Corners {
 		TOP_LEFT(FormScannerTranslation.getTranslationFor(FormScannerTranslationKeys.TOP_LEFT_CORNER)),
@@ -85,21 +86,20 @@ public class FormScannerConstants {
 	}
 	
 	public enum Frame {
-		RENAME_FILE_FRAME_NAME,
+		RENAME_FILES_FRAME_NAME,
 		FILE_LIST_FRAME_NAME,
 		MANAGE_TEMPLATE_FRAME_NAME,
-		IMAGE_FRAME_NAME;
+		IMAGE_FRAME_NAME,
+		RESULTS_GRID_FRAME_NAME;
 	}
 	
 	public enum Action {
-		RENAME_FILE_FIRST,
-		RENAME_FILE_CURRENT,
-		RENAME_FILE_SKIP,
+		RENAME_FILES_FIRST,
+		RENAME_FILES_CURRENT,
+		RENAME_FILES_SKIP,
 		OPEN_IMAGES,
 		SAVE_RESULTS,
-		ANALYZE_FILE_FIRST,
-		ANALYZE_FILE_NEXT,
-		ANALYZE_FILE_SKIP,
+		ANALYZE_FILES_FIRST,
 		LOAD_TEMPLATE,
 		USE_TEMPLATE,
 		EDIT_TEMPLATE,
@@ -117,7 +117,9 @@ public class FormScannerConstants {
 		BOTTOM_LEFT,
 		BOTTOM_RIGHT, 
 		OPTIONS,
-		SAVE_OPTIONS;
+		SAVE_OPTIONS, 
+		ANALYZE_FILES_ALL,
+		ANALYZE_FILES_CURRENT;
 	}
 	
 	public enum Mode {

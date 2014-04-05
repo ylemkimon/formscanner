@@ -33,7 +33,6 @@ public class FormScannerTranslation extends Properties {
 			
 			load(bais);
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}

@@ -140,4 +140,11 @@ public class FormScannerTranslationKeys {
 	public static final String TEMPLATE_NOT_LOADED_POPUP = "template.not.loaded.popup.title";
 	public static final String TEMPLATE_NOT_FOUND = "template.not.found";
 	public static final String TEMPLATE_NOT_FOUND_POPUP = "template.not.found.popup.title";
+	
+	public static final String ANALYZE_FILES_ALL = "analyze.files.all";
+	public static final String ANALYZE_FILES_ALL_MNEMONIC = "analyze.files.all.mnemonic";
+	public static final String ANALYZE_FILES_ALL_TOOLTIP = "analyze.files.all.tooltip";
+	public static final String ANALYZE_FILES_CURRENT_TOOLTIP = "analyze.files.current.tooltip";
+	public static final String RESULTS_GRID_FRAME_TITLE = "results.grid.frame.title";
+	public static final String RESULTS = "results";
 }

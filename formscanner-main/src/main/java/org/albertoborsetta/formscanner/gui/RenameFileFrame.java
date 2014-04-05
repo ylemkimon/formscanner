@@ -41,7 +41,7 @@ public class RenameFileFrame extends JInternalFrame implements View {
 		renameFileController = new RenameFileController(formScannerModel);
 		renameFileController.add(this);
 
-		setName(FormScannerConstants.RENAME_FILE_FRAME_NAME);
+		setName(FormScannerConstants.RENAME_FILES_FRAME_NAME);
 		setBounds(220, 320, 370, 100);
 		setClosable(true);
 		setLayout(new BorderLayout());
@@ -109,14 +109,14 @@ public class RenameFileFrame extends JInternalFrame implements View {
 						FormScannerTranslation
 								.getTranslationFor(FormScannerTranslationKeys.OK_BUTTON))
 				.setEnabled(false)
-				.withActionCommand(FormScannerConstants.RENAME_FILE_CURRENT)
+				.withActionCommand(FormScannerConstants.RENAME_FILES_CURRENT)
 				.withActionListener(renameFileController).build();
 
 		cancelButton = new ButtonBuilder()
 				.withText(
 						FormScannerTranslation
 								.getTranslationFor(FormScannerTranslationKeys.CANCEL_BUTTON))
-				.withActionCommand(FormScannerConstants.RENAME_FILE_SKIP)
+				.withActionCommand(FormScannerConstants.RENAME_FILES_SKIP)
 				.withActionListener(renameFileController).build();
 
 		return new PanelBuilder().withLayout(new SpringLayout()).add(okButton)

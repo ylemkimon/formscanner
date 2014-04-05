@@ -4,7 +4,7 @@ import java.awt.BorderLayout;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
-import javax.swing.JFrame;
+import javax.swing.JInternalFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSpinner;
@@ -20,7 +20,7 @@ import org.albertoborsetta.formscanner.gui.builder.SpinnerBuilder;
 import org.albertoborsetta.formscanner.gui.controller.OptionsFrameController;
 import org.albertoborsetta.formscanner.model.FormScannerModel;
 
-public class OptionsFrame extends JFrame {
+public class OptionsFrame extends JInternalFrame {
 
 	/**
 	 * 

@@ -37,6 +37,8 @@ public class MenuBar extends JMenuBar implements MenuView {
 	private JMenuItem aboutMenuItem;
 	private JMenuItem createTemplateMenuItem;
 	private JMenuItem loadTemplateMenuItem;
+	private JMenuItem scanAllMenuItem;
+	private JMenuItem scanMenuItem;
 
 	// private JMenuItem editTemplateMenuItem;
 
@@ -111,13 +113,39 @@ public class MenuBar extends JMenuBar implements MenuView {
 		renameMenuItem = new MenuItemBuilder(
 				FormScannerTranslation
 						.getTranslationFor(FormScannerTranslationKeys.RENAME_FILES))
-				.withActionCommand(FormScannerConstants.RENAME_FILE_FIRST)
+				.withActionCommand(FormScannerConstants.RENAME_FILES_FIRST)
 				.withActionListener(formScannerController)
 				.withMnemonic(
 						FormScannerTranslation
 								.getMnemonicFor(FormScannerTranslationKeys.RENAME_FILES_MNEMONIC))
 				.withAccelerator(
 						KeyStroke.getKeyStroke(KeyEvent.VK_R,
+								InputEvent.CTRL_MASK)).setEnabled(false)
+				.build();
+		
+		scanAllMenuItem = new MenuItemBuilder(
+				FormScannerTranslation
+						.getTranslationFor(FormScannerTranslationKeys.ANALYZE_FILES_ALL))
+				.withActionCommand(FormScannerConstants.ANALYZE_FILES_ALL)
+				.withActionListener(formScannerController)
+				.withMnemonic(
+						FormScannerTranslation
+								.getMnemonicFor(FormScannerTranslationKeys.ANALYZE_FILES_ALL_MNEMONIC))
+				.withAccelerator(
+						KeyStroke.getKeyStroke(KeyEvent.VK_A,
+								InputEvent.CTRL_MASK)).setEnabled(false)
+				.build();
+		
+		scanMenuItem = new MenuItemBuilder(
+				FormScannerTranslation
+						.getTranslationFor(FormScannerTranslationKeys.ANALYZE_FILES))
+				.withActionCommand(FormScannerConstants.ANALYZE_FILES_FIRST)
+				.withActionListener(formScannerController)
+				.withMnemonic(
+						FormScannerTranslation
+								.getMnemonicFor(FormScannerTranslationKeys.ANALYZE_FILES_MNEMONIC))
+				.withAccelerator(
+						KeyStroke.getKeyStroke(KeyEvent.VK_I,
 								InputEvent.CTRL_MASK)).setEnabled(false)
 				.build();
 
@@ -127,7 +155,11 @@ public class MenuBar extends JMenuBar implements MenuView {
 				.withMnemonic(
 						FormScannerTranslation
 								.getMnemonicFor(FormScannerTranslationKeys.EDIT_MENU_MNEMONIC))
-				.add(renameMenuItem).build();
+				.add(renameMenuItem)
+				.add(new JSeparator(JSeparator.HORIZONTAL))
+				.add(scanAllMenuItem)
+				.add(scanMenuItem)
+				.build();
 	}
 
 	public JMenu getTemplateMenu() {
@@ -252,7 +284,10 @@ public class MenuBar extends JMenuBar implements MenuView {
 	}
 
 	public void setScanControllersEnabled(boolean enable) {
-		// TODO Auto-generated method stub
+		scanMenuItem.setEnabled(enable);
+	}
 
+	public void setScanAllControllersEnabled(boolean enable) {
+		scanAllMenuItem.setEnabled(enable);
 	}
 }
