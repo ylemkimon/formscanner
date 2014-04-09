@@ -250,6 +250,13 @@ public class ImageFrame extends JInternalFrame implements ScrollableImageView {
 				button.setSelected(false);
 			}
 		}
+		
+		public void setCornerButtonsEnabled(Mode mode) {
+			for (Entry<Corners, JButton> entryCorner : cornerButtons.entrySet()) {
+				JButton button = entryCorner.getValue();
+				button.setEnabled(mode != Mode.VIEW);
+			}
+		}
 
 		public void showCornerPosition() {
 			for (Entry<Corners, JTextField> entryCorner : cornerPositions
@@ -463,6 +470,7 @@ public class ImageFrame extends JInternalFrame implements ScrollableImageView {
 	}
 	
 	public void setMode(Mode mode) {
+		statusBar.setCornerButtonsEnabled(mode);
 		this.mode = mode;
 	}
 }
