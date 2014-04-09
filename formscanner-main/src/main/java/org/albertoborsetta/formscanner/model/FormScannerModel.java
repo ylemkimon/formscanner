@@ -338,6 +338,7 @@ public class FormScannerModel {
 		case IMAGE_FRAME_NAME:
 			view.disposeFrame(renameFileFrame);
 			view.disposeFrame(manageTemplateFrame);
+			view.disposeFrame(resultsGrid);
 			break;
 		case MANAGE_TEMPLATE_FRAME_NAME:
 			view.disposeFrame(imageFrame);
