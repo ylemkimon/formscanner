@@ -441,7 +441,7 @@ public class FormScannerModel {
 								points.add(pi);
 							}
 						}
-						view.setMode(Mode.MODIFY_POINTS);
+						view.setMode(Mode.VIEW);
 						manageTemplateFrame.setupTable(points); 
 					}
 				}
