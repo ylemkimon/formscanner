@@ -442,7 +442,8 @@ public class FormScannerModel {
 							}
 						}
 						view.setMode(Mode.VIEW);
-						manageTemplateFrame.setupTable(points); 
+						manageTemplateFrame.setupTable(points);
+						manageTemplateFrame.toFront();
 					}
 				}
 			}
