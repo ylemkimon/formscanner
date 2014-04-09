@@ -47,7 +47,8 @@ public class FormScannerConstants {
 	
 	// Image Mode
 	public static final String VIEW = "VIEW";
-	public static final String UPDATE = "UPDATE";
+	public static final String SETUP_POINTS = "SETUP_POINTS";
+	public static final String MODIFY_POINTS = "MODIFY_POINTS";
 	
 	// Corners
 	public static final String TOP_LEFT = "TOP_LEFT";
@@ -124,7 +125,8 @@ public class FormScannerConstants {
 	
 	public enum Mode {
 		VIEW,
-		UPDATE;
+		SETUP_POINTS,
+		MODIFY_POINTS;
 	}
 	
 	public enum FieldType {

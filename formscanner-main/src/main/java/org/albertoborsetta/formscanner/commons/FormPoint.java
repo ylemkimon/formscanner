@@ -7,9 +7,8 @@ import java.text.ParseException;
 
 import org.apache.commons.lang3.StringUtils;
 
-public class FormPoint implements Comparable<FormPoint>{
+public class FormPoint {
 	
-	private double dist = 0;
 	private double x;
 	private double y;
 	
@@ -23,18 +22,6 @@ public class FormPoint implements Comparable<FormPoint>{
 		this.y = y;
 	}
 	
-	public FormPoint (double x, double y, double dist) {
-		this.x = x;
-		this.y = y;
-		this.dist = dist;
-	}
-
-	public int compareTo(FormPoint c2) { 
-		if (dist < c2.getDistance()) return -1;
-		if (dist > c2.getDistance()) return 1;
-		else return 0;
-	}
-
 	public double dist2 (FormPoint c2) {
 		double dx = x - c2.getX();
 		double dy = y - c2.getY();
@@ -47,14 +34,6 @@ public class FormPoint implements Comparable<FormPoint>{
 		return (dx*dx)+(dy*dy);
 	}
 
-	public void setDistance(double dist) {
-		this.dist = dist;		
-	}
-	
-	public double getDistance() {
-		return dist;		
-	}
-	
 	public String toString() {
 		return "["+(int) getX()+","+(int) getY()+"]";
 	}
@@ -126,6 +105,6 @@ public class FormPoint implements Comparable<FormPoint>{
 	}
 	
 	public FormPoint clone() {
-		return new FormPoint(x, y, dist);
+		return new FormPoint(x, y);
 	}
 }

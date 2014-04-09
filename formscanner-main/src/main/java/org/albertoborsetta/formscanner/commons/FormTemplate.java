@@ -590,4 +590,73 @@ public class FormTemplate {
 
 		return Math.atan(dy / dx);
 	}
+
+	public void removePoint(FormPoint cursorPoint) {
+		if (!pointList.isEmpty()) {
+			FormPoint nearestPoint = pointList.get(0);
+			double firstDistance = cursorPoint.dist2(nearestPoint);
+			for (FormPoint point : pointList) {
+				double lastDistance = cursorPoint.dist2(point);
+				if (lastDistance < firstDistance) {
+					nearestPoint = point;
+				}
+			}
+			pointList.remove(nearestPoint);
+			
+			for (Entry<String, FormField> field : fields.entrySet()) {
+				FormField fieldValue = field.getValue();
+				for (Entry<String, FormPoint> point : fieldValue.getPoints()
+						.entrySet()) {
+					if (nearestPoint.equals(point.getValue())) {
+						fieldValue.getPoints().remove(point.getKey());
+						return;
+					}
+				}
+			}
+		}
+		
+	}
+
+	public void addPoint(FormPoint cursorPoint) {
+		pointList.add(cursorPoint);
+		ArrayList<FormPoint> templatePoints = template.getFieldPoints();
+		if (!templatePoints.isEmpty()) {
+			FormPoint nearestTemplatePoint = templatePoints.get(0);
+			double firstDistance = cursorPoint.dist2(nearestTemplatePoint);
+			for (FormPoint templatePoint : templatePoints) {
+				double lastDistance = cursorPoint.dist2(templatePoint);
+				if (lastDistance < firstDistance) {
+					nearestTemplatePoint = templatePoint;
+					firstDistance = lastDistance; 
+				}
+			}
+
+			HashMap<String, FormField> templateFields = template.getFields();
+			for (Entry<String, FormField> templateField : templateFields
+					.entrySet()) {
+				FormField fieldValue = templateField.getValue();
+				for (Entry<String, FormPoint> templatePoint : fieldValue
+						.getPoints().entrySet()) {
+					if (nearestTemplatePoint.equals(templatePoint.getValue())) {
+						FormField currentField = fields.get(templateField
+								.getKey());
+						currentField.setPoint(templatePoint.getKey(),
+								cursorPoint);
+						fields.put(templateField.getKey(), currentField);
+						return;
+					}
+				}
+
+			}
+
+		}
+	}
+
+	public void clearPoints() {
+		pointList.clear();
+	}
+
+	public FormPoint getPoint(int i) {
+		return pointList.get(i);
+	}
 }
