@@ -203,7 +203,7 @@ public class ImageFrame extends JInternalFrame implements ScrollableImageView {
 					.withSelectedIcon(
 							FormScannerResources
 									.getIconFor(FormScannerResourcesKeys.ENABLED_BUTTON))
-					.withLeftAlignment().setEnabled(mode == Mode.UPDATE)
+					.withLeftAlignment().setEnabled(mode != Mode.VIEW)
 					.setSelected(false);
 		}
 
@@ -393,6 +393,10 @@ public class ImageFrame extends JInternalFrame implements ScrollableImageView {
 		public void setTemporaryPoint(FormPoint p) {
 			temporaryPoint = p;
 		}
+
+		public void clearTemporaryPoint() {
+			temporaryPoint = null;
+		}
 	}
 
 	public void updateImage(File file) {
@@ -426,12 +430,6 @@ public class ImageFrame extends JInternalFrame implements ScrollableImageView {
 				imagePanel.getImageHeight());
 	}
 
-	@Deprecated
-	public void setTemplate(FormTemplate template) {
-		this.template = template;
-		statusBar.showCornerPosition();
-	}
-
 	public void showCursorPosition(FormPoint p) {
 		statusBar.setCursorPosition(p);
 	}
@@ -454,5 +452,17 @@ public class ImageFrame extends JInternalFrame implements ScrollableImageView {
 
 	public void showCornerPosition() {
 		statusBar.showCornerPosition();
+	}
+
+	public FormTemplate getTemplate() {
+		return template;
+	}
+
+	public void clearTemporaryPoint() {
+		imagePanel.clearTemporaryPoint();
+	}
+	
+	public void setMode(Mode mode) {
+		this.mode = mode;
 	}
 }
