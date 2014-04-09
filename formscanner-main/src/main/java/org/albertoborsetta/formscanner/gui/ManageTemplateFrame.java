@@ -98,7 +98,7 @@ public class ManageTemplateFrame extends JInternalFrame implements TabbedView {
 			if (row == 0 && col == 0) {
 				return false;
 			}
-			return super.isCellEditable(row, col);
+			return ((row * col) == 0);
 		}
 	}
 
