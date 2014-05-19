@@ -78,7 +78,6 @@ public class FormPoint implements Comparable<FormPoint>{
 			
 			return new FormPoint(x, y);
 		} catch (ParseException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 			return null;
 		}

@@ -6,6 +6,7 @@ import java.util.HashMap;
 
 import org.albertoborsetta.formscanner.commons.FormScannerConstants.FieldType;
 import org.albertoborsetta.formscanner.commons.FormPoint;
+import org.apache.commons.lang3.StringUtils;
 
 public class FormField {
     private String name;
@@ -62,6 +63,14 @@ public class FormField {
 	public String getValues() {
 		ArrayList<String> results = new ArrayList<String>(points.keySet());
 		Collections.sort(results);
-		return results.toString();
+		String ret = "";
+		for (String result: results) {
+			if (StringUtils.isEmpty(ret)) {
+				ret += result;
+			} else {
+				ret += "|" + result;
+			}
+		}
+		return ret;
 	}
 }
