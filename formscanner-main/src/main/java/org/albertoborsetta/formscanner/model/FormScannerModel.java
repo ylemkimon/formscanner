@@ -8,6 +8,7 @@ import org.albertoborsetta.formscanner.commons.FormScannerConstants.Action;
 import org.albertoborsetta.formscanner.commons.FormScannerConstants.Corners;
 import org.albertoborsetta.formscanner.commons.FormScannerConstants.Frame;
 import org.albertoborsetta.formscanner.commons.FormScannerConstants.Mode;
+import org.albertoborsetta.formscanner.commons.FormScannerConstants.ShapeType;
 import org.albertoborsetta.formscanner.commons.FormTemplate;
 import org.albertoborsetta.formscanner.commons.configuration.FormScannerConfiguration;
 import org.albertoborsetta.formscanner.commons.configuration.FormScannerConfigurationKeys;
@@ -73,6 +74,8 @@ public class FormScannerModel {
 	private int density;
 	private ResultsGridFrame resultsGridFrame;
 	private FormTemplate filledForm;
+	private int shapeSize;
+	private ShapeType shapeType;
 
 	public FormScannerModel(FormScanner view) {
 		this.view = view;
@@ -82,14 +85,23 @@ public class FormScannerModel {
 
 		lang = configurations.getProperty(FormScannerConfigurationKeys.LANG,
 				FormScannerConfigurationKeys.DEFAULT_LANG);
+		
+		FormScannerTranslation.setTranslation(path, lang);
+		FormScannerResources.setResources(path);
+
 		threshold = Integer.valueOf(configurations.getProperty(
 				FormScannerConfigurationKeys.THRESHOLD,
 				FormScannerConfigurationKeys.DEFAULT_THRESHOLD));
 		density = Integer.valueOf(configurations.getProperty(
 				FormScannerConfigurationKeys.DENSITY,
 				FormScannerConfigurationKeys.DEFAULT_DENSITY));
-		FormScannerTranslation.setTranslation(path, lang);
-		FormScannerResources.setResources(path);
+		shapeSize = Integer.valueOf(configurations.getProperty(
+				FormScannerConfigurationKeys.SHAPE_SIZE,
+				FormScannerConfigurationKeys.DEFAULT_SHAPE_SIZE));
+		shapeType = ShapeType.valueOf(configurations.getProperty(
+				FormScannerConfigurationKeys.SHAPE_TYPE,
+				FormScannerConfigurationKeys.DEFAULT_SHAPE_TYPE));
+		
 		String tmpl = configurations.getProperty(
 				FormScannerConfigurationKeys.TEMPLATE, null);
 		if (!StringUtils.isEmpty(tmpl)) {
@@ -664,11 +676,17 @@ public class FormScannerModel {
 	public void saveOptions(OptionsFrame view) {
 		threshold = view.getThresholdValue();
 		density = view.getDensityValue();
+		shapeSize = view.getShapeSize();
+		shapeType = view.getShape();
 
 		configurations.setProperty(FormScannerConfigurationKeys.THRESHOLD,
-				String.valueOf(view.getThresholdValue()));
+				String.valueOf(threshold));
 		configurations.setProperty(FormScannerConfigurationKeys.DENSITY,
-				String.valueOf(view.getDensityValue()));
+				String.valueOf(density));
+		configurations.setProperty(FormScannerConfigurationKeys.SHAPE_SIZE,
+				String.valueOf(shapeSize));
+		configurations.setProperty(FormScannerConfigurationKeys.SHAPE_TYPE,
+				shapeType.name());
 		configurations.store();
 	}
 
@@ -688,5 +706,13 @@ public class FormScannerModel {
 
 	public void clearTemporaryPoint(ImageFrame view) {
 		view.clearTemporaryPoint();
+	}
+
+	public int getShapeSize() {
+		return shapeSize;
+	}
+
+	public ShapeType getShapeType() {
+		return shapeType;
 	}
 }

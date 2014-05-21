@@ -39,6 +39,10 @@ public class FormScannerConstants {
 	public static final String QUESTIONS_BY_ROWS = "QUESTIONS_BY_ROWS";
 	public static final String QUESTIONS_BY_COLS = "QUESTIONS_BY_COLS";
 	
+	// ShapeType
+	public static final String SQUARE = "SQUARE";
+	public static final String CIRCLE = "CIRCLE";
+	
 	// Properties
 	public static final String IS_MULTIPLE = "IS_MULTIPLE";
 	public static final String NUMBER_VALUES = "NUMBER_VALUES";
@@ -67,6 +71,8 @@ public class FormScannerConstants {
 	public static final String DENSITY = "DENSITY";
 	public static final String SAVE_OPTIONS = "SAVE_OPTIONS";
 	public static final String RESULTS_GRID_FRAME_NAME = "RESULTS_GRID_FRAME_NAME";
+	public static final String SHAPE_COMBO_BOX = "SHAPE_COMBO_BOX";
+	public static final String SHAPE_SIZE = "SHAPE_SIZE";
 	
 	public enum Corners {
 		TOP_LEFT(FormScannerTranslation.getTranslationFor(FormScannerTranslationKeys.TOP_LEFT_CORNER)),
@@ -136,6 +142,22 @@ public class FormScannerConstants {
 		private String value; 
 
 		FieldType(String value) { 
+			this.value = value;
+		}
+		
+		@Override
+		public String toString() {
+			return value;
+		}
+	}
+	
+	public enum ShapeType {
+		SQUARE(FormScannerTranslation.getTranslationFor(FormScannerTranslationKeys.SQUARE)),
+		CIRCLE(FormScannerTranslation.getTranslationFor(FormScannerTranslationKeys.CIRCLE));
+		
+		private String value; 
+
+		ShapeType(String value) { 
 			this.value = value;
 		}
 		
