@@ -153,4 +153,5 @@ public class FormScannerTranslationKeys {
 	public static final String SHAPE_SIZE_OPTION_LABEL = "shape.size.option.label";
 	public static final String MARKER_OPTIONS = "marker.options";
 	public static final String SCAN_OPTIONS = "scan.options";
+	public static final String FORMSCANNER_MAIN_TITLE = "formscanner.main.title";
 }
