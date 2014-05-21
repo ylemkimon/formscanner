@@ -2,6 +2,8 @@ package org.albertoborsetta.formscanner.gui.controller;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
@@ -10,7 +12,7 @@ import org.albertoborsetta.formscanner.commons.FormScannerConstants.Action;
 import org.albertoborsetta.formscanner.gui.OptionsFrame;
 import org.albertoborsetta.formscanner.model.FormScannerModel;
 
-public class OptionsFrameController implements ActionListener, ChangeListener {
+public class OptionsFrameController implements ActionListener, ChangeListener, ItemListener {
 	
 	private FormScannerModel formScannerModel;
 	private OptionsFrame optionsFrame;
@@ -40,6 +42,11 @@ public class OptionsFrameController implements ActionListener, ChangeListener {
 	@Override
 	public void stateChanged(ChangeEvent e) {
 		optionsFrame.setSaveEnabled();
+	}
+
+	@Override
+	public void itemStateChanged(ItemEvent e) {
+		optionsFrame.setSaveEnabled();		
 	}
 
 }

@@ -4,6 +4,7 @@ import org.albertoborsetta.formscanner.commons.FormPoint;
 import org.albertoborsetta.formscanner.commons.FormScannerConstants;
 import org.albertoborsetta.formscanner.commons.FormScannerConstants.Corners;
 import org.albertoborsetta.formscanner.commons.FormScannerConstants.Mode;
+import org.albertoborsetta.formscanner.commons.FormScannerConstants.ShapeType;
 import org.albertoborsetta.formscanner.commons.FormScannerFont;
 import org.albertoborsetta.formscanner.commons.FormTemplate;
 import org.albertoborsetta.formscanner.commons.resources.FormScannerResources;
@@ -310,8 +311,9 @@ public class ImageFrame extends JInternalFrame implements ScrollableImageView {
 
 		private int width;
 		private int height;
-		private int marker = 20;
-		private int d = 0;
+		private int marker;
+		private ShapeType markerType;
+		private int d = 1;
 		private BufferedImage image;
 		private FormPoint temporaryPoint;
 
@@ -322,6 +324,8 @@ public class ImageFrame extends JInternalFrame implements ScrollableImageView {
 			if ("Nimbus".equals(UIManager.getLookAndFeel().getName())) {
 				d = 4;
 			}
+			marker = model.getShapeSize();
+			markerType = model.getShapeType();
 		}
 
 		@Override
@@ -355,8 +359,12 @@ public class ImageFrame extends JInternalFrame implements ScrollableImageView {
 				int y = (int) point.getY() - d;
 
 				g.setColor(Color.RED);
-				g.fillArc(x - marker, y - marker, 2 * marker, 2 * marker, 0,
+				if (markerType.equals(ShapeType.CIRCLE)) {
+					g.fillArc(x - marker, y - marker, 2 * marker, 2 * marker, 0,
 						360);
+				} else {
+					g.fillRect(x - marker, y - marker, 2 * marker, 2 * marker);
+				}
 				g.setColor(Color.BLACK);
 			}
 		}
