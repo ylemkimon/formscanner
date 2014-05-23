@@ -399,7 +399,7 @@ public class ManageTemplateFrame extends JInternalFrame implements TabbedView {
 
 	private JPanel getPropertiesPanel() {
 
-		typeComboBox = new ComboBoxBuilder(FormScannerConstants.TYPE_COMBO_BOX)
+		typeComboBox = new ComboBoxBuilder<FieldType>(FormScannerConstants.TYPE_COMBO_BOX)
 				.withModel(new DefaultComboBoxModel<FieldType>(FieldType.values()))
 				.withActionListener(manageTemplateController).build();
 

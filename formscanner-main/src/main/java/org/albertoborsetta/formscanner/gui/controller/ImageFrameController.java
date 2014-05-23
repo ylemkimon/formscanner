@@ -22,6 +22,7 @@ public class ImageFrameController implements MouseMotionListener,
 	private ImageFrame view;
 	private FormPoint p1;
 	private FormPoint p2;
+	private int buttonPressed;
 
 	public ImageFrameController(FormScannerModel model) {
 		this.model = model;
@@ -34,8 +35,9 @@ public class ImageFrameController implements MouseMotionListener,
 	// MouseMotionListener
 	public void mouseDragged(MouseEvent e) {
 		switch (view.getMode()) {
-		case UPDATE:
-			if (!e.isControlDown()) {
+		case SETUP_POINTS:
+		case MODIFY_POINTS:
+			if (!e.isControlDown() && (buttonPressed == MouseEvent.BUTTON1)) {
 				FormPoint p = showCursorPosition(e);
 				Corners corner = view.getSelectedButton();
 				if (corner != null) {
@@ -77,7 +79,11 @@ public class ImageFrameController implements MouseMotionListener,
 	// MouseInputListener
 	public void mouseClicked(MouseEvent e) {
 		switch (view.getMode()) {
-		case UPDATE:
+		case MODIFY_POINTS:
+			if (e.getButton() == MouseEvent.BUTTON3) {
+				model.deleteNearestPointTo(getCursorPoint(e));
+			}
+			break;
 		case VIEW:
 		default:
 			break;
@@ -85,9 +91,11 @@ public class ImageFrameController implements MouseMotionListener,
 	}
 
 	public void mousePressed(MouseEvent e) {
+		buttonPressed = e.getButton();
 		switch (view.getMode()) {
-		case UPDATE:
-			if (!e.isControlDown()) {
+		case SETUP_POINTS:
+		case MODIFY_POINTS:
+			if (!e.isControlDown() && (buttonPressed == MouseEvent.BUTTON1)) {
 				FormPoint p = getCursorPoint(e);
 				Corners corner = view.getSelectedButton(); 
 				
@@ -111,14 +119,16 @@ public class ImageFrameController implements MouseMotionListener,
 
 	public void mouseReleased(MouseEvent e) {
 		switch (view.getMode()) {
-		case UPDATE:
-			if (!e.isControlDown()) {
+		case SETUP_POINTS:
+		case MODIFY_POINTS:
+			if (!e.isControlDown() && (buttonPressed == MouseEvent.BUTTON1)) {
 				FormPoint p = getCursorPoint(e);
 				Corners corner = view.getSelectedButton();
 				if (corner != null) {
 					model.setCorner(view, corner, p);
 					model.resetCornerButtons(view);
 				} else {
+					model.clearTemporaryPoint(view);
 					model.addPoint(view, p);
 				}
 				break;

@@ -147,6 +147,13 @@ public class FormScannerTranslationKeys {
 	public static final String ANALYZE_FILES_CURRENT_TOOLTIP = "analyze.files.current.tooltip";
 	public static final String RESULTS_GRID_FRAME_TITLE = "results.grid.frame.title";
 	public static final String RESULTS = "results";
-	public static final String TEMPLATE_NOT_SAVED = "template.not.saved";
+	public static final String SQUARE = "square";
+	public static final String CIRCLE = "circle";
+	public static final String SHAPE_TYPE_OPTION_LABEL = "shape.type.option.label";
+	public static final String SHAPE_SIZE_OPTION_LABEL = "shape.size.option.label";
+	public static final String MARKER_OPTIONS = "marker.options";
+	public static final String SCAN_OPTIONS = "scan.options";
+	public static final String FORMSCANNER_MAIN_TITLE = "formscanner.main.title";
+public static final String TEMPLATE_NOT_SAVED = "template.not.saved";
 	public static final String TEMPLATE_NOT_SAVED_POPUP = "template.not.saved.popup";
 }

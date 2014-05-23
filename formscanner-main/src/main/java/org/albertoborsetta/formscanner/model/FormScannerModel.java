@@ -8,6 +8,7 @@ import org.albertoborsetta.formscanner.commons.FormScannerConstants.Action;
 import org.albertoborsetta.formscanner.commons.FormScannerConstants.Corners;
 import org.albertoborsetta.formscanner.commons.FormScannerConstants.Frame;
 import org.albertoborsetta.formscanner.commons.FormScannerConstants.Mode;
+import org.albertoborsetta.formscanner.commons.FormScannerConstants.ShapeType;
 import org.albertoborsetta.formscanner.commons.FormTemplate;
 import org.albertoborsetta.formscanner.commons.configuration.FormScannerConfiguration;
 import org.albertoborsetta.formscanner.commons.configuration.FormScannerConfigurationKeys;
@@ -60,7 +61,6 @@ public class FormScannerModel {
 	private boolean firstPass = true;
 
 	private FormScannerConfiguration configurations;
-	// private AnalyzeFileResultsFrame analyzeFileResultsFrame;
 	private ManageTemplateFrame manageTemplateFrame;
 	private ImageFrame imageFrame;
 	private FormTemplate formTemplate;
@@ -72,7 +72,10 @@ public class FormScannerModel {
 	private String lang;
 	private int threshold;
 	private int density;
-	private ResultsGridFrame resultsGrid;
+	private ResultsGridFrame resultsGridFrame;
+	private FormTemplate filledForm;
+	private int shapeSize;
+	private ShapeType shapeType;
 
 	public FormScannerModel(FormScanner view) {
 		this.view = view;
@@ -82,14 +85,23 @@ public class FormScannerModel {
 
 		lang = configurations.getProperty(FormScannerConfigurationKeys.LANG,
 				FormScannerConfigurationKeys.DEFAULT_LANG);
+		
+		FormScannerTranslation.setTranslation(path, lang);
+		FormScannerResources.setResources(path);
+
 		threshold = Integer.valueOf(configurations.getProperty(
 				FormScannerConfigurationKeys.THRESHOLD,
 				FormScannerConfigurationKeys.DEFAULT_THRESHOLD));
 		density = Integer.valueOf(configurations.getProperty(
 				FormScannerConfigurationKeys.DENSITY,
 				FormScannerConfigurationKeys.DEFAULT_DENSITY));
-		FormScannerTranslation.setTranslation(path, lang);
-		FormScannerResources.setResources(path);
+		shapeSize = Integer.valueOf(configurations.getProperty(
+				FormScannerConfigurationKeys.SHAPE_SIZE,
+				FormScannerConfigurationKeys.DEFAULT_SHAPE_SIZE));
+		shapeType = ShapeType.valueOf(configurations.getProperty(
+				FormScannerConfigurationKeys.SHAPE_TYPE,
+				FormScannerConfigurationKeys.DEFAULT_SHAPE_TYPE));
+		
 		String tmpl = configurations.getProperty(
 				FormScannerConfigurationKeys.TEMPLATE, null);
 		if (!StringUtils.isEmpty(tmpl)) {
@@ -129,7 +141,7 @@ public class FormScannerModel {
 				renamedFileIndex = fileListFrame.getSelectedItemIndex();
 				fileListFrame.selectFile(renamedFileIndex);
 				File imageFile = openedFiles.get(renamedFileIndex);
-				FormTemplate filledForm = new FormTemplate(imageFile);
+				filledForm = new FormTemplate(imageFile);
 
 				createFormImageFrame(imageFile, filledForm, Mode.VIEW);
 
@@ -192,8 +204,7 @@ public class FormScannerModel {
 						fileListFrame.selectFile(analyzedFileIndex);
 						File imageFile = openedFiles.get(analyzedFileIndex);
 
-						FormTemplate filledForm = new FormTemplate(imageFile,
-								formTemplate);
+						filledForm = new FormTemplate(imageFile, formTemplate);
 						filledForm.findCorners(threshold);
 						filledForm.findPoints(threshold, density);
 						filledForms.put(filledForm.getName(), filledForm);
@@ -236,12 +247,13 @@ public class FormScannerModel {
 						fileListFrame.selectFile(analyzedFileIndex);
 						File imageFile = openedFiles.get(analyzedFileIndex);
 
-						FormTemplate filledForm = new FormTemplate(imageFile,
-								formTemplate);
+						filledForm = new FormTemplate(imageFile, formTemplate);
 						filledForm.findCorners(threshold);
 						filledForm.findPoints(threshold, density);
+						points = filledForm.getFieldPoints();
 						filledForms.put(filledForm.getName(), filledForm);
-						createFormImageFrame(imageFile, filledForm, Mode.VIEW);
+						createFormImageFrame(imageFile, filledForm,
+								Mode.MODIFY_POINTS);
 						createResultsGridFrame(filledForm, formTemplate);
 					} else {
 						Date today = Calendar.getInstance().getTime();
@@ -256,7 +268,7 @@ public class FormScannerModel {
 						fileUtils.saveCsvAs(outputFile, filledForms);
 
 						view.disposeFrame(imageFrame);
-						view.disposeFrame(resultsGrid);
+						view.disposeFrame(resultsGridFrame);
 
 						view.setRenameControllersEnabled(true);
 						view.setScanControllersEnabled(true);
@@ -286,8 +298,8 @@ public class FormScannerModel {
 	}
 
 	public void createResultsGridFrame(FormTemplate form, FormTemplate template) {
-		resultsGrid = new ResultsGridFrame(this, form, template);
-		view.arrangeFrame(resultsGrid);
+		resultsGridFrame = new ResultsGridFrame(this, form, template);
+		view.arrangeFrame(resultsGridFrame);
 	}
 
 	private void updateFileList(Integer index, File file) {
@@ -339,7 +351,7 @@ public class FormScannerModel {
 		case IMAGE_FRAME_NAME:
 			view.disposeFrame(renameFileFrame);
 			view.disposeFrame(manageTemplateFrame);
-			view.disposeFrame(resultsGrid);
+			view.disposeFrame(resultsGridFrame);
 			break;
 		case MANAGE_TEMPLATE_FRAME_NAME:
 			view.disposeFrame(imageFrame);
@@ -362,7 +374,7 @@ public class FormScannerModel {
 
 	public void createTemplateImageFrame() {
 		imageFrame = new ImageFrame(this, templateImage, formTemplate,
-				Mode.UPDATE);
+				Mode.SETUP_POINTS);
 		view.arrangeFrame(imageFrame);
 	}
 
@@ -388,66 +400,74 @@ public class FormScannerModel {
 		view.setAdvanceable();
 	}
 
-	public void addPoint(ImageView view, FormPoint p2) {
-		if (manageTemplateFrame != null) {
-			int rows = manageTemplateFrame.getRowsNumber();
-			int values = manageTemplateFrame.getValuesNumber();
+	public void addPoint(ImageFrame view, FormPoint p) {
+		switch (view.getMode()) {
+		case SETUP_POINTS:
+			if (manageTemplateFrame != null) {
+				int rows = manageTemplateFrame.getRowsNumber();
+				int values = manageTemplateFrame.getValuesNumber();
 
-			if (rows == 1 && values == 1) {
-				if (points.isEmpty()) {
-					points.add(p2);
-					view.repaint();
-					manageTemplateFrame.setupTable(points);
-					manageTemplateFrame.toFront();
-				}
-			} else {
-				if (points.isEmpty() || (points.size() > 1)) {
-					points.clear();
-					points.add(p2);
-					view.repaint();
-				} else {
-					FormPoint p1 = points.get(0);
-					points.clear();
-
-					FormPoint orig = formTemplate.getCorners().get(
-							Corners.TOP_LEFT);
-					double rotation = formTemplate.getRotation();
-
-					p1.relativePositionTo(orig, rotation);
-					p2.relativePositionTo(orig, rotation);
-
-					HashMap<String, Double> delta = calcDelta(rows, values, p1,
-							p2);
-
-					double rowsMultiplier;
-					double colsMultiplier;
-					for (int i = 0; i < rows; i++) {
-						for (int j = 0; j < values; j++) {
-							switch (manageTemplateFrame.getFieldType()) {
-							case QUESTIONS_BY_COLS:
-								rowsMultiplier = j;
-								colsMultiplier = i;
-								break;
-							case QUESTIONS_BY_ROWS:
-							default:
-								rowsMultiplier = i;
-								colsMultiplier = j;
-								break;
-							}
-							FormPoint pi = new FormPoint(
-									(p1.getX() + (delta.get("x") * colsMultiplier)),
-									(p1.getY() + (delta.get("y") * rowsMultiplier)));
-							pi.originalPositionFrom(orig, rotation);
-							points.add(pi);
-						}
+				if (rows == 1 && values == 1) {
+					if (points.isEmpty()) {
+						points.add(p);
+						manageTemplateFrame.setupTable(points);
+						manageTemplateFrame.toFront();
 					}
+				} else {
+					if (points.isEmpty() || (points.size() > 1)) {
+						points.clear();
+						points.add(p);
+					} else {
+						FormPoint p1 = points.get(0);
+						points.clear();
 
-					view.repaint();
-					manageTemplateFrame.setupTable(points);
-					manageTemplateFrame.toFront();
+						FormPoint orig = formTemplate.getCorners().get(
+								Corners.TOP_LEFT);
+						double rotation = formTemplate.getRotation();
+
+						p1.relativePositionTo(orig, rotation);
+						p.relativePositionTo(orig, rotation);
+
+						HashMap<String, Double> delta = calcDelta(rows, values,
+								p1, p);
+
+						double rowsMultiplier;
+						double colsMultiplier;
+						for (int i = 0; i < rows; i++) {
+							for (int j = 0; j < values; j++) {
+								switch (manageTemplateFrame.getFieldType()) {
+								case QUESTIONS_BY_COLS:
+									rowsMultiplier = j;
+									colsMultiplier = i;
+									break;
+								case QUESTIONS_BY_ROWS:
+								default:
+									rowsMultiplier = i;
+									colsMultiplier = j;
+									break;
+								}
+								FormPoint pi = new FormPoint(
+										(p1.getX() + (delta.get("x") * colsMultiplier)),
+										(p1.getY() + (delta.get("y") * rowsMultiplier)));
+								pi.originalPositionFrom(orig, rotation);
+								points.add(pi);
+							}
+						}
+						view.setMode(Mode.VIEW);
+						manageTemplateFrame.setupTable(points);
+						manageTemplateFrame.toFront();
+					}
 				}
 			}
+			break;
+		case MODIFY_POINTS:
+			filledForm.addPoint(p);
+			createResultsGridFrame(filledForm, formTemplate);
+			break;
+		default:
+			break;
 		}
+		view.repaint();
 	}
 
 	private HashMap<String, Double> calcDelta(int rows, int values,
@@ -641,8 +661,9 @@ public class FormScannerModel {
 		view.toggleCornerButton(corner);
 	}
 
-	public void setCorner(ImageView view, Corners corner, FormPoint point) {
-		formTemplate.setCorner(corner, point);
+	public void setCorner(ImageFrame view, Corners corner, FormPoint point) {
+		FormTemplate template = view.getTemplate();
+		template.setCorner(corner, point);
 		view.showCornerPosition();
 		view.repaint();
 	}
@@ -667,15 +688,43 @@ public class FormScannerModel {
 	public void saveOptions(OptionsFrame view) {
 		threshold = view.getThresholdValue();
 		density = view.getDensityValue();
+		shapeSize = view.getShapeSize();
+		shapeType = view.getShape();
 
 		configurations.setProperty(FormScannerConfigurationKeys.THRESHOLD,
-				String.valueOf(view.getThresholdValue()));
+				String.valueOf(threshold));
 		configurations.setProperty(FormScannerConfigurationKeys.DENSITY,
-				String.valueOf(view.getDensityValue()));
+				String.valueOf(density));
+		configurations.setProperty(FormScannerConfigurationKeys.SHAPE_SIZE,
+				String.valueOf(shapeSize));
+		configurations.setProperty(FormScannerConfigurationKeys.SHAPE_TYPE,
+				shapeType.name());
 		configurations.store();
 	}
 
 	public void resetFirstPass() {
 		firstPass = true;
+	}
+
+	public void deleteNearestPointTo(FormPoint cursorPoint) {
+		if (filledForm != null) {
+			filledForm.removePoint(cursorPoint);
+			createResultsGridFrame(filledForm, formTemplate);
+		} else {
+			formTemplate.removePoint(cursorPoint);
+		}
+		view.repaint();
+	}
+
+	public void clearTemporaryPoint(ImageFrame view) {
+		view.clearTemporaryPoint();
+	}
+
+	public int getShapeSize() {
+		return shapeSize;
+	}
+
+	public ShapeType getShapeType() {
+		return shapeType;
 	}
 }
