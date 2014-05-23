@@ -147,4 +147,6 @@ public class FormScannerTranslationKeys {
 	public static final String ANALYZE_FILES_CURRENT_TOOLTIP = "analyze.files.current.tooltip";
 	public static final String RESULTS_GRID_FRAME_TITLE = "results.grid.frame.title";
 	public static final String RESULTS = "results";
+	public static final String TEMPLATE_NOT_SAVED = "template.not.saved";
+	public static final String TEMPLATE_NOT_SAVED_POPUP = "template.not.saved.popup";
 }

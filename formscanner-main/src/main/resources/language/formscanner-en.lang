@@ -111,3 +111,6 @@ analyze.files.all.tooltip=Start all images scan
 analyze.files.current.tooltip=Re-scan current image
 results.grid.frame.title=Results
 results=Results
+options.frame.title=Options
+template.not.saved=Template not saved
+template.not.saved.popup=Template

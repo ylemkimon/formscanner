@@ -162,9 +162,11 @@ public class FormTemplate {
 	}
 
 	public File saveToFile(String path) {
-		File outputFile = new File(path + "/template/" + name + ".xtmpl");
 
+		File outputFile = null;
+		
 		try {
+			outputFile = new File(path + "/template/" + name + ".xtmpl");
 
 			DocumentBuilderFactory docFactory = DocumentBuilderFactory
 					.newInstance();
@@ -312,27 +314,27 @@ public class FormTemplate {
 	public String toString() {
 		StringBuilder builder = new StringBuilder();
 
-		builder = builder.append("[[Rotation:").append(rotation).append("]")
-				.append(" [Corners: ");
+		builder = builder.append("[\r\n[Rotation:").append(rotation).append("]")
+				.append("\r\n[Corners: ");
 
 		// corner elements
 		for (Entry<Corners, FormPoint> corner : corners.entrySet()) {
 			Corners cornerPosition = corner.getKey();
 			FormPoint cornerValue = corner.getValue();
 
-			builder = builder.append(" [position:")
+			builder = builder.append("\r\n[position:")
 					.append(cornerPosition.name()).append(" x coord:")
 					.append(cornerValue.getX()).append(" y coord:")
 					.append(cornerValue.getY()).append("]");
 		}
 
-		builder = builder.append("]").append(" [Fields: ");
+		builder = builder.append("]").append("\r\n[Fields: ");
 
 		// field elements
 		for (Entry<String, FormField> field : fields.entrySet()) {
 			FormField fieldValue = field.getValue();
 
-			builder = builder.append(" [name:").append(fieldValue.getName())
+			builder = builder.append("\r\n[name:").append(fieldValue.getName())
 					.append(" is multiple:").append(fieldValue.isMultiple())
 					.append(" orientation:")
 					.append(fieldValue.getType().name()).append(" values: ");
@@ -342,7 +344,7 @@ public class FormTemplate {
 					.entrySet()) {
 				FormPoint pointValue = point.getValue();
 
-				builder = builder.append(" [response:").append(point.getKey())
+				builder = builder.append("\r\n[response:").append(point.getKey())
 						.append(" x coord:").append(pointValue.getX())
 						.append(" y coord:").append(pointValue.getY())
 						.append("]");
@@ -541,7 +543,7 @@ public class FormTemplate {
 
 	private FormPoint calcResponsePoint(FormTemplate template,
 			FormPoint responsePoint) {
-		FormPoint point = responsePoint;
+		FormPoint point = responsePoint.clone();
 		FormPoint templateOrigin = template.getCorner(Corners.TOP_LEFT);
 		double templateRotation = template.getRotation();
 
