@@ -1,4 +1,5 @@
-about.text=<html><h2 align=\"center\">FormScanner - Free OMR Software</h2><h3 align=\"center\">Version 0.6.2-SNAPSHOT</h3><p align=\"center\">Copyright 2013 Alberto Borsetta</p><p align=\"center\">Visit <a href=\"http://sourceforge.net/projects/formscanner/\">Project HomePage</a> for more information about the product</p></html>
+formscanner.main.title=FormScanner 0.7-SNAPSHOT
+about.text=<html><h2 align=\"center\">FormScanner - Free OMR Software</h2><h3 align=\"center\">Version 0.7-SNAPSHOT</h3><p align=\"center\">Copyright 2013 Alberto Borsetta</p><p align=\"center\">Visit <a href=\"http://sourceforge.net/projects/formscanner/\">Project HomePage</a> for more information about the product</p></html>
 image.frame.title=Immagine
 open.images=Apri immagini
 open.images.tooltip=Apri immagini
@@ -114,3 +115,9 @@ results=Risultati
 options.frame.title=Opzioni
 template.not.saved=Errore non salvato
 template.not.saved.popup=Template
+square=Quadrato
+circle=Cerchio
+shape.type.option.label=Forma marcatore
+shape.size.option.label=Dimensione marcatore (px)
+marker.options=Opzioni marcatore
+scan.options=Opzioni scansione

@@ -4,6 +4,7 @@ import java.awt.Component;
 import java.awt.EventQueue;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.awt.Toolkit;
 
 import javax.swing.JFrame;
 import javax.swing.JInternalFrame;
@@ -12,6 +13,8 @@ import javax.swing.UIManager;
 import javax.swing.UIManager.LookAndFeelInfo;
 
 import org.albertoborsetta.formscanner.commons.FormPoint;
+import org.albertoborsetta.formscanner.commons.translation.FormScannerTranslation;
+import org.albertoborsetta.formscanner.commons.translation.FormScannerTranslationKeys;
 import org.albertoborsetta.formscanner.model.FormScannerModel;
 
 public class FormScanner extends JFrame {
@@ -53,7 +56,7 @@ public class FormScanner extends JFrame {
 	private FormScanner() {
 		model = new FormScannerModel(this);
 		
-		setTitle("FormScanner");
+		setTitle(FormScannerTranslation.getTranslationFor(FormScannerTranslationKeys.FORMSCANNER_MAIN_TITLE));
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
 		getContentPane().setLayout(new BorderLayout(0, 0));
@@ -66,9 +69,8 @@ public class FormScanner extends JFrame {
 		desktopPane = new JDesktopPane();
 		getContentPane().add(desktopPane, BorderLayout.CENTER);	
 		
-		// Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize(); 
-		// setSize(screenSize);
-		setSize(new Dimension(1200, 800));
+		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize(); 
+		setSize(screenSize);
 		setVisible(true);
 	}
 	
