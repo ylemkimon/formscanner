@@ -125,7 +125,7 @@ public class FormScannerModel {
 				view.setScanControllersEnabled(false);
 				view.setScanAllControllersEnabled(false);
 				view.setScanCurrentControllersEnabled(false);
-				
+
 				renamedFileIndex = fileListFrame.getSelectedItemIndex();
 				fileListFrame.selectFile(renamedFileIndex);
 				File imageFile = openedFiles.get(renamedFileIndex);
@@ -162,7 +162,7 @@ public class FormScannerModel {
 			} else {
 				view.disposeFrame(renameFileFrame);
 				view.disposeFrame(imageFrame);
-				
+
 				view.setRenameControllersEnabled(true);
 				view.setScanControllersEnabled(true);
 				view.setScanAllControllersEnabled(true);
@@ -185,7 +185,7 @@ public class FormScannerModel {
 					view.setScanControllersEnabled(false);
 					view.setScanAllControllersEnabled(false);
 					view.setScanCurrentControllersEnabled(false);
-					
+
 					for (Entry<Integer, File> openedFile : openedFiles
 							.entrySet()) {
 						analyzedFileIndex = openedFile.getKey();
@@ -209,7 +209,7 @@ public class FormScannerModel {
 											.getTranslationFor(FormScannerTranslationKeys.RESULTS_DEFAULT_FILE)
 									+ "_" + sdf.format(today) + ".csv");
 					fileUtils.saveCsvAs(outputFile, filledForms);
-					
+
 					view.setRenameControllersEnabled(true);
 					view.setScanControllersEnabled(true);
 					view.setScanAllControllersEnabled(true);
@@ -223,18 +223,19 @@ public class FormScannerModel {
 					view.setScanAllControllersEnabled(false);
 					view.setScanControllersEnabled(true);
 					view.setScanCurrentControllersEnabled(true);
-					
+
 					if (firstPass) {
-						analyzedFileIndex = fileListFrame.getSelectedItemIndex();
+						analyzedFileIndex = fileListFrame
+								.getSelectedItemIndex();
 						firstPass = false;
 					} else {
 						analyzedFileIndex++;
 					}
-					
+
 					if (openedFiles.size() > analyzedFileIndex) {
 						fileListFrame.selectFile(analyzedFileIndex);
 						File imageFile = openedFiles.get(analyzedFileIndex);
-						
+
 						FormTemplate filledForm = new FormTemplate(imageFile,
 								formTemplate);
 						filledForm.findCorners(threshold);
@@ -253,10 +254,10 @@ public class FormScannerModel {
 												.getTranslationFor(FormScannerTranslationKeys.RESULTS_DEFAULT_FILE)
 										+ "_" + sdf.format(today) + ".csv");
 						fileUtils.saveCsvAs(outputFile, filledForms);
-						
+
 						view.disposeFrame(imageFrame);
 						view.disposeFrame(resultsGrid);
-						
+
 						view.setRenameControllersEnabled(true);
 						view.setScanControllersEnabled(true);
 						view.setScanAllControllersEnabled(true);
@@ -495,18 +496,30 @@ public class FormScannerModel {
 
 	public void saveTemplate(TabbedView view) {
 		File template = formTemplate.saveToFile(path);
-		JOptionPane
-				.showMessageDialog(
-						null,
-						FormScannerTranslation
-								.getTranslationFor(FormScannerTranslationKeys.TEMPLATE_SAVED),
-						FormScannerTranslation
-								.getTranslationFor(FormScannerTranslationKeys.TEMPLATE_SAVED_POPUP),
-						JOptionPane.INFORMATION_MESSAGE);
-		String templatePath = template.getAbsolutePath();
-		configurations.setProperty(FormScannerConfigurationKeys.TEMPLATE,
-				templatePath);
-		configurations.store();
+
+		if (template != null) {
+			JOptionPane
+					.showMessageDialog(
+							null,
+							FormScannerTranslation
+									.getTranslationFor(FormScannerTranslationKeys.TEMPLATE_SAVED),
+							FormScannerTranslation
+									.getTranslationFor(FormScannerTranslationKeys.TEMPLATE_SAVED_POPUP),
+							JOptionPane.INFORMATION_MESSAGE);
+			String templatePath = template.getAbsolutePath();
+			configurations.setProperty(FormScannerConfigurationKeys.TEMPLATE,
+					templatePath);
+			configurations.store();
+		} else {
+			JOptionPane
+					.showMessageDialog(
+							null,
+							FormScannerTranslation
+									.getTranslationFor(FormScannerTranslationKeys.TEMPLATE_NOT_SAVED),
+							FormScannerTranslation
+									.getTranslationFor(FormScannerTranslationKeys.TEMPLATE_NOT_SAVED_POPUP),
+							JOptionPane.ERROR_MESSAGE);
+		}
 		view.dispose();
 	}
 
