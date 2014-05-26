@@ -1,0 +1,102 @@
+FormScanner 0.7.0 (released )
+
+NEW FEATURES
++ Improved corner detection
++ Enable change automatically selected selected points
++ Enable change automatically created points
++ Add properties to modify shape and size of the detection points
++ Show version in FromScanner main frame title
+
+FIXES
+* ManageTemplateFrame lost focus
+* BugFix 
+
+
+
+
+
+FormScanner 0.6.2 (released )
+
+FIXES
+* Template lost in case of multiple image analysis
+* BugFix
+
+
+
+
+
+FormScanner 0.6.1 (released 2014-05-20)
+
+FIXES
+* Remove "[", ",", "]" characters from the csv output file
+* ManageTemplate results grid is editable 
+* Results grid active even if the ImageFrame is closed
+* BugFix
+
+
+
+
+
+FormScanner 0.6.0 (released 2014-04-05)
+
+NEW FEATURES
++ New corner detection method 
++ Scan input forms step by step
++ Allow modify automatic corner selection
++ Skip corner detection if not standard marker
++ Add options menu
+
+FIXES 
+* Error calculating point positions when questions by columns is selected
+* BugFix
+
+
+
+
+
+FormScanner 0.5.1 (released 2014-03-17)
+
+NEW FEATURES:
++ Different mouse behavior in Image Frame
+
+REMOVED FEATURES
+- Removed zoom 
+
+FIXES
+* Image flickering when moved 
+* BugFix
+
+
+
+
+
+FormScanner 0.5.0 (released 2013-07-23)
+
+NEW FEATURES
++ Save results as .csv file
++ Scan input forms
++ Add settings menu with language selection
++ Add help menu with about and license frame
+
+FIXES
+* BugFix 
+
+
+
+
+
+FormScanner 0.4.0 (released 2013-07-01)
+
+FIXES
+* BugFix
+
+
+
+
+
+FormScanner 0.3.0 (released 2013-06-28)
+
+NEW FEATURES
++ First base features
++ Save/load XML template file
++ Zoom/move images
