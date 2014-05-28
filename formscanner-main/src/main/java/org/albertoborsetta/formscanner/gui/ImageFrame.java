@@ -313,7 +313,7 @@ public class ImageFrame extends JInternalFrame implements ScrollableImageView {
 		private int height;
 		private int marker;
 		private ShapeType markerType;
-		private int d = 1;
+		private int border = 1;
 		private BufferedImage image;
 		private FormPoint temporaryPoint;
 
@@ -322,7 +322,7 @@ public class ImageFrame extends JInternalFrame implements ScrollableImageView {
 			setImage(image);
 			setFont(FormScannerFont.getFont());
 			if ("Nimbus".equals(UIManager.getLookAndFeel().getName())) {
-				d = 4;
+				border = 4;
 			}
 			marker = model.getShapeSize();
 			markerType = model.getShapeType();
@@ -355,8 +355,8 @@ public class ImageFrame extends JInternalFrame implements ScrollableImageView {
 
 		private void showPoint(Graphics g, FormPoint point) {
 			if (point != null) {
-				int x = (int) point.getX() - d;
-				int y = (int) point.getY() - d;
+				int x = (int) point.getX() - border;
+				int y = (int) point.getY() - border;
 
 				g.setColor(Color.RED);
 				if (markerType.equals(ShapeType.CIRCLE)) {
