@@ -206,7 +206,7 @@ public class FormScannerModel {
 
 						filledForm = new FormTemplate(imageFile, formTemplate);
 						filledForm.findCorners(threshold);
-						filledForm.findPoints(threshold, density);
+						filledForm.findPoints(threshold, density, shapeSize);
 						filledForms.put(filledForm.getName(), filledForm);
 					}
 
@@ -249,12 +249,12 @@ public class FormScannerModel {
 
 						filledForm = new FormTemplate(imageFile, formTemplate);
 						filledForm.findCorners(threshold);
-						filledForm.findPoints(threshold, density);
+						filledForm.findPoints(threshold, density, shapeSize);
 						points = filledForm.getFieldPoints();
 						filledForms.put(filledForm.getName(), filledForm);
 						createFormImageFrame(imageFile, filledForm,
 								Mode.MODIFY_POINTS);
-						createResultsGridFrame(filledForm, formTemplate);
+						createResultsGridFrame();
 					} else {
 						Date today = Calendar.getInstance().getTime();
 						SimpleDateFormat sdf = new SimpleDateFormat(
@@ -279,8 +279,17 @@ public class FormScannerModel {
 				}
 				break;
 			case ANALYZE_FILES_CURRENT:
-				analyzedFileIndex--;
-				analyzeFiles(FormScannerConstants.ANALYZE_FILES_FIRST);
+				fileListFrame.selectFile(analyzedFileIndex);
+				File imageFile = openedFiles.get(analyzedFileIndex);
+
+				filledForm = imageFrame.getTemplate();
+				filledForm.clearPoints();
+				filledForm.findPoints(threshold, density, shapeSize);
+				points = filledForm.getFieldPoints();
+				filledForms.put(filledForm.getName(), filledForm);
+				createFormImageFrame(imageFile, filledForm,
+						Mode.MODIFY_POINTS);
+				createResultsGridFrame();
 				break;
 			default:
 				break;
@@ -297,8 +306,8 @@ public class FormScannerModel {
 		}
 	}
 
-	public void createResultsGridFrame(FormTemplate form, FormTemplate template) {
-		resultsGridFrame = new ResultsGridFrame(this, form, template);
+	public void createResultsGridFrame() {
+		resultsGridFrame = new ResultsGridFrame(this);
 		view.arrangeFrame(resultsGridFrame);
 	}
 
@@ -352,6 +361,7 @@ public class FormScannerModel {
 			view.disposeFrame(renameFileFrame);
 			view.disposeFrame(manageTemplateFrame);
 			view.disposeFrame(resultsGridFrame);
+			resetPoints();
 			break;
 		case MANAGE_TEMPLATE_FRAME_NAME:
 			view.disposeFrame(imageFrame);
@@ -415,11 +425,11 @@ public class FormScannerModel {
 					}
 				} else {
 					if (points.isEmpty() || (points.size() > 1)) {
-						points.clear();
+						resetPoints();
 						points.add(p);
 					} else {
 						FormPoint p1 = points.get(0);
-						points.clear();
+						resetPoints();
 
 						FormPoint orig = formTemplate.getCorners().get(
 								Corners.TOP_LEFT);
@@ -462,7 +472,7 @@ public class FormScannerModel {
 			break;
 		case MODIFY_POINTS:
 			filledForm.addPoint(p);
-			createResultsGridFrame(filledForm, formTemplate);
+			createResultsGridFrame();
 			break;
 		default:
 			break;
@@ -497,7 +507,7 @@ public class FormScannerModel {
 
 	public void updateTemplate(HashMap<String, FormField> fields) {
 		formTemplate.setFields(fields);
-		points.clear();
+		resetPoints();
 	}
 
 	public ArrayList<FormPoint> getPoints() {
@@ -709,7 +719,7 @@ public class FormScannerModel {
 	public void deleteNearestPointTo(FormPoint cursorPoint) {
 		if (filledForm != null) {
 			filledForm.removePoint(cursorPoint);
-			createResultsGridFrame(filledForm, formTemplate);
+			createResultsGridFrame();
 		} else {
 			formTemplate.removePoint(cursorPoint);
 		}
@@ -726,5 +736,13 @@ public class FormScannerModel {
 
 	public ShapeType getShapeType() {
 		return shapeType;
+	}
+
+	public FormTemplate getFilledForm() {
+		return filledForm;
+	}
+
+	public FormTemplate getTemplate() {
+		return formTemplate;
 	}
 }

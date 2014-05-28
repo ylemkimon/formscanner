@@ -62,14 +62,19 @@ public class FormPoint {
 		}
 	}
 	
-	public void rotate(double alfa) {
+	private void rotate(double alfa) {
 		x = ((x * Math.cos(alfa)) - (y * Math.sin(alfa)));
 		y = ((x * Math.sin(alfa)) + (y * Math.cos(alfa)));
 	}
 	
-	public void translate(double dx, double dy) {
+	private void translate(double dx, double dy) {
 		x = x + dx;
 		y = y + dy;
+	}
+	
+	public void scale(double scaleFactor) {
+		x = (scaleFactor * x);
+		y = (scaleFactor * y);
 	}
 	
 	public void relativePositionTo(FormPoint o, double alfa) {
@@ -81,7 +86,7 @@ public class FormPoint {
 		rotate(0-alfa);
 		translate(o.getX(), o.getY());
 	}
-
+	
 	public void setLocation(double x, double y) {
 		this.x = x;
 		this.y = y;

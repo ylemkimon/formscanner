@@ -26,10 +26,10 @@ public class FormTemplate {
 
 	private static final int WHITE = 1;
 	private static final int BLACK = 0;
-	private static final int WINDOW_SIZE = 5;
-	private static final int POINT_SIZE = 5;
-	private static final int WIDTH_SIZE = 6;
-	private static final int HEIGHT_SIZE = 8;
+	private static final int HALF_WINDOW_SIZE = 7;
+	private static final int WINDOW_SIZE = (HALF_WINDOW_SIZE * 2) + 1;
+	private static final int PAGE_WIDTH = 210; // millimetri
+	private static final int PAGE_HEIGHT = 297; // millimetri
 
 	private BufferedImage image;
 	private String name;
@@ -43,6 +43,7 @@ public class FormTemplate {
 	private int width;
 	private int subImageWidth;
 	private int subImageHeight;
+	private double diagonal;
 
 	public FormTemplate(File file) {
 		this(file, null);
@@ -61,24 +62,31 @@ public class FormTemplate {
 			width = 0;
 		}
 
-		subImageWidth = width / WIDTH_SIZE;
-		subImageHeight = height / HEIGHT_SIZE;
+		double scale = width / PAGE_WIDTH;
+		subImageWidth = (int) ((PAGE_WIDTH / 2) * scale);
+		subImageHeight = (int) ((PAGE_HEIGHT / 2) * scale);
 
 		this.file = file;
 		this.template = template;
 		this.name = FilenameUtils.removeExtension(this.file.getName());
 
-		corners = new HashMap<Corners, FormPoint>();
-		setDefaultCornerPosition();
+		corners = calculateDefaultCornerPosition();
+		diagonal = calculateDiagonal();
 		new HashMap<Corners, FormPoint>();
 		rotation = 0;
 		fields = new HashMap<String, FormField>();
 		pointList = new ArrayList<FormPoint>();
 	}
 
-	private void setDefaultCornerPosition() {
+	private double calculateDiagonal() {
+		return (corners.get(Corners.TOP_LEFT).dist2(corners.get(Corners.BOTTOM_RIGHT)) +
+				corners.get(Corners.TOP_RIGHT).dist2(corners.get(Corners.BOTTOM_LEFT))) / 2;
+	}
+
+	private HashMap<Corners, FormPoint> calculateDefaultCornerPosition() {
 		int x;
 		int y;
+		HashMap<Corners, FormPoint> corners = new HashMap<Corners, FormPoint>();
 
 		for (Corners position : Corners.values()) {
 			x = 0;
@@ -102,6 +110,7 @@ public class FormTemplate {
 			FormPoint corner = new FormPoint(x, y);
 			corners.put(position, corner);
 		}
+		return corners;
 	}
 
 	public FormField getField(String name) {
@@ -133,6 +142,7 @@ public class FormTemplate {
 	public void setCorner(Corners corner, FormPoint point) {
 		corners.put(corner, point);
 		rotation = calculateRotation();
+		diagonal = calculateDiagonal();
 	}
 
 	public HashMap<Corners, FormPoint> getCorners() {
@@ -164,7 +174,7 @@ public class FormTemplate {
 	public File saveToFile(String path) {
 
 		File outputFile = null;
-		
+
 		try {
 			outputFile = new File(path + "/template/" + name + ".xtmpl");
 
@@ -274,6 +284,8 @@ public class FormTemplate {
 						Double.parseDouble(xCoord), Double.parseDouble(yCoord));
 				corners.put(Corners.valueOf(postion), cornerPoint);
 			}
+			
+			diagonal = calculateDiagonal();
 
 			Element fieldsElement = (Element) templateElement
 					.getElementsByTagName("fields").item(0);
@@ -314,8 +326,8 @@ public class FormTemplate {
 	public String toString() {
 		StringBuilder builder = new StringBuilder();
 
-		builder = builder.append("[\r\n[Rotation:").append(rotation).append("]")
-				.append("\r\n[Corners: ");
+		builder = builder.append("[\r\n[Rotation:").append(rotation)
+				.append("]").append("\r\n[Corners: ");
 
 		// corner elements
 		for (Entry<Corners, FormPoint> corner : corners.entrySet()) {
@@ -344,10 +356,10 @@ public class FormTemplate {
 					.entrySet()) {
 				FormPoint pointValue = point.getValue();
 
-				builder = builder.append("\r\n[response:").append(point.getKey())
-						.append(" x coord:").append(pointValue.getX())
-						.append(" y coord:").append(pointValue.getY())
-						.append("]");
+				builder = builder.append("\r\n[response:")
+						.append(point.getKey()).append(" x coord:")
+						.append(pointValue.getX()).append(" y coord:")
+						.append(pointValue.getY()).append("]");
 			}
 
 			builder = builder.append("]");
@@ -382,43 +394,36 @@ public class FormTemplate {
 	public BufferedImage getImage() {
 		return image;
 	}
+	
+	public double getDiagonal() {
+		return diagonal;
+	}
 
 	public void findCorners(int threshold) {
-		int x;
-		int y;
-		int x1 = (width - (subImageWidth + 1));
-		int y1 = (height - (subImageHeight + 1));
 
 		for (Corners position : Corners.values()) {
-			x = 0;
-			y = 0;
 
-			switch (position) {
-			case TOP_RIGHT:
-				x = x1;
-				break;
-			case BOTTOM_LEFT:
-				y = y1;
-				break;
-			case BOTTOM_RIGHT:
-				x = x1;
-				y = y1;
-				break;
-			default:
-				break;
-			}
-
-			FormPoint corner = getCircleCenter(threshold, x, y);
+			FormPoint corner = getCircleCenter(threshold, position);
 			if (corner != null) {
 				corners.put(position, corner);
 			}
 		}
+		
+		diagonal = calculateDiagonal(); 				
 	}
 
-	private FormPoint getCircleCenter(int threshold, int x, int y) {
+	private FormPoint getCircleCenter(int threshold, Corners position) {
+		boolean found = false;
+		boolean passed = false;
 		double Xc = 0;
 		double Yc = 0;
 		int centralPoints = 0;
+		int dx = 1;
+		int dy = 1;
+		int x = 0;
+		int y = 0;
+		int x1 = 0;
+		int y1 = 0;
 		int stato;
 		int pixel;
 		int old_pixel;
@@ -426,25 +431,44 @@ public class FormTemplate {
 		int currentPixelIndex;
 		int[] rgbArray = new int[subImageWidth * subImageHeight];
 		FormPoint[] points = new FormPoint[4];
+		
+		switch (position) {
+		case TOP_RIGHT:
+			x = subImageWidth - 1;
+			x1 = width - (subImageWidth + 1);
+			dx = -1;
+			break;
+		case BOTTOM_LEFT:
+			y = subImageHeight - 1;
+			y1 = height - (subImageHeight + 1);
+			dy = -1;
+			break;
+		case BOTTOM_RIGHT:
+			x = subImageWidth - 1;
+			y = subImageHeight - 1;
+			x1 = width - (subImageWidth + 1);
+			y1 = height - (subImageHeight + 1);
+			dx = -1;
+			dy = -1;
+			break;
+		default:
+			break;
+		}
 
-		image.getRGB(x, y, subImageWidth, subImageHeight, rgbArray, 0,
+		image.getRGB(x1, y1, subImageWidth, subImageHeight, rgbArray, 0,
 				subImageWidth);
 
-		for (int yi = 0; yi < subImageHeight; yi++) {
+		for (int yi = y; (yi < subImageHeight) && (yi >= 0); yi += dy) {
 			stato = 0;
 			pixel = WHITE;
 			old_pixel = pixel;
 			whites = WINDOW_SIZE;
 
-			for (int xi = 0; xi < subImageWidth; xi++) {
+			for (int xi = x; (xi < subImageWidth) && (xi >= 0); xi += dx) {
 
-				currentPixelIndex = (yi * subImageWidth) + xi;
-				if (xi < WINDOW_SIZE) {
-					if ((rgbArray[currentPixelIndex] & (0xFF)) < threshold) {
-						whites--;
-					}
-				} else {
-					if ((rgbArray[currentPixelIndex - WINDOW_SIZE] & (0xFF)) > threshold) {
+				currentPixelIndex = ((yi * subImageWidth) + xi);
+				if ((xi > WINDOW_SIZE) && (Math.abs(x - xi) > WINDOW_SIZE)) {
+					if ((rgbArray[currentPixelIndex - (dx * WINDOW_SIZE)] & (0xFF)) > threshold) {
 						whites--;
 					}
 					if ((rgbArray[currentPixelIndex] & (0xFF)) > threshold) {
@@ -452,30 +476,36 @@ public class FormTemplate {
 					}
 				}
 
-				pixel = (whites > 2) ? WHITE : BLACK;
+				pixel = (whites > HALF_WINDOW_SIZE) ? WHITE : BLACK;
 
 				if (pixel != old_pixel) {
 					stato++;
 					old_pixel = pixel;
 					switch (stato) {
 					case 1:
-						points[0] = new FormPoint(xi - 2, yi);
+						points[0] = new FormPoint(x1 + xi - dx * HALF_WINDOW_SIZE, y1 + yi);
 					case 3:
-						points[2] = new FormPoint(xi - 2, yi);
+						points[2] = new FormPoint(x1 + xi - dx * HALF_WINDOW_SIZE, y1 + yi);
 						break;
 					case 2:
-						points[1] = new FormPoint(xi - 3, yi);
+						points[1] = new FormPoint(x1 + xi - dx * (HALF_WINDOW_SIZE + 1), y1 + yi);
 					case 4:
-						points[3] = new FormPoint(xi - 3, yi);
+						points[3] = new FormPoint(x1 + xi - dx * (HALF_WINDOW_SIZE + 1), y1 + yi);
+						found = found || (stato==4);
 						break;
 					default:
 						break;
 					}
 				}
+				
+				if ((found && (stato==4)) || (passed && (stato==2))) {
+					break;
+				}
 			}
 
 			switch (stato) {
 			case 2:
+				passed = passed || (found && (stato==2));
 			case 4:
 				double Xc1 = (points[0].getX() + points[3].getX()) / 2;
 				double Xc2 = (points[1].getX() + points[2].getX()) / 2;
@@ -486,8 +516,11 @@ public class FormTemplate {
 			case 0:
 			case 1:
 			case 3:
-				break;
 			default:
+				break;
+			}
+
+			if (passed && found && (stato==0)) {
 				break;
 			}
 		}
@@ -497,11 +530,12 @@ public class FormTemplate {
 		}
 		Xc = Xc / centralPoints;
 		Yc = Yc / centralPoints;
-		FormPoint p = new FormPoint(x + Xc, y + Yc);
+		
+		FormPoint p = new FormPoint(Xc, Yc);
 		return p;
 	}
 
-	public void findPoints(int threshold, int density) {
+	public void findPoints(int threshold, int density, int size) {
 		boolean found;
 		HashMap<String, FormField> templateFields = template.getFields();
 		ArrayList<String> fieldNames = new ArrayList<String>(
@@ -522,7 +556,7 @@ public class FormTemplate {
 				FormPoint responsePoint = calcResponsePoint(template,
 						templatePoints.get(pointName));
 
-				if (found = isFilled(responsePoint, threshold, density)) {
+				if (found = isFilled(responsePoint, threshold, density, size)) {
 					FormField filledField = getField(templateField, fieldName);
 					filledField.setPoint(pointName, responsePoint);
 					fields.put(fieldName, filledField);
@@ -546,8 +580,10 @@ public class FormTemplate {
 		FormPoint point = responsePoint.clone();
 		FormPoint templateOrigin = template.getCorner(Corners.TOP_LEFT);
 		double templateRotation = template.getRotation();
+		double scale = Math.sqrt(diagonal/template.getDiagonal());
 
 		point.relativePositionTo(templateOrigin, templateRotation);
+		point.scale(scale);
 		point.originalPositionFrom(corners.get(Corners.TOP_LEFT), rotation);
 		return point;
 	}
@@ -563,18 +599,18 @@ public class FormTemplate {
 		return filledField;
 	}
 
-	private boolean isFilled(FormPoint responsePoint, int threshold, int density) {
-		int width = 2 * POINT_SIZE;
-		int height = 2 * POINT_SIZE;
-		int total = width * height;
+	private boolean isFilled(FormPoint responsePoint, int threshold,
+			int density, int size) {
+		int total = size * size;
+		int halfSize = (int) size / 2;
 		int[] rgbArray = new int[total];
 		int count = 0;
 
 		int xCoord = (int) responsePoint.getX();
 		int yCoord = (int) responsePoint.getY();
 
-		image.getRGB(xCoord - POINT_SIZE, yCoord - POINT_SIZE, width, height,
-				rgbArray, 0, width);
+		image.getRGB(xCoord - halfSize, yCoord - halfSize, size, size, rgbArray, 0,
+				size);
 		for (int i = 0; i < total; i++) {
 			if ((rgbArray[i] & (0xFF)) < threshold) {
 				count++;
@@ -604,7 +640,7 @@ public class FormTemplate {
 				}
 			}
 			pointList.remove(nearestPoint);
-			
+
 			for (Entry<String, FormField> field : fields.entrySet()) {
 				FormField fieldValue = field.getValue();
 				for (Entry<String, FormPoint> point : fieldValue.getPoints()
@@ -616,7 +652,7 @@ public class FormTemplate {
 				}
 			}
 		}
-		
+
 	}
 
 	public void addPoint(FormPoint cursorPoint) {
@@ -629,7 +665,7 @@ public class FormTemplate {
 				double lastDistance = cursorPoint.dist2(templatePoint);
 				if (lastDistance < firstDistance) {
 					nearestTemplatePoint = templatePoint;
-					firstDistance = lastDistance; 
+					firstDistance = lastDistance;
 				}
 			}
 
@@ -656,6 +692,7 @@ public class FormTemplate {
 
 	public void clearPoints() {
 		pointList.clear();
+		fields.clear();
 	}
 
 	public FormPoint getPoint(int i) {

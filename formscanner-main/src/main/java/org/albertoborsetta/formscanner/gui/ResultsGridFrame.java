@@ -58,10 +58,11 @@ public class ResultsGridFrame extends JInternalFrame {
 	/**
 	 * Create the frame.
 	 */
-	public ResultsGridFrame(FormScannerModel model, FormTemplate form, FormTemplate template) {
+	public ResultsGridFrame(FormScannerModel model) {
 		formScannerModel = model;
-		this.form = form;
+		this.form = model.getFilledForm();
 
+		FormTemplate template = model.getTemplate();
 		header = (String[]) template.getHeader();
 		rows = template.getFields().size() + 1;
 		cols = 2;
@@ -80,13 +81,19 @@ public class ResultsGridFrame extends JInternalFrame {
 		setMaximizable(true);
 
 		table = createTable();
+		clearTable();
 		setupTable();
 		responsesGridPanel = new ScrollPaneBuilder(table).build();
 
 		getContentPane().add(responsesGridPanel, BorderLayout.CENTER);
 	}
 
-	public void setupTable() {
+	private void clearTable() {
+		table.selectAll();
+		table.clearSelection();
+	}
+
+	private void setupTable() {
 		for (int i = 1; i < rows; i++) {
 			FormField field = form.getFields().get(header[i]);
 			if (field != null) {
