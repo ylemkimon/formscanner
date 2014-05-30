@@ -12,6 +12,11 @@ public class FormPoint {
 	private double x;
 	private double y;
 	
+	public FormPoint() {
+		this.x = 0;
+		this.y = 0;
+	}
+	
 	public FormPoint(Point p) {
 		this.x = p.getX();
 		this.y = p.getY();

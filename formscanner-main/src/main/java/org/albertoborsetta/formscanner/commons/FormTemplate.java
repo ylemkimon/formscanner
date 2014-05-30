@@ -26,7 +26,7 @@ public class FormTemplate {
 
 	private static final int WHITE = 1;
 	private static final int BLACK = 0;
-	private static final int HALF_WINDOW_SIZE = 7;
+	private static final int HALF_WINDOW_SIZE = 5;
 	private static final int WINDOW_SIZE = (HALF_WINDOW_SIZE * 2) + 1;
 	private static final int PAGE_WIDTH = 210; // millimetri
 	private static final int PAGE_HEIGHT = 297; // millimetri
@@ -399,11 +399,11 @@ public class FormTemplate {
 		return diagonal;
 	}
 
-	public void findCorners(int threshold) {
+	public void findCorners(int threshold, int density) {
 
 		for (Corners position : Corners.values()) {
 
-			FormPoint corner = getCircleCenter(threshold, position);
+			FormPoint corner = getCircleCenter(threshold, density, position);
 			if (corner != null) {
 				corners.put(position, corner);
 			}
@@ -412,7 +412,7 @@ public class FormTemplate {
 		diagonal = calculateDiagonal(); 				
 	}
 
-	private FormPoint getCircleCenter(int threshold, Corners position) {
+	private FormPoint getCircleCenter(int threshold, int density, Corners position) {
 		boolean found = false;
 		boolean passed = false;
 		double Xc = 0;
@@ -420,32 +420,32 @@ public class FormTemplate {
 		int centralPoints = 0;
 		int dx = 1;
 		int dy = 1;
-		int x = 0;
-		int y = 0;
+		int x = HALF_WINDOW_SIZE;
+		int y = HALF_WINDOW_SIZE;
 		int x1 = 0;
 		int y1 = 0;
 		int stato;
 		int pixel;
 		int old_pixel;
-		int whites;
-		int currentPixelIndex;
+//		int whites;
+//		int currentPixelIndex;
 		int[] rgbArray = new int[subImageWidth * subImageHeight];
 		FormPoint[] points = new FormPoint[4];
 		
 		switch (position) {
 		case TOP_RIGHT:
-			x = subImageWidth - 1;
+			x = subImageWidth - (HALF_WINDOW_SIZE + 1);
 			x1 = width - (subImageWidth + 1);
 			dx = -1;
 			break;
 		case BOTTOM_LEFT:
-			y = subImageHeight - 1;
+			y = subImageHeight - (HALF_WINDOW_SIZE + 1);
 			y1 = height - (subImageHeight + 1);
 			dy = -1;
 			break;
 		case BOTTOM_RIGHT:
-			x = subImageWidth - 1;
-			y = subImageHeight - 1;
+			x = subImageWidth - (HALF_WINDOW_SIZE + 1);
+			y = subImageHeight - (HALF_WINDOW_SIZE + 1);
 			x1 = width - (subImageWidth + 1);
 			y1 = height - (subImageHeight + 1);
 			dx = -1;
@@ -458,39 +458,44 @@ public class FormTemplate {
 		image.getRGB(x1, y1, subImageWidth, subImageHeight, rgbArray, 0,
 				subImageWidth);
 
-		for (int yi = y; (yi < subImageHeight) && (yi >= 0); yi += dy) {
+		for (int yi = y; (yi < (subImageHeight - HALF_WINDOW_SIZE)) && (yi >= HALF_WINDOW_SIZE); yi += dy) {
 			stato = 0;
 			pixel = WHITE;
 			old_pixel = pixel;
-			whites = WINDOW_SIZE;
+			// whites = WINDOW_SIZE * WINDOW_SIZE;
 
-			for (int xi = x; (xi < subImageWidth) && (xi >= 0); xi += dx) {
+			for (int xi = x; (xi < (subImageWidth - HALF_WINDOW_SIZE)) && (xi >= HALF_WINDOW_SIZE); xi += dx) {
 
-				currentPixelIndex = ((yi * subImageWidth) + xi);
-				if ((xi > WINDOW_SIZE) && (Math.abs(x - xi) > WINDOW_SIZE)) {
-					if ((rgbArray[currentPixelIndex - (dx * WINDOW_SIZE)] & (0xFF)) > threshold) {
-						whites--;
-					}
-					if ((rgbArray[currentPixelIndex] & (0xFF)) > threshold) {
-						whites++;
-					}
-				}
+//				currentPixelIndex = ((yi * subImageWidth) + xi);
+//				if ((xi > WINDOW_SIZE) && (Math.abs(x - xi) > WINDOW_SIZE)) {
+//					if ((rgbArray[currentPixelIndex - (dx * WINDOW_SIZE)] & (0xFF)) > threshold) {
+//						whites--;
+//					}
+//					if ((rgbArray[currentPixelIndex] & (0xFF)) > threshold) {
+//						whites++;
+//					}
+//				}
 
-				pixel = (whites > HALF_WINDOW_SIZE) ? WHITE : BLACK;
+//				pixel = (whites > HALF_WINDOW_SIZE) ? WHITE : BLACK;
+				pixel = isWhite(xi, yi, rgbArray, threshold, density);
 
 				if (pixel != old_pixel) {
 					stato++;
 					old_pixel = pixel;
 					switch (stato) {
 					case 1:
-						points[0] = new FormPoint(x1 + xi - dx * HALF_WINDOW_SIZE, y1 + yi);
+//						points[0] = new FormPoint(x1 + xi - dx * HALF_WINDOW_SIZE, y1 + yi);
+						points[0] = new FormPoint(x1 + xi, y1 + yi);
 					case 3:
-						points[2] = new FormPoint(x1 + xi - dx * HALF_WINDOW_SIZE, y1 + yi);
+//						points[2] = new FormPoint(x1 + xi - dx * HALF_WINDOW_SIZE, y1 + yi);
+						points[2] = new FormPoint(x1 + xi, y1 + yi);
 						break;
 					case 2:
-						points[1] = new FormPoint(x1 + xi - dx * (HALF_WINDOW_SIZE + 1), y1 + yi);
+//						points[1] = new FormPoint(x1 + xi - dx * (HALF_WINDOW_SIZE + 1), y1 + yi);
+						points[1] = new FormPoint(x1 + xi, y1 + yi);
 					case 4:
-						points[3] = new FormPoint(x1 + xi - dx * (HALF_WINDOW_SIZE + 1), y1 + yi);
+//						points[3] = new FormPoint(x1 + xi - dx * (HALF_WINDOW_SIZE + 1), y1 + yi);
+						points[3] = new FormPoint(x1 + xi, y1 + yi);
 						found = found || (stato==4);
 						break;
 					default:
@@ -533,6 +538,24 @@ public class FormTemplate {
 		
 		FormPoint p = new FormPoint(Xc, Yc);
 		return p;
+	}
+
+	private int isWhite(int xi, int yi, int[] rgbArray, int threshold, int density) {
+		int blacks = 0;
+		int total = WINDOW_SIZE * WINDOW_SIZE;
+		for (int i=0; i<WINDOW_SIZE; i++) {
+			for (int j=0; j<WINDOW_SIZE; j++) {
+				int xji = xi - HALF_WINDOW_SIZE + j;
+				int yji = yi - HALF_WINDOW_SIZE + i;
+				int index = (yji * subImageWidth) + xji;
+				if ((rgbArray[index] & (0xFF)) < threshold) {
+					blacks++;
+				}
+			}
+		}
+		if ((blacks/ (double) total) >= (density / 100.0))
+			return BLACK;
+		return WHITE;
 	}
 
 	public void findPoints(int threshold, int density, int size) {
@@ -616,7 +639,7 @@ public class FormTemplate {
 				count++;
 			}
 		}
-		return (count / (double) total) > (density / 100);
+		return (count / (double) total) >= (density / 100.0);
 	}
 
 	public double calculateRotation() {
@@ -637,6 +660,7 @@ public class FormTemplate {
 				double lastDistance = cursorPoint.dist2(point);
 				if (lastDistance < firstDistance) {
 					nearestPoint = point;
+					firstDistance = lastDistance;
 				}
 			}
 			pointList.remove(nearestPoint);
@@ -657,12 +681,28 @@ public class FormTemplate {
 
 	public void addPoint(FormPoint cursorPoint) {
 		pointList.add(cursorPoint);
+		FormPoint templateOrigin = template.getCorner(Corners.TOP_LEFT);
+		double templateRotation = template.getRotation();
+		double scale = Math.sqrt(diagonal/template.getDiagonal());
 		ArrayList<FormPoint> templatePoints = template.getFieldPoints();
+		FormPoint point = new FormPoint();
 		if (!templatePoints.isEmpty()) {
+			
 			FormPoint nearestTemplatePoint = templatePoints.get(0);
+			
+			point = nearestTemplatePoint.clone();
+			point.relativePositionTo(templateOrigin, templateRotation);
+			point.scale(scale);
+			point.originalPositionFrom(corners.get(Corners.TOP_LEFT), rotation);
+
 			double firstDistance = cursorPoint.dist2(nearestTemplatePoint);
 			for (FormPoint templatePoint : templatePoints) {
-				double lastDistance = cursorPoint.dist2(templatePoint);
+				point = templatePoint.clone();
+				point.relativePositionTo(templateOrigin, templateRotation);
+				point.scale(scale);
+				point.originalPositionFrom(corners.get(Corners.TOP_LEFT), rotation);
+				
+				double lastDistance = cursorPoint.dist2(point);
 				if (lastDistance < firstDistance) {
 					nearestTemplatePoint = templatePoint;
 					firstDistance = lastDistance;
