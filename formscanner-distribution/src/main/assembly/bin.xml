@@ -73,7 +73,7 @@
 						<directory>src/main/resources</directory>
 						<includes>
 							<include>*.sh</include>
-							<include>*.bat</include>
+							<include>CHANGELOG</include>
 						</includes>
 					</fileSet>
 				</fileSets>
