@@ -80,7 +80,7 @@ public class FormScannerModel {
 	public FormScannerModel(FormScanner view) {
 		this.view = view;
 
-		path = System.getProperty("FormScanner_HOME");
+		path = StringUtils.defaultIfBlank(System.getProperty("FormScanner_HOME"), System.getenv("FormScanner_HOME"));
 		configurations = FormScannerConfiguration.getConfiguration(path);
 
 		lang = configurations.getProperty(FormScannerConfigurationKeys.LANG,
