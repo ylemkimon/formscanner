@@ -1,13 +1,14 @@
-FormScanner 0.7.0 (released )
+FormScanner 0.7.0 (released 2014-06-06)
 ===
 NEW FEATURES
 ---
 
 * Improved corner detection
-* Enable change automatically selected selected points
-* Enable change automatically created points
+* Enable change automatically created points in template
+* Enable change automatically selected points in scanned forms
 * Add properties to modify shape and size of the detection points
 * Show version in FromScanner main frame title
+* Windows installer
 
 FIXES
 ---
