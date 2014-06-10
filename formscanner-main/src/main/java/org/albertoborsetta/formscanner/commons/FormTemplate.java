@@ -136,6 +136,7 @@ public class FormTemplate {
 
 	public void setCorners(HashMap<Corners, FormPoint> corners) {
 		this.corners = corners;
+		diagonal = calculateDiagonal();
 		rotation = calculateRotation();
 	}
 
@@ -409,7 +410,8 @@ public class FormTemplate {
 			}
 		}
 		
-		diagonal = calculateDiagonal(); 				
+		diagonal = calculateDiagonal();
+		rotation = calculateRotation();
 	}
 
 	private FormPoint getCircleCenter(int threshold, int density, Corners position) {
