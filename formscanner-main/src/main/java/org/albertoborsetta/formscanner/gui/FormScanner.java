@@ -12,7 +12,6 @@ import javax.swing.JDesktopPane;
 import javax.swing.UIManager;
 import javax.swing.UIManager.LookAndFeelInfo;
 
-import org.albertoborsetta.formscanner.commons.FormPoint;
 import org.albertoborsetta.formscanner.commons.translation.FormScannerTranslation;
 import org.albertoborsetta.formscanner.commons.translation.FormScannerTranslationKeys;
 import org.albertoborsetta.formscanner.model.FormScannerModel;
