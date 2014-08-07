@@ -80,12 +80,14 @@ public class FormScannerModel {
 	public FormScannerModel(FormScanner view) {
 		this.view = view;
 
-		path = StringUtils.defaultIfBlank(System.getProperty("FormScanner_HOME"), System.getenv("FormScanner_HOME"));
+		path = StringUtils.defaultIfBlank(
+				System.getProperty("FormScanner_HOME"),
+				System.getenv("FormScanner_HOME"));
 		configurations = FormScannerConfiguration.getConfiguration(path);
 
 		lang = configurations.getProperty(FormScannerConfigurationKeys.LANG,
 				FormScannerConfigurationKeys.DEFAULT_LANG);
-		
+
 		FormScannerTranslation.setTranslation(path, lang);
 		FormScannerResources.setResources(path);
 
@@ -101,7 +103,7 @@ public class FormScannerModel {
 		shapeType = ShapeType.valueOf(configurations.getProperty(
 				FormScannerConfigurationKeys.SHAPE_TYPE,
 				FormScannerConfigurationKeys.DEFAULT_SHAPE_TYPE));
-		
+
 		String tmpl = configurations.getProperty(
 				FormScannerConfigurationKeys.TEMPLATE, null);
 		if (!StringUtils.isEmpty(tmpl)) {
@@ -141,13 +143,16 @@ public class FormScannerModel {
 				renamedFileIndex = fileListFrame.getSelectedItemIndex();
 				fileListFrame.selectFile(renamedFileIndex);
 				File imageFile = openedFiles.get(renamedFileIndex);
-				filledForm = new FormTemplate(imageFile);
 
-				createFormImageFrame(imageFile, filledForm, Mode.VIEW);
-
-				renameFileFrame = new RenameFileFrame(this,
-						getFileNameByIndex(renamedFileIndex));
-				view.arrangeFrame(renameFileFrame);
+				try {
+					filledForm = new FormTemplate(imageFile);
+					createFormImageFrame(imageFile, filledForm, Mode.VIEW);
+					renameFileFrame = new RenameFileFrame(this,
+							getFileNameByIndex(renamedFileIndex));
+					view.arrangeFrame(renameFileFrame);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
 			}
 			break;
 		case RENAME_FILES_CURRENT:
@@ -287,8 +292,7 @@ public class FormScannerModel {
 				filledForm.findPoints(threshold, density, shapeSize);
 				points = filledForm.getFieldPoints();
 				filledForms.put(filledForm.getName(), filledForm);
-				createFormImageFrame(imageFile, filledForm,
-						Mode.MODIFY_POINTS);
+				createFormImageFrame(imageFile, filledForm, Mode.MODIFY_POINTS);
 				createResultsGridFrame();
 				break;
 			default:
@@ -374,11 +378,15 @@ public class FormScannerModel {
 	public void loadTemplate() {
 		templateImage = fileUtils.chooseImage();
 		if (templateImage != null) {
-			formTemplate = new FormTemplate(templateImage);
-			formTemplate.findCorners(threshold, density);
-			manageTemplateFrame = new ManageTemplateFrame(this);
+			try {
+				formTemplate = new FormTemplate(templateImage);
+				formTemplate.findCorners(threshold, density);
+				manageTemplateFrame = new ManageTemplateFrame(this);
 
-			view.arrangeFrame(manageTemplateFrame);
+				view.arrangeFrame(manageTemplateFrame);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 		}
 	}
 
@@ -567,9 +575,23 @@ public class FormScannerModel {
 			return false;
 		}
 
-		formTemplate = new FormTemplate(template);
-
-		if (!formTemplate.presetFromTemplate()) {
+		try {
+			formTemplate = new FormTemplate(template);
+			if (notify) {
+				JOptionPane
+				.showMessageDialog(
+						null,
+						FormScannerTranslation
+						.getTranslationFor(FormScannerTranslationKeys.TEMPLATE_LOADED),
+						FormScannerTranslation
+						.getTranslationFor(FormScannerTranslationKeys.TEMPLATE_LOADED_POPUP),
+						JOptionPane.INFORMATION_MESSAGE);
+			}
+			configurations.setProperty(FormScannerConfigurationKeys.TEMPLATE,
+					template.getAbsolutePath());
+			configurations.store();
+			return true;
+		} catch (Exception e) {
 			JOptionPane
 					.showMessageDialog(
 							null,
@@ -578,23 +600,10 @@ public class FormScannerModel {
 							FormScannerTranslation
 									.getTranslationFor(FormScannerTranslationKeys.TEMPLATE_NOT_LOADED_POPUP),
 							JOptionPane.ERROR_MESSAGE);
+			e.printStackTrace();
 			return false;
 		}
 
-		if (notify) {
-			JOptionPane
-					.showMessageDialog(
-							null,
-							FormScannerTranslation
-									.getTranslationFor(FormScannerTranslationKeys.TEMPLATE_LOADED),
-							FormScannerTranslation
-									.getTranslationFor(FormScannerTranslationKeys.TEMPLATE_LOADED_POPUP),
-							JOptionPane.INFORMATION_MESSAGE);
-		}
-		configurations.setProperty(FormScannerConfigurationKeys.TEMPLATE,
-				template.getAbsolutePath());
-		configurations.store();
-		return true;
 	}
 
 	public void linkToHelp(URL url) {
