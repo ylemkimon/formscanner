@@ -3,6 +3,7 @@ package org.albertoborsetta.formscanner.gui;
 import org.albertoborsetta.formscanner.commons.FormPoint;
 import org.albertoborsetta.formscanner.commons.FormScannerConstants;
 import org.albertoborsetta.formscanner.commons.FormScannerConstants.Corners;
+import org.albertoborsetta.formscanner.commons.FormScannerConstants.Frame;
 import org.albertoborsetta.formscanner.commons.FormScannerConstants.Mode;
 import org.albertoborsetta.formscanner.commons.FormScannerConstants.ShapeType;
 import org.albertoborsetta.formscanner.commons.FormScannerFont;
@@ -14,7 +15,6 @@ import org.albertoborsetta.formscanner.commons.translation.FormScannerTranslatio
 import org.albertoborsetta.formscanner.gui.builder.ButtonBuilder;
 import org.albertoborsetta.formscanner.gui.builder.LabelBuilder;
 import org.albertoborsetta.formscanner.gui.builder.TextFieldBuilder;
-import org.albertoborsetta.formscanner.gui.controller.InternalFrameController;
 import org.albertoborsetta.formscanner.gui.controller.ImageFrameController;
 import org.albertoborsetta.formscanner.model.FormScannerModel;
 import org.uncommons.swing.SpringUtilities;
@@ -28,7 +28,6 @@ import java.awt.image.BufferedImage;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
-import javax.swing.JInternalFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -42,7 +41,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map.Entry;
 
-public class ImageFrame extends JInternalFrame implements ScrollableImageView {
+public class ImageFrame extends InternalFrame implements ScrollableImageView {
 
 	private static final long serialVersionUID = 1L;
 
@@ -50,7 +49,6 @@ public class ImageFrame extends JInternalFrame implements ScrollableImageView {
 	private ImagePanel imagePanel;
 	private ImageScrollPane scrollPane;
 	private ImageFrameController controller;
-	private InternalFrameController frameController;
 	private ImageStatusBar statusBar;
 	private Mode mode;
 	private FormTemplate template;
@@ -60,29 +58,23 @@ public class ImageFrame extends JInternalFrame implements ScrollableImageView {
 	 */
 	public ImageFrame(FormScannerModel model, File image,
 			FormTemplate template, Mode mode) {
-		this.model = model;
+		super(model);
 		this.mode = mode;
 		this.template = template;
 		controller = new ImageFrameController(this.model);
 		controller.add(this);
-		frameController = InternalFrameController.getInstance(this.model);
-		addInternalFrameListener(frameController);
 
-		int desktopHeight = model.getDesktopSize().height;
-		int desktopWidth = model.getDesktopSize().width;
-
-		setBounds(100, 100, 600, 500);
+		setBounds(model.getLastPosition(Frame.IMAGE_FRAME));
 		setMinimumSize(new Dimension(300, 500));
 		setClosable(true);
 		setIconifiable(true);
 		setResizable(true);
 		setMaximizable(true);
 
-		setName(FormScannerConstants.IMAGE_FRAME_NAME);
+		setName(Frame.IMAGE_FRAME.name());
 		setTitle(FormScannerTranslation
 				.getTranslationFor(FormScannerTranslationKeys.IMAGE_FRAME_TITLE));
 
-		setBounds(320, 10, desktopWidth - 500, desktopHeight - 20);
 
 		imagePanel = new ImagePanel(image);
 		scrollPane = new ImageScrollPane(imagePanel);

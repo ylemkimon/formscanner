@@ -93,11 +93,24 @@ public class FormScannerConstants {
 	}
 	
 	public enum Frame {
-		RENAME_FILES_FRAME_NAME,
-		FILE_LIST_FRAME_NAME,
-		MANAGE_TEMPLATE_FRAME_NAME,
-		IMAGE_FRAME_NAME,
-		RESULTS_GRID_FRAME_NAME;
+		RENAME_FILES_FRAME(FormScannerConstants.RENAME_FILES_FRAME_NAME),
+		FILE_LIST_FRAME(FormScannerConstants.FILE_LIST_FRAME_NAME),
+		MANAGE_TEMPLATE_FRAME(FormScannerConstants.MANAGE_TEMPLATE_FRAME_NAME),
+		IMAGE_FRAME(FormScannerConstants.IMAGE_FRAME_NAME),
+		RESULTS_GRID_FRAME(FormScannerConstants.RESULTS_GRID_FRAME_NAME),
+		OPTIONS_FRAME(FormScannerConstants.OPTIONS_FRAME_NAME),
+		ABOUT_FRAME(FormScannerConstants.ABOUT_FRAME_NAME);
+		
+		private String value; 
+
+		Frame(String value) { 
+			this.value = value;
+		}
+		
+		@Override
+		public String toString() {
+			return value;
+		}
 	}
 	
 	public enum Action {
