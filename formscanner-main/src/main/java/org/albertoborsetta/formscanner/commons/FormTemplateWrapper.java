@@ -1,10 +1,7 @@
 package org.albertoborsetta.formscanner.commons;
 
-import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Map.Entry;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -56,28 +53,7 @@ public class FormTemplateWrapper {
 
 		// field elements
 		for (Entry<String, FormField> field : template.getFields().entrySet()) {
-			Element fieldElement = doc.createElement("field");
-			FormField fieldValue = field.getValue();
-			fieldElement.setAttribute("orientation", fieldValue.getType()
-					.name());
-			fieldElement.setAttribute("multiple",
-					String.valueOf(fieldValue.isMultiple()));
-			fieldElement.setAttribute("question", fieldValue.getName());
-
-			// values element
-			Element valuesElement = doc.createElement("values");
-
-			// value elements
-			for (Entry<String, FormPoint> point : fieldValue.getPoints()
-					.entrySet()) {
-				Element valueElement = doc.createElement("value");
-				valueElement.setAttribute("response", point.getKey());
-				valueElement.appendChild(point.getValue().getXml(doc));
-				valuesElement.appendChild(valueElement);
-			}
-
-			fieldElement.appendChild(valuesElement);
-			fieldsElement.appendChild(fieldElement);
+			fieldsElement.appendChild(field.getValue().getXml(doc));
 		}
 		return doc;
 	}
@@ -141,6 +117,15 @@ public class FormTemplateWrapper {
 				field.setPoint(valueElement.getAttribute("response"), point);
 			}
 			template.setField(fieldName, field);
+		}
+	}
+
+	public static String getString(FormTemplate template) {
+		try {
+			return getXml(template).toString();
+		} catch (ParserConfigurationException e) {
+			e.printStackTrace();
+			return null;
 		}
 	}
 }
