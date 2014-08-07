@@ -24,22 +24,22 @@ public class CornerDetector implements Callable<FormPoint> {
 	private int threshold;
 	private int density;
 
-	CornerDetector(int thr, int ds, Corners pos,
-			BufferedImage img) {
-		image = img;
+	CornerDetector(int threshold, int density, Corners position,
+			BufferedImage image) {
+		this.image = image;
 		height = image.getHeight();
 		width = image.getWidth();
 
 		double scale = width / PAGE_WIDTH;
 		subImageWidth = (int) ((PAGE_WIDTH / 2) * scale);
 		subImageHeight = (int) ((PAGE_HEIGHT / 2) * scale);
-		position = pos;
-		threshold = thr;
-		density = ds;
+		this.position = position;
+		this.threshold = threshold;
+		this.density = density;
 		
 	}
 
-	private int isWhite(int xi, int yi, int[] rgbArray, int threshold, int density) {
+	private int isWhite(int xi, int yi, int[] rgbArray) {
 		int blacks = 0;
 		int total = WINDOW_SIZE * WINDOW_SIZE;
 		for (int i=0; i<WINDOW_SIZE; i++) {
@@ -109,7 +109,7 @@ public class CornerDetector implements Callable<FormPoint> {
 
 			for (int xi = x; (xi < (subImageWidth - HALF_WINDOW_SIZE)) && (xi >= HALF_WINDOW_SIZE); xi += dx) {
 
-				pixel = isWhite(xi, yi, rgbArray, threshold, density);
+				pixel = isWhite(xi, yi, rgbArray);
 
 				if (pixel != old_pixel) {
 					stato++;

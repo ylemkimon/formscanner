@@ -203,6 +203,7 @@ public class FormScannerModel {
 					view.setScanAllControllersEnabled(false);
 					view.setScanCurrentControllersEnabled(false);
 
+					System.out.println(System.currentTimeMillis());
 					for (Entry<Integer, File> openedFile : openedFiles
 							.entrySet()) {
 						analyzedFileIndex = openedFile.getKey();
@@ -214,7 +215,8 @@ public class FormScannerModel {
 						filledForm.findPoints(threshold, density, shapeSize);
 						filledForms.put(filledForm.getName(), filledForm);
 					}
-
+					System.out.println(System.currentTimeMillis());
+					
 					Date today = Calendar.getInstance().getTime();
 					SimpleDateFormat sdf = new SimpleDateFormat(
 							"yyyyMMddHHmmss");

@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map.Entry;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -37,7 +38,9 @@ public class FormTemplate {
 
 	public FormTemplate(File file) throws ParserConfigurationException, SAXException, IOException {
 		this(file, null);
-		FormTemplateWrapper.presetFromTemplate(file, this);
+		if (image == null) {
+			FormTemplateWrapper.presetFromTemplate(file, this);
+		}
 	}
 
 	public FormTemplate(File file, FormTemplate template) {
@@ -56,9 +59,9 @@ public class FormTemplate {
 		this.template = template;
 		this.name = FilenameUtils.removeExtension(file.getName());
 
+		corners = new HashMap<Corners, FormPoint>();
 		setDefaultCornerPosition();
 		calculateDiagonal();
-		corners = new HashMap<Corners, FormPoint>();
 		rotation = 0;
 		fields = new HashMap<String, FormField>();
 		pointList = new ArrayList<FormPoint>();
@@ -236,87 +239,28 @@ public class FormTemplate {
 	}
 
 	public void findPoints(int threshold, int density, int size) {
-		boolean found;
+		ExecutorService threadPool = Executors.newFixedThreadPool(8);
+		HashSet<Future<HashMap<String, FormField>>> fieldDetectorThreads = new HashSet<Future<HashMap<String, FormField>>>();
+		
 		HashMap<String, FormField> templateFields = template.getFields();
-		ArrayList<String> fieldNames = new ArrayList<String>(
-				templateFields.keySet());
+		ArrayList<String> fieldNames = new ArrayList<String>(templateFields.keySet());
 		Collections.sort(fieldNames);
 
 		for (String fieldName : fieldNames) {
-			FormField templateField = templateFields.get(fieldName);
-			HashMap<String, FormPoint> templatePoints = templateField
-					.getPoints();
-
-			ArrayList<String> pointNames = new ArrayList<String>(
-					templatePoints.keySet());
-			Collections.sort(pointNames);
-			found = false;
-
-			for (String pointName : pointNames) {
-				FormPoint responsePoint = calcResponsePoint(template,
-						templatePoints.get(pointName));
-
-				if (found = isFilled(responsePoint, threshold, density, size)) {
-					FormField filledField = getField(templateField, fieldName);
-					filledField.setPoint(pointName, responsePoint);
-					fields.put(fieldName, filledField);
-					pointList.add(responsePoint);
-					if (!templateField.isMultiple()) {
-						break;
-					}
-				}
-			}
-
-			if (!found) {
-				FormField filledField = getField(templateField, fieldName);
-				filledField.setPoint("", null);
-				fields.put(fieldName, filledField);
+			Future<HashMap<String, FormField>> future = threadPool.submit(new FieldDetector(
+					threshold, density, size, this, templateFields.get(fieldName)));
+			fieldDetectorThreads.add(future);
+		}
+		
+		for (Future<HashMap<String, FormField>> thread: fieldDetectorThreads) {
+			try {
+				
+				fields.putAll(thread.get());
+				// pointList.add(responsePoint);
+			} catch (Exception e) {
+				e.printStackTrace();
 			}
 		}
-	}
-
-	private FormPoint calcResponsePoint(FormTemplate template,
-			FormPoint responsePoint) {
-		FormPoint point = responsePoint.clone();
-		FormPoint templateOrigin = template.getCorner(Corners.TOP_LEFT);
-		double templateRotation = template.getRotation();
-		double scale = Math.sqrt(diagonal / template.getDiagonal());
-
-		point.relativePositionTo(templateOrigin, templateRotation);
-		point.scale(scale);
-		point.originalPositionFrom(corners.get(Corners.TOP_LEFT), rotation);
-		return point;
-	}
-
-	private FormField getField(FormField field, String fieldName) {
-		FormField filledField = fields.get(fieldName);
-
-		if (filledField == null) {
-			filledField = new FormField(fieldName);
-			filledField.setMultiple(field.isMultiple());
-		}
-
-		return filledField;
-	}
-
-	private boolean isFilled(FormPoint responsePoint, int threshold,
-			int density, int size) {
-		int total = size * size;
-		int halfSize = (int) size / 2;
-		int[] rgbArray = new int[total];
-		int count = 0;
-
-		int xCoord = (int) responsePoint.getX();
-		int yCoord = (int) responsePoint.getY();
-
-		image.getRGB(xCoord - halfSize, yCoord - halfSize, size, size,
-				rgbArray, 0, size);
-		for (int i = 0; i < total; i++) {
-			if ((rgbArray[i] & (0xFF)) < threshold) {
-				count++;
-			}
-		}
-		return (count / (double) total) >= (density / 100.0);
 	}
 
 	public void calculateRotation() {
@@ -415,5 +359,9 @@ public class FormTemplate {
 
 	public FormPoint getPoint(int i) {
 		return pointList.get(i);
+	}
+	
+	public FormTemplate getParentTemplate() {
+		return template;
 	}
 }
