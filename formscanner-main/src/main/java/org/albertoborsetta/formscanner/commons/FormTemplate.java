@@ -171,48 +171,7 @@ public class FormTemplate {
 	}
 
 	public String toString() {
-		StringBuilder builder = new StringBuilder();
-
-		builder = builder.append("[\r\n[Rotation:").append(rotation)
-				.append("]").append("\r\n[Corners: ");
-
-		// corner elements
-		for (Entry<Corners, FormPoint> corner : corners.entrySet()) {
-			Corners cornerPosition = corner.getKey();
-			FormPoint cornerValue = corner.getValue();
-
-			builder = builder.append("\r\n[position:")
-					.append(cornerPosition.name()).append(" x coord:")
-					.append(cornerValue.getX()).append(" y coord:")
-					.append(cornerValue.getY()).append("]");
-		}
-
-		builder = builder.append("]").append("\r\n[Fields: ");
-
-		// field elements
-		for (Entry<String, FormField> field : fields.entrySet()) {
-			FormField fieldValue = field.getValue();
-
-			builder = builder.append("\r\n[name:").append(fieldValue.getName())
-					.append(" is multiple:").append(fieldValue.isMultiple())
-					.append(" orientation:")
-					.append(fieldValue.getType().name()).append(" values: ");
-
-			// value elements
-			for (Entry<String, FormPoint> point : fieldValue.getPoints()
-					.entrySet()) {
-				FormPoint pointValue = point.getValue();
-
-				builder = builder.append("\r\n[response:")
-						.append(point.getKey()).append(" x coord:")
-						.append(pointValue.getX()).append(" y coord:")
-						.append(pointValue.getY()).append("]");
-			}
-
-			builder = builder.append("]");
-		}
-
-		return builder.append("]").append("]").toString();
+		return FormTemplateWrapper.getString(this);
 	}
 
 	public String getName() {

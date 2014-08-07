@@ -55,13 +55,7 @@ public class FormPoint {
 			decimalFormatSymbols.setDecimalSeparator('.');
 			formatter.setDecimalFormatSymbols(decimalFormatSymbols);
 
-			Number a = formatter.parse(coords[0]);
-			Number b = formatter.parse(coords[1]);
-
-			double x = a.doubleValue();
-			double y = b.doubleValue();
-
-			return new FormPoint(x, y);
+			return new FormPoint(formatter.parse(coords[0]).doubleValue(), formatter.parse(coords[1]).doubleValue());
 		} catch (ParseException e) {
 			e.printStackTrace();
 			return null;
