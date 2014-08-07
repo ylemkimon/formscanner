@@ -1,6 +1,5 @@
 package org.albertoborsetta.formscanner.gui;
 
-import javax.swing.JInternalFrame;
 import javax.swing.JTabbedPane;
 
 import java.awt.BorderLayout;
@@ -35,6 +34,7 @@ import org.albertoborsetta.formscanner.commons.FormPoint;
 import org.albertoborsetta.formscanner.commons.FormScannerConstants;
 import org.albertoborsetta.formscanner.commons.FormScannerConstants.FieldType;
 import org.albertoborsetta.formscanner.commons.FormScannerConstants.Action;
+import org.albertoborsetta.formscanner.commons.FormScannerConstants.Frame;
 import org.albertoborsetta.formscanner.commons.resources.FormScannerResources;
 import org.albertoborsetta.formscanner.commons.resources.FormScannerResourcesKeys;
 import org.albertoborsetta.formscanner.commons.translation.FormScannerTranslation;
@@ -48,12 +48,11 @@ import org.albertoborsetta.formscanner.gui.builder.PanelBuilder;
 import org.albertoborsetta.formscanner.gui.builder.SpinnerBuilder;
 import org.albertoborsetta.formscanner.gui.builder.TabbedPaneBuilder;
 import org.albertoborsetta.formscanner.gui.builder.ScrollPaneBuilder;
-import org.albertoborsetta.formscanner.gui.controller.InternalFrameController;
 import org.albertoborsetta.formscanner.gui.controller.ManageTemplateController;
 import org.albertoborsetta.formscanner.model.FormScannerModel;
 import org.apache.commons.lang3.StringUtils;
 
-public class ManageTemplateFrame extends JInternalFrame implements TabbedView {
+public class ManageTemplateFrame extends InternalFrame implements TabbedView {
 	/**
 	 * 
 	 */
@@ -78,9 +77,7 @@ public class ManageTemplateFrame extends JInternalFrame implements TabbedView {
 	private JButton okPositionButton;
 	private JButton cancelPositionButton;
 
-	private FormScannerModel formScannerModel;
 	private ManageTemplateController manageTemplateController;
-	private InternalFrameController internalFrameController;
 
 	private class TemplateTableModel extends DefaultTableModel {
 
@@ -106,20 +103,15 @@ public class ManageTemplateFrame extends JInternalFrame implements TabbedView {
 	 * Create the frame.
 	 */
 	public ManageTemplateFrame(FormScannerModel model) {
-		formScannerModel = model;
+		super(model);
 
-		internalFrameController = InternalFrameController
-				.getInstance(formScannerModel);
-		addInternalFrameListener(internalFrameController);
-
-		manageTemplateController = new ManageTemplateController(
-				formScannerModel);
+		manageTemplateController = new ManageTemplateController(model);
 		manageTemplateController.add(this);
 
-		setName(FormScannerConstants.MANAGE_TEMPLATE_FRAME_NAME);
+		setName(Frame.MANAGE_TEMPLATE_FRAME.name());
 		setTitle(FormScannerTranslation
 				.getTranslationFor(FormScannerTranslationKeys.MANAGE_TEMPLATE_FRAME_TITLE));
-		setBounds(100, 100, 600, 500);
+		setBounds(model.getLastPosition(Frame.MANAGE_TEMPLATE_FRAME));
 		setMinimumSize(new Dimension(300, 500));
 		setClosable(true);
 		setMaximizable(true);
@@ -163,17 +155,17 @@ public class ManageTemplateFrame extends JInternalFrame implements TabbedView {
 				for (int i = nextTab + 1; i < tabbedPane.getTabCount(); i++) {
 					tabbedPane.setEnabledAt(i, false);
 				}
-				formScannerModel.disposeRelatedFrame(this);
+				model.disposeRelatedFrame(this);
 
 				HashMap<String, FormField> fields = createFields();
-				formScannerModel.updateTemplate(fields);
+				model.updateTemplate(fields);
 				saveTemplateButton.setEnabled(true);
 				resetSelectedValues();
 				resetTable();
 				break;
 			case 2:
 				setupTable();
-				formScannerModel.createTemplateImageFrame();
+				model.createTemplateImageFrame();
 				break;
 			default:
 				break;
@@ -191,8 +183,8 @@ public class ManageTemplateFrame extends JInternalFrame implements TabbedView {
 				break;
 			case 1:
 				resetTable();
-				formScannerModel.resetPoints();
-				formScannerModel.disposeRelatedFrame(this);
+				model.resetPoints();
+				model.disposeRelatedFrame(this);
 				break;
 			default:
 				dispose();
@@ -206,7 +198,8 @@ public class ManageTemplateFrame extends JInternalFrame implements TabbedView {
 
 	private HashMap<String, FormField> createFields() {
 		HashMap<String, FormField> fields = new HashMap<String, FormField>();
-		DefaultListModel<String> listModel = (DefaultListModel<String>) fieldList.getModel();
+		DefaultListModel<String> listModel = (DefaultListModel<String>) fieldList
+				.getModel();
 
 		for (int i = 1; i < (Integer) rowsNumber.getValue() + 1; i++) {
 			String name = (String) table.getValueAt(i, 0);
@@ -357,7 +350,8 @@ public class ManageTemplateFrame extends JInternalFrame implements TabbedView {
 
 	private JPanel getFieldListPanel() {
 
-		fieldList = new ListBuilder().withListModel(new DefaultListModel<String>())
+		fieldList = new ListBuilder()
+				.withListModel(new DefaultListModel<String>())
 				.withSelectionMode(ListSelectionModel.SINGLE_SELECTION)
 				.withListSelectionListener(manageTemplateController).build();
 
@@ -399,8 +393,10 @@ public class ManageTemplateFrame extends JInternalFrame implements TabbedView {
 
 	private JPanel getPropertiesPanel() {
 
-		typeComboBox = new ComboBoxBuilder<FieldType>(FormScannerConstants.TYPE_COMBO_BOX)
-				.withModel(new DefaultComboBoxModel<FieldType>(FieldType.values()))
+		typeComboBox = new ComboBoxBuilder<FieldType>(
+				FormScannerConstants.TYPE_COMBO_BOX)
+				.withModel(
+						new DefaultComboBoxModel<FieldType>(FieldType.values()))
 				.withActionListener(manageTemplateController).build();
 
 		isMultiple = new CheckBoxBuilder(FormScannerConstants.IS_MULTIPLE)
@@ -552,7 +548,8 @@ public class ManageTemplateFrame extends JInternalFrame implements TabbedView {
 	}
 
 	public void removeFieldByName(String fieldName) {
-		DefaultListModel<String> listModel = (DefaultListModel<String>) fieldList.getModel();
+		DefaultListModel<String> listModel = (DefaultListModel<String>) fieldList
+				.getModel();
 		listModel.removeElement(fieldName);
 		if (listModel.isEmpty()) {
 			removeFieldButton.setEnabled(false);

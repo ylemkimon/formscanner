@@ -11,7 +11,6 @@ import java.io.IOException;
 
 import javax.swing.JButton;
 import javax.swing.JEditorPane;
-import javax.swing.JInternalFrame;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
@@ -19,6 +18,7 @@ import javax.swing.JTextArea;
 import javax.swing.SpringLayout;
 
 import org.albertoborsetta.formscanner.commons.FormScannerConstants;
+import org.albertoborsetta.formscanner.commons.FormScannerConstants.Frame;
 import org.albertoborsetta.formscanner.commons.resources.FormScannerResources;
 import org.albertoborsetta.formscanner.commons.translation.FormScannerTranslation;
 import org.albertoborsetta.formscanner.commons.translation.FormScannerTranslationKeys;
@@ -28,7 +28,7 @@ import org.albertoborsetta.formscanner.gui.builder.TabbedPaneBuilder;
 import org.albertoborsetta.formscanner.gui.controller.AboutFrameController;
 import org.albertoborsetta.formscanner.model.FormScannerModel;
 
-public class AboutFrame extends JInternalFrame {
+public class AboutFrame extends InternalFrame {
 
 	/**
 	 * 
@@ -41,15 +41,15 @@ public class AboutFrame extends JInternalFrame {
 	 * Create the frame.
 	 */
 	public AboutFrame(FormScannerModel model) {
-		this.model = model;
+		super(model);
 
 		aboutFrameController = new AboutFrameController(this.model);
 		aboutFrameController.add(this);
 
-		setName(FormScannerConstants.ABOUT_FRAME_NAME);
+		setName(Frame.ABOUT_FRAME.name());
 		setTitle(FormScannerTranslation
 				.getTranslationFor(FormScannerTranslationKeys.ABOUT_FRAME_TITLE));
-		setBounds(100, 100, 600, 500);
+		setBounds(model.getLastPosition(Frame.ABOUT_FRAME));
 		setMinimumSize(new Dimension(300, 500));
 		setResizable(false);
 

@@ -4,6 +4,7 @@ import javax.swing.event.InternalFrameEvent;
 import javax.swing.event.InternalFrameListener;
 
 import org.albertoborsetta.formscanner.model.FormScannerModel;
+import org.albertoborsetta.formscanner.gui.InternalFrame;
 
 public class InternalFrameController implements InternalFrameListener {
 
@@ -28,7 +29,7 @@ public class InternalFrameController implements InternalFrameListener {
 	}
 
 	public void internalFrameClosing(InternalFrameEvent e) {
-		model.disposeRelatedFrame(e.getInternalFrame());
+		model.disposeRelatedFrame((InternalFrame) e.getInternalFrame());
 	}
 
 	public void internalFrameClosed(InternalFrameEvent e) {

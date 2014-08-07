@@ -1,10 +1,10 @@
 package org.albertoborsetta.formscanner.gui;
 
-import javax.swing.JInternalFrame;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
+
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableCellRenderer;
@@ -14,24 +14,20 @@ import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
 
 import org.albertoborsetta.formscanner.commons.FormField;
-import org.albertoborsetta.formscanner.commons.FormScannerConstants;
+import org.albertoborsetta.formscanner.commons.FormScannerConstants.Frame;
 import org.albertoborsetta.formscanner.commons.FormTemplate;
 import org.albertoborsetta.formscanner.commons.translation.FormScannerTranslation;
 import org.albertoborsetta.formscanner.commons.translation.FormScannerTranslationKeys;
 import org.albertoborsetta.formscanner.gui.builder.ScrollPaneBuilder;
-import org.albertoborsetta.formscanner.gui.controller.InternalFrameController;
 import org.albertoborsetta.formscanner.model.FormScannerModel;
 
-public class ResultsGridFrame extends JInternalFrame {
+public class ResultsGridFrame extends InternalFrame {
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
 
 	private JTable table;
-
-	private FormScannerModel formScannerModel;
-	private InternalFrameController internalFrameController;
 
 	private JScrollPane responsesGridPanel;
 	private FormTemplate form;
@@ -59,7 +55,8 @@ public class ResultsGridFrame extends JInternalFrame {
 	 * Create the frame.
 	 */
 	public ResultsGridFrame(FormScannerModel model) {
-		formScannerModel = model;
+		super(model);
+
 		this.form = model.getFilledForm();
 
 		FormTemplate template = model.getTemplate();
@@ -67,14 +64,10 @@ public class ResultsGridFrame extends JInternalFrame {
 		rows = template.getFields().size() + 1;
 		cols = 2;
 		
-		internalFrameController = InternalFrameController
-				.getInstance(formScannerModel);
-		addInternalFrameListener(internalFrameController);
-
-		setName(FormScannerConstants.RESULTS_GRID_FRAME_NAME);
+		setBounds(model.getLastPosition(Frame.RESULTS_GRID_FRAME));
+		setName(Frame.RESULTS_GRID_FRAME.name());
 		setTitle(FormScannerTranslation
 				.getTranslationFor(FormScannerTranslationKeys.RESULTS_GRID_FRAME_TITLE));
-		setBounds(700, 100, 230, 300);
 		setClosable(true);
 		setIconifiable(true);
 		setResizable(true);

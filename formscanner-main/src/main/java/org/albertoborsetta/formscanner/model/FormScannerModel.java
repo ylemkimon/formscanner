@@ -19,6 +19,7 @@ import org.albertoborsetta.formscanner.gui.AboutFrame;
 import org.albertoborsetta.formscanner.gui.FileListFrame;
 import org.albertoborsetta.formscanner.gui.FormScanner;
 import org.albertoborsetta.formscanner.gui.ImageView;
+import org.albertoborsetta.formscanner.gui.InternalFrame;
 import org.albertoborsetta.formscanner.gui.ManageTemplateFrame;
 import org.albertoborsetta.formscanner.gui.ImageFrame;
 import org.albertoborsetta.formscanner.gui.OptionsFrame;
@@ -28,7 +29,7 @@ import org.albertoborsetta.formscanner.gui.ScrollableImageView;
 import org.albertoborsetta.formscanner.gui.TabbedView;
 
 import java.awt.Cursor;
-import java.awt.Dimension;
+import java.awt.Rectangle;
 import java.io.File;
 import java.net.URL;
 import java.text.SimpleDateFormat;
@@ -38,7 +39,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map.Entry;
 
-import javax.swing.JInternalFrame;
 import javax.swing.JOptionPane;
 
 import org.apache.commons.io.FilenameUtils;
@@ -76,6 +76,14 @@ public class FormScannerModel {
 	private FormTemplate filledForm;
 	private int shapeSize;
 	private ShapeType shapeType;
+	private Rectangle fileListFramePosition;
+	private Rectangle renameFilesFramePosition;
+	private Rectangle manageTemplateFramePosition;
+	private Rectangle imageFramePosition;
+	private Rectangle resultsGridFramePosition;
+	private Rectangle defaultPosition;
+	private Rectangle aboutFramePosition;
+	private Rectangle optionsFramePosition;
 
 	public FormScannerModel(FormScanner view) {
 		this.view = view;
@@ -110,6 +118,21 @@ public class FormScannerModel {
 			FormScannerResources.setTemplate(tmpl);
 			openTemplate(FormScannerResources.getTemplate(), false);
 		}
+		
+	}
+
+	public void setDefaultFramePositions() {
+		int desktopHeight = view.getDesktopSize().height;
+		int desktopWidth = view.getDesktopSize().width;
+		
+		fileListFramePosition = new Rectangle(10, 10, 200, desktopHeight-20);
+		renameFilesFramePosition = new Rectangle(220, 320, 370, 100);
+		manageTemplateFramePosition = new Rectangle(100, 100, 600, 500);
+		imageFramePosition = new Rectangle(320, 10, desktopWidth - 500, desktopHeight - 20);
+		resultsGridFramePosition = new Rectangle(700, 100, 230, 300);
+		aboutFramePosition = new Rectangle(100, 100, 600, 500);
+		optionsFramePosition = new Rectangle(100, 100, 300, 300);
+		defaultPosition = new Rectangle(100, 100, 600, 500);
 	}
 
 	public void openImages() {
@@ -353,23 +376,20 @@ public class FormScannerModel {
 		return openedFiles.get(index).getName();
 	}
 
-	public Dimension getDesktopSize() {
-		return view.getDesktopSize();
-	}
-
-	public void disposeRelatedFrame(JInternalFrame frame) {
+	public void disposeRelatedFrame(InternalFrame frame) {
 		Frame frm = Frame.valueOf(frame.getName());
+		setLastPosition(frm, frame.getBounds());
 		switch (frm) {
-		case RENAME_FILES_FRAME_NAME:
+		case RENAME_FILES_FRAME:
 			view.disposeFrame(imageFrame);
 			break;
-		case IMAGE_FRAME_NAME:
+		case IMAGE_FRAME:
 			view.disposeFrame(renameFileFrame);
 			view.disposeFrame(manageTemplateFrame);
 			view.disposeFrame(resultsGridFrame);
 			resetPoints();
 			break;
-		case MANAGE_TEMPLATE_FRAME_NAME:
+		case MANAGE_TEMPLATE_FRAME:
 			view.disposeFrame(imageFrame);
 			break;
 		default:
@@ -644,7 +664,7 @@ public class FormScannerModel {
 	}
 
 	public void showAboutFrame() {
-		JInternalFrame aboutFrame = new AboutFrame(this);
+		InternalFrame aboutFrame = new AboutFrame(this);
 		view.arrangeFrame(aboutFrame);
 	}
 
@@ -694,7 +714,7 @@ public class FormScannerModel {
 	}
 
 	public void showOptionsFrame() {
-		JInternalFrame optionsFrame = new OptionsFrame(this);
+		InternalFrame optionsFrame = new OptionsFrame(this);
 		view.arrangeFrame(optionsFrame);
 	}
 
@@ -755,5 +775,56 @@ public class FormScannerModel {
 
 	public FormTemplate getTemplate() {
 		return formTemplate;
+	}
+
+	public Rectangle getLastPosition(Frame frame) {
+		Frame frm = Frame.valueOf(frame.name());
+		switch (frm) {
+		case FILE_LIST_FRAME:
+			return fileListFramePosition;
+		case RENAME_FILES_FRAME:
+			return renameFilesFramePosition;
+		case MANAGE_TEMPLATE_FRAME:
+			return manageTemplateFramePosition;
+		case IMAGE_FRAME:
+			return imageFramePosition;
+		case RESULTS_GRID_FRAME:
+			return resultsGridFramePosition;
+		case ABOUT_FRAME:
+			return aboutFramePosition;
+		case OPTIONS_FRAME:
+			return optionsFramePosition;
+		default:
+			return defaultPosition;
+		}
+	}
+	
+	public void setLastPosition(Frame frame, Rectangle position) {
+		Frame frm = Frame.valueOf(frame.name());
+		switch (frm) {
+		case FILE_LIST_FRAME:
+			fileListFramePosition = position;
+			break;
+		case RENAME_FILES_FRAME:
+			renameFilesFramePosition = position;
+			break;
+		case MANAGE_TEMPLATE_FRAME:
+			manageTemplateFramePosition = position;
+			break;
+		case IMAGE_FRAME:
+			imageFramePosition = position;
+			break;
+		case RESULTS_GRID_FRAME:
+			resultsGridFramePosition = position;
+			break;
+		case ABOUT_FRAME:
+			aboutFramePosition = position;
+			break;
+		case OPTIONS_FRAME:
+			optionsFramePosition = position;
+			break;
+		default:
+			defaultPosition = position;
+		}
 	}
 }

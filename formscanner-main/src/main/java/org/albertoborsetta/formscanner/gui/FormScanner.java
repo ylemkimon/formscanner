@@ -7,12 +7,11 @@ import java.awt.Dimension;
 import java.awt.Toolkit;
 
 import javax.swing.JFrame;
-import javax.swing.JInternalFrame;
 import javax.swing.JDesktopPane;
 import javax.swing.UIManager;
 import javax.swing.UIManager.LookAndFeelInfo;
 
-import org.albertoborsetta.formscanner.commons.FormPoint;
+import org.albertoborsetta.formscanner.commons.FormScannerConstants.Frame;
 import org.albertoborsetta.formscanner.commons.translation.FormScannerTranslation;
 import org.albertoborsetta.formscanner.commons.translation.FormScannerTranslationKeys;
 import org.albertoborsetta.formscanner.model.FormScannerModel;
@@ -72,9 +71,10 @@ public class FormScanner extends JFrame {
 		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize(); 
 		setSize(screenSize);
 		setVisible(true);
+		model.setDefaultFramePositions();
 	}
 	
-	public void arrangeFrame(JInternalFrame frame) {
+	public void arrangeFrame(InternalFrame frame) {
 		boolean found = false;
 		
 		for (Component component: desktopPane.getComponents()) {
@@ -94,8 +94,9 @@ public class FormScanner extends JFrame {
 		}
 	}
 	
-	public void disposeFrame(JInternalFrame frame) {
+	public void disposeFrame(InternalFrame frame) {
 		if (frame != null) {
+			model.setLastPosition(Frame.valueOf(frame.getName()), frame.getBounds());
 			frame.setVisible(false);
 			desktopPane.remove(frame);
 		}
