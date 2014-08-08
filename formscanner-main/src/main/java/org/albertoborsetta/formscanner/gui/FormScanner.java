@@ -3,8 +3,6 @@ package org.albertoborsetta.formscanner.gui;
 import java.awt.Component;
 import java.awt.EventQueue;
 import java.awt.BorderLayout;
-import java.awt.Dimension;
-import java.awt.Toolkit;
 
 import javax.swing.JFrame;
 import javax.swing.JDesktopPane;
@@ -68,10 +66,9 @@ public class FormScanner extends JFrame {
 		desktopPane = new JDesktopPane();
 		getContentPane().add(desktopPane, BorderLayout.CENTER);	
 		
-		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize(); 
-		setSize(screenSize);
-		setVisible(true);
 		model.setDefaultFramePositions();
+		setBounds(model.getLastPosition(Frame.DESKTOP_FRAME));
+		setVisible(true);
 	}
 	
 	public void arrangeFrame(InternalFrame frame) {
@@ -102,10 +99,6 @@ public class FormScanner extends JFrame {
 		}
 		setDefaultControllersEnabled();
 		model.resetFirstPass();
-	}
-	
-	public Dimension getDesktopSize() {
-		return desktopPane.getSize();
 	}
 	
 	public void setDefaultControllersEnabled() {
