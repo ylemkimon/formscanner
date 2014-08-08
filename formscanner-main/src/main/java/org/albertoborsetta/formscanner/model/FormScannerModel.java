@@ -84,6 +84,7 @@ public class FormScannerModel {
 	private Rectangle defaultPosition;
 	private Rectangle aboutFramePosition;
 	private Rectangle optionsFramePosition;
+	private Rectangle desktopSize;
 
 	public FormScannerModel(FormScanner view) {
 		this.view = view;
@@ -118,21 +119,27 @@ public class FormScannerModel {
 			FormScannerResources.setTemplate(tmpl);
 			openTemplate(FormScannerResources.getTemplate(), false);
 		}
-		
+
 	}
 
 	public void setDefaultFramePositions() {
-		int desktopHeight = view.getDesktopSize().height;
-		int desktopWidth = view.getDesktopSize().width;
-		
-		fileListFramePosition = new Rectangle(10, 10, 200, desktopHeight-20);
-		renameFilesFramePosition = new Rectangle(220, 320, 370, 100);
-		manageTemplateFramePosition = new Rectangle(100, 100, 600, 500);
-		imageFramePosition = new Rectangle(320, 10, desktopWidth - 500, desktopHeight - 20);
-		resultsGridFramePosition = new Rectangle(700, 100, 230, 300);
-		aboutFramePosition = new Rectangle(100, 100, 600, 500);
-		optionsFramePosition = new Rectangle(100, 100, 300, 300);
-		defaultPosition = new Rectangle(100, 100, 600, 500);
+		for (Frame frame : Frame.values()) {
+			String pos = configurations.getProperty(
+					frame.getConfigurationKey(), null);
+			Rectangle position;
+			if (pos == null) {
+				position = frame.getDefaultPosition();
+			} else {
+				String[] positions = StringUtils.split(pos, ',');
+
+				position = new Rectangle(Integer.parseInt(positions[0]),
+						Integer.parseInt(positions[1]),
+						Integer.parseInt(positions[2]),
+						Integer.parseInt(positions[3]));
+			}
+
+			setLastPosition(frame, position);
+		}
 	}
 
 	public void openImages() {
@@ -237,7 +244,7 @@ public class FormScannerModel {
 						filledForm.findPoints(threshold, density, shapeSize);
 						filledForms.put(filledForm.getName(), filledForm);
 					}
-					
+
 					Date today = Calendar.getInstance().getTime();
 					SimpleDateFormat sdf = new SimpleDateFormat(
 							"yyyyMMddHHmmss");
@@ -599,13 +606,13 @@ public class FormScannerModel {
 			formTemplate = new FormTemplate(template);
 			if (notify) {
 				JOptionPane
-				.showMessageDialog(
-						null,
-						FormScannerTranslation
-						.getTranslationFor(FormScannerTranslationKeys.TEMPLATE_LOADED),
-						FormScannerTranslation
-						.getTranslationFor(FormScannerTranslationKeys.TEMPLATE_LOADED_POPUP),
-						JOptionPane.INFORMATION_MESSAGE);
+						.showMessageDialog(
+								null,
+								FormScannerTranslation
+										.getTranslationFor(FormScannerTranslationKeys.TEMPLATE_LOADED),
+								FormScannerTranslation
+										.getTranslationFor(FormScannerTranslationKeys.TEMPLATE_LOADED_POPUP),
+								JOptionPane.INFORMATION_MESSAGE);
 			}
 			configurations.setProperty(FormScannerConfigurationKeys.TEMPLATE,
 					template.getAbsolutePath());
@@ -737,7 +744,7 @@ public class FormScannerModel {
 		configurations.setProperty(FormScannerConfigurationKeys.SHAPE_SIZE,
 				String.valueOf(shapeSize));
 		configurations.setProperty(FormScannerConfigurationKeys.SHAPE_TYPE,
-				shapeType.name());
+				shapeType.getName());
 		configurations.store();
 	}
 
@@ -792,13 +799,22 @@ public class FormScannerModel {
 			return aboutFramePosition;
 		case OPTIONS_FRAME:
 			return optionsFramePosition;
+		case DESKTOP_FRAME:
+			return desktopSize;
 		default:
 			return defaultPosition;
 		}
 	}
-	
+
 	public void setLastPosition(Frame frame, Rectangle position) {
 		Frame frm = Frame.valueOf(frame.name());
+
+		String[] positions = { String.valueOf(position.x),
+				String.valueOf(position.y), String.valueOf(position.width),
+				String.valueOf(position.height) };
+
+		configurations.setProperty(frm.getConfigurationKey(), StringUtils.join(positions, ','));
+
 		switch (frm) {
 		case FILE_LIST_FRAME:
 			fileListFramePosition = position;
@@ -821,8 +837,12 @@ public class FormScannerModel {
 		case OPTIONS_FRAME:
 			optionsFramePosition = position;
 			break;
+		case DESKTOP_FRAME:
+			desktopSize = position;
+			break;
 		default:
 			defaultPosition = position;
+			break;
 		}
 	}
 }

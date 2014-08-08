@@ -42,7 +42,7 @@ public class FormTemplateWrapper {
 		for (Entry<Corners, FormPoint> corner : template.getCorners()
 				.entrySet()) {
 			Element cornerElement = doc.createElement("corner");
-			cornerElement.setAttribute("position", corner.getKey().name());
+			cornerElement.setAttribute("position", corner.getKey().getName());
 			cornerElement.appendChild(corner.getValue().getXml(doc));
 			cornersElement.appendChild(cornerElement);
 		}
