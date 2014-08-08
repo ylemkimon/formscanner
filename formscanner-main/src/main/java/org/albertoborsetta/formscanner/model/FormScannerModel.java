@@ -814,7 +814,8 @@ public class FormScannerModel {
 				String.valueOf(position.height) };
 
 		configurations.setProperty(frm.getConfigurationKey(), StringUtils.join(positions, ','));
-
+		configurations.store();
+		
 		switch (frm) {
 		case FILE_LIST_FRAME:
 			fileListFramePosition = position;
