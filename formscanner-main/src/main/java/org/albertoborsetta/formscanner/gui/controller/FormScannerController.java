@@ -11,6 +11,7 @@ import javax.swing.JRadioButtonMenuItem;
 
 import org.albertoborsetta.formscanner.commons.FormScannerConstants;
 import org.albertoborsetta.formscanner.commons.FormScannerConstants.Action;
+import org.albertoborsetta.formscanner.commons.FormScannerConstants.Frame;
 import org.albertoborsetta.formscanner.model.FormScannerModel;
 
 public class FormScannerController implements ActionListener, WindowListener {
@@ -84,6 +85,7 @@ public class FormScannerController implements ActionListener, WindowListener {
 	}
 
 	public void windowClosing(WindowEvent e) {
+		model.setLastPosition(Frame.DESKTOP_FRAME, e.getWindow().getBounds());
 		e.getWindow().dispose();
 		System.exit(0);
 	}

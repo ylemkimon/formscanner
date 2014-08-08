@@ -12,6 +12,7 @@ import javax.swing.UIManager.LookAndFeelInfo;
 import org.albertoborsetta.formscanner.commons.FormScannerConstants.Frame;
 import org.albertoborsetta.formscanner.commons.translation.FormScannerTranslation;
 import org.albertoborsetta.formscanner.commons.translation.FormScannerTranslationKeys;
+import org.albertoborsetta.formscanner.gui.controller.FormScannerController;
 import org.albertoborsetta.formscanner.model.FormScannerModel;
 
 public class FormScanner extends JFrame {
@@ -22,6 +23,7 @@ public class FormScanner extends JFrame {
 	private static JDesktopPane desktopPane;
 	private ToolBar toolBar;
 	private MenuBar menuBar;
+	private FormScannerController mainFrameController;
 
 	/**
 	 * Launch the application.
@@ -52,6 +54,11 @@ public class FormScanner extends JFrame {
 	 */
 	private FormScanner() {
 		model = new FormScannerModel(this);
+		mainFrameController = FormScannerController
+				.getInstance(model);
+		addWindowListener(mainFrameController);
+		
+		setName(Frame.DESKTOP_FRAME.name());
 		
 		setTitle(FormScannerTranslation.getTranslationFor(FormScannerTranslationKeys.FORMSCANNER_MAIN_TITLE));
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
