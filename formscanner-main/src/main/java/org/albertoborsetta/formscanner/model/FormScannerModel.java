@@ -144,6 +144,9 @@ public class FormScannerModel {
 	}
 
 	public void openImages() {
+		filledForms.clear();
+		openedFiles.clear();
+		firstPass = true;
 		File[] fileArray = fileUtils.chooseImages();
 		if (fileArray != null) {
 			Integer fileIndex = 0;
