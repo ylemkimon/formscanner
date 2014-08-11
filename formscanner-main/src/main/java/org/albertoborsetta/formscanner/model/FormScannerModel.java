@@ -32,6 +32,7 @@ import java.awt.Cursor;
 import java.awt.Rectangle;
 import java.io.File;
 import java.net.URL;
+import java.sql.ResultSetMetaData;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -341,7 +342,11 @@ public class FormScannerModel {
 	}
 
 	public void createResultsGridFrame() {
-		resultsGridFrame = new ResultsGridFrame(this);
+		if (resultsGridFrame == null) {
+			resultsGridFrame = new ResultsGridFrame(this);
+		} else {
+			resultsGridFrame.updateResults();
+		}
 		view.arrangeFrame(resultsGridFrame);
 	}
 
@@ -425,7 +430,11 @@ public class FormScannerModel {
 
 	public void createFormImageFrame(File image, FormTemplate template,
 			Mode mode) {
-		imageFrame = new ImageFrame(this, image, template, mode);
+		if (imageFrame == null) {
+			imageFrame = new ImageFrame(this, image, template, mode);
+		} else {
+			imageFrame.updateImage(image, template);
+		}
 		view.arrangeFrame(imageFrame);
 	}
 
@@ -813,9 +822,10 @@ public class FormScannerModel {
 				String.valueOf(position.y), String.valueOf(position.width),
 				String.valueOf(position.height) };
 
-		configurations.setProperty(frm.getConfigurationKey(), StringUtils.join(positions, ','));
+		configurations.setProperty(frm.getConfigurationKey(),
+				StringUtils.join(positions, ','));
 		configurations.store();
-		
+
 		switch (frm) {
 		case FILE_LIST_FRAME:
 			fileListFramePosition = position;

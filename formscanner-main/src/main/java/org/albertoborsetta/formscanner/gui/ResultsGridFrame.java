@@ -57,7 +57,7 @@ public class ResultsGridFrame extends InternalFrame {
 	public ResultsGridFrame(FormScannerModel model) {
 		super(model);
 
-		this.form = model.getFilledForm();
+		form = model.getFilledForm();
 
 		FormTemplate template = model.getTemplate();
 		header = (String[]) template.getHeader();
@@ -141,5 +141,11 @@ public class ResultsGridFrame extends InternalFrame {
 		table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 		
 		return table;
+	}
+
+	public void updateResults() {
+		form = model.getFilledForm();
+		clearTable();
+		setupTable();
 	}
 }
