@@ -1,3 +1,16 @@
+FormScanner 0.8-SNAPSHOT (released)
+===
+NEW FEATURES
+---
+
+* Store position and size of internal frames
+* Support for multicore CPU's
+
+FIXES
+---
+
+* BugFix
+
 FormScanner 0.7.1 (released 2014-06-11)
 ===
 FIXES
