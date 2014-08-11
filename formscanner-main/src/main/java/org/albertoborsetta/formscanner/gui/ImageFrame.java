@@ -45,7 +45,6 @@ public class ImageFrame extends InternalFrame implements ScrollableImageView {
 
 	private static final long serialVersionUID = 1L;
 
-	private FormScannerModel model;
 	private ImagePanel imagePanel;
 	private ImageScrollPane scrollPane;
 	private ImageFrameController controller;
@@ -408,6 +407,12 @@ public class ImageFrame extends InternalFrame implements ScrollableImageView {
 
 	public void updateImage(File file) {
 		imagePanel.setImage(file);
+		repaint();
+	}
+	
+	public void updateImage(File file, FormTemplate filledForm) {
+		imagePanel.setImage(file);
+		template = filledForm;
 		repaint();
 	}
 

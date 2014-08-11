@@ -101,8 +101,7 @@ public class FormScanner extends JFrame {
 	public void disposeFrame(InternalFrame frame) {
 		if (frame != null) {
 			model.setLastPosition(Frame.valueOf(frame.getName()), frame.getBounds());
-			frame.setVisible(false);
-			desktopPane.remove(frame);
+			frame.dispose();
 		}
 		setDefaultControllersEnabled();
 		model.resetFirstPass();
