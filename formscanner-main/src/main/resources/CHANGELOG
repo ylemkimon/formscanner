@@ -1,4 +1,12 @@
-FormScanner 0.7.1 (released 2014-11-06)
+FormScanner 0.7.2-SNAPSHOT (released )
+===
+FIXES
+---
+
+* Elder results saved on output file
+* BugFix
+
+FormScanner 0.7.1 (released 2014-06-11)
 ===
 FIXES
 ---
