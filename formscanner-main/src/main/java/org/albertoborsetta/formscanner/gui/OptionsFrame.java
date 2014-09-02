@@ -6,13 +6,13 @@ import javax.swing.BorderFactory;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
-import javax.swing.JInternalFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSpinner;
 import javax.swing.SpringLayout;
 
 import org.albertoborsetta.formscanner.commons.FormScannerConstants;
+import org.albertoborsetta.formscanner.commons.FormScannerConstants.Frame;
 import org.albertoborsetta.formscanner.commons.FormScannerConstants.ShapeType;
 import org.albertoborsetta.formscanner.commons.translation.FormScannerTranslation;
 import org.albertoborsetta.formscanner.commons.translation.FormScannerTranslationKeys;
@@ -24,7 +24,7 @@ import org.albertoborsetta.formscanner.gui.builder.SpinnerBuilder;
 import org.albertoborsetta.formscanner.gui.controller.OptionsFrameController;
 import org.albertoborsetta.formscanner.model.FormScannerModel;
 
-public class OptionsFrame extends JInternalFrame {
+public class OptionsFrame extends InternalFrame {
 
 	/**
 	 * 
@@ -43,15 +43,15 @@ public class OptionsFrame extends JInternalFrame {
 	 * Create the frame.
 	 */
 	public OptionsFrame(FormScannerModel model) {
-		this.model = model;
+		super(model);
 
 		optionsFrameController = new OptionsFrameController(model);
 		optionsFrameController.add(this);
 
-		setName(FormScannerConstants.OPTIONS_FRAME_NAME);
+		setBounds(model.getLastPosition(Frame.OPTIONS_FRAME));
+		setName(Frame.OPTIONS_FRAME.name());
 		setTitle(FormScannerTranslation
 				.getTranslationFor(FormScannerTranslationKeys.OPTIONS_FRAME_TITLE));
-		setBounds(100, 100, 300, 300);
 		setResizable(false);
 
 		JPanel optionsPanel = getOptionsPanel();

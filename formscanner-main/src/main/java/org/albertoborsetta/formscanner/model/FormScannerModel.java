@@ -19,6 +19,7 @@ import org.albertoborsetta.formscanner.gui.AboutFrame;
 import org.albertoborsetta.formscanner.gui.FileListFrame;
 import org.albertoborsetta.formscanner.gui.FormScanner;
 import org.albertoborsetta.formscanner.gui.ImageView;
+import org.albertoborsetta.formscanner.gui.InternalFrame;
 import org.albertoborsetta.formscanner.gui.ManageTemplateFrame;
 import org.albertoborsetta.formscanner.gui.ImageFrame;
 import org.albertoborsetta.formscanner.gui.OptionsFrame;
@@ -28,9 +29,10 @@ import org.albertoborsetta.formscanner.gui.ScrollableImageView;
 import org.albertoborsetta.formscanner.gui.TabbedView;
 
 import java.awt.Cursor;
-import java.awt.Dimension;
+import java.awt.Rectangle;
 import java.io.File;
 import java.net.URL;
+import java.sql.ResultSetMetaData;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -38,7 +40,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map.Entry;
 
-import javax.swing.JInternalFrame;
 import javax.swing.JOptionPane;
 
 import org.apache.commons.io.FilenameUtils;
@@ -76,16 +77,27 @@ public class FormScannerModel {
 	private FormTemplate filledForm;
 	private int shapeSize;
 	private ShapeType shapeType;
+	private Rectangle fileListFramePosition;
+	private Rectangle renameFilesFramePosition;
+	private Rectangle manageTemplateFramePosition;
+	private Rectangle imageFramePosition;
+	private Rectangle resultsGridFramePosition;
+	private Rectangle defaultPosition;
+	private Rectangle aboutFramePosition;
+	private Rectangle optionsFramePosition;
+	private Rectangle desktopSize;
 
 	public FormScannerModel(FormScanner view) {
 		this.view = view;
 
-		path = StringUtils.defaultIfBlank(System.getProperty("FormScanner_HOME"), System.getenv("FormScanner_HOME"));
+		path = StringUtils.defaultIfBlank(
+				System.getProperty("FormScanner_HOME"),
+				System.getenv("FormScanner_HOME"));
 		configurations = FormScannerConfiguration.getConfiguration(path);
 
 		lang = configurations.getProperty(FormScannerConfigurationKeys.LANG,
 				FormScannerConfigurationKeys.DEFAULT_LANG);
-		
+
 		FormScannerTranslation.setTranslation(path, lang);
 		FormScannerResources.setResources(path);
 
@@ -101,12 +113,33 @@ public class FormScannerModel {
 		shapeType = ShapeType.valueOf(configurations.getProperty(
 				FormScannerConfigurationKeys.SHAPE_TYPE,
 				FormScannerConfigurationKeys.DEFAULT_SHAPE_TYPE));
-		
+
 		String tmpl = configurations.getProperty(
 				FormScannerConfigurationKeys.TEMPLATE, null);
 		if (!StringUtils.isEmpty(tmpl)) {
 			FormScannerResources.setTemplate(tmpl);
 			openTemplate(FormScannerResources.getTemplate(), false);
+		}
+
+	}
+
+	public void setDefaultFramePositions() {
+		for (Frame frame : Frame.values()) {
+			String pos = configurations.getProperty(
+					frame.getConfigurationKey(), null);
+			Rectangle position;
+			if (pos == null) {
+				position = frame.getDefaultPosition();
+			} else {
+				String[] positions = StringUtils.split(pos, ',');
+
+				position = new Rectangle(Integer.parseInt(positions[0]),
+						Integer.parseInt(positions[1]),
+						Integer.parseInt(positions[2]),
+						Integer.parseInt(positions[3]));
+			}
+
+			setLastPosition(frame, position);
 		}
 	}
 
@@ -144,13 +177,16 @@ public class FormScannerModel {
 				renamedFileIndex = fileListFrame.getSelectedItemIndex();
 				fileListFrame.selectFile(renamedFileIndex);
 				File imageFile = openedFiles.get(renamedFileIndex);
-				filledForm = new FormTemplate(imageFile);
 
-				createFormImageFrame(imageFile, filledForm, Mode.VIEW);
-
-				renameFileFrame = new RenameFileFrame(this,
-						getFileNameByIndex(renamedFileIndex));
-				view.arrangeFrame(renameFileFrame);
+				try {
+					filledForm = new FormTemplate(imageFile);
+					createFormImageFrame(imageFile, filledForm, Mode.VIEW);
+					renameFileFrame = new RenameFileFrame(this,
+							getFileNameByIndex(renamedFileIndex));
+					view.arrangeFrame(renameFileFrame);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
 			}
 			break;
 		case RENAME_FILES_CURRENT:
@@ -290,8 +326,7 @@ public class FormScannerModel {
 				filledForm.findPoints(threshold, density, shapeSize);
 				points = filledForm.getFieldPoints();
 				filledForms.put(filledForm.getName(), filledForm);
-				createFormImageFrame(imageFile, filledForm,
-						Mode.MODIFY_POINTS);
+				createFormImageFrame(imageFile, filledForm, Mode.MODIFY_POINTS);
 				createResultsGridFrame();
 				break;
 			default:
@@ -310,7 +345,11 @@ public class FormScannerModel {
 	}
 
 	public void createResultsGridFrame() {
-		resultsGridFrame = new ResultsGridFrame(this);
+		if (resultsGridFrame == null) {
+			resultsGridFrame = new ResultsGridFrame(this);
+		} else {
+			resultsGridFrame.updateResults();
+		}
 		view.arrangeFrame(resultsGridFrame);
 	}
 
@@ -350,23 +389,20 @@ public class FormScannerModel {
 		return openedFiles.get(index).getName();
 	}
 
-	public Dimension getDesktopSize() {
-		return view.getDesktopSize();
-	}
-
-	public void disposeRelatedFrame(JInternalFrame frame) {
+	public void disposeRelatedFrame(InternalFrame frame) {
 		Frame frm = Frame.valueOf(frame.getName());
+		setLastPosition(frm, frame.getBounds());
 		switch (frm) {
-		case RENAME_FILES_FRAME_NAME:
+		case RENAME_FILES_FRAME:
 			view.disposeFrame(imageFrame);
 			break;
-		case IMAGE_FRAME_NAME:
+		case IMAGE_FRAME:
 			view.disposeFrame(renameFileFrame);
 			view.disposeFrame(manageTemplateFrame);
 			view.disposeFrame(resultsGridFrame);
 			resetPoints();
 			break;
-		case MANAGE_TEMPLATE_FRAME_NAME:
+		case MANAGE_TEMPLATE_FRAME:
 			view.disposeFrame(imageFrame);
 			break;
 		default:
@@ -377,11 +413,15 @@ public class FormScannerModel {
 	public void loadTemplate() {
 		templateImage = fileUtils.chooseImage();
 		if (templateImage != null) {
-			formTemplate = new FormTemplate(templateImage);
-			formTemplate.findCorners(threshold, density);
-			manageTemplateFrame = new ManageTemplateFrame(this);
+			try {
+				formTemplate = new FormTemplate(templateImage);
+				formTemplate.findCorners(threshold, density);
+				manageTemplateFrame = new ManageTemplateFrame(this);
 
-			view.arrangeFrame(manageTemplateFrame);
+				view.arrangeFrame(manageTemplateFrame);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 		}
 	}
 
@@ -393,7 +433,11 @@ public class FormScannerModel {
 
 	public void createFormImageFrame(File image, FormTemplate template,
 			Mode mode) {
-		imageFrame = new ImageFrame(this, image, template, mode);
+		if (imageFrame == null) {
+			imageFrame = new ImageFrame(this, image, template, mode);
+		} else {
+			imageFrame.updateImage(image, template);
+		}
 		view.arrangeFrame(imageFrame);
 	}
 
@@ -570,9 +614,23 @@ public class FormScannerModel {
 			return false;
 		}
 
-		formTemplate = new FormTemplate(template);
-
-		if (!formTemplate.presetFromTemplate()) {
+		try {
+			formTemplate = new FormTemplate(template);
+			if (notify) {
+				JOptionPane
+						.showMessageDialog(
+								null,
+								FormScannerTranslation
+										.getTranslationFor(FormScannerTranslationKeys.TEMPLATE_LOADED),
+								FormScannerTranslation
+										.getTranslationFor(FormScannerTranslationKeys.TEMPLATE_LOADED_POPUP),
+								JOptionPane.INFORMATION_MESSAGE);
+			}
+			configurations.setProperty(FormScannerConfigurationKeys.TEMPLATE,
+					template.getAbsolutePath());
+			configurations.store();
+			return true;
+		} catch (Exception e) {
 			JOptionPane
 					.showMessageDialog(
 							null,
@@ -581,23 +639,10 @@ public class FormScannerModel {
 							FormScannerTranslation
 									.getTranslationFor(FormScannerTranslationKeys.TEMPLATE_NOT_LOADED_POPUP),
 							JOptionPane.ERROR_MESSAGE);
+			e.printStackTrace();
 			return false;
 		}
 
-		if (notify) {
-			JOptionPane
-					.showMessageDialog(
-							null,
-							FormScannerTranslation
-									.getTranslationFor(FormScannerTranslationKeys.TEMPLATE_LOADED),
-							FormScannerTranslation
-									.getTranslationFor(FormScannerTranslationKeys.TEMPLATE_LOADED_POPUP),
-							JOptionPane.INFORMATION_MESSAGE);
-		}
-		configurations.setProperty(FormScannerConfigurationKeys.TEMPLATE,
-				template.getAbsolutePath());
-		configurations.store();
-		return true;
 	}
 
 	public void linkToHelp(URL url) {
@@ -636,7 +681,7 @@ public class FormScannerModel {
 	}
 
 	public void showAboutFrame() {
-		JInternalFrame aboutFrame = new AboutFrame(this);
+		InternalFrame aboutFrame = new AboutFrame(this);
 		view.arrangeFrame(aboutFrame);
 	}
 
@@ -686,7 +731,7 @@ public class FormScannerModel {
 	}
 
 	public void showOptionsFrame() {
-		JInternalFrame optionsFrame = new OptionsFrame(this);
+		InternalFrame optionsFrame = new OptionsFrame(this);
 		view.arrangeFrame(optionsFrame);
 	}
 
@@ -711,7 +756,7 @@ public class FormScannerModel {
 		configurations.setProperty(FormScannerConfigurationKeys.SHAPE_SIZE,
 				String.valueOf(shapeSize));
 		configurations.setProperty(FormScannerConfigurationKeys.SHAPE_TYPE,
-				shapeType.name());
+				shapeType.getName());
 		configurations.store();
 	}
 
@@ -747,5 +792,71 @@ public class FormScannerModel {
 
 	public FormTemplate getTemplate() {
 		return formTemplate;
+	}
+
+	public Rectangle getLastPosition(Frame frame) {
+		Frame frm = Frame.valueOf(frame.name());
+		switch (frm) {
+		case FILE_LIST_FRAME:
+			return fileListFramePosition;
+		case RENAME_FILES_FRAME:
+			return renameFilesFramePosition;
+		case MANAGE_TEMPLATE_FRAME:
+			return manageTemplateFramePosition;
+		case IMAGE_FRAME:
+			return imageFramePosition;
+		case RESULTS_GRID_FRAME:
+			return resultsGridFramePosition;
+		case ABOUT_FRAME:
+			return aboutFramePosition;
+		case OPTIONS_FRAME:
+			return optionsFramePosition;
+		case DESKTOP_FRAME:
+			return desktopSize;
+		default:
+			return defaultPosition;
+		}
+	}
+
+	public void setLastPosition(Frame frame, Rectangle position) {
+		Frame frm = Frame.valueOf(frame.name());
+
+		String[] positions = { String.valueOf(position.x),
+				String.valueOf(position.y), String.valueOf(position.width),
+				String.valueOf(position.height) };
+
+		configurations.setProperty(frm.getConfigurationKey(),
+				StringUtils.join(positions, ','));
+		configurations.store();
+
+		switch (frm) {
+		case FILE_LIST_FRAME:
+			fileListFramePosition = position;
+			break;
+		case RENAME_FILES_FRAME:
+			renameFilesFramePosition = position;
+			break;
+		case MANAGE_TEMPLATE_FRAME:
+			manageTemplateFramePosition = position;
+			break;
+		case IMAGE_FRAME:
+			imageFramePosition = position;
+			break;
+		case RESULTS_GRID_FRAME:
+			resultsGridFramePosition = position;
+			break;
+		case ABOUT_FRAME:
+			aboutFramePosition = position;
+			break;
+		case OPTIONS_FRAME:
+			optionsFramePosition = position;
+			break;
+		case DESKTOP_FRAME:
+			desktopSize = position;
+			break;
+		default:
+			defaultPosition = position;
+			break;
+		}
 	}
 }

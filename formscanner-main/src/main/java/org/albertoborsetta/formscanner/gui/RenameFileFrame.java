@@ -1,18 +1,17 @@
 package org.albertoborsetta.formscanner.gui;
 
 import org.albertoborsetta.formscanner.commons.FormScannerConstants;
+import org.albertoborsetta.formscanner.commons.FormScannerConstants.Frame;
 import org.albertoborsetta.formscanner.commons.translation.FormScannerTranslation;
 import org.albertoborsetta.formscanner.commons.translation.FormScannerTranslationKeys;
 import org.albertoborsetta.formscanner.gui.builder.ButtonBuilder;
 import org.albertoborsetta.formscanner.gui.builder.LabelBuilder;
 import org.albertoborsetta.formscanner.gui.builder.PanelBuilder;
 import org.albertoborsetta.formscanner.gui.builder.TextFieldBuilder;
-import org.albertoborsetta.formscanner.gui.controller.InternalFrameController;
 import org.albertoborsetta.formscanner.gui.controller.RenameFileController;
 import org.albertoborsetta.formscanner.model.FormScannerModel;
 import org.apache.commons.io.FilenameUtils;
 
-import javax.swing.JInternalFrame;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.JLabel;
@@ -21,7 +20,7 @@ import javax.swing.SpringLayout;
 
 import java.awt.BorderLayout;
 
-public class RenameFileFrame extends JInternalFrame implements View {
+public class RenameFileFrame extends InternalFrame implements View {
 
 	private static final long serialVersionUID = 1L;
 
@@ -30,25 +29,21 @@ public class RenameFileFrame extends JInternalFrame implements View {
 	private JButton okButton;
 	private JButton cancelButton;
 	private RenameFileController renameFileController;
-	private InternalFrameController internalFrameController;
 	private JPanel buttonPanel;
 	private JPanel renamePanel;
 
 	/**
 	 * Create the frame.
 	 */
-	public RenameFileFrame(FormScannerModel formScannerModel, String fileName) {
-		renameFileController = new RenameFileController(formScannerModel);
+	public RenameFileFrame(FormScannerModel model, String fileName) {
+		super(model);
+		renameFileController = new RenameFileController(model);
 		renameFileController.add(this);
 
-		setName(FormScannerConstants.RENAME_FILES_FRAME_NAME);
-		setBounds(220, 320, 370, 100);
+		setBounds(model.getLastPosition(Frame.RENAME_FILES_FRAME));
+		setName(Frame.RENAME_FILES_FRAME.name());
 		setClosable(true);
 		setLayout(new BorderLayout());
-
-		internalFrameController = InternalFrameController
-				.getInstance(formScannerModel);
-		addInternalFrameListener(internalFrameController);
 
 		renamePanel = getRenamePanel();
 		buttonPanel = getButtonPanel();

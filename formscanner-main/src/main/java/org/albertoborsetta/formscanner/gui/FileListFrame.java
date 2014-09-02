@@ -1,6 +1,5 @@
 package org.albertoborsetta.formscanner.gui;
 
-import javax.swing.JInternalFrame;
 import javax.swing.JScrollPane;
 import javax.swing.ListSelectionModel;
 
@@ -8,32 +7,28 @@ import java.awt.BorderLayout;
 
 import javax.swing.JList;
 
-import org.albertoborsetta.formscanner.commons.FormScannerConstants;
+import org.albertoborsetta.formscanner.commons.FormScannerConstants.Frame;
 import org.albertoborsetta.formscanner.commons.translation.FormScannerTranslation;
 import org.albertoborsetta.formscanner.commons.translation.FormScannerTranslationKeys;
 import org.albertoborsetta.formscanner.gui.builder.ListBuilder;
 import org.albertoborsetta.formscanner.gui.builder.ScrollPaneBuilder;
 import org.albertoborsetta.formscanner.model.FormScannerModel;
 
-public class FileListFrame extends JInternalFrame {
+public class FileListFrame extends InternalFrame {
 	
 	private static final long serialVersionUID = 1L;
 	
 	private JScrollPane scrollPane;
 	private JList<String> list;
-	private FormScannerModel model;
 	
 	/**
 	 * Create the frame.
 	 */
 	public FileListFrame(FormScannerModel model, String[] fileList) {
+		super(model);
+		setBounds(model.getLastPosition(Frame.FILE_LIST_FRAME));
 		
-		this.model = model;
-		int desktopHeight = this.model.getDesktopSize().height;
-		
-		setBounds(10, 10, 200, desktopHeight-20);
-		
-		setName(FormScannerConstants.FILE_LIST_FRAME_NAME);
+		setName(Frame.FILE_LIST_FRAME.name());
 		setTitle(FormScannerTranslation.getTranslationFor(FormScannerTranslationKeys.FILE_LIST_FRAME_TITLE));		
 		
 		setIconifiable(true);
@@ -76,5 +71,5 @@ public class FileListFrame extends JInternalFrame {
 		
 		return new ScrollPaneBuilder(list)
 			.build();
-	} 
+	}
 }

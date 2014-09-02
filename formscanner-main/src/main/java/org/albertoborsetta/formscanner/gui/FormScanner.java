@@ -3,17 +3,16 @@ package org.albertoborsetta.formscanner.gui;
 import java.awt.Component;
 import java.awt.EventQueue;
 import java.awt.BorderLayout;
-import java.awt.Dimension;
-import java.awt.Toolkit;
 
 import javax.swing.JFrame;
-import javax.swing.JInternalFrame;
 import javax.swing.JDesktopPane;
 import javax.swing.UIManager;
 import javax.swing.UIManager.LookAndFeelInfo;
 
+import org.albertoborsetta.formscanner.commons.FormScannerConstants.Frame;
 import org.albertoborsetta.formscanner.commons.translation.FormScannerTranslation;
 import org.albertoborsetta.formscanner.commons.translation.FormScannerTranslationKeys;
+import org.albertoborsetta.formscanner.gui.controller.FormScannerController;
 import org.albertoborsetta.formscanner.model.FormScannerModel;
 
 public class FormScanner extends JFrame {
@@ -24,6 +23,7 @@ public class FormScanner extends JFrame {
 	private static JDesktopPane desktopPane;
 	private ToolBar toolBar;
 	private MenuBar menuBar;
+	private FormScannerController mainFrameController;
 
 	/**
 	 * Launch the application.
@@ -54,6 +54,11 @@ public class FormScanner extends JFrame {
 	 */
 	private FormScanner() {
 		model = new FormScannerModel(this);
+		mainFrameController = FormScannerController
+				.getInstance(model);
+		addWindowListener(mainFrameController);
+		
+		setName(Frame.DESKTOP_FRAME.name());
 		
 		setTitle(FormScannerTranslation.getTranslationFor(FormScannerTranslationKeys.FORMSCANNER_MAIN_TITLE));
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -68,12 +73,12 @@ public class FormScanner extends JFrame {
 		desktopPane = new JDesktopPane();
 		getContentPane().add(desktopPane, BorderLayout.CENTER);	
 		
-		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize(); 
-		setSize(screenSize);
+		model.setDefaultFramePositions();
+		setBounds(model.getLastPosition(Frame.DESKTOP_FRAME));
 		setVisible(true);
 	}
 	
-	public void arrangeFrame(JInternalFrame frame) {
+	public void arrangeFrame(InternalFrame frame) {
 		boolean found = false;
 		
 		for (Component component: desktopPane.getComponents()) {
@@ -93,17 +98,13 @@ public class FormScanner extends JFrame {
 		}
 	}
 	
-	public void disposeFrame(JInternalFrame frame) {
+	public void disposeFrame(InternalFrame frame) {
 		if (frame != null) {
-			frame.setVisible(false);
-			desktopPane.remove(frame);
+			model.setLastPosition(Frame.valueOf(frame.getName()), frame.getBounds());
+			frame.dispose();
 		}
 		setDefaultControllersEnabled();
 		model.resetFirstPass();
-	}
-	
-	public Dimension getDesktopSize() {
-		return desktopPane.getSize();
 	}
 	
 	public void setDefaultControllersEnabled() {
