@@ -1,9 +1,10 @@
-FormScanner 0.7.2-SNAPSHOT (released )
+FormScanner 0.7.2 (released 2014-09-05)
 ===
 FIXES
 ---
 
 * Elder results saved on output file
+* Lacks support for modules that are not A4
 * BugFix
 
 FormScanner 0.7.1 (released 2014-06-11)

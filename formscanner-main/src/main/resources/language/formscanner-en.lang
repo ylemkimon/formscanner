@@ -1,5 +1,5 @@
-formscanner.main.title=FormScanner 0.7.2-SNAPSHOT
-about.text=<html><h2 align=\"center\">FormScanner - Free OMR Software</h2><h3 align=\"center\">Version 0.7.2-SNAPSHOT</h3><p align=\"center\">Copyright 2013-2014 Alberto Borsetta</p><p align=\"center\">Visit <a href=\"http://sourceforge.net/projects/formscanner/\">Project HomePage</a> for more information about the product</p></html>
+formscanner.main.title=FormScanner 0.7.2
+about.text=<html><h2 align=\"center\">FormScanner - Free OMR Software</h2><h3 align=\"center\">Version 0.7.2</h3><p align=\"center\">Copyright 2013-2014 Alberto Borsetta</p><p align=\"center\">Visit <a href=\"http://sourceforge.net/projects/formscanner/\">Project HomePage</a> for more information about the product</p></html>
 image.frame.title=Image
 open.images=Open images
 open.images.tooltip=Open images
