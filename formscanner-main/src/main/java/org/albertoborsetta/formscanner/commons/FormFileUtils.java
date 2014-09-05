@@ -151,8 +151,8 @@ public class FormFileUtils extends JFileChooser {
 				StreamResult result = new StreamResult(file);
 				transformer.transform(source, result);
 			}
-		} catch (TransformerException tfe) {
-			tfe.printStackTrace();
+		} catch (TransformerException e) {
+			e.printStackTrace();
 		}
 		return file;
 	}
