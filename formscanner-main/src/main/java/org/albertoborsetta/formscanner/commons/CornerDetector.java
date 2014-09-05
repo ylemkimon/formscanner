@@ -11,8 +11,6 @@ public class CornerDetector implements Callable<FormPoint> {
 	private static final int BLACK = 0;
 	private static final int HALF_WINDOW_SIZE = 5;
 	private static final int WINDOW_SIZE = (HALF_WINDOW_SIZE * 2) + 1;
-	private static final int PAGE_WIDTH = 210; // millimetri
-	private static final int PAGE_HEIGHT = 297; // millimetri
 	
 	private int height;
 	private int width;
@@ -30,9 +28,8 @@ public class CornerDetector implements Callable<FormPoint> {
 		height = image.getHeight();
 		width = image.getWidth();
 
-		double scale = width / PAGE_WIDTH;
-		subImageWidth = (int) ((PAGE_WIDTH / 2) * scale);
-		subImageHeight = (int) ((PAGE_HEIGHT / 2) * scale);
+		subImageWidth = (int) (width / 2);
+		subImageHeight = (int) (height / 2);
 		this.position = position;
 		this.threshold = threshold;
 		this.density = density;
