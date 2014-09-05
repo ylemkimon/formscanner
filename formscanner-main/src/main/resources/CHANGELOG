@@ -11,6 +11,14 @@ FIXES
 
 * BugFix
 
+FormScanner 0.7.2 (released 2014-09-05)
+===
+FIXES
+---
+
+* Elder results saved on output file
+* Lacks support for modules that are not A4
+
 FormScanner 0.7.1 (released 2014-06-11)
 ===
 FIXES
