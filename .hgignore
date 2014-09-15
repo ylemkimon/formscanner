@@ -1,12 +1,12 @@
 target
 
+.classpath
 .project
 .settings
 formscanner-main/.classpath
 formscanner-main/.settings
+formscanner-main/.project
+formscanner-distribution/.classpath
+formscanner-distribution/.settings
+formscanner-distribution/.project
 syntax: glob
-formscanner-main/src/main/resources/template/*.jasper
-files.txt
-messages.txt
-files.txt~
-messages.txt~
