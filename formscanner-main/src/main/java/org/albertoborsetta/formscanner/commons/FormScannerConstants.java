@@ -180,6 +180,15 @@ public class FormScannerConstants {
 		FieldType(String value) {
 			this.value = value;
 		}
+		
+		public String getName() {
+			return value;
+		}
+		
+		@Override
+		public String toString() {
+			return value;
+		}
 	}
 
 	public enum ShapeType {
@@ -193,6 +202,11 @@ public class FormScannerConstants {
 		}
 
 		public String getName() {
+			return value;
+		}
+		
+		@Override
+		public String toString() {
 			return value;
 		}
 	}

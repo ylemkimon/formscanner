@@ -30,7 +30,6 @@ public class OptionsFrame extends InternalFrame {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	private FormScannerModel model;
 	private OptionsFrameController optionsFrameController;
 	private JSpinner thresholdValue;
 	private JSpinner densityValue;
