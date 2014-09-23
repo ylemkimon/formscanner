@@ -165,7 +165,7 @@ public class FormTemplate {
 		try {
 			outputFile = new File(path + "/template/" + name + ".xtmpl");
 			Document xml = FormTemplateWrapper.getXml(this);
-			FormFileUtils.getInstance().saveTemplateAs(outputFile, xml);
+			outputFile = FormFileUtils.getInstance().saveTemplateAs(outputFile, xml);
 		} catch (ParserConfigurationException e) {
 			e.printStackTrace();
 		}
@@ -254,9 +254,16 @@ public class FormTemplate {
 		
 		for (Future<HashMap<String, FormField>> thread: fieldDetectorThreads) {
 			try {
-				
-				fields.putAll(thread.get());
-				// pointList.add(responsePoint);
+				HashMap<String, FormField> threadFields = thread.get();
+				for (String fieldName: threadFields.keySet()) {
+					FormField field = threadFields.get(fieldName);
+					fields.put(fieldName, field);
+					for (Entry<String, FormPoint> point: field.getPoints().entrySet()) {
+						if (point.getValue() != null) {
+							pointList.add(point.getValue());
+						}
+					}
+				}
 			} catch (Exception e) {
 				e.printStackTrace();
 			}

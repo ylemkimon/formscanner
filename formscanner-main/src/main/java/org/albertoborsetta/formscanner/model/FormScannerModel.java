@@ -467,7 +467,7 @@ public class FormScannerModel {
 				if (rows == 1 && values == 1) {
 					if (points.isEmpty()) {
 						points.add(p);
-						manageTemplateFrame.setupTable(points);
+						manageTemplateFrame.setupPositionTable(points);
 						manageTemplateFrame.toFront();
 					}
 				} else {
@@ -511,7 +511,7 @@ public class FormScannerModel {
 							}
 						}
 						view.setMode(Mode.VIEW);
-						manageTemplateFrame.setupTable(points);
+						manageTemplateFrame.setupPositionTable(points);
 						manageTemplateFrame.toFront();
 					}
 				}
