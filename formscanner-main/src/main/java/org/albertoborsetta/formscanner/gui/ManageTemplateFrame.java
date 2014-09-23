@@ -58,7 +58,8 @@ public class ManageTemplateFrame extends InternalFrame implements TabbedView {
 	 */
 	private static final long serialVersionUID = 1L;
 	private JTabbedPane tabbedPane;
-	private JScrollPane fieldPositionScrollPane;
+	private JScrollPane positionsTableScrollPane;
+	private JScrollPane fieldsTableScrollPane;
 
 	private JList<String> fieldList;
 	private JButton addFieldButton;
@@ -73,7 +74,8 @@ public class ManageTemplateFrame extends InternalFrame implements TabbedView {
 	private JButton okPropertiesButton;
 	private JButton cancelPropertiesButton;
 
-	private JTable table;
+	private JTable positionsTable;
+	private JTable fieldsTable;
 	private JButton okPositionButton;
 	private JButton cancelPositionButton;
 
@@ -158,13 +160,14 @@ public class ManageTemplateFrame extends InternalFrame implements TabbedView {
 				model.disposeRelatedFrame(this);
 
 				HashMap<String, FormField> fields = createFields();
+				setupFieldsTable(fields);
 				model.updateTemplate(fields);
 				saveTemplateButton.setEnabled(true);
 				resetSelectedValues();
-				resetTable();
+				removePositionsTable();
 				break;
 			case 2:
-				setupTable();
+				resetPositionsTable();
 				model.createTemplateImageFrame();
 				break;
 			default:
@@ -182,7 +185,7 @@ public class ManageTemplateFrame extends InternalFrame implements TabbedView {
 				resetSelectedValues();
 				break;
 			case 1:
-				resetTable();
+				removePositionsTable();
 				model.resetPoints();
 				model.disposeRelatedFrame(this);
 				break;
@@ -202,11 +205,11 @@ public class ManageTemplateFrame extends InternalFrame implements TabbedView {
 				.getModel();
 
 		for (int i = 1; i < (Integer) rowsNumber.getValue() + 1; i++) {
-			String name = (String) table.getValueAt(i, 0);
+			String name = (String) positionsTable.getValueAt(i, 0);
 			listModel.addElement(name);
 			FormField field = new FormField(name);
 			for (int j = 1; j < (Integer) valuesNumber.getValue() + 1; j++) {
-				String value = (String) table.getValueAt(0, j);
+				String value = (String) positionsTable.getValueAt(0, j);
 				FormPoint p = getPointFromTable(i, j);
 				field.setPoint(value, p);
 				field.setType(getFieldType());
@@ -218,7 +221,7 @@ public class ManageTemplateFrame extends InternalFrame implements TabbedView {
 	}
 
 	private FormPoint getPointFromTable(int i, int j) {
-		return FormPoint.toPoint((String) table.getValueAt(i, j));
+		return FormPoint.toPoint((String) positionsTable.getValueAt(i, j));
 	}
 
 	public int getRowsNumber() {
@@ -229,39 +232,67 @@ public class ManageTemplateFrame extends InternalFrame implements TabbedView {
 		return (Integer) valuesNumber.getValue();
 	}
 
-	public void setupTable(List<FormPoint> points) {
+	public void setupPositionTable(List<FormPoint> points) {
 		for (int i = 0; i < (Integer) rowsNumber.getValue(); i++) {
 			for (int j = 0; j < (Integer) valuesNumber.getValue(); j++) {
 				int index = ((Integer) valuesNumber.getValue() * i) + j;
 				FormPoint p = points.get(index);
-				table.setValueAt(p.toString(), (i + 1), (j + 1));
+				positionsTable.setValueAt(p.toString(), (i + 1), (j + 1));
 			}
 		}
 	}
-
-	public void clearTable() {
-		table.selectAll();
-		table.clearSelection();
+	
+	public void clearPositionsTable() {
+		positionsTable.selectAll();
+		positionsTable.clearSelection();
 	}
 
-	private void setupTable() {
-		fieldPositionScrollPane.remove(table);
+	private void removePositionsTable() {
+		positionsTableScrollPane.remove(positionsTable);
+	}
 
-		table = createTable(((Integer) rowsNumber.getValue()) + 1,
+	private void resetPositionsTable() {
+		removePositionsTable();
+
+		positionsTable = createPositionsTable(((Integer) rowsNumber.getValue()) + 1,
 				((Integer) valuesNumber.getValue()) + 1);
 
-		fieldPositionScrollPane.setViewportView(table);
-		table.setVisible(true);
+		positionsTableScrollPane.setViewportView(positionsTable);
+		positionsTable.setVisible(true);
+	}
+	
+	public void setupFieldsTable(HashMap<String, FormField> fields) {
+//		for (int i = 0; i < (Integer) rowsNumber.getValue(); i++) {
+//			for (int j = 0; j < (Integer) valuesNumber.getValue(); j++) {
+//				int index = ((Integer) valuesNumber.getValue() * i) + j;
+//				FormPoint p = fields.get(index);
+//				positionsTable.setValueAt(p.toString(), (i + 1), (j + 1));
+//			}
+//		}
+	}
+	
+	public void clearFieldsTable() {
+		fieldsTable.selectAll();
+		fieldsTable.clearSelection();
+	}
+
+	private void removeFieldsTable() {
+		fieldsTableScrollPane.remove(fieldsTable);
+	}
+
+	private void resetFieldsTable() {
+		removeFieldsTable();
+
+		fieldsTable = createFieldsTable(2,5);
+
+		fieldsTableScrollPane.setViewportView(fieldsTable);
+		fieldsTable.setVisible(true);
 	}
 
 	private void resetSelectedValues() {
 		rowsNumber.setValue(0);
 		valuesNumber.setValue(0);
 		typeComboBox.setSelectedIndex(0);
-	}
-
-	private void resetTable() {
-		fieldPositionScrollPane.remove(table);
 	}
 
 	public FieldType getFieldType() {
@@ -298,7 +329,57 @@ public class ManageTemplateFrame extends InternalFrame implements TabbedView {
 					.getSelectedItem() != null));
 	}
 
-	private JTable createTable(int rows, int cols) {
+	private JTable createPositionsTable(int rows, int cols) {
+		TemplateTableModel tableModel = new TemplateTableModel(rows, cols);
+		TableColumnModel columnModel = new DefaultTableColumnModel();
+
+		for (int i = 0; i < cols; i++) {
+			TableColumn column = new TableColumn(i);
+			column.setMinWidth(100);
+			columnModel.addColumn(column);
+		}
+
+		JTable table = new JTable(tableModel, columnModel);
+		table.setDefaultRenderer(Object.class, new DefaultTableCellRenderer() {
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public Component getTableCellRendererComponent(JTable table,
+					Object value, boolean isSelected, boolean hasFocus,
+					int row, int column) {
+				final Component cell = super.getTableCellRendererComponent(
+						table, value, isSelected, hasFocus, row, column);
+				if (row == 0 || column == 0) {
+					cell.setBackground(new java.awt.Color(238, 238, 238));
+				} else {
+					cell.setBackground(Color.white);
+				}
+				return cell;
+			}
+		});
+
+		for (int i = 1; i < cols; i++) {
+			table.setValueAt(
+					(String) FormScannerTranslation
+							.getTranslationFor(FormScannerTranslationKeys.RESPONSE)
+							+ " " + StringUtils.leftPad("" + i, 2, "0"), 0, i);
+		}
+
+		for (int i = 1; i < rows; i++) {
+			table.setValueAt(
+					(String) FormScannerTranslation
+							.getTranslationFor(FormScannerTranslationKeys.QUESTION)
+							+ " " + StringUtils.leftPad("" + i, 2, "0"), i, 0);
+		}
+		table.setCellSelectionEnabled(true);
+		table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+		return table;
+	}
+	
+	private JTable createFieldsTable(int rows, int cols) {
 		TemplateTableModel tableModel = new TemplateTableModel(rows, cols);
 		TableColumnModel columnModel = new DefaultTableColumnModel();
 
@@ -349,20 +430,25 @@ public class ManageTemplateFrame extends InternalFrame implements TabbedView {
 	}
 
 	private JPanel getFieldListPanel() {
+		
+		fieldsTable = new JTable();
+		fieldsTableScrollPane = new ScrollPaneBuilder(fieldsTable).build();
+		resetFieldsTable();
 
-		fieldList = new ListBuilder()
-				.withListModel(new DefaultListModel<String>())
-				.withSelectionMode(ListSelectionModel.SINGLE_SELECTION)
-				.withListSelectionListener(manageTemplateController).build();
-
-		JScrollPane fieldListScrollPane = new ScrollPaneBuilder(fieldList)
-				.build();
+//		fieldList = new ListBuilder()
+//				.withListModel(new DefaultListModel<String>())
+//				.withSelectionMode(ListSelectionModel.SINGLE_SELECTION)
+//				.withListSelectionListener(manageTemplateController).build();
+//
+//		JScrollPane fieldListScrollPane = new ScrollPaneBuilder(fieldList)
+//				.build();
 
 		JPanel fieldListManageButtonPanel = getManageListButtonPanel();
 		JPanel fieldListButtonPanel = getFieldListButtonPanel();
 
 		return new PanelBuilder().withLayout(new BorderLayout())
-				.addComponent(fieldListScrollPane, BorderLayout.CENTER)
+//				.addComponent(fieldListScrollPane, BorderLayout.CENTER)
+				.addComponent(fieldsTableScrollPane, BorderLayout.CENTER)
 				.addComponent(fieldListManageButtonPanel, BorderLayout.EAST)
 				.addComponent(fieldListButtonPanel, BorderLayout.SOUTH).build();
 	}
@@ -382,12 +468,12 @@ public class ManageTemplateFrame extends InternalFrame implements TabbedView {
 
 		JPanel positionButtonPanel = getPositionButtonPanel();
 
-		table = new JTable();
-		fieldPositionScrollPane = new ScrollPaneBuilder(table).build();
+		positionsTable = new JTable();
+		positionsTableScrollPane = new ScrollPaneBuilder(positionsTable).build();
 
 		return new PanelBuilder().withLayout(new BorderLayout())
 				.addComponent(positionButtonPanel, BorderLayout.SOUTH)
-				.addComponent(fieldPositionScrollPane, BorderLayout.CENTER)
+				.addComponent(positionsTableScrollPane, BorderLayout.CENTER)
 				.build();
 	}
 
