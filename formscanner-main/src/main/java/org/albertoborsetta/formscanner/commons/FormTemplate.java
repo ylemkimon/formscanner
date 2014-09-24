@@ -112,7 +112,9 @@ public class FormTemplate {
 	public void setField(String name, FormField field) {
 		fields.put(name, field);
 		for (Entry<String, FormPoint> point : field.getPoints().entrySet()) {
-			pointList.add(point.getValue());
+			if (point.getValue() != null) {
+				pointList.add(point.getValue());
+			}
 		}
 	}
 
