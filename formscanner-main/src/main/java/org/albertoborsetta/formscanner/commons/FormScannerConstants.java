@@ -89,18 +89,28 @@ public class FormScannerConstants {
 	public static final String SHAPE_SIZE = "SHAPE_SIZE";
 
 	public enum Corners {
-		TOP_LEFT(FormScannerTranslation.getTranslationFor(FormScannerTranslationKeys.TOP_LEFT_CORNER)), 
-		TOP_RIGHT(FormScannerTranslation.getTranslationFor(FormScannerTranslationKeys.TOP_RIGHT_CORNER)), 
-		BOTTOM_RIGHT(FormScannerTranslation.getTranslationFor(FormScannerTranslationKeys.BOTTOM_RIGHT_CORNER)), 
-		BOTTOM_LEFT(FormScannerTranslation.getTranslationFor(FormScannerTranslationKeys.BOTTOM_LEFT_CORNER));
+		TOP_LEFT(FormScannerConstants.TOP_LEFT, FormScannerTranslation.getTranslationFor(FormScannerTranslationKeys.TOP_LEFT_CORNER)), 
+		TOP_RIGHT(FormScannerConstants.TOP_RIGHT, FormScannerTranslation.getTranslationFor(FormScannerTranslationKeys.TOP_RIGHT_CORNER)), 
+		BOTTOM_RIGHT(FormScannerConstants.BOTTOM_RIGHT, FormScannerTranslation.getTranslationFor(FormScannerTranslationKeys.BOTTOM_RIGHT_CORNER)), 
+		BOTTOM_LEFT(FormScannerConstants.BOTTOM_LEFT, FormScannerTranslation.getTranslationFor(FormScannerTranslationKeys.BOTTOM_LEFT_CORNER));
 
+		private String name;
 		private String value;
 
-		Corners(String value) {
+		Corners(String name, String value) {
+			this.name = name;
 			this.value = value;
 		}
 
 		public String getName() {
+			return name;
+		}
+		
+		public String getValue() {
+			return value;
+		}
+		
+		public String toString() {
 			return value;
 		}
 	}
@@ -172,40 +182,50 @@ public class FormScannerConstants {
 	}
 
 	public enum FieldType {
-		QUESTIONS_BY_ROWS(FormScannerTranslation.getTranslationFor(FormScannerTranslationKeys.QUESTIONS_BY_ROWS)), 
-		QUESTIONS_BY_COLS(FormScannerTranslation.getTranslationFor(FormScannerTranslationKeys.QUESTIONS_BY_COLS));
+		QUESTIONS_BY_ROWS(FormScannerConstants.QUESTIONS_BY_ROWS, FormScannerTranslation.getTranslationFor(FormScannerTranslationKeys.QUESTIONS_BY_ROWS)), 
+		QUESTIONS_BY_COLS(FormScannerConstants.QUESTIONS_BY_COLS, FormScannerTranslation.getTranslationFor(FormScannerTranslationKeys.QUESTIONS_BY_COLS));
 
+		private String name;
 		private String value;
 
-		FieldType(String value) {
+		FieldType(String name, String value) {
+			this.name = name;
 			this.value = value;
 		}
 		
-		public String getName() {
+		public String getValue() {
 			return value;
 		}
 		
-		@Override
+		public String getName() {
+			return name;
+		}
+		
 		public String toString() {
 			return value;
 		}
 	}
 
 	public enum ShapeType {
-		SQUARE(FormScannerTranslation.getTranslationFor(FormScannerTranslationKeys.SQUARE)), 
-		CIRCLE(FormScannerTranslation.getTranslationFor(FormScannerTranslationKeys.CIRCLE));
+		SQUARE(FormScannerConstants.SQUARE, FormScannerTranslation.getTranslationFor(FormScannerTranslationKeys.SQUARE)), 
+		CIRCLE(FormScannerConstants.CIRCLE, FormScannerTranslation.getTranslationFor(FormScannerTranslationKeys.CIRCLE));
 
+		private String name;
 		private String value;
 
-		ShapeType(String value) {
+		ShapeType(String name, String value) {
+			this.name = name;
 			this.value = value;
 		}
 
-		public String getName() {
+		public String getValue() {
 			return value;
 		}
 		
-		@Override
+		public String getName() {
+			return name;
+		}
+		
 		public String toString() {
 			return value;
 		}
