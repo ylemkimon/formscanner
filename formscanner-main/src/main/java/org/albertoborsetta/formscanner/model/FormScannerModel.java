@@ -564,7 +564,7 @@ public class FormScannerModel {
 	public void removeField(TabbedView view) {
 		String fieldName = view.getSelectedItem();
 		formTemplate.removeFieldByName(fieldName);
-		view.removeFieldByName(fieldName);
+		view.removeSelectedField();
 	}
 
 	public void enableRemoveFields(TabbedView view) {
