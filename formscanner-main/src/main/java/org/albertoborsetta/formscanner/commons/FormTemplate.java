@@ -236,6 +236,7 @@ public class FormTemplate {
 		}
 
 		calculateDiagonal();
+		calculateRotation();
 		threadPool.shutdown();
 
 	}
