@@ -17,17 +17,18 @@ import org.albertoborsetta.formscanner.commons.FormScannerConstants.Action;
 import org.albertoborsetta.formscanner.gui.ManageTemplateFrame;
 import org.albertoborsetta.formscanner.model.FormScannerModel;
 
-public class ManageTemplateController implements ActionListener, ChangeListener, ItemListener, TableModelListener, ListSelectionListener {
-	
+public class ManageTemplateController implements ActionListener,
+		ChangeListener, ItemListener, TableModelListener, ListSelectionListener {
+
 	private FormScannerModel formScannerModel;
 	private ManageTemplateFrame view;
-	
+
 	public ManageTemplateController(FormScannerModel model) {
 		this.formScannerModel = model;
 	}
-	
+
 	public void add(ManageTemplateFrame view) {
-		this.view = view;		
+		this.view = view;
 	}
 
 	public void actionPerformed(ActionEvent e) {
@@ -51,7 +52,7 @@ public class ManageTemplateController implements ActionListener, ChangeListener,
 		default:
 			break;
 		}
-		
+
 	}
 
 	public void stateChanged(ChangeEvent e) {
@@ -59,11 +60,11 @@ public class ManageTemplateController implements ActionListener, ChangeListener,
 	}
 
 	public void itemStateChanged(ItemEvent e) {
-		formScannerModel.setAdvanceable(view);		
+		formScannerModel.setAdvanceable(view);
 	}
 
 	public void tableChanged(TableModelEvent e) {
-		formScannerModel.setAdvanceable(view);		
+		formScannerModel.setAdvanceable(view);
 	}
 
 	public void valueChanged(ListSelectionEvent e) {

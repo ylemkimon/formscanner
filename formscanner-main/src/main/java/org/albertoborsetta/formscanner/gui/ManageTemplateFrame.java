@@ -8,15 +8,11 @@ import java.awt.Component;
 import java.awt.Dimension;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map.Entry;
 
 import javax.swing.BorderFactory;
-import javax.swing.DefaultListSelectionModel;
 import javax.swing.JPanel;
-import javax.swing.JList;
 import javax.swing.JButton;
 import javax.swing.DefaultComboBoxModel;
-import javax.swing.DefaultListModel;
 import javax.swing.JCheckBox;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -25,13 +21,13 @@ import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.ListSelectionModel;
 import javax.swing.SpringLayout;
-import javax.swing.event.ListSelectionListener;
 import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableColumnModel;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
+import javax.swing.table.TableRowSorter;
 
 import org.albertoborsetta.formscanner.commons.FormField;
 import org.albertoborsetta.formscanner.commons.FormPoint;
@@ -47,7 +43,6 @@ import org.albertoborsetta.formscanner.gui.builder.ButtonBuilder;
 import org.albertoborsetta.formscanner.gui.builder.CheckBoxBuilder;
 import org.albertoborsetta.formscanner.gui.builder.ComboBoxBuilder;
 import org.albertoborsetta.formscanner.gui.builder.LabelBuilder;
-import org.albertoborsetta.formscanner.gui.builder.ListBuilder;
 import org.albertoborsetta.formscanner.gui.builder.PanelBuilder;
 import org.albertoborsetta.formscanner.gui.builder.SpinnerBuilder;
 import org.albertoborsetta.formscanner.gui.builder.TabbedPaneBuilder;
@@ -84,7 +79,7 @@ public class ManageTemplateFrame extends InternalFrame implements TabbedView {
 
 	private ManageTemplateController manageTemplateController;
 	
-	private class FieldsTableModel extends DefaultTableModel {
+	public class FieldsTableModel extends DefaultTableModel {
 
 		/**
 		 *
@@ -378,6 +373,7 @@ public class ManageTemplateFrame extends InternalFrame implements TabbedView {
 	private JTable createFieldsTable() {
 		FieldsTableModel fieldsTableModel = new FieldsTableModel();
 		JTable table = new JTable(fieldsTableModel);
+		table.setRowSorter(new TableRowSorter<FieldsTableModel>(fieldsTableModel));
 		
 		String[] columns = new String[]{"Name", "Type", "Multiple", "N. of responses"}; 
 		for (int i = 0; i < columns.length; i++) {
