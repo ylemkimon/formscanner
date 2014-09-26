@@ -79,6 +79,8 @@ public class FormScannerConstants {
 	// Languages
 	public static final String ENGLISH = "ENGLISH";
 	public static final String ITALIAN = "ITALIAN";
+	
+	// Fields Table Columns
 
 	// support
 	public static final String WIKI_PAGE = "http://sourceforge.net/p/formscanner/wiki/Home/";
@@ -270,6 +272,23 @@ public class FormScannerConstants {
 
 		public String getTranslation() {
 			return translation;
+		}
+	}
+	
+	public enum FieldsTableColumn {
+		NAME_COLUMN(FormScannerTranslation.getTranslationFor(FormScannerTranslationKeys.NAME_COLUMN)), 
+		TYPE_COLUMN(FormScannerTranslation.getTranslationFor(FormScannerTranslationKeys.TYPE_COLUMN)),
+		MULTIPLE_COLUMN(FormScannerTranslation.getTranslationFor(FormScannerTranslationKeys.MULTIPLE_COLUMN)),
+		RESPONSES_COLUMN(FormScannerTranslation.getTranslationFor(FormScannerTranslationKeys.RESPONSES_COLUMN));
+
+		private String value;
+
+		FieldsTableColumn(String value) {
+			this.value = value;
+		}
+
+		public String getValue() {
+			return value;
 		}
 	}
 }

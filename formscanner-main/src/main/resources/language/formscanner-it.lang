@@ -121,3 +121,7 @@ shape.type.option.label=Forma marcatore
 shape.size.option.label=Dimensione marcatore (px)
 marker.options=Opzioni marcatore
 scan.options=Opzioni scansione
+name.column=Nome campo
+type.column=Tipo campo
+multiple.column=Risposta multipla
+responses.column=N. risposte
