@@ -31,6 +31,7 @@ import javax.swing.table.TableColumnModel;
 import javax.swing.table.TableRowSorter;
 
 import org.apache.commons.lang3.StringUtils;
+import org.albertoborsetta.formscanner.commons.CharSequenceGenerator;
 import org.albertoborsetta.formscanner.commons.FormField;
 import org.albertoborsetta.formscanner.commons.FormPoint;
 import org.albertoborsetta.formscanner.commons.FormScannerConstants;
@@ -80,6 +81,7 @@ public class ManageTemplateFrame extends InternalFrame implements TabbedView {
 	private JButton cancelPositionButton;
 
 	private ManageTemplateController manageTemplateController;
+	private int previousRowsCount;
 
 	public class FieldsTableModel extends DefaultTableModel {
 
@@ -95,10 +97,11 @@ public class ManageTemplateFrame extends InternalFrame implements TabbedView {
 		public boolean isCellEditable(int row, int col) {
 			return false;
 		}
-		
+
 		@Override
 		public Class<?> getColumnClass(int columnIndex) {
-			return (columnIndex == 2) ? Boolean.class : super.getColumnClass(columnIndex);
+			return (columnIndex == 2) ? Boolean.class : super
+					.getColumnClass(columnIndex);
 		}
 	}
 
@@ -120,6 +123,7 @@ public class ManageTemplateFrame extends InternalFrame implements TabbedView {
 		setMaximizable(true);
 		setIconifiable(true);
 		setResizable(true);
+		previousRowsCount = 1;
 
 		JPanel fieldListPanel = getFieldListPanel();
 		JPanel fieldPropertiesPanel = getFieldPropertiesPanel();
@@ -261,9 +265,6 @@ public class ManageTemplateFrame extends InternalFrame implements TabbedView {
 		}
 
 		for (FormField field : fields.values()) {
-
-//			JCheckBox multiple = new CheckBoxBuilder("").setChecked(true).build();
-
 			fieldsTableModel.addRow(new Object[] { field.getName(),
 					field.getType().getValue(), field.isMultiple(),
 					field.getPoints().size() });
@@ -367,18 +368,17 @@ public class ManageTemplateFrame extends InternalFrame implements TabbedView {
 			}
 		});
 
+		CharSequenceGenerator charSequence = new CharSequenceGenerator();
+
 		for (int i = 1; i < cols; i++) {
-			table.setValueAt(
-					(String) FormScannerTranslation
-							.getTranslationFor(FormScannerTranslationKeys.RESPONSE)
-							+ " " + StringUtils.leftPad("" + i, 2, "0"), 0, i);
+			table.setValueAt(charSequence.next(), 0, i);
 		}
 
 		for (int i = 1; i < rows; i++) {
 			table.setValueAt(
 					(String) FormScannerTranslation
 							.getTranslationFor(FormScannerTranslationKeys.QUESTION)
-							+ " " + StringUtils.leftPad("" + i, 2, "0"), i, 0);
+							+ " " + StringUtils.leftPad("" + previousRowsCount++, 2, "0"), i, 0);
 		}
 		table.setCellSelectionEnabled(true);
 		table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
