@@ -3,7 +3,6 @@ package org.albertoborsetta.formscanner.gui;
 import javax.swing.JTabbedPane;
 
 import java.awt.BorderLayout;
-import java.awt.Checkbox;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;

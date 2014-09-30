@@ -1,6 +1,7 @@
 package org.albertoborsetta.formscanner.gui.builder;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 
@@ -19,6 +20,11 @@ public class PanelBuilder {
 	public PanelBuilder() {
 		panel = new JPanel();
 		panel.setFont(FormScannerFont.getFont());
+	}
+	
+	public PanelBuilder withBackgroundColor(Color color) {
+		panel.setBackground(color);
+		return this;
 	}
 	
 	public PanelBuilder withLayout(BorderLayout layout) {
