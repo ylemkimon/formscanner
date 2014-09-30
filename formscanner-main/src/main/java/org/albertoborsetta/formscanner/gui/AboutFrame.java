@@ -1,6 +1,7 @@
 package org.albertoborsetta.formscanner.gui;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.io.BufferedReader;
@@ -11,6 +12,7 @@ import java.io.IOException;
 
 import javax.swing.JButton;
 import javax.swing.JEditorPane;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
@@ -20,6 +22,7 @@ import javax.swing.SpringLayout;
 import org.albertoborsetta.formscanner.commons.FormScannerConstants;
 import org.albertoborsetta.formscanner.commons.FormScannerConstants.Frame;
 import org.albertoborsetta.formscanner.commons.resources.FormScannerResources;
+import org.albertoborsetta.formscanner.commons.resources.FormScannerResourcesKeys;
 import org.albertoborsetta.formscanner.commons.translation.FormScannerTranslation;
 import org.albertoborsetta.formscanner.commons.translation.FormScannerTranslationKeys;
 import org.albertoborsetta.formscanner.gui.builder.ButtonBuilder;
@@ -34,7 +37,6 @@ public class AboutFrame extends InternalFrame {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	private FormScannerModel model;
 	private AboutFrameController aboutFrameController;
 
 	/**
@@ -117,15 +119,16 @@ public class AboutFrame extends InternalFrame {
 	}
 
 	private JPanel getAboutPanel() {
-		// JLabel logo = new JLabel(
-		// FormScannerResources
-		// .getIconFor(FormScannerResourcesKeys.FORMSCANNER_ICON));
+		JLabel logo = new JLabel(
+				FormScannerResources
+						.getIconFor(FormScannerResourcesKeys.FORMSCANNER_SPLASH));
 
 		JEditorPane aboutTextPanel = getAboutTextPanel();
 
 		return new PanelBuilder().withLayout(new BorderLayout())
-		// .addComponent(logo, BorderLayout.WEST)
-				.addComponent(aboutTextPanel, BorderLayout.CENTER).build();
+				.withBackgroundColor(Color.white)
+				.addComponent(logo, BorderLayout.CENTER)
+				.addComponent(aboutTextPanel, BorderLayout.SOUTH).build();
 	}
 
 	private JEditorPane getAboutTextPanel() {

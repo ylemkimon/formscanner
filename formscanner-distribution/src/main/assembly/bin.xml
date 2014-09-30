@@ -75,6 +75,9 @@
 							<include>*.sh</include>
 							<include>CHANGELOG</include>
 						</includes>
+						<excludes>
+							<exclude>install</exclude>
+						</excludes>
 					</fileSet>
 				</fileSets>
 			</sources>
