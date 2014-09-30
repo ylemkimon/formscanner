@@ -78,7 +78,6 @@ public class FormScannerTranslationKeys {
 	public static final String SAVE_TEMPLATE_BUTTON = "save.template.button";
 	public static final String SAVE_TEMPLATE_BUTTON_TOOLTIP = "save.template.button.tooltip";
 	
-	public static final String RESPONSE = "response";
 	public static final String QUESTION = "question";
 	
 	public static final String QUESTIONS_BY_ROWS = "questions.by.rows";
