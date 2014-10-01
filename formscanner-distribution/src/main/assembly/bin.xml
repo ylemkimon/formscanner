@@ -44,6 +44,7 @@
 						<directory>src/main/resources/icons</directory>
 						<includes>
 							<include>*.png</include>
+							<include>*.bmp</include>
 						</includes>
 					</fileSet>
 					<fileSet>
