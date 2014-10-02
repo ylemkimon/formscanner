@@ -97,10 +97,6 @@ public class FormScannerTranslationKeys {
 	public static final String BOTTOM_RIGHT_CORNER_TOOLTIP = "bottom.right.corner.tooltip";
 	
 	public static final String ALL_IMAGES = "all.images";
-	public static final String BMP_IMAGES = "bmp.images";
-	public static final String PNG_IMAGES = "png.images";
-	public static final String JPEG_IMAGES = "jpeg.images";
-	public static final String TIFF_IMAGES = "tiff.images";
 	
 	public static final String TEMPLATE_FILE = "template.file";
 	public static final String TEMPLATE_LOADED = "template.loaded";
