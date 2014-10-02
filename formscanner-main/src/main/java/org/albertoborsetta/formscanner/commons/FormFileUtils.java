@@ -6,7 +6,10 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map.Entry;
+import java.util.Set;
+import java.util.TreeSet;
 
+import javax.imageio.ImageIO;
 import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.xml.transform.OutputKeys;
@@ -84,32 +87,58 @@ public class FormFileUtils extends JFileChooser {
 	private void setImagesFilter() {
 		resetChoosableFileFilters();
 
+		// Creating a set for preveting duplication of entries
+		Set<String> setOfExtensions = new TreeSet<String>();
+		// Iterating all possible image suffixes the current jvm can open
+		for (String suffix : ImageIO.getReaderFileSuffixes()) {
+			setOfExtensions.add(suffix);
+		}
+		// Creating individual file filters
+		for (String ext : setOfExtensions) {
+			setFileFilter(new FileNameExtensionFilter(
+					FormScannerTranslation.getTranslationFor(ext + ".images"), ext));
+		}
+		// Creating "all images" file filter (the one which opens any supported
+		// image type)
 		FileNameExtensionFilter allImagesFilter = new FileNameExtensionFilter(
 				FormScannerTranslation
 						.getTranslationFor(FormScannerTranslationKeys.ALL_IMAGES),
-				"jpg", "jpeg", "tif", "tiff", "png", "bmp");
-		FileNameExtensionFilter pmbImagesFilter = new FileNameExtensionFilter(
-				FormScannerTranslation
-						.getTranslationFor(FormScannerTranslationKeys.BMP_IMAGES),
-				"bmp");
-		FileNameExtensionFilter pngImagesFilter = new FileNameExtensionFilter(
-				FormScannerTranslation
-						.getTranslationFor(FormScannerTranslationKeys.PNG_IMAGES),
-				"png");
-		FileNameExtensionFilter jpegImagesFilter = new FileNameExtensionFilter(
-				FormScannerTranslation
-						.getTranslationFor(FormScannerTranslationKeys.JPEG_IMAGES),
-				"jpg", "jpeg");
-		FileNameExtensionFilter tiffImagesFilter = new FileNameExtensionFilter(
-				FormScannerTranslation
-						.getTranslationFor(FormScannerTranslationKeys.TIFF_IMAGES),
-				"tif", "tiff");
-
-		setFileFilter(pmbImagesFilter);
-		setFileFilter(pngImagesFilter);
-		setFileFilter(jpegImagesFilter);
-		setFileFilter(tiffImagesFilter);
+				ImageIO.getReaderFileSuffixes());
 		setFileFilter(allImagesFilter);
+
+		// resetChoosableFileFilters();
+		//
+		// FileNameExtensionFilter allImagesFilter = new
+		// FileNameExtensionFilter(
+		// FormScannerTranslation
+		// .getTranslationFor(FormScannerTranslationKeys.ALL_IMAGES),
+		// "jpg", "jpeg", "tif", "tiff", "png", "bmp");
+		// FileNameExtensionFilter pmbImagesFilter = new
+		// FileNameExtensionFilter(
+		// FormScannerTranslation
+		// .getTranslationFor(FormScannerTranslationKeys.BMP_IMAGES),
+		// "bmp");
+		// FileNameExtensionFilter pngImagesFilter = new
+		// FileNameExtensionFilter(
+		// FormScannerTranslation
+		// .getTranslationFor(FormScannerTranslationKeys.PNG_IMAGES),
+		// "png");
+		// FileNameExtensionFilter jpegImagesFilter = new
+		// FileNameExtensionFilter(
+		// FormScannerTranslation
+		// .getTranslationFor(FormScannerTranslationKeys.JPEG_IMAGES),
+		// "jpg", "jpeg");
+		// FileNameExtensionFilter tiffImagesFilter = new
+		// FileNameExtensionFilter(
+		// FormScannerTranslation
+		// .getTranslationFor(FormScannerTranslationKeys.TIFF_IMAGES),
+		// "tif", "tiff");
+		//
+		// setFileFilter(pmbImagesFilter);
+		// setFileFilter(pngImagesFilter);
+		// setFileFilter(jpegImagesFilter);
+		// setFileFilter(tiffImagesFilter);
+		// setFileFilter(allImagesFilter);
 	}
 
 	private void setTemplateFilter() {
@@ -120,7 +149,7 @@ public class FormFileUtils extends JFileChooser {
 				"xtmpl");
 		setFileFilter(templateFilter);
 	}
-	
+
 	private void setCsvFilter() {
 		resetChoosableFileFilters();
 		FileNameExtensionFilter templateFilter = new FileNameExtensionFilter(
@@ -168,15 +197,15 @@ public class FormFileUtils extends JFileChooser {
 				setMultiSelectionEnabled(false);
 				setCsvFilter();
 				setSelectedFile(file);
-	
+
 				int returnValue = showSaveDialog(null);
 				if (returnValue == JFileChooser.APPROVE_OPTION) {
 					file = getSelectedFile();
 					mapWriter = new CsvMapWriter(new FileWriter(file),
 							CsvPreference.EXCEL_NORTH_EUROPE_PREFERENCE);
 					mapWriter.writeHeader(header);
-					
-					for (HashMap<String, String> result: results) {
+
+					for (HashMap<String, String> result : results) {
 						mapWriter.write(result, header);
 					}
 				}
