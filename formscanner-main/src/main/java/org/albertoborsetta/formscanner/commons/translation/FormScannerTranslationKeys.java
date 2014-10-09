@@ -117,6 +117,8 @@ public class FormScannerTranslationKeys {
 	public static final String LICENSE_TAB_NAME = "license.tab.name";
 	public static final String ENGLISH = "english.label";
 	public static final String ITALIAN = "italian.label";
+	public static final String PORTUGUES = "portugues.label";
+	public static final String SPANISH = "spanish.label";
 	public static final String LANGUAGE_CHANGED = "language.changed";
 	public static final String SETTINGS_POPUP = "settings.popup.title";
 	public static final String TEMPLATE_SAVED_POPUP = "template.saved.popup.title";
