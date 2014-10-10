@@ -14,6 +14,7 @@ import javax.swing.JButton;
 import javax.swing.JEditorPane;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextArea;
@@ -144,8 +145,6 @@ public class AboutFrame extends InternalFrame {
 		
 		JScrollPane scrollPane = new JScrollPane(text);
 		scrollPane.setPreferredSize(new Dimension(400, 300));
-		scrollPane.setAlignmentX(Component.CENTER_ALIGNMENT);
-		scrollPane.setAlignmentY(Component.TOP_ALIGNMENT);
 
 		return scrollPane;
 	}

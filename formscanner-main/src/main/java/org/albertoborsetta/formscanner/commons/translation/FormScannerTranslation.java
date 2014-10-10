@@ -22,16 +22,7 @@ public class FormScannerTranslation extends Properties {
 		try {
 			String translationFile = path + "/language/formscanner-" + language
 					+ ".lang";
-			final FileInputStream translationInputStream = new FileInputStream(
-					translationFile);
-
-			InputStreamReader isr = new InputStreamReader(translationInputStream, "UTF-8");
-			byte[] bs = new String(IOUtils.toByteArray(isr), "UTF-8").getBytes("ISO-8859-1");
-			isr.close();
-						
-			ByteArrayInputStream bais = new ByteArrayInputStream(bs);
-			
-			load(bais);
+			load(new FileInputStream(translationFile));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
