@@ -90,7 +90,7 @@ public class AboutFrame extends InternalFrame {
 
 		JScrollPane scrollPane = new JScrollPane(textArea);
 		scrollPane.setPreferredSize(new Dimension(400, 300));
-		scrollPane.setAlignmentX(Component.LEFT_ALIGNMENT);
+		scrollPane.setAlignmentX(Component.CENTER_ALIGNMENT);
 		scrollPane.setAlignmentY(Component.TOP_ALIGNMENT);
 
 		String licenseText = "";
@@ -123,7 +123,7 @@ public class AboutFrame extends InternalFrame {
 				FormScannerResources
 						.getIconFor(FormScannerResourcesKeys.FORMSCANNER_SPLASH));
 
-		JEditorPane aboutTextPanel = getAboutTextPanel();
+		JScrollPane aboutTextPanel = getAboutTextPanel();
 
 		return new PanelBuilder().withLayout(new BorderLayout())
 				.withBackgroundColor(Color.white)
@@ -131,18 +131,23 @@ public class AboutFrame extends InternalFrame {
 				.addComponent(aboutTextPanel, BorderLayout.SOUTH).build();
 	}
 
-	private JEditorPane getAboutTextPanel() {
+	private JScrollPane getAboutTextPanel() {
 		JEditorPane text = new JEditorPane();
 		text.setAlignmentX(Component.CENTER_ALIGNMENT);
-		text.setAlignmentY(Component.BOTTOM_ALIGNMENT);
+		text.setAlignmentY(Component.TOP_ALIGNMENT);
 		text.setContentType("text/html");
 		text.setOpaque(true);
 		text.addHyperlinkListener(aboutFrameController);
 		text.setText(FormScannerTranslation
 				.getTranslationFor(FormScannerTranslationKeys.ABOUT_TEXT));
 		text.setEditable(false);
+		
+		JScrollPane scrollPane = new JScrollPane(text);
+		scrollPane.setPreferredSize(new Dimension(400, 300));
+		scrollPane.setAlignmentX(Component.CENTER_ALIGNMENT);
+		scrollPane.setAlignmentY(Component.TOP_ALIGNMENT);
 
-		return text;
+		return scrollPane;
 	}
 
 	private JPanel getButtonPanel() {
