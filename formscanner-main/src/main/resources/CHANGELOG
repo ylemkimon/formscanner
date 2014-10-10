@@ -1,10 +1,15 @@
-FormScanner 0.8-SNAPSHOT (released)
+FormScanner 0.8-SNAPSHOT (released 2014-10-XX)
 ===
 NEW FEATURES
 ---
 
 * Store position and size of internal frames
-* Support for multicore CPU's
+* Support for multiple CPU's
+* Improved corner detection for better precision
+* Improved fields summary table with fields informations
+* Changed [Response 01]...[Response 05] to A...E for better usability
+* Used the next set of numbers to mark a new set of questions
+* Safely open only supported images from JVM implementation
 
 FIXES
 ---
