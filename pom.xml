@@ -1,26 +1,13 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-  <modelVersion>4.0.0</modelVersion>
-  <groupId>org.albertoborsetta</groupId>
-  <artifactId>formscanner</artifactId>
-  <packaging>pom</packaging>
-  <name>FormScanner</name>
-  <version>0.8-SNAPSHOT</version>
-  <build>
-		<pluginManagement>
-			<plugins>
-			</plugins>
-		</pluginManagement>
-		<plugins>
-		</plugins>
-	</build>
-  <dependencies>
-  </dependencies>
-  <dependencyManagement>
-  	<dependencies>
-  	</dependencies>
-  </dependencyManagement>
-  <modules>
-  	<module>formscanner-main</module>
-  	<module>formscanner-distribution</module>
-  </modules>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>org.albertoborsetta</groupId>
+	<artifactId>formscanner</artifactId>
+	<packaging>pom</packaging>
+	<name>FormScanner</name>
+	<version>0.8-SNAPSHOT</version>
+	<modules>
+		<module>formscanner-main</module>
+		<module>formscanner-distribution</module>
+	</modules>
 </project>
