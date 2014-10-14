@@ -32,7 +32,6 @@ import java.awt.Cursor;
 import java.awt.Rectangle;
 import java.io.File;
 import java.net.URL;
-import java.sql.ResultSetMetaData;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
