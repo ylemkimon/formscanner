@@ -1,12 +1,8 @@
 package org.albertoborsetta.formscanner.commons.translation;
 
-import java.io.ByteArrayInputStream;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.util.Properties;
-
-import org.apache.commons.io.IOUtils;
 
 public class FormScannerTranslation extends Properties {
 
