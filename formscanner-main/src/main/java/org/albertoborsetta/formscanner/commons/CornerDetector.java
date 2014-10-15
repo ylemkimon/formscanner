@@ -106,62 +106,65 @@ public class CornerDetector implements Callable<FormPoint> {
 			break;
 		}
 
-		image.getRGB(x0, y0, subImageWidth, subImageHeight, rgbArray, 0,
-				subImageWidth);
-		
-		for (int yi = y; (yi < (subImageHeight - HALF_WINDOW_SIZE)) && (yi >= HALF_WINDOW_SIZE); yi += dy) {
-			pixel = WHITE;
-			old_pixel = pixel;
-
-			for (int xi = x; (xi < (subImageWidth - HALF_WINDOW_SIZE)) && (xi >= HALF_WINDOW_SIZE); xi += dx) {
-
-				pixel = isWhite(xi, yi, rgbArray);
-				double delta = dx * (x0 + xi - xc);
-
-				if (pixel != old_pixel) {
-					old_pixel = pixel;
-					if ((stato == BLACK_CIRCLE) && (delta > 0)) {
-						xc = sumX / count;
-						stato = OUT_OF_CIRCLES;
-						break;
-					} else if ((stato == BLACK_CIRCLE) && (delta <= 0)) {
-						stato = WHITE_CIRCLE;
-					} else if ((stato == WHITE_CIRCLE) || (stato == BEFORE_CIRCLES)) {
-						sumX += (x0 + xi);
-						sumY += (y0 + yi);
-						count++;
-						stato = BLACK_CIRCLE;
-					} else if (stato == OUT_OF_CIRCLES) {
-						sumX += (x0 + xi);
-						sumY += (y0 + yi);
-						count++;
-						stato = BLACK_CIRCLE;
+		try {
+			image.getRGB(x0, y0, subImageWidth, subImageHeight, rgbArray, 0,
+					subImageWidth);
+			
+			for (int yi = y; (yi < (subImageHeight - HALF_WINDOW_SIZE)) && (yi >= HALF_WINDOW_SIZE); yi += dy) {
+				pixel = WHITE;
+				old_pixel = pixel;
+	
+				for (int xi = x; (xi < (subImageWidth - HALF_WINDOW_SIZE)) && (xi >= HALF_WINDOW_SIZE); xi += dx) {
+	
+					pixel = isWhite(xi, yi, rgbArray);
+					double delta = dx * (x0 + xi - xc);
+	
+					if (pixel != old_pixel) {
+						old_pixel = pixel;
+						if ((stato == BLACK_CIRCLE) && (delta > 0)) {
+							xc = sumX / count;
+							stato = OUT_OF_CIRCLES;
+							break;
+						} else if ((stato == BLACK_CIRCLE) && (delta <= 0)) {
+							stato = WHITE_CIRCLE;
+						} else if ((stato == WHITE_CIRCLE) || (stato == BEFORE_CIRCLES)) {
+							sumX += (x0 + xi);
+							sumY += (y0 + yi);
+							count++;
+							stato = BLACK_CIRCLE;
+						} else if (stato == OUT_OF_CIRCLES) {
+							sumX += (x0 + xi);
+							sumY += (y0 + yi);
+							count++;
+							stato = BLACK_CIRCLE;
+						}
+					} else {
+						if ((stato == BLACK_CIRCLE)) {
+							sumX += (x0 + xi);
+							sumY += (y0 + yi);
+							count++;
+						} else if ((stato == OUT_OF_CIRCLES) && (delta > 0)) {
+							stato = AFTER_CIRCLES;
+							break;
+						}
+						
 					}
-				} else {
-					if ((stato == BLACK_CIRCLE)) {
-						sumX += (x0 + xi);
-						sumY += (y0 + yi);
-						count++;
-					} else if ((stato == OUT_OF_CIRCLES) && (delta > 0)) {
-						stato = AFTER_CIRCLES;
-						break;
-					}
-					
+				}
+	
+				if (stato == AFTER_CIRCLES) {
+					break;
 				}
 			}
-
-			if (stato == AFTER_CIRCLES) {
-				break;
+	
+			if (count == 0) {
+				return null;
 			}
+			
+			xc = sumX / count;
+			yc = sumY / count;
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
-
-		if (count == 0) {
-			return null;
-		}
-		
-		xc = sumX / count;
-		yc = sumY / count;
-		
 		FormPoint p = new FormPoint(xc, yc);
 		return p;
 	}
