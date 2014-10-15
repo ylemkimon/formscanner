@@ -17,7 +17,8 @@ public class FieldDetector implements Callable<HashMap<String, FormField>> {
 	private FormTemplate parent;
 	private HashMap<String, FormField> fields;
 
-	FieldDetector(int threshold, int density, int size, FormTemplate template, FormField templateField) {
+	FieldDetector(int threshold, int density, int size, FormTemplate template,
+			FormField templateField) {
 		this.template = template;
 		parent = template.getParentTemplate();
 		this.threshold = threshold;
@@ -30,15 +31,17 @@ public class FieldDetector implements Callable<HashMap<String, FormField>> {
 	@Override
 	public HashMap<String, FormField> call() throws Exception {
 		boolean found = false;
-		
+
 		HashMap<String, FormPoint> templatePoints = templateField.getPoints();
 		String fieldName = templateField.getName();
 
-		ArrayList<String> pointNames = new ArrayList<String>(templatePoints.keySet());
+		ArrayList<String> pointNames = new ArrayList<String>(
+				templatePoints.keySet());
 		Collections.sort(pointNames);
 
 		for (String pointName : pointNames) {
-			FormPoint responsePoint = calcResponsePoint(templatePoints.get(pointName));
+			FormPoint responsePoint = calcResponsePoint(templatePoints
+					.get(pointName));
 
 			if (found = isFilled(responsePoint)) {
 				FormField filledField = getField(templateField, fieldName);
@@ -55,23 +58,24 @@ public class FieldDetector implements Callable<HashMap<String, FormField>> {
 			filledField.setPoint("", null);
 			fields.put(fieldName, filledField);
 		}
-		
+
 		return fields;
 	}
 
 	private FormPoint calcResponsePoint(FormPoint responsePoint) {
 		FormPoint point = responsePoint.clone();
-		
+
 		FormPoint templateOrigin = parent.getCorner(Corners.TOP_LEFT);
 		double templateRotation = parent.getRotation();
 		double scale = Math.sqrt(template.getDiagonal() / parent.getDiagonal());
 
 		point.relativePositionTo(templateOrigin, templateRotation);
 		point.scale(scale);
-		point.originalPositionFrom(template.getCorners().get(Corners.TOP_LEFT), template.getRotation());
+		point.originalPositionFrom(template.getCorners().get(Corners.TOP_LEFT),
+				template.getRotation());
 		return point;
 	}
-	
+
 	private boolean isFilled(FormPoint responsePoint) {
 		int total = size * size;
 		int halfSize = (int) size / 2;
@@ -81,16 +85,20 @@ public class FieldDetector implements Callable<HashMap<String, FormField>> {
 		int xCoord = (int) responsePoint.getX();
 		int yCoord = (int) responsePoint.getY();
 
-		template.getImage().getRGB(xCoord - halfSize, yCoord - halfSize, size, size,
-				rgbArray, 0, size);
-		for (int i = 0; i < total; i++) {
-			if ((rgbArray[i] & (0xFF)) < threshold) {
-				count++;
+		try {
+			template.getImage().getRGB(xCoord - halfSize, yCoord - halfSize,
+					size, size, rgbArray, 0, size);
+			for (int i = 0; i < total; i++) {
+				if ((rgbArray[i] & (0xFF)) < threshold) {
+					count++;
+				}
 			}
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 		return (count / (double) total) >= (density / 100.0);
 	}
-	
+
 	private FormField getField(FormField field, String fieldName) {
 		FormField filledField = fields.get(fieldName);
 
