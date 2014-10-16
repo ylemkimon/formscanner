@@ -64,6 +64,7 @@ public class FormScannerConstants {
 	public static final String NUMBER_VALUES = "NUMBER_VALUES";
 	public static final String NUMBER_COLS_ROWS = "NUMBER_COLS_ROWS";
 	public static final String TYPE_COMBO_BOX = "TYPE_COMBO_BOX";
+	public static final String REJECT_IF_NOT_MULTIPLE = "REJECT_IF_NOT_MULTIPLE";
 
 	// Image Mode
 	public static final String VIEW = "VIEW";
@@ -178,7 +179,8 @@ public class FormScannerConstants {
 		OPTIONS, 
 		SAVE_OPTIONS, 
 		ANALYZE_FILES_ALL, 
-		ANALYZE_FILES_CURRENT;
+		ANALYZE_FILES_CURRENT,
+		IS_MULTIPLE;
 	}
 
 	public enum Mode {

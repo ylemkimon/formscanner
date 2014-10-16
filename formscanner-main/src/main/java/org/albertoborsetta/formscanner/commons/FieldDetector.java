@@ -31,6 +31,7 @@ public class FieldDetector implements Callable<HashMap<String, FormField>> {
 	@Override
 	public HashMap<String, FormField> call() throws Exception {
 		boolean found = false;
+		int count = 0;
 
 		HashMap<String, FormPoint> templatePoints = templateField.getPoints();
 		String fieldName = templateField.getName();
@@ -44,12 +45,18 @@ public class FieldDetector implements Callable<HashMap<String, FormField>> {
 					.get(pointName));
 
 			if (found = isFilled(responsePoint)) {
+				count++;
 				FormField filledField = getField(templateField, fieldName);
 				filledField.setPoint(pointName, responsePoint);
 				fields.put(fieldName, filledField);
 				if (!templateField.isMultiple()) {
-					break;
-				}
+					if (!templateField.rejectIfNotMultiple()) {
+						break;
+					} if (templateField.rejectIfNotMultiple() && count > 1) {
+						fields.clear();
+						break;
+					}
+				} 
 			}
 		}
 

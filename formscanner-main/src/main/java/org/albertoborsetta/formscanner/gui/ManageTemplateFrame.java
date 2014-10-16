@@ -71,6 +71,7 @@ public class ManageTemplateFrame extends InternalFrame implements TabbedView {
 	private JSpinner rowsNumber;
 	private JComboBox<FieldType> typeComboBox;
 	private JCheckBox isMultiple;
+	private JCheckBox rejectIfNotMultiple;
 	private JButton okPropertiesButton;
 	private JButton cancelPropertiesButton;
 
@@ -214,6 +215,7 @@ public class ManageTemplateFrame extends InternalFrame implements TabbedView {
 				field.setType(getFieldType());
 			}
 			field.setMultiple(isMultiple.isSelected());
+			field.setRejectIfNotMultiple(rejectIfNotMultiple.isSelected());
 			fields.put(name, field);
 		}
 		return fields;
@@ -475,6 +477,10 @@ public class ManageTemplateFrame extends InternalFrame implements TabbedView {
 		isMultiple = new CheckBoxBuilder(FormScannerConstants.IS_MULTIPLE)
 				.withActionListener(manageTemplateController).setChecked(false)
 				.build();
+		
+		rejectIfNotMultiple = new CheckBoxBuilder(FormScannerConstants.REJECT_IF_NOT_MULTIPLE)
+				.withActionListener(manageTemplateController).setChecked(false).setEnabled(!isMultiple.isSelected())
+				.build();
 
 		rowsNumber = new SpinnerBuilder(FormScannerConstants.NUMBER_COLS_ROWS)
 				.withActionListener(manageTemplateController).build();
@@ -488,10 +494,12 @@ public class ManageTemplateFrame extends InternalFrame implements TabbedView {
 				.add(typeComboBox)
 				.add(getLabel(FormScannerTranslationKeys.FIELD_PROPERTIES_IS_MULTIPLE))
 				.add(isMultiple)
+				.add(getLabel(FormScannerTranslationKeys.FIELD_PROPERTIES_REJECT_IF_NOT_MULTIPLE))
+				.add(rejectIfNotMultiple)
 				.add(getLabel(FormScannerTranslationKeys.FIELD_PROPERTIES_N_ROW_COL_LABEL))
 				.add(rowsNumber)
 				.add(getLabel(FormScannerTranslationKeys.FIELD_PROPERTIES_N_VALUES_LABEL))
-				.add(valuesNumber).withGrid(4, 2).build();
+				.add(valuesNumber).withGrid(5, 2).build();
 	}
 
 	private JLabel getLabel(String value) {
