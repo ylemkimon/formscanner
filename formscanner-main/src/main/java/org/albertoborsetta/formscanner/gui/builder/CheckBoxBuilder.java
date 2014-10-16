@@ -20,6 +20,11 @@ public class CheckBoxBuilder {
 		return this;
 	}
 	
+	public CheckBoxBuilder setEnabled(boolean enabled) {
+		chkBox.setEnabled(enabled);
+		return this;
+	}
+	
 	public CheckBoxBuilder withActionListener(ChangeListener listener) {
 		chkBox.addChangeListener(listener);
 		return this;
