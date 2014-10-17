@@ -100,8 +100,8 @@ public class FormTemplateWrapper {
 			FormField field = new FormField(fieldName);
 			field.setMultiple(Boolean.parseBoolean(fieldElement
 					.getAttribute("multiple")));
-			field.setRejectIfNotMultiple(Boolean.parseBoolean(fieldElement
-					.getAttribute("rejectIfNotMultiple")));
+			field.setRejectMultiple(Boolean.parseBoolean(fieldElement
+					.getAttribute("rejectMultiple")));
 			field.setType(FieldType.valueOf(fieldElement
 					.getAttribute("orientation")));
 

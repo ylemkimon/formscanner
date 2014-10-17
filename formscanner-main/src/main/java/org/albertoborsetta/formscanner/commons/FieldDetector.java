@@ -50,9 +50,9 @@ public class FieldDetector implements Callable<HashMap<String, FormField>> {
 				filledField.setPoint(pointName, responsePoint);
 				fields.put(fieldName, filledField);
 				if (!templateField.isMultiple()) {
-					if (!templateField.rejectIfNotMultiple()) {
+					if (!templateField.rejectMultiple()) {
 						break;
-					} if (templateField.rejectIfNotMultiple() && count > 1) {
+					} if (templateField.rejectMultiple() && count > 1) {
 						fields.clear();
 						break;
 					}

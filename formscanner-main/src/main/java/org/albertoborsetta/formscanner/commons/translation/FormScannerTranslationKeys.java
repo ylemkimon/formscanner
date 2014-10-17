@@ -65,7 +65,7 @@ public class FormScannerTranslationKeys {
 	public static final String FIELD_PROPERTIES_N_ROW_COL_LABEL = "field.properties.number.rows.columns.label";
 	public static final String FIELD_PROPERTIES_N_VALUES_LABEL = "field.properties.number.values.label";
 	public static final String FIELD_POSITION_TAB_NAME = "field.position.tab.name";
-	public static final String FIELD_PROPERTIES_REJECT_IF_NOT_MULTIPLE = "field.properties.reject.if.not.multiple";
+	public static final String FIELD_PROPERTIES_REJECT_MULTIPLE = "field.properties.reject.multiple";
 	
 	public static final String OK_BUTTON = "ok.button";
 	public static final String OK_BUTTON_TOOLTIP = "ok.button.tooltip";

@@ -16,7 +16,7 @@ public class FormField {
 	private FieldType type;
 	private boolean multiple;
 	private HashMap<String, FormPoint> points;
-	private boolean rejectIfNotMultiple = false;
+	private boolean rejectMultiple = false;
 
 	public FormField(String name, HashMap<String, FormPoint> points) {
 		this.name = name;
@@ -82,7 +82,7 @@ public class FormField {
 		Element fieldElement = doc.createElement("field");
 		fieldElement.setAttribute("orientation", type.name());
 		fieldElement.setAttribute("multiple", String.valueOf(multiple));
-		fieldElement.setAttribute("rejectIfNotMultiple", String.valueOf(rejectIfNotMultiple));
+		fieldElement.setAttribute("rejectMultiple", String.valueOf(rejectMultiple));
 		fieldElement.setAttribute("question", name);
 		
 		// values element
@@ -100,11 +100,11 @@ public class FormField {
 		return fieldElement;
 	}
 
-	public void setRejectIfNotMultiple(boolean rejectIfNotMultiple) {
-		this.rejectIfNotMultiple = rejectIfNotMultiple;
+	public void setRejectMultiple(boolean rejectMultiple) {
+		this.rejectMultiple = rejectMultiple;
 	}
 	
-	public boolean rejectIfNotMultiple() {
-		return rejectIfNotMultiple;
+	public boolean rejectMultiple() {
+		return rejectMultiple;
 	}
 }
