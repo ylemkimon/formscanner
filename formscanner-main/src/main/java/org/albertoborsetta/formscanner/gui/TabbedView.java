@@ -7,5 +7,7 @@ public interface TabbedView extends View {
 	public String getSelectedItem();
 	public void enableRemoveFields();
 	public void removeSelectedField();
+	public boolean getIsMultiple();
+	public void enableRejectMultiple(boolean enable);
 	public void dispose();
 }

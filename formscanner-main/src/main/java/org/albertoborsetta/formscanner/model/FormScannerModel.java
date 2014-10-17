@@ -858,4 +858,8 @@ public class FormScannerModel {
 			break;
 		}
 	}
+
+	public void enableRejectMultiple(TabbedView view) {
+		view.enableRejectMultiple(!view.getIsMultiple());
+	}
 }

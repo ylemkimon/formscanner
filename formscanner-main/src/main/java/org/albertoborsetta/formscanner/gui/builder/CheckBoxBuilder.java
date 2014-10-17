@@ -1,7 +1,8 @@
 package org.albertoborsetta.formscanner.gui.builder;
 
+import java.awt.event.ActionListener;
+
 import javax.swing.JCheckBox;
-import javax.swing.event.ChangeListener;
 
 import org.albertoborsetta.formscanner.commons.FormScannerFont;
 
@@ -25,12 +26,17 @@ public class CheckBoxBuilder {
 		return this;
 	}
 	
-	public CheckBoxBuilder withActionListener(ChangeListener listener) {
-		chkBox.addChangeListener(listener);
+	public CheckBoxBuilder withActionListener(ActionListener listener) {
+		chkBox.addActionListener(listener);
 		return this;
 	}
 	
 	public JCheckBox build() {
 		return chkBox;
+	}
+
+	public CheckBoxBuilder withActionCommand(String action) {
+		chkBox.setActionCommand(action);
+		return this;
 	}
 }

@@ -7,6 +7,8 @@ import java.awt.event.ItemListener;
 
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
 
@@ -16,7 +18,7 @@ import org.albertoborsetta.formscanner.gui.ManageTemplateFrame;
 import org.albertoborsetta.formscanner.model.FormScannerModel;
 
 public class ManageTemplateController implements ActionListener,
-		ChangeListener, ItemListener, TableModelListener {
+		ChangeListener, ItemListener, TableModelListener, ListSelectionListener {
 
 	private FormScannerModel formScannerModel;
 	private ManageTemplateFrame view;
@@ -48,7 +50,8 @@ public class ManageTemplateController implements ActionListener,
 			formScannerModel.setNextTab(FormScannerConstants.CANCEL, view);
 			break;
 		case IS_MULTIPLE:
-			formScannerModel.enableRejectIfNotMultiple(view)
+			formScannerModel.enableRejectMultiple(view);
+			break;
 		default:
 			break;
 		}
