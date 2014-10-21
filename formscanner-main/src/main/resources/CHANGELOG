@@ -1,4 +1,4 @@
-FormScanner 0.8-SNAPSHOT (released 2014-10-XX)
+FormScanner 0.8.0 (released 2014-10-24)
 ===
 NEW FEATURES
 ---
@@ -10,6 +10,8 @@ NEW FEATURES
 * Changed [Response 01]...[Response 05] to A...E for better usability
 * Used the next set of numbers to mark a new set of questions
 * Safely open only supported images from JVM implementation
+* Ignore multiple responses when single choice is selected
+* Added Portugues translation
 
 FIXES
 ---
