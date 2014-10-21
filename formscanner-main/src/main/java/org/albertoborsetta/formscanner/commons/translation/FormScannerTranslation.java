@@ -1,8 +1,12 @@
 package org.albertoborsetta.formscanner.commons.translation;
 
+import java.io.ByteArrayInputStream;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.Properties;
+
+import org.apache.commons.io.IOUtils;
 
 public class FormScannerTranslation extends Properties {
 
@@ -18,7 +22,16 @@ public class FormScannerTranslation extends Properties {
 		try {
 			String translationFile = path + "/language/formscanner-" + language
 					+ ".lang";
-			load(new FileInputStream(translationFile));
+			final FileInputStream translationInputStream = new FileInputStream(
+					translationFile);
+
+			InputStreamReader isr = new InputStreamReader(translationInputStream, "UTF-8");
+			byte[] bs = new String(IOUtils.toByteArray(isr), "UTF-8").getBytes("ISO-8859-1");
+			isr.close();
+						
+			ByteArrayInputStream bais = new ByteArrayInputStream(bs);
+			
+			load(bais);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
