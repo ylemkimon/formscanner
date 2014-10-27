@@ -25,13 +25,7 @@ public class FormScannerTranslation extends Properties {
 			final FileInputStream translationInputStream = new FileInputStream(
 					translationFile);
 
-			InputStreamReader isr = new InputStreamReader(translationInputStream, "UTF-8");
-			byte[] bs = new String(IOUtils.toByteArray(isr), "UTF-8").getBytes("ISO-8859-1");
-			isr.close();
-						
-			ByteArrayInputStream bais = new ByteArrayInputStream(bs);
-			
-			load(bais);
+			load(translationInputStream);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
