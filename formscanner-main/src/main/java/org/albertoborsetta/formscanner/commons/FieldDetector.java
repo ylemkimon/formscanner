@@ -1,5 +1,6 @@
 package org.albertoborsetta.formscanner.commons;
 
+import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -16,9 +17,10 @@ public class FieldDetector implements Callable<HashMap<String, FormField>> {
 	private int size;
 	private FormTemplate parent;
 	private HashMap<String, FormField> fields;
+	BufferedImage image;
 
 	FieldDetector(int threshold, int density, int size, FormTemplate template,
-			FormField templateField) {
+			FormField templateField, BufferedImage image) {
 		this.template = template;
 		parent = template.getParentTemplate();
 		this.threshold = threshold;
@@ -26,6 +28,7 @@ public class FieldDetector implements Callable<HashMap<String, FormField>> {
 		this.templateField = templateField;
 		this.size = size;
 		fields = new HashMap<String, FormField>();
+		this.image = image;
 	}
 
 	@Override
@@ -93,7 +96,7 @@ public class FieldDetector implements Callable<HashMap<String, FormField>> {
 		int yCoord = (int) responsePoint.getY();
 
 		try {
-			template.getImage().getRGB(xCoord - halfSize, yCoord - halfSize,
+			image.getRGB(xCoord - halfSize, yCoord - halfSize,
 					size, size, rgbArray, 0, size);
 			for (int i = 0; i < total; i++) {
 				if ((rgbArray[i] & (0xFF)) < threshold) {

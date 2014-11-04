@@ -34,10 +34,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.SpringLayout;
 import javax.swing.UIManager;
-import javax.imageio.ImageIO;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map.Entry;
 
@@ -55,7 +52,7 @@ public class ImageFrame extends InternalFrame implements ScrollableImageView {
 	/**
 	 * Create the frame.
 	 */
-	public ImageFrame(FormScannerModel model, File image,
+	public ImageFrame(FormScannerModel model, BufferedImage image,
 			FormTemplate template, Mode mode) {
 		super(model);
 		this.mode = mode;
@@ -308,7 +305,7 @@ public class ImageFrame extends InternalFrame implements ScrollableImageView {
 		private BufferedImage image;
 		private FormPoint temporaryPoint;
 
-		public ImagePanel(File image) {
+		public ImagePanel(BufferedImage image) {
 			super();
 			setImage(image);
 			setFont(FormScannerFont.getFont());
@@ -380,12 +377,8 @@ public class ImageFrame extends InternalFrame implements ScrollableImageView {
 			g.setColor(Color.BLACK);
 		}
 
-		private void setImage(File file) {
-			try {
-				image = ImageIO.read(file);
-			} catch (IOException ex) {
-				image = null;
-			}
+		private void setImage(BufferedImage image) {
+			this.image = image;
 		}
 
 		public int getImageWidth() {
@@ -405,12 +398,12 @@ public class ImageFrame extends InternalFrame implements ScrollableImageView {
 		}
 	}
 
-	public void updateImage(File file) {
+	public void updateImage(BufferedImage file) {
 		imagePanel.setImage(file);
 		repaint();
 	}
 	
-	public void updateImage(File file, FormTemplate filledForm) {
+	public void updateImage(BufferedImage file, FormTemplate filledForm) {
 		imagePanel.setImage(file);
 		template = filledForm;
 		repaint();

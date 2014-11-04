@@ -25,7 +25,7 @@ import org.xml.sax.SAXException;
 
 public class FormTemplate {
 
-	private BufferedImage image;
+//	private BufferedImage image;
 	private String name;
 	private HashMap<String, FormField> fields;
 	private HashMap<Corners, FormPoint> corners;
@@ -36,28 +36,18 @@ public class FormTemplate {
 	private int width;
 	private double diagonal;
 
-	public FormTemplate(File file) throws ParserConfigurationException, SAXException, IOException {
-		this(file, null);
-		if (image == null) {
-			FormTemplateWrapper.presetFromTemplate(file, this);
-		}
+	public FormTemplate(String name) {
+		this(name, null);
 	}
-
-	public FormTemplate(File file, FormTemplate template) {
-		try {
-			image = ImageIO.read(file);
-
-			height = image.getHeight();
-			width = image.getWidth();
-		} catch (Exception e) {
-			image = null;
-
-			height = 0;
-			width = 0;
-		}
-
+	
+	public FormTemplate(File file) throws ParserConfigurationException, SAXException, IOException {
+		this(FilenameUtils.removeExtension(file.getName()), null);
+		FormTemplateWrapper.presetFromTemplate(file, this);
+	}
+	
+	public FormTemplate(String name, FormTemplate template) {
 		this.template = template;
-		this.name = FilenameUtils.removeExtension(file.getName());
+		this.name = name;
 
 		corners = new HashMap<Corners, FormPoint>();
 		setDefaultCornerPosition();
@@ -202,10 +192,6 @@ public class FormTemplate {
 		return corners.get(corner);
 	}
 
-	public BufferedImage getImage() {
-		return image;
-	}
-
 	public double getDiagonal() {
 		return diagonal;
 	}
@@ -213,8 +199,11 @@ public class FormTemplate {
 	public void setDiagonal(double diag) {
 		diagonal=diag;
 	}
-
-	public void findCorners(int threshold, int density) {
+	
+	public void findCorners(BufferedImage image, int threshold, int density) {
+		height = image.getHeight();
+		width = image.getWidth();
+		
 		ExecutorService threadPool = Executors.newFixedThreadPool(4);
 		HashMap<Corners, Future<FormPoint>> cornerDetectorThreads = new HashMap<Corners, Future<FormPoint>>();
 
@@ -240,8 +229,11 @@ public class FormTemplate {
 		threadPool.shutdown();
 
 	}
-
-	public void findPoints(int threshold, int density, int size) {
+	
+	public void findPoints(BufferedImage image, int threshold, int density, int size) {
+		height = image.getHeight();
+		width = image.getWidth();
+		
 		ExecutorService threadPool = Executors.newFixedThreadPool(8);
 		HashSet<Future<HashMap<String, FormField>>> fieldDetectorThreads = new HashSet<Future<HashMap<String, FormField>>>();
 		
@@ -251,7 +243,7 @@ public class FormTemplate {
 
 		for (String fieldName : fieldNames) {
 			Future<HashMap<String, FormField>> future = threadPool.submit(new FieldDetector(
-					threshold, density, size, this, templateFields.get(fieldName)));
+					threshold, density, size, this, templateFields.get(fieldName), image));
 			fieldDetectorThreads.add(future);
 		}
 		
