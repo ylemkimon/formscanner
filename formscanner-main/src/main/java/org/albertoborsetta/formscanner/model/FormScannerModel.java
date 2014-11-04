@@ -30,6 +30,7 @@ import org.albertoborsetta.formscanner.gui.TabbedView;
 
 import java.awt.Cursor;
 import java.awt.Rectangle;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.net.URL;
 import java.text.SimpleDateFormat;
@@ -39,6 +40,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map.Entry;
 
+import javax.imageio.ImageIO;
 import javax.swing.JOptionPane;
 
 import org.apache.commons.io.FilenameUtils;
@@ -64,7 +66,7 @@ public class FormScannerModel {
 	private ManageTemplateFrame manageTemplateFrame;
 	private ImageFrame imageFrame;
 	private FormTemplate formTemplate;
-	private File templateImage;
+	private BufferedImage templateImage;
 	private FormFileUtils fileUtils = FormFileUtils.getInstance();
 	private HashMap<String, FormTemplate> filledForms = new HashMap<String, FormTemplate>();
 
@@ -178,8 +180,11 @@ public class FormScannerModel {
 				File imageFile = openedFiles.get(renamedFileIndex);
 
 				try {
-					filledForm = new FormTemplate(imageFile);
-					createFormImageFrame(imageFile, filledForm, Mode.VIEW);
+					BufferedImage image = ImageIO.read(imageFile);
+					String name = FilenameUtils.removeExtension(imageFile
+							.getName());
+					filledForm = new FormTemplate(name);
+					createFormImageFrame(image, filledForm, Mode.VIEW);
 					renameFileFrame = new RenameFileFrame(this,
 							getFileNameByIndex(renamedFileIndex));
 					view.arrangeFrame(renameFileFrame);
@@ -205,10 +210,16 @@ public class FormScannerModel {
 
 			if (openedFiles.size() > renamedFileIndex) {
 				fileListFrame.selectFile(renamedFileIndex);
-				imageFrame.updateImage(openedFiles.get(renamedFileIndex));
-				renameFileFrame
-						.updateRenamedFile(getFileNameByIndex(renamedFileIndex));
-				view.arrangeFrame(renameFileFrame);
+				File imageFile = openedFiles.get(renamedFileIndex);
+				try {
+					BufferedImage image = ImageIO.read(imageFile);
+					imageFrame.updateImage(image);
+					renameFileFrame
+							.updateRenamedFile(getFileNameByIndex(renamedFileIndex));
+					view.arrangeFrame(renameFileFrame);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
 			} else {
 				view.disposeFrame(renameFileFrame);
 				view.disposeFrame(imageFrame);
@@ -241,11 +252,19 @@ public class FormScannerModel {
 						analyzedFileIndex = openedFile.getKey();
 						fileListFrame.selectFile(analyzedFileIndex);
 						File imageFile = openedFiles.get(analyzedFileIndex);
+						try {
+							BufferedImage image = ImageIO.read(imageFile);
+							String name = FilenameUtils
+									.removeExtension(imageFile.getName());
+							filledForm = new FormTemplate(name, formTemplate);
+							filledForm.findCorners(image, threshold, density);
+							filledForm.findPoints(image, threshold, density,
+									shapeSize);
+							filledForms.put(filledForm.getName(), filledForm);
+						} catch (Exception e) {
+							e.printStackTrace();
+						}
 
-						filledForm = new FormTemplate(imageFile, formTemplate);
-						filledForm.findCorners(threshold, density);
-						filledForm.findPoints(threshold, density, shapeSize);
-						filledForms.put(filledForm.getName(), filledForm);
 					}
 
 					Date today = Calendar.getInstance().getTime();
@@ -284,15 +303,22 @@ public class FormScannerModel {
 					if (openedFiles.size() > analyzedFileIndex) {
 						fileListFrame.selectFile(analyzedFileIndex);
 						File imageFile = openedFiles.get(analyzedFileIndex);
-
-						filledForm = new FormTemplate(imageFile, formTemplate);
-						filledForm.findCorners(threshold, density);
-						filledForm.findPoints(threshold, density, shapeSize);
-						points = filledForm.getFieldPoints();
-						filledForms.put(filledForm.getName(), filledForm);
-						createFormImageFrame(imageFile, filledForm,
-								Mode.MODIFY_POINTS);
-						createResultsGridFrame();
+						try {
+							BufferedImage image = ImageIO.read(imageFile);
+							String name = FilenameUtils
+									.removeExtension(imageFile.getName());
+							filledForm = new FormTemplate(name, formTemplate);
+							filledForm.findCorners(image, threshold, density);
+							filledForm.findPoints(image, threshold, density,
+									shapeSize);
+							points = filledForm.getFieldPoints();
+							filledForms.put(filledForm.getName(), filledForm);
+							createFormImageFrame(image, filledForm,
+									Mode.MODIFY_POINTS);
+							createResultsGridFrame();
+						} catch (Exception e) {
+							e.printStackTrace();
+						}
 					} else {
 						Date today = Calendar.getInstance().getTime();
 						SimpleDateFormat sdf = new SimpleDateFormat(
@@ -320,13 +346,18 @@ public class FormScannerModel {
 				fileListFrame.selectFile(analyzedFileIndex);
 				File imageFile = openedFiles.get(analyzedFileIndex);
 
-				filledForm = imageFrame.getTemplate();
-				filledForm.clearPoints();
-				filledForm.findPoints(threshold, density, shapeSize);
-				points = filledForm.getFieldPoints();
-				filledForms.put(filledForm.getName(), filledForm);
-				createFormImageFrame(imageFile, filledForm, Mode.MODIFY_POINTS);
-				createResultsGridFrame();
+				try {
+					BufferedImage image = ImageIO.read(imageFile);
+					filledForm = imageFrame.getTemplate();
+					filledForm.clearPoints();
+					filledForm.findPoints(image, threshold, density, shapeSize);
+					points = filledForm.getFieldPoints();
+					filledForms.put(filledForm.getName(), filledForm);
+					createFormImageFrame(image, filledForm, Mode.MODIFY_POINTS);
+					createResultsGridFrame();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
 				break;
 			default:
 				break;
@@ -410,11 +441,14 @@ public class FormScannerModel {
 	}
 
 	public void loadTemplate() {
-		templateImage = fileUtils.chooseImage();
-		if (templateImage != null) {
+		File templateFile = fileUtils.chooseImage();
+		if (templateFile != null) {
 			try {
-				formTemplate = new FormTemplate(templateImage);
-				formTemplate.findCorners(threshold, density);
+				templateImage = ImageIO.read(templateFile);
+				String name = FilenameUtils.removeExtension(templateFile
+						.getName());
+				formTemplate = new FormTemplate(name);
+				formTemplate.findCorners(templateImage, threshold, density);
 				manageTemplateFrame = new ManageTemplateFrame(this);
 
 				view.arrangeFrame(manageTemplateFrame);
@@ -430,8 +464,8 @@ public class FormScannerModel {
 		view.arrangeFrame(imageFrame);
 	}
 
-	public void createFormImageFrame(File image, FormTemplate template,
-			Mode mode) {
+	public void createFormImageFrame(BufferedImage image,
+			FormTemplate template, Mode mode) {
 		if (imageFrame == null) {
 			imageFrame = new ImageFrame(this, image, template, mode);
 		} else {
