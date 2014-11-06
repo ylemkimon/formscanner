@@ -3,11 +3,7 @@
   <parent>
     <artifactId>formscanner</artifactId>
     <groupId>org.albertoborsetta</groupId>
-<<<<<<< local
     <version>0.9-SNAPSHOT</version>
-=======
-    <version>0.8.2-SNAPSHOT</version>
->>>>>>> other
   </parent>
   <artifactId>formscanner-distribution</artifactId>
   <packaging>pom</packaging>
