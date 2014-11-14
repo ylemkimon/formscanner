@@ -1,4 +1,4 @@
-package org.albertoborsetta.formscanner.commons;
+package org.albertoborsetta.formscanner.api;
 
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
@@ -6,6 +6,9 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.concurrent.Callable;
 
+import org.albertoborsetta.formscanner.api.FormField;
+import org.albertoborsetta.formscanner.api.FormPoint;
+import org.albertoborsetta.formscanner.api.FormTemplate;
 import org.albertoborsetta.formscanner.commons.FormScannerConstants.Corners;
 
 public class FieldDetector implements Callable<HashMap<String, FormField>> {
@@ -31,7 +34,6 @@ public class FieldDetector implements Callable<HashMap<String, FormField>> {
 		this.image = image;
 	}
 
-	@Override
 	public HashMap<String, FormField> call() throws Exception {
 		boolean found = false;
 		int count = 0;

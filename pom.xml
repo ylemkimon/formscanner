@@ -8,6 +8,8 @@
 	<version>0.9-SNAPSHOT</version>
 	<modules>
 		<module>formscanner-main</module>
+		<module>formscanner-api</module>
 		<module>formscanner-distribution</module>
+		<module>formscanner-commons</module>
 	</modules>
 </project>

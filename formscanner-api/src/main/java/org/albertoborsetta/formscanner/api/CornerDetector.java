@@ -1,8 +1,10 @@
-package org.albertoborsetta.formscanner.commons;
+package org.albertoborsetta.formscanner.api;
 
 import java.awt.image.BufferedImage;
 import java.util.concurrent.Callable;
 
+import org.albertoborsetta.formscanner.api.FormPoint;
+import org.albertoborsetta.formscanner.commons.FormScannerConstants;
 import org.albertoborsetta.formscanner.commons.FormScannerConstants.Corners;
 
 public class CornerDetector implements Callable<FormPoint> {
@@ -59,7 +61,6 @@ public class CornerDetector implements Callable<FormPoint> {
 		return WHITE;
 	}
 
-	@Override
 	public FormPoint call() throws Exception {
 		Long sumX = 0L;
 		Long sumY = 0L;

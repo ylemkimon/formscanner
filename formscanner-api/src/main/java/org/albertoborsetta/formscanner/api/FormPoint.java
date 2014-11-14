@@ -1,4 +1,4 @@
-package org.albertoborsetta.formscanner.commons;
+package org.albertoborsetta.formscanner.api;
 
 import java.awt.Point;
 import java.text.DecimalFormat;

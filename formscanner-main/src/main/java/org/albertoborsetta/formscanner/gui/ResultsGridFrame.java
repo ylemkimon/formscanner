@@ -13,9 +13,9 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
 
-import org.albertoborsetta.formscanner.commons.FormField;
+import org.albertoborsetta.formscanner.api.FormField;
+import org.albertoborsetta.formscanner.api.FormTemplate;
 import org.albertoborsetta.formscanner.commons.FormScannerConstants.Frame;
-import org.albertoborsetta.formscanner.commons.FormTemplate;
 import org.albertoborsetta.formscanner.commons.translation.FormScannerTranslation;
 import org.albertoborsetta.formscanner.commons.translation.FormScannerTranslationKeys;
 import org.albertoborsetta.formscanner.gui.builder.ScrollPaneBuilder;

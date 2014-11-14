@@ -10,29 +10,14 @@
 	<name>FormScanner - Main</name>
 	<dependencies>
 		<dependency>
-			<groupId>org.apache.commons</groupId>
-			<artifactId>commons-io</artifactId>
-			<version>${commons-io.version}</version>
-			<scope>compile</scope>
+			<groupId>org.albertoborsetta</groupId>
+			<artifactId>formscanner-api</artifactId>
+			<version>${project.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>org.apache.commons</groupId>
-			<artifactId>commons-lang3</artifactId>
-			<version>${commons-lang3.version}</version>
-			<type>jar</type>
-			<scope>compile</scope>
-		</dependency>
-		<dependency>
-			<groupId>net.sf.supercsv</groupId>
-			<artifactId>super-csv</artifactId>
-			<version>${super-csv.version}</version>
-			<type>jar</type>
-			<scope>compile</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.uncommons.watchmaker</groupId>
-			<artifactId>watchmaker-swing</artifactId>
-			<version>${watchmaker-swing.version}</version>
+			<groupId>org.albertoborsetta</groupId>
+			<artifactId>formscanner-commons</artifactId>
+			<version>${project.version}</version>
 		</dependency>
 	</dependencies>
 	<build>
@@ -79,10 +64,4 @@
 		<dependencies>
 		</dependencies>
 	</dependencyManagement>
-	<properties>
-		<commons-io.version>1.3.2</commons-io.version>
-		<commons-lang3.version>3.1</commons-lang3.version>
-		<super-csv.version>2.1.0</super-csv.version>
-		<watchmaker-swing.version>0.7.1</watchmaker-swing.version>
-	</properties>
 </project>

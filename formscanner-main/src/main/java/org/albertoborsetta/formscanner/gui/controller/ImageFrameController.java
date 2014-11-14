@@ -10,7 +10,7 @@ import java.awt.event.MouseWheelListener;
 
 import javax.swing.event.MouseInputListener;
 
-import org.albertoborsetta.formscanner.commons.FormPoint;
+import org.albertoborsetta.formscanner.api.FormPoint;
 import org.albertoborsetta.formscanner.commons.FormScannerConstants.Corners;
 import org.albertoborsetta.formscanner.gui.ImageFrame;
 import org.albertoborsetta.formscanner.model.FormScannerModel;

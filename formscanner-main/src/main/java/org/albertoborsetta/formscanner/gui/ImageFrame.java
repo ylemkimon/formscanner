@@ -1,13 +1,13 @@
 package org.albertoborsetta.formscanner.gui;
 
-import org.albertoborsetta.formscanner.commons.FormPoint;
+import org.albertoborsetta.formscanner.api.FormPoint;
+import org.albertoborsetta.formscanner.api.FormTemplate;
 import org.albertoborsetta.formscanner.commons.FormScannerConstants;
 import org.albertoborsetta.formscanner.commons.FormScannerConstants.Corners;
 import org.albertoborsetta.formscanner.commons.FormScannerConstants.Frame;
 import org.albertoborsetta.formscanner.commons.FormScannerConstants.Mode;
 import org.albertoborsetta.formscanner.commons.FormScannerConstants.ShapeType;
 import org.albertoborsetta.formscanner.commons.FormScannerFont;
-import org.albertoborsetta.formscanner.commons.FormTemplate;
 import org.albertoborsetta.formscanner.commons.resources.FormScannerResources;
 import org.albertoborsetta.formscanner.commons.resources.FormScannerResourcesKeys;
 import org.albertoborsetta.formscanner.commons.translation.FormScannerTranslation;
