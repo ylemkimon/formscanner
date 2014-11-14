@@ -1,15 +1,15 @@
 package org.albertoborsetta.formscanner.model;
 
-import org.albertoborsetta.formscanner.commons.FormField;
-import org.albertoborsetta.formscanner.commons.FormFileUtils;
-import org.albertoborsetta.formscanner.commons.FormPoint;
+import org.albertoborsetta.formscanner.api.FormField;
+import org.albertoborsetta.formscanner.api.FormFileUtils;
+import org.albertoborsetta.formscanner.api.FormPoint;
+import org.albertoborsetta.formscanner.api.FormTemplate;
 import org.albertoborsetta.formscanner.commons.FormScannerConstants;
 import org.albertoborsetta.formscanner.commons.FormScannerConstants.Action;
 import org.albertoborsetta.formscanner.commons.FormScannerConstants.Corners;
 import org.albertoborsetta.formscanner.commons.FormScannerConstants.Frame;
 import org.albertoborsetta.formscanner.commons.FormScannerConstants.Mode;
 import org.albertoborsetta.formscanner.commons.FormScannerConstants.ShapeType;
-import org.albertoborsetta.formscanner.commons.FormTemplate;
 import org.albertoborsetta.formscanner.commons.configuration.FormScannerConfiguration;
 import org.albertoborsetta.formscanner.commons.configuration.FormScannerConfigurationKeys;
 import org.albertoborsetta.formscanner.commons.resources.FormScannerResources;

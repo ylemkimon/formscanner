@@ -30,9 +30,9 @@ import javax.swing.table.TableColumnModel;
 import javax.swing.table.TableRowSorter;
 
 import org.apache.commons.lang3.StringUtils;
+import org.albertoborsetta.formscanner.api.FormField;
+import org.albertoborsetta.formscanner.api.FormPoint;
 import org.albertoborsetta.formscanner.commons.CharSequenceGenerator;
-import org.albertoborsetta.formscanner.commons.FormField;
-import org.albertoborsetta.formscanner.commons.FormPoint;
 import org.albertoborsetta.formscanner.commons.FormScannerConstants;
 import org.albertoborsetta.formscanner.commons.FormScannerConstants.FieldType;
 import org.albertoborsetta.formscanner.commons.FormScannerConstants.Action;

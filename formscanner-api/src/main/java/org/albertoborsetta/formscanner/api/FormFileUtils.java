@@ -1,4 +1,4 @@
-package org.albertoborsetta.formscanner.commons;
+package org.albertoborsetta.formscanner.api;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -19,6 +19,7 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
+import org.albertoborsetta.formscanner.commons.FormScannerFont;
 import org.albertoborsetta.formscanner.commons.translation.FormScannerTranslation;
 import org.albertoborsetta.formscanner.commons.translation.FormScannerTranslationKeys;
 import org.supercsv.io.CsvMapWriter;

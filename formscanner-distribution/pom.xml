@@ -9,7 +9,7 @@
   <packaging>pom</packaging>
   <name>FormScanner - Distribution</name>
   <build>
-  	<finalName>${parent.artifactId}-${version}</finalName>
+  	<finalName>${project.parent.artifactId}-${project.version}</finalName>
   	<plugins>
   		<plugin>
   			<groupId>org.apache.maven.plugins</groupId>
@@ -36,6 +36,18 @@
   	<dependency>
   		<groupId>${project.groupId}</groupId>
   		<artifactId>formscanner-main</artifactId>
+  		<version>${project.version}</version>
+  		<scope>compile</scope>
+  	</dependency>
+  	<dependency>
+  		<groupId>${project.groupId}</groupId>
+  		<artifactId>formscanner-api</artifactId>
+  		<version>${project.version}</version>
+  		<scope>compile</scope>
+  	</dependency>
+  	<dependency>
+  		<groupId>${project.groupId}</groupId>
+  		<artifactId>formscanner-commons</artifactId>
   		<version>${project.version}</version>
   		<scope>compile</scope>
   	</dependency>

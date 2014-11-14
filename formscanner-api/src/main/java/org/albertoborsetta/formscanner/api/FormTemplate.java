@@ -1,4 +1,4 @@
-package org.albertoborsetta.formscanner.commons;
+package org.albertoborsetta.formscanner.api;
 
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -12,12 +12,14 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
+import org.albertoborsetta.formscanner.api.FormField;
+import org.albertoborsetta.formscanner.api.FormPoint;
+import org.albertoborsetta.formscanner.api.FormTemplateWrapper;
 import org.albertoborsetta.formscanner.commons.FormScannerConstants.Corners;
 import org.albertoborsetta.formscanner.commons.translation.FormScannerTranslation;
 import org.albertoborsetta.formscanner.commons.translation.FormScannerTranslationKeys;
 import org.apache.commons.io.FilenameUtils;
 
-import javax.imageio.ImageIO;
 import javax.xml.parsers.ParserConfigurationException;
 
 import org.w3c.dom.Document;
@@ -25,7 +27,6 @@ import org.xml.sax.SAXException;
 
 public class FormTemplate {
 
-//	private BufferedImage image;
 	private String name;
 	private HashMap<String, FormField> fields;
 	private HashMap<Corners, FormPoint> corners;

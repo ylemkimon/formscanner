@@ -1,12 +1,12 @@
-package org.albertoborsetta.formscanner.commons;
+package org.albertoborsetta.formscanner.api;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map.Entry;
 
+import org.albertoborsetta.formscanner.api.FormPoint;
 import org.albertoborsetta.formscanner.commons.FormScannerConstants.FieldType;
-import org.albertoborsetta.formscanner.commons.FormPoint;
 import org.apache.commons.lang3.StringUtils;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
