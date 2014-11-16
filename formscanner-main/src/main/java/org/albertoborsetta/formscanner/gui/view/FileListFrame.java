@@ -1,4 +1,4 @@
-package org.albertoborsetta.formscanner.gui;
+package org.albertoborsetta.formscanner.gui.view;
 
 import javax.swing.JScrollPane;
 import javax.swing.ListSelectionModel;
@@ -7,12 +7,12 @@ import java.awt.BorderLayout;
 
 import javax.swing.JList;
 
-import org.albertoborsetta.formscanner.commons.FormScannerConstants.Frame;
 import org.albertoborsetta.formscanner.commons.translation.FormScannerTranslation;
 import org.albertoborsetta.formscanner.commons.translation.FormScannerTranslationKeys;
+import org.albertoborsetta.formscanner.commons.FormScannerConstants.Frame;
 import org.albertoborsetta.formscanner.gui.builder.ListBuilder;
 import org.albertoborsetta.formscanner.gui.builder.ScrollPaneBuilder;
-import org.albertoborsetta.formscanner.model.FormScannerModel;
+import org.albertoborsetta.formscanner.gui.model.FormScannerModel;
 
 public class FileListFrame extends InternalFrame {
 	

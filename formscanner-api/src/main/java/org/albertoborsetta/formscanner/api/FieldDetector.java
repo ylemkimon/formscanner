@@ -9,7 +9,7 @@ import java.util.concurrent.Callable;
 import org.albertoborsetta.formscanner.api.FormField;
 import org.albertoborsetta.formscanner.api.FormPoint;
 import org.albertoborsetta.formscanner.api.FormTemplate;
-import org.albertoborsetta.formscanner.commons.FormScannerConstants.Corners;
+import org.albertoborsetta.formscanner.api.commons.Constants.Corners;;
 
 public class FieldDetector implements Callable<HashMap<String, FormField>> {
 

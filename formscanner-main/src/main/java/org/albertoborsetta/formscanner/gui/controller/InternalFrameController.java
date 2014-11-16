@@ -3,8 +3,8 @@ package org.albertoborsetta.formscanner.gui.controller;
 import javax.swing.event.InternalFrameEvent;
 import javax.swing.event.InternalFrameListener;
 
-import org.albertoborsetta.formscanner.model.FormScannerModel;
-import org.albertoborsetta.formscanner.gui.InternalFrame;
+import org.albertoborsetta.formscanner.gui.model.FormScannerModel;
+import org.albertoborsetta.formscanner.gui.view.InternalFrame;
 
 public class InternalFrameController implements InternalFrameListener {
 

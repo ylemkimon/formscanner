@@ -7,8 +7,8 @@ import javax.swing.event.HyperlinkEvent;
 import javax.swing.event.HyperlinkListener;
 
 import org.albertoborsetta.formscanner.commons.FormScannerConstants.Action;
-import org.albertoborsetta.formscanner.gui.AboutFrame;
-import org.albertoborsetta.formscanner.model.FormScannerModel;
+import org.albertoborsetta.formscanner.gui.model.FormScannerModel;
+import org.albertoborsetta.formscanner.gui.view.AboutFrame;
 
 public class AboutFrameController implements ActionListener, HyperlinkListener {
 	

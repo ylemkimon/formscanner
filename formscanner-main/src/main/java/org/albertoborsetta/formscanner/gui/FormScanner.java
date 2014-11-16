@@ -9,11 +9,14 @@ import javax.swing.JDesktopPane;
 import javax.swing.UIManager;
 import javax.swing.UIManager.LookAndFeelInfo;
 
-import org.albertoborsetta.formscanner.commons.FormScannerConstants.Frame;
 import org.albertoborsetta.formscanner.commons.translation.FormScannerTranslation;
 import org.albertoborsetta.formscanner.commons.translation.FormScannerTranslationKeys;
+import org.albertoborsetta.formscanner.commons.FormScannerConstants.Frame;
 import org.albertoborsetta.formscanner.gui.controller.FormScannerController;
-import org.albertoborsetta.formscanner.model.FormScannerModel;
+import org.albertoborsetta.formscanner.gui.model.FormScannerModel;
+import org.albertoborsetta.formscanner.gui.view.InternalFrame;
+import org.albertoborsetta.formscanner.gui.view.MenuBar;
+import org.albertoborsetta.formscanner.gui.view.ToolBar;
 
 public class FormScanner extends JFrame {
 

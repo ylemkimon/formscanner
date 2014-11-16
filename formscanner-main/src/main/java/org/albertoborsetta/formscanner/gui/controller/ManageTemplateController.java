@@ -14,8 +14,8 @@ import javax.swing.event.TableModelListener;
 
 import org.albertoborsetta.formscanner.commons.FormScannerConstants;
 import org.albertoborsetta.formscanner.commons.FormScannerConstants.Action;
-import org.albertoborsetta.formscanner.gui.ManageTemplateFrame;
-import org.albertoborsetta.formscanner.model.FormScannerModel;
+import org.albertoborsetta.formscanner.gui.model.FormScannerModel;
+import org.albertoborsetta.formscanner.gui.view.ManageTemplateFrame;
 
 public class ManageTemplateController implements ActionListener,
 		ChangeListener, ItemListener, TableModelListener, ListSelectionListener {

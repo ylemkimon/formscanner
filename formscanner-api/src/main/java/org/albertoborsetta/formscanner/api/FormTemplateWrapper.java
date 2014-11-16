@@ -10,8 +10,8 @@ import javax.xml.parsers.ParserConfigurationException;
 
 import org.albertoborsetta.formscanner.api.FormField;
 import org.albertoborsetta.formscanner.api.FormPoint;
-import org.albertoborsetta.formscanner.commons.FormScannerConstants.Corners;
-import org.albertoborsetta.formscanner.commons.FormScannerConstants.FieldType;
+import org.albertoborsetta.formscanner.api.commons.Constants.Corners;
+import org.albertoborsetta.formscanner.api.commons.Constants.FieldType;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;

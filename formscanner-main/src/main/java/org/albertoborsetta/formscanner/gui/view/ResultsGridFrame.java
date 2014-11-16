@@ -1,4 +1,4 @@
-package org.albertoborsetta.formscanner.gui;
+package org.albertoborsetta.formscanner.gui.view;
 
 
 import java.awt.BorderLayout;
@@ -15,11 +15,12 @@ import javax.swing.table.TableColumnModel;
 
 import org.albertoborsetta.formscanner.api.FormField;
 import org.albertoborsetta.formscanner.api.FormTemplate;
-import org.albertoborsetta.formscanner.commons.FormScannerConstants.Frame;
 import org.albertoborsetta.formscanner.commons.translation.FormScannerTranslation;
 import org.albertoborsetta.formscanner.commons.translation.FormScannerTranslationKeys;
+import org.albertoborsetta.formscanner.commons.FormFileUtils;
+import org.albertoborsetta.formscanner.commons.FormScannerConstants.Frame;
 import org.albertoborsetta.formscanner.gui.builder.ScrollPaneBuilder;
-import org.albertoborsetta.formscanner.model.FormScannerModel;
+import org.albertoborsetta.formscanner.gui.model.FormScannerModel;
 
 public class ResultsGridFrame extends InternalFrame {
 	/**
@@ -60,7 +61,7 @@ public class ResultsGridFrame extends InternalFrame {
 		form = model.getFilledForm();
 
 		FormTemplate template = model.getTemplate();
-		header = (String[]) template.getHeader();
+		header = (String[]) FormFileUtils.getHeader(template);
 		rows = template.getFields().size() + 1;
 		cols = 2;
 		

@@ -15,14 +15,11 @@ import java.util.concurrent.Future;
 import org.albertoborsetta.formscanner.api.FormField;
 import org.albertoborsetta.formscanner.api.FormPoint;
 import org.albertoborsetta.formscanner.api.FormTemplateWrapper;
-import org.albertoborsetta.formscanner.commons.FormScannerConstants.Corners;
-import org.albertoborsetta.formscanner.commons.translation.FormScannerTranslation;
-import org.albertoborsetta.formscanner.commons.translation.FormScannerTranslationKeys;
+import org.albertoborsetta.formscanner.api.commons.Constants.Corners;
 import org.apache.commons.io.FilenameUtils;
 
 import javax.xml.parsers.ParserConfigurationException;
 
-import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
 
 public class FormTemplate {
@@ -152,41 +149,12 @@ public class FormTemplate {
 		fields.remove(fieldName);
 	}
 
-	public File saveToFile(String path) {
-		File outputFile = null;
-		
-		try {
-			outputFile = new File(path + "/template/" + name + ".xtmpl");
-			Document xml = FormTemplateWrapper.getXml(this);
-			outputFile = FormFileUtils.getInstance().saveTemplateAs(outputFile, xml);
-		} catch (ParserConfigurationException e) {
-			e.printStackTrace();
-		}
-		
-		return outputFile;
-	}
-
 	public String toString() {
 		return FormTemplateWrapper.getString(this);
 	}
 
 	public String getName() {
 		return name;
-	}
-
-	public String[] getHeader() {
-		String[] header = new String[fields.size() + 1];
-		int i = 0;
-		header[i++] = FormScannerTranslation
-				.getTranslationFor(FormScannerTranslationKeys.FIRST_CSV_COLUMN);
-
-		ArrayList<String> keys = new ArrayList<String>(fields.keySet());
-		Collections.sort(keys);
-		for (String key : keys) {
-			header[i++] = key;
-		}
-
-		return header;
 	}
 
 	public FormPoint getCorner(Corners corner) {
