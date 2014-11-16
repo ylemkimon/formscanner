@@ -2,8 +2,8 @@ package org.albertoborsetta.formscanner.gui.controller;
 
 import org.albertoborsetta.formscanner.commons.FormScannerConstants;
 import org.albertoborsetta.formscanner.commons.FormScannerConstants.Action;
-import org.albertoborsetta.formscanner.gui.RenameFileFrame;
-import org.albertoborsetta.formscanner.model.FormScannerModel;
+import org.albertoborsetta.formscanner.gui.model.FormScannerModel;
+import org.albertoborsetta.formscanner.gui.view.RenameFileFrame;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;

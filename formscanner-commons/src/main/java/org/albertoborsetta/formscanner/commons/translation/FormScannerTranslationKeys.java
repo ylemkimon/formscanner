@@ -1,6 +1,8 @@
 package org.albertoborsetta.formscanner.commons.translation;
 
-public class FormScannerTranslationKeys {
+import org.albertoborsetta.formscanner.api.commons.translation.TranslationKeys;
+
+public class FormScannerTranslationKeys extends TranslationKeys {
 	/*
 	 * Translation keys 
 	 */

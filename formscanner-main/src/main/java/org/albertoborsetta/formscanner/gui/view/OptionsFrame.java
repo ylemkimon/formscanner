@@ -1,4 +1,4 @@
-package org.albertoborsetta.formscanner.gui;
+package org.albertoborsetta.formscanner.gui.view;
 
 import java.awt.BorderLayout;
 
@@ -11,18 +11,18 @@ import javax.swing.JPanel;
 import javax.swing.JSpinner;
 import javax.swing.SpringLayout;
 
+import org.albertoborsetta.formscanner.commons.translation.FormScannerTranslation;
+import org.albertoborsetta.formscanner.commons.translation.FormScannerTranslationKeys;
 import org.albertoborsetta.formscanner.commons.FormScannerConstants;
 import org.albertoborsetta.formscanner.commons.FormScannerConstants.Frame;
 import org.albertoborsetta.formscanner.commons.FormScannerConstants.ShapeType;
-import org.albertoborsetta.formscanner.commons.translation.FormScannerTranslation;
-import org.albertoborsetta.formscanner.commons.translation.FormScannerTranslationKeys;
 import org.albertoborsetta.formscanner.gui.builder.ButtonBuilder;
 import org.albertoborsetta.formscanner.gui.builder.ComboBoxBuilder;
 import org.albertoborsetta.formscanner.gui.builder.LabelBuilder;
 import org.albertoborsetta.formscanner.gui.builder.PanelBuilder;
 import org.albertoborsetta.formscanner.gui.builder.SpinnerBuilder;
 import org.albertoborsetta.formscanner.gui.controller.OptionsFrameController;
-import org.albertoborsetta.formscanner.model.FormScannerModel;
+import org.albertoborsetta.formscanner.gui.model.FormScannerModel;
 
 public class OptionsFrame extends InternalFrame {
 
@@ -35,8 +35,25 @@ public class OptionsFrame extends InternalFrame {
 	private JSpinner densityValue;
 	private JButton saveButton;
 	private JButton cancelButton;
-	private JComboBox<ShapeType> shapeTypeComboBox;
+	private JComboBox<InternalShapeType> shapeTypeComboBox;
 	private JSpinner shapeSizeValue;
+	
+	private class InternalShapeType {
+		
+		private ShapeType type;
+		
+		protected InternalShapeType(ShapeType type) {
+			this.type = type;
+		}
+
+		protected ShapeType getType() {
+			return type;
+		}
+
+		public String toString() {
+			return FormScannerTranslation.getTranslationFor(type.getValue());
+		}
+	}
 
 	/**
 	 * Create the frame.
@@ -92,10 +109,18 @@ public class OptionsFrame extends InternalFrame {
 	}
 
 	private JPanel getShapePanel() {
-		shapeTypeComboBox = new ComboBoxBuilder<ShapeType>(
+		
+		ShapeType shapes[] = ShapeType.values();
+		InternalShapeType types[] = new InternalShapeType[shapes.length];
+		
+		for (int i=0; i<shapes.length; i++) {
+			types[i] = new InternalShapeType(shapes[i]);
+		}
+		
+		shapeTypeComboBox = new ComboBoxBuilder<InternalShapeType>(
 				FormScannerConstants.SHAPE_COMBO_BOX)
 				.withModel(
-						new DefaultComboBoxModel<ShapeType>(ShapeType.values()))
+						new DefaultComboBoxModel<InternalShapeType>(types))
 				.withActionListener(optionsFrameController).build();
 
 		shapeSizeValue = new SpinnerBuilder(FormScannerConstants.SHAPE_SIZE)
@@ -155,7 +180,7 @@ public class OptionsFrame extends InternalFrame {
 	}
 
 	public ShapeType getShape() {
-		return (ShapeType) shapeTypeComboBox.getSelectedItem();
+		return (ShapeType) ((InternalShapeType) shapeTypeComboBox.getSelectedItem()).getType();
 	}
 
 	public void setSaveEnabled() {

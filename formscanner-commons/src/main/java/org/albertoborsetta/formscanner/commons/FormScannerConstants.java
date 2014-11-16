@@ -2,11 +2,13 @@ package org.albertoborsetta.formscanner.commons;
 
 import java.awt.Rectangle;
 
+import org.albertoborsetta.formscanner.api.commons.Constants;
+import org.albertoborsetta.formscanner.api.commons.translation.TranslationKeys;
 import org.albertoborsetta.formscanner.commons.configuration.FormScannerConfigurationKeys;
 import org.albertoborsetta.formscanner.commons.translation.FormScannerTranslation;
 import org.albertoborsetta.formscanner.commons.translation.FormScannerTranslationKeys;
 
-public class FormScannerConstants {
+public class FormScannerConstants extends Constants {
 
 	// Actions
 	public static final String RENAME_FILES_FIRST = "RENAME_FILES_FIRST";
@@ -51,10 +53,6 @@ public class FormScannerConstants {
 	private static final Rectangle OPTIONS_FRAME_POSITION = new Rectangle(100, 100, 300, 300);
 	private static final Rectangle DESKTOP_SIZE = new Rectangle(0, 0, 1024, 768);
 
-	// GridType
-	public static final String QUESTIONS_BY_ROWS = "QUESTIONS_BY_ROWS";
-	public static final String QUESTIONS_BY_COLS = "QUESTIONS_BY_COLS";
-
 	// ShapeType
 	public static final String SQUARE = "SQUARE";
 	public static final String CIRCLE = "CIRCLE";
@@ -71,12 +69,6 @@ public class FormScannerConstants {
 	public static final String SETUP_POINTS = "SETUP_POINTS";
 	public static final String MODIFY_POINTS = "MODIFY_POINTS";
 
-	// Corners
-	public static final String TOP_LEFT = "TOP_LEFT";
-	public static final String TOP_RIGHT = "TOP_RIGHT";
-	public static final String BOTTOM_LEFT = "BOTTOM_LEFT";
-	public static final String BOTTOM_RIGHT = "BOTTOM_RIGHT";
-
 	// Languages
 	public static final String ENGLISH = "ENGLISH";
 	public static final String ITALIAN = "ITALIAN";
@@ -92,33 +84,6 @@ public class FormScannerConstants {
 	public static final String SAVE_OPTIONS = "SAVE_OPTIONS";
 	public static final String SHAPE_COMBO_BOX = "SHAPE_COMBO_BOX";
 	public static final String SHAPE_SIZE = "SHAPE_SIZE";
-
-	public enum Corners {
-		TOP_LEFT(FormScannerConstants.TOP_LEFT, FormScannerTranslation.getTranslationFor(FormScannerTranslationKeys.TOP_LEFT_CORNER)), 
-		TOP_RIGHT(FormScannerConstants.TOP_RIGHT, FormScannerTranslation.getTranslationFor(FormScannerTranslationKeys.TOP_RIGHT_CORNER)), 
-		BOTTOM_RIGHT(FormScannerConstants.BOTTOM_RIGHT, FormScannerTranslation.getTranslationFor(FormScannerTranslationKeys.BOTTOM_RIGHT_CORNER)), 
-		BOTTOM_LEFT(FormScannerConstants.BOTTOM_LEFT, FormScannerTranslation.getTranslationFor(FormScannerTranslationKeys.BOTTOM_LEFT_CORNER));
-
-		private String name;
-		private String value;
-
-		Corners(String name, String value) {
-			this.name = name;
-			this.value = value;
-		}
-
-		public String getName() {
-			return name;
-		}
-		
-		public String getValue() {
-			return value;
-		}
-		
-		public String toString() {
-			return value;
-		}
-	}
 
 	public enum Frame {
 		RENAME_FILES_FRAME(RENAME_FILES_FRAME_NAME,	FormScannerConfigurationKeys.RENAME_FILES_FRAME, RENAME_FILES_FRAME_POSITION), 
@@ -187,34 +152,9 @@ public class FormScannerConstants {
 		VIEW, SETUP_POINTS, MODIFY_POINTS;
 	}
 
-	public enum FieldType {
-		QUESTIONS_BY_ROWS(FormScannerConstants.QUESTIONS_BY_ROWS, FormScannerTranslation.getTranslationFor(FormScannerTranslationKeys.QUESTIONS_BY_ROWS)), 
-		QUESTIONS_BY_COLS(FormScannerConstants.QUESTIONS_BY_COLS, FormScannerTranslation.getTranslationFor(FormScannerTranslationKeys.QUESTIONS_BY_COLS));
-
-		private String name;
-		private String value;
-
-		FieldType(String name, String value) {
-			this.name = name;
-			this.value = value;
-		}
-		
-		public String getValue() {
-			return value;
-		}
-		
-		public String getName() {
-			return name;
-		}
-		
-		public String toString() {
-			return value;
-		}
-	}
-
 	public enum ShapeType {
-		SQUARE(FormScannerConstants.SQUARE, FormScannerTranslation.getTranslationFor(FormScannerTranslationKeys.SQUARE)), 
-		CIRCLE(FormScannerConstants.CIRCLE, FormScannerTranslation.getTranslationFor(FormScannerTranslationKeys.CIRCLE));
+		SQUARE(FormScannerConstants.SQUARE, FormScannerTranslationKeys.SQUARE), 
+		CIRCLE(FormScannerConstants.CIRCLE, FormScannerTranslationKeys.CIRCLE);
 
 		private String name;
 		private String value;
@@ -230,10 +170,6 @@ public class FormScannerConstants {
 		
 		public String getName() {
 			return name;
-		}
-		
-		public String toString() {
-			return value;
 		}
 	}
 
@@ -259,10 +195,10 @@ public class FormScannerConstants {
 	}
 
 	public enum Language {
-		ENGLISH("en", FormScannerTranslation.getTranslationFor(FormScannerTranslationKeys.ENGLISH)), 
-		ITALIAN("it", FormScannerTranslation.getTranslationFor(FormScannerTranslationKeys.ITALIAN)),
-		PORTUGUES("pt", FormScannerTranslation.getTranslationFor(FormScannerTranslationKeys.PORTUGUES));
-		// SPANISH("es", FormScannerTranslation.getTranslationFor(FormScannerTranslationKeys.SPANISH));
+		ENGLISH("en", FormScannerTranslationKeys.ENGLISH), 
+		ITALIAN("it", FormScannerTranslationKeys.ITALIAN),
+		PORTUGUES("pt", FormScannerTranslationKeys.PORTUGUES);
+		// SPANISH("es", FormScannerTranslationKeys.SPANISH);
 
 		private String value;
 		private String translation;
@@ -282,10 +218,10 @@ public class FormScannerConstants {
 	}
 	
 	public enum FieldsTableColumn {
-		NAME_COLUMN(FormScannerTranslation.getTranslationFor(FormScannerTranslationKeys.NAME_COLUMN)), 
-		TYPE_COLUMN(FormScannerTranslation.getTranslationFor(FormScannerTranslationKeys.TYPE_COLUMN)),
-		MULTIPLE_COLUMN(FormScannerTranslation.getTranslationFor(FormScannerTranslationKeys.MULTIPLE_COLUMN)),
-		RESPONSES_COLUMN(FormScannerTranslation.getTranslationFor(FormScannerTranslationKeys.RESPONSES_COLUMN));
+		NAME_COLUMN(FormScannerTranslationKeys.NAME_COLUMN), 
+		TYPE_COLUMN(FormScannerTranslationKeys.TYPE_COLUMN),
+		MULTIPLE_COLUMN(FormScannerTranslationKeys.MULTIPLE_COLUMN),
+		RESPONSES_COLUMN(FormScannerTranslationKeys.RESPONSES_COLUMN);
 
 		private String value;
 

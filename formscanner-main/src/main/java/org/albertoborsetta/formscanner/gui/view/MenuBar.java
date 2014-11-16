@@ -1,4 +1,4 @@
-package org.albertoborsetta.formscanner.gui;
+package org.albertoborsetta.formscanner.gui.view;
 
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
@@ -11,14 +11,14 @@ import javax.swing.JRadioButtonMenuItem;
 import javax.swing.JSeparator;
 import javax.swing.KeyStroke;
 
-import org.albertoborsetta.formscanner.commons.FormScannerConstants;
-import org.albertoborsetta.formscanner.commons.FormScannerConstants.Language;
 import org.albertoborsetta.formscanner.commons.translation.FormScannerTranslation;
 import org.albertoborsetta.formscanner.commons.translation.FormScannerTranslationKeys;
+import org.albertoborsetta.formscanner.commons.FormScannerConstants;
+import org.albertoborsetta.formscanner.commons.FormScannerConstants.Language;
 import org.albertoborsetta.formscanner.gui.builder.MenuBuilder;
 import org.albertoborsetta.formscanner.gui.builder.MenuItemBuilder;
 import org.albertoborsetta.formscanner.gui.controller.FormScannerController;
-import org.albertoborsetta.formscanner.model.FormScannerModel;
+import org.albertoborsetta.formscanner.gui.model.FormScannerModel;
 
 public class MenuBar extends JMenuBar implements MenuView {
 
@@ -265,7 +265,7 @@ public class MenuBar extends JMenuBar implements MenuView {
 		JRadioButtonMenuItem languageItem;
 		ButtonGroup buttonGroup = new ButtonGroup();
 		for (Language language : Language.values()) {
-			languageItem = new JRadioButtonMenuItem(language.getTranslation());
+			languageItem = new JRadioButtonMenuItem(FormScannerTranslation.getTranslationFor(language.getTranslation()));
 			if (language.getValue().equals(defaultLanguage)) {
 				languageItem.setSelected(true);
 			}

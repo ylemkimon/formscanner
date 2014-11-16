@@ -1,4 +1,4 @@
-package org.albertoborsetta.formscanner.gui;
+package org.albertoborsetta.formscanner.gui.view;
 
 import java.awt.Component;
 import java.awt.ComponentOrientation;
@@ -9,15 +9,15 @@ import javax.swing.JPanel;
 import javax.swing.JToolBar;
 import javax.swing.border.EtchedBorder;
 
+import org.albertoborsetta.formscanner.commons.translation.FormScannerTranslation;
+import org.albertoborsetta.formscanner.commons.translation.FormScannerTranslationKeys;
 import org.albertoborsetta.formscanner.commons.FormScannerConstants;
 import org.albertoborsetta.formscanner.commons.resources.FormScannerResources;
 import org.albertoborsetta.formscanner.commons.resources.FormScannerResourcesKeys;
-import org.albertoborsetta.formscanner.commons.translation.FormScannerTranslation;
-import org.albertoborsetta.formscanner.commons.translation.FormScannerTranslationKeys;
 import org.albertoborsetta.formscanner.gui.builder.ButtonBuilder;
 import org.albertoborsetta.formscanner.gui.builder.ToolBarBuilder;
 import org.albertoborsetta.formscanner.gui.controller.FormScannerController;
-import org.albertoborsetta.formscanner.model.FormScannerModel;
+import org.albertoborsetta.formscanner.gui.model.FormScannerModel;
 
 public class ToolBar extends JPanel implements MenuView {
 

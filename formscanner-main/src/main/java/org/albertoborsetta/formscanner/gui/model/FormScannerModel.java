@@ -1,32 +1,33 @@
-package org.albertoborsetta.formscanner.model;
+package org.albertoborsetta.formscanner.gui.model;
 
 import org.albertoborsetta.formscanner.api.FormField;
-import org.albertoborsetta.formscanner.api.FormFileUtils;
 import org.albertoborsetta.formscanner.api.FormPoint;
 import org.albertoborsetta.formscanner.api.FormTemplate;
+import org.albertoborsetta.formscanner.commons.translation.FormScannerTranslation;
+import org.albertoborsetta.formscanner.commons.translation.FormScannerTranslationKeys;
+import org.albertoborsetta.formscanner.commons.FormFileUtils;
 import org.albertoborsetta.formscanner.commons.FormScannerConstants;
 import org.albertoborsetta.formscanner.commons.FormScannerConstants.Action;
-import org.albertoborsetta.formscanner.commons.FormScannerConstants.Corners;
+import org.albertoborsetta.formscanner.api.commons.Constants;
+import org.albertoborsetta.formscanner.api.commons.Constants.Corners;
 import org.albertoborsetta.formscanner.commons.FormScannerConstants.Frame;
 import org.albertoborsetta.formscanner.commons.FormScannerConstants.Mode;
 import org.albertoborsetta.formscanner.commons.FormScannerConstants.ShapeType;
 import org.albertoborsetta.formscanner.commons.configuration.FormScannerConfiguration;
 import org.albertoborsetta.formscanner.commons.configuration.FormScannerConfigurationKeys;
 import org.albertoborsetta.formscanner.commons.resources.FormScannerResources;
-import org.albertoborsetta.formscanner.commons.translation.FormScannerTranslation;
-import org.albertoborsetta.formscanner.commons.translation.FormScannerTranslationKeys;
-import org.albertoborsetta.formscanner.gui.AboutFrame;
-import org.albertoborsetta.formscanner.gui.FileListFrame;
 import org.albertoborsetta.formscanner.gui.FormScanner;
-import org.albertoborsetta.formscanner.gui.ImageView;
-import org.albertoborsetta.formscanner.gui.InternalFrame;
-import org.albertoborsetta.formscanner.gui.ManageTemplateFrame;
-import org.albertoborsetta.formscanner.gui.ImageFrame;
-import org.albertoborsetta.formscanner.gui.OptionsFrame;
-import org.albertoborsetta.formscanner.gui.RenameFileFrame;
-import org.albertoborsetta.formscanner.gui.ResultsGridFrame;
-import org.albertoborsetta.formscanner.gui.ScrollableImageView;
-import org.albertoborsetta.formscanner.gui.TabbedView;
+import org.albertoborsetta.formscanner.gui.view.AboutFrame;
+import org.albertoborsetta.formscanner.gui.view.FileListFrame;
+import org.albertoborsetta.formscanner.gui.view.ImageFrame;
+import org.albertoborsetta.formscanner.gui.view.ImageView;
+import org.albertoborsetta.formscanner.gui.view.InternalFrame;
+import org.albertoborsetta.formscanner.gui.view.ManageTemplateFrame;
+import org.albertoborsetta.formscanner.gui.view.OptionsFrame;
+import org.albertoborsetta.formscanner.gui.view.RenameFileFrame;
+import org.albertoborsetta.formscanner.gui.view.ResultsGridFrame;
+import org.albertoborsetta.formscanner.gui.view.ScrollableImageView;
+import org.albertoborsetta.formscanner.gui.view.TabbedView;
 
 import java.awt.Cursor;
 import java.awt.Rectangle;
@@ -605,7 +606,7 @@ public class FormScannerModel {
 	}
 
 	public void saveTemplate(TabbedView view) {
-		File template = formTemplate.saveToFile(path);
+		File template = FormFileUtils.saveToFile(path, formTemplate);
 
 		if (template != null) {
 			JOptionPane

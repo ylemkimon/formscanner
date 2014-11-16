@@ -1,4 +1,4 @@
-package org.albertoborsetta.formscanner.gui;
+package org.albertoborsetta.formscanner.gui.view;
 
 import java.awt.Cursor;
 import java.awt.Dimension;

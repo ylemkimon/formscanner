@@ -1,4 +1,4 @@
-package org.albertoborsetta.formscanner.gui;
+package org.albertoborsetta.formscanner.gui.view;
 
 import javax.swing.JTabbedPane;
 
@@ -32,16 +32,16 @@ import javax.swing.table.TableRowSorter;
 import org.apache.commons.lang3.StringUtils;
 import org.albertoborsetta.formscanner.api.FormField;
 import org.albertoborsetta.formscanner.api.FormPoint;
+import org.albertoborsetta.formscanner.commons.translation.FormScannerTranslation;
+import org.albertoborsetta.formscanner.commons.translation.FormScannerTranslationKeys;
 import org.albertoborsetta.formscanner.commons.CharSequenceGenerator;
 import org.albertoborsetta.formscanner.commons.FormScannerConstants;
-import org.albertoborsetta.formscanner.commons.FormScannerConstants.FieldType;
+import org.albertoborsetta.formscanner.api.commons.Constants.FieldType;
 import org.albertoborsetta.formscanner.commons.FormScannerConstants.Action;
 import org.albertoborsetta.formscanner.commons.FormScannerConstants.Frame;
 import org.albertoborsetta.formscanner.commons.FormScannerConstants.FieldsTableColumn;
 import org.albertoborsetta.formscanner.commons.resources.FormScannerResources;
 import org.albertoborsetta.formscanner.commons.resources.FormScannerResourcesKeys;
-import org.albertoborsetta.formscanner.commons.translation.FormScannerTranslation;
-import org.albertoborsetta.formscanner.commons.translation.FormScannerTranslationKeys;
 import org.albertoborsetta.formscanner.gui.builder.ButtonBuilder;
 import org.albertoborsetta.formscanner.gui.builder.CheckBoxBuilder;
 import org.albertoborsetta.formscanner.gui.builder.ComboBoxBuilder;
@@ -51,7 +51,7 @@ import org.albertoborsetta.formscanner.gui.builder.SpinnerBuilder;
 import org.albertoborsetta.formscanner.gui.builder.TabbedPaneBuilder;
 import org.albertoborsetta.formscanner.gui.builder.ScrollPaneBuilder;
 import org.albertoborsetta.formscanner.gui.controller.ManageTemplateController;
-import org.albertoborsetta.formscanner.model.FormScannerModel;
+import org.albertoborsetta.formscanner.gui.model.FormScannerModel;
 
 public class ManageTemplateFrame extends InternalFrame implements TabbedView {
 	/**
@@ -69,7 +69,7 @@ public class ManageTemplateFrame extends InternalFrame implements TabbedView {
 
 	private JSpinner valuesNumber;
 	private JSpinner rowsNumber;
-	private JComboBox<FieldType> typeComboBox;
+	private JComboBox<InternalFieldType> typeComboBox;
 	private JCheckBox isMultiple;
 	private JCheckBox rejectMultiple;
 	private JButton okPropertiesButton;
@@ -82,8 +82,25 @@ public class ManageTemplateFrame extends InternalFrame implements TabbedView {
 
 	private ManageTemplateController manageTemplateController;
 	private int previousRowsCount;
+	
+	private class InternalFieldType {
+		
+		private FieldType type;
+		
+		protected InternalFieldType(FieldType type) {
+			this.type = type;
+		}
 
-	public class FieldsTableModel extends DefaultTableModel {
+		protected FieldType getType() {
+			return type;
+		}
+
+		public String toString() {
+			return FormScannerTranslation.getTranslationFor(type.getValue());
+		}
+	}
+
+	protected class FieldsTableModel extends DefaultTableModel {
 
 		/**
 		 *
@@ -258,7 +275,7 @@ public class ManageTemplateFrame extends InternalFrame implements TabbedView {
 		positionsTable.setVisible(true);
 	}
 
-	public void setupFieldsTable(HashMap<String, FormField> fields) {
+	protected void setupFieldsTable(HashMap<String, FormField> fields) {
 		FieldsTableModel fieldsTableModel = (FieldsTableModel) fieldsTable
 				.getModel();
 		while (fieldsTable.getRowCount() > 0) {
@@ -267,7 +284,7 @@ public class ManageTemplateFrame extends InternalFrame implements TabbedView {
 
 		for (FormField field : fields.values()) {
 			fieldsTableModel.addRow(new Object[] { field.getName(),
-					field.getType().getValue(), field.isMultiple(),
+					FormScannerTranslation.getTranslationFor(field.getType().getValue()), field.isMultiple(),
 					field.getPoints().size() });
 		}
 
@@ -280,7 +297,7 @@ public class ManageTemplateFrame extends InternalFrame implements TabbedView {
 	}
 
 	public FieldType getFieldType() {
-		return (FieldType) typeComboBox.getSelectedItem();
+		return (FieldType) ((InternalFieldType) typeComboBox.getSelectedItem()).getType();
 	}
 
 	public void setAdvanceable() {
@@ -393,7 +410,7 @@ public class ManageTemplateFrame extends InternalFrame implements TabbedView {
 				fieldsTableModel));
 
 		for (FieldsTableColumn tableColumn : FieldsTableColumn.values()) {
-			fieldsTableModel.addColumn(tableColumn.getValue());
+			fieldsTableModel.addColumn(FormScannerTranslation.getTranslationFor(tableColumn.getValue()));
 		}
 
 		table.setDefaultRenderer(Object.class, new DefaultTableCellRenderer() {
@@ -452,7 +469,7 @@ public class ManageTemplateFrame extends InternalFrame implements TabbedView {
 				.build();
 	}
 
-	public JPanel getFieldPositionPanel() {
+	protected JPanel getFieldPositionPanel() {
 
 		JPanel positionButtonPanel = getPositionButtonPanel();
 
@@ -467,11 +484,18 @@ public class ManageTemplateFrame extends InternalFrame implements TabbedView {
 	}
 
 	private JPanel getPropertiesPanel() {
+		
+		FieldType fields[] = FieldType.values();
+		InternalFieldType types[] = new InternalFieldType[fields.length];
+		
+		for (int i=0; i<fields.length; i++) {
+			types[i] = new InternalFieldType(fields[i]);
+		}
 
-		typeComboBox = new ComboBoxBuilder<FieldType>(
+		typeComboBox = new ComboBoxBuilder<InternalFieldType>(
 				FormScannerConstants.TYPE_COMBO_BOX)
 				.withModel(
-						new DefaultComboBoxModel<FieldType>(FieldType.values()))
+						new DefaultComboBoxModel<InternalFieldType>(types))
 				.withActionListener(manageTemplateController).build();
 
 		isMultiple = new CheckBoxBuilder(FormScannerConstants.IS_MULTIPLE)

@@ -11,9 +11,9 @@ import java.awt.event.MouseWheelListener;
 import javax.swing.event.MouseInputListener;
 
 import org.albertoborsetta.formscanner.api.FormPoint;
-import org.albertoborsetta.formscanner.commons.FormScannerConstants.Corners;
-import org.albertoborsetta.formscanner.gui.ImageFrame;
-import org.albertoborsetta.formscanner.model.FormScannerModel;
+import org.albertoborsetta.formscanner.api.commons.Constants.Corners;
+import org.albertoborsetta.formscanner.gui.model.FormScannerModel;
+import org.albertoborsetta.formscanner.gui.view.ImageFrame;
 
 public class ImageFrameController implements MouseMotionListener,
 		MouseInputListener, MouseWheelListener, ActionListener {

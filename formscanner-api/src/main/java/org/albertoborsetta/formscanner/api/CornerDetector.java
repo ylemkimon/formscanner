@@ -4,8 +4,8 @@ import java.awt.image.BufferedImage;
 import java.util.concurrent.Callable;
 
 import org.albertoborsetta.formscanner.api.FormPoint;
-import org.albertoborsetta.formscanner.commons.FormScannerConstants;
-import org.albertoborsetta.formscanner.commons.FormScannerConstants.Corners;
+import org.albertoborsetta.formscanner.api.commons.Constants;
+import org.albertoborsetta.formscanner.api.commons.Constants.Corners;
 
 public class CornerDetector implements Callable<FormPoint> {
 	

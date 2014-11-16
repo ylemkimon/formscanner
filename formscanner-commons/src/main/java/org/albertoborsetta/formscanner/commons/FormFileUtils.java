@@ -1,9 +1,10 @@
-package org.albertoborsetta.formscanner.api;
+package org.albertoborsetta.formscanner.commons;
 
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map.Entry;
 import java.util.Set;
@@ -12,6 +13,7 @@ import java.util.TreeSet;
 import javax.imageio.ImageIO;
 import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileNameExtensionFilter;
+import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerException;
@@ -19,7 +21,10 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
-import org.albertoborsetta.formscanner.commons.FormScannerFont;
+import org.albertoborsetta.formscanner.api.FormField;
+import org.albertoborsetta.formscanner.api.FormTemplate;
+import org.albertoborsetta.formscanner.api.FormTemplateWrapper;
+import org.albertoborsetta.formscanner.api.commons.translation.TranslationKeys;
 import org.albertoborsetta.formscanner.commons.translation.FormScannerTranslation;
 import org.albertoborsetta.formscanner.commons.translation.FormScannerTranslationKeys;
 import org.supercsv.io.CsvMapWriter;
@@ -188,7 +193,9 @@ public class FormFileUtils extends JFileChooser {
 	}
 
 	public File saveCsvAs(File file, HashMap<String, FormTemplate> filledForms) {
-		String[] header = getHeader(filledForms);
+		String aKey = (String) filledForms.keySet().toArray()[0];
+		FormTemplate aForm = filledForms.get(aKey);
+		String[] header = getHeader(aForm);
 		ArrayList<HashMap<String, String>> results = getResults(filledForms,
 				header);
 
@@ -240,10 +247,33 @@ public class FormFileUtils extends JFileChooser {
 		return results;
 	}
 
-	private String[] getHeader(HashMap<String, FormTemplate> filledForms) {
-		String aKey = (String) filledForms.keySet().toArray()[0];
-		FormTemplate aForm = filledForms.get(aKey);
-		String[] header = (String[]) aForm.getHeader();
+	public static String[] getHeader(FormTemplate template) {
+		HashMap<String, FormField> fields = template.getFields();
+		String[] header = new String[fields.size() + 1];
+		int i = 0;
+		header[i++] = FormScannerTranslation
+				.getTranslationFor(FormScannerTranslationKeys.FIRST_CSV_COLUMN);
+
+		ArrayList<String> keys = new ArrayList<String>(fields.keySet());
+		Collections.sort(keys);
+		for (String key : keys) {
+			header[i++] = key;
+		}
+
 		return header;
+	}
+	
+	public static File saveToFile(String path, FormTemplate template) {
+		File outputFile = null;
+		
+		try {
+			outputFile = new File(path + "/template/" + template.getName() + ".xtmpl");
+			Document xml = FormTemplateWrapper.getXml(template);
+			outputFile = FormFileUtils.getInstance().saveTemplateAs(outputFile, xml);
+		} catch (ParserConfigurationException e) {
+			e.printStackTrace();
+		}
+		
+		return outputFile;
 	}
 }

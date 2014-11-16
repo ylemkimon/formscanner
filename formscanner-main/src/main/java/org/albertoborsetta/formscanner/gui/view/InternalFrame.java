@@ -1,9 +1,9 @@
-package org.albertoborsetta.formscanner.gui;
+package org.albertoborsetta.formscanner.gui.view;
 
 import javax.swing.JInternalFrame;
 
 import org.albertoborsetta.formscanner.gui.controller.InternalFrameController;
-import org.albertoborsetta.formscanner.model.FormScannerModel;
+import org.albertoborsetta.formscanner.gui.model.FormScannerModel;
 
 public class InternalFrame extends JInternalFrame {
 

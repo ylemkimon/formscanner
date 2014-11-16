@@ -1,22 +1,22 @@
-package org.albertoborsetta.formscanner.gui;
+package org.albertoborsetta.formscanner.gui.view;
 
 import org.albertoborsetta.formscanner.api.FormPoint;
 import org.albertoborsetta.formscanner.api.FormTemplate;
+import org.albertoborsetta.formscanner.commons.translation.FormScannerTranslation;
+import org.albertoborsetta.formscanner.commons.translation.FormScannerTranslationKeys;
 import org.albertoborsetta.formscanner.commons.FormScannerConstants;
-import org.albertoborsetta.formscanner.commons.FormScannerConstants.Corners;
+import org.albertoborsetta.formscanner.api.commons.Constants.Corners;
 import org.albertoborsetta.formscanner.commons.FormScannerConstants.Frame;
 import org.albertoborsetta.formscanner.commons.FormScannerConstants.Mode;
 import org.albertoborsetta.formscanner.commons.FormScannerConstants.ShapeType;
 import org.albertoborsetta.formscanner.commons.FormScannerFont;
 import org.albertoborsetta.formscanner.commons.resources.FormScannerResources;
 import org.albertoborsetta.formscanner.commons.resources.FormScannerResourcesKeys;
-import org.albertoborsetta.formscanner.commons.translation.FormScannerTranslation;
-import org.albertoborsetta.formscanner.commons.translation.FormScannerTranslationKeys;
 import org.albertoborsetta.formscanner.gui.builder.ButtonBuilder;
 import org.albertoborsetta.formscanner.gui.builder.LabelBuilder;
 import org.albertoborsetta.formscanner.gui.builder.TextFieldBuilder;
 import org.albertoborsetta.formscanner.gui.controller.ImageFrameController;
-import org.albertoborsetta.formscanner.model.FormScannerModel;
+import org.albertoborsetta.formscanner.gui.model.FormScannerModel;
 import org.uncommons.swing.SpringUtilities;
 
 import java.awt.Color;
