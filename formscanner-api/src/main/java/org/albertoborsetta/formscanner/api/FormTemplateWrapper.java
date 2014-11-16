@@ -17,8 +17,19 @@ import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
+/**
+ * The Class FormTemplateWrapper.
+ */
 public class FormTemplateWrapper {
 
+	/**
+	 * Gets the xml.
+	 *
+	 * @author Alberto Borsetta
+	 * @param template the template
+	 * @return the xml
+	 * @throws ParserConfigurationException the parser configuration exception
+	 */
 	public static Document getXml(FormTemplate template)
 			throws ParserConfigurationException {
 		DocumentBuilderFactory docFactory = DocumentBuilderFactory
@@ -60,6 +71,16 @@ public class FormTemplateWrapper {
 		return doc;
 	}
 
+	/**
+	 * Preset from template.
+	 *
+	 * @author Alberto Borsetta
+	 * @param file the file
+	 * @param template the template
+	 * @throws ParserConfigurationException the parser configuration exception
+	 * @throws SAXException the SAX exception
+	 * @throws IOException Signals that an I/O exception has occurred.
+	 */
 	public static void presetFromTemplate(File file, FormTemplate template)
 			throws ParserConfigurationException, SAXException, IOException {
 		DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
@@ -124,6 +145,13 @@ public class FormTemplateWrapper {
 		}
 	}
 
+	/**
+	 * Gets the string.
+	 *
+	 * @author Alberto Borsetta
+	 * @param template the template
+	 * @return the string
+	 */
 	public static String getString(FormTemplate template) {
 		try {
 			return getXml(template).toString();
