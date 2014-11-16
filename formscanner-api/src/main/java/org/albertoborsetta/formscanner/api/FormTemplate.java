@@ -22,27 +22,70 @@ import javax.xml.parsers.ParserConfigurationException;
 
 import org.xml.sax.SAXException;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class FormTemplate.
+ */
 public class FormTemplate {
 
+	/** The name. */
 	private String name;
+	
+	/** The fields. */
 	private HashMap<String, FormField> fields;
+	
+	/** The corners. */
 	private HashMap<Corners, FormPoint> corners;
+	
+	/** The point list. */
 	private ArrayList<FormPoint> pointList;
+	
+	/** The rotation. */
 	private double rotation;
+	
+	/** The template. */
 	private FormTemplate template;
+	
+	/** The height. */
 	private int height;
+	
+	/** The width. */
 	private int width;
+	
+	/** The diagonal. */
 	private double diagonal;
 
+	/**
+	 * Instantiates a new form template.
+	 *
+	 * @author Alberto Borsetta
+	 * @param name the name
+	 */
 	public FormTemplate(String name) {
 		this(name, null);
 	}
 	
+	/**
+	 * Instantiates a new form template.
+	 *
+	 * @author Alberto Borsetta
+	 * @param file the file
+	 * @throws ParserConfigurationException the parser configuration exception
+	 * @throws SAXException the SAX exception
+	 * @throws IOException Signals that an I/O exception has occurred.
+	 */
 	public FormTemplate(File file) throws ParserConfigurationException, SAXException, IOException {
 		this(FilenameUtils.removeExtension(file.getName()), null);
 		FormTemplateWrapper.presetFromTemplate(file, this);
 	}
 	
+	/**
+	 * Instantiates a new form template.
+	 *
+	 * @author Alberto Borsetta
+	 * @param name the name
+	 * @param template the template
+	 */
 	public FormTemplate(String name, FormTemplate template) {
 		this.template = template;
 		this.name = name;
@@ -55,12 +98,22 @@ public class FormTemplate {
 		pointList = new ArrayList<FormPoint>();
 	}
 
+	/**
+	 * Calculate diagonal.
+	 * 
+	 * @author Alberto Borsetta
+	 */
 	public void calculateDiagonal() {
 		diagonal = (corners.get(Corners.TOP_LEFT).dist2(
 				corners.get(Corners.BOTTOM_RIGHT)) + corners.get(
 				Corners.TOP_RIGHT).dist2(corners.get(Corners.BOTTOM_LEFT))) / 2;
 	}
 
+	/**
+	 * Sets the default corner position.
+	 * 
+	 * @author Alberto Borsetta
+	 */
 	private void setDefaultCornerPosition() {
 		int x;
 		int y;
@@ -89,14 +142,34 @@ public class FormTemplate {
 		}
 	}
 
+	/**
+	 * Gets the field.
+	 *
+	 * @author Alberto Borsetta
+	 * @param name the name
+	 * @return the field
+	 */
 	public FormField getField(String name) {
 		return fields.get(name);
 	}
 
+	/**
+	 * Gets the fields.
+	 *
+	 * @author Alberto Borsetta
+	 * @return the fields
+	 */
 	public HashMap<String, FormField> getFields() {
 		return fields;
 	}
 
+	/**
+	 * Sets the field.
+	 *
+	 * @author Alberto Borsetta
+	 * @param name the name
+	 * @param field the field
+	 */
 	public void setField(String name, FormField field) {
 		fields.put(name, field);
 		for (Entry<String, FormPoint> point : field.getPoints().entrySet()) {
@@ -106,39 +179,88 @@ public class FormTemplate {
 		}
 	}
 
+	/**
+	 * Sets the fields.
+	 *
+	 * @author Alberto Borsetta
+	 * @param fields the fields
+	 */
 	public void setFields(HashMap<String, FormField> fields) {
 		for (Entry<String, FormField> field : fields.entrySet()) {
 			setField(field.getKey(), field.getValue());
 		}
 	}
 
+	/**
+	 * Sets the corners.
+	 *
+	 * @author Alberto Borsetta
+	 * @param corners the corners
+	 */
 	public void setCorners(HashMap<Corners, FormPoint> corners) {
 		this.corners = corners;
 		calculateRotation();
 	}
 
+	/**
+	 * Sets the corner.
+	 *
+	 * @author Alberto Borsetta
+	 * @param corner the corner
+	 * @param point the point
+	 */
 	public void setCorner(Corners corner, FormPoint point) {
 		corners.put(corner, point);
 		calculateRotation();
 		calculateDiagonal();
 	}
 
+	/**
+	 * Gets the corners.
+	 *
+	 * @author Alberto Borsetta
+	 * @return the corners
+	 */
 	public HashMap<Corners, FormPoint> getCorners() {
 		return corners;
 	}
 
+	/**
+	 * Gets the rotation.
+	 *
+	 * @author Alberto Borsetta
+	 * @return the rotation
+	 */
 	public double getRotation() {
 		return rotation;
 	}
 
+	/**
+	 * Sets the rotation.
+	 *
+	 * @author Alberto Borsetta
+	 * @param rotation the new rotation
+	 */
 	public void setRotation(double rotation) {
 		this.rotation = rotation;
 	}
 
+	/**
+	 * Gets the field points.
+	 *
+	 * @author Alberto Borsetta
+	 * @return the field points
+	 */
 	public ArrayList<FormPoint> getFieldPoints() {
 		return pointList;
 	}
 
+	/**
+	 * Removes the field by name.
+	 *
+	 * @author Alberto Borsetta
+	 * @param fieldName the field name
+	 */
 	public void removeFieldByName(String fieldName) {
 
 		FormField field = fields.get(fieldName);
@@ -149,26 +271,62 @@ public class FormTemplate {
 		fields.remove(fieldName);
 	}
 
+	/* (non-Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
 	public String toString() {
 		return FormTemplateWrapper.getString(this);
 	}
 
+	/**
+	 * Gets the name.
+	 *
+	 * @author Alberto Borsetta
+	 * @return the name
+	 */
 	public String getName() {
 		return name;
 	}
 
+	/**
+	 * Gets the corner.
+	 *
+	 * @author Alberto Borsetta
+	 * @param corner the corner
+	 * @return the corner
+	 */
 	public FormPoint getCorner(Corners corner) {
 		return corners.get(corner);
 	}
 
+	/**
+	 * Gets the diagonal.
+	 *
+	 * @author Alberto Borsetta
+	 * @return the diagonal
+	 */
 	public double getDiagonal() {
 		return diagonal;
 	}
 	
+	/**
+	 * Sets the diagonal.
+	 *
+	 * @author Alberto Borsetta
+	 * @param diag the new diagonal
+	 */
 	public void setDiagonal(double diag) {
 		diagonal=diag;
 	}
 	
+	/**
+	 * Find corners.
+	 *
+	 * @author Alberto Borsetta
+	 * @param image the image
+	 * @param threshold the threshold
+	 * @param density the density
+	 */
 	public void findCorners(BufferedImage image, int threshold, int density) {
 		height = image.getHeight();
 		width = image.getWidth();
@@ -199,6 +357,15 @@ public class FormTemplate {
 
 	}
 	
+	/**
+	 * Find points.
+	 *
+	 * @author Alberto Borsetta
+	 * @param image the image
+	 * @param threshold the threshold
+	 * @param density the density
+	 * @param size the size
+	 */
 	public void findPoints(BufferedImage image, int threshold, int density, int size) {
 		height = image.getHeight();
 		width = image.getWidth();
@@ -234,6 +401,11 @@ public class FormTemplate {
 		}
 	}
 
+	/**
+	 * Calculate rotation.
+	 * 
+	 * @author Alberto Borsetta
+	 */
 	public void calculateRotation() {
 		FormPoint topLeftPoint = corners.get(Corners.TOP_LEFT);
 		FormPoint topRightPoint = corners.get(Corners.TOP_RIGHT);
@@ -244,6 +416,12 @@ public class FormTemplate {
 		rotation = Math.atan(dy / dx);
 	}
 
+	/**
+	 * Removes the point.
+	 *
+	 * @author Alberto Borsetta
+	 * @param cursorPoint the cursor point
+	 */
 	public void removePoint(FormPoint cursorPoint) {
 		if (!pointList.isEmpty()) {
 			FormPoint nearestPoint = pointList.get(0);
@@ -271,6 +449,12 @@ public class FormTemplate {
 
 	}
 
+	/**
+	 * Adds the point.
+	 *
+	 * @author Alberto Borsetta
+	 * @param cursorPoint the cursor point
+	 */
 	public void addPoint(FormPoint cursorPoint) {
 		pointList.add(cursorPoint);
 		FormPoint templateOrigin = template.getCorner(Corners.TOP_LEFT);
@@ -323,15 +507,33 @@ public class FormTemplate {
 		}
 	}
 
+	/**
+	 * Clear points.
+	 * 
+	 * @author Alberto Borsetta
+	 */
 	public void clearPoints() {
 		pointList.clear();
 		fields.clear();
 	}
 
+	/**
+	 * Gets the point.
+	 *
+	 * @author Alberto Borsetta
+	 * @param i the i
+	 * @return the point
+	 */
 	public FormPoint getPoint(int i) {
 		return pointList.get(i);
 	}
 	
+	/**
+	 * Gets the parent template.
+	 *
+	 * @author Alberto Borsetta
+	 * @return the parent template
+	 */
 	public FormTemplate getParentTemplate() {
 		return template;
 	}
