@@ -8,7 +8,6 @@ import org.albertoborsetta.formscanner.commons.translation.FormScannerTranslatio
 import org.albertoborsetta.formscanner.commons.FormFileUtils;
 import org.albertoborsetta.formscanner.commons.FormScannerConstants;
 import org.albertoborsetta.formscanner.commons.FormScannerConstants.Action;
-import org.albertoborsetta.formscanner.api.commons.Constants;
 import org.albertoborsetta.formscanner.api.commons.Constants.Corners;
 import org.albertoborsetta.formscanner.commons.FormScannerConstants.Frame;
 import org.albertoborsetta.formscanner.commons.FormScannerConstants.Mode;
@@ -516,8 +515,8 @@ public class FormScannerModel {
 								Corners.TOP_LEFT);
 						double rotation = formTemplate.getRotation();
 
-						p1.relativePositionTo(orig, rotation);
-						p.relativePositionTo(orig, rotation);
+						p1.rotoTranslate(orig, rotation, true);
+						p.rotoTranslate(orig, rotation, true);
 
 						HashMap<String, Double> delta = calcDelta(rows, values,
 								p1, p);
@@ -540,7 +539,7 @@ public class FormScannerModel {
 								FormPoint pi = new FormPoint(
 										(p1.getX() + (delta.get("x") * colsMultiplier)),
 										(p1.getY() + (delta.get("y") * rowsMultiplier)));
-								pi.originalPositionFrom(orig, rotation);
+								pi.rotoTranslate(orig, rotation, false);
 								points.add(pi);
 							}
 						}

@@ -6,71 +6,25 @@ import java.util.concurrent.Callable;
 import org.albertoborsetta.formscanner.api.FormPoint;
 import org.albertoborsetta.formscanner.api.commons.Constants.Corners;
 
-/**
- * The Class CornerDetector.
- */
 public class CornerDetector implements Callable<FormPoint> {
-	
-	/** The Constant WHITE. */
 	private static final int WHITE = 1;
-	
-	/** The Constant BLACK. */
 	private static final int BLACK = 0;
-	
-	/** The Constant HALF_WINDOW_SIZE. */
 	private static final int HALF_WINDOW_SIZE = 5;
-	
-	/** The Constant WINDOW_SIZE. */
 	private static final int WINDOW_SIZE = (HALF_WINDOW_SIZE * 2) + 1;
-	
-	/** The Constant BEFORE_CIRCLES. */
 	private static final int BEFORE_CIRCLES = 0;
-	
-	/** The Constant BLACK_CIRCLE. */
 	private static final int BLACK_CIRCLE = 1;
-	
-	/** The Constant WHITE_CIRCLE. */
 	private static final int WHITE_CIRCLE = 2;
-	
-	/** The Constant OUT_OF_CIRCLES. */
 	private static final int OUT_OF_CIRCLES = 3;
-	
-	/** The Constant AFTER_CIRCLES. */
 	private static final int AFTER_CIRCLES = 4;
-	
-	/** The height. */
 	private int height;
-	
-	/** The width. */
 	private int width;
-	
-	/** The sub image width. */
 	private int subImageWidth;
-	
-	/** The sub image height. */
 	private int subImageHeight;
-	
-	/** The image. */
 	private BufferedImage image;
-	
-	/** The position. */
 	private Corners position;
-	
-	/** The threshold. */
 	private int threshold;
-	
-	/** The density. */
 	private int density;
 
-	/**
-	 * Instantiates a new corner detector.
-	 *
-	 * @author Alberto Borsetta
-	 * @param threshold the threshold
-	 * @param density the density
-	 * @param position the position
-	 * @param image the image
-	 */
 	CornerDetector(int threshold, int density, Corners position,
 			BufferedImage image) {
 		this.image = image;
@@ -85,15 +39,6 @@ public class CornerDetector implements Callable<FormPoint> {
 		
 	}
 
-	/**
-	 * Checks if is white.
-	 *
-	 * @author Alberto Borsetta
-	 * @param xi the xi
-	 * @param yi the yi
-	 * @param rgbArray the rgb array
-	 * @return the int
-	 */
 	private int isWhite(int xi, int yi, int[] rgbArray) {
 		int blacks = 0;
 		int total = WINDOW_SIZE * WINDOW_SIZE;
@@ -112,9 +57,6 @@ public class CornerDetector implements Callable<FormPoint> {
 		return WHITE;
 	}
 
-	/* (non-Javadoc)
-	 * @see java.util.concurrent.Callable#call()
-	 */
 	public FormPoint call() throws Exception {
 		Long sumX = 0L;
 		Long sumY = 0L;
