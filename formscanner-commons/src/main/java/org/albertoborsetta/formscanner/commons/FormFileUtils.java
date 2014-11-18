@@ -23,8 +23,6 @@ import javax.xml.transform.stream.StreamResult;
 
 import org.albertoborsetta.formscanner.api.FormField;
 import org.albertoborsetta.formscanner.api.FormTemplate;
-import org.albertoborsetta.formscanner.api.FormTemplateWrapper;
-import org.albertoborsetta.formscanner.api.commons.translation.TranslationKeys;
 import org.albertoborsetta.formscanner.commons.translation.FormScannerTranslation;
 import org.albertoborsetta.formscanner.commons.translation.FormScannerTranslationKeys;
 import org.supercsv.io.CsvMapWriter;
@@ -268,7 +266,7 @@ public class FormFileUtils extends JFileChooser {
 		
 		try {
 			outputFile = new File(path + "/template/" + template.getName() + ".xtmpl");
-			Document xml = FormTemplateWrapper.getXml(template);
+			Document xml = template.getXml();
 			outputFile = FormFileUtils.getInstance().saveTemplateAs(outputFile, xml);
 		} catch (ParserConfigurationException e) {
 			e.printStackTrace();

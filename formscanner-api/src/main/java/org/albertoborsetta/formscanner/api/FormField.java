@@ -16,19 +16,10 @@ import org.w3c.dom.Element;
  */
 public class FormField {
 	
-	/** The name. */
 	private String name;
-	
-	/** The type. */
 	private FieldType type;
-	
-	/** The multiple. */
 	private boolean multiple;
-	
-	/** The points. */
 	private HashMap<String, FormPoint> points;
-	
-	/** The reject multiple. */
 	private boolean rejectMultiple = false;
 
 	/**

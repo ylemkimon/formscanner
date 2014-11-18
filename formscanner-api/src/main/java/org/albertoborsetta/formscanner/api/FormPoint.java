@@ -14,10 +14,7 @@ import org.w3c.dom.Element;
  */
 public class FormPoint {
 
-	/** The x. */
 	private double x;
-	
-	/** The y. */
 	private double y;
 
 	/**
@@ -109,24 +106,11 @@ public class FormPoint {
 		}
 	}
 
-	/**
-	 * Rotate.
-	 *
-	 * @author Alberto Borsetta
-	 * @param alfa the alfa
-	 */
 	private void rotate(double alfa) {
 		x = ((x * Math.cos(alfa)) - (y * Math.sin(alfa)));
 		y = ((x * Math.sin(alfa)) + (y * Math.cos(alfa)));
 	}
 
-	/**
-	 * Translate.
-	 *
-	 * @author Alberto Borsetta
-	 * @param dx the dx
-	 * @param dy the dy
-	 */
 	private void translate(double dx, double dy) {
 		x = x + dx;
 		y = y + dy;
@@ -144,25 +128,27 @@ public class FormPoint {
 	}
 
 	/**
-	 * Relative position to.
+	 * Roto-translate.
 	 *
 	 * @author Alberto Borsetta
 	 * @param o the o
 	 * @param alfa the alfa
+	 * @param direct the direct
 	 */
-	public void relativePositionTo(FormPoint o, double alfa) {
+	public void rotoTranslate(FormPoint o, double alfa, boolean direct) {
+		if (direct) {
+			relativePositionTo(o, alfa);
+		} else {
+			 originalPositionFrom(o, alfa);
+		}
+	}
+	
+	private void relativePositionTo(FormPoint o, double alfa) {
 		translate(0 - o.getX(), 0 - o.getY());
 		rotate(alfa);
 	}
 
-	/**
-	 * Original position from.
-	 *
-	 * @author Alberto Borsetta
-	 * @param o the o
-	 * @param alfa the alfa
-	 */
-	public void originalPositionFrom(FormPoint o, double alfa) {
+	private void originalPositionFrom(FormPoint o, double alfa) {
 		rotate(0 - alfa);
 		translate(o.getX(), o.getY());
 	}

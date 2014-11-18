@@ -3,9 +3,7 @@ package org.albertoborsetta.formscanner.commons;
 import java.awt.Rectangle;
 
 import org.albertoborsetta.formscanner.api.commons.Constants;
-import org.albertoborsetta.formscanner.api.commons.translation.TranslationKeys;
 import org.albertoborsetta.formscanner.commons.configuration.FormScannerConfigurationKeys;
-import org.albertoborsetta.formscanner.commons.translation.FormScannerTranslation;
 import org.albertoborsetta.formscanner.commons.translation.FormScannerTranslationKeys;
 
 public class FormScannerConstants extends Constants {

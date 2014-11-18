@@ -47,10 +47,7 @@ public class Constants {
 		/** The bottom left. */
 		BOTTOM_LEFT(Constants.BOTTOM_LEFT, TranslationKeys.BOTTOM_LEFT_CORNER);
 
-		/** The name. */
 		private String name;
-		
-		/** The value. */
 		private String value;
 
 		/**
@@ -100,10 +97,7 @@ public class Constants {
 		/** The questions by cols. */
 		QUESTIONS_BY_COLS(Constants.QUESTIONS_BY_COLS, TranslationKeys.QUESTIONS_BY_COLS);
 
-		/** The name. */
 		private String name;
-		
-		/** The value. */
 		private String value;
 
 		/**
