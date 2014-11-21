@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<artifactId>formscanner</artifactId>
-		<groupId>org.albertoborsetta</groupId>
+		<groupId>com.albertoborsetta</groupId>
 		<version>0.9-SNAPSHOT</version>
 	</parent>
 	<artifactId>formscanner-commons</artifactId>
@@ -17,7 +17,7 @@
 			<scope>test</scope>
 		</dependency>
 		<dependency>
-			<groupId>org.albertoborsetta</groupId>
+			<groupId>${project.groupId}</groupId>
 			<artifactId>formscanner-api</artifactId>
 			<version>${project.version}</version>
 		</dependency>

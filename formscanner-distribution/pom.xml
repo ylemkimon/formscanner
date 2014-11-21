@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <parent>
     <artifactId>formscanner</artifactId>
-    <groupId>org.albertoborsetta</groupId>
+    <groupId>com.albertoborsetta</groupId>
     <version>0.9-SNAPSHOT</version>
   </parent>
   <artifactId>formscanner-distribution</artifactId>
