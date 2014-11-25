@@ -4,7 +4,7 @@
 	<parent>
 		<artifactId>formscanner</artifactId>
 		<groupId>com.albertoborsetta</groupId>
-		<version>0.9-SNAPSHOT</version>
+		<version>0.9.0</version>
 	</parent>
 	<artifactId>formscanner-api</artifactId>
 	<packaging>jar</packaging>
@@ -25,8 +25,22 @@
 				<configuration>
 					<serverId>ossrh</serverId>
 					<nexusUrl>https://oss.sonatype.org/</nexusUrl>
-					<autoReleaseAfterClose>true</autoReleaseAfterClose>
+					<autoReleaseAfterClose>false</autoReleaseAfterClose>
 				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-gpg-plugin</artifactId>
+				<version>${maven-gpg-plugin.version}</version>
+				<executions>
+					<execution>
+						<id>sign-artifacts</id>
+						<phase>verify</phase>
+						<goals>
+							<goal>sign</goal>
+						</goals>
+					</execution>
+				</executions>
 			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
@@ -73,5 +87,6 @@
 		<commons-io.version>1.3.2</commons-io.version>
 		<commons-lang3.version>3.1</commons-lang3.version>
 		<nexus-staging-maven-plugin.version>1.6.3</nexus-staging-maven-plugin.version>
+		<maven-gpg-plugin.version>1.5</maven-gpg-plugin.version>
 	</properties>
 </project>
