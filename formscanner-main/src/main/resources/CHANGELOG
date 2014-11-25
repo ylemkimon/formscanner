@@ -1,10 +1,15 @@
-FormScanner 0.9-SNAPSHOT (released yyyy-mm-dd)
+FormScanner 0.9.0 (released 2014-11-26)
 ===
 NEW FEATURES
 ---
+ 
+* Exposed FormScanner core functionalities through APIs
 
 FIXES
 ---
+
+* BugFix
+* Problems of accents in Portuguese language
 
 FormScanner 0.8.1 (released 2014-11-07)
 ===
