@@ -5,7 +5,7 @@
 	<artifactId>formscanner</artifactId>
 	<packaging>pom</packaging>
 	<name>FormScanner</name>
-	<version>0.9-SNAPSHOT</version>
+	<version>0.9.0</version>
 	<modules>
 		<module>formscanner-main</module>
 		<module>formscanner-api</module>
