@@ -211,7 +211,7 @@ public class OptionsFrame extends InternalFrame {
 
 		return (((Integer) thresholdValue.getValue() != model.getThreshold())
 				|| ((Integer) densityValue.getValue() != model.getDensity())
-				|| ((Integer) shapeSizeValue.getValue() != model.getShapeSize()) || (!((ShapeType) shapeTypeComboBox
-					.getSelectedItem()).equals(model.getShapeType())));
+				|| ((Integer) shapeSizeValue.getValue() != model.getShapeSize()) || (!((InternalShapeType) shapeTypeComboBox
+					.getSelectedItem()).getType().equals(model.getShapeType())));
 	}
 }
