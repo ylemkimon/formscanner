@@ -397,7 +397,7 @@ public class ManageTemplateFrame extends InternalFrame implements TabbedView {
 			table.setValueAt(
 					(String) FormScannerTranslation
 							.getTranslationFor(FormScannerTranslationKeys.QUESTION)
-							+ " " + StringUtils.leftPad("" + previousRowsCount++, 2, "0"), i, 0);
+							+ " " + StringUtils.leftPad("" + previousRowsCount++, 3, "0"), i, 0);
 		}
 		table.setCellSelectionEnabled(true);
 		table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
