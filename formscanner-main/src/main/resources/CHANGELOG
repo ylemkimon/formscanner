@@ -1,3 +1,12 @@
+FormScanner 0.9.1 (released 2014-12-05)
+===
+FIXES
+---
+
+* Minor BugFix
+* Fix the problem at the opening of the options window
+* Fix the problem of sorting the rows in csv when they are more than one hundred
+
 FormScanner 0.9.0 (released 2014-11-26)
 ===
 NEW FEATURES
@@ -13,7 +22,6 @@ FIXES
 
 FormScanner 0.8.1 (released 2014-11-07)
 ===
-
 FIXES
 ---
 
