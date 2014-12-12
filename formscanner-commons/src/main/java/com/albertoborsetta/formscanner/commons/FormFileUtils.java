@@ -110,40 +110,6 @@ public class FormFileUtils extends JFileChooser {
 						.getTranslationFor(FormScannerTranslationKeys.ALL_IMAGES),
 				ImageIO.getReaderFileSuffixes());
 		setFileFilter(allImagesFilter);
-
-		// resetChoosableFileFilters();
-		//
-		// FileNameExtensionFilter allImagesFilter = new
-		// FileNameExtensionFilter(
-		// FormScannerTranslation
-		// .getTranslationFor(FormScannerTranslationKeys.ALL_IMAGES),
-		// "jpg", "jpeg", "tif", "tiff", "png", "bmp");
-		// FileNameExtensionFilter pmbImagesFilter = new
-		// FileNameExtensionFilter(
-		// FormScannerTranslation
-		// .getTranslationFor(FormScannerTranslationKeys.BMP_IMAGES),
-		// "bmp");
-		// FileNameExtensionFilter pngImagesFilter = new
-		// FileNameExtensionFilter(
-		// FormScannerTranslation
-		// .getTranslationFor(FormScannerTranslationKeys.PNG_IMAGES),
-		// "png");
-		// FileNameExtensionFilter jpegImagesFilter = new
-		// FileNameExtensionFilter(
-		// FormScannerTranslation
-		// .getTranslationFor(FormScannerTranslationKeys.JPEG_IMAGES),
-		// "jpg", "jpeg");
-		// FileNameExtensionFilter tiffImagesFilter = new
-		// FileNameExtensionFilter(
-		// FormScannerTranslation
-		// .getTranslationFor(FormScannerTranslationKeys.TIFF_IMAGES),
-		// "tif", "tiff");
-		//
-		// setFileFilter(pmbImagesFilter);
-		// setFileFilter(pngImagesFilter);
-		// setFileFilter(jpegImagesFilter);
-		// setFileFilter(tiffImagesFilter);
-		// setFileFilter(allImagesFilter);
 	}
 
 	private void setTemplateFilter() {
