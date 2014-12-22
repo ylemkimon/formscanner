@@ -72,6 +72,7 @@ public class FormScannerConstants extends Constants {
 	public static final String ITALIAN = "ITALIAN";
 	public static final String PORTUGUES = "PORTUGUES";
 	public static final String SPANISH = "SPANISH";
+	public static final String GREEK = "GREEK";
 	
 	// Fields Table Columns
 
@@ -195,8 +196,9 @@ public class FormScannerConstants extends Constants {
 	public enum Language {
 		ENGLISH("en", FormScannerTranslationKeys.ENGLISH), 
 		ITALIAN("it", FormScannerTranslationKeys.ITALIAN),
-		PORTUGUES("pt", FormScannerTranslationKeys.PORTUGUES);
+		PORTUGUES("pt_BR", FormScannerTranslationKeys.PORTUGUES),
 		// SPANISH("es", FormScannerTranslationKeys.SPANISH);
+		GREEK("el", FormScannerTranslationKeys.GREEK);
 
 		private String value;
 		private String translation;

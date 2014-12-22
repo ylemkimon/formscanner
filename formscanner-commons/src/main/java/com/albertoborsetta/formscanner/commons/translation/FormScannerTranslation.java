@@ -2,6 +2,7 @@ package com.albertoborsetta.formscanner.commons.translation;
 
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.util.Properties;
 
 public class FormScannerTranslation extends Properties {
@@ -34,11 +35,23 @@ public class FormScannerTranslation extends Properties {
 
 	public static String getTranslationFor(String key) {
 		String value = translations.getProperty(key, key);
+		try {
+			value = new String(value.getBytes("ISO-8859-1"), "UTF-8");
+		} catch (UnsupportedEncodingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		return value;
 	}
 	
 	public static char getMnemonicFor(String key) {
-		char value = translations.getProperty(key, key).charAt(0);
-		return value;
+		String value = translations.getProperty(key, key);
+		try {
+			value = new String(value.getBytes("ISO-8859-1"), "UTF-8");
+		} catch (UnsupportedEncodingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return value.charAt(0);
 	}
 }

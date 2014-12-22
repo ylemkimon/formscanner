@@ -10,11 +10,14 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map.Entry;
 
 import javax.imageio.ImageIO;
+import javax.swing.JComponent;
 import javax.swing.JOptionPane;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.StringUtils;
 
@@ -67,7 +70,7 @@ public class FormScannerModel {
 	private ImageFrame imageFrame;
 	private FormTemplate formTemplate;
 	private BufferedImage templateImage;
-	private FormFileUtils fileUtils = FormFileUtils.getInstance();
+	private FormFileUtils fileUtils;
 	private HashMap<String, FormTemplate> filledForms = new HashMap<String, FormTemplate>();
 
 	private ArrayList<FormPoint> points = new ArrayList<FormPoint>();
@@ -87,6 +90,7 @@ public class FormScannerModel {
 	private Rectangle aboutFramePosition;
 	private Rectangle optionsFramePosition;
 	private Rectangle desktopSize;
+	private Locale locale;
 
 	public FormScannerModel(FormScanner view) {
 		this.view = view;
@@ -98,6 +102,13 @@ public class FormScannerModel {
 
 		lang = configurations.getProperty(FormScannerConfigurationKeys.LANG,
 				FormScannerConfigurationKeys.DEFAULT_LANG);
+		String[] locales = StringUtils.split(lang, '_');
+		if (locales.length == 2) {
+			locale = new Locale(locales[0], locales[1]);
+		} else {
+			locale = new Locale(locales[0]);
+		}
+		fileUtils = FormFileUtils.getInstance(locale);
 
 		FormScannerTranslation.setTranslation(path, lang);
 		FormScannerResources.setResources(path);
@@ -605,7 +616,7 @@ public class FormScannerModel {
 	}
 
 	public void saveTemplate(TabbedView view) {
-		File template = FormFileUtils.saveToFile(path, formTemplate);
+		File template = fileUtils.saveToFile(path, formTemplate);
 
 		if (template != null) {
 			JOptionPane
@@ -895,5 +906,9 @@ public class FormScannerModel {
 
 	public void enableRejectMultiple(TabbedView view) {
 		view.enableRejectMultiple(!view.getIsMultiple());
+	}
+
+	public Locale getLocale() {
+		return locale;
 	}
 }
