@@ -34,7 +34,8 @@ public class ResultsGridFrame extends InternalFrame {
 	private FormTemplate form;
 	private int rows;
 	private int cols;
-	String[] header;
+	private FormFileUtils fileUtils;
+	private String[] header;
 
 	private class TemplateTableModel extends DefaultTableModel {
 
@@ -57,11 +58,12 @@ public class ResultsGridFrame extends InternalFrame {
 	 */
 	public ResultsGridFrame(FormScannerModel model) {
 		super(model);
-
+		fileUtils = FormFileUtils.getInstance(model.getLocale());
+		
 		form = model.getFilledForm();
 
 		FormTemplate template = model.getTemplate();
-		header = (String[]) FormFileUtils.getHeader(template);
+		header = (String[]) fileUtils.getHeader(template);
 		rows = template.getFields().size() + 1;
 		cols = 2;
 		

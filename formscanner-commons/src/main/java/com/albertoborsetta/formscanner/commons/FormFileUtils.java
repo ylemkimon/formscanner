@@ -6,11 +6,13 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map.Entry;
 import java.util.Set;
 import java.util.TreeSet;
 
 import javax.imageio.ImageIO;
+import javax.swing.JComponent;
 import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.xml.parsers.ParserConfigurationException;
@@ -39,16 +41,18 @@ public class FormFileUtils extends JFileChooser {
 	private static final long serialVersionUID = 1L;
 	private static FormFileUtils instance;
 
-	public static FormFileUtils getInstance() {
+	public static FormFileUtils getInstance(Locale locale) {
 		if (instance == null) {
-			instance = new FormFileUtils();
+			instance = new FormFileUtils(locale);
 		}
 		return instance;
 	}
 
-	private FormFileUtils() {
+	private FormFileUtils(Locale locale) {
 		super();
 		setFont(FormScannerFont.getFont());
+		setLocale(locale);
+		updateUI();
 	}
 
 	private File chooseFile() {
@@ -68,6 +72,7 @@ public class FormFileUtils extends JFileChooser {
 		if (returnValue == JFileChooser.APPROVE_OPTION) {
 			files = getSelectedFiles();
 		}
+		System.out.println(getLocale().toString());
 		return files;
 	}
 
@@ -130,7 +135,7 @@ public class FormFileUtils extends JFileChooser {
 		setFileFilter(templateFilter);
 	}
 
-	public File saveTemplateAs(File file, Document doc) {
+	private File saveTemplateAs(File file, Document doc) {
 		try {
 			TransformerFactory transformerFactory = TransformerFactory
 					.newInstance();
@@ -212,7 +217,7 @@ public class FormFileUtils extends JFileChooser {
 		return results;
 	}
 
-	public static String[] getHeader(FormTemplate template) {
+	public String[] getHeader(FormTemplate template) {
 		HashMap<String, FormField> fields = template.getFields();
 		String[] header = new String[fields.size() + 1];
 		int i = 0;
@@ -228,13 +233,13 @@ public class FormFileUtils extends JFileChooser {
 		return header;
 	}
 	
-	public static File saveToFile(String path, FormTemplate template) {
+	public File saveToFile(String path, FormTemplate template) {
 		File outputFile = null;
 		
 		try {
 			outputFile = new File(path + "/template/" + template.getName() + ".xtmpl");
 			Document xml = template.getXml();
-			outputFile = FormFileUtils.getInstance().saveTemplateAs(outputFile, xml);
+			outputFile = saveTemplateAs(outputFile, xml);
 		} catch (ParserConfigurationException e) {
 			e.printStackTrace();
 		}
