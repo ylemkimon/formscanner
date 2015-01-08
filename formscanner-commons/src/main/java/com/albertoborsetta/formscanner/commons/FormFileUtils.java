@@ -12,7 +12,6 @@ import java.util.Set;
 import java.util.TreeSet;
 
 import javax.imageio.ImageIO;
-import javax.swing.JComponent;
 import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.xml.parsers.ParserConfigurationException;
@@ -72,7 +71,6 @@ public class FormFileUtils extends JFileChooser {
 		if (returnValue == JFileChooser.APPROVE_OPTION) {
 			files = getSelectedFiles();
 		}
-		System.out.println(getLocale().toString());
 		return files;
 	}
 
