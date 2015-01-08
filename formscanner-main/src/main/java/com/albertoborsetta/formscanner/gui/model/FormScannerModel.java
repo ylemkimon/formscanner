@@ -14,10 +14,8 @@ import java.util.Locale;
 import java.util.Map.Entry;
 
 import javax.imageio.ImageIO;
-import javax.swing.JComponent;
 import javax.swing.JOptionPane;
 
-import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.StringUtils;
 
@@ -103,28 +101,19 @@ public class FormScannerModel {
 		String userHome = System.getProperty("user.home");
 		String osName = System.getProperty("os.name");
 		
-		System.out.println(userHome);
-		System.out.println(osName);
-		
 		if (StringUtils.contains(osName, "Windows")) {
 			resultsPath = userHome + "/Documents";
 			templatePath = userHome + "/Documents";
-			propertiesPath = userHome + "/AppData";
+			propertiesPath = userHome + "/AppData/Local/FormScanner";
+		} else {
+			propertiesPath = userHome + "/.FormScanner";
 		}
-		
-		System.out.println(resultsPath);
-		System.out.println(templatePath);
-		System.out.println(propertiesPath);
 		
 		resultsPath = resultsPath + "/FormScanner/results/";
 		templatePath = templatePath + "/FormScanner/templates/";
-		propertiesPath = propertiesPath + "/.FormScanner/properties/";
+		propertiesPath = propertiesPath + "/properties/";
 		
-		System.out.println(resultsPath);
-		System.out.println(templatePath);
-		System.out.println(propertiesPath);
-		
-		configurations = FormScannerConfiguration.getConfiguration(propertiesPath, installPath);
+		configurations = FormScannerConfiguration.getConfiguration(propertiesPath, installPath + "/");
 		
 		lang = configurations.getProperty(FormScannerConfigurationKeys.LANG,
 				FormScannerConfigurationKeys.DEFAULT_LANG);

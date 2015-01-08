@@ -96,11 +96,12 @@ public class Constants {
 	public enum FieldType {
 		
 		/** The QUESTIONS_BY_ROWS field type. */
-		QUESTIONS_BY_ROWS(Constants.QUESTIONS_BY_ROWS, TranslationKeys.QUESTIONS_BY_ROWS), 
+		QUESTIONS_BY_ROWS(0, Constants.QUESTIONS_BY_ROWS, TranslationKeys.QUESTIONS_BY_ROWS), 
 		
 		/** The QUESTIONS_BY_COLS field type. */
-		QUESTIONS_BY_COLS(Constants.QUESTIONS_BY_COLS, TranslationKeys.QUESTIONS_BY_COLS);
+		QUESTIONS_BY_COLS(1, Constants.QUESTIONS_BY_COLS, TranslationKeys.QUESTIONS_BY_COLS);
 
+		private int index;
 		private String name;
 		private String value;
 
@@ -108,12 +109,24 @@ public class Constants {
 		 * Instantiates a new field type.
 		 *
 		 * @author Alberto Borsetta
+		 * @param index the index
 		 * @param name the name
 		 * @param value the value
 		 */
-		private FieldType(String name, String value) {
+		private FieldType(int index, String name, String value) {
+			this.index = index;
 			this.name = name;
 			this.value = value;
+		}
+		
+		/**
+		 * Returns the index.
+		 *
+		 * @author Alberto Borsetta
+		 * @return the index
+		 */
+		public int getIndex() {
+			return index;
 		}
 		
 		/**
