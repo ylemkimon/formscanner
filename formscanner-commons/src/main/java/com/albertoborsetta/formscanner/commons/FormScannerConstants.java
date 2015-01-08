@@ -153,17 +153,23 @@ public class FormScannerConstants extends Constants {
 	}
 
 	public enum ShapeType {
-		SQUARE(FormScannerConstants.SQUARE, FormScannerTranslationKeys.SQUARE), 
-		CIRCLE(FormScannerConstants.CIRCLE, FormScannerTranslationKeys.CIRCLE);
+		SQUARE(0, FormScannerConstants.SQUARE, FormScannerTranslationKeys.SQUARE), 
+		CIRCLE(1, FormScannerConstants.CIRCLE, FormScannerTranslationKeys.CIRCLE);
 
+		private int index;
 		private String name;
 		private String value;
 
-		private ShapeType(String name, String value) {
+		private ShapeType(int index, String name, String value) {
+			this.index = index;
 			this.name = name;
 			this.value = value;
 		}
 
+		public int getIndex() {
+			return index;
+		}
+		
 		public String getValue() {
 			return value;
 		}

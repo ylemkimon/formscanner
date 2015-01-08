@@ -10,49 +10,53 @@ import java.util.Properties;
 import org.apache.commons.io.FileUtils;
 
 public class FormScannerConfiguration extends Properties {
-	
-	private static String configFile;
-	
+
+	private static final String CONFIG_FILE_NAME = "formscanner.properties";
+	private static String userConfigFile;
+
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	
+
 	private static FormScannerConfiguration configurations = null;
 
-	private FormScannerConfiguration(String propertiesFile) {
+	private FormScannerConfiguration() {
 		super();
 		try {
-			load(new FileInputStream(propertiesFile));
-		} catch (IOException e) {			
+			load(new FileInputStream(userConfigFile));
+		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
-	
-	public static FormScannerConfiguration getConfiguration(String path, String defaultPath) {
-		if (configurations == null) {
-			configFile = path + "/formscanner.properties";
-			File destFile = new File(configFile);
 
-			if (!destFile.exists() || destFile.isDirectory()) {
-				System.out.println("Cannot find properties file into user home directory... try loading default properties");
-				String propertiesFile = defaultPath + "/config/formscanner.properties";
-				File srcFile = new File(propertiesFile);
+	public static FormScannerConfiguration getConfiguration(String userPath,
+			String installPath) {
+		if (configurations == null) {
+			userConfigFile = userPath + CONFIG_FILE_NAME;
+			
+			File userFile = new File(userConfigFile);
+			if (!userFile.exists() || userFile.isDirectory()) {
+				String defaultConfigFile = installPath + "config/"
+						+ CONFIG_FILE_NAME;
+				File defaultFile = new File(defaultConfigFile);
+				
 				try {
-					FileUtils.copyFile(srcFile, destFile);
+					FileUtils.copyFile(defaultFile, userFile);
 				} catch (IOException e) {
-					configFile = propertiesFile;
-					e.printStackTrace();
+					System.out.println("Cannot load user configurations... try loading defaults");
+					userConfigFile = defaultConfigFile;
 				}
-			}			
-			configurations = new FormScannerConfiguration(configFile);
+			}
+			
+			configurations = new FormScannerConfiguration();
 		}
 		return configurations;
 	}
-	
+
 	public void store() {
 		try {
-			store(new FileOutputStream(configFile), null);
+				store(new FileOutputStream(userConfigFile), null);
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
