@@ -108,6 +108,14 @@ public class FormScannerTranslationKeys extends TranslationKeys {
 	public static final String RESULTS_DEFAULT_FILE = "results.default.file";
 	public static final String CSV_FILE = "csv.file";
 	
+	// Language
+	public static final String ENGLISH = "english.label";
+	public static final String ITALIAN = "italian.label";
+	public static final String PORTUGUES = "portugues.label";
+	public static final String SPANISH = "spanish.label";
+	public static final String GREEK = "greek.label";
+	public static final String POLISH = "polish.label";
+	
 	public static final String HELP = "help";
 	public static final String ABOUT = "about";
 	public static final String HELP_MENU = "help.menu";
@@ -118,10 +126,6 @@ public class FormScannerTranslationKeys extends TranslationKeys {
 	public static final String ABOUT_FRAME_TITLE = "about.formscanner";
 	public static final String ABOUT_TAB_NAME = "about.tab.name";
 	public static final String LICENSE_TAB_NAME = "license.tab.name";
-	public static final String ENGLISH = "english.label";
-	public static final String ITALIAN = "italian.label";
-	public static final String PORTUGUES = "portugues.label";
-	public static final String SPANISH = "spanish.label";
 	public static final String LANGUAGE_CHANGED = "language.changed";
 	public static final String SETTINGS_POPUP = "settings.popup.title";
 	public static final String TEMPLATE_SAVED_POPUP = "template.saved.popup.title";

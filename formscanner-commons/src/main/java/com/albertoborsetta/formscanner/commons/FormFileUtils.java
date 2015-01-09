@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map.Entry;
 import java.util.Set;
 import java.util.TreeSet;
@@ -39,16 +40,18 @@ public class FormFileUtils extends JFileChooser {
 	private static final long serialVersionUID = 1L;
 	private static FormFileUtils instance;
 
-	public static FormFileUtils getInstance() {
+	public static FormFileUtils getInstance(Locale locale) {
 		if (instance == null) {
-			instance = new FormFileUtils();
+			instance = new FormFileUtils(locale);
 		}
 		return instance;
 	}
 
-	private FormFileUtils() {
+	private FormFileUtils(Locale locale) {
 		super();
 		setFont(FormScannerFont.getFont());
+		setLocale(locale);
+		updateUI();
 	}
 
 	private File chooseFile() {
@@ -110,40 +113,6 @@ public class FormFileUtils extends JFileChooser {
 						.getTranslationFor(FormScannerTranslationKeys.ALL_IMAGES),
 				ImageIO.getReaderFileSuffixes());
 		setFileFilter(allImagesFilter);
-
-		// resetChoosableFileFilters();
-		//
-		// FileNameExtensionFilter allImagesFilter = new
-		// FileNameExtensionFilter(
-		// FormScannerTranslation
-		// .getTranslationFor(FormScannerTranslationKeys.ALL_IMAGES),
-		// "jpg", "jpeg", "tif", "tiff", "png", "bmp");
-		// FileNameExtensionFilter pmbImagesFilter = new
-		// FileNameExtensionFilter(
-		// FormScannerTranslation
-		// .getTranslationFor(FormScannerTranslationKeys.BMP_IMAGES),
-		// "bmp");
-		// FileNameExtensionFilter pngImagesFilter = new
-		// FileNameExtensionFilter(
-		// FormScannerTranslation
-		// .getTranslationFor(FormScannerTranslationKeys.PNG_IMAGES),
-		// "png");
-		// FileNameExtensionFilter jpegImagesFilter = new
-		// FileNameExtensionFilter(
-		// FormScannerTranslation
-		// .getTranslationFor(FormScannerTranslationKeys.JPEG_IMAGES),
-		// "jpg", "jpeg");
-		// FileNameExtensionFilter tiffImagesFilter = new
-		// FileNameExtensionFilter(
-		// FormScannerTranslation
-		// .getTranslationFor(FormScannerTranslationKeys.TIFF_IMAGES),
-		// "tif", "tiff");
-		//
-		// setFileFilter(pmbImagesFilter);
-		// setFileFilter(pngImagesFilter);
-		// setFileFilter(jpegImagesFilter);
-		// setFileFilter(tiffImagesFilter);
-		// setFileFilter(allImagesFilter);
 	}
 
 	private void setTemplateFilter() {
@@ -164,7 +133,7 @@ public class FormFileUtils extends JFileChooser {
 		setFileFilter(templateFilter);
 	}
 
-	public File saveTemplateAs(File file, Document doc) {
+	private File saveTemplateAs(File file, Document doc) {
 		try {
 			TransformerFactory transformerFactory = TransformerFactory
 					.newInstance();
@@ -246,7 +215,7 @@ public class FormFileUtils extends JFileChooser {
 		return results;
 	}
 
-	public static String[] getHeader(FormTemplate template) {
+	public String[] getHeader(FormTemplate template) {
 		HashMap<String, FormField> fields = template.getFields();
 		String[] header = new String[fields.size() + 1];
 		int i = 0;
@@ -262,13 +231,13 @@ public class FormFileUtils extends JFileChooser {
 		return header;
 	}
 	
-	public static File saveToFile(String path, FormTemplate template) {
+	public File saveToFile(String path, FormTemplate template) {
 		File outputFile = null;
 		
 		try {
 			outputFile = new File(path + "/template/" + template.getName() + ".xtmpl");
 			Document xml = template.getXml();
-			outputFile = FormFileUtils.getInstance().saveTemplateAs(outputFile, xml);
+			outputFile = saveTemplateAs(outputFile, xml);
 		} catch (ParserConfigurationException e) {
 			e.printStackTrace();
 		}

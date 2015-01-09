@@ -83,6 +83,7 @@ public class ManageTemplateFrame extends InternalFrame implements TabbedView {
 
 	private ManageTemplateController manageTemplateController;
 	private int previousRowsCount;
+	private InternalFieldType[] types;
 	
 	private class InternalFieldType {
 		
@@ -298,7 +299,7 @@ public class ManageTemplateFrame extends InternalFrame implements TabbedView {
 	}
 
 	public FieldType getFieldType() {
-		return (FieldType) ((InternalFieldType) typeComboBox.getSelectedItem()).getType();
+		return (types[typeComboBox.getSelectedIndex()]).getType();
 	}
 
 	public void setAdvanceable() {
@@ -397,7 +398,7 @@ public class ManageTemplateFrame extends InternalFrame implements TabbedView {
 			table.setValueAt(
 					(String) FormScannerTranslation
 							.getTranslationFor(FormScannerTranslationKeys.QUESTION)
-							+ " " + StringUtils.leftPad("" + previousRowsCount++, 2, "0"), i, 0);
+							+ " " + StringUtils.leftPad("" + previousRowsCount++, 3, "0"), i, 0);
 		}
 		table.setCellSelectionEnabled(true);
 		table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
@@ -487,10 +488,10 @@ public class ManageTemplateFrame extends InternalFrame implements TabbedView {
 	private JPanel getPropertiesPanel() {
 		
 		FieldType fields[] = FieldType.values();
-		InternalFieldType types[] = new InternalFieldType[fields.length];
+		types = new InternalFieldType[fields.length];
 		
-		for (int i=0; i<fields.length; i++) {
-			types[i] = new InternalFieldType(fields[i]);
+		for (FieldType type: fields) {
+			types[type.getIndex()] = new InternalFieldType(type);
 		}
 
 		typeComboBox = new ComboBoxBuilder<InternalFieldType>(

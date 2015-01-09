@@ -83,6 +83,15 @@ public class FormField {
 	public FormPoint getPoint(String value) {
 		return points.get(value);
 	}
+	
+	/**
+	 * Clear all points of a single response.
+	 *
+	 * @author Alberto Borsetta
+	 */
+	public void clearPoints() {
+		points.clear();
+	}
 
 	/**
 	 * Returns the response points of a FormField object.

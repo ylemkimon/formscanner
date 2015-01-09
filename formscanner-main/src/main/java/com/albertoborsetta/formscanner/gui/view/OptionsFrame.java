@@ -31,6 +31,7 @@ public class OptionsFrame extends InternalFrame {
 	 */
 	private static final long serialVersionUID = 1L;
 	private OptionsFrameController optionsFrameController;
+	private InternalShapeType[] types;
 	private JSpinner thresholdValue;
 	private JSpinner densityValue;
 	private JButton saveButton;
@@ -45,7 +46,7 @@ public class OptionsFrame extends InternalFrame {
 		protected InternalShapeType(ShapeType type) {
 			this.type = type;
 		}
-
+		
 		protected ShapeType getType() {
 			return type;
 		}
@@ -86,7 +87,7 @@ public class OptionsFrame extends InternalFrame {
 	private void setDefaultValues() {
 		thresholdValue.setValue(model.getThreshold());
 		densityValue.setValue(model.getDensity());
-		shapeTypeComboBox.setSelectedItem(model.getShapeType());
+		shapeTypeComboBox.setSelectedIndex(model.getShapeType().getIndex());
 		shapeSizeValue.setValue(model.getShapeSize());
 	}
 
@@ -111,10 +112,10 @@ public class OptionsFrame extends InternalFrame {
 	private JPanel getShapePanel() {
 		
 		ShapeType shapes[] = ShapeType.values();
-		InternalShapeType types[] = new InternalShapeType[shapes.length];
+		types = new InternalShapeType[shapes.length];
 		
-		for (int i=0; i<shapes.length; i++) {
-			types[i] = new InternalShapeType(shapes[i]);
+		for (ShapeType shape: shapes) {
+			types[shape.getIndex()] = new InternalShapeType(shape);
 		}
 		
 		shapeTypeComboBox = new ComboBoxBuilder<InternalShapeType>(
@@ -180,7 +181,7 @@ public class OptionsFrame extends InternalFrame {
 	}
 
 	public ShapeType getShape() {
-		return (ShapeType) ((InternalShapeType) shapeTypeComboBox.getSelectedItem()).getType();
+		return (types[shapeTypeComboBox.getSelectedIndex()]).getType();
 	}
 
 	public void setSaveEnabled() {
@@ -211,7 +212,6 @@ public class OptionsFrame extends InternalFrame {
 
 		return (((Integer) thresholdValue.getValue() != model.getThreshold())
 				|| ((Integer) densityValue.getValue() != model.getDensity())
-				|| ((Integer) shapeSizeValue.getValue() != model.getShapeSize()) || (!((ShapeType) shapeTypeComboBox
-					.getSelectedItem()).equals(model.getShapeType())));
+				|| ((Integer) shapeSizeValue.getValue() != model.getShapeSize()) || (shapeTypeComboBox.getSelectedIndex() != model.getShapeType().getIndex()));
 	}
 }

@@ -72,6 +72,8 @@ public class FormScannerConstants extends Constants {
 	public static final String ITALIAN = "ITALIAN";
 	public static final String PORTUGUES = "PORTUGUES";
 	public static final String SPANISH = "SPANISH";
+	public static final String GREEK = "GREEK";
+	public static final String POLISH = "POLISH";
 	
 	// Fields Table Columns
 
@@ -151,17 +153,23 @@ public class FormScannerConstants extends Constants {
 	}
 
 	public enum ShapeType {
-		SQUARE(FormScannerConstants.SQUARE, FormScannerTranslationKeys.SQUARE), 
-		CIRCLE(FormScannerConstants.CIRCLE, FormScannerTranslationKeys.CIRCLE);
+		SQUARE(0, FormScannerConstants.SQUARE, FormScannerTranslationKeys.SQUARE), 
+		CIRCLE(1, FormScannerConstants.CIRCLE, FormScannerTranslationKeys.CIRCLE);
 
+		private int index;
 		private String name;
 		private String value;
 
-		private ShapeType(String name, String value) {
+		private ShapeType(int index, String name, String value) {
+			this.index = index;
 			this.name = name;
 			this.value = value;
 		}
 
+		public int getIndex() {
+			return index;
+		}
+		
 		public String getValue() {
 			return value;
 		}
@@ -195,8 +203,10 @@ public class FormScannerConstants extends Constants {
 	public enum Language {
 		ENGLISH("en", FormScannerTranslationKeys.ENGLISH), 
 		ITALIAN("it", FormScannerTranslationKeys.ITALIAN),
-		PORTUGUES("pt", FormScannerTranslationKeys.PORTUGUES);
-		// SPANISH("es", FormScannerTranslationKeys.SPANISH);
+		PORTUGUES("pt_BR", FormScannerTranslationKeys.PORTUGUES),
+		// SPANISH("es", FormScannerTranslationKeys.SPANISH),
+		POLISH("pl", FormScannerTranslationKeys.POLISH),
+		GREEK("el", FormScannerTranslationKeys.GREEK);
 
 		private String value;
 		private String translation;
