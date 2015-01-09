@@ -12,6 +12,7 @@ FIXES
 
 * Minor BugFix
 * Fix the problem saving formscanner options
+* Problem scanning forms with "Ignore multiple responses" enabled
 
 FormScanner 0.9.1 (released 2014-12-05)
 ===
