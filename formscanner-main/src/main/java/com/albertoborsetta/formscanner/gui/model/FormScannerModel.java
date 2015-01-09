@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map.Entry;
 
 import javax.imageio.ImageIO;
@@ -53,7 +54,9 @@ public class FormScannerModel {
 	public static final String ROW_DX = "ROW_DX";
 	public static final String ROW_DY = "ROW_DY";
 
-	private String path;
+	private String templatePath;
+	private String resultsPath;
+	private String propertiesPath;
 	private HashMap<Integer, File> openedFiles = new HashMap<Integer, File>();
 	private FileListFrame fileListFrame;
 	private RenameFileFrame renameFileFrame;
@@ -67,7 +70,7 @@ public class FormScannerModel {
 	private ImageFrame imageFrame;
 	private FormTemplate formTemplate;
 	private BufferedImage templateImage;
-	private FormFileUtils fileUtils = FormFileUtils.getInstance();
+	private FormFileUtils fileUtils;
 	private HashMap<String, FormTemplate> filledForms = new HashMap<String, FormTemplate>();
 
 	private ArrayList<FormPoint> points = new ArrayList<FormPoint>();
@@ -87,20 +90,43 @@ public class FormScannerModel {
 	private Rectangle aboutFramePosition;
 	private Rectangle optionsFramePosition;
 	private Rectangle desktopSize;
+	private Locale locale;
 
 	public FormScannerModel(FormScanner view) {
 		this.view = view;
 
-		path = StringUtils.defaultIfBlank(
+		String  installPath = StringUtils.defaultIfBlank(
 				System.getProperty("FormScanner_HOME"),
 				System.getenv("FormScanner_HOME"));
-		configurations = FormScannerConfiguration.getConfiguration(path);
-
+		String userHome = System.getProperty("user.home");
+		String osName = System.getProperty("os.name");
+		
+		if (StringUtils.contains(osName, "Windows")) {
+			resultsPath = userHome + "/Documents";
+			templatePath = userHome + "/Documents";
+			propertiesPath = userHome + "/AppData/Local/FormScanner";
+		} else {
+			propertiesPath = userHome + "/.FormScanner";
+		}
+		
+		resultsPath = resultsPath + "/FormScanner/results/";
+		templatePath = templatePath + "/FormScanner/templates/";
+		propertiesPath = propertiesPath + "/properties/";
+		
+		configurations = FormScannerConfiguration.getConfiguration(propertiesPath, installPath + "/");
+		
 		lang = configurations.getProperty(FormScannerConfigurationKeys.LANG,
 				FormScannerConfigurationKeys.DEFAULT_LANG);
+		String[] locales = StringUtils.split(lang, '_');
+		if (locales.length == 2) {
+			locale = new Locale(locales[0], locales[1]);
+		} else {
+			locale = new Locale(locales[0]);
+		}
+		fileUtils = FormFileUtils.getInstance(locale);
 
-		FormScannerTranslation.setTranslation(path, lang);
-		FormScannerResources.setResources(path);
+		FormScannerTranslation.setTranslation(installPath, lang);
+		FormScannerResources.setResources(installPath);
 
 		threshold = Integer.valueOf(configurations.getProperty(
 				FormScannerConfigurationKeys.THRESHOLD,
@@ -121,7 +147,6 @@ public class FormScannerModel {
 			FormScannerResources.setTemplate(tmpl);
 			openTemplate(FormScannerResources.getTemplate(), false);
 		}
-
 	}
 
 	public void setDefaultFramePositions() {
@@ -271,8 +296,7 @@ public class FormScannerModel {
 					SimpleDateFormat sdf = new SimpleDateFormat(
 							"yyyyMMddHHmmss");
 					File outputFile = new File(
-							path
-									+ "/results/"
+							resultsPath
 									+ FormScannerTranslation
 											.getTranslationFor(FormScannerTranslationKeys.RESULTS_DEFAULT_FILE)
 									+ "_" + sdf.format(today) + ".csv");
@@ -324,8 +348,7 @@ public class FormScannerModel {
 						SimpleDateFormat sdf = new SimpleDateFormat(
 								"yyyyMMddHHmmss");
 						File outputFile = new File(
-								path
-										+ "/results/"
+								resultsPath
 										+ FormScannerTranslation
 												.getTranslationFor(FormScannerTranslationKeys.RESULTS_DEFAULT_FILE)
 										+ "_" + sdf.format(today) + ".csv");
@@ -605,7 +628,7 @@ public class FormScannerModel {
 	}
 
 	public void saveTemplate(TabbedView view) {
-		File template = FormFileUtils.saveToFile(path, formTemplate);
+		File template = fileUtils.saveToFile(templatePath, formTemplate);
 
 		if (template != null) {
 			JOptionPane
@@ -616,7 +639,7 @@ public class FormScannerModel {
 							FormScannerTranslation
 									.getTranslationFor(FormScannerTranslationKeys.TEMPLATE_SAVED_POPUP),
 							JOptionPane.INFORMATION_MESSAGE);
-			String templatePath = template.getAbsolutePath();
+			templatePath = template.getAbsolutePath();
 			configurations.setProperty(FormScannerConfigurationKeys.TEMPLATE,
 					templatePath);
 			configurations.store();
@@ -895,5 +918,9 @@ public class FormScannerModel {
 
 	public void enableRejectMultiple(TabbedView view) {
 		view.enableRejectMultiple(!view.getIsMultiple());
+	}
+
+	public Locale getLocale() {
+		return locale;
 	}
 }

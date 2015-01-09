@@ -1,42 +1,62 @@
 package com.albertoborsetta.formscanner.commons.configuration;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Properties;
 
+import org.apache.commons.io.FileUtils;
+
 public class FormScannerConfiguration extends Properties {
-	
-	private String configFile;
-	
+
+	private static final String CONFIG_FILE_NAME = "formscanner.properties";
+	private static String userConfigFile;
+
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	
+
 	private static FormScannerConfiguration configurations = null;
 
-	private FormScannerConfiguration(String path) {
+	private FormScannerConfiguration() {
 		super();
 		try {
-			configFile = path + "/config/formscanner.properties";
-			load(new FileInputStream(configFile));
+			load(new FileInputStream(userConfigFile));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
-	
-	public static FormScannerConfiguration getConfiguration(String path) {
+
+	public static FormScannerConfiguration getConfiguration(String userPath,
+			String installPath) {
 		if (configurations == null) {
-			configurations = new FormScannerConfiguration(path);
+			userConfigFile = userPath + CONFIG_FILE_NAME;
+			
+			File userFile = new File(userConfigFile);
+			if (!userFile.exists() || userFile.isDirectory()) {
+				String defaultConfigFile = installPath + "config/"
+						+ CONFIG_FILE_NAME;
+				File defaultFile = new File(defaultConfigFile);
+				
+				try {
+					FileUtils.copyFile(defaultFile, userFile);
+				} catch (IOException e) {
+					System.out.println("Cannot load user configurations... try loading defaults");
+					userConfigFile = defaultConfigFile;
+				}
+			}
+			
+			configurations = new FormScannerConfiguration();
 		}
 		return configurations;
 	}
-	
+
 	public void store() {
 		try {
-			store(new FileOutputStream(configFile), null);
+				store(new FileOutputStream(userConfigFile), null);
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		} catch (IOException e) {

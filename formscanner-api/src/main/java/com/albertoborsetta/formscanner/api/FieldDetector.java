@@ -52,16 +52,22 @@ public class FieldDetector implements Callable<HashMap<String, FormField>> {
 			if (found = isFilled(responsePoint)) {
 				count++;
 				FormField filledField = getField(templateField, fieldName);
+				
 				filledField.setPoint(pointName, responsePoint);
 				fields.put(fieldName, filledField);
+				
 				if (!templateField.isMultiple()) {
+					if (templateField.rejectMultiple() && count > 1) {
+						filledField.clearPoints();
+						filledField.setPoint("", null);
+						fields.clear();
+						fields.put(fieldName, filledField);
+						break;
+					} 
 					if (!templateField.rejectMultiple()) {
 						break;
-					} if (templateField.rejectMultiple() && count > 1) {
-						fields.clear();
-						break;
 					}
-				} 
+				}
 			}
 		}
 
