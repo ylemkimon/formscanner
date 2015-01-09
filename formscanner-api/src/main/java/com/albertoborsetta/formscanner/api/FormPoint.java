@@ -227,7 +227,7 @@ public class FormPoint {
 	 * Returns the xml representation of the FormPoint object.
 	 *
 	 * @author Alberto Borsetta
-	 * @param the parent document
+	 * @param doc the parent document
 	 * @return the xml representation of the FormPoint object
 	 */
 	public Element getXml(Document doc) {
