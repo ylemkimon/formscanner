@@ -1,4 +1,4 @@
-FormScanner 0.9.2 (released yyyy-mm-dd)
+FormScanner 0.9.2 (released 2015-01-14)
 ===
 NEW FEATURES
 ---
@@ -10,9 +10,9 @@ NEW FEATURES
 FIXES
 ---
 
-* Minor BugFix
 * Fix the problem saving formscanner options
 * Problem scanning forms with "Ignore multiple responses" enabled
+* Minor BugFix
 
 FormScanner 0.9.1 (released 2014-12-05)
 ===
