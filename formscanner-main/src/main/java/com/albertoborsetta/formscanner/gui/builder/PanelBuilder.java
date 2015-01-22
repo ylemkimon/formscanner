@@ -2,6 +2,7 @@ package com.albertoborsetta.formscanner.gui.builder;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.ComponentOrientation;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 
@@ -18,9 +19,10 @@ public class PanelBuilder {
 	
 	protected JPanel panel;
 	
-	public PanelBuilder() {
+	public PanelBuilder(ComponentOrientation orientation) {
 		panel = new JPanel();
 		panel.setFont(FormScannerFont.getFont());
+		panel.setComponentOrientation(orientation);
 	}
 	
 	public PanelBuilder withBackgroundColor(Color color) {
