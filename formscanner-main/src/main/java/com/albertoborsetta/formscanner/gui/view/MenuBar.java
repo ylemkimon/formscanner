@@ -1,5 +1,6 @@
 package com.albertoborsetta.formscanner.gui.view;
 
+import java.awt.ComponentOrientation;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 
@@ -24,7 +25,7 @@ public class MenuBar extends JMenuBar implements MenuView {
 
 	private static final long serialVersionUID = 1L;
 
-	private FormScannerModel formScannerModel;
+	private FormScannerModel model;
 	private FormScannerController formScannerController;
 
 	private JMenuItem openMenuItem;
@@ -39,13 +40,17 @@ public class MenuBar extends JMenuBar implements MenuView {
 	private JMenuItem loadTemplateMenuItem;
 	private JMenuItem scanAllMenuItem;
 	private JMenuItem scanMenuItem;
+	private ComponentOrientation orientation;
 
 	// private JMenuItem editTemplateMenuItem;
 
 	public MenuBar(final FormScannerModel model) {
-		formScannerModel = model;
+		this.model = model;
+		orientation = model.getOrientation();
 		formScannerController = FormScannerController
-				.getInstance(formScannerModel);
+				.getInstance(model);
+		
+		setComponentOrientation(model.getOrientation());
 
 		JMenu fileMenu = getFileMenu();
 		JMenu editMenu = getEditMenu();
@@ -63,7 +68,7 @@ public class MenuBar extends JMenuBar implements MenuView {
 
 		openMenuItem = new MenuItemBuilder(
 				FormScannerTranslation
-						.getTranslationFor(FormScannerTranslationKeys.OPEN_IMAGES))
+						.getTranslationFor(FormScannerTranslationKeys.OPEN_IMAGES), orientation)
 				.withActionCommand(FormScannerConstants.OPEN_IMAGES)
 				.withActionListener(formScannerController)
 				.withAccelerator(
@@ -86,7 +91,7 @@ public class MenuBar extends JMenuBar implements MenuView {
 
 		exitMenuItem = new MenuItemBuilder(
 				FormScannerTranslation
-						.getTranslationFor(FormScannerTranslationKeys.EXIT))
+						.getTranslationFor(FormScannerTranslationKeys.EXIT), orientation)
 				.withActionCommand(FormScannerConstants.EXIT)
 				.withActionListener(formScannerController)
 				.withMnemonic(
@@ -98,7 +103,7 @@ public class MenuBar extends JMenuBar implements MenuView {
 
 		return new MenuBuilder(
 				FormScannerTranslation
-						.getTranslationFor(FormScannerTranslationKeys.FILE_MENU))
+						.getTranslationFor(FormScannerTranslationKeys.FILE_MENU), orientation)
 				.withMnemonic(
 						FormScannerTranslation
 								.getMnemonicFor(FormScannerTranslationKeys.FILE_MENU_MNEMONIC))
@@ -112,7 +117,7 @@ public class MenuBar extends JMenuBar implements MenuView {
 
 		renameMenuItem = new MenuItemBuilder(
 				FormScannerTranslation
-						.getTranslationFor(FormScannerTranslationKeys.RENAME_FILES))
+						.getTranslationFor(FormScannerTranslationKeys.RENAME_FILES), orientation)
 				.withActionCommand(FormScannerConstants.RENAME_FILES_FIRST)
 				.withActionListener(formScannerController)
 				.withMnemonic(
@@ -125,7 +130,7 @@ public class MenuBar extends JMenuBar implements MenuView {
 		
 		scanAllMenuItem = new MenuItemBuilder(
 				FormScannerTranslation
-						.getTranslationFor(FormScannerTranslationKeys.ANALYZE_FILES_ALL))
+						.getTranslationFor(FormScannerTranslationKeys.ANALYZE_FILES_ALL), orientation)
 				.withActionCommand(FormScannerConstants.ANALYZE_FILES_ALL)
 				.withActionListener(formScannerController)
 				.withMnemonic(
@@ -138,7 +143,7 @@ public class MenuBar extends JMenuBar implements MenuView {
 		
 		scanMenuItem = new MenuItemBuilder(
 				FormScannerTranslation
-						.getTranslationFor(FormScannerTranslationKeys.ANALYZE_FILES))
+						.getTranslationFor(FormScannerTranslationKeys.ANALYZE_FILES), orientation)
 				.withActionCommand(FormScannerConstants.ANALYZE_FILES_FIRST)
 				.withActionListener(formScannerController)
 				.withMnemonic(
@@ -151,7 +156,7 @@ public class MenuBar extends JMenuBar implements MenuView {
 
 		return new MenuBuilder(
 				FormScannerTranslation
-						.getTranslationFor(FormScannerTranslationKeys.EDIT_MENU))
+						.getTranslationFor(FormScannerTranslationKeys.EDIT_MENU), orientation)
 				.withMnemonic(
 						FormScannerTranslation
 								.getMnemonicFor(FormScannerTranslationKeys.EDIT_MENU_MNEMONIC))
@@ -166,7 +171,7 @@ public class MenuBar extends JMenuBar implements MenuView {
 
 		createTemplateMenuItem = new MenuItemBuilder(
 				FormScannerTranslation
-						.getTranslationFor(FormScannerTranslationKeys.CREATE_TEMPLATE))
+						.getTranslationFor(FormScannerTranslationKeys.CREATE_TEMPLATE), orientation)
 				.withActionCommand(FormScannerConstants.CREATE_TEMPLATE)
 				.withActionListener(formScannerController)
 				.withMnemonic(
@@ -177,7 +182,7 @@ public class MenuBar extends JMenuBar implements MenuView {
 								InputEvent.CTRL_MASK)).build();
 		loadTemplateMenuItem = new MenuItemBuilder(
 				FormScannerTranslation
-						.getTranslationFor(FormScannerTranslationKeys.LOAD_TEMPLATE))
+						.getTranslationFor(FormScannerTranslationKeys.LOAD_TEMPLATE), orientation)
 				.withActionCommand(FormScannerConstants.LOAD_TEMPLATE)
 				.withActionListener(formScannerController)
 				.withMnemonic(
@@ -197,7 +202,7 @@ public class MenuBar extends JMenuBar implements MenuView {
 
 		return new MenuBuilder(
 				FormScannerTranslation
-						.getTranslationFor(FormScannerTranslationKeys.TEMPLATE_MENU))
+						.getTranslationFor(FormScannerTranslationKeys.TEMPLATE_MENU), orientation)
 				.withMnemonic(
 						FormScannerTranslation
 								.getMnemonicFor(FormScannerTranslationKeys.TEMPLATE_MENU_MNEMONIC))
@@ -211,7 +216,7 @@ public class MenuBar extends JMenuBar implements MenuView {
 	public JMenu getHelpMenu() {
 		helpMenuItem = new MenuItemBuilder(
 				FormScannerTranslation
-						.getTranslationFor(FormScannerTranslationKeys.HELP))
+						.getTranslationFor(FormScannerTranslationKeys.HELP), orientation)
 				.withActionCommand(FormScannerConstants.HELP)
 				.withActionListener(formScannerController)
 				.withAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F1, 0))
@@ -219,7 +224,7 @@ public class MenuBar extends JMenuBar implements MenuView {
 
 		aboutMenuItem = new MenuItemBuilder(
 				FormScannerTranslation
-						.getTranslationFor(FormScannerTranslationKeys.ABOUT))
+						.getTranslationFor(FormScannerTranslationKeys.ABOUT), orientation)
 				.withActionCommand(FormScannerConstants.ABOUT)
 				.withActionListener(formScannerController)
 				.withAccelerator(
@@ -228,7 +233,7 @@ public class MenuBar extends JMenuBar implements MenuView {
 
 		return new MenuBuilder(
 				FormScannerTranslation
-						.getTranslationFor(FormScannerTranslationKeys.HELP_MENU))
+						.getTranslationFor(FormScannerTranslationKeys.HELP_MENU), orientation)
 				.withMnemonic(
 						FormScannerTranslation
 								.getMnemonicFor(FormScannerTranslationKeys.HELP_MENU_MNEMONIC))
@@ -239,7 +244,7 @@ public class MenuBar extends JMenuBar implements MenuView {
 		languageMenuItem = getLanguagesMenu();
 		optionsMenuItem = new MenuItemBuilder(
 				FormScannerTranslation
-						.getTranslationFor(FormScannerTranslationKeys.OPTIONS))
+						.getTranslationFor(FormScannerTranslationKeys.OPTIONS), orientation)
 				.withActionCommand(FormScannerConstants.OPTIONS)
 				.withActionListener(formScannerController)
 				.withAccelerator(
@@ -248,7 +253,7 @@ public class MenuBar extends JMenuBar implements MenuView {
 
 		return new MenuBuilder(
 				FormScannerTranslation
-						.getTranslationFor(FormScannerTranslationKeys.SETTINGS_MENU))
+						.getTranslationFor(FormScannerTranslationKeys.SETTINGS_MENU), orientation)
 				.withMnemonic(
 						FormScannerTranslation
 								.getMnemonicFor(FormScannerTranslationKeys.SETTINGS_MENU_MNEMONIC))
@@ -256,11 +261,11 @@ public class MenuBar extends JMenuBar implements MenuView {
 	}
 
 	private JMenu getLanguagesMenu() {
-		String defaultLanguage = formScannerModel.getLanguage();
+		String defaultLanguage = model.getLanguage();
 
 		MenuBuilder menuBuilder = new MenuBuilder(
 				FormScannerTranslation
-						.getTranslationFor(FormScannerTranslationKeys.LANGUAGE));
+						.getTranslationFor(FormScannerTranslationKeys.LANGUAGE), orientation);
 
 		JRadioButtonMenuItem languageItem;
 		ButtonGroup buttonGroup = new ButtonGroup();

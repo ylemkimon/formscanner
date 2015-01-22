@@ -72,7 +72,6 @@ public class ImageFrame extends InternalFrame implements ScrollableImageView {
 		setTitle(FormScannerTranslation
 				.getTranslationFor(FormScannerTranslationKeys.IMAGE_FRAME_TITLE));
 
-
 		imagePanel = new ImagePanel(image);
 		scrollPane = new ImageScrollPane(imagePanel);
 		statusBar = new ImageStatusBar(this.mode);
@@ -105,18 +104,33 @@ public class ImageFrame extends InternalFrame implements ScrollableImageView {
 
 			setCornerButtons(mode);
 
-			add(getLabel(FormScannerTranslationKeys.X_CURSOR_POSITION_LABEL));
-			add(XPositionValue);
-			add(cornerButtons.get(Corners.TOP_LEFT));
-			add(cornerPositions.get(Corners.TOP_LEFT));
-			add(cornerButtons.get(Corners.TOP_RIGHT));
-			add(cornerPositions.get(Corners.TOP_RIGHT));
-			add(getLabel(FormScannerTranslationKeys.Y_CURSOR_POSITION_LABEL));
-			add(YPositionValue);
-			add(cornerButtons.get(Corners.BOTTOM_LEFT));
-			add(cornerPositions.get(Corners.BOTTOM_LEFT));
-			add(cornerButtons.get(Corners.BOTTOM_RIGHT));
-			add(cornerPositions.get(Corners.BOTTOM_RIGHT));
+			if (orientation.isLeftToRight()) {
+				add(getLabel(FormScannerTranslationKeys.X_CURSOR_POSITION_LABEL));
+				add(XPositionValue);
+				add(cornerButtons.get(Corners.TOP_LEFT));
+				add(cornerPositions.get(Corners.TOP_LEFT));
+				add(cornerButtons.get(Corners.TOP_RIGHT));
+				add(cornerPositions.get(Corners.TOP_RIGHT));
+				add(getLabel(FormScannerTranslationKeys.Y_CURSOR_POSITION_LABEL));
+				add(YPositionValue);
+				add(cornerButtons.get(Corners.BOTTOM_LEFT));
+				add(cornerPositions.get(Corners.BOTTOM_LEFT));
+				add(cornerButtons.get(Corners.BOTTOM_RIGHT));
+				add(cornerPositions.get(Corners.BOTTOM_RIGHT));
+			} else {
+				add(cornerPositions.get(Corners.TOP_RIGHT));
+				add(cornerButtons.get(Corners.TOP_RIGHT));
+				add(cornerPositions.get(Corners.TOP_LEFT));
+				add(cornerButtons.get(Corners.TOP_LEFT));
+				add(XPositionValue);
+				add(getLabel(FormScannerTranslationKeys.X_CURSOR_POSITION_LABEL));
+				add(cornerPositions.get(Corners.BOTTOM_RIGHT));
+				add(cornerButtons.get(Corners.BOTTOM_RIGHT));
+				add(cornerPositions.get(Corners.BOTTOM_LEFT));
+				add(cornerButtons.get(Corners.BOTTOM_LEFT));
+				add(YPositionValue);
+				add(getLabel(FormScannerTranslationKeys.Y_CURSOR_POSITION_LABEL));
+			}
 
 			SpringUtilities.makeCompactGrid(this, 2, 6, 3, 3, 3, 3);
 		}
@@ -181,11 +195,12 @@ public class ImageFrame extends InternalFrame implements ScrollableImageView {
 		}
 
 		private JTextField getTextField() {
-			return new TextFieldBuilder(10).setEditable(false).build();
+			return new TextFieldBuilder(10, orientation).setEditable(false)
+					.build();
 		}
 
 		private ButtonBuilder getButtonBuilder(Mode mode) {
-			return new ButtonBuilder()
+			return new ButtonBuilder(orientation)
 					.withActionListener(controller)
 					.withIcon(
 							FormScannerResources
@@ -193,14 +208,15 @@ public class ImageFrame extends InternalFrame implements ScrollableImageView {
 					.withSelectedIcon(
 							FormScannerResources
 									.getIconFor(FormScannerResourcesKeys.ENABLED_BUTTON))
-					.withLeftAlignment().setEnabled(mode != Mode.VIEW)
+					.setAlignment().setEnabled(mode != Mode.VIEW)
 					.setSelected(false);
 		}
 
 		private JLabel getLabel(String value) {
 			return new LabelBuilder(
-					FormScannerTranslation.getTranslationFor(value))
-					.withBorder(BorderFactory.createEmptyBorder()).build();
+					FormScannerTranslation.getTranslationFor(value),
+					orientation).withBorder(BorderFactory.createEmptyBorder())
+					.build();
 		}
 
 		public void setCursorPosition(FormPoint p) {
@@ -240,7 +256,7 @@ public class ImageFrame extends InternalFrame implements ScrollableImageView {
 				button.setSelected(false);
 			}
 		}
-		
+
 		public void setCornerButtonsEnabled(Mode mode) {
 			for (Entry<Corners, JButton> entryCorner : cornerButtons.entrySet()) {
 				JButton button = entryCorner.getValue();
@@ -349,8 +365,8 @@ public class ImageFrame extends InternalFrame implements ScrollableImageView {
 
 				g.setColor(Color.RED);
 				if (markerType.equals(ShapeType.CIRCLE)) {
-					g.fillArc(x - marker, y - marker, 2 * marker, 2 * marker, 0,
-						360);
+					g.fillArc(x - marker, y - marker, 2 * marker, 2 * marker,
+							0, 360);
 				} else {
 					g.fillRect(x - marker, y - marker, 2 * marker, 2 * marker);
 				}
@@ -403,7 +419,7 @@ public class ImageFrame extends InternalFrame implements ScrollableImageView {
 		imagePanel.setImage(file);
 		repaint();
 	}
-	
+
 	public void updateImage(BufferedImage file, FormTemplate filledForm) {
 		imagePanel.setImage(file);
 		template = filledForm;
@@ -467,7 +483,7 @@ public class ImageFrame extends InternalFrame implements ScrollableImageView {
 	public void clearTemporaryPoint() {
 		imagePanel.clearTemporaryPoint();
 	}
-	
+
 	public void setMode(Mode mode) {
 		statusBar.setCornerButtonsEnabled(mode);
 		this.mode = mode;

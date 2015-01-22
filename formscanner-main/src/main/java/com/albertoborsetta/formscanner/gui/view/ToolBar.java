@@ -31,19 +31,27 @@ public class ToolBar extends JPanel implements MenuView {
 	private JButton startButton;
 	private JButton startAllButton;
 	private JButton reloadButton;
+	private FormScannerModel model;
+	private ComponentOrientation orientation;
 
 	/**
 	 * Create the panel.
 	 */
-	public ToolBar(FormScannerModel formScannerModel) {
+	public ToolBar(FormScannerModel model) {
+		this.model = model;
+		orientation = model.getOrientation();
 
 		formScannerController = FormScannerController
-				.getInstance(formScannerModel);
+				.getInstance(model);
 
 		setBorder(new EtchedBorder(EtchedBorder.RAISED, null, null));
-		setComponentOrientation(ComponentOrientation.LEFT_TO_RIGHT);
+		setComponentOrientation(model.getOrientation());
 
-		setLayout(new FlowLayout(FlowLayout.LEFT));
+		if (model.getOrientation().isLeftToRight()) {
+			setLayout(new FlowLayout(FlowLayout.LEFT));
+		} else {
+			setLayout(new FlowLayout(FlowLayout.RIGHT));
+		}
 
 		JToolBar fileToolBar = getFileToolBar();
 		add(fileToolBar);
@@ -54,7 +62,7 @@ public class ToolBar extends JPanel implements MenuView {
 
 	public JToolBar getFileToolBar() {
 
-		openButton = new ButtonBuilder()
+		openButton = new ButtonBuilder(orientation)
 				.withActionCommand(FormScannerConstants.OPEN_IMAGES)
 				.withActionListener(formScannerController)
 				.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null))
@@ -74,9 +82,8 @@ public class ToolBar extends JPanel implements MenuView {
 		// .setEnabled(false)
 		// .build();
 
-		return new ToolBarBuilder().withAlignmentY(Component.CENTER_ALIGNMENT)
+		return new ToolBarBuilder(orientation).withAlignmentY(Component.CENTER_ALIGNMENT)
 				.withAlignmentX(Component.LEFT_ALIGNMENT)
-				.withComponentOrientation(ComponentOrientation.LEFT_TO_RIGHT)
 				.add(openButton)
 				// .add(saveButton)
 				.build();
@@ -84,7 +91,7 @@ public class ToolBar extends JPanel implements MenuView {
 
 	public JToolBar getEditToolBar() {
 
-		renameButton = new ButtonBuilder()
+		renameButton = new ButtonBuilder(orientation)
 				.withActionCommand(FormScannerConstants.RENAME_FILES_FIRST)
 				.withActionListener(formScannerController)
 				.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null))
@@ -95,7 +102,7 @@ public class ToolBar extends JPanel implements MenuView {
 						FormScannerResources
 								.getIconFor(FormScannerResourcesKeys.RENAME_FILES_ICON))
 				.setEnabled(false).build();
-		startButton = new ButtonBuilder()
+		startButton = new ButtonBuilder(orientation)
 				.withActionCommand(FormScannerConstants.ANALYZE_FILES_FIRST)
 				.withActionListener(formScannerController)
 				.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null))
@@ -106,7 +113,7 @@ public class ToolBar extends JPanel implements MenuView {
 						FormScannerResources
 								.getIconFor(FormScannerResourcesKeys.ANALYZE_FILES_ICON))
 				.setEnabled(false).build();
-		startAllButton = new ButtonBuilder()
+		startAllButton = new ButtonBuilder(orientation)
 				.withActionCommand(FormScannerConstants.ANALYZE_FILES_ALL)
 				.withActionListener(formScannerController)
 				.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null))
@@ -117,7 +124,7 @@ public class ToolBar extends JPanel implements MenuView {
 						FormScannerResources
 								.getIconFor(FormScannerResourcesKeys.ANALYZE_FILES_ALL_ICON))
 				.setEnabled(false).build();
-		reloadButton = new ButtonBuilder()
+		reloadButton = new ButtonBuilder(orientation)
 				.withActionCommand(FormScannerConstants.ANALYZE_FILES_CURRENT)
 				.withActionListener(formScannerController)
 				.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null))
@@ -129,10 +136,15 @@ public class ToolBar extends JPanel implements MenuView {
 								.getIconFor(FormScannerResourcesKeys.ANALYZE_FILES_CURRENT_ICON))
 				.setEnabled(false).build();
 
-		return new ToolBarBuilder().withAlignmentY(Component.CENTER_ALIGNMENT)
-				.withAlignmentX(Component.LEFT_ALIGNMENT)
-				.withComponentOrientation(ComponentOrientation.LEFT_TO_RIGHT)
-				.add(renameButton).add(startAllButton).add(startButton).add(reloadButton).build();
+		ToolBarBuilder toolBarBuilder = new ToolBarBuilder(orientation).withAlignmentY(Component.CENTER_ALIGNMENT)
+				.withAlignmentX(Component.LEFT_ALIGNMENT);
+		
+		if (orientation.isLeftToRight()) {
+			toolBarBuilder.add(renameButton).add(startAllButton).add(startButton).add(reloadButton);
+		} else {
+			toolBarBuilder.add(reloadButton).add(startButton).add(startAllButton).add(renameButton);
+		}
+		return toolBarBuilder.build();
 	}
 
 	public void setRenameControllersEnabled(boolean enable) {

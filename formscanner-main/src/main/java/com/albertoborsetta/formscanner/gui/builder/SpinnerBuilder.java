@@ -1,5 +1,7 @@
 package com.albertoborsetta.formscanner.gui.builder;
 
+import java.awt.ComponentOrientation;
+
 import javax.swing.JSpinner;
 import javax.swing.event.ChangeListener;
 
@@ -9,10 +11,11 @@ public class SpinnerBuilder {
 	
 	private JSpinner spinner;
 	
-	public SpinnerBuilder(String name) {
+	public SpinnerBuilder(String name, ComponentOrientation orientation) {
 		spinner = new JSpinner();
 		spinner.setName(name);
 		spinner.setFont(FormScannerFont.getFont());
+		spinner.setComponentOrientation(orientation);
 	}
 	
 	public SpinnerBuilder withActionListener(ChangeListener listener) {

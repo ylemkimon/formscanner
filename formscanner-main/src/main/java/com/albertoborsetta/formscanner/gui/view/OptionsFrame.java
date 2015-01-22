@@ -74,7 +74,7 @@ public class OptionsFrame extends InternalFrame {
 		JPanel optionsPanel = getOptionsPanel();
 		JPanel shapePanel = getShapePanel();
 
-		JPanel masterPanel = new PanelBuilder().withLayout(new SpringLayout())
+		JPanel masterPanel = new PanelBuilder(orientation).withLayout(new SpringLayout())
 				.add(optionsPanel).add(shapePanel).withGrid(2, 1).build();
 
 		JPanel buttonPanel = getButtonPanel();
@@ -92,20 +92,30 @@ public class OptionsFrame extends InternalFrame {
 	}
 
 	private JPanel getOptionsPanel() {
-		thresholdValue = new SpinnerBuilder(FormScannerConstants.THRESHOLD)
+		thresholdValue = new SpinnerBuilder(FormScannerConstants.THRESHOLD, orientation)
 				.withActionListener(optionsFrameController).build();
 
-		densityValue = new SpinnerBuilder(FormScannerConstants.DENSITY)
+		densityValue = new SpinnerBuilder(FormScannerConstants.DENSITY, orientation)
 				.withActionListener(optionsFrameController).build();
 
-		return new PanelBuilder()
-				.withLayout(new SpringLayout())
-				.add(getLabel(FormScannerTranslationKeys.THRESHOLD_OPTION_LABEL))
-				.add(thresholdValue)
-				.add(getLabel(FormScannerTranslationKeys.DENSITY_OPTION_LABEL))
-				.add(densityValue).withGrid(2, 2)
-				.withBorder(BorderFactory.createTitledBorder(
-						FormScannerTranslation.getTranslationFor(FormScannerTranslationKeys.SCAN_OPTIONS)))
+		PanelBuilder optionPanelBuilder = new PanelBuilder(orientation)
+		.withLayout(new SpringLayout()).withBorder(BorderFactory.createTitledBorder(
+				FormScannerTranslation.getTranslationFor(FormScannerTranslationKeys.SCAN_OPTIONS)));
+		
+		if (orientation.isLeftToRight()) {
+			optionPanelBuilder
+			.add(getLabel(FormScannerTranslationKeys.THRESHOLD_OPTION_LABEL))
+			.add(thresholdValue)
+			.add(getLabel(FormScannerTranslationKeys.DENSITY_OPTION_LABEL))
+			.add(densityValue);
+		} else {
+			optionPanelBuilder
+			.add(thresholdValue)
+			.add(getLabel(FormScannerTranslationKeys.THRESHOLD_OPTION_LABEL))
+			.add(densityValue)
+			.add(getLabel(FormScannerTranslationKeys.DENSITY_OPTION_LABEL));
+		}
+		return optionPanelBuilder.withGrid(2, 2)
 				.build();
 	}
 
@@ -119,31 +129,42 @@ public class OptionsFrame extends InternalFrame {
 		}
 		
 		shapeTypeComboBox = new ComboBoxBuilder<InternalShapeType>(
-				FormScannerConstants.SHAPE_COMBO_BOX)
+				FormScannerConstants.SHAPE_COMBO_BOX, orientation)
 				.withModel(
 						new DefaultComboBoxModel<InternalShapeType>(types))
 				.withActionListener(optionsFrameController).build();
 
-		shapeSizeValue = new SpinnerBuilder(FormScannerConstants.SHAPE_SIZE)
+		shapeSizeValue = new SpinnerBuilder(FormScannerConstants.SHAPE_SIZE, orientation)
 				.withActionListener(optionsFrameController).build();
 
-		return new PanelBuilder()
-				.withLayout(new SpringLayout())
-				.add(getLabel(FormScannerTranslationKeys.SHAPE_TYPE_OPTION_LABEL))
-				.add(shapeTypeComboBox)
-				.add(getLabel(FormScannerTranslationKeys.SHAPE_SIZE_OPTION_LABEL))
-				.add(shapeSizeValue).withGrid(2, 2)
-				.withBorder(BorderFactory.createTitledBorder(FormScannerTranslation.getTranslationFor(FormScannerTranslationKeys.MARKER_OPTIONS)))
+		PanelBuilder shapePanelBuilder = new PanelBuilder(orientation)
+		.withLayout(new SpringLayout()).withBorder(BorderFactory.createTitledBorder(
+				FormScannerTranslation.getTranslationFor(FormScannerTranslationKeys.MARKER_OPTIONS)));
+		
+		if (orientation.isLeftToRight()) {
+			shapePanelBuilder
+			.add(getLabel(FormScannerTranslationKeys.SHAPE_TYPE_OPTION_LABEL))
+			.add(shapeTypeComboBox)
+			.add(getLabel(FormScannerTranslationKeys.SHAPE_SIZE_OPTION_LABEL))
+			.add(shapeSizeValue);
+		} else {
+			shapePanelBuilder
+			.add(shapeTypeComboBox)
+			.add(getLabel(FormScannerTranslationKeys.SHAPE_TYPE_OPTION_LABEL))
+			.add(shapeSizeValue)
+			.add(getLabel(FormScannerTranslationKeys.SHAPE_SIZE_OPTION_LABEL));
+		}
+		return shapePanelBuilder.withGrid(2, 2)
 				.build();
 	}
 
 	private JLabel getLabel(String value) {
-		return new LabelBuilder(FormScannerTranslation.getTranslationFor(value))
+		return new LabelBuilder(FormScannerTranslation.getTranslationFor(value), orientation)
 				.withBorder(BorderFactory.createEmptyBorder()).build();
 	}
 
 	private JPanel getButtonPanel() {
-		saveButton = new ButtonBuilder()
+		saveButton = new ButtonBuilder(orientation)
 				.withText(
 						FormScannerTranslation
 								.getTranslationFor(FormScannerTranslationKeys.SAVE_OPTIONS_BUTTON))
@@ -154,7 +175,7 @@ public class OptionsFrame extends InternalFrame {
 				.withActionListener(optionsFrameController).setEnabled(false)
 				.build();
 
-		cancelButton = new ButtonBuilder()
+		cancelButton = new ButtonBuilder(orientation)
 				.withText(
 						FormScannerTranslation
 								.getTranslationFor(FormScannerTranslationKeys.CANCEL_BUTTON))
@@ -164,8 +185,22 @@ public class OptionsFrame extends InternalFrame {
 				.withActionCommand(FormScannerConstants.CANCEL)
 				.withActionListener(optionsFrameController).build();
 
-		return new PanelBuilder().withLayout(new SpringLayout())
-				.add(saveButton).add(cancelButton).withGrid(1, 2).build();
+		String position;
+		PanelBuilder innerPanelBuilder = new PanelBuilder(orientation)
+				.withLayout(new SpringLayout());
+		if (orientation.isLeftToRight()) {
+			innerPanelBuilder.add(saveButton).add(
+					cancelButton);
+			position = BorderLayout.EAST;
+		} else {
+			innerPanelBuilder.add(cancelButton).add(
+					saveButton);
+			position = BorderLayout.WEST;
+		}
+
+		return new PanelBuilder(orientation).withLayout(new BorderLayout())
+				.add(innerPanelBuilder.withGrid(1, 2).build(), position)
+				.build();
 	}
 
 	public int getThresholdValue() {

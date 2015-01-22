@@ -84,11 +84,11 @@ public class ManageTemplateFrame extends InternalFrame implements TabbedView {
 	private ManageTemplateController manageTemplateController;
 	private int previousRowsCount;
 	private InternalFieldType[] types;
-	
+
 	private class InternalFieldType {
-		
+
 		private FieldType type;
-		
+
 		protected InternalFieldType(FieldType type) {
 			this.type = type;
 		}
@@ -148,7 +148,7 @@ public class ManageTemplateFrame extends InternalFrame implements TabbedView {
 		JPanel fieldPropertiesPanel = getFieldPropertiesPanel();
 		JPanel fieldPositionPanel = getFieldPositionPanel();
 
-		tabbedPane = new TabbedPaneBuilder(JTabbedPane.TOP)
+		tabbedPane = new TabbedPaneBuilder(JTabbedPane.TOP, orientation)
 				.addTab(FormScannerTranslation
 						.getTranslationFor(FormScannerTranslationKeys.FIELD_LIST_TAB_NAME),
 						fieldListPanel)
@@ -234,7 +234,8 @@ public class ManageTemplateFrame extends InternalFrame implements TabbedView {
 				field.setType(getFieldType());
 			}
 			field.setMultiple(isMultiple.isSelected());
-			field.setRejectMultiple(!isMultiple.isSelected() && rejectMultiple.isSelected());
+			field.setRejectMultiple(!isMultiple.isSelected()
+					&& rejectMultiple.isSelected());
 			fields.put(name, field);
 		}
 		return fields;
@@ -285,8 +286,10 @@ public class ManageTemplateFrame extends InternalFrame implements TabbedView {
 		}
 
 		for (FormField field : fields.values()) {
-			fieldsTableModel.addRow(new Object[] { field.getName(),
-					FormScannerTranslation.getTranslationFor(field.getType().getValue()), field.isMultiple(),
+			fieldsTableModel.addRow(new Object[] {
+					field.getName(),
+					FormScannerTranslation.getTranslationFor(field.getType()
+							.getValue()), field.isMultiple(),
 					field.getPoints().size() });
 		}
 
@@ -398,7 +401,9 @@ public class ManageTemplateFrame extends InternalFrame implements TabbedView {
 			table.setValueAt(
 					(String) FormScannerTranslation
 							.getTranslationFor(FormScannerTranslationKeys.QUESTION)
-							+ " " + StringUtils.leftPad("" + previousRowsCount++, 3, "0"), i, 0);
+							+ " "
+							+ StringUtils.leftPad("" + previousRowsCount++, 3,
+									"0"), i, 0);
 		}
 		table.setCellSelectionEnabled(true);
 		table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
@@ -412,7 +417,8 @@ public class ManageTemplateFrame extends InternalFrame implements TabbedView {
 				fieldsTableModel));
 
 		for (FieldsTableColumn tableColumn : FieldsTableColumn.values()) {
-			fieldsTableModel.addColumn(FormScannerTranslation.getTranslationFor(tableColumn.getValue()));
+			fieldsTableModel.addColumn(FormScannerTranslation
+					.getTranslationFor(tableColumn.getValue()));
 		}
 
 		table.setDefaultRenderer(Object.class, new DefaultTableCellRenderer() {
@@ -449,15 +455,26 @@ public class ManageTemplateFrame extends InternalFrame implements TabbedView {
 	private JPanel getFieldListPanel() {
 
 		fieldsTable = createFieldsTable();
-		fieldsTableScrollPane = new ScrollPaneBuilder(fieldsTable).build();
+		fieldsTableScrollPane = new ScrollPaneBuilder(fieldsTable, orientation)
+				.build();
 
 		JPanel fieldListManageButtonPanel = getManageListButtonPanel();
 		JPanel fieldListButtonPanel = getFieldListButtonPanel();
 
-		return new PanelBuilder().withLayout(new BorderLayout())
+		PanelBuilder fieldListPanelBuilder = new PanelBuilder(orientation)
+				.withLayout(new BorderLayout())
 				.addComponent(fieldsTableScrollPane, BorderLayout.CENTER)
-				.addComponent(fieldListManageButtonPanel, BorderLayout.EAST)
-				.addComponent(fieldListButtonPanel, BorderLayout.SOUTH).build();
+				.addComponent(fieldListButtonPanel, BorderLayout.SOUTH);
+
+		if (orientation.isLeftToRight()) {
+			fieldListPanelBuilder.addComponent(fieldListManageButtonPanel,
+					BorderLayout.EAST);
+		} else {
+			fieldListPanelBuilder.addComponent(fieldListManageButtonPanel,
+					BorderLayout.WEST);
+		}
+
+		return fieldListPanelBuilder.build();
 	}
 
 	private JPanel getFieldPropertiesPanel() {
@@ -465,7 +482,7 @@ public class ManageTemplateFrame extends InternalFrame implements TabbedView {
 		JPanel propertiesPanel = getPropertiesPanel();
 		JPanel propertiesButtonPanel = getPropertiesButtonPanel();
 
-		return new PanelBuilder().withLayout(new BorderLayout())
+		return new PanelBuilder(orientation).withLayout(new BorderLayout())
 				.addComponent(propertiesPanel, BorderLayout.NORTH)
 				.addComponent(propertiesButtonPanel, BorderLayout.SOUTH)
 				.build();
@@ -476,67 +493,87 @@ public class ManageTemplateFrame extends InternalFrame implements TabbedView {
 		JPanel positionButtonPanel = getPositionButtonPanel();
 
 		positionsTable = new JTable();
-		positionsTableScrollPane = new ScrollPaneBuilder(positionsTable)
-				.build();
+		positionsTableScrollPane = new ScrollPaneBuilder(positionsTable,
+				orientation).build();
 
-		return new PanelBuilder().withLayout(new BorderLayout())
+		return new PanelBuilder(orientation).withLayout(new BorderLayout())
 				.addComponent(positionButtonPanel, BorderLayout.SOUTH)
 				.addComponent(positionsTableScrollPane, BorderLayout.CENTER)
 				.build();
 	}
 
 	private JPanel getPropertiesPanel() {
-		
+
 		FieldType fields[] = FieldType.values();
 		types = new InternalFieldType[fields.length];
-		
-		for (FieldType type: fields) {
+
+		for (FieldType type : fields) {
 			types[type.getIndex()] = new InternalFieldType(type);
 		}
 
 		typeComboBox = new ComboBoxBuilder<InternalFieldType>(
-				FormScannerConstants.TYPE_COMBO_BOX)
-				.withModel(
-						new DefaultComboBoxModel<InternalFieldType>(types))
+				FormScannerConstants.TYPE_COMBO_BOX, orientation)
+				.withModel(new DefaultComboBoxModel<InternalFieldType>(types))
 				.withActionListener(manageTemplateController).build();
 
-		isMultiple = new CheckBoxBuilder(FormScannerConstants.IS_MULTIPLE)
+		isMultiple = new CheckBoxBuilder(FormScannerConstants.IS_MULTIPLE,
+				orientation)
 				.withActionCommand(FormScannerConstants.IS_MULTIPLE)
 				.withActionListener(manageTemplateController).setChecked(false)
 				.build();
-		
-		rejectMultiple = new CheckBoxBuilder(FormScannerConstants.REJECT_IF_NOT_MULTIPLE)
-				.setChecked(false).setEnabled(!isMultiple.isSelected())
+
+		rejectMultiple = new CheckBoxBuilder(
+				FormScannerConstants.REJECT_IF_NOT_MULTIPLE, orientation)
+				.setChecked(false).setEnabled(!isMultiple.isSelected()).build();
+
+		rowsNumber = new SpinnerBuilder(FormScannerConstants.NUMBER_COLS_ROWS,
+				orientation).withActionListener(manageTemplateController)
 				.build();
 
-		rowsNumber = new SpinnerBuilder(FormScannerConstants.NUMBER_COLS_ROWS)
-				.withActionListener(manageTemplateController).build();
+		valuesNumber = new SpinnerBuilder(FormScannerConstants.NUMBER_VALUES,
+				orientation).withActionListener(manageTemplateController)
+				.build();
 
-		valuesNumber = new SpinnerBuilder(FormScannerConstants.NUMBER_VALUES)
-				.withActionListener(manageTemplateController).build();
+		PanelBuilder panelBuilder = new PanelBuilder(orientation)
+				.withLayout(new SpringLayout());
+		if (orientation.isLeftToRight()) {
+			panelBuilder
+					.add(getLabel(FormScannerTranslationKeys.FIELD_PROPERTIES_TYPE_LABEL))
+					.add(typeComboBox)
+					.add(getLabel(FormScannerTranslationKeys.FIELD_PROPERTIES_IS_MULTIPLE))
+					.add(isMultiple)
+					.add(getLabel(FormScannerTranslationKeys.FIELD_PROPERTIES_REJECT_MULTIPLE))
+					.add(rejectMultiple)
+					.add(getLabel(FormScannerTranslationKeys.FIELD_PROPERTIES_N_ROW_COL_LABEL))
+					.add(rowsNumber)
+					.add(getLabel(FormScannerTranslationKeys.FIELD_PROPERTIES_N_VALUES_LABEL))
+					.add(valuesNumber);
+		} else {
+			panelBuilder
+					.add(typeComboBox)
+					.add(getLabel(FormScannerTranslationKeys.FIELD_PROPERTIES_TYPE_LABEL))
+					.add(isMultiple)
+					.add(getLabel(FormScannerTranslationKeys.FIELD_PROPERTIES_IS_MULTIPLE))
+					.add(rejectMultiple)
+					.add(getLabel(FormScannerTranslationKeys.FIELD_PROPERTIES_REJECT_MULTIPLE))
+					.add(rowsNumber)
+					.add(getLabel(FormScannerTranslationKeys.FIELD_PROPERTIES_N_ROW_COL_LABEL))
+					.add(valuesNumber)
+					.add(getLabel(FormScannerTranslationKeys.FIELD_PROPERTIES_N_VALUES_LABEL));
+		}
 
-		return new PanelBuilder()
-				.withLayout(new SpringLayout())
-				.add(getLabel(FormScannerTranslationKeys.FIELD_PROPERTIES_TYPE_LABEL))
-				.add(typeComboBox)
-				.add(getLabel(FormScannerTranslationKeys.FIELD_PROPERTIES_IS_MULTIPLE))
-				.add(isMultiple)
-				.add(getLabel(FormScannerTranslationKeys.FIELD_PROPERTIES_REJECT_MULTIPLE))
-				.add(rejectMultiple)
-				.add(getLabel(FormScannerTranslationKeys.FIELD_PROPERTIES_N_ROW_COL_LABEL))
-				.add(rowsNumber)
-				.add(getLabel(FormScannerTranslationKeys.FIELD_PROPERTIES_N_VALUES_LABEL))
-				.add(valuesNumber).withGrid(5, 2).build();
+		return panelBuilder.withGrid(5, 2).build();
 	}
 
 	private JLabel getLabel(String value) {
-		return new LabelBuilder(FormScannerTranslation.getTranslationFor(value))
+		return new LabelBuilder(
+				FormScannerTranslation.getTranslationFor(value), orientation)
 				.withBorder(BorderFactory.createEmptyBorder()).build();
 	}
 
 	private JPanel getPropertiesButtonPanel() {
 
-		okPropertiesButton = new ButtonBuilder()
+		okPropertiesButton = new ButtonBuilder(orientation)
 				.withText(
 						FormScannerTranslation
 								.getTranslationFor(FormScannerTranslationKeys.OK_BUTTON))
@@ -547,7 +584,7 @@ public class ManageTemplateFrame extends InternalFrame implements TabbedView {
 				.withActionListener(manageTemplateController).setEnabled(false)
 				.build();
 
-		cancelPropertiesButton = new ButtonBuilder()
+		cancelPropertiesButton = new ButtonBuilder(orientation)
 				.withText(
 						FormScannerTranslation
 								.getTranslationFor(FormScannerTranslationKeys.CANCEL_BUTTON))
@@ -557,14 +594,27 @@ public class ManageTemplateFrame extends InternalFrame implements TabbedView {
 				.withActionCommand(FormScannerConstants.CANCEL)
 				.withActionListener(manageTemplateController).build();
 
-		return new PanelBuilder().withLayout(new SpringLayout())
-				.add(okPropertiesButton).add(cancelPropertiesButton)
-				.withGrid(1, 2).build();
+		String position;
+		PanelBuilder innerPanelBuilder = new PanelBuilder(orientation)
+				.withLayout(new SpringLayout());
+		if (orientation.isLeftToRight()) {
+			innerPanelBuilder.add(okPropertiesButton).add(
+					cancelPropertiesButton);
+			position = BorderLayout.EAST;
+		} else {
+			innerPanelBuilder.add(cancelPropertiesButton).add(
+					okPropertiesButton);
+			position = BorderLayout.WEST;
+		}
+
+		return new PanelBuilder(orientation).withLayout(new BorderLayout())
+				.add(innerPanelBuilder.withGrid(1, 2).build(), position)
+				.build();
 	}
 
 	private JPanel getFieldListButtonPanel() {
 
-		saveTemplateButton = new ButtonBuilder()
+		saveTemplateButton = new ButtonBuilder(orientation)
 				.withText(
 						FormScannerTranslation
 								.getTranslationFor(FormScannerTranslationKeys.SAVE_TEMPLATE_BUTTON))
@@ -575,7 +625,7 @@ public class ManageTemplateFrame extends InternalFrame implements TabbedView {
 				.withActionListener(manageTemplateController).setEnabled(false)
 				.build();
 
-		cancelTemplateButton = new ButtonBuilder()
+		cancelTemplateButton = new ButtonBuilder(orientation)
 				.withText(
 						FormScannerTranslation
 								.getTranslationFor(FormScannerTranslationKeys.CANCEL_BUTTON))
@@ -585,14 +635,27 @@ public class ManageTemplateFrame extends InternalFrame implements TabbedView {
 				.withActionCommand(FormScannerConstants.CANCEL)
 				.withActionListener(manageTemplateController).build();
 
-		return new PanelBuilder().withLayout(new SpringLayout())
-				.add(saveTemplateButton).add(cancelTemplateButton)
-				.withGrid(1, 2).build();
+		String position;
+		PanelBuilder innerPanelBuilder = new PanelBuilder(orientation)
+				.withLayout(new SpringLayout());
+		if (orientation.isLeftToRight()) {
+			innerPanelBuilder.add(saveTemplateButton).add(
+					cancelTemplateButton);
+			position = BorderLayout.EAST;
+		} else {
+			innerPanelBuilder.add(cancelTemplateButton).add(
+					saveTemplateButton);
+			position = BorderLayout.WEST;
+		}
+
+		return new PanelBuilder(orientation).withLayout(new BorderLayout())
+				.add(innerPanelBuilder.withGrid(1, 2).build(), position)
+				.build();
 	}
 
 	private JPanel getManageListButtonPanel() {
 
-		addFieldButton = new ButtonBuilder()
+		addFieldButton = new ButtonBuilder(orientation)
 				.withIcon(
 						FormScannerResources
 								.getIconFor(FormScannerResourcesKeys.ADD_FIELD_BUTTON))
@@ -602,7 +665,7 @@ public class ManageTemplateFrame extends InternalFrame implements TabbedView {
 				.withActionCommand(FormScannerConstants.ADD_FIELD)
 				.withActionListener(manageTemplateController).build();
 
-		removeFieldButton = new ButtonBuilder()
+		removeFieldButton = new ButtonBuilder(orientation)
 				.withIcon(
 						FormScannerResources
 								.getIconFor(FormScannerResourcesKeys.REMOVE_FIELD_BUTTON))
@@ -613,14 +676,14 @@ public class ManageTemplateFrame extends InternalFrame implements TabbedView {
 				.withActionListener(manageTemplateController).setEnabled(false)
 				.build();
 
-		return new PanelBuilder().withLayout(new SpringLayout())
+		return new PanelBuilder(orientation).withLayout(new SpringLayout())
 				.add(addFieldButton).add(removeFieldButton).withGrid(2, 1)
 				.build();
 	}
 
 	private JPanel getPositionButtonPanel() {
 
-		okPositionButton = new ButtonBuilder()
+		okPositionButton = new ButtonBuilder(orientation)
 				.withText(
 						FormScannerTranslation
 								.getTranslationFor(FormScannerTranslationKeys.OK_BUTTON))
@@ -631,7 +694,7 @@ public class ManageTemplateFrame extends InternalFrame implements TabbedView {
 				.withActionListener(manageTemplateController).setEnabled(false)
 				.build();
 
-		cancelPositionButton = new ButtonBuilder()
+		cancelPositionButton = new ButtonBuilder(orientation)
 				.withText(
 						FormScannerTranslation
 								.getTranslationFor(FormScannerTranslationKeys.CANCEL_BUTTON))
@@ -641,8 +704,21 @@ public class ManageTemplateFrame extends InternalFrame implements TabbedView {
 				.withActionCommand(FormScannerConstants.CANCEL)
 				.withActionListener(manageTemplateController).build();
 
-		return new PanelBuilder().withLayout(new SpringLayout())
-				.add(okPositionButton).add(cancelPositionButton).withGrid(1, 2)
+		String position;
+		PanelBuilder innerPanelBuilder = new PanelBuilder(orientation)
+				.withLayout(new SpringLayout());
+		if (orientation.isLeftToRight()) {
+			innerPanelBuilder.add(okPositionButton).add(
+					cancelPositionButton);
+			position = BorderLayout.EAST;
+		} else {
+			innerPanelBuilder.add(cancelPositionButton).add(
+					okPositionButton);
+			position = BorderLayout.WEST;
+		}
+
+		return new PanelBuilder(orientation).withLayout(new BorderLayout())
+				.add(innerPanelBuilder.withGrid(1, 2).build(), position)
 				.build();
 	}
 
