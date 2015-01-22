@@ -6,6 +6,7 @@ import javax.swing.ComboBoxModel;
 import javax.swing.JComboBox;
 
 import com.albertoborsetta.formscanner.commons.FormScannerFont;
+import com.albertoborsetta.formscanner.gui.controller.ImageFrameController;
 
 public class ComboBoxBuilder<T> {
 	
