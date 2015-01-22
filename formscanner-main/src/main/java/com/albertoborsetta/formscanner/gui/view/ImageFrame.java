@@ -6,6 +6,7 @@ import com.albertoborsetta.formscanner.api.FormPoint;
 import com.albertoborsetta.formscanner.api.FormTemplate;
 import com.albertoborsetta.formscanner.api.commons.Constants.Corners;
 import com.albertoborsetta.formscanner.commons.FormScannerConstants;
+import com.albertoborsetta.formscanner.commons.FormScannerConstants.Zoom;
 import com.albertoborsetta.formscanner.commons.FormScannerFont;
 import com.albertoborsetta.formscanner.commons.FormScannerConstants.Frame;
 import com.albertoborsetta.formscanner.commons.FormScannerConstants.Mode;
@@ -15,26 +16,35 @@ import com.albertoborsetta.formscanner.commons.resources.FormScannerResourcesKey
 import com.albertoborsetta.formscanner.commons.translation.FormScannerTranslation;
 import com.albertoborsetta.formscanner.commons.translation.FormScannerTranslationKeys;
 import com.albertoborsetta.formscanner.gui.builder.ButtonBuilder;
+import com.albertoborsetta.formscanner.gui.builder.ComboBoxBuilder;
 import com.albertoborsetta.formscanner.gui.builder.LabelBuilder;
 import com.albertoborsetta.formscanner.gui.builder.TextFieldBuilder;
+import com.albertoborsetta.formscanner.gui.builder.ToolBarBuilder;
 import com.albertoborsetta.formscanner.gui.controller.ImageFrameController;
 import com.albertoborsetta.formscanner.gui.model.FormScannerModel;
 
 import java.awt.Color;
+import java.awt.Component;
+import java.awt.ComponentOrientation;
 import java.awt.Cursor;
 import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.Graphics;
 import java.awt.BorderLayout;
 import java.awt.image.BufferedImage;
 
 import javax.swing.BorderFactory;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
+import javax.swing.JToolBar;
 import javax.swing.SpringLayout;
 import javax.swing.UIManager;
+import javax.swing.border.EtchedBorder;
 
 import java.util.HashMap;
 import java.util.Map.Entry;
@@ -49,6 +59,9 @@ public class ImageFrame extends InternalFrame implements ScrollableImageView {
 	private ImageStatusBar statusBar;
 	private Mode mode;
 	private FormTemplate template;
+	private JComboBox<Zoom> zoomComboBox;
+
+	private ImageToolBar toolBar;
 
 	/**
 	 * Create the frame.
@@ -76,10 +89,50 @@ public class ImageFrame extends InternalFrame implements ScrollableImageView {
 		imagePanel = new ImagePanel(image);
 		scrollPane = new ImageScrollPane(imagePanel);
 		statusBar = new ImageStatusBar(this.mode);
+		toolBar = new ImageToolBar();
+		getContentPane().add(toolBar, BorderLayout.NORTH);
 		getContentPane().add(scrollPane, BorderLayout.CENTER);
 		getContentPane().add(statusBar, BorderLayout.SOUTH);
 	}
 
+	private class ImageToolBar extends JPanel {
+
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = 1L;
+		private Zoom[] zoom;
+
+		public ImageToolBar() {
+			super();
+			setBorder(new EtchedBorder(EtchedBorder.RAISED, null, null));
+			setComponentOrientation(ComponentOrientation.LEFT_TO_RIGHT);
+
+			setLayout(new FlowLayout(FlowLayout.LEFT));
+			
+			JToolBar zoomToolBar = getZoomToolBar();
+			add(zoomToolBar);
+		}
+		
+		public JToolBar getZoomToolBar() {
+
+			zoom = Zoom.values();
+			
+			zoomComboBox = new ComboBoxBuilder<Zoom>(
+					FormScannerConstants.SHAPE_COMBO_BOX)
+					.withModel(
+							new DefaultComboBoxModel<Zoom>(zoom))
+					.withActionListener(controller).build();
+			
+			return new ToolBarBuilder().withAlignmentY(Component.CENTER_ALIGNMENT)
+					.withAlignmentX(Component.LEFT_ALIGNMENT)
+					.withComponentOrientation(ComponentOrientation.LEFT_TO_RIGHT)
+					.add(zoomComboBox)
+					.build();
+		}
+	}
+
+	
 	private class ImageStatusBar extends JPanel {
 
 		/**

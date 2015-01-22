@@ -84,6 +84,10 @@ public class FormScannerConstants extends Constants {
 	public static final String SAVE_OPTIONS = "SAVE_OPTIONS";
 	public static final String SHAPE_COMBO_BOX = "SHAPE_COMBO_BOX";
 	public static final String SHAPE_SIZE = "SHAPE_SIZE";
+	
+	// Zoom
+	public static final Integer FIT_WIDTH = 0;
+	public static final Integer FIT_PAGE = -1;
 
 	public enum Frame {
 		RENAME_FILES_FRAME(RENAME_FILES_FRAME_NAME,	FormScannerConfigurationKeys.RENAME_FILES_FRAME, RENAME_FILES_FRAME_POSITION), 
@@ -181,13 +185,15 @@ public class FormScannerConstants extends Constants {
 
 	public enum Zoom {
 
-		PERCENT_25(25), 
-		PERCENT_50(50), 
-		PERCENT_75(75), 
-		PERCENT_100(100), 
-		PERCENT_125(125), 
-		PERCENT_150(150), 
-		PERCENT_200(200);
+		ZOOM_25(25), 
+		ZOOM_50(50), 
+		ZOOM_75(75), 
+		ZOOM_100(100), 
+		ZOOM_125(125), 
+		ZOOM_150(150), 
+		ZOOM_200(200),
+		ZOOM_WIDTH(FIT_WIDTH),
+		ZOOM_PAGE(FIT_PAGE);
 
 		private Integer value;
 
@@ -195,8 +201,8 @@ public class FormScannerConstants extends Constants {
 			this.value = value;
 		}
 
-		public double getValue() {
-			return value / 100.0;
+		public Integer getValue() {
+			return value;
 		}
 	}
 
@@ -205,6 +211,7 @@ public class FormScannerConstants extends Constants {
 		ITALIAN("it", FormScannerTranslationKeys.ITALIAN),
 		PORTUGUES("pt_BR", FormScannerTranslationKeys.PORTUGUES),
 		// SPANISH("es", FormScannerTranslationKeys.SPANISH),
+		// GERMAN("de", FormScannerTranslationKeys.GERMAN),
 		POLISH("pl", FormScannerTranslationKeys.POLISH),
 		GREEK("el", FormScannerTranslationKeys.GREEK);
 
