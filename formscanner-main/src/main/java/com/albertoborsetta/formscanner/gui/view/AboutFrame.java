@@ -162,13 +162,7 @@ public class AboutFrame extends InternalFrame {
 
 		JPanel innerButtonPanel = new PanelBuilder(orientation).withLayout(new SpringLayout())
 				.addComponent(okButton).withGrid(1, 1).build();
-		PanelBuilder buttonPanelBuilder = new PanelBuilder(orientation).withLayout(new BorderLayout());
-		if (orientation.isLeftToRight()) {
-			buttonPanelBuilder.add(innerButtonPanel, BorderLayout.EAST);
-		} else {
-			buttonPanelBuilder.add(innerButtonPanel, BorderLayout.WEST);
-		}
 
-		return buttonPanelBuilder.build();
+		return new PanelBuilder(orientation).withLayout(new BorderLayout()).add(innerButtonPanel, BorderLayout.EAST).build();
 	}
 }

@@ -82,27 +82,14 @@ public class RenameFileFrame extends InternalFrame implements View {
 	}
 
 	private JPanel getRenamePanel() {
-		fileNameField = new TextFieldBuilder(10, orientation).withActionListener(
-				renameFileController).build();
+		fileNameField = new TextFieldBuilder(10, orientation)
+				.withActionListener(renameFileController).build();
 
 		fileExtensionField = new LabelBuilder(orientation).build();
 
-		PanelBuilder renameFilePanelBuilder = new PanelBuilder(orientation)
-		.withLayout(new SpringLayout());
-		if (orientation.isLeftToRight()) {
-			renameFilePanelBuilder
-			.add(getLabel(FormScannerTranslationKeys.RENAME_FILE_FRAME_LABEL))
-			.add(fileNameField)
-			.add(fileExtensionField);
-		} else {
-			renameFilePanelBuilder
-			.add(fileExtensionField)
-			.add(fileNameField)
-			.add(getLabel(FormScannerTranslationKeys.RENAME_FILE_FRAME_LABEL));
-		}
-		return renameFilePanelBuilder
-				.withGrid(1, 3)
-				.build();
+		return new PanelBuilder(orientation)
+				.withLayout(new SpringLayout()).add(getLabel(FormScannerTranslationKeys.RENAME_FILE_FRAME_LABEL))
+				.add(fileNameField).add(fileExtensionField).withGrid(1, 3).build();
 	}
 
 	private JLabel getLabel(String value) {
@@ -126,21 +113,11 @@ public class RenameFileFrame extends InternalFrame implements View {
 				.withActionCommand(FormScannerConstants.RENAME_FILES_SKIP)
 				.withActionListener(renameFileController).build();
 
-		String position;
-		PanelBuilder innerPanelBuilder = new PanelBuilder(orientation)
-				.withLayout(new SpringLayout());
-		if (orientation.isLeftToRight()) {
-			innerPanelBuilder.add(okButton).add(
-					cancelButton);
-			position = BorderLayout.EAST;
-		} else {
-			innerPanelBuilder.add(cancelButton).add(
-					okButton);
-			position = BorderLayout.WEST;
-		}
+		JPanel innerPanel = new PanelBuilder(orientation)
+				.withLayout(new SpringLayout()).add(okButton).add(cancelButton)
+				.withGrid(1, 2).build();
 
 		return new PanelBuilder(orientation).withLayout(new BorderLayout())
-				.add(innerPanelBuilder.withGrid(1, 2).build(), position)
-				.build();
+				.add(innerPanel, BorderLayout.EAST).build();
 	}
 }

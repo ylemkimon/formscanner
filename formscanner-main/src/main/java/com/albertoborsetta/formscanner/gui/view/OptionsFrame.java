@@ -98,25 +98,14 @@ public class OptionsFrame extends InternalFrame {
 		densityValue = new SpinnerBuilder(FormScannerConstants.DENSITY, orientation)
 				.withActionListener(optionsFrameController).build();
 
-		PanelBuilder optionPanelBuilder = new PanelBuilder(orientation)
+		return new PanelBuilder(orientation)
 		.withLayout(new SpringLayout()).withBorder(BorderFactory.createTitledBorder(
-				FormScannerTranslation.getTranslationFor(FormScannerTranslationKeys.SCAN_OPTIONS)));
-		
-		if (orientation.isLeftToRight()) {
-			optionPanelBuilder
-			.add(getLabel(FormScannerTranslationKeys.THRESHOLD_OPTION_LABEL))
+				FormScannerTranslation.getTranslationFor(FormScannerTranslationKeys.SCAN_OPTIONS)))
+				.add(getLabel(FormScannerTranslationKeys.THRESHOLD_OPTION_LABEL))
 			.add(thresholdValue)
 			.add(getLabel(FormScannerTranslationKeys.DENSITY_OPTION_LABEL))
-			.add(densityValue);
-		} else {
-			optionPanelBuilder
-			.add(thresholdValue)
-			.add(getLabel(FormScannerTranslationKeys.THRESHOLD_OPTION_LABEL))
-			.add(densityValue)
-			.add(getLabel(FormScannerTranslationKeys.DENSITY_OPTION_LABEL));
-		}
-		return optionPanelBuilder.withGrid(2, 2)
-				.build();
+			.add(densityValue).withGrid(2, 2)
+			.build();
 	}
 
 	private JPanel getShapePanel() {
@@ -137,24 +126,12 @@ public class OptionsFrame extends InternalFrame {
 		shapeSizeValue = new SpinnerBuilder(FormScannerConstants.SHAPE_SIZE, orientation)
 				.withActionListener(optionsFrameController).build();
 
-		PanelBuilder shapePanelBuilder = new PanelBuilder(orientation)
+		return new PanelBuilder(orientation)
 		.withLayout(new SpringLayout()).withBorder(BorderFactory.createTitledBorder(
-				FormScannerTranslation.getTranslationFor(FormScannerTranslationKeys.MARKER_OPTIONS)));
-		
-		if (orientation.isLeftToRight()) {
-			shapePanelBuilder
-			.add(getLabel(FormScannerTranslationKeys.SHAPE_TYPE_OPTION_LABEL))
-			.add(shapeTypeComboBox)
-			.add(getLabel(FormScannerTranslationKeys.SHAPE_SIZE_OPTION_LABEL))
-			.add(shapeSizeValue);
-		} else {
-			shapePanelBuilder
-			.add(shapeTypeComboBox)
-			.add(getLabel(FormScannerTranslationKeys.SHAPE_TYPE_OPTION_LABEL))
-			.add(shapeSizeValue)
-			.add(getLabel(FormScannerTranslationKeys.SHAPE_SIZE_OPTION_LABEL));
-		}
-		return shapePanelBuilder.withGrid(2, 2)
+				FormScannerTranslation.getTranslationFor(FormScannerTranslationKeys.MARKER_OPTIONS))).add(getLabel(FormScannerTranslationKeys.SHAPE_TYPE_OPTION_LABEL))
+				.add(shapeTypeComboBox)
+				.add(getLabel(FormScannerTranslationKeys.SHAPE_SIZE_OPTION_LABEL))
+				.add(shapeSizeValue).withGrid(2, 2)
 				.build();
 	}
 
@@ -185,21 +162,12 @@ public class OptionsFrame extends InternalFrame {
 				.withActionCommand(FormScannerConstants.CANCEL)
 				.withActionListener(optionsFrameController).build();
 
-		String position;
-		PanelBuilder innerPanelBuilder = new PanelBuilder(orientation)
-				.withLayout(new SpringLayout());
-		if (orientation.isLeftToRight()) {
-			innerPanelBuilder.add(saveButton).add(
-					cancelButton);
-			position = BorderLayout.EAST;
-		} else {
-			innerPanelBuilder.add(cancelButton).add(
-					saveButton);
-			position = BorderLayout.WEST;
-		}
+		JPanel innerPanel = new PanelBuilder(orientation)
+				.withLayout(new SpringLayout()).add(saveButton).add(
+						cancelButton).withGrid(1, 2).build();
 
 		return new PanelBuilder(orientation).withLayout(new BorderLayout())
-				.add(innerPanelBuilder.withGrid(1, 2).build(), position)
+				.add(innerPanel, BorderLayout.EAST)
 				.build();
 	}
 
