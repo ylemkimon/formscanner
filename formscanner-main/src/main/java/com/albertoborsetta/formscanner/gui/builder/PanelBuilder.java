@@ -5,6 +5,7 @@ import java.awt.Color;
 import java.awt.ComponentOrientation;
 import java.awt.Dimension;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import javax.swing.JComponent;
 import javax.swing.JPanel;
@@ -21,16 +22,12 @@ public class PanelBuilder {
 	private Color bgColor = null;
 	private Object layout = null;
 	private Border border = null;
-	private ArrayList<JComponent> components = new ArrayList<JComponent>();
-	private ArrayList<String> positions = new ArrayList<String>();
+	private ArrayList<JComponent> componentsArray;
+	private HashMap<String, JComponent> componentsMap;
 	private Dimension size = null;
 	private int rows = 0;
 	private int cols = 0;
-	
-	public PanelBuilder() {
-		this.orientation = ComponentOrientation.LEFT_TO_RIGHT;
-	}
-	
+
 	public PanelBuilder(ComponentOrientation orientation) {
 		this.orientation = orientation;
 	}
@@ -41,6 +38,11 @@ public class PanelBuilder {
 	}
 
 	public PanelBuilder withLayout(Object layout) {
+		if (layout instanceof BorderLayout) {
+			componentsMap = new HashMap<String, JComponent>();
+		} else if (layout instanceof SpringLayout) {
+			componentsArray = new ArrayList<JComponent>();
+		}
 		this.layout = layout;
 		return this;
 	}
@@ -57,8 +59,7 @@ public class PanelBuilder {
 	}
 
 	public PanelBuilder addComponent(JComponent component, String position) {
-		components.add(component);
-		positions.add(position);
+		componentsMap.put(position, component);
 		return this;
 	}
 
@@ -72,7 +73,7 @@ public class PanelBuilder {
 	}
 
 	public PanelBuilder addComponent(JComponent component) {
-		components.add(component);
+		componentsArray.add(component);
 		return this;
 	}
 
@@ -93,30 +94,25 @@ public class PanelBuilder {
 			panel.setBorder(border);
 		}
 
-		switch (layout.getClass().getName()) {
-		case "java.awt.BorderLayout":
+		if (!orientation.isLeftToRight()) {
+			switchPositions();
+		}
+
+		if (layout instanceof BorderLayout) {
 			panel.setLayout((BorderLayout) layout);
-			
-			if (!orientation.isLeftToRight()) {
-				switchEastWestPositions();
+
+			for (String position : componentsMap.keySet()) {
+				if (componentsMap.get(position) != null) {
+					panel.add(componentsMap.get(position), position);
+				}
 			}
-			
-			for (int i = 0; i < components.size(); i++) {
-				panel.add(components.get(i), positions.get(i));
-			}
-			break;
-		case "javax.swing.SpringLayout":
+		} else if (layout instanceof SpringLayout) {
 			panel.setLayout((SpringLayout) layout);
 
-			if (!orientation.isLeftToRight()) {
-				switchGridPositions();
-			}
-			
-			for (int i = 0; i < components.size(); i++) {	 
-				panel.add(components.get(i));
+			for (int i = 0; i < componentsArray.size(); i++) {
+				panel.add(componentsArray.get(i));
 			}
 			SpringUtilities.makeCompactGrid(panel, rows, cols, 3, 3, 3, 3);
-			break;
 		}
 
 		if (size != null) {
@@ -126,32 +122,19 @@ public class PanelBuilder {
 		return panel;
 	}
 
-	private void switchGridPositions() {
-		int size = components.size();
-		if ((size % 2) == 0) {
-			for (int i=0; i<size; i=i+2) {
-				JComponent tempComponent = components.get(i);
-				components.set(i, components.get(i+1));
-				components.set(i+1, tempComponent);
-			}
-		} else {
-			for (int i=0; i<size/2; i++) {
-				JComponent tempComponent = components.get(i);
-				components.set(i, components.get(size-i));
-				components.set(size-i, tempComponent);
-			}
-		}
-	}
-
-	private void switchEastWestPositions() {
-		for (int i=0; i<positions.size(); i++) {
-			switch (positions.get(i)) {
-			case BorderLayout.EAST:
-				positions.set(i, BorderLayout.WEST);
-				break;
-			case BorderLayout.WEST:
-				positions.set(i, BorderLayout.EAST);
-				break;
+	private void switchPositions() {
+		if (layout instanceof BorderLayout) {
+			JComponent tempComponent = componentsMap.get(BorderLayout.EAST);
+			componentsMap.put(BorderLayout.EAST,
+					componentsMap.get(BorderLayout.WEST));
+			componentsMap.put(BorderLayout.WEST, tempComponent);
+		} else if (layout instanceof SpringLayout) {
+			for (int j = 0; j < rows; j++) {
+				for (int i = 0; i < cols / 2; i++) {
+					JComponent tempComponent = componentsArray.get(i + (j * cols));
+					componentsArray.set(i + (j * cols), componentsArray.get(((j + 1) * cols) - (i + 1)));
+					componentsArray.set(((j + 1) * cols) - (i + 1), tempComponent);
+				}
 			}
 		}
 	}

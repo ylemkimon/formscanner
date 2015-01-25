@@ -16,6 +16,7 @@ import com.albertoborsetta.formscanner.commons.translation.FormScannerTranslatio
 import com.albertoborsetta.formscanner.commons.translation.FormScannerTranslationKeys;
 import com.albertoborsetta.formscanner.gui.builder.ButtonBuilder;
 import com.albertoborsetta.formscanner.gui.builder.LabelBuilder;
+import com.albertoborsetta.formscanner.gui.builder.PanelBuilder;
 import com.albertoborsetta.formscanner.gui.builder.TextFieldBuilder;
 import com.albertoborsetta.formscanner.gui.controller.ImageFrameController;
 import com.albertoborsetta.formscanner.gui.model.FormScannerModel;
@@ -76,10 +77,10 @@ public class ImageFrame extends InternalFrame implements ScrollableImageView {
 		scrollPane = new ImageScrollPane(imagePanel);
 		statusBar = new ImageStatusBar(this.mode);
 		getContentPane().add(scrollPane, BorderLayout.CENTER);
-		getContentPane().add(statusBar, BorderLayout.SOUTH);
+		getContentPane().add(statusBar.getPanel(), BorderLayout.SOUTH);
 	}
 
-	private class ImageStatusBar extends JPanel {
+	private class ImageStatusBar {
 
 		/**
 		 * 
@@ -90,12 +91,9 @@ public class ImageFrame extends InternalFrame implements ScrollableImageView {
 		private JTextField YPositionValue;
 		private HashMap<Corners, JButton> cornerButtons = new HashMap<Corners, JButton>();
 		private HashMap<Corners, JTextField> cornerPositions = new HashMap<Corners, JTextField>();
+		private JPanel panel;
 
 		public ImageStatusBar(Mode mode) {
-			super();
-			SpringLayout layout = new SpringLayout();
-			setLayout(layout);
-
 			XPositionValue = getTextField();
 			YPositionValue = getTextField();
 
@@ -103,36 +101,25 @@ public class ImageFrame extends InternalFrame implements ScrollableImageView {
 			showCornerPosition();
 
 			setCornerButtons(mode);
-
-			if (orientation.isLeftToRight()) {
-				add(getLabel(FormScannerTranslationKeys.X_CURSOR_POSITION_LABEL));
-				add(XPositionValue);
-				add(cornerButtons.get(Corners.TOP_LEFT));
-				add(cornerPositions.get(Corners.TOP_LEFT));
-				add(cornerButtons.get(Corners.TOP_RIGHT));
-				add(cornerPositions.get(Corners.TOP_RIGHT));
-				add(getLabel(FormScannerTranslationKeys.Y_CURSOR_POSITION_LABEL));
-				add(YPositionValue);
-				add(cornerButtons.get(Corners.BOTTOM_LEFT));
-				add(cornerPositions.get(Corners.BOTTOM_LEFT));
-				add(cornerButtons.get(Corners.BOTTOM_RIGHT));
-				add(cornerPositions.get(Corners.BOTTOM_RIGHT));
-			} else {
-				add(cornerPositions.get(Corners.TOP_RIGHT));
-				add(cornerButtons.get(Corners.TOP_RIGHT));
-				add(cornerPositions.get(Corners.TOP_LEFT));
-				add(cornerButtons.get(Corners.TOP_LEFT));
-				add(XPositionValue);
-				add(getLabel(FormScannerTranslationKeys.X_CURSOR_POSITION_LABEL));
-				add(cornerPositions.get(Corners.BOTTOM_RIGHT));
-				add(cornerButtons.get(Corners.BOTTOM_RIGHT));
-				add(cornerPositions.get(Corners.BOTTOM_LEFT));
-				add(cornerButtons.get(Corners.BOTTOM_LEFT));
-				add(YPositionValue);
-				add(getLabel(FormScannerTranslationKeys.Y_CURSOR_POSITION_LABEL));
-			}
-
-			SpringUtilities.makeCompactGrid(this, 2, 6, 3, 3, 3, 3);
+			
+			panel = new PanelBuilder(orientation).withLayout(new SpringLayout()).withGrid(2, 6)
+				.add(getLabel(FormScannerTranslationKeys.X_CURSOR_POSITION_LABEL))
+				.add(XPositionValue)
+				.add(cornerButtons.get(Corners.TOP_LEFT))
+				.add(cornerPositions.get(Corners.TOP_LEFT))
+				.add(cornerButtons.get(Corners.TOP_RIGHT))
+				.add(cornerPositions.get(Corners.TOP_RIGHT))
+				.add(getLabel(FormScannerTranslationKeys.Y_CURSOR_POSITION_LABEL))
+				.add(YPositionValue)
+				.add(cornerButtons.get(Corners.BOTTOM_LEFT))
+				.add(cornerPositions.get(Corners.BOTTOM_LEFT))
+				.add(cornerButtons.get(Corners.BOTTOM_RIGHT))
+				.add(cornerPositions.get(Corners.BOTTOM_RIGHT))
+				.build();
+		}
+		
+		public JPanel getPanel() {
+			return panel;
 		}
 
 		private void setCornerButtons(Mode mode) {
