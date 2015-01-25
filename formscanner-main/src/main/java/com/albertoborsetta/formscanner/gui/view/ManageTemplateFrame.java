@@ -633,7 +633,7 @@ public class ManageTemplateFrame extends InternalFrame implements TabbedView {
 				.withActionListener(manageTemplateController).setEnabled(false)
 				.build();
 
-		return new PanelBuilder().withLayout(new SpringLayout())
+		return new PanelBuilder(orientation).withLayout(new SpringLayout())
 				.add(addFieldButton).add(removeFieldButton).withGrid(2, 1)
 				.build();
 	}
