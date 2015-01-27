@@ -140,6 +140,7 @@ public class ResultsGridFrame extends InternalFrame {
 			table.setValueAt(
 					header[i], i, 0);
 		}
+		table.setComponentOrientation(orientation);
 		table.setCellSelectionEnabled(true);
 		table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 		
