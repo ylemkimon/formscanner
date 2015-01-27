@@ -3,6 +3,8 @@ package com.albertoborsetta.formscanner.gui.controller;
 import java.awt.Cursor;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseMotionListener;
@@ -16,7 +18,7 @@ import com.albertoborsetta.formscanner.gui.model.FormScannerModel;
 import com.albertoborsetta.formscanner.gui.view.ImageFrame;
 
 public class ImageFrameController implements MouseMotionListener,
-		MouseInputListener, MouseWheelListener, ActionListener {
+		MouseInputListener, MouseWheelListener, ActionListener, ItemListener {
 
 	private FormScannerModel model;
 	private ImageFrame view;
@@ -178,5 +180,11 @@ public class ImageFrameController implements MouseMotionListener,
 	public void actionPerformed(ActionEvent e) {
 		Corners corner = Corners.valueOf(e.getActionCommand());
 		model.setSelectedCorner(view, corner);
+	}
+
+	@Override
+	public void itemStateChanged(ItemEvent e) {
+		// TODO Auto-generated method stub
+		
 	}
 }
