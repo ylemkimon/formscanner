@@ -19,7 +19,7 @@
 
 JAVA_PATH=$(readlink -f $(which java))
 INSTALL_DIR=$PWD
-FS_EXECUTABLE=$(ls $INSTALL_DIR/lib/formscanner*)
+FS_EXECUTABLE=$(ls $INSTALL_DIR/lib/formscanner-main*)
 
 echo "#!/bin/sh" > $INSTALL_DIR/bin/run.sh
 echo "$JAVA_PATH -jar -DFormScanner_HOME=$INSTALL_DIR $FS_EXECUTABLE" >> $INSTALL_DIR/bin/run.sh
