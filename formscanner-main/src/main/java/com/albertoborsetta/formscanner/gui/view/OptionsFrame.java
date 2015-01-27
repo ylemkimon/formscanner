@@ -74,7 +74,7 @@ public class OptionsFrame extends InternalFrame {
 		JPanel optionsPanel = getOptionsPanel();
 		JPanel shapePanel = getShapePanel();
 
-		JPanel masterPanel = new PanelBuilder(orientation).withLayout(new SpringLayout())
+		JPanel masterPanel = new PanelBuilder().withLayout(new SpringLayout())
 				.add(optionsPanel).add(shapePanel).withGrid(2, 1).build();
 
 		JPanel buttonPanel = getButtonPanel();
@@ -92,20 +92,21 @@ public class OptionsFrame extends InternalFrame {
 	}
 
 	private JPanel getOptionsPanel() {
-		thresholdValue = new SpinnerBuilder(FormScannerConstants.THRESHOLD, orientation)
+		thresholdValue = new SpinnerBuilder(FormScannerConstants.THRESHOLD)
 				.withActionListener(optionsFrameController).build();
 
-		densityValue = new SpinnerBuilder(FormScannerConstants.DENSITY, orientation)
+		densityValue = new SpinnerBuilder(FormScannerConstants.DENSITY)
 				.withActionListener(optionsFrameController).build();
 
-		return new PanelBuilder(orientation)
-		.withLayout(new SpringLayout()).withBorder(BorderFactory.createTitledBorder(
-				FormScannerTranslation.getTranslationFor(FormScannerTranslationKeys.SCAN_OPTIONS)))
+		return new PanelBuilder()
+				.withLayout(new SpringLayout())
 				.add(getLabel(FormScannerTranslationKeys.THRESHOLD_OPTION_LABEL))
-			.add(thresholdValue)
-			.add(getLabel(FormScannerTranslationKeys.DENSITY_OPTION_LABEL))
-			.add(densityValue).withGrid(2, 2)
-			.build();
+				.add(thresholdValue)
+				.add(getLabel(FormScannerTranslationKeys.DENSITY_OPTION_LABEL))
+				.add(densityValue).withGrid(2, 2)
+				.withBorder(BorderFactory.createTitledBorder(
+						FormScannerTranslation.getTranslationFor(FormScannerTranslationKeys.SCAN_OPTIONS)))
+				.build();
 	}
 
 	private JPanel getShapePanel() {
@@ -118,30 +119,31 @@ public class OptionsFrame extends InternalFrame {
 		}
 		
 		shapeTypeComboBox = new ComboBoxBuilder<InternalShapeType>(
-				FormScannerConstants.SHAPE_COMBO_BOX, orientation)
+				FormScannerConstants.SHAPE_COMBO_BOX)
 				.withModel(
 						new DefaultComboBoxModel<InternalShapeType>(types))
 				.withActionListener(optionsFrameController).build();
 
-		shapeSizeValue = new SpinnerBuilder(FormScannerConstants.SHAPE_SIZE, orientation)
+		shapeSizeValue = new SpinnerBuilder(FormScannerConstants.SHAPE_SIZE)
 				.withActionListener(optionsFrameController).build();
 
-		return new PanelBuilder(orientation)
-		.withLayout(new SpringLayout()).withBorder(BorderFactory.createTitledBorder(
-				FormScannerTranslation.getTranslationFor(FormScannerTranslationKeys.MARKER_OPTIONS))).add(getLabel(FormScannerTranslationKeys.SHAPE_TYPE_OPTION_LABEL))
+		return new PanelBuilder()
+				.withLayout(new SpringLayout())
+				.add(getLabel(FormScannerTranslationKeys.SHAPE_TYPE_OPTION_LABEL))
 				.add(shapeTypeComboBox)
 				.add(getLabel(FormScannerTranslationKeys.SHAPE_SIZE_OPTION_LABEL))
 				.add(shapeSizeValue).withGrid(2, 2)
+				.withBorder(BorderFactory.createTitledBorder(FormScannerTranslation.getTranslationFor(FormScannerTranslationKeys.MARKER_OPTIONS)))
 				.build();
 	}
 
 	private JLabel getLabel(String value) {
-		return new LabelBuilder(FormScannerTranslation.getTranslationFor(value), orientation)
+		return new LabelBuilder(FormScannerTranslation.getTranslationFor(value))
 				.withBorder(BorderFactory.createEmptyBorder()).build();
 	}
 
 	private JPanel getButtonPanel() {
-		saveButton = new ButtonBuilder(orientation)
+		saveButton = new ButtonBuilder()
 				.withText(
 						FormScannerTranslation
 								.getTranslationFor(FormScannerTranslationKeys.SAVE_OPTIONS_BUTTON))
@@ -152,7 +154,7 @@ public class OptionsFrame extends InternalFrame {
 				.withActionListener(optionsFrameController).setEnabled(false)
 				.build();
 
-		cancelButton = new ButtonBuilder(orientation)
+		cancelButton = new ButtonBuilder()
 				.withText(
 						FormScannerTranslation
 								.getTranslationFor(FormScannerTranslationKeys.CANCEL_BUTTON))
@@ -162,13 +164,8 @@ public class OptionsFrame extends InternalFrame {
 				.withActionCommand(FormScannerConstants.CANCEL)
 				.withActionListener(optionsFrameController).build();
 
-		JPanel innerPanel = new PanelBuilder(orientation)
-				.withLayout(new SpringLayout()).add(saveButton).add(
-						cancelButton).withGrid(1, 2).build();
-
-		return new PanelBuilder(orientation).withLayout(new BorderLayout())
-				.add(innerPanel, BorderLayout.EAST)
-				.build();
+		return new PanelBuilder().withLayout(new SpringLayout())
+				.add(saveButton).add(cancelButton).withGrid(1, 2).build();
 	}
 
 	public int getThresholdValue() {

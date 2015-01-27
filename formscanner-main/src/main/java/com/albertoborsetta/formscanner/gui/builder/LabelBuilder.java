@@ -1,7 +1,5 @@
 package com.albertoborsetta.formscanner.gui.builder;
 
-import java.awt.ComponentOrientation;
-
 import javax.swing.JLabel;
 import javax.swing.border.Border;
 
@@ -11,24 +9,14 @@ public class LabelBuilder {
 	
 	private JLabel label;
 	
-	public LabelBuilder(ComponentOrientation orientation) {
+	public LabelBuilder() {
 		label = new JLabel();
-		setCustomParams(orientation);
-	}
-
-	public LabelBuilder(String text, ComponentOrientation orientation) {
-		label = new JLabel(text);
-		setCustomParams(orientation);
-	}
-
-	private void setCustomParams(ComponentOrientation orientation) {
 		label.setFont(FormScannerFont.getFont());
-		label.setComponentOrientation(orientation);
-		if (orientation.isLeftToRight()) {
-			label.setAlignmentX(JLabel.LEFT_ALIGNMENT);
-		} else {
-			label.setAlignmentX(JLabel.RIGHT_ALIGNMENT);
-		}
+	}
+	
+	public LabelBuilder(String text) {
+		label = new JLabel(text);
+		label.setFont(FormScannerFont.getFont());
 	}
 	
 	public LabelBuilder withBorder(Border border) {

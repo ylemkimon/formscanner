@@ -79,7 +79,7 @@ public class ResultsGridFrame extends InternalFrame {
 		table = createTable();
 		clearTable();
 		setupTable();
-		responsesGridPanel = new ScrollPaneBuilder(table, orientation).build();
+		responsesGridPanel = new ScrollPaneBuilder(table).build();
 
 		getContentPane().add(responsesGridPanel, BorderLayout.CENTER);
 	}

@@ -1,6 +1,5 @@
 package com.albertoborsetta.formscanner.gui.builder;
 
-import java.awt.ComponentOrientation;
 import java.awt.event.KeyListener;
 
 import javax.swing.JTextField;
@@ -11,11 +10,10 @@ public class TextFieldBuilder {
 	
 	private JTextField textField;
 	
-	public TextFieldBuilder(int columns, ComponentOrientation orientation) {
+	public TextFieldBuilder(int columns) {
 		textField = new JTextField(columns);
 		textField.setFont(FormScannerFont.getFont());
 		textField.setEditable(true);
-		textField.setComponentOrientation(orientation);
 	}
 	
 	public TextFieldBuilder withActionListener(KeyListener listener) {

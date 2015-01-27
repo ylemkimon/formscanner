@@ -1,7 +1,5 @@
 package com.albertoborsetta.formscanner.gui.builder;
 
-import java.awt.ComponentOrientation;
-
 import javax.swing.JList;
 import javax.swing.ListModel;
 import javax.swing.event.ListSelectionListener;
@@ -12,10 +10,9 @@ public class ListBuilder {
 	
 	private JList<String> list;
 	
-	public ListBuilder(String[] objectList, ComponentOrientation orientation) {
+	public ListBuilder(String[] objectList) {
 		list = new JList<String>(objectList);
 		list.setFont(FormScannerFont.getFont());
-		list.setComponentOrientation(orientation);
 	}
 	
 	public ListBuilder() {
