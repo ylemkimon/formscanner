@@ -82,23 +82,25 @@ public class RenameFileFrame extends InternalFrame implements View {
 	}
 
 	private JPanel getRenamePanel() {
-		fileNameField = new TextFieldBuilder(10, orientation)
-				.withActionListener(renameFileController).build();
+		fileNameField = new TextFieldBuilder(10).withActionListener(
+				renameFileController).build();
 
-		fileExtensionField = new LabelBuilder(orientation).build();
+		fileExtensionField = new LabelBuilder().build();
 
-		return new PanelBuilder(orientation)
-				.withLayout(new SpringLayout()).add(getLabel(FormScannerTranslationKeys.RENAME_FILE_FRAME_LABEL))
-				.add(fileNameField).add(fileExtensionField).withGrid(1, 3).build();
+		return new PanelBuilder()
+				.withLayout(new SpringLayout())
+				.add(getLabel(FormScannerTranslationKeys.RENAME_FILE_FRAME_LABEL))
+				.add(fileNameField).add(fileExtensionField).withGrid(1, 3)
+				.build();
 	}
 
 	private JLabel getLabel(String value) {
 		return new LabelBuilder(FormScannerTranslation.getTranslationFor(value)
-				+ ": ", orientation).build();
+				+ ": ").build();
 	}
 
 	private JPanel getButtonPanel() {
-		okButton = new ButtonBuilder(orientation)
+		okButton = new ButtonBuilder()
 				.withText(
 						FormScannerTranslation
 								.getTranslationFor(FormScannerTranslationKeys.OK_BUTTON))
@@ -106,18 +108,14 @@ public class RenameFileFrame extends InternalFrame implements View {
 				.withActionCommand(FormScannerConstants.RENAME_FILES_CURRENT)
 				.withActionListener(renameFileController).build();
 
-		cancelButton = new ButtonBuilder(orientation)
+		cancelButton = new ButtonBuilder()
 				.withText(
 						FormScannerTranslation
 								.getTranslationFor(FormScannerTranslationKeys.CANCEL_BUTTON))
 				.withActionCommand(FormScannerConstants.RENAME_FILES_SKIP)
 				.withActionListener(renameFileController).build();
 
-		JPanel innerPanel = new PanelBuilder(orientation)
-				.withLayout(new SpringLayout()).add(okButton).add(cancelButton)
-				.withGrid(1, 2).build();
-
-		return new PanelBuilder(orientation).withLayout(new BorderLayout())
-				.add(innerPanel, BorderLayout.EAST).build();
+		return new PanelBuilder().withLayout(new SpringLayout()).add(okButton)
+				.add(cancelButton).withGrid(1, 2).build();
 	}
 }

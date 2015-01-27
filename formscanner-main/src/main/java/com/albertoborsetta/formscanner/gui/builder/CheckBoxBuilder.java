@@ -1,6 +1,5 @@
 package com.albertoborsetta.formscanner.gui.builder;
 
-import java.awt.ComponentOrientation;
 import java.awt.event.ActionListener;
 
 import javax.swing.JCheckBox;
@@ -11,11 +10,10 @@ public class CheckBoxBuilder {
 	
 	private JCheckBox chkBox;
 	
-	public CheckBoxBuilder(String name, ComponentOrientation orientation) {
+	public CheckBoxBuilder(String name) {
 		chkBox = new JCheckBox();
 		chkBox.setName(name);
 		chkBox.setFont(FormScannerFont.getFont());
-		chkBox.setComponentOrientation(orientation);
 	}
 	
 	public CheckBoxBuilder setChecked(boolean checked) {
