@@ -10,6 +10,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import javax.swing.BorderFactory;
+import javax.swing.JFormattedTextField;
 import javax.swing.JPanel;
 import javax.swing.JButton;
 import javax.swing.DefaultComboBoxModel;
@@ -317,7 +318,6 @@ public class ManageTemplateFrame extends InternalFrame implements TabbedView {
 		default:
 			break;
 		}
-
 	}
 
 	private boolean verifySpinnerValues() {
@@ -510,10 +510,10 @@ public class ManageTemplateFrame extends InternalFrame implements TabbedView {
 				.build();
 
 		rowsNumber = new SpinnerBuilder(FormScannerConstants.NUMBER_COLS_ROWS)
-				.withActionListener(manageTemplateController).build();
+				.withActionListener(manageTemplateController).withFocusListener(manageTemplateController).build();
 
 		valuesNumber = new SpinnerBuilder(FormScannerConstants.NUMBER_VALUES)
-				.withActionListener(manageTemplateController).build();
+				.withActionListener(manageTemplateController).withFocusListener(manageTemplateController).build();
 
 		return new PanelBuilder()
 				.withLayout(new SpringLayout())

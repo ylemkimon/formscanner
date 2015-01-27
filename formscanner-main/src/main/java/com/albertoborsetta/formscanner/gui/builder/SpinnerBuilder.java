@@ -1,6 +1,9 @@
 package com.albertoborsetta.formscanner.gui.builder;
 
+import java.awt.event.FocusListener;
+
 import javax.swing.JSpinner;
+import javax.swing.JSpinner.DefaultEditor;
 import javax.swing.event.ChangeListener;
 
 import com.albertoborsetta.formscanner.commons.FormScannerFont;
@@ -17,6 +20,12 @@ public class SpinnerBuilder {
 	
 	public SpinnerBuilder withActionListener(ChangeListener listener) {
 		spinner.addChangeListener(listener);
+		return this;
+	}
+	
+	public SpinnerBuilder withFocusListener(FocusListener listener) {
+		DefaultEditor editor = (DefaultEditor) spinner.getEditor();
+		editor.getTextField().addFocusListener(listener);
 		return this;
 	}
 	

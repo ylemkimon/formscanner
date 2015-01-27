@@ -93,10 +93,10 @@ public class OptionsFrame extends InternalFrame {
 
 	private JPanel getOptionsPanel() {
 		thresholdValue = new SpinnerBuilder(FormScannerConstants.THRESHOLD)
-				.withActionListener(optionsFrameController).build();
+				.withActionListener(optionsFrameController).withActionListener(optionsFrameController).build();
 
 		densityValue = new SpinnerBuilder(FormScannerConstants.DENSITY)
-				.withActionListener(optionsFrameController).build();
+				.withActionListener(optionsFrameController).withActionListener(optionsFrameController).build();
 
 		return new PanelBuilder()
 				.withLayout(new SpringLayout())
@@ -125,7 +125,7 @@ public class OptionsFrame extends InternalFrame {
 				.withActionListener(optionsFrameController).build();
 
 		shapeSizeValue = new SpinnerBuilder(FormScannerConstants.SHAPE_SIZE)
-				.withActionListener(optionsFrameController).build();
+				.withActionListener(optionsFrameController).withActionListener(optionsFrameController).build();
 
 		return new PanelBuilder()
 				.withLayout(new SpringLayout())

@@ -11,6 +11,7 @@ import java.awt.event.MouseWheelListener;
 import javax.swing.event.MouseInputListener;
 
 import com.albertoborsetta.formscanner.api.FormPoint;
+import com.albertoborsetta.formscanner.api.FormTemplate;
 import com.albertoborsetta.formscanner.api.commons.Constants.Corners;
 import com.albertoborsetta.formscanner.gui.model.FormScannerModel;
 import com.albertoborsetta.formscanner.gui.view.ImageFrame;
@@ -41,9 +42,13 @@ public class ImageFrameController implements MouseMotionListener,
 				FormPoint p = showCursorPosition(e);
 				Corners corner = view.getSelectedButton();
 				if (corner != null) {
-					model.setCorner(view, corner, p);
+					FormTemplate template = view.getTemplate();
+					template.setCorner(corner, p);
+					view.showCornerPosition();
+					view.repaint();
 				} else {
-					model.addTemporaryPoint(view, p);
+					view.setTemporaryPoint(p);
+					view.repaint();
 				}
 				break;
 			}
@@ -57,7 +62,7 @@ public class ImageFrameController implements MouseMotionListener,
 
 					p1 = p2;
 
-					model.setScrollBars(view, (int) deltaX, (int) deltaY);
+					view.setScrollBars((int) deltaX, (int) deltaY);
 				}
 			}
 		default:
@@ -68,7 +73,7 @@ public class ImageFrameController implements MouseMotionListener,
 
 	private FormPoint showCursorPosition(MouseEvent e) {
 		FormPoint p = getCursorPoint(e);
-		model.showCursorPosition(view, p);
+		view.showCursorPosition(p);
 		return p;
 	}
 
@@ -100,16 +105,20 @@ public class ImageFrameController implements MouseMotionListener,
 				Corners corner = view.getSelectedButton(); 
 				
 				if (corner != null) {
-					model.setCorner(view, corner, p);
+					FormTemplate template = view.getTemplate();
+					template.setCorner(corner, p);
+					view.showCornerPosition();
+					view.repaint();
 				} else {
-					model.addTemporaryPoint(view, p);
+					view.setTemporaryPoint(p);
+					view.repaint();
 				}
 				break;
 			}
 		case VIEW:
 			if (e.isControlDown()) {
 				p1 = new FormPoint(e.getPoint());
-				model.setImageCursor(view, new Cursor(Cursor.HAND_CURSOR));
+				view.setImageCursor(new Cursor(Cursor.HAND_CURSOR));
 			}
 		default:
 			break;
@@ -125,8 +134,11 @@ public class ImageFrameController implements MouseMotionListener,
 				FormPoint p = getCursorPoint(e);
 				Corners corner = view.getSelectedButton();
 				if (corner != null) {
-					model.setCorner(view, corner, p);
-					model.resetCornerButtons(view);
+					FormTemplate template = view.getTemplate();
+					template.setCorner(corner, p);
+					view.showCornerPosition();
+					view.repaint();
+					view.resetCornerButtons();
 				} else {
 					model.clearTemporaryPoint(view);
 					model.addPoint(view, p);
@@ -135,7 +147,7 @@ public class ImageFrameController implements MouseMotionListener,
 			}
 		case VIEW:
 			if (e.isControlDown()) {
-				model.setImageCursor(view, new Cursor(Cursor.CROSSHAIR_CURSOR));
+				view.setImageCursor(new Cursor(Cursor.CROSSHAIR_CURSOR));
 			}
 		default:
 			break;
@@ -143,24 +155,24 @@ public class ImageFrameController implements MouseMotionListener,
 	}
 
 	public void mouseEntered(MouseEvent e) {
-		model.setImageCursor(view, new Cursor(Cursor.CROSSHAIR_CURSOR));
+		view.setImageCursor(new Cursor(Cursor.CROSSHAIR_CURSOR));
 	}
 
 	public void mouseExited(MouseEvent e) {
-		model.setImageCursor(view, new Cursor(Cursor.DEFAULT_CURSOR));
+		view.setImageCursor(new Cursor(Cursor.DEFAULT_CURSOR));
 	}
 
 	public void mouseWheelMoved(MouseWheelEvent e) {
 		int delta = e.getUnitsToScroll() * 5;
 
 		if (e.isControlDown()) {
-			model.setScrollBars(view, delta, 0);
+			view.setScrollBars(delta, 0);
 		} else {
-			model.setScrollBars(view, 0, delta);
+			view.setScrollBars(0, delta);
 		}
 
 		FormPoint p = getCursorPoint(e);
-		model.showCursorPosition(view, p);
+		view.showCursorPosition(p);
 	}
 
 	private FormPoint getCursorPoint(MouseEvent e) {
@@ -177,6 +189,6 @@ public class ImageFrameController implements MouseMotionListener,
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		Corners corner = Corners.valueOf(e.getActionCommand());
-		model.setSelectedCorner(view, corner);
+		view.toggleCornerButton(corner);
 	}
 }
