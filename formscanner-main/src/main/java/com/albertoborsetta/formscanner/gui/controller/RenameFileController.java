@@ -7,10 +7,14 @@ import com.albertoborsetta.formscanner.gui.view.RenameFileFrame;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
-public class RenameFileController implements KeyListener, ActionListener {
+import javax.swing.JTextField;
+
+public class RenameFileController implements KeyListener, ActionListener, FocusListener {
 	
 	private FormScannerModel model;
 	private RenameFileFrame view;
@@ -56,5 +60,16 @@ public class RenameFileController implements KeyListener, ActionListener {
 		default:
 			break;
 		}
+	}
+
+	@Override
+	public void focusGained(FocusEvent e) {
+		((JTextField) e.getComponent()).selectAll();
+		
+	}
+
+	@Override
+	public void focusLost(FocusEvent e) {
+		view.setOkEnabled(true);		
 	}
 }

@@ -1,5 +1,6 @@
 package com.albertoborsetta.formscanner.gui.builder;
 
+import java.awt.event.FocusListener;
 import java.awt.event.KeyListener;
 
 import javax.swing.JTextField;
@@ -28,5 +29,11 @@ public class TextFieldBuilder {
 	
 	public JTextField build() {
 		return textField;
+	}
+
+	public TextFieldBuilder withFocusListener(
+			FocusListener listener) {
+		textField.addFocusListener(listener);
+		return this;
 	}
 }

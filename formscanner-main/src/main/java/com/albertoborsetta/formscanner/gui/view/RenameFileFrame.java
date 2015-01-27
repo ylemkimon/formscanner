@@ -73,6 +73,7 @@ public class RenameFileFrame extends InternalFrame implements View {
 				+ ": " + fileName);
 		fileNameField.setText(FilenameUtils.removeExtension(fileName));
 		fileExtensionField.setText('.' + FilenameUtils.getExtension(fileName));
+		fileNameField.selectAll();
 	}
 
 	public String getNewFileName() {
@@ -83,7 +84,8 @@ public class RenameFileFrame extends InternalFrame implements View {
 
 	private JPanel getRenamePanel() {
 		fileNameField = new TextFieldBuilder(10).withActionListener(
-				renameFileController).build();
+				renameFileController).withFocusListener(renameFileController).build();
+		fileNameField.selectAll();
 
 		fileExtensionField = new LabelBuilder().build();
 
