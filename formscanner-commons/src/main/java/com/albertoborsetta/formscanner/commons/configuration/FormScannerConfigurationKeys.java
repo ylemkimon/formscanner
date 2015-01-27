@@ -31,4 +31,6 @@ public class FormScannerConfigurationKeys {
 	public static final String OPTIONS_FRAME = "optionsFramePosition";
 	public static final String ABOUT_FRAME = "aboutFramePosition";
 	public static final String DESKTOP_FRAME = "desktopSize";
+	public static final String TEMPLATE_SAVE_PATH = "templateSavePath";
+	public static final String RESULTS_SAVE_PATH = "resultsSavePath";
 }
