@@ -405,6 +405,8 @@ public class ManageTemplateFrame extends InternalFrame implements TabbedView {
 							+ StringUtils.leftPad("" + previousRowsCount++, 3,
 									"0"), i, 0);
 		}
+		
+		table.setComponentOrientation(orientation);
 		table.setCellSelectionEnabled(true);
 		table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 		return table;
@@ -443,6 +445,7 @@ public class ManageTemplateFrame extends InternalFrame implements TabbedView {
 			}
 		});
 
+		table.setComponentOrientation(orientation);
 		table.setRowSelectionAllowed(true);
 		table.getSelectionModel().setSelectionMode(
 				ListSelectionModel.SINGLE_SELECTION);
@@ -455,6 +458,7 @@ public class ManageTemplateFrame extends InternalFrame implements TabbedView {
 	private JPanel getFieldListPanel() {
 
 		fieldsTable = createFieldsTable();
+		fieldsTable.setComponentOrientation(orientation);
 		fieldsTableScrollPane = new ScrollPaneBuilder(fieldsTable, orientation)
 				.build();
 
@@ -485,6 +489,7 @@ public class ManageTemplateFrame extends InternalFrame implements TabbedView {
 		JPanel positionButtonPanel = getPositionButtonPanel();
 
 		positionsTable = new JTable();
+		positionsTable.setComponentOrientation(orientation);
 		positionsTableScrollPane = new ScrollPaneBuilder(positionsTable,
 				orientation).build();
 
