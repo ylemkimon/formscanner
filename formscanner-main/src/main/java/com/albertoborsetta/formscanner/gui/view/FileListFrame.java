@@ -65,11 +65,11 @@ public class FileListFrame extends InternalFrame {
 	}
 	
 	private JScrollPane getPanel(String[] fileList) {
-		list = new ListBuilder(fileList)
+		list = new ListBuilder(fileList, orientation)
 			.withSelectionMode(ListSelectionModel.SINGLE_SELECTION)
 			.build();
 		
-		return new ScrollPaneBuilder(list)
+		return new ScrollPaneBuilder(list, orientation)
 			.build();
 	}
 }

@@ -1,5 +1,7 @@
 package com.albertoborsetta.formscanner.gui.model;
 
+import java.awt.ComponentOrientation;
+import java.awt.Cursor;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -126,6 +128,8 @@ public class FormScannerModel {
 			locale = new Locale(locales[0]);
 		}
 		fileUtils = FormFileUtils.getInstance(locale);
+		
+		orientation = ComponentOrientation.getOrientation(locale);
 
 		FormScannerTranslation.setTranslation(installPath, lang);
 		FormScannerResources.setResources(installPath);
@@ -888,5 +892,9 @@ public class FormScannerModel {
 
 	public Locale getLocale() {
 		return locale;
+	}
+
+	public ComponentOrientation getOrientation() {
+		return orientation;
 	}
 }

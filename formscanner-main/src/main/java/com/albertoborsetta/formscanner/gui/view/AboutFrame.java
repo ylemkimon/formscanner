@@ -59,7 +59,7 @@ public class AboutFrame extends InternalFrame {
 		JPanel licensePanel = getLicensePanel();
 		JPanel buttonPanel = getButtonPanel();
 
-		JTabbedPane tabbedPane = new TabbedPaneBuilder(JTabbedPane.TOP)
+		JTabbedPane tabbedPane = new TabbedPaneBuilder(JTabbedPane.TOP, orientation)
 				.addTab(FormScannerTranslation
 						.getTranslationFor(FormScannerTranslationKeys.ABOUT_TAB_NAME),
 						aboutPanel)
@@ -75,7 +75,7 @@ public class AboutFrame extends InternalFrame {
 	private JPanel getLicensePanel() {
 		JScrollPane licenseTextPanel = getLiceseTextPanel();
 
-		return new PanelBuilder().withLayout(new BorderLayout())
+		return new PanelBuilder(orientation).withLayout(new BorderLayout())
 				.addComponent(licenseTextPanel, BorderLayout.CENTER).build();
 	}
 
@@ -125,7 +125,7 @@ public class AboutFrame extends InternalFrame {
 
 		JScrollPane aboutTextPanel = getAboutTextPanel();
 
-		return new PanelBuilder().withLayout(new BorderLayout())
+		return new PanelBuilder(orientation).withLayout(new BorderLayout())
 				.withBackgroundColor(Color.white)
 				.addComponent(logo, BorderLayout.CENTER)
 				.addComponent(aboutTextPanel, BorderLayout.SOUTH).build();
@@ -149,7 +149,7 @@ public class AboutFrame extends InternalFrame {
 	}
 
 	private JPanel getButtonPanel() {
-		JButton okButton = new ButtonBuilder()
+		JButton okButton = new ButtonBuilder(orientation)
 				.withText(
 						FormScannerTranslation
 								.getTranslationFor(FormScannerTranslationKeys.OK_BUTTON))
@@ -162,5 +162,7 @@ public class AboutFrame extends InternalFrame {
 
 		return new PanelBuilder().withLayout(new SpringLayout())
 				.addComponent(okButton).withGrid(1, 1).build();
+
+		return new PanelBuilder(orientation).withLayout(new BorderLayout()).add(innerButtonPanel, BorderLayout.EAST).build();
 	}
 }
