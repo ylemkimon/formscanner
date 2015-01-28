@@ -93,7 +93,7 @@ public class ImageFrame extends InternalFrame implements ScrollableImageView {
 		getContentPane().add(statusBar.getPanel(), BorderLayout.SOUTH);
 	}
 
-	private class ImageToolBar extends JPanel {
+	private class ImageToolBar extends JPanel implements MenuView {
 
 		/**
 		 * 
