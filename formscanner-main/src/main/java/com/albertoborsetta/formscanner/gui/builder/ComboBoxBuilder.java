@@ -1,5 +1,6 @@
 package com.albertoborsetta.formscanner.gui.builder;
 
+import java.awt.ComponentOrientation;
 import java.awt.event.ItemListener;
 
 import javax.swing.ComboBoxModel;
@@ -12,10 +13,11 @@ public class ComboBoxBuilder<T> {
 	
 	private JComboBox<T> comboBox;
 	
-	public ComboBoxBuilder(String name) {
+	public ComboBoxBuilder(String name, ComponentOrientation orientation) {
 		comboBox = new JComboBox<T>();
 		comboBox.setName(name);
 		comboBox.setFont(FormScannerFont.getFont());
+		comboBox.setComponentOrientation(orientation);
 	}
 	
 	public ComboBoxBuilder<T> withActionListener(ItemListener listener) {

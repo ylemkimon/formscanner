@@ -1,6 +1,7 @@
 package com.albertoborsetta.formscanner.gui;
 
 import java.awt.Component;
+import java.awt.ComponentOrientation;
 import java.awt.EventQueue;
 import java.awt.BorderLayout;
 
@@ -79,6 +80,8 @@ public class FormScanner extends JFrame {
 		model.setDefaultFramePositions();
 		setBounds(model.getLastPosition(Frame.DESKTOP_FRAME));
 		setVisible(true);
+		setDefaultLookAndFeelDecorated(true);
+		setComponentOrientation(ComponentOrientation.RIGHT_TO_LEFT);
 	}
 	
 	public void arrangeFrame(InternalFrame frame) {

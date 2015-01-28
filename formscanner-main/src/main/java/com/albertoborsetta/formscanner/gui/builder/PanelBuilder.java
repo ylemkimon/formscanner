@@ -2,8 +2,10 @@ package com.albertoborsetta.formscanner.gui.builder;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.ComponentOrientation;
 import java.awt.Dimension;
-import java.awt.FlowLayout;
+import java.util.ArrayList;
+import java.util.HashMap;
 
 import javax.swing.JComponent;
 import javax.swing.JPanel;
@@ -15,68 +17,125 @@ import org.uncommons.swing.SpringUtilities;
 import com.albertoborsetta.formscanner.commons.FormScannerFont;
 
 public class PanelBuilder {
-	
-	protected JPanel panel;
-	
-	public PanelBuilder() {
-		panel = new JPanel();
-		panel.setFont(FormScannerFont.getFont());
+
+	private ComponentOrientation orientation;
+	private Color bgColor = null;
+	private Object layout = null;
+	private Border border = null;
+	private ArrayList<JComponent> componentsArray;
+	private HashMap<String, JComponent> componentsMap;
+	private Dimension size = null;
+	private int rows = 0;
+	private int cols = 0;
+
+	public PanelBuilder(ComponentOrientation orientation) {
+		this.orientation = orientation;
 	}
-	
+
 	public PanelBuilder withBackgroundColor(Color color) {
-		panel.setBackground(color);
+		this.bgColor = color;
 		return this;
 	}
-	
-	public PanelBuilder withLayout(BorderLayout layout) {
-		panel.setLayout(layout);
+
+	public PanelBuilder withLayout(Object layout) {
+		if (layout instanceof BorderLayout) {
+			componentsMap = new HashMap<String, JComponent>();
+		} else if (layout instanceof SpringLayout) {
+			componentsArray = new ArrayList<JComponent>();
+		}
+		this.layout = layout;
 		return this;
 	}
-	
-	public PanelBuilder withLayout(SpringLayout layout) {
-		panel.setLayout(layout);
-		return this;
-	}
-	
+
 	public PanelBuilder withGrid(int rows, int cols) {
-		SpringUtilities.makeCompactGrid(panel, rows, cols, 3, 3, 3, 3);
+		this.rows = rows;
+		this.cols = cols;
 		return this;
 	}
-	
+
 	public PanelBuilder withPreferredSize(Dimension size) {
-		panel.setPreferredSize(size);
+		this.size = size;
 		return this;
 	}
-	
+
 	public PanelBuilder addComponent(JComponent component, String position) {
-		panel.add(component, position);
+		componentsMap.put(position, component);
 		return this;
 	}
-	
+
 	public PanelBuilder add(JComponent component, String position) {
 		return addComponent(component, position);
 	}
-	
-	public JPanel build() {
-		return panel;
-	}
-	
-	public PanelBuilder withLayout(FlowLayout layout) {
-		panel.setLayout(layout);
-		return this;
-	}
-	
+
 	public PanelBuilder withBorder(Border border) {
-		panel.setBorder(border);
+		this.border = border;
 		return this;
 	}
-	
+
 	public PanelBuilder addComponent(JComponent component) {
-		panel.add(component);
+		componentsArray.add(component);
 		return this;
 	}
-	
+
 	public PanelBuilder add(JComponent component) {
 		return addComponent(component);
+	}
+
+	public JPanel build() {
+		JPanel panel = new JPanel();
+		panel.setFont(FormScannerFont.getFont());
+		panel.setComponentOrientation(orientation);
+
+		if (bgColor != null) {
+			panel.setBackground(bgColor);
+		}
+
+		if (border != null) {
+			panel.setBorder(border);
+		}
+
+		if (!orientation.isLeftToRight()) {
+			switchPositions();
+		}
+
+		if (layout instanceof BorderLayout) {
+			panel.setLayout((BorderLayout) layout);
+
+			for (String position : componentsMap.keySet()) {
+				if (componentsMap.get(position) != null) {
+					panel.add(componentsMap.get(position), position);
+				}
+			}
+		} else if (layout instanceof SpringLayout) {
+			panel.setLayout((SpringLayout) layout);
+
+			for (int i = 0; i < componentsArray.size(); i++) {
+				panel.add(componentsArray.get(i));
+			}
+			SpringUtilities.makeCompactGrid(panel, rows, cols, 3, 3, 3, 3);
+		}
+
+		if (size != null) {
+			panel.setPreferredSize(size);
+		}
+
+		return panel;
+	}
+
+	private void switchPositions() {
+		if (layout instanceof BorderLayout) {
+			JComponent tempComponent = componentsMap.get(BorderLayout.EAST);
+			componentsMap.put(BorderLayout.EAST,
+					componentsMap.get(BorderLayout.WEST));
+			componentsMap.put(BorderLayout.WEST, tempComponent);
+		} else if (layout instanceof SpringLayout) {
+			for (int j = 0; j < rows; j++) {
+				for (int i = 0; i < cols / 2; i++) {
+					JComponent tempComponent = componentsArray.get(i + (j * cols));
+					componentsArray.set(i + (j * cols), componentsArray.get(((j + 1) * cols) - (i + 1)));
+					componentsArray.set(((j + 1) * cols) - (i + 1), tempComponent);
+				}
+			}
+		}
 	}
 }

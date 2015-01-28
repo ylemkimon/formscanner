@@ -1,5 +1,7 @@
 package com.albertoborsetta.formscanner.gui.builder;
 
+import java.awt.ComponentOrientation;
+
 import javax.swing.JComponent;
 import javax.swing.JMenu;
 
@@ -9,9 +11,10 @@ public class MenuBuilder {
 	
 	private JMenu menu;
 	
-	public MenuBuilder(String name) {
+	public MenuBuilder(String name, ComponentOrientation orientation) {
 		menu = new JMenu(name);
 		menu.setFont(FormScannerFont.getFont());
+		menu.setComponentOrientation(orientation);
 	}
 	
 	public MenuBuilder withMnemonic(char mnemonic) {

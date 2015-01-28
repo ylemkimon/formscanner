@@ -11,9 +11,10 @@ public class ToolBarBuilder {
 	
 	private JToolBar toolBar;
 	
-	public ToolBarBuilder() {
+	public ToolBarBuilder(ComponentOrientation orientation) {
 		toolBar = new JToolBar();
 		toolBar.setFont(FormScannerFont.getFont());
+		toolBar.setComponentOrientation(orientation);
 	}
 	
 	public ToolBarBuilder withAlignmentX(float alignment) {
@@ -23,11 +24,6 @@ public class ToolBarBuilder {
 	
 	public ToolBarBuilder withAlignmentY(float alignment) {
 		toolBar.setAlignmentX(alignment);
-		return this;
-	}
-	
-	public ToolBarBuilder withComponentOrientation(ComponentOrientation orientation) {
-		toolBar.setComponentOrientation(orientation);
 		return this;
 	}
 	
