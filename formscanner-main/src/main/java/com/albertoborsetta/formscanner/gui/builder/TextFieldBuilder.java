@@ -1,6 +1,7 @@
 package com.albertoborsetta.formscanner.gui.builder;
 
 import java.awt.ComponentOrientation;
+import java.awt.event.FocusListener;
 import java.awt.event.KeyListener;
 
 import javax.swing.JTextField;

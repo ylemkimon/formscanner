@@ -160,7 +160,7 @@ public class AboutFrame extends InternalFrame {
 				.withActionListener(aboutFrameController).setEnabled(true)
 				.build();
 
-		return new PanelBuilder().withLayout(new SpringLayout())
+		JPanel innerButtonPanel = new PanelBuilder(orientation).withLayout(new SpringLayout())
 				.addComponent(okButton).withGrid(1, 1).build();
 
 		return new PanelBuilder(orientation).withLayout(new BorderLayout()).add(innerButtonPanel, BorderLayout.EAST).build();

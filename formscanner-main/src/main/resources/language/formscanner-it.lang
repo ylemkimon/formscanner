@@ -1,6 +1,6 @@
 # Italian Translation
 formscanner.main.title=FormScanner 0.10-SNAPSHOT
-about.text=<html><h2 align=\"center\">FormScanner - Free OMR Software</h2><h3 align=\"center\">Version 0.9.2-SNAPSHOT</h3><h3 align=\"center\">FormScanner is designed and developed by:</h3><center><a href=\"http://albertoborsetta.com/\">Alberto Borsetta</a></center><h3 align=\"center\">Quality assurance and test:</h3><center><a href=\"http://www.dies.uniud.it/battauz.html\">Michela Battauz</a><br /><a href=\"http://www.nicholls.edu/physical-sciences/faculty-staff/c-young/\">Chadwick Young</a><br /><a href=\"http://www.columbia.edu/~ns2224/\">Nicol&aacute;s E. Stier-Moses</a></center><h3 align=\"center\">Portugues translation:</h3><center>Milennia Maria Moura Phereira<br />FranChasing Phereira<br />Giuliana (Jule) Benedetti</center><h3 align=\"center\">Greek translation:</h3><center><a href=\"http://www.geogeo.gr\">GeoGeo.gr</a></center><h3 align=\"center\">Polish translation:</h3><center>Marek Lewandowski</center><p align=\"center\">Visit <a href=\"http://sourceforge.net/projects/formscanner/\">Project HomePage</a> for more information about the product</p><p align=\"center\">Copyright 2013-2014 <a href=\"http://albertoborsetta.com/\">Alberto Borsetta</a></p><br /><center><a title=\"Make a donation\" href=\"https://www.paypal.com/cgi-bin/webscr?cmd=_donations&amp;business=alberto%2eborsetta%40gmail%2ecom&amp;lc=GB&amp;item_name=FormScanner&amp;item_number=FS%2d1976&amp;currency_code=EUR&amp;bn=PP%2dDonationsBF%3abtn_donateCC_LG%2egif%3aNonHosted\" target=\"_blank\"><img class=\"aligncenter\" src=\"https://www.paypal.com/en_US/i/btn/x-click-but04.gif\" alt=\"Make a donation\" /></a></center></html>
+about.text=<html><h2 align=\"center\">FormScanner - Free OMR Software</h2><h3 align=\"center\">Version 0.10-SNAPSHOT</h3><h3 align=\"center\">FormScanner is designed and developed by:</h3><center><a href=\"http://albertoborsetta.com/\">Alberto Borsetta</a></center><h3 align=\"center\">Quality assurance and test:</h3><center><a href=\"http://www.dies.uniud.it/battauz.html\">Michela Battauz</a><br /><a href=\"http://www.nicholls.edu/physical-sciences/faculty-staff/c-young/\">Chadwick Young</a><br /><a href=\"http://www.columbia.edu/~ns2224/\">Nicol&aacute;s E. Stier-Moses</a></center><h3 align=\"center\">Portugues translation:</h3><center>Milennia Maria Moura Phereira<br />FranChasing Phereira<br />Giuliana (Jule) Benedetti</center><h3 align=\"center\">Greek translation:</h3><center><a href=\"http://www.geogeo.gr\">GeoGeo.gr</a></center><h3 align=\"center\">Polish translation:</h3><center>Marek Lewandowski</center><p align=\"center\">Visit <a href=\"http://sourceforge.net/projects/formscanner/\">Project HomePage</a> for more information about the product</p><p align=\"center\">Copyright 2013-2014 <a href=\"http://albertoborsetta.com/\">Alberto Borsetta</a></p><br /><center><a title=\"Make a donation\" href=\"https://www.paypal.com/cgi-bin/webscr?cmd=_donations&amp;business=alberto%2eborsetta%40gmail%2ecom&amp;lc=GB&amp;item_name=FormScanner&amp;item_number=FS%2d1976&amp;currency_code=EUR&amp;bn=PP%2dDonationsBF%3abtn_donateCC_LG%2egif%3aNonHosted\" target=\"_blank\"><img class=\"aligncenter\" src=\"https://www.paypal.com/en_US/i/btn/x-click-but04.gif\" alt=\"Make a donation\" /></a></center></html>
 image.frame.title=Immagine
 open.images=Apri immagini
 open.images.tooltip=Apri immagini
@@ -41,7 +41,7 @@ exit.mnemonic=E
 file.list.frame.title=Immagini
 manage.template.frame.title=Crea template
 field.list.tab.name=Lista campi
-field.properties.tab.name=Propriet� campi
+field.properties.tab.name=Proprietà campi
 field.properties.type.label=Tipo campi
 field.properties.is.multiple=Risposta multipla
 field.properties.number.rows.columns.label=Numero quesiti
@@ -93,10 +93,12 @@ about.tab.name=Informazioni
 license.tab.name=Licenza
 english.label=English
 italian.label=Italiano
-portugues.label=Portugu�s
-spanish.label=Espa�ol
-greek.label=????????
+portugues.label=Português
+spanish.label=Español
+greek.label=Ελληνικά
 polish.label=Polski
+persian.label=فارسی
+german.label=Deutsch
 language.changed=Riavvia FormScanner per rendere attive le nuove impostazioni
 settings.popup.title=Impostazioni
 template.saved.popup.title=Template
@@ -105,7 +107,7 @@ x.cursor.position.label=X:
 y.cursor.position.label=Y:
 options=Opzioni
 threshold.option.label=Soglia
-density.option.label=Densit�
+density.option.label=Densità
 save.options.button=Salva opzioni
 save.options.tooltip=Salva opzioni
 template.not.loaded=Errore nel caricamento del template

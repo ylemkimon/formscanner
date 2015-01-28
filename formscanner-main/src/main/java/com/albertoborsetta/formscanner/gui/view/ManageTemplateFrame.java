@@ -10,7 +10,6 @@ import java.util.HashMap;
 import java.util.List;
 
 import javax.swing.BorderFactory;
-import javax.swing.JFormattedTextField;
 import javax.swing.JPanel;
 import javax.swing.JButton;
 import javax.swing.DefaultComboBoxModel;
@@ -400,6 +399,7 @@ public class ManageTemplateFrame extends InternalFrame implements TabbedView {
 							.getTranslationFor(FormScannerTranslationKeys.QUESTION)
 							+ " " + StringUtils.leftPad("" + previousRowsCount++, 3, "0"), i, 0);
 		}
+		table.setComponentOrientation(orientation);
 		table.setCellSelectionEnabled(true);
 		table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 		return table;
@@ -437,6 +437,7 @@ public class ManageTemplateFrame extends InternalFrame implements TabbedView {
 			}
 		});
 
+		table.setComponentOrientation(orientation);
 		table.setRowSelectionAllowed(true);
 		table.getSelectionModel().setSelectionMode(
 				ListSelectionModel.SINGLE_SELECTION);
@@ -512,11 +513,11 @@ public class ManageTemplateFrame extends InternalFrame implements TabbedView {
 				.setChecked(false).setEnabled(!isMultiple.isSelected()).build();
 
 		rowsNumber = new SpinnerBuilder(FormScannerConstants.NUMBER_COLS_ROWS,
-				orientation).withActionListener(manageTemplateController)
+				orientation).withActionListener(manageTemplateController).withFocusListener(manageTemplateController)
 				.build();
 
 		valuesNumber = new SpinnerBuilder(FormScannerConstants.NUMBER_VALUES,
-				orientation).withActionListener(manageTemplateController)
+				orientation).withActionListener(manageTemplateController).withFocusListener(manageTemplateController)
 				.build();
 
 		return new PanelBuilder(orientation)

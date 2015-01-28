@@ -47,7 +47,7 @@ public class ToolBar extends JPanel implements MenuView {
 		setBorder(new EtchedBorder(EtchedBorder.RAISED, null, null));
 		setComponentOrientation(model.getOrientation());
 
-		if (model.getOrientation().isLeftToRight()) {
+		if (orientation.isLeftToRight()) {
 			setLayout(new FlowLayout(FlowLayout.LEFT));
 		} else {
 			setLayout(new FlowLayout(FlowLayout.RIGHT));
@@ -136,15 +136,8 @@ public class ToolBar extends JPanel implements MenuView {
 								.getIconFor(FormScannerResourcesKeys.ANALYZE_FILES_CURRENT_ICON))
 				.setEnabled(false).build();
 
-		ToolBarBuilder toolBarBuilder = new ToolBarBuilder(orientation).withAlignmentY(Component.CENTER_ALIGNMENT)
-				.withAlignmentX(Component.LEFT_ALIGNMENT);
-		
-		if (orientation.isLeftToRight()) {
-			toolBarBuilder.add(renameButton).add(startAllButton).add(startButton).add(reloadButton);
-		} else {
-			toolBarBuilder.add(reloadButton).add(startButton).add(startAllButton).add(renameButton);
-		}
-		return toolBarBuilder.build();
+		return new ToolBarBuilder(orientation).withAlignmentY(Component.CENTER_ALIGNMENT)
+				.withAlignmentX(Component.LEFT_ALIGNMENT).add(renameButton).add(startAllButton).add(startButton).add(reloadButton).build();
 	}
 
 	public void setRenameControllersEnabled(boolean enable) {
