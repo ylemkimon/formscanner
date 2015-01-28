@@ -5,9 +5,9 @@ import java.awt.event.ItemListener;
 
 import javax.swing.ComboBoxModel;
 import javax.swing.JComboBox;
+import javax.swing.JLabel;
 
 import com.albertoborsetta.formscanner.commons.FormScannerFont;
-import com.albertoborsetta.formscanner.gui.controller.ImageFrameController;
 
 public class ComboBoxBuilder<T> {
 	
@@ -18,6 +18,9 @@ public class ComboBoxBuilder<T> {
 		comboBox.setName(name);
 		comboBox.setFont(FormScannerFont.getFont());
 		comboBox.setComponentOrientation(orientation);
+		if (!orientation.isLeftToRight()) {
+			((JLabel)comboBox.getRenderer()).setHorizontalAlignment(JLabel.RIGHT);
+		}
 	}
 	
 	public ComboBoxBuilder<T> withActionListener(ItemListener listener) {

@@ -1,7 +1,6 @@
 package com.albertoborsetta.formscanner.gui.model;
 
 import java.awt.ComponentOrientation;
-import java.awt.Cursor;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -89,6 +88,7 @@ public class FormScannerModel {
 	private Rectangle optionsFramePosition;
 	private Rectangle desktopSize;
 	private Locale locale;
+	private ComponentOrientation orientation;
 
 	public FormScannerModel(FormScanner view) {
 		this.view = view;

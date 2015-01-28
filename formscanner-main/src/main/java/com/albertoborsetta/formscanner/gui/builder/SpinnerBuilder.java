@@ -1,6 +1,7 @@
 package com.albertoborsetta.formscanner.gui.builder;
 
 import java.awt.ComponentOrientation;
+import java.awt.event.FocusListener;
 
 import javax.swing.JSpinner;
 import javax.swing.JSpinner.DefaultEditor;

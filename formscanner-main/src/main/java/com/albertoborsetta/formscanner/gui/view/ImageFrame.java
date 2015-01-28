@@ -25,8 +25,11 @@ import com.albertoborsetta.formscanner.gui.controller.ImageFrameController;
 import com.albertoborsetta.formscanner.gui.model.FormScannerModel;
 
 import java.awt.Color;
+import java.awt.Component;
+import java.awt.ComponentOrientation;
 import java.awt.Cursor;
 import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.Graphics;
 import java.awt.BorderLayout;
 import java.awt.image.BufferedImage;
@@ -58,7 +61,6 @@ public class ImageFrame extends InternalFrame implements ScrollableImageView {
 	private Mode mode;
 	private FormTemplate template;
 	private JComboBox<Zoom> zoomComboBox;
-
 	private ImageToolBar toolBar;
 
 	/**
@@ -93,7 +95,7 @@ public class ImageFrame extends InternalFrame implements ScrollableImageView {
 		getContentPane().add(statusBar.getPanel(), BorderLayout.SOUTH);
 	}
 
-	private class ImageToolBar extends JPanel implements MenuView {
+	private class ImageToolBar extends JPanel {
 
 		/**
 		 * 
@@ -102,11 +104,14 @@ public class ImageFrame extends InternalFrame implements ScrollableImageView {
 		private Zoom[] zoom;
 
 		public ImageToolBar() {
-			super();
 			setBorder(new EtchedBorder(EtchedBorder.RAISED, null, null));
-			setComponentOrientation(ComponentOrientation.LEFT_TO_RIGHT);
+			setComponentOrientation(orientation);
 
-			setLayout(new FlowLayout(FlowLayout.LEFT));
+			if (orientation.isLeftToRight()) {
+				setLayout(new FlowLayout(FlowLayout.LEFT));
+			} else {
+				setLayout(new FlowLayout(FlowLayout.RIGHT));
+			}
 			
 			JToolBar zoomToolBar = getZoomToolBar();
 			add(zoomToolBar);
@@ -117,14 +122,13 @@ public class ImageFrame extends InternalFrame implements ScrollableImageView {
 			zoom = Zoom.values();
 			
 			zoomComboBox = new ComboBoxBuilder<Zoom>(
-					FormScannerConstants.SHAPE_COMBO_BOX)
+					FormScannerConstants.SHAPE_COMBO_BOX, orientation)
 					.withModel(
 							new DefaultComboBoxModel<Zoom>(zoom))
 					.withActionListener(controller).build();
 			
-			return new ToolBarBuilder().withAlignmentY(Component.CENTER_ALIGNMENT)
+			return new ToolBarBuilder(orientation).withAlignmentY(Component.CENTER_ALIGNMENT)
 					.withAlignmentX(Component.LEFT_ALIGNMENT)
-					.withComponentOrientation(ComponentOrientation.LEFT_TO_RIGHT)
 					.add(zoomComboBox)
 					.build();
 		}
@@ -153,7 +157,7 @@ public class ImageFrame extends InternalFrame implements ScrollableImageView {
 
 			setCornerButtons(mode);
 			
-			panel = new PanelBuilder(orientation).withLayout(new SpringLayout()).withGrid(2, 6)
+			panel = new PanelBuilder(ComponentOrientation.LEFT_TO_RIGHT).withLayout(new SpringLayout()).withGrid(2, 6)
 				.add(getLabel(FormScannerTranslationKeys.X_CURSOR_POSITION_LABEL))
 				.add(XPositionValue)
 				.add(cornerButtons.get(Corners.TOP_LEFT))
