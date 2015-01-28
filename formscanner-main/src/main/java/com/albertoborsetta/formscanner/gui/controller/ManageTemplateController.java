@@ -1,10 +1,15 @@
 package com.albertoborsetta.formscanner.gui.controller;
 
+import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 
+import javax.swing.JFormattedTextField;
+import javax.swing.SwingUtilities;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.event.ListSelectionEvent;
@@ -18,7 +23,7 @@ import com.albertoborsetta.formscanner.gui.model.FormScannerModel;
 import com.albertoborsetta.formscanner.gui.view.ManageTemplateFrame;
 
 public class ManageTemplateController implements ActionListener,
-		ChangeListener, ItemListener, TableModelListener, ListSelectionListener {
+		ChangeListener, ItemListener, TableModelListener, ListSelectionListener, FocusListener {
 
 	private FormScannerModel formScannerModel;
 	private ManageTemplateFrame view;
@@ -35,22 +40,25 @@ public class ManageTemplateController implements ActionListener,
 		Action act = Action.valueOf(e.getActionCommand());
 		switch (act) {
 		case ADD_FIELD:
-			formScannerModel.setNextTab(FormScannerConstants.CONFIRM, view);
+			view.setupNextTab(FormScannerConstants.CONFIRM);
 			break;
 		case REMOVE_FIELD:
-			formScannerModel.removeField(view);
+			String fieldName = view.getSelectedItem();
+			formScannerModel.removeField(fieldName);
+			view.removeSelectedField();
 			break;
 		case SAVE_TEMPLATE:
-			formScannerModel.saveTemplate(view);
+			formScannerModel.saveTemplate();
+			view.dispose();
 			break;
 		case CONFIRM:
-			formScannerModel.setNextTab(FormScannerConstants.CONFIRM, view);
+			view.setupNextTab(FormScannerConstants.CONFIRM);
 			break;
 		case CANCEL:
-			formScannerModel.setNextTab(FormScannerConstants.CANCEL, view);
+			view.setupNextTab(FormScannerConstants.CANCEL);
 			break;
 		case IS_MULTIPLE:
-			formScannerModel.enableRejectMultiple(view);
+			view.enableRejectMultiple(!view.getIsMultiple());
 			break;
 		default:
 			break;
@@ -59,18 +67,34 @@ public class ManageTemplateController implements ActionListener,
 	}
 
 	public void stateChanged(ChangeEvent e) {
-		formScannerModel.setAdvanceable(view);
+		view.setAdvanceable();
 	}
 
 	public void itemStateChanged(ItemEvent e) {
-		formScannerModel.setAdvanceable(view);
+		view.setAdvanceable();
 	}
 
 	public void tableChanged(TableModelEvent e) {
-		formScannerModel.setAdvanceable(view);
+		view.setAdvanceable();
 	}
 
 	public void valueChanged(ListSelectionEvent e) {
-		formScannerModel.enableRemoveFields(view);
+		view.enableRemoveFields();
+	}
+
+	public void focusGained(FocusEvent e) {
+		Component c = e.getComponent();
+        if (c instanceof JFormattedTextField) {
+          final JFormattedTextField textField = (JFormattedTextField) c;
+          SwingUtilities.invokeLater(new Runnable() {
+            public void run() {
+              textField.selectAll();
+            }
+          });
+        }
+	}
+
+	public void focusLost(FocusEvent e) {
+		view.setAdvanceable();
 	}
 }

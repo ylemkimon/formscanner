@@ -1,7 +1,5 @@
 package com.albertoborsetta.formscanner.gui.model;
 
-import java.awt.ComponentOrientation;
-import java.awt.Cursor;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -39,14 +37,11 @@ import com.albertoborsetta.formscanner.gui.FormScanner;
 import com.albertoborsetta.formscanner.gui.view.AboutFrame;
 import com.albertoborsetta.formscanner.gui.view.FileListFrame;
 import com.albertoborsetta.formscanner.gui.view.ImageFrame;
-import com.albertoborsetta.formscanner.gui.view.ImageView;
 import com.albertoborsetta.formscanner.gui.view.InternalFrame;
 import com.albertoborsetta.formscanner.gui.view.ManageTemplateFrame;
 import com.albertoborsetta.formscanner.gui.view.OptionsFrame;
 import com.albertoborsetta.formscanner.gui.view.RenameFileFrame;
 import com.albertoborsetta.formscanner.gui.view.ResultsGridFrame;
-import com.albertoborsetta.formscanner.gui.view.ScrollableImageView;
-import com.albertoborsetta.formscanner.gui.view.TabbedView;
 
 public class FormScannerModel {
 
@@ -92,17 +87,16 @@ public class FormScannerModel {
 	private Rectangle optionsFramePosition;
 	private Rectangle desktopSize;
 	private Locale locale;
-	private ComponentOrientation orientation;
 
 	public FormScannerModel(FormScanner view) {
 		this.view = view;
 
-		String  installPath = StringUtils.defaultIfBlank(
+		String installPath = StringUtils.defaultIfBlank(
 				System.getProperty("FormScanner_HOME"),
 				System.getenv("FormScanner_HOME"));
 		String userHome = System.getProperty("user.home");
 		String osName = System.getProperty("os.name");
-		
+
 		if (StringUtils.contains(osName, "Windows")) {
 			resultsPath = userHome + "/Documents";
 			templatePath = userHome + "/Documents";
@@ -110,13 +104,19 @@ public class FormScannerModel {
 		} else {
 			propertiesPath = userHome + "/.FormScanner";
 		}
-		
-		resultsPath = resultsPath + "/FormScanner/results/";
-		templatePath = templatePath + "/FormScanner/templates/";
+
 		propertiesPath = propertiesPath + "/properties/";
-		
-		configurations = FormScannerConfiguration.getConfiguration(propertiesPath, installPath + "/");
-		
+
+		configurations = FormScannerConfiguration.getConfiguration(
+				propertiesPath, installPath + "/");
+
+		templatePath = configurations.getProperty(
+				FormScannerConfigurationKeys.TEMPLATE_SAVE_PATH, templatePath
+						+ "/FormScanner/templates/");
+		resultsPath = configurations.getProperty(
+				FormScannerConfigurationKeys.RESULTS_SAVE_PATH, resultsPath
+						+ "/FormScanner/results/");
+
 		lang = configurations.getProperty(FormScannerConfigurationKeys.LANG,
 				FormScannerConfigurationKeys.DEFAULT_LANG);
 		String[] locales = StringUtils.split(lang, '_');
@@ -126,8 +126,6 @@ public class FormScannerModel {
 			locale = new Locale(locales[0]);
 		}
 		fileUtils = FormFileUtils.getInstance(locale);
-		
-		orientation = ComponentOrientation.getOrientation(locale);
 
 		FormScannerTranslation.setTranslation(installPath, lang);
 		FormScannerResources.setResources(installPath);
@@ -148,7 +146,7 @@ public class FormScannerModel {
 		String tmpl = configurations.getProperty(
 				FormScannerConfigurationKeys.TEMPLATE, null);
 		if (!StringUtils.isEmpty(tmpl)) {
-			FormScannerResources.setTemplate(tmpl);
+			FormScannerResources.setTemplate(templatePath + tmpl);
 			openTemplate(FormScannerResources.getTemplate(), false);
 		}
 	}
@@ -243,8 +241,10 @@ public class FormScannerModel {
 				try {
 					BufferedImage image = ImageIO.read(imageFile);
 					imageFrame.updateImage(image);
-					renameFileFrame
-							.updateRenamedFile(getFileNameByIndex(renamedFileIndex));
+					renameFileFrame = new RenameFileFrame(this,
+							getFileNameByIndex(renamedFileIndex));
+//					renameFileFrame
+//							.updateRenamedFile(getFileNameByIndex(renamedFileIndex));
 					view.arrangeFrame(renameFileFrame);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -304,7 +304,11 @@ public class FormScannerModel {
 									+ FormScannerTranslation
 											.getTranslationFor(FormScannerTranslationKeys.RESULTS_DEFAULT_FILE)
 									+ "_" + sdf.format(today) + ".csv");
-					fileUtils.saveCsvAs(outputFile, filledForms);
+					File savedFile = fileUtils.saveCsvAs(outputFile,
+							filledForms);
+					configurations.setProperty(
+							FormScannerConfigurationKeys.RESULTS_SAVE_PATH, FilenameUtils.getFullPath(savedFile.getAbsolutePath()));
+					configurations.store();
 
 					view.setRenameControllersEnabled(true);
 					view.setScanControllersEnabled(true);
@@ -356,7 +360,11 @@ public class FormScannerModel {
 										+ FormScannerTranslation
 												.getTranslationFor(FormScannerTranslationKeys.RESULTS_DEFAULT_FILE)
 										+ "_" + sdf.format(today) + ".csv");
-						fileUtils.saveCsvAs(outputFile, filledForms);
+						File savedFile = fileUtils.saveCsvAs(outputFile, filledForms);
+						configurations.setProperty(
+								FormScannerConfigurationKeys.RESULTS_SAVE_PATH,
+								FilenameUtils.getFullPath(savedFile.getAbsolutePath()));
+						configurations.store();
 
 						view.disposeFrame(imageFrame);
 						view.disposeFrame(resultsGridFrame);
@@ -501,22 +509,6 @@ public class FormScannerModel {
 		view.arrangeFrame(imageFrame);
 	}
 
-	public void setImageCursor(ImageView view, Cursor cursor) {
-		view.setImageCursor(cursor);
-	}
-
-	public void setScrollBars(ScrollableImageView view, int deltaX, int deltaY) {
-		view.setScrollBars(deltaX, deltaY);
-	}
-
-	public void setNextTab(String action, TabbedView view) {
-		view.setupNextTab(action);
-	}
-
-	public void setAdvanceable(TabbedView view) {
-		view.setAdvanceable();
-	}
-
 	public void addPoint(ImageFrame view, FormPoint p) {
 		switch (view.getMode()) {
 		case SETUP_POINTS:
@@ -621,17 +613,11 @@ public class FormScannerModel {
 		return points;
 	}
 
-	public void removeField(TabbedView view) {
-		String fieldName = view.getSelectedItem();
+	public void removeField(String fieldName) {
 		formTemplate.removeFieldByName(fieldName);
-		view.removeSelectedField();
 	}
 
-	public void enableRemoveFields(TabbedView view) {
-		view.enableRemoveFields();
-	}
-
-	public void saveTemplate(TabbedView view) {
+	public void saveTemplate() {
 		File template = fileUtils.saveToFile(templatePath, formTemplate);
 
 		if (template != null) {
@@ -643,9 +629,11 @@ public class FormScannerModel {
 							FormScannerTranslation
 									.getTranslationFor(FormScannerTranslationKeys.TEMPLATE_SAVED_POPUP),
 							JOptionPane.INFORMATION_MESSAGE);
-			templatePath = template.getAbsolutePath();
+			templatePath = FilenameUtils.getFullPath(template.getAbsolutePath());
+			String templateFile = FilenameUtils.getName(template.getAbsolutePath());
 			configurations.setProperty(FormScannerConfigurationKeys.TEMPLATE,
-					templatePath);
+					templateFile);
+			configurations.setProperty(FormScannerConfigurationKeys.TEMPLATE_SAVE_PATH, templatePath);
 			configurations.store();
 		} else {
 			JOptionPane
@@ -657,7 +645,6 @@ public class FormScannerModel {
 									.getTranslationFor(FormScannerTranslationKeys.TEMPLATE_NOT_SAVED_POPUP),
 							JOptionPane.ERROR_MESSAGE);
 		}
-		view.dispose();
 	}
 
 	public void exitFormScanner() {
@@ -686,8 +673,11 @@ public class FormScannerModel {
 										.getTranslationFor(FormScannerTranslationKeys.TEMPLATE_LOADED_POPUP),
 								JOptionPane.INFORMATION_MESSAGE);
 			}
+			templatePath = FilenameUtils.getFullPath(template.getAbsolutePath());
+			String templateFile = FilenameUtils.getName(template.getAbsolutePath());
 			configurations.setProperty(FormScannerConfigurationKeys.TEMPLATE,
-					template.getAbsolutePath());
+					templateFile);
+			configurations.setProperty(FormScannerConfigurationKeys.TEMPLATE_SAVE_PATH, templatePath);
 			configurations.store();
 			return true;
 		} catch (Exception e) {
@@ -764,30 +754,6 @@ public class FormScannerModel {
 
 	public void resetPoints() {
 		points.clear();
-	}
-
-	public void showCursorPosition(ImageFrame view, FormPoint point) {
-		view.showCursorPosition(point);
-	}
-
-	public void addTemporaryPoint(ImageFrame view, FormPoint point) {
-		view.setTemporaryPoint(point);
-		view.repaint();
-	}
-
-	public void setSelectedCorner(ImageFrame view, Corners corner) {
-		view.toggleCornerButton(corner);
-	}
-
-	public void setCorner(ImageFrame view, Corners corner, FormPoint point) {
-		FormTemplate template = view.getTemplate();
-		template.setCorner(corner, point);
-		view.showCornerPosition();
-		view.repaint();
-	}
-
-	public void resetCornerButtons(ImageFrame view) {
-		view.resetCornerButtons();
 	}
 
 	public void showOptionsFrame() {
@@ -920,15 +886,7 @@ public class FormScannerModel {
 		}
 	}
 
-	public void enableRejectMultiple(TabbedView view) {
-		view.enableRejectMultiple(!view.getIsMultiple());
-	}
-
 	public Locale getLocale() {
 		return locale;
-	}
-
-	public ComponentOrientation getOrientation() {
-		return orientation;
 	}
 }

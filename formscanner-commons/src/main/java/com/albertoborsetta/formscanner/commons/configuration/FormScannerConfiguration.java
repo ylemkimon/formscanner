@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.util.Properties;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.lang3.StringUtils;
 
 public class FormScannerConfiguration extends Properties {
 
@@ -62,5 +63,11 @@ public class FormScannerConfiguration extends Properties {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+	}
+	
+	@ Override
+	public String getProperty(String key, String defaultValue) {
+		String val = getProperty(key);
+        return (StringUtils.isEmpty(val)) ? defaultValue : val;
 	}
 }

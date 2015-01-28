@@ -1,6 +1,5 @@
 package com.albertoborsetta.formscanner.gui.builder;
 
-import java.awt.ComponentOrientation;
 import java.awt.event.ActionListener;
 
 import javax.swing.ImageIcon;
@@ -13,13 +12,10 @@ import com.albertoborsetta.formscanner.commons.FormScannerFont;
 public class ButtonBuilder {
 
 	private JButton button;
-	private ComponentOrientation orientation;
 	
-	public ButtonBuilder(ComponentOrientation orientation) {
+	public ButtonBuilder() {
 		button = new JButton();
 		button.setFont(FormScannerFont.getFont());
-		button.setComponentOrientation(orientation);
-		this.orientation = orientation;
 	}
 	
 	public ButtonBuilder withActionListener(ActionListener listener) {
@@ -47,6 +43,11 @@ public class ButtonBuilder {
 		return this;
 	}
 	
+	public ButtonBuilder withLeftAlignment() {
+		button.setHorizontalAlignment(SwingConstants.LEFT);
+		return this;
+	}
+
 	public ButtonBuilder withText(String text) {
 		button.setText(text);
 		return this;
@@ -69,15 +70,6 @@ public class ButtonBuilder {
 	
 	public JButton build() {
 		return button;
-	}
-
-	public ButtonBuilder setAlignment() {
-		if (orientation.isLeftToRight()) {
-			button.setHorizontalAlignment(SwingConstants.LEFT);
-		} else {
-			button.setHorizontalAlignment(SwingConstants.RIGHT);
-		}
-		return this;
 	}
 
 }
