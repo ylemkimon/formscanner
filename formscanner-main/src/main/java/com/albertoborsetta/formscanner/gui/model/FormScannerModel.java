@@ -241,8 +241,10 @@ public class FormScannerModel {
 				try {
 					BufferedImage image = ImageIO.read(imageFile);
 					imageFrame.updateImage(image);
-					renameFileFrame
-							.updateRenamedFile(getFileNameByIndex(renamedFileIndex));
+					renameFileFrame = new RenameFileFrame(this,
+							getFileNameByIndex(renamedFileIndex));
+//					renameFileFrame
+//							.updateRenamedFile(getFileNameByIndex(renamedFileIndex));
 					view.arrangeFrame(renameFileFrame);
 				} catch (Exception e) {
 					e.printStackTrace();

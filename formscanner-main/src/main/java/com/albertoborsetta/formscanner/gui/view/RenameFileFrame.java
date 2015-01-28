@@ -67,7 +67,7 @@ public class RenameFileFrame extends InternalFrame implements View {
 		okButton.setEnabled(value);
 	}
 
-	public void updateRenamedFile(String fileName) {
+	private void updateRenamedFile(String fileName) {
 		setTitle(FormScannerTranslation
 				.getTranslationFor(FormScannerTranslationKeys.RENAME_FILE_FRAME_TITLE)
 				+ ": " + fileName);
@@ -85,7 +85,6 @@ public class RenameFileFrame extends InternalFrame implements View {
 	private JPanel getRenamePanel() {
 		fileNameField = new TextFieldBuilder(10).withActionListener(
 				renameFileController).withFocusListener(renameFileController).build();
-		fileNameField.selectAll();
 
 		fileExtensionField = new LabelBuilder().build();
 
