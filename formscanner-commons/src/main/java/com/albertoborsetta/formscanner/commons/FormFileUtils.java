@@ -235,7 +235,7 @@ public class FormFileUtils extends JFileChooser {
 		File outputFile = null;
 		
 		try {
-			outputFile = new File(path + "/template/" + template.getName() + ".xtmpl");
+			outputFile = new File(path + template.getName() + ".xtmpl");
 			Document xml = template.getXml();
 			outputFile = saveTemplateAs(outputFile, xml);
 		} catch (ParserConfigurationException e) {

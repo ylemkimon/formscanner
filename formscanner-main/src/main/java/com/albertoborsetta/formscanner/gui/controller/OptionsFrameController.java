@@ -1,10 +1,15 @@
 package com.albertoborsetta.formscanner.gui.controller;
 
+import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 
+import javax.swing.JFormattedTextField;
+import javax.swing.SwingUtilities;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
@@ -12,8 +17,9 @@ import com.albertoborsetta.formscanner.commons.FormScannerConstants.Action;
 import com.albertoborsetta.formscanner.gui.model.FormScannerModel;
 import com.albertoborsetta.formscanner.gui.view.OptionsFrame;
 
-public class OptionsFrameController implements ActionListener, ChangeListener, ItemListener {
-	
+public class OptionsFrameController implements ActionListener, ChangeListener,
+		ItemListener, FocusListener {
+
 	private FormScannerModel formScannerModel;
 	private OptionsFrame optionsFrame;
 
@@ -22,7 +28,7 @@ public class OptionsFrameController implements ActionListener, ChangeListener, I
 	}
 
 	public void add(OptionsFrame optionsFrame) {
-		 this.optionsFrame = optionsFrame;
+		this.optionsFrame = optionsFrame;
 	}
 
 	@Override
@@ -46,7 +52,25 @@ public class OptionsFrameController implements ActionListener, ChangeListener, I
 
 	@Override
 	public void itemStateChanged(ItemEvent e) {
-		optionsFrame.setSaveEnabled();		
+		optionsFrame.setSaveEnabled();
+	}
+
+	@Override
+	public void focusGained(FocusEvent e) {
+		Component c = e.getComponent();
+		if (c instanceof JFormattedTextField) {
+			final JFormattedTextField textField = (JFormattedTextField) c;
+			SwingUtilities.invokeLater(new Runnable() {
+				public void run() {
+					textField.selectAll();
+				}
+			});
+		}
+	}
+
+	@Override
+	public void focusLost(FocusEvent e) {
+		optionsFrame.setSaveEnabled();
 	}
 
 }

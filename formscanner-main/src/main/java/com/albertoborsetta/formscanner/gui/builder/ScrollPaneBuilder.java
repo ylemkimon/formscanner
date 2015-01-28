@@ -1,7 +1,5 @@
 package com.albertoborsetta.formscanner.gui.builder;
 
-import java.awt.ComponentOrientation;
-
 import javax.swing.JComponent;
 import javax.swing.JScrollPane;
 
@@ -11,10 +9,9 @@ public class ScrollPaneBuilder {
 	
 	private JScrollPane scrollPane;
 	
-	public ScrollPaneBuilder(JComponent component, ComponentOrientation orientation) {
+	public ScrollPaneBuilder(JComponent component) {
 		scrollPane = new JScrollPane(component);
 		scrollPane.setFont(FormScannerFont.getFont());
-		scrollPane.setComponentOrientation(orientation);
 	}
 
 	public JScrollPane build() {

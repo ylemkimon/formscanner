@@ -1,7 +1,5 @@
 package com.albertoborsetta.formscanner.gui.builder;
 
-import java.awt.ComponentOrientation;
-
 import javax.swing.JComponent;
 import javax.swing.JTabbedPane;
 
@@ -11,10 +9,9 @@ public class TabbedPaneBuilder {
 	
 	private JTabbedPane tabbedPane;
 	
-	public TabbedPaneBuilder(int tabPosition, ComponentOrientation orientation) {
+	public TabbedPaneBuilder(int tabPosition) {
 		tabbedPane = new JTabbedPane(tabPosition);
 		tabbedPane.setFont(FormScannerFont.getFont());
-		tabbedPane.setComponentOrientation(orientation);
 	}
 	
 	public TabbedPaneBuilder addTab(String title, JComponent component) {
