@@ -29,6 +29,7 @@ import com.albertoborsetta.formscanner.commons.FormScannerConstants.Action;
 import com.albertoborsetta.formscanner.commons.FormScannerConstants.Frame;
 import com.albertoborsetta.formscanner.commons.FormScannerConstants.Mode;
 import com.albertoborsetta.formscanner.commons.FormScannerConstants.ShapeType;
+import com.albertoborsetta.formscanner.commons.FormScannerFont;
 import com.albertoborsetta.formscanner.commons.configuration.FormScannerConfiguration;
 import com.albertoborsetta.formscanner.commons.configuration.FormScannerConfigurationKeys;
 import com.albertoborsetta.formscanner.commons.resources.FormScannerResources;
@@ -89,7 +90,9 @@ public class FormScannerModel {
 	private Rectangle desktopSize;
 	private Locale locale;
 	private ComponentOrientation orientation;
-
+	private String fontType;
+	private Integer fontSize;
+	
 	public FormScannerModel(FormScanner view) {
 		this.view = view;
 
@@ -118,6 +121,14 @@ public class FormScannerModel {
 		resultsPath = configurations.getProperty(
 				FormScannerConfigurationKeys.RESULTS_SAVE_PATH, resultsPath
 						+ "/FormScanner/results/");
+		
+		fontType = configurations.getProperty(
+				FormScannerConfigurationKeys.FONT_TYPE,
+				FormScannerConfigurationKeys.DEFAULT_FONT_TYPE);
+		fontSize = configurations.getProperty(
+				FormScannerConfigurationKeys.FONT_SIZE,
+				FormScannerConfigurationKeys.DEFAULT_FONT_SIZE);
+		FormScannerFont.getFont(fontType, fontSize);
 
 		lang = configurations.getProperty(FormScannerConfigurationKeys.LANG,
 				FormScannerConfigurationKeys.DEFAULT_LANG);
@@ -148,7 +159,7 @@ public class FormScannerModel {
 				FormScannerConfigurationKeys.DEFAULT_SHAPE_TYPE));
 
 		String tmpl = configurations.getProperty(
-				FormScannerConfigurationKeys.TEMPLATE, null);
+				FormScannerConfigurationKeys.TEMPLATE, (String) null);
 		if (!StringUtils.isEmpty(tmpl)) {
 			FormScannerResources.setTemplate(templatePath + tmpl);
 			openTemplate(FormScannerResources.getTemplate(), false);
@@ -158,7 +169,7 @@ public class FormScannerModel {
 	public void setDefaultFramePositions() {
 		for (Frame frame : Frame.values()) {
 			String pos = configurations.getProperty(
-					frame.getConfigurationKey(), null);
+					frame.getConfigurationKey(), (String) null);
 			Rectangle position;
 			if (pos == null) {
 				position = frame.getDefaultPosition();
@@ -778,6 +789,8 @@ public class FormScannerModel {
 		density = view.getDensityValue();
 		shapeSize = view.getShapeSize();
 		shapeType = view.getShape();
+		fontType = view.getFontType();
+		fontSize = view.getFontSize();
 
 		configurations.setProperty(FormScannerConfigurationKeys.THRESHOLD,
 				String.valueOf(threshold));
@@ -787,6 +800,8 @@ public class FormScannerModel {
 				String.valueOf(shapeSize));
 		configurations.setProperty(FormScannerConfigurationKeys.SHAPE_TYPE,
 				shapeType.getName());
+		configurations.setProperty(FormScannerConfigurationKeys.FONT_TYPE, fontType);
+		configurations.setProperty(FormScannerConfigurationKeys.FONT_SIZE, fontSize);
 		configurations.store();
 	}
 
@@ -896,5 +911,13 @@ public class FormScannerModel {
 
 	public ComponentOrientation getOrientation() {
 		return orientation;
+	}
+
+	public String getFontType() {
+		return fontType;
+	}
+	
+	public Integer getFontSize() {
+		return fontSize;
 	}
 }

@@ -35,21 +35,22 @@ public class FormScannerConfiguration extends Properties {
 			String installPath) {
 		if (configurations == null) {
 			userConfigFile = userPath + CONFIG_FILE_NAME;
-			
+
 			File userFile = new File(userConfigFile);
 			if (!userFile.exists() || userFile.isDirectory()) {
 				String defaultConfigFile = installPath + "config/"
 						+ CONFIG_FILE_NAME;
 				File defaultFile = new File(defaultConfigFile);
-				
+
 				try {
 					FileUtils.copyFile(defaultFile, userFile);
 				} catch (IOException e) {
-					System.out.println("Cannot load user configurations... try loading defaults");
+					System.out
+							.println("Cannot load user configurations... try loading defaults");
 					userConfigFile = defaultConfigFile;
 				}
 			}
-			
+
 			configurations = new FormScannerConfiguration();
 		}
 		return configurations;
@@ -57,17 +58,26 @@ public class FormScannerConfiguration extends Properties {
 
 	public void store() {
 		try {
-				store(new FileOutputStream(userConfigFile), null);
+			store(new FileOutputStream(userConfigFile), null);
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
-	
-	@ Override
+
+	@Override
 	public String getProperty(String key, String defaultValue) {
 		String val = getProperty(key);
-        return (StringUtils.isEmpty(val)) ? defaultValue : val;
+		return (StringUtils.isEmpty(val)) ? defaultValue : val;
+	}
+
+	public Integer getProperty(String key, Integer defaultValue) {
+		String val = getProperty(key);
+		return (StringUtils.isEmpty(val)) ? defaultValue : Integer.valueOf(val);
+	}
+
+	public void setProperty(String fontSize, Integer value) {
+		setProperty(fontSize, value.toString());
 	}
 }

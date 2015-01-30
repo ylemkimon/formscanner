@@ -1,5 +1,7 @@
 package com.albertoborsetta.formscanner.commons.configuration;
 
+import java.awt.Font;
+
 public class FormScannerConfigurationKeys {
 	/*
 	 * Configuration Constants
@@ -33,4 +35,10 @@ public class FormScannerConfigurationKeys {
 	public static final String DESKTOP_FRAME = "desktopSize";
 	public static final String TEMPLATE_SAVE_PATH = "templateSavePath";
 	public static final String RESULTS_SAVE_PATH = "resultsSavePath";
+	
+	public static final String FONT_TYPE = "font.type";
+	public static final String DEFAULT_FONT_TYPE = Font.SANS_SERIF;
+	
+	public static final String FONT_SIZE = "font.size";
+	public static final Integer DEFAULT_FONT_SIZE = 12;
 }
