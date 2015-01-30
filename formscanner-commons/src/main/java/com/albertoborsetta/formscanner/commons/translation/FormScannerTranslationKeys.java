@@ -167,4 +167,7 @@ public class FormScannerTranslationKeys extends TranslationKeys {
 	public static final String TYPE_COLUMN = "type.column";
 	public static final String MULTIPLE_COLUMN = "multiple.column";
 	public static final String RESPONSES_COLUMN = "responses.column";
+	public static final String FONT_TYPE_OPTION_LABEL = "font.type.label";
+	public static final String GUI_OPTIONS = "gui.options";
+	public static final String FONT_SIZE_OPTION_LABEL = "font.size.label";
 }

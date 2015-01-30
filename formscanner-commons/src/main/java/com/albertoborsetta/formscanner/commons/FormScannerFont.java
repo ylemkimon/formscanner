@@ -23,4 +23,10 @@ public class FormScannerFont extends Font {
 		
 	}
 
+	public static Font getFont(String fontType, Integer fontSize) {
+		if (font == null) {
+			font = new FormScannerFont(fontType, Font.PLAIN, fontSize);
+		}
+		return (Font) font;
+	}
 }

@@ -134,3 +134,8 @@ type.column=Tipo campo
 multiple.column=Risposta multipla
 responses.column=N. risposte
 field.properties.reject.multiple=Ignora risposte multiple
+
+# added 0.10
+font.type.label=Tipo carattere
+font.size.label=Dimesione carattere
+gui.options=Opzioni interfaccia (Richiede riavvio)

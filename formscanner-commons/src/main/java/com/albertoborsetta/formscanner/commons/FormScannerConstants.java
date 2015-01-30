@@ -89,6 +89,10 @@ public class FormScannerConstants extends Constants {
 	// Zoom
 	public static final Integer FIT_WIDTH = 0;
 	public static final Integer FIT_PAGE = -1;
+	
+	// Font
+	public static final String FONT_TYPE_COMBO_BOX = "FONT_TYPE_COMBO_BOX";
+	public static final String FONT_SIZE_COMBO_BOX = "FONT_SIZE_COMBO_BOX";
 
 	public enum Frame {
 		RENAME_FILES_FRAME(RENAME_FILES_FRAME_NAME,	FormScannerConfigurationKeys.RENAME_FILES_FRAME, RENAME_FILES_FRAME_POSITION), 
