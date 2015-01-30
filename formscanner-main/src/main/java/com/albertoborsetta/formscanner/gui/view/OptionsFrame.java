@@ -1,9 +1,7 @@
 package com.albertoborsetta.formscanner.gui.view;
 
 import java.awt.BorderLayout;
-import java.awt.Dimension;
 import java.awt.GraphicsEnvironment;
-import java.awt.Font;
 
 import javax.swing.BorderFactory;
 import javax.swing.DefaultComboBoxModel;
@@ -126,6 +124,8 @@ public class OptionsFrame extends InternalFrame {
 		densityValue.setValue(model.getDensity());
 		shapeTypeComboBox.setSelectedIndex(model.getShapeType().getIndex());
 		shapeSizeValue.setValue(model.getShapeSize());
+		fontTypeComboBox.setSelectedItem(model.getFontType());
+		fontSizeComboBox.setSelectedItem(model.getFontSize());
 	}
 
 	private JPanel getOptionsPanel() {
