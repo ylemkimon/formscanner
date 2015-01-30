@@ -1,7 +1,5 @@
 package com.albertoborsetta.formscanner.gui.view;
 
-import org.uncommons.swing.SpringUtilities;
-
 import com.albertoborsetta.formscanner.api.FormPoint;
 import com.albertoborsetta.formscanner.api.FormTemplate;
 import com.albertoborsetta.formscanner.api.commons.Constants.Corners;
@@ -60,8 +58,37 @@ public class ImageFrame extends InternalFrame implements ScrollableImageView {
 	private ImageStatusBar statusBar;
 	private Mode mode;
 	private FormTemplate template;
-	private JComboBox<Zoom> zoomComboBox;
+	private JComboBox<InternalZoom> zoomComboBox;
 	private ImageToolBar toolBar;
+	
+	private class InternalZoom {
+
+		private Zoom zoom;
+
+		protected InternalZoom(Zoom zoom) {
+			this.zoom = zoom;
+		}
+
+		protected Zoom getZoom() {
+			return zoom;
+		}
+
+		public String toString() {
+			String value;
+			switch (zoom) {
+			case ZOOM_WIDTH:
+				value = FormScannerTranslation.getTranslationFor(FormScannerTranslationKeys.FIT_WIDTH);
+				break;
+			case ZOOM_PAGE:
+				value = FormScannerTranslation.getTranslationFor(FormScannerTranslationKeys.FIT_PAGE);
+				break;
+			default:
+				value = zoom.getValue().toString();
+				break;
+			}
+			return value;
+		}
+	}
 
 	/**
 	 * Create the frame.
@@ -101,7 +128,7 @@ public class ImageFrame extends InternalFrame implements ScrollableImageView {
 		 * 
 		 */
 		private static final long serialVersionUID = 1L;
-		private Zoom[] zoom;
+		private InternalZoom[] zoom;
 
 		public ImageToolBar() {
 			setBorder(new EtchedBorder(EtchedBorder.RAISED, null, null));
@@ -119,12 +146,17 @@ public class ImageFrame extends InternalFrame implements ScrollableImageView {
 		
 		public JToolBar getZoomToolBar() {
 
-			zoom = Zoom.values();
+			Zoom zoomValues[] = Zoom.values();
+			zoom = new InternalZoom[zoomValues.length];
+
+			for (Zoom zoomValue: zoomValues) {
+				zoom[zoomValue.getIndex()] = new InternalZoom(zoomValue);
+			}
 			
-			zoomComboBox = new ComboBoxBuilder<Zoom>(
-					FormScannerConstants.SHAPE_COMBO_BOX, orientation)
+			zoomComboBox = new ComboBoxBuilder<InternalZoom>(
+					FormScannerConstants.ZOOM_COMBO_BOX, orientation)
 					.withModel(
-							new DefaultComboBoxModel<Zoom>(zoom))
+							new DefaultComboBoxModel<InternalZoom>(zoom))
 					.withActionListener(controller).build();
 			
 			return new ToolBarBuilder(orientation).withAlignmentY(Component.CENTER_ALIGNMENT)

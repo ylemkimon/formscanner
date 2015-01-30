@@ -170,4 +170,6 @@ public class FormScannerTranslationKeys extends TranslationKeys {
 	public static final String FONT_TYPE_OPTION_LABEL = "font.type.label";
 	public static final String GUI_OPTIONS = "gui.options";
 	public static final String FONT_SIZE_OPTION_LABEL = "font.size.label";
+	public static final String FIT_WIDTH = "zoom.fit.width";
+	public static final String FIT_PAGE = "zoom.fit.page";
 }

@@ -48,7 +48,7 @@ public class FormScannerConstants extends Constants {
 	private static final Rectangle IMAGE_FRAME_POSITION = new Rectangle(10, 10, 1000, 600);
 	private static final Rectangle RESULTS_GRID_FRAME_POSITION = new Rectangle(100, 100, 230, 300);
 	private static final Rectangle ABOUT_FRAME_POSITION = new Rectangle(100, 100, 600, 500);
-	private static final Rectangle OPTIONS_FRAME_POSITION = new Rectangle(100, 100, 300, 300);
+	private static final Rectangle OPTIONS_FRAME_POSITION = new Rectangle(100, 100, 400, 500);
 	private static final Rectangle DESKTOP_SIZE = new Rectangle(0, 0, 1024, 768);
 
 	// ShapeType
@@ -89,6 +89,7 @@ public class FormScannerConstants extends Constants {
 	// Zoom
 	public static final Integer FIT_WIDTH = 0;
 	public static final Integer FIT_PAGE = -1;
+	public static final String ZOOM_COMBO_BOX = "ZOOM_COMBO_BOX";
 	
 	// Font
 	public static final String FONT_TYPE_COMBO_BOX = "FONT_TYPE_COMBO_BOX";
@@ -190,20 +191,26 @@ public class FormScannerConstants extends Constants {
 
 	public enum Zoom {
 
-		ZOOM_25(25), 
-		ZOOM_50(50), 
-		ZOOM_75(75), 
-		ZOOM_100(100), 
-		ZOOM_125(125), 
-		ZOOM_150(150), 
-		ZOOM_200(200),
-		ZOOM_WIDTH(FIT_WIDTH),
-		ZOOM_PAGE(FIT_PAGE);
+		ZOOM_25(0, 25), 
+		ZOOM_50(1, 50), 
+		ZOOM_75(2, 75), 
+		ZOOM_100(3, 100), 
+		ZOOM_125(4, 125), 
+		ZOOM_150(5, 150), 
+		ZOOM_200(6, 200),
+		ZOOM_WIDTH(7, FormScannerConstants.FIT_WIDTH),
+		ZOOM_PAGE(8, FormScannerConstants.FIT_PAGE);
 
+		private Integer index;
 		private Integer value;
 
-		private Zoom(Integer value) {
+		private Zoom(Integer index, Integer value) {
 			this.value = value;
+			this.index = index;
+		}
+		
+		public int getIndex() {
+			return index;
 		}
 
 		public Integer getValue() {
