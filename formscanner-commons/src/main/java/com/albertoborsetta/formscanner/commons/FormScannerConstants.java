@@ -191,28 +191,44 @@ public class FormScannerConstants extends Constants {
 
 	public enum Zoom {
 
-		ZOOM_25(0, 25), 
-		ZOOM_50(1, 50), 
-		ZOOM_75(2, 75), 
-		ZOOM_100(3, 100), 
-		ZOOM_125(4, 125), 
-		ZOOM_150(5, 150), 
-		ZOOM_200(6, 200),
-		ZOOM_WIDTH(7, FormScannerConstants.FIT_WIDTH),
-		ZOOM_PAGE(8, FormScannerConstants.FIT_PAGE);
+		ZOOM_25(25), 
+		ZOOM_50(50), 
+		ZOOM_75(75), 
+		ZOOM_100(100), 
+		ZOOM_125(125), 
+		ZOOM_150(150), 
+		ZOOM_200(200),
+		ZOOM_WIDTH(FormScannerConstants.FIT_WIDTH),
+		ZOOM_PAGE(FormScannerConstants.FIT_PAGE);
 
-		private Integer index;
 		private Integer value;
 
-		private Zoom(Integer index, Integer value) {
+		private Zoom(Integer value) {
 			this.value = value;
-			this.index = index;
 		}
 		
-		public int getIndex() {
-			return index;
+		public Integer getValue() {
+			return value;
 		}
+	}
+	
+	public enum FontSize {
 
+		SIZE_10(10), 
+		SIZE_12(12),
+		SIZE_14(14),
+		SIZE_16(16),
+		SIZE_20(20), 
+		SIZE_24(24), 
+		SIZE_30(30), 
+		SIZE_36(36); 
+
+		private Integer value;
+
+		private FontSize(Integer value) {
+			this.value = value;
+		}
+		
 		public Integer getValue() {
 			return value;
 		}

@@ -13,6 +13,7 @@ import javax.swing.JSpinner;
 import javax.swing.SpringLayout;
 
 import com.albertoborsetta.formscanner.commons.FormScannerConstants;
+import com.albertoborsetta.formscanner.commons.FormScannerConstants.FontSize;
 import com.albertoborsetta.formscanner.commons.FormScannerConstants.Frame;
 import com.albertoborsetta.formscanner.commons.FormScannerConstants.ShapeType;
 import com.albertoborsetta.formscanner.commons.translation.FormScannerTranslation;
@@ -97,7 +98,12 @@ public class OptionsFrame extends InternalFrame {
 		for (int i = 0; i < e.getAllFonts().length; i++) {
 			fonts[i] = e.getAllFonts()[i].getFontName(model.getLocale());
 		}
-		Integer[] sizes = { 10, 12, 14, 18, 20 };
+		
+		FontSize[] fontSizes = FontSize.values();
+		Integer[] sizes = new Integer[fontSizes.length];
+		for (int i = 0; i < fontSizes.length; i++) {
+			sizes[i] = fontSizes[i].getValue();
+		}
 
 		fontTypeComboBox = new ComboBoxBuilder<String>(
 				FormScannerConstants.FONT_TYPE_COMBO_BOX, orientation)

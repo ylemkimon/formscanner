@@ -148,9 +148,8 @@ public class ImageFrame extends InternalFrame implements ScrollableImageView {
 
 			Zoom zoomValues[] = Zoom.values();
 			zoom = new InternalZoom[zoomValues.length];
-
-			for (Zoom zoomValue: zoomValues) {
-				zoom[zoomValue.getIndex()] = new InternalZoom(zoomValue);
+			for (int i =0; i<zoomValues.length; i++) {
+				zoom[i] = new InternalZoom(zoomValues[i]);
 			}
 			
 			zoomComboBox = new ComboBoxBuilder<InternalZoom>(
