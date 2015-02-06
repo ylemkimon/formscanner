@@ -60,7 +60,8 @@ public class ImageFrame extends InternalFrame implements ScrollableImageView {
 	private FormTemplate template;
 	private JComboBox<InternalZoom> zoomComboBox;
 	private ImageToolBar toolBar;
-	
+	private InternalZoom zoomValue = new InternalZoom(Zoom.ZOOM_100);;
+
 	private class InternalZoom {
 
 		private Zoom zoom;
@@ -77,10 +78,12 @@ public class ImageFrame extends InternalFrame implements ScrollableImageView {
 			String value;
 			switch (zoom) {
 			case ZOOM_WIDTH:
-				value = FormScannerTranslation.getTranslationFor(FormScannerTranslationKeys.FIT_WIDTH);
+				value = FormScannerTranslation
+						.getTranslationFor(FormScannerTranslationKeys.FIT_WIDTH);
 				break;
 			case ZOOM_PAGE:
-				value = FormScannerTranslation.getTranslationFor(FormScannerTranslationKeys.FIT_PAGE);
+				value = FormScannerTranslation
+						.getTranslationFor(FormScannerTranslationKeys.FIT_PAGE);
 				break;
 			default:
 				value = zoom.getValue().toString();
@@ -112,7 +115,6 @@ public class ImageFrame extends InternalFrame implements ScrollableImageView {
 		setTitle(FormScannerTranslation
 				.getTranslationFor(FormScannerTranslationKeys.IMAGE_FRAME_TITLE));
 
-
 		imagePanel = new ImagePanel(image);
 		scrollPane = new ImageScrollPane(imagePanel);
 		statusBar = new ImageStatusBar(this.mode);
@@ -139,33 +141,36 @@ public class ImageFrame extends InternalFrame implements ScrollableImageView {
 			} else {
 				setLayout(new FlowLayout(FlowLayout.RIGHT));
 			}
-			
+
 			JToolBar zoomToolBar = getZoomToolBar();
 			add(zoomToolBar);
 		}
-		
+
 		public JToolBar getZoomToolBar() {
 
 			Zoom zoomValues[] = Zoom.values();
 			zoom = new InternalZoom[zoomValues.length];
-			for (int i =0; i<zoomValues.length; i++) {
+			for (int i = 0; i < zoomValues.length; i++) {
 				zoom[i] = new InternalZoom(zoomValues[i]);
+				if (zoomValues[i].equals(Zoom.ZOOM_100)) {
+					zoomValue = zoom[i];
+				}
 			}
-			
+
 			zoomComboBox = new ComboBoxBuilder<InternalZoom>(
 					FormScannerConstants.ZOOM_COMBO_BOX, orientation)
-					.withModel(
-							new DefaultComboBoxModel<InternalZoom>(zoom))
+					.withModel(new DefaultComboBoxModel<InternalZoom>(zoom))
 					.withActionListener(controller).build();
-			
-			return new ToolBarBuilder(orientation).withAlignmentY(Component.CENTER_ALIGNMENT)
-					.withAlignmentX(Component.LEFT_ALIGNMENT)
-					.add(zoomComboBox)
+
+			zoomComboBox.setSelectedItem(zoomValue);
+
+			return new ToolBarBuilder(orientation)
+					.withAlignmentY(Component.CENTER_ALIGNMENT)
+					.withAlignmentX(Component.LEFT_ALIGNMENT).add(zoomComboBox)
 					.build();
 		}
 	}
 
-	
 	private class ImageStatusBar extends JPanel {
 
 		/**
@@ -187,23 +192,24 @@ public class ImageFrame extends InternalFrame implements ScrollableImageView {
 			showCornerPosition();
 
 			setCornerButtons(mode);
-			
-			panel = new PanelBuilder(ComponentOrientation.LEFT_TO_RIGHT).withLayout(new SpringLayout()).withGrid(2, 6)
-				.add(getLabel(FormScannerTranslationKeys.X_CURSOR_POSITION_LABEL))
-				.add(XPositionValue)
-				.add(cornerButtons.get(Corners.TOP_LEFT))
-				.add(cornerPositions.get(Corners.TOP_LEFT))
-				.add(cornerButtons.get(Corners.TOP_RIGHT))
-				.add(cornerPositions.get(Corners.TOP_RIGHT))
-				.add(getLabel(FormScannerTranslationKeys.Y_CURSOR_POSITION_LABEL))
-				.add(YPositionValue)
-				.add(cornerButtons.get(Corners.BOTTOM_LEFT))
-				.add(cornerPositions.get(Corners.BOTTOM_LEFT))
-				.add(cornerButtons.get(Corners.BOTTOM_RIGHT))
-				.add(cornerPositions.get(Corners.BOTTOM_RIGHT))
-				.build();
+
+			panel = new PanelBuilder(ComponentOrientation.LEFT_TO_RIGHT)
+					.withLayout(new SpringLayout())
+					.withGrid(2, 6)
+					.add(getLabel(FormScannerTranslationKeys.X_CURSOR_POSITION_LABEL))
+					.add(XPositionValue)
+					.add(cornerButtons.get(Corners.TOP_LEFT))
+					.add(cornerPositions.get(Corners.TOP_LEFT))
+					.add(cornerButtons.get(Corners.TOP_RIGHT))
+					.add(cornerPositions.get(Corners.TOP_RIGHT))
+					.add(getLabel(FormScannerTranslationKeys.Y_CURSOR_POSITION_LABEL))
+					.add(YPositionValue)
+					.add(cornerButtons.get(Corners.BOTTOM_LEFT))
+					.add(cornerPositions.get(Corners.BOTTOM_LEFT))
+					.add(cornerButtons.get(Corners.BOTTOM_RIGHT))
+					.add(cornerPositions.get(Corners.BOTTOM_RIGHT)).build();
 		}
-		
+
 		public JPanel getPanel() {
 			return panel;
 		}
@@ -293,8 +299,9 @@ public class ImageFrame extends InternalFrame implements ScrollableImageView {
 		}
 
 		public void setCursorPosition(FormPoint p) {
-			XPositionValue.setText("" + (int) p.getX());
-			YPositionValue.setText("" + (int) p.getY());
+			XPositionValue.setText("" + p.getX());
+			YPositionValue.setText("" + p.getY());
+			System.out.println("(" + XPositionValue.getText() + ", " + YPositionValue.getText() + ")");
 		}
 
 		public void toggleCornerButton(Corners corner) {
@@ -387,13 +394,14 @@ public class ImageFrame extends InternalFrame implements ScrollableImageView {
 		 */
 		private static final long serialVersionUID = 1L;
 
-		private int width;
-		private int height;
+		private int imageWidth;
+		private int imageHeight;
 		private int marker;
 		private ShapeType markerType;
 		private int border = 1;
 		private BufferedImage image;
 		private FormPoint temporaryPoint;
+		private Double zoom;
 
 		public ImagePanel(BufferedImage image) {
 			super();
@@ -404,12 +412,20 @@ public class ImageFrame extends InternalFrame implements ScrollableImageView {
 			}
 			marker = model.getShapeSize();
 			markerType = model.getShapeType();
+			imageWidth = image.getWidth();
+			imageHeight = image.getHeight();
+			zoom = 1d;
+		}
+
+		public void setZoom(Double zoom) {
+			this.zoom = zoom;
 		}
 
 		@Override
 		public void paintComponent(Graphics g) {
-			width = image.getWidth();
-			height = image.getHeight();
+			marker = (int) (model.getShapeSize() * zoom);
+			int width = (int) (imageWidth * zoom);
+			int height = (int) (imageHeight * zoom);
 			setPreferredSize(new Dimension(width, height));
 			g.drawImage(image, 0, 0, width, height, this);
 			showPoints(g);
@@ -433,8 +449,8 @@ public class ImageFrame extends InternalFrame implements ScrollableImageView {
 
 		private void showPoint(Graphics g, FormPoint point) {
 			if (point != null) {
-				int x = (int) point.getX() - border;
-				int y = (int) point.getY() - border;
+				int x = (int) ((point.getX() * zoom) - border);
+				int y = (int) ((point.getY() * zoom) - border);
 
 				g.setColor(Color.RED);
 				if (markerType.equals(ShapeType.CIRCLE)) {
@@ -460,8 +476,8 @@ public class ImageFrame extends InternalFrame implements ScrollableImageView {
 				FormPoint p2 = corners.get(Corners.values()[(i + 1)
 						% Corners.values().length]);
 
-				g.drawLine((int) p1.getX(), (int) p1.getY(), (int) p2.getX(),
-						(int) p2.getY());
+				g.drawLine((int) (p1.getX() * zoom), (int) (p1.getY() * zoom), (int) (p2.getX() * zoom),
+						(int) (p2.getY() * zoom));
 			}
 
 			g.setColor(Color.BLACK);
@@ -472,11 +488,11 @@ public class ImageFrame extends InternalFrame implements ScrollableImageView {
 		}
 
 		public int getImageWidth() {
-			return width;
+			return imageWidth;
 		}
 
 		public int getImageHeight() {
-			return height;
+			return imageHeight;
 		}
 
 		public void setTemporaryPoint(FormPoint p) {
@@ -509,20 +525,15 @@ public class ImageFrame extends InternalFrame implements ScrollableImageView {
 	}
 
 	public int getHorizontalScrollbarValue() {
-		return scrollPane.getHorizontalScrollBarValue();
+		return (int) (scrollPane.getHorizontalScrollBarValue() / getZoom());
 	}
 
 	public int getVerticalScrollbarValue() {
-		return scrollPane.getVerticalScrollBarValue();
+		return (int) (scrollPane.getVerticalScrollBarValue() / getZoom());
 	}
 
 	public Mode getMode() {
 		return mode;
-	}
-
-	public Dimension getImageSize() {
-		return new Dimension(imagePanel.getImageWidth(),
-				imagePanel.getImageHeight());
 	}
 
 	public void showCursorPosition(FormPoint p) {
@@ -560,5 +571,31 @@ public class ImageFrame extends InternalFrame implements ScrollableImageView {
 	public void setMode(Mode mode) {
 		statusBar.setCornerButtonsEnabled(mode);
 		this.mode = mode;
+	}
+
+	public void setZoom() {
+		imagePanel.setZoom(getZoom());
+		repaint();
+	}
+
+	public Double getZoom() {
+		zoomValue = (InternalZoom) zoomComboBox.getSelectedItem();
+		Double value = zoomValue.getZoom().getValue() / 100d;
+		switch (zoomValue.getZoom()) {
+		case ZOOM_WIDTH:
+			value = scrollPane.getWidth()
+					/ ((double) imagePanel.getImageWidth());
+			break;
+		case ZOOM_PAGE:
+			value = Math.min(
+					scrollPane.getHeight()
+							/ ((double) imagePanel.getImageHeight()),
+					scrollPane.getWidth()
+							/ ((double) imagePanel.getImageWidth()));
+			break;
+		default:
+			break;
+		}
+		return value;
 	}
 }
