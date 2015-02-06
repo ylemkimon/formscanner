@@ -181,8 +181,8 @@ public class ImageFrameController implements MouseMotionListener,
 		int dx = view.getHorizontalScrollbarValue();
 		int dy = view.getVerticalScrollbarValue();
 
-		int x = e.getX() + dx;
-		int y = e.getY() + dy;
+		int x = (int) (e.getX() / view.getZoom()) + dx;
+		int y = (int) (e.getY() / view.getZoom()) + dy;
 
 		FormPoint p1 = new FormPoint(x, y);
 		return p1;
@@ -196,7 +196,8 @@ public class ImageFrameController implements MouseMotionListener,
 
 	@Override
 	public void itemStateChanged(ItemEvent e) {
-		// TODO Auto-generated method stub
-		
+		if (e.getStateChange()==ItemEvent.SELECTED) {
+			view.setZoom();
+		}
 	}
 }
