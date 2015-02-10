@@ -139,3 +139,5 @@ field.properties.reject.multiple=Ignora risposte multiple
 font.type.label=Tipo carattere
 font.size.label=Dimesione carattere
 gui.options=Opzioni interfaccia (Richiede riavvio)
+zoom.fit.width=Adatta alla larghezza
+zoom.fit.page=Adatta alla finestra

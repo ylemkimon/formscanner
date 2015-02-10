@@ -134,3 +134,10 @@ type.column=Τύπος πεδίου
 multiple.column=Πολλαπλή επιλογή
 responses.column=Αρ. απαντήσεων
 field.properties.reject.multiple=Παράβλεψη πολλαπλών απαντήσεων
+
+# added 0.10
+font.type.label=Τύπος γραμματοσειράς
+font.size.label=Μέγεθος γραμματοσειράς
+gui.options=Επιλογές γραφικού περιβάλλοντος (Απαιτεί επανεκκίνηση)
+zoom.fit.width=Προσαρμογή στο πλάτους
+zoom.fit.page=Προσαρμογή στο παράθυρο

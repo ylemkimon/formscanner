@@ -1,8 +1,11 @@
 package com.albertoborsetta.formscanner.commons;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -104,7 +107,8 @@ public class FormFileUtils extends JFileChooser {
 		// Creating individual file filters
 		for (String ext : setOfExtensions) {
 			setFileFilter(new FileNameExtensionFilter(
-					FormScannerTranslation.getTranslationFor(ext + ".images"), ext));
+					FormScannerTranslation.getTranslationFor(ext + ".images"),
+					ext));
 		}
 		// Creating "all images" file filter (the one which opens any supported
 		// image type)
@@ -142,6 +146,7 @@ public class FormFileUtils extends JFileChooser {
 			transformer.setOutputProperty(OutputKeys.METHOD, "xml");
 			transformer.setOutputProperty(
 					"{http://xml.apache.org/xslt}indent-amount", "4");
+			transformer.setOutputProperty(OutputKeys.ENCODING, "UTF-8");
 			DOMSource source = new DOMSource(doc);
 
 			setMultiSelectionEnabled(false);
@@ -151,11 +156,16 @@ public class FormFileUtils extends JFileChooser {
 			int returnValue = showSaveDialog(null);
 			if (returnValue == JFileChooser.APPROVE_OPTION) {
 				file = getSelectedFile();
-				StreamResult result = new StreamResult(file);
+				FileOutputStream fos = new FileOutputStream(file);
+				OutputStreamWriter out = new OutputStreamWriter(fos,
+						Charset.forName("UTF-8"));
+				StreamResult result = new StreamResult(out);
 				transformer.transform(source, result);
 			}
 		} catch (TransformerException e) {
 			e.printStackTrace();
+		} catch (IOException e1) {
+			e1.printStackTrace();
 		}
 		return file;
 	}
@@ -177,7 +187,10 @@ public class FormFileUtils extends JFileChooser {
 				int returnValue = showSaveDialog(null);
 				if (returnValue == JFileChooser.APPROVE_OPTION) {
 					file = getSelectedFile();
-					mapWriter = new CsvMapWriter(new FileWriter(file),
+					FileOutputStream fos = new FileOutputStream(file);
+					OutputStreamWriter out = new OutputStreamWriter(fos,
+							Charset.forName("UTF-8"));
+					mapWriter = new CsvMapWriter(out,
 							CsvPreference.EXCEL_NORTH_EUROPE_PREFERENCE);
 					mapWriter.writeHeader(header);
 
@@ -230,10 +243,10 @@ public class FormFileUtils extends JFileChooser {
 
 		return header;
 	}
-	
+
 	public File saveToFile(String path, FormTemplate template) {
 		File outputFile = null;
-		
+
 		try {
 			outputFile = new File(path + template.getName() + ".xtmpl");
 			Document xml = template.getXml();
@@ -241,7 +254,7 @@ public class FormFileUtils extends JFileChooser {
 		} catch (ParserConfigurationException e) {
 			e.printStackTrace();
 		}
-		
+
 		return outputFile;
 	}
 }

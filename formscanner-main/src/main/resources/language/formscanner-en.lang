@@ -134,3 +134,10 @@ type.column=Field type
 multiple.column=Multiple choice
 responses.column=N. of responses
 field.properties.reject.multiple=Ignore multiple responses
+
+# added 0.10
+font.type.label=Font type
+font.size.label=Font size
+gui.options=Graphical interface options (Requires restart)
+zoom.fit.width=Fit to width
+zoom.fit.page=Fit to page

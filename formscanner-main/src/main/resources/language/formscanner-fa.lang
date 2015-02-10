@@ -134,3 +134,10 @@ type.column=نوع سوال
 multiple.column=چند گزینه ای
 responses.column=تعداد گزینه ها
 field.properties.reject.multiple=از پاسخ های چند گزینه ای پشم پوشی کن
+
+# added 0.10
+font.type.label=نوع قلم
+font.size.label=اندازه قلم
+gui.options=گزینه های ظاهر کاربری (نیازمند راه اندازی مجدد)
+zoom.fit.width=مناسب برای عرض
+zoom.fit.page=مناسب برای پنجره
