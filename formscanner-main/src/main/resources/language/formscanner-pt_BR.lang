@@ -136,9 +136,8 @@ responses.column=Número de respostas
 field.properties.reject.multiple=Ignora múltiplas respostas
 
 # added 0.10
-# added 0.10
 font.type.label=Tipo de fonte
 font.size.label=Tamanho da fonte
 gui.options=Opções de interface gráfica (requer reinicialização)
-zoom.fit.width=Ajustar à largura
-zoom.fit.page=Ajustar à janela
+zoom.fit.width=Adaptar à largura
+zoom.fit.page=Adaptar à janela

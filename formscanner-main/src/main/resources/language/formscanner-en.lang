@@ -140,4 +140,4 @@ font.type.label=Font type
 font.size.label=Font size
 gui.options=Graphical interface options (Requires restart)
 zoom.fit.width=Fit to width
-zoom.fit.page=Fit to page
+zoom.fit.page=Fit to window
