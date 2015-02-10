@@ -23,8 +23,8 @@ edit.menu=Modificar
 edit.menu.tooltip=Menu modificar
 edit.menu.mnemonic=M
 analyze.file.frame.title=Verificar arquivos
-analyze.files=Começe a digitalização imagem-por-imagem
-analyze.files.tooltip=Começe a digitalização imagem-por-imagem
+analyze.files=Comece a digitalização imagem-por-imagem
+analyze.files.tooltip=Comece a digitalização imagem-por-imagem
 analyze.files.mnemonic=Eu
 file.menu=Arquivo
 file.menu.tooltip=Menu arquivo
@@ -114,9 +114,9 @@ template.not.loaded=Erro no carregamento do modelo
 template.not.loaded.popup.title=Modelo
 template.not.found=Carregar um modelo antes de verificar
 template.not.found.popup.title=Modelo
-analyze.files.all=Começe a digitalizar todas as imagens
+analyze.files.all=Comece a digitalizar todas as imagens
 analyze.files.all.mnemonic=A
-analyze.files.all.tooltip=Começe a digitalizar todas as imagens
+analyze.files.all.tooltip=Comece a digitalizar todas as imagens
 analyze.files.current.tooltip=Reescanear imagem atual
 results.grid.frame.title=Resultados
 results=Resultados
@@ -134,3 +134,11 @@ type.column=Tipo de campo
 multiple.column=Múltipla escolha
 responses.column=Número de respostas
 field.properties.reject.multiple=Ignora múltiplas respostas
+
+# added 0.10
+# added 0.10
+font.type.label=Tipo de fonte
+font.size.label=Tamanho da fonte
+gui.options=Opções de interface gráfica (requer reinicialização)
+zoom.fit.width=Ajustar à largura
+zoom.fit.page=Ajustar à janela

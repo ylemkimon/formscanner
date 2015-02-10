@@ -157,16 +157,25 @@ public class ImageFrame extends InternalFrame implements ScrollableImageView {
 				}
 			}
 
+			JLabel zoomLabel = new LabelBuilder(
+					FormScannerTranslation
+							.getTranslationFor(FormScannerTranslationKeys.ZOOM_LABEL),
+					orientation).withBorder(BorderFactory.createEmptyBorder()).build();
+
 			zoomComboBox = new ComboBoxBuilder<InternalZoom>(
 					FormScannerConstants.ZOOM_COMBO_BOX, orientation)
 					.withModel(new DefaultComboBoxModel<InternalZoom>(zoom))
 					.withActionListener(controller).build();
 
 			zoomComboBox.setSelectedItem(zoomValue);
+			
+			JPanel zoomPanel = new PanelBuilder(ComponentOrientation.LEFT_TO_RIGHT)
+			.withLayout(new SpringLayout())
+			.withGrid(1, 2).add(zoomLabel).add(zoomComboBox).build();
 
 			return new ToolBarBuilder(orientation)
 					.withAlignmentY(Component.CENTER_ALIGNMENT)
-					.withAlignmentX(Component.LEFT_ALIGNMENT).add(zoomComboBox)
+					.withAlignmentX(Component.LEFT_ALIGNMENT).add(zoomPanel)
 					.build();
 		}
 	}
@@ -301,7 +310,6 @@ public class ImageFrame extends InternalFrame implements ScrollableImageView {
 		public void setCursorPosition(FormPoint p) {
 			XPositionValue.setText("" + p.getX());
 			YPositionValue.setText("" + p.getY());
-			System.out.println("(" + XPositionValue.getText() + ", " + YPositionValue.getText() + ")");
 		}
 
 		public void toggleCornerButton(Corners corner) {
@@ -476,8 +484,8 @@ public class ImageFrame extends InternalFrame implements ScrollableImageView {
 				FormPoint p2 = corners.get(Corners.values()[(i + 1)
 						% Corners.values().length]);
 
-				g.drawLine((int) (p1.getX() * zoom), (int) (p1.getY() * zoom), (int) (p2.getX() * zoom),
-						(int) (p2.getY() * zoom));
+				g.drawLine((int) (p1.getX() * zoom), (int) (p1.getY() * zoom),
+						(int) (p2.getX() * zoom), (int) (p2.getY() * zoom));
 			}
 
 			g.setColor(Color.BLACK);
