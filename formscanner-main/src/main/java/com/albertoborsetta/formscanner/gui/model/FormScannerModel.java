@@ -27,6 +27,7 @@ import com.albertoborsetta.formscanner.commons.FormFileUtils;
 import com.albertoborsetta.formscanner.commons.FormScannerConstants;
 import com.albertoborsetta.formscanner.commons.FormScannerConstants.Action;
 import com.albertoborsetta.formscanner.commons.FormScannerConstants.Frame;
+import com.albertoborsetta.formscanner.commons.FormScannerConstants.Language;
 import com.albertoborsetta.formscanner.commons.FormScannerConstants.Mode;
 import com.albertoborsetta.formscanner.commons.FormScannerConstants.ShapeType;
 import com.albertoborsetta.formscanner.commons.FormScannerFont;
@@ -92,25 +93,39 @@ public class FormScannerModel {
 	private ComponentOrientation orientation;
 	private String fontType;
 	private Integer fontSize;
-	
+
 	public FormScannerModel(FormScanner view) {
 		this.view = view;
 
 		String installPath = StringUtils.defaultIfBlank(
 				System.getProperty("FormScanner_HOME"),
 				System.getenv("FormScanner_HOME"));
+		
+		String formScannerVersion = StringUtils.defaultIfBlank(
+				System.getProperty("FormScanner_VERSION"),
+				System.getenv("FormScanner_VERSION"));
+		
+		String installationLanguage = StringUtils.defaultIfBlank(
+				System.getProperty("FormScanner_LANGUAGE"),
+				System.getenv("FormScanner_LANGUAGE"));
+		
+		if ((installPath == null) || (formScannerVersion == null) || (installationLanguage == null)) {
+			
+		}
+		
 		String userHome = System.getProperty("user.home");
 		String osName = System.getProperty("os.name");
 
+		resultsPath = userHome + "/Documents";
+		templatePath = userHome + "/Documents";
+
 		if (StringUtils.contains(osName, "Windows")) {
-			resultsPath = userHome + "/Documents";
-			templatePath = userHome + "/Documents";
-			propertiesPath = userHome + "/AppData/Local/FormScanner";
+			propertiesPath = userHome + "/AppData/Local/FormScanner_";
 		} else {
-			propertiesPath = userHome + "/.FormScanner";
+			propertiesPath = userHome + "/.FormScanner_";
 		}
 
-		propertiesPath = propertiesPath + "/properties/";
+		propertiesPath = propertiesPath + formScannerVersion + "/properties/";
 
 		configurations = FormScannerConfiguration.getConfiguration(
 				propertiesPath, installPath + "/");
@@ -122,16 +137,8 @@ public class FormScannerModel {
 				FormScannerConfigurationKeys.RESULTS_SAVE_PATH, resultsPath
 						+ "/FormScanner/results/");
 		
-		fontType = configurations.getProperty(
-				FormScannerConfigurationKeys.FONT_TYPE,
-				FormScannerConfigurationKeys.DEFAULT_FONT_TYPE);
-		fontSize = configurations.getProperty(
-				FormScannerConfigurationKeys.FONT_SIZE,
-				FormScannerConfigurationKeys.DEFAULT_FONT_SIZE);
-		FormScannerFont.getFont(fontType, fontSize);
-
-		lang = configurations.getProperty(FormScannerConfigurationKeys.LANG,
-				FormScannerConfigurationKeys.DEFAULT_LANG);
+		lang = configurations.getProperty(FormScannerConfigurationKeys.LANG, getDefaultLanguage(installationLanguage));
+		
 		String[] locales = StringUtils.split(lang, '_');
 		if (locales.length == 2) {
 			locale = new Locale(locales[0], locales[1]);
@@ -139,7 +146,7 @@ public class FormScannerModel {
 			locale = new Locale(locales[0]);
 		}
 		fileUtils = FormFileUtils.getInstance(locale);
-		
+
 		orientation = ComponentOrientation.getOrientation(locale);
 
 		FormScannerTranslation.setTranslation(installPath, lang);
@@ -158,12 +165,29 @@ public class FormScannerModel {
 				FormScannerConfigurationKeys.SHAPE_TYPE,
 				FormScannerConfigurationKeys.DEFAULT_SHAPE_TYPE));
 
+		fontType = configurations.getProperty(
+				FormScannerConfigurationKeys.FONT_TYPE,
+				FormScannerConfigurationKeys.DEFAULT_FONT_TYPE);
+		fontSize = configurations.getProperty(
+				FormScannerConfigurationKeys.FONT_SIZE,
+				FormScannerConfigurationKeys.DEFAULT_FONT_SIZE);
+		FormScannerFont.getFont(fontType, fontSize);
+
 		String tmpl = configurations.getProperty(
 				FormScannerConfigurationKeys.TEMPLATE, (String) null);
 		if (!StringUtils.isEmpty(tmpl)) {
 			FormScannerResources.setTemplate(templatePath + tmpl);
 			openTemplate(FormScannerResources.getTemplate(), false);
 		}
+	}
+
+	private String getDefaultLanguage(String installationLanguage) {
+		for (Language language: Language.values()) {
+			if (!language.getInstallationLanguages().isEmpty() && language.getInstallationLanguages().contains(installationLanguage)) {
+				return language.getValue();
+			}
+		}
+		return FormScannerConfigurationKeys.DEFAULT_LANG;
 	}
 
 	public void setDefaultFramePositions() {
@@ -258,8 +282,8 @@ public class FormScannerModel {
 					imageFrame.updateImage(image);
 					renameFileFrame = new RenameFileFrame(this,
 							getFileNameByIndex(renamedFileIndex));
-//					renameFileFrame
-//							.updateRenamedFile(getFileNameByIndex(renamedFileIndex));
+					// renameFileFrame
+					// .updateRenamedFile(getFileNameByIndex(renamedFileIndex));
 					view.arrangeFrame(renameFileFrame);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -322,7 +346,9 @@ public class FormScannerModel {
 					File savedFile = fileUtils.saveCsvAs(outputFile,
 							filledForms);
 					configurations.setProperty(
-							FormScannerConfigurationKeys.RESULTS_SAVE_PATH, FilenameUtils.getFullPath(savedFile.getAbsolutePath()));
+							FormScannerConfigurationKeys.RESULTS_SAVE_PATH,
+							FilenameUtils.getFullPath(savedFile
+									.getAbsolutePath()));
 					configurations.store();
 
 					view.setRenameControllersEnabled(true);
@@ -375,10 +401,12 @@ public class FormScannerModel {
 										+ FormScannerTranslation
 												.getTranslationFor(FormScannerTranslationKeys.RESULTS_DEFAULT_FILE)
 										+ "_" + sdf.format(today) + ".csv");
-						File savedFile = fileUtils.saveCsvAs(outputFile, filledForms);
+						File savedFile = fileUtils.saveCsvAs(outputFile,
+								filledForms);
 						configurations.setProperty(
 								FormScannerConfigurationKeys.RESULTS_SAVE_PATH,
-								FilenameUtils.getFullPath(savedFile.getAbsolutePath()));
+								FilenameUtils.getFullPath(savedFile
+										.getAbsolutePath()));
 						configurations.store();
 
 						view.disposeFrame(imageFrame);
@@ -644,11 +672,15 @@ public class FormScannerModel {
 							FormScannerTranslation
 									.getTranslationFor(FormScannerTranslationKeys.TEMPLATE_SAVED_POPUP),
 							JOptionPane.INFORMATION_MESSAGE);
-			templatePath = FilenameUtils.getFullPath(template.getAbsolutePath());
-			String templateFile = FilenameUtils.getName(template.getAbsolutePath());
+			templatePath = FilenameUtils
+					.getFullPath(template.getAbsolutePath());
+			String templateFile = FilenameUtils.getName(template
+					.getAbsolutePath());
 			configurations.setProperty(FormScannerConfigurationKeys.TEMPLATE,
 					templateFile);
-			configurations.setProperty(FormScannerConfigurationKeys.TEMPLATE_SAVE_PATH, templatePath);
+			configurations.setProperty(
+					FormScannerConfigurationKeys.TEMPLATE_SAVE_PATH,
+					templatePath);
 			configurations.store();
 		} else {
 			JOptionPane
@@ -688,22 +720,28 @@ public class FormScannerModel {
 										.getTranslationFor(FormScannerTranslationKeys.TEMPLATE_LOADED_POPUP),
 								JOptionPane.INFORMATION_MESSAGE);
 			}
-			templatePath = FilenameUtils.getFullPath(template.getAbsolutePath());
-			String templateFile = FilenameUtils.getName(template.getAbsolutePath());
+			templatePath = FilenameUtils
+					.getFullPath(template.getAbsolutePath());
+			String templateFile = FilenameUtils.getName(template
+					.getAbsolutePath());
 			configurations.setProperty(FormScannerConfigurationKeys.TEMPLATE,
 					templateFile);
-			configurations.setProperty(FormScannerConfigurationKeys.TEMPLATE_SAVE_PATH, templatePath);
+			configurations.setProperty(
+					FormScannerConfigurationKeys.TEMPLATE_SAVE_PATH,
+					templatePath);
 			configurations.store();
 			return true;
 		} catch (Exception e) {
-			JOptionPane
-					.showMessageDialog(
-							null,
-							FormScannerTranslation
-									.getTranslationFor(FormScannerTranslationKeys.TEMPLATE_NOT_LOADED),
-							FormScannerTranslation
-									.getTranslationFor(FormScannerTranslationKeys.TEMPLATE_NOT_LOADED_POPUP),
-							JOptionPane.ERROR_MESSAGE);
+			if (notify) {
+				JOptionPane
+						.showMessageDialog(
+								null,
+								FormScannerTranslation
+										.getTranslationFor(FormScannerTranslationKeys.TEMPLATE_NOT_LOADED),
+								FormScannerTranslation
+										.getTranslationFor(FormScannerTranslationKeys.TEMPLATE_NOT_LOADED_POPUP),
+								JOptionPane.ERROR_MESSAGE);
+			}
 			e.printStackTrace();
 			return false;
 		}
@@ -800,8 +838,10 @@ public class FormScannerModel {
 				String.valueOf(shapeSize));
 		configurations.setProperty(FormScannerConfigurationKeys.SHAPE_TYPE,
 				shapeType.getName());
-		configurations.setProperty(FormScannerConfigurationKeys.FONT_TYPE, fontType);
-		configurations.setProperty(FormScannerConfigurationKeys.FONT_SIZE, fontSize);
+		configurations.setProperty(FormScannerConfigurationKeys.FONT_TYPE,
+				fontType);
+		configurations.setProperty(FormScannerConfigurationKeys.FONT_SIZE,
+				fontSize);
 		configurations.store();
 	}
 
@@ -916,7 +956,7 @@ public class FormScannerModel {
 	public String getFontType() {
 		return fontType;
 	}
-	
+
 	public Integer getFontSize() {
 		return fontSize;
 	}

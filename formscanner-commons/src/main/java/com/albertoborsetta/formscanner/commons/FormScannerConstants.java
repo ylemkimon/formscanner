@@ -1,6 +1,12 @@
 package com.albertoborsetta.formscanner.commons;
 
 import java.awt.Rectangle;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.Arrays;
+
+import org.apache.commons.lang3.StringUtils;
 
 import com.albertoborsetta.formscanner.api.commons.Constants;
 import com.albertoborsetta.formscanner.commons.configuration.FormScannerConfigurationKeys;
@@ -40,7 +46,7 @@ public class FormScannerConstants extends Constants {
 	public static final String DESKTOP_NAME = "DESKTOP";
 	public static final String OPTIONS_FRAME_NAME = "OPTIONS";
 	public static final String RESULTS_GRID_FRAME_NAME = "RESULTS_GRID_FRAME_NAME";
-	
+
 	// Frames positions and size
 	private static final Rectangle FILE_LIST_FRAME_POSITION = new Rectangle(10, 10, 200, 600);
 	private static final Rectangle RENAME_FILES_FRAME_POSITION = new Rectangle(220, 320, 370, 100);
@@ -75,7 +81,41 @@ public class FormScannerConstants extends Constants {
 	public static final String GERMAN = "GERMAN";
 	public static final String GREEK = "GREEK";
 	public static final String POLISH = "POLISH";
+	public static final String FARSI = "FARSI";
+
+	public static final String INSTALLATION_ARABIC = "Arabic";
+	public static final String INSTALLATION_CHINESE = "Chinese (Simplified)";
+	public static final String INSTALLATION_GERMAN = "Deutsch";
+	public static final String INSTALLATION_ENGLISH = "English";
+	public static final String INSTALLATION_SPANISH = "Español";
+	public static final String INSTALLATION_FRENCH = "Français";
+	public static final String INSTALLATION_GREEK = "Greek";
+	public static final String INSTALLATION_ITALIAN = "Italiano";
+	public static final String INSTALLATION_MAGYAR = "Magyar";
+	public static final String INSTALLATION_NEDERLANDS = "Nederlands";
+	public static final String INSTALLATION_PORTUGUES = "Português (Brasil)";
+	public static final String INSTALLATION_RUSSIAN = "Russian";
+	public static final String INSTALLATION_TURKISH = "Türkçe";
 	
+	public static final Set<String> ENGLISH_LANGUAGES = new HashSet<String> (Arrays.asList(new String[] {
+		INSTALLATION_ARABIC, 
+		INSTALLATION_CHINESE, 
+		INSTALLATION_ENGLISH, 
+		INSTALLATION_FRENCH, 
+		INSTALLATION_MAGYAR, 
+		INSTALLATION_NEDERLANDS, 
+		INSTALLATION_RUSSIAN, 
+		INSTALLATION_TURKISH, 
+		INSTALLATION_SPANISH, 
+		INSTALLATION_GERMAN}));
+	public static final String[] ITALIAN_LANGUAGES = new String[] {INSTALLATION_ITALIAN};
+	public static final String[] PORTUGUES_LANGUAGES = new String[] {INSTALLATION_PORTUGUES};
+	// public static final String[] SPANISH_LANGUAGES = new String[] {INSTALLATION_SPANISH};
+	// public static final String[] GERMAN_LANGUAGES = new String[] {INSTALLATION_GERMAN};
+	public static final String[] GREEK_LANGUAGES = new String[] {INSTALLATION_GREEK};
+	public static final String[] POLISH_LANGUAGES = new String[] {};
+	public static final String[] FARSI_LANGUAGES = new String[] {};
+
 	// Fields Table Columns
 
 	// support
@@ -85,25 +125,25 @@ public class FormScannerConstants extends Constants {
 	public static final String SAVE_OPTIONS = "SAVE_OPTIONS";
 	public static final String SHAPE_COMBO_BOX = "SHAPE_COMBO_BOX";
 	public static final String SHAPE_SIZE = "SHAPE_SIZE";
-	
+
 	// Zoom
 	public static final Integer FIT_WIDTH = 0;
 	public static final Integer FIT_PAGE = -1;
 	public static final String ZOOM_COMBO_BOX = "ZOOM_COMBO_BOX";
-	
+
 	// Font
 	public static final String FONT_TYPE_COMBO_BOX = "FONT_TYPE_COMBO_BOX";
 	public static final String FONT_SIZE_COMBO_BOX = "FONT_SIZE_COMBO_BOX";
 
 	public enum Frame {
-		RENAME_FILES_FRAME(RENAME_FILES_FRAME_NAME,	FormScannerConfigurationKeys.RENAME_FILES_FRAME, RENAME_FILES_FRAME_POSITION), 
+		RENAME_FILES_FRAME(RENAME_FILES_FRAME_NAME, FormScannerConfigurationKeys.RENAME_FILES_FRAME, RENAME_FILES_FRAME_POSITION), 
 		FILE_LIST_FRAME(FILE_LIST_FRAME_NAME, FormScannerConfigurationKeys.FILE_LIST_FRAME, FILE_LIST_FRAME_POSITION), 
 		MANAGE_TEMPLATE_FRAME(MANAGE_TEMPLATE_FRAME_NAME, FormScannerConfigurationKeys.MANAGE_TEMPLATE_FRAME, MANAGE_TEMPLATE_FRAME_POSITION), 
 		IMAGE_FRAME(IMAGE_FRAME_NAME, FormScannerConfigurationKeys.IMAGE_FRAME, IMAGE_FRAME_POSITION), 
 		RESULTS_GRID_FRAME(RESULTS_GRID_FRAME_NAME, FormScannerConfigurationKeys.RESULTS_GRID_FRAME, RESULTS_GRID_FRAME_POSITION), 
 		OPTIONS_FRAME(OPTIONS_FRAME_NAME, FormScannerConfigurationKeys.OPTIONS_FRAME, OPTIONS_FRAME_POSITION), 
-		ABOUT_FRAME(ABOUT_FRAME_NAME, FormScannerConfigurationKeys.ABOUT_FRAME, ABOUT_FRAME_POSITION), 
-		DESKTOP_FRAME(DESKTOP_NAME, FormScannerConfigurationKeys.DESKTOP_FRAME, DESKTOP_SIZE);
+		ABOUT_FRAME(ABOUT_FRAME_NAME, FormScannerConfigurationKeys.ABOUT_FRAME, ABOUT_FRAME_POSITION),
+		DESKTOP_FRAME( DESKTOP_NAME, FormScannerConfigurationKeys.DESKTOP_FRAME, DESKTOP_SIZE);
 
 		private String value;
 		private String key;
@@ -154,12 +194,14 @@ public class FormScannerConstants extends Constants {
 		OPTIONS, 
 		SAVE_OPTIONS, 
 		ANALYZE_FILES_ALL, 
-		ANALYZE_FILES_CURRENT,
+		ANALYZE_FILES_CURRENT, 
 		IS_MULTIPLE;
 	}
 
 	public enum Mode {
-		VIEW, SETUP_POINTS, MODIFY_POINTS;
+		VIEW, 
+		SETUP_POINTS, 
+		MODIFY_POINTS;
 	}
 
 	public enum ShapeType {
@@ -179,11 +221,11 @@ public class FormScannerConstants extends Constants {
 		public int getIndex() {
 			return index;
 		}
-		
+
 		public String getValue() {
 			return value;
 		}
-		
+
 		public String getName() {
 			return name;
 		}
@@ -197,8 +239,8 @@ public class FormScannerConstants extends Constants {
 		ZOOM_100(100), 
 		ZOOM_125(125), 
 		ZOOM_150(150), 
-		ZOOM_200(200),
-		ZOOM_WIDTH(FormScannerConstants.FIT_WIDTH),
+		ZOOM_200(200), 
+		ZOOM_WIDTH(FormScannerConstants.FIT_WIDTH), 
 		ZOOM_PAGE(FormScannerConstants.FIT_PAGE);
 
 		private Integer value;
@@ -206,50 +248,53 @@ public class FormScannerConstants extends Constants {
 		private Zoom(Integer value) {
 			this.value = value;
 		}
-		
+
 		public Integer getValue() {
 			return value;
 		}
 	}
-	
+
 	public enum FontSize {
 
 		SIZE_10(10), 
-		SIZE_12(12),
-		SIZE_14(14),
-		SIZE_16(16),
+		SIZE_12(12), 
+		SIZE_14(14), 
+		SIZE_16(16), 
 		SIZE_20(20), 
 		SIZE_24(24), 
 		SIZE_30(30), 
-		SIZE_36(36); 
+		SIZE_36(36);
 
 		private Integer value;
 
 		private FontSize(Integer value) {
 			this.value = value;
 		}
-		
+
 		public Integer getValue() {
 			return value;
 		}
 	}
 
 	public enum Language {
-		ENGLISH("en", FormScannerTranslationKeys.ENGLISH), 
-		ITALIAN("it", FormScannerTranslationKeys.ITALIAN),
-		PORTUGUES("pt_BR", FormScannerTranslationKeys.PORTUGUES),
-		// SPANISH("es", FormScannerTranslationKeys.SPANISH),
-		// GERMAN("de", FormScannerTranslationKeys.GERMAN),
-		FARSI("fa", FormScannerTranslationKeys.FARSI),
-		POLISH("pl", FormScannerTranslationKeys.POLISH),
-		GREEK("el", FormScannerTranslationKeys.GREEK);
-
+		ENGLISH("en", FormScannerTranslationKeys.ENGLISH, ENGLISH_LANGUAGES),
+		ITALIAN("it", FormScannerTranslationKeys.ITALIAN, new HashSet<String>(Arrays.asList(ITALIAN_LANGUAGES))), 
+		PORTUGUES("pt_BR", FormScannerTranslationKeys.PORTUGUES, new HashSet<String>(Arrays.asList(PORTUGUES_LANGUAGES))),
+		// SPANISH("es", FormScannerTranslationKeys.SPANISH, new HashSet<String>(Arrays.asList(SPANISH_LANGUAGES))),
+		// GERMAN("de", FormScannerTranslationKeys.GERMAN, new HashSet<String>(Arrays.asList(GERMAN_LANGUAGES))),
+		FARSI("fa", FormScannerTranslationKeys.FARSI, new HashSet<String>(Arrays.asList(FARSI_LANGUAGES))), 
+		POLISH("pl", FormScannerTranslationKeys.POLISH, new HashSet<String>(Arrays.asList(POLISH_LANGUAGES))),
+		GREEK("el", FormScannerTranslationKeys.GREEK, new HashSet<String>(Arrays.asList(GREEK_LANGUAGES)));
+		
 		private String value;
 		private String translation;
+		private Set<String> installationLanguages;
 
-		private Language(String value, String translation) {
+		private Language(String value, String translation,
+			Set<String> installationLanguages) {
 			this.value = value;
 			this.translation = translation;
+			this.installationLanguages = installationLanguages;
 		}
 
 		public String getValue() {
@@ -259,12 +304,16 @@ public class FormScannerConstants extends Constants {
 		public String getTranslation() {
 			return translation;
 		}
+
+		public Set<String> getInstallationLanguages() {
+			return installationLanguages;
+		}
 	}
-	
+
 	public enum FieldsTableColumn {
 		NAME_COLUMN(FormScannerTranslationKeys.NAME_COLUMN), 
-		TYPE_COLUMN(FormScannerTranslationKeys.TYPE_COLUMN),
-		MULTIPLE_COLUMN(FormScannerTranslationKeys.MULTIPLE_COLUMN),
+		TYPE_COLUMN(FormScannerTranslationKeys.TYPE_COLUMN), 
+		MULTIPLE_COLUMN(FormScannerTranslationKeys.MULTIPLE_COLUMN), 
 		RESPONSES_COLUMN(FormScannerTranslationKeys.RESPONSES_COLUMN);
 
 		private String value;
