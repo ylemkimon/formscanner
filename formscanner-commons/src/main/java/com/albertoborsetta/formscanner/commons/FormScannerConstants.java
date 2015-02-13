@@ -1,12 +1,9 @@
 package com.albertoborsetta.formscanner.commons;
 
 import java.awt.Rectangle;
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.Arrays;
-
-import org.apache.commons.lang3.StringUtils;
 
 import com.albertoborsetta.formscanner.api.commons.Constants;
 import com.albertoborsetta.formscanner.commons.configuration.FormScannerConfigurationKeys;
@@ -108,13 +105,13 @@ public class FormScannerConstants extends Constants {
 		INSTALLATION_TURKISH, 
 		INSTALLATION_SPANISH, 
 		INSTALLATION_GERMAN}));
-	public static final String[] ITALIAN_LANGUAGES = new String[] {INSTALLATION_ITALIAN};
-	public static final String[] PORTUGUES_LANGUAGES = new String[] {INSTALLATION_PORTUGUES};
-	// public static final String[] SPANISH_LANGUAGES = new String[] {INSTALLATION_SPANISH};
-	// public static final String[] GERMAN_LANGUAGES = new String[] {INSTALLATION_GERMAN};
-	public static final String[] GREEK_LANGUAGES = new String[] {INSTALLATION_GREEK};
-	public static final String[] POLISH_LANGUAGES = new String[] {};
-	public static final String[] FARSI_LANGUAGES = new String[] {};
+	public static final Set<String> ITALIAN_LANGUAGES = new HashSet<String> (Arrays.asList(new String[] {INSTALLATION_ITALIAN}));
+	public static final Set<String> PORTUGUES_LANGUAGES = new HashSet<String> (Arrays.asList(new String[] {INSTALLATION_PORTUGUES}));
+	// public static final Set<String> SPANISH_LANGUAGES = new HashSet<String> (Arrays.asList(new String[] {INSTALLATION_SPANISH}));
+	// public static final Set<String> GERMAN_LANGUAGES = new String[] {INSTALLATION_GERMAN}));
+	public static final Set<String> GREEK_LANGUAGES = new HashSet<String> (Arrays.asList(new String[] {INSTALLATION_GREEK}));
+	public static final Set<String> POLISH_LANGUAGES = new HashSet<String> (Arrays.asList(new String[] {}));
+	public static final Set<String> FARSI_LANGUAGES = new HashSet<String> (Arrays.asList(new String[] {}));
 
 	// Fields Table Columns
 
@@ -278,13 +275,13 @@ public class FormScannerConstants extends Constants {
 
 	public enum Language {
 		ENGLISH("en", FormScannerTranslationKeys.ENGLISH, ENGLISH_LANGUAGES),
-		ITALIAN("it", FormScannerTranslationKeys.ITALIAN, new HashSet<String>(Arrays.asList(ITALIAN_LANGUAGES))), 
-		PORTUGUES("pt_BR", FormScannerTranslationKeys.PORTUGUES, new HashSet<String>(Arrays.asList(PORTUGUES_LANGUAGES))),
-		// SPANISH("es", FormScannerTranslationKeys.SPANISH, new HashSet<String>(Arrays.asList(SPANISH_LANGUAGES))),
-		// GERMAN("de", FormScannerTranslationKeys.GERMAN, new HashSet<String>(Arrays.asList(GERMAN_LANGUAGES))),
-		FARSI("fa", FormScannerTranslationKeys.FARSI, new HashSet<String>(Arrays.asList(FARSI_LANGUAGES))), 
-		POLISH("pl", FormScannerTranslationKeys.POLISH, new HashSet<String>(Arrays.asList(POLISH_LANGUAGES))),
-		GREEK("el", FormScannerTranslationKeys.GREEK, new HashSet<String>(Arrays.asList(GREEK_LANGUAGES)));
+		ITALIAN("it", FormScannerTranslationKeys.ITALIAN, ITALIAN_LANGUAGES), 
+		PORTUGUES("pt_BR", FormScannerTranslationKeys.PORTUGUES, PORTUGUES_LANGUAGES),
+		// SPANISH("es", FormScannerTranslationKeys.SPANISH, SPANISH_LANGUAGES),
+		// GERMAN("de", FormScannerTranslationKeys.GERMAN, GERMAN_LANGUAGES),
+		FARSI("fa", FormScannerTranslationKeys.FARSI, FARSI_LANGUAGES), 
+		POLISH("pl", FormScannerTranslationKeys.POLISH, POLISH_LANGUAGES),
+		GREEK("el", FormScannerTranslationKeys.GREEK, GREEK_LANGUAGES);
 		
 		private String value;
 		private String translation;
