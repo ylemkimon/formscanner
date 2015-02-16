@@ -140,4 +140,4 @@ font.type.label=Typ czcionki
 font.size.label=Rozmiar czcionki
 gui.options=Opcje interfejsu graficznego (wymaga ponownego uruchomienia programu)
 zoom.fit.width=Dopasuj do szerokości
-zoom.fit.page=Pasuje do okna
+zoom.fit.page=Dopasuj do strony
