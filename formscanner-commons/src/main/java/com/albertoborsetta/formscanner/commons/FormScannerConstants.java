@@ -90,7 +90,7 @@ public class FormScannerConstants extends Constants {
 	public static final String INSTALLATION_ITALIAN = "Italiano";
 	public static final String INSTALLATION_MAGYAR = "Magyar";
 	public static final String INSTALLATION_NEDERLANDS = "Nederlands";
-	public static final String INSTALLATION_PORTUGUES = "Português (Brasil)";
+	public static final String INSTALLATION_PORTUGUES = "Portugu^s (Brasil)";
 	public static final String INSTALLATION_RUSSIAN = "Russian";
 	public static final String INSTALLATION_TURKISH = "Türkçe";
 	
