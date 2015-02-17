@@ -84,15 +84,15 @@ public class FormScannerConstants extends Constants {
 	public static final String INSTALLATION_CHINESE = "Chinese (Simplified)";
 	public static final String INSTALLATION_GERMAN = "Deutsch";
 	public static final String INSTALLATION_ENGLISH = "English";
-	public static final String INSTALLATION_SPANISH = "Español";
-	public static final String INSTALLATION_FRENCH = "Français";
+	public static final String INSTALLATION_SPANISH = "EspaÂ¤ol";
+	public static final String INSTALLATION_FRENCH = "Franâ€¡ais";
 	public static final String INSTALLATION_GREEK = "Greek";
 	public static final String INSTALLATION_ITALIAN = "Italiano";
 	public static final String INSTALLATION_MAGYAR = "Magyar";
 	public static final String INSTALLATION_NEDERLANDS = "Nederlands";
 	public static final String INSTALLATION_PORTUGUES = "Portugu^s (Brasil)";
 	public static final String INSTALLATION_RUSSIAN = "Russian";
-	public static final String INSTALLATION_TURKISH = "Türkçe";
+	public static final String INSTALLATION_TURKISH = "Tï¿½rkâ€¡e";
 	
 	public static final Set<String> ENGLISH_LANGUAGES = new HashSet<String> (Arrays.asList(new String[] {
 		INSTALLATION_ARABIC, 

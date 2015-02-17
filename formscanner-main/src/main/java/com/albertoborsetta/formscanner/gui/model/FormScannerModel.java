@@ -109,9 +109,15 @@ public class FormScannerModel {
 				System.getProperty("FormScanner_LANGUAGE"),
 				System.getenv("FormScanner_LANGUAGE"));
 		
-		if ((installPath == null) || (formScannerVersion == null) || (installationLanguage == null)) {
-			
-		}
+//		if ((installPath == null) || (formScannerVersion == null)) {
+//			JOptionPane
+//			.showMessageDialog(
+//					null,
+//					"Error running FormScanner",
+//					"Error running FormScanner: please restart the system or reinstall it",
+//					JOptionPane.ERROR_MESSAGE);
+//			exitFormScanner();
+//		}
 		
 		String userHome = System.getProperty("user.home");
 		String osName = System.getProperty("os.name");
