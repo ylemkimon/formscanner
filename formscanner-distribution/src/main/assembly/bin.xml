@@ -75,6 +75,7 @@
 						<includes>
 							<include>*.sh</include>
 							<include>CHANGELOG</include>
+							<include>README</include>
 						</includes>
 						<excludes>
 							<exclude>install</exclude>
