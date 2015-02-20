@@ -24,7 +24,7 @@ import com.albertoborsetta.formscanner.api.commons.Constants.FieldType;
  * </ul>
  * 
  * @author Alberto Borsetta
- * @version 0.9-SNAPSHOT
+ * @version 0.11-SNAPSHOT
  * @see FormPoint
  * @see FieldType
  */

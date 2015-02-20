@@ -94,7 +94,7 @@ import com.albertoborsetta.formscanner.api.commons.Constants.FieldType;
  * </pre>
  * 
  * @author Alberto Borsetta
- * @version 0.9-SNAPSHOT
+ * @version 0.11-SNAPSHOT
  * @see FormPoint
  * @see FormField
  * @see FieldType
