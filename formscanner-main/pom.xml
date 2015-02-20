@@ -4,7 +4,7 @@
 	<parent>
 		<artifactId>formscanner</artifactId>
 		<groupId>com.albertoborsetta</groupId>
-		<version>0.10-SNAPSHOT</version>
+		<version>0.10.0</version>
 	</parent>
 	<artifactId>formscanner-main</artifactId>
 	<name>FormScanner - Main</name>
