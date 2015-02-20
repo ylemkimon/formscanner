@@ -6,7 +6,7 @@ import com.albertoborsetta.formscanner.api.commons.translation.TranslationKeys;
  * The Class Constants.
  * 
  * @author Alberto Borsetta
- * @version 0.10.0
+ * @version 0.10.1-SNAPSHOT
  */
 public class Constants {
 
@@ -34,7 +34,7 @@ public class Constants {
 	 * The Enum Corners.
 	 * 
 	 * @author Alberto Borsetta
-	 * @version 0.10.0
+	 * @version 0.10.1-SNAPSHOT
 	 */
 	public enum Corners {
 		
@@ -91,7 +91,7 @@ public class Constants {
 	 * The Enum FieldType.
 	 * 
 	 * @author Alberto Borsetta
-	 * @version 0.10.0
+	 * @version 0.10.1-SNAPSHOT
 	 */
 	public enum FieldType {
 		
