@@ -94,10 +94,8 @@ public class OptionsFrame extends InternalFrame {
 
 		GraphicsEnvironment e = GraphicsEnvironment
 				.getLocalGraphicsEnvironment();
-		String[] fonts = new String[e.getAllFonts().length];
-		for (int i = 0; i < e.getAllFonts().length; i++) {
-			fonts[i] = e.getAllFonts()[i].getFontName(model.getLocale());
-		}
+		String[] fonts;
+		fonts = e.getAvailableFontFamilyNames(model.getLocale());
 		
 		FontSize[] fontSizes = FontSize.values();
 		Integer[] sizes = new Integer[fontSizes.length];

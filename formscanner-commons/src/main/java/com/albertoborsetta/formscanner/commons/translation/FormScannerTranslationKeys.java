@@ -64,7 +64,7 @@ public class FormScannerTranslationKeys extends TranslationKeys {
 	public static final String FIELD_PROPERTIES_TAB_NAME = "field.properties.tab.name";
 	public static final String FIELD_PROPERTIES_TYPE_LABEL = "field.properties.type.label";
 	public static final String FIELD_PROPERTIES_IS_MULTIPLE = "field.properties.is.multiple";
-	public static final String FIELD_PROPERTIES_N_ROW_COL_LABEL = "field.properties.number.rows.columns.label";
+	public static final String FIELD_PROPERTIES_N_QUESTIONS_LABEL = "field.properties.number.rows.columns.label";
 	public static final String FIELD_PROPERTIES_N_VALUES_LABEL = "field.properties.number.values.label";
 	public static final String FIELD_POSITION_TAB_NAME = "field.position.tab.name";
 	public static final String FIELD_PROPERTIES_REJECT_MULTIPLE = "field.properties.reject.multiple";
@@ -83,16 +83,8 @@ public class FormScannerTranslationKeys extends TranslationKeys {
 	
 	public static final String QUESTION = "question";
 	
-	public static final String QUESTIONS_BY_ROWS = "questions.by.rows";
-	public static final String QUESTIONS_BY_COLS = "questions.by.cols";
-	
 	public static final String ROTATION_LABEL = "rotation.label";
 	public static final String ZOOM_LABEL = "zoom.label";
-	
-	public static final String TOP_LEFT_CORNER = "top.left.corner";
-	public static final String TOP_RIGHT_CORNER = "top.right.corner";
-	public static final String BOTTOM_LEFT_CORNER = "bottom.left.corner";
-	public static final String BOTTOM_RIGHT_CORNER = "bottom.right.corner";
 	
 	public static final String TOP_LEFT_CORNER_TOOLTIP = "top.left.corner.tooltip";
 	public static final String TOP_RIGHT_CORNER_TOOLTIP = "top.right.corner.tooltip";
@@ -172,4 +164,13 @@ public class FormScannerTranslationKeys extends TranslationKeys {
 	public static final String FONT_SIZE_OPTION_LABEL = "font.size.label";
 	public static final String FIT_WIDTH = "zoom.fit.width";
 	public static final String FIT_PAGE = "zoom.fit.page";
+	
+	// added 0.11
+	public static final String FIELD_TYPE_TAB_NAME = "field.type.panel";
+	public static final String FIELD_PROPERTIES_ORIENTATION = "field.orientation";
+	public static final String FIELD_PROPERTIES_N_ROWS_LABEL = "field.properties.rows.number";
+	public static final String FIELD_PROPERTIES_N_COLS_LABEL = "field.properties.cols.number";
+	public static final String BARCODE_LABEL = "barcode.label";
+	public static final String SINGLE_QUESTION_LABEL = "single.question.label";
+	public static final String SET_OF_QUESTIONS_LABEL = "set.of.questions.label";
 }

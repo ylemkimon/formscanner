@@ -80,6 +80,11 @@
 			<scope>compile</scope>
 		</dependency>
 		<dependency>
+			<groupId>com.google.zxing</groupId>
+			<artifactId>core</artifactId>
+			<version>${zxing.version}</version>
+		</dependency>
+		<dependency>
 			<groupId>org.apache.commons</groupId>
 			<artifactId>commons-lang3</artifactId>
 			<version>${commons-lang3.version}</version>
@@ -92,5 +97,6 @@
 		<commons-lang3.version>3.1</commons-lang3.version>
 		<nexus-staging-maven-plugin.version>1.6.3</nexus-staging-maven-plugin.version>
 		<maven-gpg-plugin.version>1.5</maven-gpg-plugin.version>
+		<zxing.version>3.2.0</zxing.version>
 	</properties>
 </project>
