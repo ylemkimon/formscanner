@@ -30,6 +30,12 @@ public class Constants {
 	/** Identifies the QUESTIONS_BY_COLS field type. */
 	public static final String QUESTIONS_BY_COLS = "QUESTIONS_BY_COLS";
 
+	/** Identifies the RESPONSES_BY_GRID field type. 0.11 */
+	public static final String RESPONSES_BY_GRID = "RESPONSES_BY_GRID";
+
+	/** Identifies the QRCODE_BARCODE field type. 0.11 */
+	public static final String BARCODE = "BARCODE";
+
 	/**
 	 * The Enum Corners.
 	 * 
@@ -99,7 +105,13 @@ public class Constants {
 		QUESTIONS_BY_ROWS(0, Constants.QUESTIONS_BY_ROWS, TranslationKeys.QUESTIONS_BY_ROWS), 
 		
 		/** The QUESTIONS_BY_COLS field type. */
-		QUESTIONS_BY_COLS(1, Constants.QUESTIONS_BY_COLS, TranslationKeys.QUESTIONS_BY_COLS);
+		QUESTIONS_BY_COLS(1, Constants.QUESTIONS_BY_COLS, TranslationKeys.QUESTIONS_BY_COLS),
+		
+		/** The RESPONSES_BY_GRID field type. */
+		RESPONSES_BY_GRID(2, Constants.RESPONSES_BY_GRID, TranslationKeys.RESPONSES_BY_GRID),
+		
+		/** The QRCODE_BARCODE field type. */
+		BARCODE(3, Constants.BARCODE, TranslationKeys.BARCODE);
 
 		private int index;
 		private String name;

@@ -7,6 +7,8 @@ import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 
 import javax.swing.JFormattedTextField;
 import javax.swing.SwingUtilities;
@@ -23,7 +25,7 @@ import com.albertoborsetta.formscanner.gui.model.FormScannerModel;
 import com.albertoborsetta.formscanner.gui.view.ManageTemplateFrame;
 
 public class ManageTemplateController implements ActionListener,
-		ChangeListener, ItemListener, TableModelListener, ListSelectionListener, FocusListener {
+		ChangeListener, ItemListener, TableModelListener, ListSelectionListener, FocusListener, KeyListener {
 
 	private FormScannerModel formScannerModel;
 	private ManageTemplateFrame view;
@@ -95,6 +97,21 @@ public class ManageTemplateController implements ActionListener,
 	}
 
 	public void focusLost(FocusEvent e) {
+		view.setAdvanceable();
+	}
+
+	@Override
+	public void keyTyped(KeyEvent e) {
+		view.setAdvanceable();
+	}
+
+	@Override
+	public void keyPressed(KeyEvent e) {
+		view.setAdvanceable();
+	}
+
+	@Override
+	public void keyReleased(KeyEvent e) {
 		view.setAdvanceable();
 	}
 }

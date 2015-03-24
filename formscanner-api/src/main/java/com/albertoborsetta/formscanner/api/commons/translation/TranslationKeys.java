@@ -14,6 +14,12 @@ public class TranslationKeys {
 	/** The Translation Key for QUESTIONS_BY_COLS. */
 	public static final String QUESTIONS_BY_COLS = "questions.by.cols";
 	
+	/** The Translation Key for RESPONSES_BY_GRID. 0.11 */
+	public static final String RESPONSES_BY_GRID = "responses.by.grid";
+	
+	/** The Translation Key for QRCODE_BARCODE. 0.11 */
+	public static final String BARCODE = "qrcode.barcode";
+	
 	/** The Translation Key for TOP_LEFT_CORNER. */
 	public static final String TOP_LEFT_CORNER = "top.left.corner";
 	
