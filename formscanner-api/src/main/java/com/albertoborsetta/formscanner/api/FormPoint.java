@@ -24,6 +24,8 @@ public class FormPoint {
 
 	/**
 	 * Instantiates a new FormPoint object with (x,y)=(0,0).
+	 * 
+	 * @author Alberto Borsetta
 	 */
 	public FormPoint() {
 		this(0, 0);

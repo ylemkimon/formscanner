@@ -90,6 +90,7 @@ public class ManageTemplateFrame extends InternalFrame implements TabbedView {
 	private InternalFieldType[] types;
 	private JPanel fieldsTypeButtonPanel;
 	private JTextField questionsLabel;
+	private String fieldsType;
 
 	private class InternalFieldType {
 
@@ -216,9 +217,12 @@ public class ManageTemplateFrame extends InternalFrame implements TabbedView {
 			}
 			switch (nextTab) {
 			case 0:
-				resetSelectedValues();
+				resetFieldsType();
 				break;
 			case 1:
+				resetSelectedValues();
+				break;
+			case 2:
 				model.resetPoints();
 				model.disposeRelatedFrame(this);
 				break;
@@ -233,6 +237,10 @@ public class ManageTemplateFrame extends InternalFrame implements TabbedView {
 
 		tabbedPane.setEnabledAt(nextTab, true);
 		tabbedPane.setSelectedIndex(nextTab);
+	}
+
+	private void resetFieldsType() {
+		typeComboBox.setSelectedIndex(0);
 	}
 
 	private HashMap<String, FormField> createFields() {
@@ -284,9 +292,7 @@ public class ManageTemplateFrame extends InternalFrame implements TabbedView {
 	private void resetPositionsTable() {
 		removePositionsTable();
 
-		String type = getFieldType().getName();
-
-		switch (type) {
+		switch (fieldsType) {
 		case FormScannerConstants.QUESTIONS_BY_ROWS:
 		case FormScannerConstants.QUESTIONS_BY_COLS:
 			positionsTable = createSimplePositionsTable(
@@ -296,10 +302,10 @@ public class ManageTemplateFrame extends InternalFrame implements TabbedView {
 		case FormScannerConstants.RESPONSES_BY_GRID:
 			positionsTable = createGridPositionsTable(
 					((Integer) rowsNumber.getValue()),
-					((Integer) colsNumber.getValue())*2);
+					((Integer) colsNumber.getValue()) * 2);
 			break;
 		case FormScannerConstants.BARCODE:
-			positionsTable = createGridPositionsTable(4,2);
+			positionsTable = createBarcodePositionsTable(2, 4);
 			break;
 		}
 
@@ -325,9 +331,13 @@ public class ManageTemplateFrame extends InternalFrame implements TabbedView {
 	}
 
 	private void resetSelectedValues() {
-		rowsNumber.setValue(0);
-		colsNumber.setValue(0);
-		typeComboBox.setSelectedIndex(0);
+		if (!fieldsType.equals(FormScannerConstants.BARCODE)) {
+			rowsNumber.setValue(0);
+			colsNumber.setValue(0);
+			isMultiple.setSelected(false);
+			rejectMultiple.setSelected(false);
+		}
+		questionsLabel.setText(StringUtils.EMPTY);
 	}
 
 	public FieldType getFieldType() {
@@ -353,15 +363,17 @@ public class ManageTemplateFrame extends InternalFrame implements TabbedView {
 	}
 
 	private boolean verifyPropertiesValues() {
-		if ((Integer) colsNumber.getValue() < 0) {
+		if (colsNumber != null && (Integer) colsNumber.getValue() < 0) {
 			colsNumber.setValue(0);
 		}
-		if ((Integer) rowsNumber.getValue() < 0) {
+		if (rowsNumber != null && (Integer) rowsNumber.getValue() < 0) {
 			rowsNumber.setValue(0);
 		}
-		return (((Integer) colsNumber.getValue() > 0)
-				&& ((Integer) rowsNumber.getValue() > 0) && (typeComboBox
-					.getSelectedItem() != null) && StringUtils.isNotBlank(questionsLabel.getText()));
+		return (((colsNumber != null && (Integer) colsNumber.getValue() > 0)
+				&& (rowsNumber != null && (Integer) rowsNumber.getValue() > 0) && StringUtils
+					.isNotBlank(questionsLabel.getText())) || (colsNumber == null
+				&& rowsNumber == null && StringUtils.isNotBlank(questionsLabel
+				.getText())));
 	}
 
 	private JTable createSimplePositionsTable(int rows, int cols) {
@@ -463,10 +475,7 @@ public class ManageTemplateFrame extends InternalFrame implements TabbedView {
 			}
 
 			public boolean isCellEditable(int row, int col) {
-				if (row == 0 && col == 0) {
-					return false;
-				}
-				return ((row * col) == 0);
+				return (col % 2 == 0);
 			}
 		}, columnModel);
 
@@ -482,7 +491,7 @@ public class ManageTemplateFrame extends InternalFrame implements TabbedView {
 					int row, int column) {
 				final Component cell = super.getTableCellRendererComponent(
 						table, value, isSelected, hasFocus, row, column);
-				if (row == 0 || column == 0) {
+				if (column % 2 == 0) {
 					cell.setBackground(new java.awt.Color(238, 238, 238));
 				} else {
 					if (isSelected) {
@@ -498,18 +507,86 @@ public class ManageTemplateFrame extends InternalFrame implements TabbedView {
 
 		CharSequenceGenerator charSequence = new CharSequenceGenerator();
 
-		for (int i = 1; i < cols; i++) {
-			table.setValueAt(charSequence.next(), 0, i);
+		for (int i = 0; i < rows; i++) {
+			for (int j = 0; j < cols; j = j + 2) {
+				table.setValueAt(charSequence.next(), i, j);
+			}
+		}
+		table.setComponentOrientation(orientation);
+		table.setCellSelectionEnabled(true);
+		table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+		return table;
+	}
+
+	private JTable createBarcodePositionsTable(int rows, int cols) {
+		TableColumnModel columnModel = new DefaultTableColumnModel();
+
+		for (int i = 0; i < cols; i++) {
+			TableColumn column = new TableColumn(i);
+			column.setMinWidth(100);
+			columnModel.addColumn(column);
 		}
 
-		for (int i = 1; i < rows; i++) {
-			table.setValueAt(
-					(String) FormScannerTranslation
-							.getTranslationFor(FormScannerTranslationKeys.QUESTION)
-							+ " "
-							+ StringUtils.leftPad("" + previousRowsCount++, 3,
-									"0"), i, 0);
-		}
+		JTable table = new JTable(new DefaultTableModel(rows, cols) {
+
+			/**
+			 *
+			 */
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public void addTableModelListener(
+					TableModelListener tableModelListener) {
+				super.addTableModelListener(manageTemplateController);
+			}
+
+			public boolean isCellEditable(int row, int col) {
+				return (false);
+			}
+		}, columnModel);
+
+		table.setDefaultRenderer(Object.class, new DefaultTableCellRenderer() {
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public Component getTableCellRendererComponent(JTable table,
+					Object value, boolean isSelected, boolean hasFocus,
+					int row, int column) {
+				final Component cell = super.getTableCellRendererComponent(
+						table, value, isSelected, hasFocus, row, column);
+				if (column % 2 == 0) {
+					cell.setBackground(new java.awt.Color(238, 238, 238));
+				} else {
+					if (isSelected) {
+						cell.setBackground(Color.lightGray);
+					} else {
+						cell.setBackground(Color.white);
+					}
+				}
+				cell.repaint();
+				return cell;
+			}
+		});
+
+		table.setValueAt(FormScannerTranslation
+				.getTranslationFor(FormScannerTranslationKeys.TOP_LEFT_CORNER),
+				0, 0);
+		table.setValueAt(
+				FormScannerTranslation
+						.getTranslationFor(FormScannerTranslationKeys.TOP_RIGHT_CORNER),
+				0, 2);
+		table.setValueAt(
+				FormScannerTranslation
+						.getTranslationFor(FormScannerTranslationKeys.BOTTOM_LEFT_CORNER),
+				1, 0);
+		table.setValueAt(
+				FormScannerTranslation
+						.getTranslationFor(FormScannerTranslationKeys.BOTTOM_RIGHT_CORNER),
+				1, 2);
+
 		table.setComponentOrientation(orientation);
 		table.setCellSelectionEnabled(true);
 		table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
@@ -576,15 +653,15 @@ public class ManageTemplateFrame extends InternalFrame implements TabbedView {
 
 	private JPanel getFieldPropertiesPanel() {
 
+		fieldsType = getFieldType().getName();
+
 		JPanel propertiesButtonPanel = getPropertiesButtonPanel();
 
 		PanelBuilder pPanelBuilder = new PanelBuilder(orientation).withLayout(
 				new BorderLayout()).add(propertiesButtonPanel,
 				BorderLayout.SOUTH);
 
-		String type = getFieldType().getName();
-
-		switch (type) {
+		switch (fieldsType) {
 		case FormScannerConstants.BARCODE:
 			JPanel barcodePanel = getBarcodePanel();
 			pPanelBuilder.add(barcodePanel, BorderLayout.NORTH);
@@ -592,8 +669,7 @@ public class ManageTemplateFrame extends InternalFrame implements TabbedView {
 		case FormScannerConstants.RESPONSES_BY_GRID:
 		case FormScannerConstants.QUESTIONS_BY_ROWS:
 		case FormScannerConstants.QUESTIONS_BY_COLS:
-			JPanel rowsColsPanel = getRowsColsPanel(type
-					.equals(FormScannerConstants.RESPONSES_BY_GRID));
+			JPanel rowsColsPanel = getRowsColsPanel();
 			pPanelBuilder.add(rowsColsPanel, BorderLayout.NORTH);
 			break;
 		}
@@ -605,8 +681,7 @@ public class ManageTemplateFrame extends InternalFrame implements TabbedView {
 		questionsLabel = new TextFieldBuilder(10, orientation)
 				.withActionListener(manageTemplateController).build();
 
-		return new PanelBuilder(orientation)
-				.withLayout(new SpringLayout())
+		return new PanelBuilder(orientation).withLayout(new SpringLayout())
 				.add(getLabel(FormScannerTranslationKeys.BARCODE_LABEL))
 				.add(questionsLabel).withGrid(1, 2).build();
 	}
@@ -651,7 +726,10 @@ public class ManageTemplateFrame extends InternalFrame implements TabbedView {
 				.addComponent(typePanel, BorderLayout.NORTH).build();
 	}
 
-	private JPanel getRowsColsPanel(boolean isGrid) {
+	private JPanel getRowsColsPanel() {
+
+		boolean isGrid = fieldsType
+				.equals(FormScannerConstants.RESPONSES_BY_GRID);
 
 		questionsLabel = new TextFieldBuilder(10, orientation)
 				.withActionListener(manageTemplateController).build();
@@ -739,9 +817,8 @@ public class ManageTemplateFrame extends InternalFrame implements TabbedView {
 								.getTranslationFor(FormScannerTranslationKeys.OK_BUTTON_TOOLTIP))
 				.withActionCommand(FormScannerConstants.CONFIRM)
 				.withActionListener(manageTemplateController)
-				.setEnabled(
-						getFieldType().getName().equals(
-								FormScannerConstants.BARCODE)).build();
+				.setEnabled(fieldsType.equals(FormScannerConstants.BARCODE))
+				.build();
 
 		cancelPropertiesButton = new ButtonBuilder(orientation)
 				.withText(
