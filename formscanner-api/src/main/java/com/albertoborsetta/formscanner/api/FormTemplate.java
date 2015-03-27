@@ -64,28 +64,88 @@ import com.albertoborsetta.formscanner.api.commons.Constants.FieldType;
  * <template>
  * 	<rotation angle="0.0"/>
  * 	<corners>
- * 		<corner position="BOTTOM_RIGHT" x="2324.627551020408" y="3353.5"/>
- * 		<corner position="TOP_RIGHT" x="2324.627551020408" y="153.5"/>
- * 		<corner position="TOP_LEFT" x="153.7844387755102" y="153.5"/>
- * 		<corner position="BOTTOM_LEFT" x="153.7844387755102" y="3353.5"/>
+ * 		<corner position="TOP_RIGHT">
+ * 			<point x="2324.627551020408" y="153.5"/>
+ * 		</corner>
+ * 		<corner position="TOP_LEFT">
+ * 			<point x="153.7844387755102" y="153.5"/>
+ * 		</corner>
+ * 		<corner position="BOTTOM_RIGHT">
+ * 			<point x="2324.627551020408" y="3353.5"/>
+ * 		</corner>
+ * 		<corner position="BOTTOM_LEFT">
+ * 			<point x="153.7844387755102" y="3353.5"/>
+ * 		</corner>
  * 	</corners>
  * 	<fields>
- * 		<field multiple="false" orientation="QUESTIONS_BY_ROWS">
- * 			<name>Question 01</name>
+ * 		<field multiple="false" type="QUESTIONS_BY_ROWS" question="Question 01">
  * 			<values>
- * 				<value x="840.0" y="1287.0">Response 02</value>
- * 				<value x="715.0" y="1287.0">Response 01</value>
- * 				<value x="1091.0" y="1287.0">Response 04</value>
- * 				<value x="965.0" y="1287.0">Response 03</value>
+ * 				<value response="Response 01">
+ * 					<point x="800.0" y="1300.0" />
+ * 				</value>
+ * 				<value response="Response 02">
+ * 					<point x="925.0" y="1300.0" />
+ * 				</value>
+ * 				<value response="Response 03">
+ * 					<point x="1050.0" y="1300.0" />
+ * 				</value>
+ * 				<value response="Response 04">
+ * 					<point x="1175.0" y="1300.0" />
+ * 				</value>
  * 			</values>
  * 		</field>
- * 		<field multiple="false" orientation="QUESTIONS_BY_ROWS">
- * 			<name>Question 05</name>
+ * 		<field multiple="false" type="QUESTIONS_BY_COLS" question="Question 02">
  * 			<values>
- * 				<value x="840.0" y="1620.0">Response 02</value>
- * 				<value x="715.0" y="1620.0">Response 01</value>
- * 				<value x="1091.0" y="1620.0">Response 04</value>
- * 				<value x="965.0" y="1620.0">Response 03</value>
+ * 				<value response="Response 01">
+ * 					<point x="800.0" y="1400.0" />
+ * 				</value>
+ * 				<value response="Response 02">
+ * 					<point x="800.0" y="1525.0" />
+ * 				</value>
+ * 				<value response="Response 03">
+ * 					<point x="800.0" y="1650.0" />
+ * 				</value>
+ * 				<value response="Response 04">
+ * 					<point x="800.0" y="1725.0" />
+ * 				</value>
+ * 			</values>
+ * 		</field>
+ * 		<field multiple="false" type="RESPONSES_BY_GRID" question="Question 03">
+ * 			<values>
+ * 				<value response="Response A">
+ * 					<point x="800.0" y="1850.0" />
+ * 				</value>
+ * 				<value response="Response B">
+ * 					<point x="925.0" y="1850.0" />
+ * 				</value>
+ * 				<value response="Response C">
+ * 					<point x="1050.0" y="1850.0" />
+ * 				</value>
+ * 				<value response="Response D">
+ * 					<point x="800.0" y="1975.0" />
+ * 				</value>
+ * 				<value response="Response E">
+ * 					<point x="925.0" y="1975.0" />
+ * 				</value>
+ * 				<value response="Response F">
+ * 					<point x="1050.0" y="1975.0" />
+ * 				</value>
+ * 			</values>
+ * 		</field>
+ * 		<field type="BARCODE" name="Barcode">
+ * 			<values>
+ * 				<value response="TOP_LEFT">
+ * 					<point x="800.0" y="2100.0" />
+ * 				</value>
+ * 				<value response="TOP_RIGHT">
+ * 					<point x="1200.0" y="2100.0" />
+ * 				</value>
+ * 				<value response="BOTTOM_LEFT">
+ * 					<point x="800.0" y="2300.0" />
+ * 				</value>
+ * 				<value response="BOTTOM_RIGHT">
+ * 					<point x="1200.0" y="2300.0" />
+ * 				</value>
  * 			</values>
  * 		</field>
  * 	</fields>
@@ -104,6 +164,7 @@ public class FormTemplate {
 
 	private String name;
 	private HashMap<String, FormField> fields;
+	private HashMap<String, FormArea> areas;
 	private HashMap<Corners, FormPoint> corners;
 	private ArrayList<FormPoint> pointList;
 	private double rotation;
@@ -111,6 +172,7 @@ public class FormTemplate {
 	private int height;
 	private int width;
 	private double diagonal;
+	private ArrayList<FormArea> areaList;
 	
 	private static class FormTemplateWrapper {
 
@@ -151,6 +213,15 @@ public class FormTemplate {
 			// field elements
 			for (Entry<String, FormField> field : template.getFields().entrySet()) {
 				fieldsElement.appendChild(field.getValue().getXml(doc));
+			}
+			
+			// areas element
+			Element areasElement = doc.createElement("areas");
+			templateElement.appendChild(areasElement);
+
+			// field elements
+			for (Entry<String, FormArea> area : template.getAreas().entrySet()) {
+				areasElement.appendChild(area.getValue().getXml(doc));
 			}
 			return doc;
 		}
@@ -199,8 +270,12 @@ public class FormTemplate {
 						.getAttribute("multiple")));
 				field.setRejectMultiple(Boolean.parseBoolean(fieldElement
 						.getAttribute("rejectMultiple")));
+				
+				// DEPRECATED "orientation" attribute.
 				field.setType(FieldType.valueOf(fieldElement
-						.getAttribute("orientation")));
+						.getAttribute("type")==null?fieldElement
+								.getAttribute("orientation"):fieldElement
+								.getAttribute("type")));
 
 				Element valuesElement = (Element) fieldElement
 						.getElementsByTagName("values").item(0);
@@ -431,6 +506,16 @@ public class FormTemplate {
 	 */
 	public ArrayList<FormPoint> getFieldPoints() {
 		return pointList;
+	}
+	
+	/**
+	 * Returns the areas of the barcode fields of the FormTemplate object.
+	 *
+	 * @author Alberto Borsetta
+	 * @return the areas of the barcode fields of the FormTemplate object
+	 */
+	public Object getBarcodeAreas() {
+		return areaList;
 	}
 
 	/**
