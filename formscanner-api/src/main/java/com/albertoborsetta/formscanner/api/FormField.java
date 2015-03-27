@@ -10,6 +10,7 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
 import com.albertoborsetta.formscanner.api.FormPoint;
+import com.albertoborsetta.formscanner.api.commons.Constants;
 import com.albertoborsetta.formscanner.api.commons.Constants.FieldType;
 
 /**
@@ -195,10 +196,14 @@ public class FormField {
 	 */
 	public Element getXml(Document doc) {
 		Element fieldElement = doc.createElement("field");
-		fieldElement.setAttribute("orientation", type.name());
-		fieldElement.setAttribute("multiple", String.valueOf(multiple));
-		fieldElement.setAttribute("rejectMultiple", String.valueOf(rejectMultiple));
+		
+		fieldElement.setAttribute("type", type.name());
 		fieldElement.setAttribute("question", name);
+		
+		if (!type.getValue().equals(Constants.BARCODE)) {
+			fieldElement.setAttribute("multiple", String.valueOf(multiple));
+			fieldElement.setAttribute("rejectMultiple", String.valueOf(rejectMultiple));
+		}
 		
 		// values element
 		Element valuesElement = doc.createElement("values");

@@ -1,5 +1,6 @@
 package com.albertoborsetta.formscanner.gui.view;
 
+import com.albertoborsetta.formscanner.api.FormArea;
 import com.albertoborsetta.formscanner.api.FormPoint;
 import com.albertoborsetta.formscanner.api.FormTemplate;
 import com.albertoborsetta.formscanner.api.commons.Constants.Corners;
@@ -443,12 +444,12 @@ public class ImageFrame extends InternalFrame implements ScrollableImageView {
 
 		private void showBarcodeArea(Graphics g) {
 			for (FormArea area : template.getBarcodeAreas()) {
-				showPoint(g, area);
+				showArea(g, area.getPoints());
 			}
 			
 			if (!model.getAreas().isEmpty()) {
 				for (FormArea area : model.getAreas()) {
-					showPoint(g, area);
+					showArea(g, area.getPoints());
 				}
 			}
 		}
@@ -489,12 +490,16 @@ public class ImageFrame extends InternalFrame implements ScrollableImageView {
 			if (corners.isEmpty()) {
 				return;
 			}
+			showArea(g, corners);
+		}
+
+		private void showArea(Graphics g, HashMap<Corners, FormPoint> points) {
 			g.setColor(Color.GREEN);
 
 			for (int i = 0; i < Corners.values().length; i++) {
-				FormPoint p1 = corners.get(Corners.values()[i
+				FormPoint p1 = points.get(Corners.values()[i
 						% Corners.values().length]);
-				FormPoint p2 = corners.get(Corners.values()[(i + 1)
+				FormPoint p2 = points.get(Corners.values()[(i + 1)
 						% Corners.values().length]);
 
 				g.drawLine((int) (p1.getX() * zoom), (int) (p1.getY() * zoom),
