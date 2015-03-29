@@ -10,7 +10,8 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
 /**
- * The <code>FormPoint</code> class represents a point into the scanned form.<p>
+ * The <code>FormPoint</code> class represents a point into the scanned form.
+ * <p>
  * A FormPoint object has only the (x,y) coordinates attributes
  * 
  * @author Alberto Borsetta
@@ -30,24 +31,27 @@ public class FormPoint {
 	public FormPoint() {
 		this(0, 0);
 	}
-	
+
 	/**
 	 * Instantiates a new FormPoint object from a <code>java.awt.Point</code>.
 	 *
 	 * @author Alberto Borsetta
-	 * @param p the <code>java.awt.Point</code> object
+	 * @param p
+	 *            the <code>java.awt.Point</code> object
 	 * @see Point
 	 */
 	public FormPoint(Point p) {
 		this(p.getX(), p.getY());
 	}
-	
+
 	/**
 	 * Instantiates a new FormPoint object with given (x,y) coordinates.
 	 *
 	 * @author Alberto Borsetta
-	 * @param x the x coordinate
-	 * @param y the y coordinate
+	 * @param x
+	 *            the x coordinate
+	 * @param y
+	 *            the y coordinate
 	 */
 	public FormPoint(double x, double y) {
 		this.x = x;
@@ -58,7 +62,8 @@ public class FormPoint {
 	 * Returns the quadratic distance to the given FormPoint object.
 	 *
 	 * @author Alberto Borsetta
-	 * @param c2 the point to calculate the distance from
+	 * @param c2
+	 *            the point to calculate the distance from
 	 * @return the calculated quadratic distance
 	 */
 	public double dist2(FormPoint c2) {
@@ -71,8 +76,10 @@ public class FormPoint {
 	 * Returns the quadratic distance to the given (x,y) coordinates.
 	 *
 	 * @author Alberto Borsetta
-	 * @param x2 the x coordinate to calculate the distance from
-	 * @param y2 the y coordinate to calculate the distance from
+	 * @param x2
+	 *            the x coordinate to calculate the distance from
+	 * @param y2
+	 *            the y coordinate to calculate the distance from
 	 * @return the calculated quadratic distance
 	 */
 	public double dist2(double x2, double y2) {
@@ -81,18 +88,24 @@ public class FormPoint {
 		return (dx * dx) + (dy * dy);
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see java.lang.Object#toString()
 	 */
 	public String toString() {
-		return "[" + (int) getX() + "," + (int) getY() + "]";
+		StringBuilder sb = new StringBuilder();
+		sb.append("[").append((int) getX()).append(",").append((int) getY())
+				.append("]");
+		return sb.toString();
 	}
 
 	/**
 	 * Retruns the FormPoint object from the string representation of it.
 	 *
 	 * @author Alberto Borsetta
-	 * @param str the string representation of a FormPoint object
+	 * @param str
+	 *            the string representation of a FormPoint object
 	 * @return the FormPoint object
 	 */
 	public static FormPoint toPoint(String str) {
@@ -107,7 +120,8 @@ public class FormPoint {
 			decimalFormatSymbols.setDecimalSeparator('.');
 			formatter.setDecimalFormatSymbols(decimalFormatSymbols);
 
-			return new FormPoint(formatter.parse(coords[0]).doubleValue(), formatter.parse(coords[1]).doubleValue());
+			return new FormPoint(formatter.parse(coords[0]).doubleValue(),
+					formatter.parse(coords[1]).doubleValue());
 		} catch (ParseException e) {
 			e.printStackTrace();
 			return null;
@@ -128,7 +142,8 @@ public class FormPoint {
 	 * Calculate the rescaled position according to the given scaleFactor.
 	 *
 	 * @author Alberto Borsetta
-	 * @param scaleFactor the scale factor
+	 * @param scaleFactor
+	 *            the scale factor
 	 */
 	public void scale(double scaleFactor) {
 		x = (scaleFactor * x);
@@ -136,17 +151,22 @@ public class FormPoint {
 	}
 
 	/**
-	 * Roto-translate the point using the given origin and angle.
-	 * The direction indicates:
+	 * Roto-translate the point using the given origin and angle. The direction
+	 * indicates:
 	 * <ul>
-	 * <li><code>true</code> - calculate the relative position to the given origin FormPoint object
-	 * <li><code>false</code> - calculate the original position from the given origin FormPoint object
+	 * <li><code>true</code> - calculate the relative position to the given
+	 * origin FormPoint object
+	 * <li><code>false</code> - calculate the original position from the given
+	 * origin FormPoint object
 	 * </ul>
 	 *
 	 * @author Alberto Borsetta
-	 * @param o the origin FormPoint object
-	 * @param alfa the angle (in radiants)
-	 * @param direct the direction
+	 * @param o
+	 *            the origin FormPoint object
+	 * @param alfa
+	 *            the angle (in radiants)
+	 * @param direct
+	 *            the direction
 	 */
 	public void rotoTranslate(FormPoint o, double alfa, boolean direct) {
 		if (direct) {
@@ -155,7 +175,7 @@ public class FormPoint {
 			originalPositionFrom(o, alfa);
 		}
 	}
-	
+
 	private void relativePositionTo(FormPoint o, double alfa) {
 		translate(0 - o.getX(), 0 - o.getY());
 		rotate(alfa);
@@ -170,8 +190,10 @@ public class FormPoint {
 	 * Sets the (x,y) coordinates of the FormPoint object.
 	 *
 	 * @author Alberto Borsetta
-	 * @param x the x coordinate
-	 * @param y the y coordinate
+	 * @param x
+	 *            the x coordinate
+	 * @param y
+	 *            the y coordinate
 	 */
 	public void setLocation(double x, double y) {
 		this.x = x;
@@ -192,7 +214,8 @@ public class FormPoint {
 	 * Sets the x coordinate.
 	 *
 	 * @author Alberto Borsetta
-	 * @param x the new x coordinate
+	 * @param x
+	 *            the new x coordinate
 	 */
 	public void setX(double x) {
 		this.x = x;
@@ -212,13 +235,16 @@ public class FormPoint {
 	 * Sets the y coordinate.
 	 *
 	 * @author Alberto Borsetta
-	 * @param y the new y coordinate
+	 * @param y
+	 *            the new y coordinate
 	 */
 	public void setY(double y) {
 		this.y = y;
 	}
-	
-	/* (non-Javadoc)
+
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see java.lang.Object#clone()
 	 */
 	public FormPoint clone() {
@@ -229,7 +255,8 @@ public class FormPoint {
 	 * Returns the xml representation of the FormPoint object.
 	 *
 	 * @author Alberto Borsetta
-	 * @param doc the parent document
+	 * @param doc
+	 *            the parent document
 	 * @return the xml representation of the FormPoint object
 	 */
 	public Element getXml(Document doc) {

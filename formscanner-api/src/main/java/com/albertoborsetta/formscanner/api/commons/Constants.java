@@ -35,6 +35,8 @@ public class Constants {
 
 	/** Identifies the QRCODE_BARCODE field type. 0.11 */
 	public static final String BARCODE = "BARCODE";
+	
+	public static final String CURRENT_TEMPLATE_VERSION = "1.0";
 
 	/**
 	 * The Enum Corners.

@@ -10,12 +10,10 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
 import com.albertoborsetta.formscanner.api.FormPoint;
-import com.albertoborsetta.formscanner.api.commons.Constants;
-import com.albertoborsetta.formscanner.api.commons.Constants.FieldType;
 
 /**
- * The <code>FormField</code> class represents a field into the scanned form.<p>
- * A FormField object has this attributes:
+ * The <code>FormQuestion</code> class represents a question field into the scanned form.<p>
+ * A FormQuestion object has this attributes:
  * <ul>
  * <li>A name
  * <li>A specific type
@@ -26,39 +24,37 @@ import com.albertoborsetta.formscanner.api.commons.Constants.FieldType;
  * 
  * @author Alberto Borsetta
  * @version 0.11-SNAPSHOT
+ * @see FormField
  * @see FormPoint
- * @see FieldType
  */
-public class FormField {
+public class FormQuestion extends FormField {
 	
-	private String name;
-	private FieldType type;
 	private boolean multiple;
 	private HashMap<String, FormPoint> points;
 	private boolean rejectMultiple = false;
 
 	/**
-	 * Instantiates a new FormField with the responses points.
+	 * Instantiates a new FormQuestion with the responses points.
 	 *
 	 * @author Alberto Borsetta
 	 * @param name the name of the field
 	 * @param points the points which indicates the position of the responses
 	 * @see FormPoint
 	 */
-	public FormField(String name, HashMap<String, FormPoint> points) {
-		this.name = name;
+	public FormQuestion(String name, HashMap<String, FormPoint> points) {
+		super(name);
 		this.points = points;
 	}
 
 	/**
-	 * Instantiates a new empty FormField. Initialize an empty set of response points.
+	 * Instantiates a new empty FormQuestion. Initialize an empty set of response points.
 	 *
 	 * @author Alberto Borsetta
 	 * @param name the name of the field
 	 * @see FormPoint
 	 */
-	public FormField(String name) {
-		this.name = name;
+	public FormQuestion(String name) {
+		super(name);
 		points = new HashMap<String, FormPoint>();
 	}
 
@@ -95,7 +91,7 @@ public class FormField {
 	}
 
 	/**
-	 * Returns the response points of a FormField object.
+	 * Returns the response points of a FormQuestion object.
 	 *
 	 * @author Alberto Borsetta
 	 * @return the response points
@@ -106,49 +102,7 @@ public class FormField {
 	}
 
 	/**
-	 * Sets the FormField object type.
-	 *
-	 * @author Alberto Borsetta
-	 * @param type the new field type
-	 * @see FieldType
-	 */
-	public void setType(FieldType type) {
-		this.type = type;
-	}
-
-	/**
-	 * Returns the FormField object type.
-	 *
-	 * @author Alberto Borsetta
-	 * @return the field type
-	 * @see FieldType
-	 */
-	public FieldType getType() {
-		return type;
-	}
-
-	/**
-	 * Sets the FormField object name.
-	 *
-	 * @author Alberto Borsetta
-	 * @param name the new field name
-	 */
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	/**
-	 * Returns the FormField object name.
-	 *
-	 * @author Alberto Borsetta
-	 * @return the field name
-	 */
-	public String getName() {
-		return name;
-	}
-
-	/**
-	 * Checks if it is a multiple choice FormField object.
+	 * Checks if it is a multiple choice FormQuestion object.
 	 *
 	 * @author Alberto Borsetta
 	 * @return <code>true</code>, if it is a multiple choice FormField object 
@@ -158,7 +112,7 @@ public class FormField {
 	}
 
 	/**
-	 * Sets if it is a multiple choice FormField object.
+	 * Sets if it is a multiple choice FormQuestion object.
 	 *
 	 * @author Alberto Borsetta
 	 * @param multiple <code>true</code> if it is a multiple choice FormField object
@@ -176,37 +130,36 @@ public class FormField {
 	public String getValues() {
 		ArrayList<String> results = new ArrayList<String>(points.keySet());
 		Collections.sort(results);
-		String ret = "";
+		StringBuilder ret = new StringBuilder();
 		for (String result : results) {
-			if (StringUtils.isEmpty(ret)) {
-				ret += result;
+			if (StringUtils.isEmpty(ret.toString())) {
+				ret.append(result);
 			} else {
-				ret += "|" + result;
+				ret.append("|").append(result);
 			}
 		}
-		return ret;
+		return ret.toString();
 	}
 
 	/**
-	 * Returns the xml representation of the FormField object.
+	 * Returns the xml representation of the FormQuestion object.
 	 *
 	 * @author Alberto Borsetta
 	 * @param doc the parent document
-	 * @return the xml representation of the FormField object
+	 * @return the xml representation of the FormQuestion object
 	 */
+	@Override
 	public Element getXml(Document doc) {
-		Element fieldElement = doc.createElement("field");
+		Element questionElement = doc.createElement("question");
 		
-		fieldElement.setAttribute("type", type.name());
-		fieldElement.setAttribute("question", name);
-		
-		if (!type.getValue().equals(Constants.BARCODE)) {
-			fieldElement.setAttribute("multiple", String.valueOf(multiple));
-			fieldElement.setAttribute("rejectMultiple", String.valueOf(rejectMultiple));
-		}
+		questionElement.setAttribute("type", type.name());
+		questionElement.setAttribute("question", name);
+		questionElement.setAttribute("multiple", String.valueOf(multiple));
+		questionElement.setAttribute("rejectMultiple", String.valueOf(rejectMultiple));
 		
 		// values element
 		Element valuesElement = doc.createElement("values");
+		questionElement.appendChild(valuesElement);
 
 		// value elements
 		for (Entry<String, FormPoint> point : points.entrySet()) {
@@ -216,25 +169,24 @@ public class FormField {
 			valuesElement.appendChild(valueElement);
 		}
 
-		fieldElement.appendChild(valuesElement);
-		return fieldElement;
+		return questionElement;
 	}
 
 	/**
-	 * Sets if the FormField object has to be rejected in case of multiple responses.
+	 * Sets if the FormQuestion object has to be rejected in case of multiple responses.
 	 *
 	 * @author Alberto Borsetta
-	 * @param rejectMultiple <code>true</code> if the FormField object has to be rejected in case of multiple responses
+	 * @param rejectMultiple <code>true</code> if the FormQuestion object has to be rejected in case of multiple responses
 	 */
 	public void setRejectMultiple(boolean rejectMultiple) {
 		this.rejectMultiple = rejectMultiple;
 	}
 	
 	/**
-	 * Returns if the FormField object has to be rejected in case of multiple responses.
+	 * Returns if the FormQuestion object has to be rejected in case of multiple responses.
 	 *
 	 * @author Alberto Borsetta
-	 * @return <code>true</code>, if the FormField object has to be rejected in case of multiple responses
+	 * @return <code>true</code>, if the FormQuestion object has to be rejected in case of multiple responses
 	 */
 	public boolean rejectMultiple() {
 		return rejectMultiple;

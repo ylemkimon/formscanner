@@ -50,7 +50,7 @@ public class ManageTemplateController implements ActionListener,
 			view.removeSelectedField();
 			break;
 		case SAVE_TEMPLATE:
-			formScannerModel.saveTemplate();
+			formScannerModel.saveTemplate(true);
 			view.dispose();
 			break;
 		case CONFIRM:

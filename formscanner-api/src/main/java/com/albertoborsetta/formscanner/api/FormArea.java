@@ -1,6 +1,5 @@
 package com.albertoborsetta.formscanner.api;
 
-import java.awt.Point;
 import java.util.HashMap;
 import java.util.Map.Entry;
 
@@ -13,16 +12,20 @@ import com.albertoborsetta.formscanner.api.commons.Constants.FieldType;
 /**
  * The <code>FormArea</code> class represents an area (like barcode area) into the scanned form.<p>
  * A FormArea object has the four corners points attributes
+ * <ul>
+ * <li>A name
+ * <li>A specific type
+ * <li>A set of points which indicates the position of the corners
+ * </ul>
  * 
  * @author Alberto Borsetta
  * @version 0.11-SNAPSHOT
  * @see FormPoint
+ * @see FieldType
  * @see Corners
  */
-public class FormArea {
+public class FormArea extends FormField {
 	
-	private String name;
-	private FieldType type;
 	private HashMap<Corners, FormPoint> area;
 
 	/**
@@ -35,7 +38,7 @@ public class FormArea {
 	 * @see Corners
 	 */
 	public FormArea(String name, HashMap<Corners, FormPoint> area) {
-		this.name = name;
+		super(name);
 		this.area = area;
 	}
 	
@@ -48,7 +51,7 @@ public class FormArea {
 	 * @see Corners
 	 */
 	public FormArea(String name) {
-		this.name = name;
+		super(name);
 		area = new HashMap<Corners, FormPoint>();
 	}
 
@@ -61,7 +64,7 @@ public class FormArea {
 	 * @see FormPoint
 	 * @see Corners
 	 */
-	public void setPoint(Corners corner, FormPoint point) {
+	public void setCorner(Corners corner, FormPoint point) {
 		area.put(corner, point);
 	}
 	
@@ -86,58 +89,15 @@ public class FormArea {
 	}
 	
 	/**
-	 * Returns the area indentified by the FormArea object.
+	 * Returns the corners of the FormArea object.
 	 *
 	 * @author Alberto Borsetta
-	 * @return the area
+	 * @return the corners
 	 * @see FormPoint
 	 * @see Corners
 	 */
-	public HashMap<Corners, FormPoint> getArea() {
+	public HashMap<Corners, FormPoint> getCorners() {
 		return area;
-	}
-	
-	/**
-	 * Sets the FormArea object type.
-	 *
-	 * @author Alberto Borsetta
-	 * @param type the new area type
-	 * @see FieldType
-	 */
-	public void setType(FieldType type) {
-		this.type = type;
-	}
-	
-
-	/**
-	 * Returns the FormArea object type.
-	 *
-	 * @author Alberto Borsetta
-	 * @return the field type
-	 * @see FieldType
-	 */
-	public FieldType getType() {
-		return type;
-	}
-	
-	/**
-	 * Sets the FormField object name.
-	 *
-	 * @author Alberto Borsetta
-	 * @param name the new field name
-	 */
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	/**
-	 * Returns the FormField object name.
-	 *
-	 * @author Alberto Borsetta
-	 * @return the field name
-	 */
-	public String getName() {
-		return name;
 	}
 	
 	/**
@@ -147,10 +107,25 @@ public class FormArea {
 	 * @param doc the parent document
 	 * @return the xml representation of the FormArea object
 	 */
+	@Override
 	public Element getXml(Document doc) {
-		Element pointElement = doc.createElement("point");
-		pointElement.setAttribute("x", String.valueOf(x));
-		pointElement.setAttribute("y", String.valueOf(y));
-		return pointElement;
+		Element areaElement = doc.createElement("area");
+		
+		areaElement.setAttribute("type", type.name());
+		areaElement.setAttribute("name", name);
+		
+		// corners element
+		Element cornersElement = doc.createElement("corners");
+		areaElement.appendChild(cornersElement);
+
+		// corner elements
+		for (Entry<Corners, FormPoint> corner : area.entrySet()) {
+			Element cornerElement = doc.createElement("corner");
+			cornerElement.setAttribute("position", corner.getKey().getName());
+			cornerElement.appendChild(corner.getValue().getXml(doc));
+			cornersElement.appendChild(cornerElement);
+		}
+
+		return areaElement;
 	}
 }

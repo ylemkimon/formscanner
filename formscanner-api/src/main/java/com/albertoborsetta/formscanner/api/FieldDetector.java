@@ -8,33 +8,33 @@ import java.util.concurrent.Callable;
 
 import com.albertoborsetta.formscanner.api.commons.Constants.Corners;
 
-import com.albertoborsetta.formscanner.api.FormField;
+import com.albertoborsetta.formscanner.api.FormQuestion;
 import com.albertoborsetta.formscanner.api.FormPoint;
 import com.albertoborsetta.formscanner.api.FormTemplate;
 
-public class FieldDetector implements Callable<HashMap<String, FormField>> {
+public class FieldDetector implements Callable<HashMap<String, FormQuestion>> {
 	private FormTemplate template;
 	private int threshold;
 	private int density;
-	private FormField templateField;
+	private FormQuestion templateField;
 	private int size;
 	private FormTemplate parent;
-	private HashMap<String, FormField> fields;
+	private HashMap<String, FormQuestion> fields;
 	private BufferedImage image;
 
 	FieldDetector(int threshold, int density, int size, FormTemplate template,
-			FormField templateField, BufferedImage image) {
+			FormQuestion templateField, BufferedImage image) {
 		this.template = template;
 		parent = template.getParentTemplate();
 		this.threshold = threshold;
 		this.density = density;
 		this.templateField = templateField;
 		this.size = size;
-		fields = new HashMap<String, FormField>();
+		fields = new HashMap<String, FormQuestion>();
 		this.image = image;
 	}
 
-	public HashMap<String, FormField> call() throws Exception {
+	public HashMap<String, FormQuestion> call() throws Exception {
 		boolean found = false;
 		int count = 0;
 
@@ -51,7 +51,7 @@ public class FieldDetector implements Callable<HashMap<String, FormField>> {
 
 			if (found = isFilled(responsePoint)) {
 				count++;
-				FormField filledField = getField(templateField, fieldName);
+				FormQuestion filledField = getField(templateField, fieldName);
 				
 				filledField.setPoint(pointName, responsePoint);
 				fields.put(fieldName, filledField);
@@ -72,7 +72,7 @@ public class FieldDetector implements Callable<HashMap<String, FormField>> {
 		}
 
 		if (!found) {
-			FormField filledField = getField(templateField, fieldName);
+			FormQuestion filledField = getField(templateField, fieldName);
 			filledField.setPoint("", null);
 			fields.put(fieldName, filledField);
 		}
@@ -116,11 +116,11 @@ public class FieldDetector implements Callable<HashMap<String, FormField>> {
 		return (count / (double) total) >= (density / 100.0);
 	}
 
-	private FormField getField(FormField field, String fieldName) {
-		FormField filledField = fields.get(fieldName);
+	private FormQuestion getField(FormQuestion field, String fieldName) {
+		FormQuestion filledField = fields.get(fieldName);
 
 		if (filledField == null) {
-			filledField = new FormField(fieldName);
+			filledField = new FormQuestion(fieldName);
 			filledField.setMultiple(field.isMultiple());
 		}
 

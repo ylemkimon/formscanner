@@ -23,8 +23,9 @@ import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
-import com.albertoborsetta.formscanner.api.FormField;
+import com.albertoborsetta.formscanner.api.FormQuestion;
 import com.albertoborsetta.formscanner.api.FormPoint;
+import com.albertoborsetta.formscanner.api.commons.Constants;
 import com.albertoborsetta.formscanner.api.commons.Constants.Corners;
 import com.albertoborsetta.formscanner.api.commons.Constants.FieldType;
 
@@ -61,7 +62,7 @@ import com.albertoborsetta.formscanner.api.commons.Constants.FieldType;
  * <pre>
  * {@code
  * <?xml version="1.0" encoding="UTF-8" standalone="no"?>
- * <template>
+ * <template version="1.0">
  * 	<rotation angle="0.0"/>
  * 	<corners>
  * 		<corner position="TOP_RIGHT">
@@ -78,7 +79,7 @@ import com.albertoborsetta.formscanner.api.commons.Constants.FieldType;
  * 		</corner>
  * 	</corners>
  * 	<fields>
- * 		<field multiple="false" type="QUESTIONS_BY_ROWS" question="Question 01">
+ * 		<question multiple="false" type="QUESTIONS_BY_ROWS" question="Question 01">
  * 			<values>
  * 				<value response="Response 01">
  * 					<point x="800.0" y="1300.0" />
@@ -93,8 +94,8 @@ import com.albertoborsetta.formscanner.api.commons.Constants.FieldType;
  * 					<point x="1175.0" y="1300.0" />
  * 				</value>
  * 			</values>
- * 		</field>
- * 		<field multiple="false" type="QUESTIONS_BY_COLS" question="Question 02">
+ * 		</question>
+ * 		<question multiple="false" type="QUESTIONS_BY_COLS" question="Question 02">
  * 			<values>
  * 				<value response="Response 01">
  * 					<point x="800.0" y="1400.0" />
@@ -109,8 +110,8 @@ import com.albertoborsetta.formscanner.api.commons.Constants.FieldType;
  * 					<point x="800.0" y="1725.0" />
  * 				</value>
  * 			</values>
- * 		</field>
- * 		<field multiple="false" type="RESPONSES_BY_GRID" question="Question 03">
+ * 		</question>
+ * 		<question multiple="false" type="RESPONSES_BY_GRID" question="Question 03">
  * 			<values>
  * 				<value response="Response A">
  * 					<point x="800.0" y="1850.0" />
@@ -131,23 +132,23 @@ import com.albertoborsetta.formscanner.api.commons.Constants.FieldType;
  * 					<point x="1050.0" y="1975.0" />
  * 				</value>
  * 			</values>
- * 		</field>
- * 		<field type="BARCODE" name="Barcode">
- * 			<values>
- * 				<value response="TOP_LEFT">
+ * 		</question>
+ * 		<area type="BARCODE" name="Barcode">
+ * 			<corners>
+ * 				<corner position="TOP_LEFT">
  * 					<point x="800.0" y="2100.0" />
- * 				</value>
- * 				<value response="TOP_RIGHT">
+ * 				</corner>
+ * 				<corner position="TOP_RIGHT">
  * 					<point x="1200.0" y="2100.0" />
- * 				</value>
- * 				<value response="BOTTOM_LEFT">
+ * 				</corner>
+ * 				<corner position="BOTTOM_LEFT">
  * 					<point x="800.0" y="2300.0" />
- * 				</value>
- * 				<value response="BOTTOM_RIGHT">
+ * 				</corner>
+ * 				<corner position="BOTTOM_RIGHT">
  * 					<point x="1200.0" y="2300.0" />
- * 				</value>
- * 			</values>
- * 		</field>
+ * 				</corner>
+ * 			</corners>
+ * 		</area>
  * 	</fields>
  * </template>
  * }
@@ -156,14 +157,14 @@ import com.albertoborsetta.formscanner.api.commons.Constants.FieldType;
  * @author Alberto Borsetta
  * @version 0.11-SNAPSHOT
  * @see FormPoint
- * @see FormField
+ * @see FormQuestion
  * @see FieldType
  * @see Corners
  */
 public class FormTemplate {
 
 	private String name;
-	private HashMap<String, FormField> fields;
+	private HashMap<String, FormQuestion> fields;
 	private HashMap<String, FormArea> areas;
 	private HashMap<Corners, FormPoint> corners;
 	private ArrayList<FormPoint> pointList;
@@ -173,6 +174,7 @@ public class FormTemplate {
 	private int width;
 	private double diagonal;
 	private ArrayList<FormArea> areaList;
+	private String version;
 	
 	private static class FormTemplateWrapper {
 
@@ -185,6 +187,7 @@ public class FormTemplate {
 			// root element
 			Document doc = docBuilder.newDocument();
 			Element templateElement = doc.createElement("template");
+			templateElement.setAttribute("version", Constants.CURRENT_TEMPLATE_VERSION);
 
 			// rotation element
 			doc.appendChild(templateElement);
@@ -210,19 +213,16 @@ public class FormTemplate {
 			Element fieldsElement = doc.createElement("fields");
 			templateElement.appendChild(fieldsElement);
 
-			// field elements
-			for (Entry<String, FormField> field : template.getFields().entrySet()) {
+			// question elements
+			for (Entry<String, FormQuestion> field : template.getFields().entrySet()) {
 				fieldsElement.appendChild(field.getValue().getXml(doc));
 			}
-			
-			// areas element
-			Element areasElement = doc.createElement("areas");
-			templateElement.appendChild(areasElement);
 
-			// field elements
+			// area elements
 			for (Entry<String, FormArea> area : template.getAreas().entrySet()) {
-				areasElement.appendChild(area.getValue().getXml(doc));
+				fieldsElement.appendChild(area.getValue().getXml(doc));
 			}
+			
 			return doc;
 		}
 
@@ -234,64 +234,116 @@ public class FormTemplate {
 			doc.getDocumentElement().normalize();
 
 			Element templateElement = (Element) doc.getDocumentElement();
-			Element rotationElement = (Element) templateElement
-					.getElementsByTagName("rotation").item(0);
-			template.setRotation(Double.parseDouble(rotationElement
-					.getAttribute("angle")));
+			template.setVersion(templateElement.getAttribute("version"));
+			Element rotationElement = (Element) templateElement.getElementsByTagName("rotation").item(0);
+			template.setRotation(Double.parseDouble(rotationElement.getAttribute("angle")));
 
-			Element cornersElement = (Element) templateElement
-					.getElementsByTagName("corners").item(0);
-			NodeList cornerList = cornersElement.getElementsByTagName("corner");
-			for (int i = 0; i < cornerList.getLength(); i++) {
-				Element cornerElement = (Element) cornerList.item(i);
-				String postion = cornerElement.getAttribute("position");
-				cornerElement.getElementsByTagName("point");
-				Element pointElement = (Element) cornerElement
-						.getElementsByTagName("point").item(0);
-				String xCoord = pointElement.getAttribute("x");
-				String yCoord = pointElement.getAttribute("y");
-
-				FormPoint corner = new FormPoint(Double.parseDouble(xCoord),
-						Double.parseDouble(yCoord));
-				template.setCorner(Corners.valueOf(postion), corner);
-			}
+			Element cornersElement = (Element) templateElement.getElementsByTagName("corners").item(0);
+			addCorners(template, cornersElement);
 
 			template.calculateDiagonal();
 
-			Element fieldsElement = (Element) templateElement.getElementsByTagName(
-					"fields").item(0);
-			NodeList fieldList = fieldsElement.getElementsByTagName("field");
+			Element fieldsElement = (Element) templateElement.getElementsByTagName("fields").item(0);
+			
+			addQuestions(template, fieldsElement);
+			addAreas(template, fieldsElement);
+		}
+
+		private static void addAreas(FormTemplate template,
+				Element element) {
+			NodeList fieldList = element.getElementsByTagName("area");
+			for (int i = 0; i < fieldList.getLength(); i++) {
+				Element fieldElement = (Element) fieldList.item(i);
+				String fieldName = fieldElement.getAttribute("name");
+				
+				FormArea field = getArea(fieldElement, fieldName);
+				template.setArea(fieldName, field);
+			}
+			
+		}
+
+		private static FormArea getArea(Element element, String name) {
+			FormArea area = new FormArea(name);
+			
+			area.setType(FieldType.valueOf(element.getAttribute("type")));
+
+			Element cornersElement = (Element) element.getElementsByTagName("corners").item(0);
+			NodeList cornerList = cornersElement.getElementsByTagName("corner");
+			for (int i = 0; i < cornerList.getLength(); i++) {
+				Element cornerElement = (Element) cornerList.item(i);
+				String position = cornerElement.getAttribute("position");
+				cornerElement.getElementsByTagName("point");
+				FormPoint point = getPoint(cornerElement);
+				area.setCorner(Corners.valueOf(position), point);
+			}
+			return area;
+		}
+
+		private static void addCorners(FormTemplate template,
+				Element element) {
+			NodeList cornerList = element.getElementsByTagName("corner");
+			for (int i = 0; i < cornerList.getLength(); i++) {
+				Element cornerElement = (Element) cornerList.item(i);
+				String position = cornerElement.getAttribute("position");
+				cornerElement.getElementsByTagName("point");
+				FormPoint corner = getPoint(cornerElement);
+				template.setCorner(Corners.valueOf(position), corner);
+			}
+		}
+
+		private static FormPoint getPoint(Element element) {
+			Element pointElement = (Element) element
+					.getElementsByTagName("point").item(0);
+			String xCoord = pointElement.getAttribute("x");
+			String yCoord = pointElement.getAttribute("y");
+
+			FormPoint point = new FormPoint(Double.parseDouble(xCoord),
+					Double.parseDouble(yCoord));
+			return point;
+		}
+
+		private static void addQuestions(FormTemplate template,
+				Element element) {
+			NodeList fieldList = element.getElementsByTagName("question");
+			for (int i = 0; i < fieldList.getLength(); i++) {
+				Element fieldElement = (Element) fieldList.item(i);
+				String fieldName = fieldElement.getAttribute("question");
+				
+				FormQuestion field = getQuestion(fieldElement, fieldName);
+				template.setField(fieldName, field);
+			}
+
+			// Tag "field" deprecated. To be removed
+			fieldList = element.getElementsByTagName("field");
 			for (int i = 0; i < fieldList.getLength(); i++) {
 				Element fieldElement = (Element) fieldList.item(i);
 				String fieldName = fieldElement.getAttribute("question");
 
-				FormField field = new FormField(fieldName);
-				field.setMultiple(Boolean.parseBoolean(fieldElement
-						.getAttribute("multiple")));
-				field.setRejectMultiple(Boolean.parseBoolean(fieldElement
-						.getAttribute("rejectMultiple")));
-				
-				// DEPRECATED "orientation" attribute.
-				field.setType(FieldType.valueOf(fieldElement
-						.getAttribute("type")==null?fieldElement
-								.getAttribute("orientation"):fieldElement
-								.getAttribute("type")));
-
-				Element valuesElement = (Element) fieldElement
-						.getElementsByTagName("values").item(0);
-				NodeList valueList = valuesElement.getElementsByTagName("value");
-				for (int j = 0; j < valueList.getLength(); j++) {
-					Element valueElement = (Element) valueList.item(j);
-					Element pointElement = (Element) valueElement.getElementsByTagName("point").item(0);
-					String xCoord = pointElement.getAttribute("x");
-					String yCoord = pointElement.getAttribute("y");
-
-					FormPoint point = new FormPoint(Double.parseDouble(xCoord),
-							Double.parseDouble(yCoord));
-					field.setPoint(valueElement.getAttribute("response"), point);
-				}
+				FormQuestion field = getQuestion(fieldElement, fieldName);
 				template.setField(fieldName, field);
 			}
+		}
+		
+		private static FormQuestion getQuestion(Element element,
+				String name) {
+			FormQuestion field = new FormQuestion(name);
+			field.setMultiple(Boolean.parseBoolean(element
+					.getAttribute("multiple")));
+			field.setRejectMultiple(Boolean.parseBoolean(element
+					.getAttribute("rejectMultiple")));
+			
+			// Attribute "orientation" deprecated. To be removed
+			field.setType(FieldType.valueOf((element.getAttribute("orientation").isEmpty())?element.getAttribute("type"):element.getAttribute("orientation")));
+
+			Element valuesElement = (Element) element
+					.getElementsByTagName("values").item(0);
+			NodeList valueList = valuesElement.getElementsByTagName("value");
+			for (int j = 0; j < valueList.getLength(); j++) {
+				Element valueElement = (Element) valueList.item(j);
+				FormPoint point = getPoint(valueElement);
+				field.setPoint(valueElement.getAttribute("response"), point);
+			}
+			return field;
 		}
 
 		public static String toString(FormTemplate template) {
@@ -313,7 +365,11 @@ public class FormTemplate {
 	public FormTemplate(String name) {
 		this(name, null);
 	}
-	
+
+	public void setVersion(String version) {
+		this.version = version;
+	}
+
 	/**
 	 * Instantiates a new form template from an xml representation.
 	 *
@@ -343,8 +399,10 @@ public class FormTemplate {
 		setDefaultCornerPosition();
 		calculateDiagonal();
 		rotation = 0;
-		fields = new HashMap<String, FormField>();
+		fields = new HashMap<String, FormQuestion>();
 		pointList = new ArrayList<FormPoint>();
+		areas = new HashMap<String, FormArea>();
+		areaList = new ArrayList<FormArea>();
 	}
 
 	/**
@@ -392,7 +450,7 @@ public class FormTemplate {
 	 * @author Alberto Borsetta
 	 * @param name the name of the field
 	 * @return the FormField object
-	 * @see FormField
+	 * @see FormQuestion
 	 */
 	public FormField getField(String name) {
 		return fields.get(name);
@@ -403,9 +461,9 @@ public class FormTemplate {
 	 *
 	 * @author Alberto Borsetta
 	 * @return the fields of the FormTemplate object
-	 * @see FormField
+	 * @see FormQuestion
 	 */
-	public HashMap<String, FormField> getFields() {
+	public HashMap<String, FormQuestion> getFields() {
 		return fields;
 	}
 
@@ -415,9 +473,9 @@ public class FormTemplate {
 	 * @author Alberto Borsetta
 	 * @param name the name of the field
 	 * @param field the field to set
-	 * @see FormField
+	 * @see FormQuestion
 	 */
-	public void setField(String name, FormField field) {
+	public void setField(String name, FormQuestion field) {
 		fields.put(name, field);
 		for (Entry<String, FormPoint> point : field.getPoints().entrySet()) {
 			if (point.getValue() != null) {
@@ -432,12 +490,44 @@ public class FormTemplate {
 	 * @author Alberto Borsetta
 	 * @param fields the fields to set
 	 */
-	public void setFields(HashMap<String, FormField> fields) {
-		for (Entry<String, FormField> field : fields.entrySet()) {
+	public void setFields(HashMap<String, FormQuestion> fields) {
+		for (Entry<String, FormQuestion> field : fields.entrySet()) {
 			setField(field.getKey(), field.getValue());
 		}
 	}
+	
+	// TODO: Javadoc
+	public FormArea getArea(String name) {
+		return areas.get(name);
+	}
+	
+	// TODO: Javadoc
+	public HashMap<String, FormArea> getAreas() {
+		return areas;
+	}
 
+	// TODO: Javadoc
+	public void setArea(String fieldName, FormArea area) {
+		areas.put(fieldName, area);
+		areaList.add(area);
+	}
+	
+	// TODO: Javadoc
+	public void setAreas(HashMap<String, FormArea> areas) {
+		this.areas = areas;
+		areaList.addAll(areas.values());
+	}
+	
+	/**
+	 * Returns the list of the areas of the FormTemplate object.
+	 *
+	 * @author Alberto Borsetta
+	 * @return the areas of the FormTemplate object
+	 */
+	public ArrayList<FormArea> getFieldAreas() {
+		return areaList;
+	}
+	
 	/**
 	 * Sets the corners of the FormTemplate object.
 	 *
@@ -507,16 +597,6 @@ public class FormTemplate {
 	public ArrayList<FormPoint> getFieldPoints() {
 		return pointList;
 	}
-	
-	/**
-	 * Returns the areas of the barcode fields of the FormTemplate object.
-	 *
-	 * @author Alberto Borsetta
-	 * @return the areas of the barcode fields of the FormTemplate object
-	 */
-	public Object getBarcodeAreas() {
-		return areaList;
-	}
 
 	/**
 	 * Removes the field identified by the given name.
@@ -526,7 +606,7 @@ public class FormTemplate {
 	 */
 	public void removeFieldByName(String fieldName) {
 
-		FormField field = fields.get(fieldName);
+		FormQuestion field = fields.get(fieldName);
 		for (Entry<String, FormPoint> point : field.getPoints().entrySet()) {
 			pointList.remove(point.getValue());
 		}
@@ -663,23 +743,23 @@ public class FormTemplate {
 		width = image.getWidth();
 		
 		ExecutorService threadPool = Executors.newFixedThreadPool(8);
-		HashSet<Future<HashMap<String, FormField>>> fieldDetectorThreads = new HashSet<Future<HashMap<String, FormField>>>();
+		HashSet<Future<HashMap<String, FormQuestion>>> fieldDetectorThreads = new HashSet<Future<HashMap<String, FormQuestion>>>();
 		
-		HashMap<String, FormField> templateFields = template.getFields();
+		HashMap<String, FormQuestion> templateFields = template.getFields();
 		ArrayList<String> fieldNames = new ArrayList<String>(templateFields.keySet());
 		Collections.sort(fieldNames);
 
 		for (String fieldName : fieldNames) {
-			Future<HashMap<String, FormField>> future = threadPool.submit(new FieldDetector(
+			Future<HashMap<String, FormQuestion>> future = threadPool.submit(new FieldDetector(
 					threshold, density, size, this, templateFields.get(fieldName), image));
 			fieldDetectorThreads.add(future);
 		}
 		
-		for (Future<HashMap<String, FormField>> thread: fieldDetectorThreads) {
+		for (Future<HashMap<String, FormQuestion>> thread: fieldDetectorThreads) {
 			try {
-				HashMap<String, FormField> threadFields = thread.get();
+				HashMap<String, FormQuestion> threadFields = thread.get();
 				for (String fieldName: threadFields.keySet()) {
-					FormField field = threadFields.get(fieldName);
+					FormQuestion field = threadFields.get(fieldName);
 					fields.put(fieldName, field);
 					for (Entry<String, FormPoint> point: field.getPoints().entrySet()) {
 						if (point.getValue() != null) {
@@ -723,8 +803,8 @@ public class FormTemplate {
 			}
 			pointList.remove(nearestPoint);
 
-			for (Entry<String, FormField> field : fields.entrySet()) {
-				FormField fieldValue = field.getValue();
+			for (Entry<String, FormQuestion> field : fields.entrySet()) {
+				FormQuestion fieldValue = field.getValue();
 				for (Entry<String, FormPoint> point : fieldValue.getPoints()
 						.entrySet()) {
 					if (nearestPoint.equals(point.getValue())) {
@@ -774,14 +854,14 @@ public class FormTemplate {
 				}
 			}
 
-			HashMap<String, FormField> templateFields = template.getFields();
-			for (Entry<String, FormField> templateField : templateFields
+			HashMap<String, FormQuestion> templateFields = template.getFields();
+			for (Entry<String, FormQuestion> templateField : templateFields
 					.entrySet()) {
-				FormField fieldValue = templateField.getValue();
+				FormQuestion fieldValue = templateField.getValue();
 				for (Entry<String, FormPoint> templatePoint : fieldValue
 						.getPoints().entrySet()) {
 					if (nearestTemplatePoint.equals(templatePoint.getValue())) {
-						FormField currentField = fields.get(templateField
+						FormQuestion currentField = fields.get(templateField
 								.getKey());
 						currentField.setPoint(templatePoint.getKey(),
 								cursorPoint);
@@ -824,5 +904,9 @@ public class FormTemplate {
 	 */
 	public FormTemplate getParentTemplate() {
 		return template;
+	}
+
+	public String getVersion() {
+		return version;
 	}
 }
