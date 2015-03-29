@@ -13,7 +13,7 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
 
-import com.albertoborsetta.formscanner.api.FormField;
+import com.albertoborsetta.formscanner.api.FormQuestion;
 import com.albertoborsetta.formscanner.api.FormTemplate;
 import com.albertoborsetta.formscanner.commons.FormFileUtils;
 import com.albertoborsetta.formscanner.commons.FormScannerConstants.Frame;
@@ -91,7 +91,7 @@ public class ResultsGridFrame extends InternalFrame {
 
 	private void setupTable() {
 		for (int i = 1; i < rows; i++) {
-			FormField field = form.getFields().get(header[i]);
+			FormQuestion field = form.getFields().get(header[i]);
 			if (field != null) {
 				table.setValueAt(field.getValues(), i, 1);
 			}

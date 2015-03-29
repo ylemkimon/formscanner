@@ -29,7 +29,7 @@ import org.supercsv.io.ICsvMapWriter;
 import org.supercsv.prefs.CsvPreference;
 import org.w3c.dom.Document;
 
-import com.albertoborsetta.formscanner.api.FormField;
+import com.albertoborsetta.formscanner.api.FormQuestion;
 import com.albertoborsetta.formscanner.api.FormTemplate;
 import com.albertoborsetta.formscanner.commons.translation.FormScannerTranslation;
 import com.albertoborsetta.formscanner.commons.translation.FormScannerTranslationKeys;
@@ -213,12 +213,12 @@ public class FormFileUtils extends JFileChooser {
 		ArrayList<HashMap<String, String>> results = new ArrayList<HashMap<String, String>>();
 		for (Entry<String, FormTemplate> filledForm : filledForms.entrySet()) {
 			FormTemplate form = filledForm.getValue();
-			HashMap<String, FormField> fields = form.getFields();
+			HashMap<String, FormQuestion> fields = form.getFields();
 
 			HashMap<String, String> result = new HashMap<String, String>();
 			result.put(header[0], filledForm.getKey());
 			for (int i = 1; i < header.length; i++) {
-				FormField field = fields.get(header[i]);
+				FormQuestion field = fields.get(header[i]);
 				result.put(header[i], field.getValues());
 			}
 
@@ -228,7 +228,7 @@ public class FormFileUtils extends JFileChooser {
 	}
 
 	public String[] getHeader(FormTemplate template) {
-		HashMap<String, FormField> fields = template.getFields();
+		HashMap<String, FormQuestion> fields = template.getFields();
 		String[] header = new String[fields.size() + 1];
 		int i = 0;
 		header[i++] = FormScannerTranslation

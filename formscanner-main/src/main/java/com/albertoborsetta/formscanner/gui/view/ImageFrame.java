@@ -443,19 +443,18 @@ public class ImageFrame extends InternalFrame implements ScrollableImageView {
 		}
 
 		private void showBarcodeArea(Graphics g) {
-			for (FormArea area : template.getBarcodeAreas()) {
-				showArea(g, area.getPoints());
+			for (FormArea area : template.getFieldAreas()) {
+				showArea(g, area.getCorners());
 			}
 			
 			if (!model.getAreas().isEmpty()) {
 				for (FormArea area : model.getAreas()) {
-					showArea(g, area.getPoints());
+					showArea(g, area.getCorners());
 				}
 			}
 		}
 
 		private void showPoints(Graphics g) {
-
 			for (FormPoint point : template.getFieldPoints()) {
 				showPoint(g, point);
 			}

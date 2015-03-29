@@ -19,7 +19,8 @@ import javax.swing.JOptionPane;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.StringUtils;
 
-import com.albertoborsetta.formscanner.api.FormField;
+import com.albertoborsetta.formscanner.api.FormArea;
+import com.albertoborsetta.formscanner.api.FormQuestion;
 import com.albertoborsetta.formscanner.api.FormPoint;
 import com.albertoborsetta.formscanner.api.FormTemplate;
 import com.albertoborsetta.formscanner.api.commons.Constants.Corners;
@@ -74,11 +75,11 @@ public class FormScannerModel {
 
 	private ArrayList<FormPoint> points = new ArrayList<FormPoint>();
 	private String lang;
-	private int threshold;
-	private int density;
+	private Integer threshold;
+	private Integer density;
 	private ResultsGridFrame resultsGridFrame;
 	private FormTemplate filledForm;
-	private int shapeSize;
+	private Integer shapeSize;
 	private ShapeType shapeType;
 	private Rectangle fileListFramePosition;
 	private Rectangle renameFilesFramePosition;
@@ -93,6 +94,7 @@ public class FormScannerModel {
 	private ComponentOrientation orientation;
 	private String fontType;
 	private Integer fontSize;
+	private ArrayList<FormArea> areas;
 
 	public FormScannerModel(FormScanner view) {
 		this.view = view;
@@ -100,25 +102,25 @@ public class FormScannerModel {
 		String installPath = StringUtils.defaultIfBlank(
 				System.getProperty("FormScanner_HOME"),
 				System.getenv("FormScanner_HOME"));
-		
+
 		String formScannerVersion = StringUtils.defaultIfBlank(
 				System.getProperty("FormScanner_VERSION"),
 				System.getenv("FormScanner_VERSION"));
-		
+
 		String installationLanguage = StringUtils.defaultIfBlank(
 				System.getProperty("FormScanner_LANGUAGE"),
 				System.getenv("FormScanner_LANGUAGE"));
-		
-//		if ((installPath == null) || (formScannerVersion == null)) {
-//			JOptionPane
-//			.showMessageDialog(
-//					null,
-//					"Error running FormScanner",
-//					"Error running FormScanner: please restart the system or reinstall it",
-//					JOptionPane.ERROR_MESSAGE);
-//			exitFormScanner();
-//		}
-		
+
+		// if ((installPath == null) || (formScannerVersion == null)) {
+		// JOptionPane
+		// .showMessageDialog(
+		// null,
+		// "Error running FormScanner",
+		// "Error running FormScanner: please restart the system or reinstall it",
+		// JOptionPane.ERROR_MESSAGE);
+		// exitFormScanner();
+		// }
+
 		String userHome = System.getProperty("user.home");
 		String osName = System.getProperty("os.name");
 
@@ -142,9 +144,10 @@ public class FormScannerModel {
 		resultsPath = configurations.getProperty(
 				FormScannerConfigurationKeys.RESULTS_SAVE_PATH, resultsPath
 						+ "/FormScanner/results/");
-		
-		lang = configurations.getProperty(FormScannerConfigurationKeys.LANG, getDefaultLanguage(installationLanguage));
-		
+
+		lang = configurations.getProperty(FormScannerConfigurationKeys.LANG,
+				getDefaultLanguage(installationLanguage));
+
 		String[] locales = StringUtils.split(lang, '_');
 		if (locales.length == 2) {
 			locale = new Locale(locales[0], locales[1]);
@@ -188,8 +191,10 @@ public class FormScannerModel {
 	}
 
 	private String getDefaultLanguage(String installationLanguage) {
-		for (Language language: Language.values()) {
-			if (!language.getInstallationLanguages().isEmpty() && language.getInstallationLanguages().contains(installationLanguage)) {
+		for (Language language : Language.values()) {
+			if (!language.getInstallationLanguages().isEmpty()
+					&& language.getInstallationLanguages().contains(
+							installationLanguage)) {
 				return language.getValue();
 			}
 		}
@@ -653,7 +658,7 @@ public class FormScannerModel {
 		return delta;
 	}
 
-	public void updateTemplate(HashMap<String, FormField> fields) {
+	public void updateTemplate(HashMap<String, FormQuestion> fields) {
 		formTemplate.setFields(fields);
 		resetPoints();
 	}
@@ -666,18 +671,20 @@ public class FormScannerModel {
 		formTemplate.removeFieldByName(fieldName);
 	}
 
-	public void saveTemplate() {
+	public void saveTemplate(boolean notify) {
 		File template = fileUtils.saveToFile(templatePath, formTemplate);
 
 		if (template != null) {
-			JOptionPane
-					.showMessageDialog(
-							null,
-							FormScannerTranslation
-									.getTranslationFor(FormScannerTranslationKeys.TEMPLATE_SAVED),
-							FormScannerTranslation
-									.getTranslationFor(FormScannerTranslationKeys.TEMPLATE_SAVED_POPUP),
-							JOptionPane.INFORMATION_MESSAGE);
+			if (notify) {
+				JOptionPane
+						.showMessageDialog(
+								null,
+								FormScannerTranslation
+										.getTranslationFor(FormScannerTranslationKeys.TEMPLATE_SAVED),
+								FormScannerTranslation
+										.getTranslationFor(FormScannerTranslationKeys.TEMPLATE_SAVED_POPUP),
+								JOptionPane.INFORMATION_MESSAGE);
+			}
 			templatePath = FilenameUtils
 					.getFullPath(template.getAbsolutePath());
 			String templateFile = FilenameUtils.getName(template
@@ -689,14 +696,16 @@ public class FormScannerModel {
 					templatePath);
 			configurations.store();
 		} else {
-			JOptionPane
-					.showMessageDialog(
-							null,
-							FormScannerTranslation
-									.getTranslationFor(FormScannerTranslationKeys.TEMPLATE_NOT_SAVED),
-							FormScannerTranslation
-									.getTranslationFor(FormScannerTranslationKeys.TEMPLATE_NOT_SAVED_POPUP),
-							JOptionPane.ERROR_MESSAGE);
+			if (notify) {
+				JOptionPane
+						.showMessageDialog(
+								null,
+								FormScannerTranslation
+										.getTranslationFor(FormScannerTranslationKeys.TEMPLATE_NOT_SAVED),
+								FormScannerTranslation
+										.getTranslationFor(FormScannerTranslationKeys.TEMPLATE_NOT_SAVED_POPUP),
+								JOptionPane.ERROR_MESSAGE);
+			}
 		}
 	}
 
@@ -716,6 +725,11 @@ public class FormScannerModel {
 
 		try {
 			formTemplate = new FormTemplate(template);
+			if (!FormScannerConstants.CURRENT_TEMPLATE_VERSION
+					.equals(formTemplate.getVersion())) {
+				saveTemplate(false);
+				return true;
+			}
 			if (notify) {
 				JOptionPane
 						.showMessageDialog(
@@ -965,5 +979,9 @@ public class FormScannerModel {
 
 	public Integer getFontSize() {
 		return fontSize;
+	}
+
+	public ArrayList<FormArea> getAreas() {
+		return areas;
 	}
 }

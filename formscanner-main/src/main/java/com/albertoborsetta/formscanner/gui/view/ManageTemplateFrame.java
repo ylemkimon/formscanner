@@ -32,7 +32,7 @@ import javax.swing.table.TableRowSorter;
 
 import org.apache.commons.lang3.StringUtils;
 
-import com.albertoborsetta.formscanner.api.FormField;
+import com.albertoborsetta.formscanner.api.FormQuestion;
 import com.albertoborsetta.formscanner.api.FormPoint;
 import com.albertoborsetta.formscanner.api.commons.Constants.FieldType;
 import com.albertoborsetta.formscanner.commons.CharSequenceGenerator;
@@ -191,7 +191,7 @@ public class ManageTemplateFrame extends InternalFrame implements TabbedView {
 				}
 				model.disposeRelatedFrame(this);
 
-				HashMap<String, FormField> fields = createFields();
+				HashMap<String, FormQuestion> fields = createFields();
 				model.updateTemplate(fields);
 				setupFieldsTable(model.getTemplate().getFields());
 				saveTemplateButton.setEnabled(true);
@@ -243,12 +243,12 @@ public class ManageTemplateFrame extends InternalFrame implements TabbedView {
 		typeComboBox.setSelectedIndex(0);
 	}
 
-	private HashMap<String, FormField> createFields() {
-		HashMap<String, FormField> fields = new HashMap<String, FormField>();
+	private HashMap<String, FormQuestion> createFields() {
+		HashMap<String, FormQuestion> fields = new HashMap<String, FormQuestion>();
 
 		for (int i = 1; i < (Integer) rowsNumber.getValue() + 1; i++) {
 			String name = (String) positionsTable.getValueAt(i, 0);
-			FormField field = new FormField(name);
+			FormQuestion field = new FormQuestion(name);
 			for (int j = 1; j < (Integer) colsNumber.getValue() + 1; j++) {
 				String value = (String) positionsTable.getValueAt(0, j);
 				FormPoint p = getPointFromTable(i, j);
@@ -313,14 +313,14 @@ public class ManageTemplateFrame extends InternalFrame implements TabbedView {
 		positionsTable.setVisible(true);
 	}
 
-	protected void setupFieldsTable(HashMap<String, FormField> fields) {
+	protected void setupFieldsTable(HashMap<String, FormQuestion> fields) {
 		FieldsTableModel fieldsTableModel = (FieldsTableModel) fieldsTable
 				.getModel();
 		while (fieldsTable.getRowCount() > 0) {
 			fieldsTableModel.removeRow(fieldsTable.getRowCount() - 1);
 		}
 
-		for (FormField field : fields.values()) {
+		for (FormQuestion field : fields.values()) {
 			fieldsTableModel.addRow(new Object[] {
 					field.getName(),
 					FormScannerTranslation.getTranslationFor(field.getType()
