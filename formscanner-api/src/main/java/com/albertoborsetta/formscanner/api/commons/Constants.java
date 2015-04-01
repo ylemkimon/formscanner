@@ -1,6 +1,11 @@
 package com.albertoborsetta.formscanner.api.commons;
 
+import java.util.EnumSet;
+import java.util.HashMap;
+
 import com.albertoborsetta.formscanner.api.commons.translation.TranslationKeys;
+import com.google.zxing.BarcodeFormat;
+import com.google.zxing.DecodeHintType;
 
 /**
  * The Class Constants.
@@ -163,4 +168,14 @@ public class Constants {
 			return name;
 		}
 	}
+	
+	public static final HashMap<DecodeHintType,Object> HINTS = new HashMap<DecodeHintType, Object>();
+	public static final HashMap<DecodeHintType,Object> HINTS_PURE = new HashMap<DecodeHintType, Object>();
+	
+	static {
+	    HINTS.put(DecodeHintType.TRY_HARDER, Boolean.TRUE);
+	    HINTS.put(DecodeHintType.POSSIBLE_FORMATS, EnumSet.allOf(BarcodeFormat.class));
+	    HINTS_PURE.putAll(HINTS);
+	    HINTS_PURE.put(DecodeHintType.PURE_BARCODE, Boolean.TRUE);
+	  }
 }
