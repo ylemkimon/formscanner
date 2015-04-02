@@ -94,7 +94,7 @@ public class FormScannerModel {
 	private ComponentOrientation orientation;
 	private String fontType;
 	private Integer fontSize;
-	private ArrayList<FormArea> areas;
+	private ArrayList<FormArea> areas = new ArrayList<FormArea>();
 
 	public FormScannerModel(FormScanner view) {
 		this.view = view;
@@ -339,6 +339,7 @@ public class FormScannerModel {
 							filledForm.findCorners(image, threshold, density);
 							filledForm.findPoints(image, threshold, density,
 									shapeSize);
+							filledForm.findAreas(image);
 							filledForms.put(filledForm.getName(), filledForm);
 						} catch (Exception e) {
 							e.printStackTrace();
@@ -395,7 +396,9 @@ public class FormScannerModel {
 							filledForm.findCorners(image, threshold, density);
 							filledForm.findPoints(image, threshold, density,
 									shapeSize);
+							filledForm.findAreas(image);
 							points = filledForm.getFieldPoints();
+							areas = filledForm.getFieldAreas();
 							filledForms.put(filledForm.getName(), filledForm);
 							createFormImageFrame(image, filledForm,
 									Mode.MODIFY_POINTS);
@@ -440,7 +443,9 @@ public class FormScannerModel {
 					filledForm = imageFrame.getTemplate();
 					filledForm.clearPoints();
 					filledForm.findPoints(image, threshold, density, shapeSize);
+					filledForm.findAreas(image);
 					points = filledForm.getFieldPoints();
+					areas = filledForm.getFieldAreas();
 					filledForms.put(filledForm.getName(), filledForm);
 					createFormImageFrame(image, filledForm, Mode.MODIFY_POINTS);
 					createResultsGridFrame();

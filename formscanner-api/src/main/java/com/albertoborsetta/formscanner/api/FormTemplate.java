@@ -734,7 +734,7 @@ public class FormTemplate {
 	 *
 	 * @author Alberto Borsetta
 	 * @param image the image on which to find the corners
-	 * * @param threshold the value of threshold parameter
+	 * @param threshold the value of threshold parameter
 	 * @param density the value of density parameter
 	 * @param size the size of the area of a single point
 	 */
@@ -908,5 +908,37 @@ public class FormTemplate {
 
 	public String getVersion() {
 		return version;
+	}
+
+	// TODO: javadoc
+	public void findAreas(BufferedImage image) {
+		height = image.getHeight();
+		width = image.getWidth();
+		
+		ExecutorService threadPool = Executors.newFixedThreadPool(8);
+		HashSet<Future<HashMap<String, FormArea>>> barcodeDetectorThreads = new HashSet<Future<HashMap<String, FormArea>>>();
+		
+		HashMap<String, FormArea> barcodeFields = template.getAreas();
+		ArrayList<String> barcodeNames = new ArrayList<String>(barcodeFields.keySet());
+		Collections.sort(barcodeNames);
+
+		for (String barcodeName: barcodeNames) {
+			Future<HashMap<String, FormArea>> future = threadPool.submit(new BarcodeDetector(
+					this, barcodeFields.get(barcodeName), image));
+			barcodeDetectorThreads.add(future);
+		}
+		
+		for (Future<HashMap<String, FormArea>> thread: barcodeDetectorThreads) {
+			try {
+				HashMap<String, FormArea> threadFields = thread.get();
+				for (String barcodeName: threadFields.keySet()) {
+					FormArea barcode = threadFields.get(barcodeName);
+					areas.put(barcodeName, barcode);
+					areaList.add(barcode);
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
 	}
 }
