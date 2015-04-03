@@ -46,6 +46,8 @@ import javax.swing.SpringLayout;
 import javax.swing.UIManager;
 import javax.swing.border.EtchedBorder;
 
+import org.apache.commons.lang3.StringUtils;
+
 import java.util.HashMap;
 import java.util.Map.Entry;
 
@@ -444,13 +446,24 @@ public class ImageFrame extends InternalFrame implements ScrollableImageView {
 
 		private void showBarcodeArea(Graphics g) {
 			for (FormArea area : template.getFieldAreas()) {
-				showArea(g, area.getCorners());
+				showArea(g, area);
 			}
 			
 			if (!model.getAreas().isEmpty()) {
 				for (FormArea area : model.getAreas()) {
-					showArea(g, area.getCorners());
+					showArea(g, area);
 				}
+			}
+		}
+
+		private void showArea(Graphics g, FormArea area) {
+			showArea(g, area.getCorners());
+
+			if (!StringUtils.isEmpty(area.getText())) { 
+				g.setColor(Color.RED);
+				// TODO: calcolare il centor dell'area per il carattere centrale del testo
+				g.drawChars(area.getText().toCharArray(), 0, area.getText().toCharArray().length, (int) area.getCorner(Corners.BOTTOM_LEFT).getX(), (int) area.getCorner(Corners.BOTTOM_LEFT).getY());
+				g.setColor(Color.BLACK);
 			}
 		}
 
@@ -493,7 +506,7 @@ public class ImageFrame extends InternalFrame implements ScrollableImageView {
 		}
 
 		private void showArea(Graphics g, HashMap<Corners, FormPoint> points) {
-			g.setColor(Color.GREEN);
+			g.setColor(Color.RED);
 
 			for (int i = 0; i < Corners.values().length; i++) {
 				FormPoint p1 = points.get(Corners.values()[i

@@ -1,11 +1,8 @@
 package com.albertoborsetta.formscanner.api;
 
-import java.util.Map.Entry;
-
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
-import com.albertoborsetta.formscanner.api.commons.Constants;
 import com.albertoborsetta.formscanner.api.commons.Constants.FieldType;
 
 /**

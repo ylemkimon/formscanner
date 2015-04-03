@@ -27,6 +27,7 @@ import com.albertoborsetta.formscanner.api.commons.Constants.FieldType;
 public class FormArea extends FormField {
 	
 	private HashMap<Corners, FormPoint> area;
+	private String text;
 
 	/**
 	 * Instantiates a new FormArea with the corner points.
@@ -127,5 +128,15 @@ public class FormArea extends FormField {
 		}
 
 		return areaElement;
+	}
+
+	// TODO: Javadoc
+	public void setText(String text) {
+		this.text = text;
+	}
+	
+	// TODO: Javadoc
+	public String getText() {
+		return text;
 	}
 }
