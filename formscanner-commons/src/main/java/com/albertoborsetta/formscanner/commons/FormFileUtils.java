@@ -29,6 +29,7 @@ import org.supercsv.io.ICsvMapWriter;
 import org.supercsv.prefs.CsvPreference;
 import org.w3c.dom.Document;
 
+import com.albertoborsetta.formscanner.api.FormArea;
 import com.albertoborsetta.formscanner.api.FormQuestion;
 import com.albertoborsetta.formscanner.api.FormTemplate;
 import com.albertoborsetta.formscanner.commons.translation.FormScannerTranslation;
@@ -214,12 +215,19 @@ public class FormFileUtils extends JFileChooser {
 		for (Entry<String, FormTemplate> filledForm : filledForms.entrySet()) {
 			FormTemplate form = filledForm.getValue();
 			HashMap<String, FormQuestion> fields = form.getFields();
+			HashMap<String, FormArea> areas = form.getAreas();
 
 			HashMap<String, String> result = new HashMap<String, String>();
 			result.put(header[0], filledForm.getKey());
+			
 			for (int i = 1; i < header.length; i++) {
 				FormQuestion field = fields.get(header[i]);
-				result.put(header[i], field.getValues());
+				if (field != null) {
+					result.put(header[i], field.getValues());
+				} else {
+					FormArea area = areas.get(header[i]);
+					result.put(header[i], area.getText());
+				}
 			}
 
 			results.add(result);
@@ -229,17 +237,24 @@ public class FormFileUtils extends JFileChooser {
 
 	public String[] getHeader(FormTemplate template) {
 		HashMap<String, FormQuestion> fields = template.getFields();
-		String[] header = new String[fields.size() + 1];
+		HashMap<String, FormArea> areas = template.getAreas();
+		String[] header = new String[fields.size() + areas.size() + 1];
 		int i = 0;
 		header[i++] = FormScannerTranslation
 				.getTranslationFor(FormScannerTranslationKeys.FIRST_CSV_COLUMN);
 
-		ArrayList<String> keys = new ArrayList<String>(fields.keySet());
-		Collections.sort(keys);
-		for (String key : keys) {
-			header[i++] = key;
+		ArrayList<String> fieldKeys = new ArrayList<String>(fields.keySet());
+		Collections.sort(fieldKeys);
+		for (String fieldKey : fieldKeys) {
+			header[i++] = fieldKey;
 		}
-
+		
+		ArrayList<String> areaKeys = new ArrayList<String>(areas.keySet());
+		Collections.sort(areaKeys);
+		for (String areaKey : areaKeys) {
+			header[i++] = areaKey;
+		}
+		
 		return header;
 	}
 
