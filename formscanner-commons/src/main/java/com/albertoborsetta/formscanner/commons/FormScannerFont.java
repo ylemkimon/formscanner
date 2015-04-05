@@ -27,4 +27,8 @@ public class FormScannerFont extends Font {
 		font = new FormScannerFont(fontType, Font.PLAIN, fontSize);
 		return (Font) font;
 	}
+	
+	public static Font getImageFont(Integer fontSize) {
+		return (Font) new FormScannerFont(font.getFamily(), Font.PLAIN, fontSize);
+	}
 }

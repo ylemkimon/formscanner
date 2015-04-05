@@ -31,6 +31,8 @@ import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Graphics;
 import java.awt.BorderLayout;
+import java.awt.Graphics2D;
+import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
 
 import javax.swing.BorderFactory;
@@ -163,7 +165,8 @@ public class ImageFrame extends InternalFrame implements ScrollableImageView {
 			JLabel zoomLabel = new LabelBuilder(
 					FormScannerTranslation
 							.getTranslationFor(FormScannerTranslationKeys.ZOOM_LABEL),
-					orientation).withBorder(BorderFactory.createEmptyBorder()).build();
+					orientation).withBorder(BorderFactory.createEmptyBorder())
+					.build();
 
 			zoomComboBox = new ComboBoxBuilder<InternalZoom>(
 					FormScannerConstants.ZOOM_COMBO_BOX, orientation)
@@ -171,10 +174,11 @@ public class ImageFrame extends InternalFrame implements ScrollableImageView {
 					.withActionListener(controller).build();
 
 			zoomComboBox.setSelectedItem(zoomValue);
-			
-			JPanel zoomPanel = new PanelBuilder(ComponentOrientation.LEFT_TO_RIGHT)
-			.withLayout(new SpringLayout())
-			.withGrid(1, 2).add(zoomLabel).add(zoomComboBox).build();
+
+			JPanel zoomPanel = new PanelBuilder(
+					ComponentOrientation.LEFT_TO_RIGHT)
+					.withLayout(new SpringLayout()).withGrid(1, 2)
+					.add(zoomLabel).add(zoomComboBox).build();
 
 			return new ToolBarBuilder(orientation)
 					.withAlignmentY(Component.CENTER_ALIGNMENT)
@@ -439,16 +443,16 @@ public class ImageFrame extends InternalFrame implements ScrollableImageView {
 			int height = (int) (imageHeight * zoom);
 			setPreferredSize(new Dimension(width, height));
 			g.drawImage(image, 0, 0, width, height, this);
-			showPoints(g);
-			showBarcodeArea(g);
-			showCorners(g);
+			showPoints((Graphics2D) g);
+			showBarcodeArea((Graphics2D) g);
+			showCorners((Graphics2D) g);
 		}
 
-		private void showBarcodeArea(Graphics g) {
+		private void showBarcodeArea(Graphics2D g) {
 			for (FormArea area : template.getFieldAreas()) {
 				showArea(g, area);
 			}
-			
+
 			if (!model.getAreas().isEmpty()) {
 				for (FormArea area : model.getAreas()) {
 					showArea(g, area);
@@ -456,18 +460,35 @@ public class ImageFrame extends InternalFrame implements ScrollableImageView {
 			}
 		}
 
-		private void showArea(Graphics g, FormArea area) {
-			showArea(g, area.getCorners());
+		private void showArea(Graphics2D g, FormArea area) {
+			showArea(g, area.getCorners(), Color.RED);
 
-			if (!StringUtils.isEmpty(area.getText())) { 
+			if (!StringUtils.isEmpty(area.getText())) {
 				g.setColor(Color.RED);
-				// TODO: calcolare il centor dell'area per il carattere centrale del testo
-				g.drawChars(area.getText().toCharArray(), 0, area.getText().toCharArray().length, (int) area.getCorner(Corners.BOTTOM_LEFT).getX(), (int) area.getCorner(Corners.BOTTOM_LEFT).getY());
+				AffineTransform orig = g.getTransform();
+				g.rotate(template.getRotation());
+
+				g.setFont(FormScannerFont.getImageFont((int) (24 * zoom)));
+				int textHeight = (int) g.getFontMetrics().getStringBounds(area.getText(), g).getHeight();
+				String[] stringArray = StringUtils.split(area.getText(), "\n");
+
+				int startY = (int) (area.getCorner(Corners.BOTTOM_LEFT).getY() * zoom) - (textHeight * stringArray.length) - 2;
+				
+				for (String line : stringArray) {
+					int textWidth = (int) g.getFontMetrics().getStringBounds(line, g).getWidth();
+					int startX = (int) (((area.getCorner(Corners.TOP_RIGHT).getX() - area.getCorner(Corners.TOP_LEFT).getX())) * zoom)/2 - 
+							textWidth/2 +
+							(int) (area.getCorner(Corners.TOP_LEFT).getX() * zoom);
+					g.drawString(line, startX, startY += textHeight);
+				}
+
+
+				g.setTransform(orig);
 				g.setColor(Color.BLACK);
 			}
 		}
 
-		private void showPoints(Graphics g) {
+		private void showPoints(Graphics2D g) {
 			for (FormPoint point : template.getFieldPoints()) {
 				showPoint(g, point);
 			}
@@ -481,7 +502,7 @@ public class ImageFrame extends InternalFrame implements ScrollableImageView {
 			showPoint(g, temporaryPoint);
 		}
 
-		private void showPoint(Graphics g, FormPoint point) {
+		private void showPoint(Graphics2D g, FormPoint point) {
 			if (point != null) {
 				int x = (int) ((point.getX() * zoom) - border);
 				int y = (int) ((point.getY() * zoom) - border);
@@ -497,16 +518,16 @@ public class ImageFrame extends InternalFrame implements ScrollableImageView {
 			}
 		}
 
-		public void showCorners(Graphics g) {
+		public void showCorners(Graphics2D g) {
 			HashMap<Corners, FormPoint> corners = template.getCorners();
 			if (corners.isEmpty()) {
 				return;
 			}
-			showArea(g, corners);
+			showArea(g, corners, Color.GREEN);
 		}
 
-		private void showArea(Graphics g, HashMap<Corners, FormPoint> points) {
-			g.setColor(Color.RED);
+		private void showArea(Graphics2D g, HashMap<Corners, FormPoint> points, Color color) {
+			g.setColor(color);
 
 			for (int i = 0; i < Corners.values().length; i++) {
 				FormPoint p1 = points.get(Corners.values()[i

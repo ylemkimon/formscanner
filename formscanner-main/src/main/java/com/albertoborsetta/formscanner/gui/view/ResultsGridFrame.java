@@ -1,18 +1,22 @@
 package com.albertoborsetta.formscanner.gui.view;
 
-
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.Component;
+import java.awt.Dimension;
+import java.util.ArrayList;
 
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
-import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.JTextArea;
+import javax.swing.UIManager;
+import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableColumnModel;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
 
+import com.albertoborsetta.formscanner.api.FormArea;
 import com.albertoborsetta.formscanner.api.FormQuestion;
 import com.albertoborsetta.formscanner.api.FormTemplate;
 import com.albertoborsetta.formscanner.commons.FormFileUtils;
@@ -54,19 +58,111 @@ public class ResultsGridFrame extends InternalFrame {
 	}
 
 	/**
+	 * Multiline Table Cell Renderer.
+	 */
+	public class MultilineTableCellRenderer extends JTextArea implements
+			TableCellRenderer {
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = 1L;
+
+		private ArrayList<ArrayList<Integer>> rowColHeight = new ArrayList<ArrayList<Integer>>();
+
+		public MultilineTableCellRenderer() {
+			setLineWrap(true);
+			setWrapStyleWord(true);
+			setOpaque(true);
+		}
+
+		public Component getTableCellRendererComponent(JTable table,
+				Object value, boolean isSelected, boolean hasFocus, int row,
+				int column) {
+
+			if (row == 0 || column == 0) {
+				setBackground(new java.awt.Color(238, 238, 238));
+			} else {
+				if (isSelected && row != 0 && column != 0) {
+					setForeground(table.getSelectionForeground());
+					setBackground(table.getSelectionBackground());
+				} else {
+					setForeground(table.getForeground());
+					setBackground(table.getBackground());
+				}
+			}
+			setFont(table.getFont());
+			if (hasFocus && row != 0 && column != 0) {
+				setBorder(UIManager.getBorder("Table.focusCellHighlightBorder"));
+				if (table.isCellEditable(row, column)) {
+					setForeground(UIManager
+							.getColor("Table.focusCellForeground"));
+					setBackground(UIManager
+							.getColor("Table.focusCellBackground"));
+				}
+			} else {
+				setBorder(new EmptyBorder(1, 2, 1, 2));
+			}
+			if (value != null) {
+				setText(value.toString());
+			} else {
+				setText("");
+			}
+			adjustRowHeight(table, row, column);
+			return this;
+		}
+
+		/**
+		 * Calculate the new preferred height for a given row, and sets the
+		 * height on the table.
+		 */
+		private void adjustRowHeight(JTable table, int row, int column) {
+			// The trick to get this to work properly is to set the width of the
+			// column to the
+			// textarea. The reason for this is that getPreferredSize(), without
+			// a width tries
+			// to place all the text in one line. By setting the size with the
+			// with of the column,
+			// getPreferredSize() returnes the proper height which the row
+			// should have in
+			// order to make room for the text.
+			int cWidth = table.getTableHeader().getColumnModel()
+					.getColumn(column).getWidth();
+			setSize(new Dimension(cWidth, 1000));
+			int prefH = getPreferredSize().height;
+			while (rowColHeight.size() <= row) {
+				rowColHeight.add(new ArrayList<Integer>(column));
+			}
+			ArrayList<Integer> colHeights = rowColHeight.get(row);
+			while (colHeights.size() <= column) {
+				colHeights.add(0);
+			}
+			colHeights.set(column, prefH);
+			int maxH = prefH;
+			for (Integer colHeight : colHeights) {
+				if (colHeight > maxH) {
+					maxH = colHeight;
+				}
+			}
+			if (table.getRowHeight(row) != maxH) {
+				table.setRowHeight(row, maxH);
+			}
+		}
+	}
+
+	/**
 	 * Create the frame.
 	 */
 	public ResultsGridFrame(FormScannerModel model) {
 		super(model);
 		fileUtils = FormFileUtils.getInstance(model.getLocale());
-		
+
 		form = model.getFilledForm();
 
 		FormTemplate template = model.getTemplate();
 		header = (String[]) fileUtils.getHeader(template);
-		rows = template.getFields().size() + 1;
+		rows = template.getFields().size() + template.getAreas().size() + 1;
 		cols = 2;
-		
+
 		setBounds(model.getLastPosition(Frame.RESULTS_GRID_FRAME));
 		setName(Frame.RESULTS_GRID_FRAME.name());
 		setTitle(FormScannerTranslation
@@ -90,11 +186,18 @@ public class ResultsGridFrame extends InternalFrame {
 	}
 
 	private void setupTable() {
-		for (int i = 1; i < rows; i++) {
-			FormQuestion field = form.getFields().get(header[i]);
+		int i = 1;
+		for (FormQuestion field : form.getFields().values()) {
 			if (field != null) {
 				table.setValueAt(field.getValues(), i, 1);
 			}
+			i++;
+		}
+		for (FormArea area : form.getAreas().values()) {
+			if (area != null) {
+				table.setValueAt(area.getText(), i, 1);
+			}
+			i++;
 		}
 	}
 
@@ -109,36 +212,16 @@ public class ResultsGridFrame extends InternalFrame {
 		}
 
 		JTable table = new JTable(tableModel, columnModel);
-		table.setDefaultRenderer(Object.class, new DefaultTableCellRenderer() {
-			/**
-			 * 
-			 */
-			private static final long serialVersionUID = 1L;
-
-			@Override
-			public Component getTableCellRendererComponent(JTable table,
-					Object value, boolean isSelected, boolean hasFocus,
-					int row, int column) {
-				final Component cell = super.getTableCellRendererComponent(
-						table, value, isSelected, hasFocus, row, column);
-				if (row == 0 || column == 0) {
-					cell.setBackground(new java.awt.Color(238, 238, 238));
-				} else {
-					cell.setBackground(Color.white);
-				}
-				return cell;
-			}
-		});
+		table.setDefaultRenderer(Object.class, new MultilineTableCellRenderer());
 
 		for (int i = 1; i < cols; i++) {
-			table.setValueAt(
-					(String) FormScannerTranslation
-							.getTranslationFor(FormScannerTranslationKeys.RESULTS), 0, i);
+			table.setValueAt((String) FormScannerTranslation
+					.getTranslationFor(FormScannerTranslationKeys.RESULTS), 0,
+					i);
 		}
 
 		for (int i = 1; i < rows; i++) {
-			table.setValueAt(
-					header[i], i, 0);
+			table.setValueAt(header[i], i, 0);
 		}
 		table.setComponentOrientation(orientation);
 		table.setCellSelectionEnabled(true);

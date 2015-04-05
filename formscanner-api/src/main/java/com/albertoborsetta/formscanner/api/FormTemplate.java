@@ -473,7 +473,7 @@ public class FormTemplate {
 	 * @return the FormField object
 	 * @see FormQuestion
 	 */
-	public FormField getField(String name) {
+	public FormQuestion getField(String name) {
 		return fields.get(name);
 	}
 
@@ -977,13 +977,10 @@ public class FormTemplate {
 		Collections.sort(barcodeNames);
 
 		for (String barcodeName: barcodeNames) {
-			int topLeftX = (int) barcodeFields.get(barcodeName).getCorner(Corners.TOP_LEFT).getX();
-			int topLeftY = (int) barcodeFields.get(barcodeName).getCorner(Corners.TOP_LEFT).getY();
-			int w = (int) barcodeFields.get(barcodeName).getCorner(Corners.TOP_RIGHT).getX() - topLeftX;
-			int h = (int) barcodeFields.get(barcodeName).getCorner(Corners.BOTTOM_LEFT).getY() - topLeftY;
-			BufferedImage subImage = image.getSubimage(topLeftX, topLeftY, w, h);
+			FormArea area = barcodeFields.get(barcodeName);
+			BufferedImage subImage = getAreaImage(image, area);
 			Future<HashMap<String, FormArea>> future = threadPool.submit(new BarcodeDetector(
-					this, barcodeFields.get(barcodeName), subImage));
+					this, area, subImage));
 			barcodeDetectorThreads.add(future);
 		}
 		
@@ -999,5 +996,16 @@ public class FormTemplate {
 				e.printStackTrace();
 			}
 		}
+	}
+
+	private BufferedImage getAreaImage(BufferedImage image, FormArea area) {
+		int minX = (int) Math.min(area.getCorner(Corners.TOP_LEFT).getX(), area.getCorner(Corners.BOTTOM_LEFT).getX());
+		int minY = (int) Math.min(area.getCorner(Corners.TOP_LEFT).getY(), area.getCorner(Corners.TOP_RIGHT).getY());
+		int maxX = (int) Math.max(area.getCorner(Corners.TOP_RIGHT).getX(), area.getCorner(Corners.BOTTOM_RIGHT).getX());
+		int maxY = (int) Math.max(area.getCorner(Corners.BOTTOM_LEFT).getY(), area.getCorner(Corners.BOTTOM_RIGHT).getY());
+		int subImageWidth = maxX - minX;
+		int hsubImageHeight = maxY - minY;
+		BufferedImage subImage = image.getSubimage(minX, minY, subImageWidth, hsubImageHeight);
+		return subImage;
 	}
 }

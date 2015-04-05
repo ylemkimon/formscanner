@@ -1,14 +1,13 @@
 package com.albertoborsetta.formscanner.api;
 
 import java.awt.image.BufferedImage;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.concurrent.Callable;
 
+import org.apache.commons.lang3.StringUtils;
+
 import com.albertoborsetta.formscanner.api.commons.Constants;
-import com.google.zxing.BarcodeFormat;
+import com.albertoborsetta.formscanner.api.commons.Constants.Corners;
 import com.google.zxing.BinaryBitmap;
 import com.google.zxing.DecodeHintType;
 import com.google.zxing.LuminanceSource;
@@ -18,23 +17,9 @@ import com.google.zxing.ReaderException;
 import com.google.zxing.common.GlobalHistogramBinarizer;
 import com.google.zxing.common.HybridBinarizer;
 import com.google.zxing.client.j2se.BufferedImageLuminanceSource;
-import com.google.zxing.multi.GenericMultipleBarcodeReader;
-import com.google.zxing.multi.MultipleBarcodeReader;
 import com.google.zxing.Result;
 
 public class BarcodeDetector implements Callable<HashMap<String, FormArea>> {
-
-	// private static final Map<DecodeHintType,Object> HINTS;
-	// private static final Map<DecodeHintType,Object> HINTS_PURE;
-	//
-	// static {
-	// HINTS = new EnumMap<DecodeHintType, Object>(DecodeHintType.class);
-	// HINTS.put(DecodeHintType.TRY_HARDER, Boolean.TRUE);
-	// HINTS.put(DecodeHintType.POSSIBLE_FORMATS,
-	// EnumSet.allOf(BarcodeFormat.class));
-	// HINTS_PURE = new EnumMap<DecodeHintType, Object>(HINTS);
-	// HINTS_PURE.put(DecodeHintType.PURE_BARCODE, Boolean.TRUE);
-	// }
 
 	private FormTemplate template;
 	private FormArea barcodeArea;
@@ -42,86 +27,86 @@ public class BarcodeDetector implements Callable<HashMap<String, FormArea>> {
 	private HashMap<String, FormArea> barcodes;
 	private BufferedImage image;
 
+	// TODO Javadoc
 	public BarcodeDetector(FormTemplate template, FormArea barcodeArea,
 			BufferedImage image) {
+		this.template = template;
 		this.barcodeArea = barcodeArea;
 		parent = template.getParentTemplate();
 		this.image = image;
 		barcodes = new HashMap<String, FormArea>();
 	}
 
+	// TODO Javadoc
 	public HashMap<String, FormArea> call() throws Exception {
 		LuminanceSource source = new BufferedImageLuminanceSource(image);
 		BinaryBitmap bitmap = new BinaryBitmap(new GlobalHistogramBinarizer(
 				source));
-//		ArrayList<Result> results = new ArrayList<Result>();
 
 		try {
 
 			Reader reader = new MultiFormatReader();
-//			try {
-//				// Look for multiple barcodes
-//				MultipleBarcodeReader multiReader = new GenericMultipleBarcodeReader(
-//						reader);
-//				Result[] multipleBarcodesResult = multiReader.decodeMultiple(bitmap,
-//						Constants.HINTS);
-//				if (multipleBarcodesResult != null) {
-//					results.addAll(Arrays.asList(multipleBarcodesResult));
-//				}
-//			} catch (ReaderException re) {
-//				savedException = re;
-//			}
+			Result resultBarcode = null;
 
+			int attempts = 0;
+			boolean lastAttempt = false;
+			while ((resultBarcode == null) && !lastAttempt) {
 				try {
-					// Look for pure barcode
-					Result resultBarcode = reader.decode(bitmap,
-							Constants.HINTS_PURE);
-					if (resultBarcode != null) {
-						FormArea resultArea = new FormArea(barcodeArea.getName(), barcodeArea.getCorners());
-						resultArea.setType(barcodeArea.getType());
-						resultArea.setText(resultBarcode.getText());
-						barcodes.put(barcodeArea.getName(), resultArea);
+					HashMap<DecodeHintType, Object> hints;
+					switch (attempts) {
+					case 2:
+						// Try again with other binarizer
+						bitmap = new BinaryBitmap(new HybridBinarizer(source));
+						lastAttempt = true;
+					case 1:
+						// Look for normal barcode in photo
+						hints = Constants.HINTS;
+						break;
+					default:
+						// Look for pure barcode
+						hints = Constants.HINTS_PURE;
+						break;
 					}
+					resultBarcode = reader.decode(bitmap, hints);
 				} catch (ReaderException re) {
-					re.printStackTrace();
+					// Do nothing
 				}
-
-			if (barcodes.isEmpty()) {
-				try {
-					// Look for normal barcode in photo
-					Result resultBarcode = reader.decode(bitmap, Constants.HINTS);
-					if (resultBarcode != null) {
-						FormArea resultArea = new FormArea(barcodeArea.getName(), barcodeArea.getCorners());
-						resultArea.setType(barcodeArea.getType());
-						resultArea.setText(resultBarcode.getText());
-						barcodes.put(barcodeArea.getName(), resultArea);
-					}
-				} catch (ReaderException re) {
-					re.printStackTrace();
-				}
+				attempts++;
 			}
 
-			if (barcodes.isEmpty()) {
-				try {
-					// Try again with other binarizer
-					BinaryBitmap hybridBitmap = new BinaryBitmap(
-							new HybridBinarizer(source));
-					Result resultBarcode = reader.decode(hybridBitmap,
-							Constants.HINTS);
-					if (resultBarcode != null) {
-						FormArea resultArea = new FormArea(barcodeArea.getName(), barcodeArea.getCorners());
-						resultArea.setType(barcodeArea.getType());
-						resultArea.setText(resultBarcode.getText());
-						barcodes.put(barcodeArea.getName(), resultArea);
-					}
-				} catch (ReaderException re) {
-					re.printStackTrace();
-				}
-			}
+			FormArea resultArea = calcResultArea();
+			resultArea.setText(resultBarcode != null ? resultBarcode.getText() : StringUtils.EMPTY);
+			barcodes.put(barcodeArea.getName(), resultArea);
 		} catch (RuntimeException re) {
 			re.printStackTrace();
 		}
 		return barcodes;
+	}
+
+	private FormArea calcResultArea() {
+		FormArea responseArea = new FormArea(barcodeArea.getName());
+
+		for (Corners corner : Corners.values()) {
+			responseArea.setCorner(corner,
+					calcResponsePoint(barcodeArea.getCorner(corner)));
+		}
+
+		responseArea.setType(barcodeArea.getType());
+		return responseArea;
+	}
+
+	private FormPoint calcResponsePoint(FormPoint responsePoint) {
+		FormPoint point = responsePoint.clone();
+
+		FormPoint templateOrigin = parent.getCorner(Corners.TOP_LEFT);
+		double templateRotation = parent.getRotation();
+		double scale = Math.sqrt(template.getDiagonal() / parent.getDiagonal());
+
+		point.rotoTranslate(templateOrigin, templateRotation, true);
+		point.scale(scale);
+		point.rotoTranslate(template.getCorners().get(Corners.TOP_LEFT),
+				template.getRotation(), false);
+		return point;
 	}
 
 }
