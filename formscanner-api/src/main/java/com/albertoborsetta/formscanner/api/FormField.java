@@ -17,7 +17,7 @@ import com.albertoborsetta.formscanner.api.commons.Constants.FieldType;
  * @version 0.11-SNAPSHOT
  * @see FieldType
  */
-public class FormField {
+public abstract class FormField {
 	
 	protected String name;
 	protected FieldType type;

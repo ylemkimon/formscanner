@@ -3,7 +3,6 @@ package com.albertoborsetta.formscanner.gui.view;
 import javax.swing.JTabbedPane;
 
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.util.HashMap;
@@ -19,13 +18,16 @@ import javax.swing.JTable;
 import javax.swing.JSpinner;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
+import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
 import javax.swing.SpringLayout;
+import javax.swing.UIManager;
+import javax.swing.border.EmptyBorder;
 import javax.swing.event.TableModelListener;
-import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableColumnModel;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
 import javax.swing.table.TableRowSorter;
@@ -131,6 +133,113 @@ public class ManageTemplateFrame extends InternalFrame implements TabbedView {
 		}
 	}
 
+	public class PositionsTableCellRenderer extends JTextArea implements TableCellRenderer {
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = 1L;
+		
+		private String type;
+
+		public PositionsTableCellRenderer(String type) {
+			setLineWrap(true);
+			setWrapStyleWord(true);
+			setOpaque(true);
+			this.type = type;
+		}
+
+		public Component getTableCellRendererComponent(JTable table,
+				Object value, boolean isSelected, boolean hasFocus, int row,
+				int column) {
+			
+			boolean header = false;
+			switch (type) {
+			case FormScannerConstants.QUESTIONS_BY_ROWS:
+			case FormScannerConstants.QUESTIONS_BY_COLS:
+				header = ((row == 0) || (column == 0));
+				break;
+			case FormScannerConstants.RESPONSES_BY_GRID:
+			case FormScannerConstants.BARCODE:
+				header = ((column % 2) == 0);
+				break;
+			}
+
+			if (header) {
+				setBackground(new java.awt.Color(238, 238, 238));
+			} else {
+				if (isSelected && !header) {
+					setForeground(table.getSelectionForeground());
+					setBackground(table.getSelectionBackground());
+				} else {
+					setForeground(table.getForeground());
+					setBackground(table.getBackground());
+				}
+			}
+			setFont(table.getFont());
+			if (hasFocus && !header) {
+				setBorder(UIManager.getBorder("Table.focusCellHighlightBorder"));
+				if (table.isCellEditable(row, column)) {
+					setForeground(UIManager
+							.getColor("Table.focusCellForeground"));
+					setBackground(UIManager
+							.getColor("Table.focusCellBackground"));
+				}
+			} else {
+				setBorder(new EmptyBorder(1, 2, 1, 2));
+			}
+			if (value != null) {
+				setText(value.toString());
+			} else {
+				setText("");
+			}
+			return this;
+		}
+	}
+	
+	public class FieldsTableCellRenderer extends JTextArea implements TableCellRenderer {
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = 1L;
+
+		public FieldsTableCellRenderer() {
+			setLineWrap(true);
+			setWrapStyleWord(true);
+			setOpaque(true);
+		}
+
+		public Component getTableCellRendererComponent(JTable table,
+				Object value, boolean isSelected, boolean hasFocus, int row,
+				int column) {
+
+				if (isSelected) {
+					setForeground(table.getSelectionForeground());
+					setBackground(table.getSelectionBackground());
+				} else {
+					setForeground(table.getForeground());
+					setBackground(table.getBackground());
+				}
+			setFont(table.getFont());
+			if (hasFocus) {
+				setBorder(UIManager.getBorder("Table.focusCellHighlightBorder"));
+				if (table.isCellEditable(row, column)) {
+					setForeground(UIManager
+							.getColor("Table.focusCellForeground"));
+					setBackground(UIManager
+							.getColor("Table.focusCellBackground"));
+				}
+			} else {
+				setBorder(new EmptyBorder(1, 2, 1, 2));
+			}
+			if (value != null) {
+				setText(value.toString());
+			} else {
+				setText("");
+			}
+			return this;
+		}
+	}
+
 	/**
 	 * Create the frame.
 	 */
@@ -203,7 +312,7 @@ public class ManageTemplateFrame extends InternalFrame implements TabbedView {
 				break;
 			case 3:
 				resetPositionsTable();
-				model.createTemplateImageFrame();
+				model.createTemplateImageFrame(fieldsType);
 				break;
 			default:
 				break;
@@ -268,20 +377,58 @@ public class ManageTemplateFrame extends InternalFrame implements TabbedView {
 	}
 
 	public int getRowsNumber() {
-		return (Integer) rowsNumber.getValue();
+		switch (fieldsType) {
+		case FormScannerConstants.QUESTIONS_BY_ROWS:
+		case FormScannerConstants.QUESTIONS_BY_COLS:
+		case FormScannerConstants.RESPONSES_BY_GRID:
+			return (Integer) rowsNumber.getValue();
+		case FormScannerConstants.BARCODE:
+			return 2;
+		default:
+			return 1;
+		}
 	}
 
 	public int getValuesNumber() {
-		return (Integer) colsNumber.getValue();
+		switch (fieldsType) {
+		case FormScannerConstants.QUESTIONS_BY_ROWS:
+		case FormScannerConstants.QUESTIONS_BY_COLS:
+		case FormScannerConstants.RESPONSES_BY_GRID:
+			return (Integer) colsNumber.getValue();
+		case FormScannerConstants.BARCODE:
+			return 2;
+		default:
+			return 1;
+		}
 	}
 
 	public void setupPositionTable(List<FormPoint> points) {
-		for (int i = 0; i < (Integer) rowsNumber.getValue(); i++) {
-			for (int j = 0; j < (Integer) colsNumber.getValue(); j++) {
-				int index = ((Integer) colsNumber.getValue() * i) + j;
-				FormPoint p = points.get(index);
-				positionsTable.setValueAt(p.toString(), (i + 1), (j + 1));
+		Integer rows = (Integer) rowsNumber.getValue();
+		Integer cols = (Integer) colsNumber.getValue();
+
+		switch (fieldsType) {
+		case FormScannerConstants.QUESTIONS_BY_ROWS:
+		case FormScannerConstants.QUESTIONS_BY_COLS:
+			for (int i = 0; i < rows; i++) {
+				for (int j = 0; j < cols; j++) {
+					int index = (cols * i) + j;
+					FormPoint p = points.get(index);
+					positionsTable.setValueAt(p.toString(), (i + 1), (j + 1));
+				}
 			}
+			break;
+		case FormScannerConstants.BARCODE:
+			rows = 2;
+			cols = 2;
+		case FormScannerConstants.RESPONSES_BY_GRID:
+			for (int i = 0; i < rows; i++) {
+				for (int j = 0; j < cols; j++) {
+					int index = ((cols % 2) * i) + (j % 2);
+					FormPoint p = points.get(index);
+					positionsTable.setValueAt(p.toString(), i, ((2 * j) +1));
+				}
+			}
+			break;
 		}
 	}
 
@@ -313,7 +460,7 @@ public class ManageTemplateFrame extends InternalFrame implements TabbedView {
 		positionsTable.setVisible(true);
 	}
 
-	protected void setupFieldsTable(HashMap<String, FormQuestion> fields) {
+	private void setupFieldsTable(HashMap<String, FormQuestion> fields) {
 		FieldsTableModel fieldsTableModel = (FieldsTableModel) fieldsTable
 				.getModel();
 		while (fieldsTable.getRowCount() > 0) {
@@ -406,31 +553,7 @@ public class ManageTemplateFrame extends InternalFrame implements TabbedView {
 			}
 		}, columnModel);
 
-		table.setDefaultRenderer(Object.class, new DefaultTableCellRenderer() {
-			/**
-			 * 
-			 */
-			private static final long serialVersionUID = 1L;
-
-			@Override
-			public Component getTableCellRendererComponent(JTable table,
-					Object value, boolean isSelected, boolean hasFocus,
-					int row, int column) {
-				final Component cell = super.getTableCellRendererComponent(
-						table, value, isSelected, hasFocus, row, column);
-				if (row == 0 || column == 0) {
-					cell.setBackground(new java.awt.Color(238, 238, 238));
-				} else {
-					if (isSelected) {
-						cell.setBackground(Color.lightGray);
-					} else {
-						cell.setBackground(Color.white);
-					}
-				}
-				cell.repaint();
-				return cell;
-			}
-		});
+		table.setDefaultRenderer(Object.class, new PositionsTableCellRenderer(fieldsType));
 
 		CharSequenceGenerator charSequence = new CharSequenceGenerator();
 
@@ -479,36 +602,12 @@ public class ManageTemplateFrame extends InternalFrame implements TabbedView {
 			}
 		}, columnModel);
 
-		table.setDefaultRenderer(Object.class, new DefaultTableCellRenderer() {
-			/**
-			 * 
-			 */
-			private static final long serialVersionUID = 1L;
-
-			@Override
-			public Component getTableCellRendererComponent(JTable table,
-					Object value, boolean isSelected, boolean hasFocus,
-					int row, int column) {
-				final Component cell = super.getTableCellRendererComponent(
-						table, value, isSelected, hasFocus, row, column);
-				if (column % 2 == 0) {
-					cell.setBackground(new java.awt.Color(238, 238, 238));
-				} else {
-					if (isSelected) {
-						cell.setBackground(Color.lightGray);
-					} else {
-						cell.setBackground(Color.white);
-					}
-				}
-				cell.repaint();
-				return cell;
-			}
-		});
+		table.setDefaultRenderer(Object.class, new PositionsTableCellRenderer(fieldsType));
 
 		CharSequenceGenerator charSequence = new CharSequenceGenerator();
 
 		for (int i = 0; i < rows; i++) {
-			for (int j = 0; j < cols; j = j + 2) {
+			for (int j = 0; j < cols; j += 2) {
 				table.setValueAt(charSequence.next(), i, j);
 			}
 		}
@@ -545,31 +644,7 @@ public class ManageTemplateFrame extends InternalFrame implements TabbedView {
 			}
 		}, columnModel);
 
-		table.setDefaultRenderer(Object.class, new DefaultTableCellRenderer() {
-			/**
-			 * 
-			 */
-			private static final long serialVersionUID = 1L;
-
-			@Override
-			public Component getTableCellRendererComponent(JTable table,
-					Object value, boolean isSelected, boolean hasFocus,
-					int row, int column) {
-				final Component cell = super.getTableCellRendererComponent(
-						table, value, isSelected, hasFocus, row, column);
-				if (column % 2 == 0) {
-					cell.setBackground(new java.awt.Color(238, 238, 238));
-				} else {
-					if (isSelected) {
-						cell.setBackground(Color.lightGray);
-					} else {
-						cell.setBackground(Color.white);
-					}
-				}
-				cell.repaint();
-				return cell;
-			}
-		});
+		table.setDefaultRenderer(Object.class, new PositionsTableCellRenderer(fieldsType));
 
 		table.setValueAt(FormScannerTranslation
 				.getTranslationFor(FormScannerTranslationKeys.TOP_LEFT_CORNER),
@@ -604,27 +679,7 @@ public class ManageTemplateFrame extends InternalFrame implements TabbedView {
 					.getTranslationFor(tableColumn.getValue()));
 		}
 
-		table.setDefaultRenderer(Object.class, new DefaultTableCellRenderer() {
-			/**
-			 * 
-			 */
-			private static final long serialVersionUID = 1L;
-
-			@Override
-			public Component getTableCellRendererComponent(JTable table,
-					Object value, boolean isSelected, boolean hasFocus,
-					int row, int column) {
-				final Component cell = super.getTableCellRendererComponent(
-						table, value, isSelected, hasFocus, row, column);
-				if (isSelected) {
-					cell.setBackground(Color.lightGray);
-				} else {
-					cell.setBackground(Color.white);
-				}
-				cell.repaint();
-				return cell;
-			}
-		});
+		table.setDefaultRenderer(Object.class, new FieldsTableCellRenderer());
 
 		table.setComponentOrientation(orientation);
 		table.setRowSelectionAllowed(true);

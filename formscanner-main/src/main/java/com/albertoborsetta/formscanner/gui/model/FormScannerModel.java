@@ -552,9 +552,19 @@ public class FormScannerModel {
 		}
 	}
 
-	public void createTemplateImageFrame() {
-		imageFrame = new ImageFrame(this, templateImage, formTemplate,
-				Mode.SETUP_POINTS);
+	public void createTemplateImageFrame(String fieldsType) {
+		switch (fieldsType) {
+		case FormScannerConstants.QUESTIONS_BY_ROWS:
+		case FormScannerConstants.QUESTIONS_BY_COLS:
+		case FormScannerConstants.RESPONSES_BY_GRID:
+			imageFrame = new ImageFrame(this, templateImage, formTemplate,
+					Mode.SETUP_POINTS);
+			break;
+		case FormScannerConstants.BARCODE:
+			imageFrame = new ImageFrame(this, templateImage, formTemplate,
+					Mode.SETUP_AREA);
+			break;
+		}
 		view.arrangeFrame(imageFrame);
 	}
 
@@ -570,6 +580,7 @@ public class FormScannerModel {
 
 	public void addPoint(ImageFrame view, FormPoint p) {
 		switch (view.getMode()) {
+		case SETUP_AREA:
 		case SETUP_POINTS:
 			if (manageTemplateFrame != null) {
 				int rows = manageTemplateFrame.getRowsNumber();

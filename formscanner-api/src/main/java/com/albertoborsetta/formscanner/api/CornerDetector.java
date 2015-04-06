@@ -7,6 +7,7 @@ import com.albertoborsetta.formscanner.api.FormPoint;
 import com.albertoborsetta.formscanner.api.commons.Constants.Corners;
 
 public class CornerDetector implements Callable<FormPoint> {
+	
 	private static final int WHITE = 1;
 	private static final int BLACK = 0;
 	private static final int HALF_WINDOW_SIZE = 5;
@@ -16,6 +17,7 @@ public class CornerDetector implements Callable<FormPoint> {
 	private static final int WHITE_CIRCLE = 2;
 	private static final int OUT_OF_CIRCLES = 3;
 	private static final int AFTER_CIRCLES = 4;
+	
 	private int height;
 	private int width;
 	private int subImageWidth;

@@ -116,15 +116,6 @@ public class ResultsGridFrame extends InternalFrame {
 		 * height on the table.
 		 */
 		private void adjustRowHeight(JTable table, int row, int column) {
-			// The trick to get this to work properly is to set the width of the
-			// column to the
-			// textarea. The reason for this is that getPreferredSize(), without
-			// a width tries
-			// to place all the text in one line. By setting the size with the
-			// with of the column,
-			// getPreferredSize() returnes the proper height which the row
-			// should have in
-			// order to make room for the text.
 			int cWidth = table.getTableHeader().getColumnModel()
 					.getColumn(column).getWidth();
 			setSize(new Dimension(cWidth, 1000));
