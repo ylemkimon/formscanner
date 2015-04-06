@@ -198,7 +198,8 @@ public class FormScannerConstants extends Constants {
 	public enum Mode {
 		VIEW, 
 		SETUP_POINTS, 
-		MODIFY_POINTS;
+		MODIFY_POINTS, 
+		SETUP_AREA;
 	}
 
 	public enum ShapeType {

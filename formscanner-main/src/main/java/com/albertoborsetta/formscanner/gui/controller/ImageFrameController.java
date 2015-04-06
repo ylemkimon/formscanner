@@ -38,6 +38,7 @@ public class ImageFrameController implements MouseMotionListener,
 	// MouseMotionListener
 	public void mouseDragged(MouseEvent e) {
 		switch (view.getMode()) {
+		case SETUP_AREA:
 		case SETUP_POINTS:
 		case MODIFY_POINTS:
 			if (!e.isControlDown() && (buttonPressed == MouseEvent.BUTTON1)) {
@@ -100,6 +101,7 @@ public class ImageFrameController implements MouseMotionListener,
 	public void mousePressed(MouseEvent e) {
 		buttonPressed = e.getButton();
 		switch (view.getMode()) {
+		case SETUP_AREA:
 		case SETUP_POINTS:
 		case MODIFY_POINTS:
 			if (!e.isControlDown() && (buttonPressed == MouseEvent.BUTTON1)) {
@@ -130,6 +132,7 @@ public class ImageFrameController implements MouseMotionListener,
 
 	public void mouseReleased(MouseEvent e) {
 		switch (view.getMode()) {
+		case SETUP_AREA:
 		case SETUP_POINTS:
 		case MODIFY_POINTS:
 			if (!e.isControlDown() && (buttonPressed == MouseEvent.BUTTON1)) {

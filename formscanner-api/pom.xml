@@ -77,7 +77,6 @@
 			<groupId>org.apache.commons</groupId>
 			<artifactId>commons-io</artifactId>
 			<version>${commons-io.version}</version>
-			<scope>compile</scope>
 		</dependency>
 		<dependency>
 			<groupId>com.google.zxing</groupId>
@@ -93,8 +92,11 @@
 			<groupId>org.apache.commons</groupId>
 			<artifactId>commons-lang3</artifactId>
 			<version>${commons-lang3.version}</version>
-			<type>jar</type>
-			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>net.sourceforge.tess4j</groupId>
+			<artifactId>tess4j</artifactId>
+			<version>${tess4j.version}</version>
 		</dependency>
 	</dependencies>
 	<properties>
@@ -103,5 +105,6 @@
 		<nexus-staging-maven-plugin.version>1.6.3</nexus-staging-maven-plugin.version>
 		<maven-gpg-plugin.version>1.5</maven-gpg-plugin.version>
 		<zxing.version>3.2.0</zxing.version>
+		<tess4j.version>1.5.0</tess4j.version>
 	</properties>
 </project>

@@ -13,6 +13,7 @@ import com.albertoborsetta.formscanner.api.FormPoint;
 import com.albertoborsetta.formscanner.api.FormTemplate;
 
 public class FieldDetector implements Callable<HashMap<String, FormQuestion>> {
+	
 	private FormTemplate template;
 	private int threshold;
 	private int density;

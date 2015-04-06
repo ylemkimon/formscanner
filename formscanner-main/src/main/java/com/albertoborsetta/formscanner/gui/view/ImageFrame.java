@@ -443,6 +443,7 @@ public class ImageFrame extends InternalFrame implements ScrollableImageView {
 			int height = (int) (imageHeight * zoom);
 			setPreferredSize(new Dimension(width, height));
 			g.drawImage(image, 0, 0, width, height, this);
+			showPoint((Graphics2D) g, temporaryPoint);
 			showPoints((Graphics2D) g);
 			showBarcodeArea((Graphics2D) g);
 			showCorners((Graphics2D) g);
@@ -498,8 +499,6 @@ public class ImageFrame extends InternalFrame implements ScrollableImageView {
 					showPoint(g, point);
 				}
 			}
-
-			showPoint(g, temporaryPoint);
 		}
 
 		private void showPoint(Graphics2D g, FormPoint point) {
@@ -508,11 +507,17 @@ public class ImageFrame extends InternalFrame implements ScrollableImageView {
 				int y = (int) ((point.getY() * zoom) - border);
 
 				g.setColor(Color.RED);
-				if (markerType.equals(ShapeType.CIRCLE)) {
-					g.fillArc(x - marker, y - marker, 2 * marker, 2 * marker,
-							0, 360);
+				if (mode.equals(Mode.SETUP_AREA)) {
+					g.drawLine(x - (marker/2), y, x + (marker/2), y);
+					g.drawLine(x, y - (marker/2), x, y + (marker/2));
 				} else {
-					g.fillRect(x - marker, y - marker, 2 * marker, 2 * marker);
+					if (markerType.equals(ShapeType.CIRCLE)) {
+						g.fillArc(x - marker, y - marker, 2 * marker,
+								2 * marker, 0, 360);
+					} else {
+						g.fillRect(x - marker, y - marker, 2 * marker,
+								2 * marker);
+					}
 				}
 				g.setColor(Color.BLACK);
 			}
