@@ -660,15 +660,14 @@ public class FormScannerModel {
 		HashMap<String, Double> delta = new HashMap<String, Double>();
 
 		switch (manageTemplateFrame.getFieldType()) {
-		case QUESTIONS_BY_ROWS:
-			delta.put("x", dX / valuesDivider);
-			delta.put("y", dY / questionDivider);
-			break;
 		case QUESTIONS_BY_COLS:
 			delta.put("x", dX / questionDivider);
 			delta.put("y", dY / valuesDivider);
 			break;
+		case QUESTIONS_BY_ROWS:
 		default:
+			delta.put("x", dX / valuesDivider);
+			delta.put("y", dY / questionDivider);
 			break;
 		}
 		return delta;

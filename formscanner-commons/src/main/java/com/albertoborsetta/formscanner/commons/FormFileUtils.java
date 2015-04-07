@@ -10,8 +10,6 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map.Entry;
-import java.util.Set;
-import java.util.TreeSet;
 
 import javax.imageio.ImageIO;
 import javax.swing.JFileChooser;
@@ -24,6 +22,7 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
+import org.apache.commons.lang3.StringUtils;
 import org.supercsv.io.CsvMapWriter;
 import org.supercsv.io.ICsvMapWriter;
 import org.supercsv.prefs.CsvPreference;
@@ -99,23 +98,25 @@ public class FormFileUtils extends JFileChooser {
 		resetChoosableFileFilters();
 
 		// Creating a set for preveting duplication of entries
-		Set<String> setOfExtensions = new TreeSet<String>();
+		ArrayList<String> setOfExtensions = new ArrayList<String>();
 		// Iterating all possible image suffixes the current jvm can open
 		for (String suffix : ImageIO.getReaderFileSuffixes()) {
-			setOfExtensions.add(suffix);
+			if (StringUtils.isNotBlank(suffix)) {
+				setFileFilter(new FileNameExtensionFilter(
+						FormScannerTranslation.getTranslationFor(suffix + ".images"),
+						suffix));
+				setOfExtensions.add(suffix);
+			}
 		}
-		// Creating individual file filters
-		for (String ext : setOfExtensions) {
-			setFileFilter(new FileNameExtensionFilter(
-					FormScannerTranslation.getTranslationFor(ext + ".images"),
-					ext));
-		}
+
 		// Creating "all images" file filter (the one which opens any supported
 		// image type)
+		String[] arrayOfExtensions = new String[setOfExtensions.size()];
+		arrayOfExtensions = setOfExtensions.toArray(arrayOfExtensions);
 		FileNameExtensionFilter allImagesFilter = new FileNameExtensionFilter(
 				FormScannerTranslation
 						.getTranslationFor(FormScannerTranslationKeys.ALL_IMAGES),
-				ImageIO.getReaderFileSuffixes());
+						arrayOfExtensions);
 		setFileFilter(allImagesFilter);
 	}
 
