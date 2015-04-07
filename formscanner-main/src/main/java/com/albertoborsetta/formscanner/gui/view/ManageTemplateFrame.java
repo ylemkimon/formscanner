@@ -34,6 +34,7 @@ import javax.swing.table.TableRowSorter;
 
 import org.apache.commons.lang3.StringUtils;
 
+import com.albertoborsetta.formscanner.api.FormArea;
 import com.albertoborsetta.formscanner.api.FormQuestion;
 import com.albertoborsetta.formscanner.api.FormPoint;
 import com.albertoborsetta.formscanner.api.commons.Constants.FieldType;
@@ -91,7 +92,7 @@ public class ManageTemplateFrame extends InternalFrame implements TabbedView {
 	private int previousRowsCount;
 	private InternalFieldType[] types;
 	private JPanel fieldsTypeButtonPanel;
-	private JTextField questionsLabel;
+	private JTextField questionLabel;
 	private String fieldsType;
 
 	private class InternalFieldType {
@@ -300,9 +301,19 @@ public class ManageTemplateFrame extends InternalFrame implements TabbedView {
 				}
 				model.disposeRelatedFrame(this);
 
+				switch (fieldsType) {
+				case FormScannerConstants.QUESTIONS_BY_COLS:
+				case FormScannerConstants.QUESTIONS_BY_ROWS:
+				case FormScannerConstants.RESPONSES_BY_GRID:
 				HashMap<String, FormQuestion> fields = createFields();
 				model.updateTemplate(fields);
-				setupFieldsTable(model.getTemplate().getFields());
+				break;
+				case FormScannerConstants.BARCODE:
+					HashMap<String, FormArea> area = createArea();
+					model.updateTemplate(area);
+					break;
+				}
+				setupFieldsTable();
 				saveTemplateButton.setEnabled(true);
 				resetSelectedValues();
 				break;
@@ -354,20 +365,44 @@ public class ManageTemplateFrame extends InternalFrame implements TabbedView {
 
 	private HashMap<String, FormQuestion> createFields() {
 		HashMap<String, FormQuestion> fields = new HashMap<String, FormQuestion>();
-
-		for (int i = 1; i < (Integer) rowsNumber.getValue() + 1; i++) {
-			String name = (String) positionsTable.getValueAt(i, 0);
-			FormQuestion field = new FormQuestion(name);
-			for (int j = 1; j < (Integer) colsNumber.getValue() + 1; j++) {
-				String value = (String) positionsTable.getValueAt(0, j);
-				FormPoint p = getPointFromTable(i, j);
-				field.setPoint(value, p);
-				field.setType(getFieldType());
+		
+		Integer rows = (Integer) rowsNumber.getValue();
+		Integer cols = (Integer) colsNumber.getValue();
+		
+		switch (fieldsType) {
+		case FormScannerConstants.QUESTIONS_BY_ROWS:
+		case FormScannerConstants.QUESTIONS_BY_COLS:
+			for (int i = 1; i < rows + 1; i++) {
+				String name = (String) positionsTable.getValueAt(i, 0);
+				FormQuestion field = new FormQuestion(name);
+				for (int j = 1; j < cols + 1; j++) {
+					String value = (String) positionsTable.getValueAt(0, j);
+					FormPoint p = getPointFromTable(i, j);
+					field.setPoint(value, p);
+					field.setType(getFieldType());
+				}
+				field.setMultiple(isMultiple.isSelected());
+				field.setRejectMultiple(!isMultiple.isSelected()
+						&& rejectMultiple.isSelected());
+				fields.put(name, field);
 			}
+			break;
+		case FormScannerConstants.RESPONSES_BY_GRID:
+			String name = questionLabel.getText();
+			FormQuestion field = new FormQuestion(name);
+			for (int i = 0; i < rows; i++) {
+				for (int j = 1; j < cols; j+=2) {
+					String value = (String) positionsTable.getValueAt(i, j-1);
+					FormPoint p = getPointFromTable(i, j);
+					field.setPoint(value, p);
+				}
+			}
+			field.setType(getFieldType());
 			field.setMultiple(isMultiple.isSelected());
 			field.setRejectMultiple(!isMultiple.isSelected()
 					&& rejectMultiple.isSelected());
 			fields.put(name, field);
+			break;
 		}
 		return fields;
 	}
@@ -403,8 +438,8 @@ public class ManageTemplateFrame extends InternalFrame implements TabbedView {
 	}
 
 	public void setupPositionTable(List<FormPoint> points) {
-		Integer rows = (Integer) rowsNumber.getValue();
-		Integer cols = (Integer) colsNumber.getValue();
+		Integer rows = (rowsNumber != null) ? (Integer) rowsNumber.getValue() : 2;
+		Integer cols = (colsNumber != null) ? (Integer) colsNumber.getValue() : 2;
 
 		switch (fieldsType) {
 		case FormScannerConstants.QUESTIONS_BY_ROWS:
@@ -460,7 +495,8 @@ public class ManageTemplateFrame extends InternalFrame implements TabbedView {
 		positionsTable.setVisible(true);
 	}
 
-	private void setupFieldsTable(HashMap<String, FormQuestion> fields) {
+	private void setupFieldsTable() {
+		HashMap<String, FormQuestion> fields = model.getTemplate().getFields();
 		FieldsTableModel fieldsTableModel = (FieldsTableModel) fieldsTable
 				.getModel();
 		while (fieldsTable.getRowCount() > 0) {
@@ -475,6 +511,7 @@ public class ManageTemplateFrame extends InternalFrame implements TabbedView {
 					field.getPoints().size() });
 		}
 
+		// TODO: Add Areas.
 	}
 
 	private void resetSelectedValues() {
@@ -484,7 +521,7 @@ public class ManageTemplateFrame extends InternalFrame implements TabbedView {
 			isMultiple.setSelected(false);
 			rejectMultiple.setSelected(false);
 		}
-		questionsLabel.setText(StringUtils.EMPTY);
+		questionLabel.setText(StringUtils.EMPTY);
 	}
 
 	public FieldType getFieldType() {
@@ -518,8 +555,8 @@ public class ManageTemplateFrame extends InternalFrame implements TabbedView {
 		}
 		return (((colsNumber != null && (Integer) colsNumber.getValue() > 0)
 				&& (rowsNumber != null && (Integer) rowsNumber.getValue() > 0) && StringUtils
-					.isNotBlank(questionsLabel.getText())) || (colsNumber == null
-				&& rowsNumber == null && StringUtils.isNotBlank(questionsLabel
+					.isNotBlank(questionLabel.getText())) || (colsNumber == null
+				&& rowsNumber == null && StringUtils.isNotBlank(questionLabel
 				.getText())));
 	}
 
@@ -733,12 +770,12 @@ public class ManageTemplateFrame extends InternalFrame implements TabbedView {
 	}
 
 	private JPanel getBarcodePanel() {
-		questionsLabel = new TextFieldBuilder(10, orientation)
+		questionLabel = new TextFieldBuilder(10, orientation)
 				.withActionListener(manageTemplateController).build();
 
 		return new PanelBuilder(orientation).withLayout(new SpringLayout())
 				.add(getLabel(FormScannerTranslationKeys.BARCODE_LABEL))
-				.add(questionsLabel).withGrid(1, 2).build();
+				.add(questionLabel).withGrid(1, 2).build();
 	}
 
 	protected JPanel getFieldPositionPanel() {
@@ -786,7 +823,7 @@ public class ManageTemplateFrame extends InternalFrame implements TabbedView {
 		boolean isGrid = fieldsType
 				.equals(FormScannerConstants.RESPONSES_BY_GRID);
 
-		questionsLabel = new TextFieldBuilder(10, orientation)
+		questionLabel = new TextFieldBuilder(10, orientation)
 				.withActionListener(manageTemplateController).build();
 
 		isMultiple = new CheckBoxBuilder(FormScannerConstants.IS_MULTIPLE,
@@ -807,12 +844,21 @@ public class ManageTemplateFrame extends InternalFrame implements TabbedView {
 				orientation).withActionListener(manageTemplateController)
 				.withFocusListener(manageTemplateController).build();
 
-		return new PanelBuilder(orientation)
-				.withLayout(new SpringLayout())
-				.add(getLabel(isGrid ? FormScannerTranslationKeys.SINGLE_QUESTION_LABEL
-						: FormScannerTranslationKeys.SET_OF_QUESTIONS_LABEL))
-				.add(questionsLabel)
-				.add(getLabel(FormScannerTranslationKeys.FIELD_PROPERTIES_IS_MULTIPLE))
+		PanelBuilder propertiesPanelBuilder = new PanelBuilder(orientation)
+				.withLayout(new SpringLayout());
+		switch (fieldsType) {
+		case FormScannerConstants.RESPONSES_BY_GRID:
+			propertiesPanelBuilder.add(getLabel(isGrid ? FormScannerTranslationKeys.SINGLE_QUESTION_LABEL
+					: FormScannerTranslationKeys.SET_OF_QUESTIONS_LABEL))
+					.add(questionLabel).withGrid(5, 2);
+			break;
+		case FormScannerConstants.QUESTIONS_BY_ROWS:
+		case FormScannerConstants.QUESTIONS_BY_COLS:
+					propertiesPanelBuilder.withGrid(4, 2);
+			break;
+		}
+		
+		return propertiesPanelBuilder.add(getLabel(FormScannerTranslationKeys.FIELD_PROPERTIES_IS_MULTIPLE))
 				.add(isMultiple)
 				.add(getLabel(FormScannerTranslationKeys.FIELD_PROPERTIES_REJECT_MULTIPLE))
 				.add(rejectMultiple)
@@ -821,7 +867,7 @@ public class ManageTemplateFrame extends InternalFrame implements TabbedView {
 				.add(rowsNumber)
 				.add(getLabel(isGrid ? FormScannerTranslationKeys.FIELD_PROPERTIES_N_COLS_LABEL
 						: FormScannerTranslationKeys.FIELD_PROPERTIES_N_VALUES_LABEL))
-				.add(colsNumber).withGrid(5, 2).build();
+				.add(colsNumber).build();
 	}
 
 	private JLabel getLabel(String value) {
