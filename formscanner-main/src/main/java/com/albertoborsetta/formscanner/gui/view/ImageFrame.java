@@ -445,11 +445,11 @@ public class ImageFrame extends InternalFrame implements ScrollableImageView {
 			g.drawImage(image, 0, 0, width, height, this);
 			showPoint((Graphics2D) g, temporaryPoint);
 			showPoints((Graphics2D) g);
-			showBarcodeArea((Graphics2D) g);
+			showArea((Graphics2D) g);
 			showCorners((Graphics2D) g);
 		}
 
-		private void showBarcodeArea(Graphics2D g) {
+		private void showArea(Graphics2D g) {
 			for (FormArea area : template.getFieldAreas()) {
 				showArea(g, area);
 			}

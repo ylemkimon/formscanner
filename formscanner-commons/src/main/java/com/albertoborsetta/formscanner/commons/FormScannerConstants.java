@@ -309,6 +309,7 @@ public class FormScannerConstants extends Constants {
 	}
 
 	public enum FieldsTableColumn {
+		GROUP_COLUMN(FormScannerTranslationKeys.GROUP_COLUMN),
 		NAME_COLUMN(FormScannerTranslationKeys.NAME_COLUMN), 
 		TYPE_COLUMN(FormScannerTranslationKeys.TYPE_COLUMN), 
 		MULTIPLE_COLUMN(FormScannerTranslationKeys.MULTIPLE_COLUMN), 
