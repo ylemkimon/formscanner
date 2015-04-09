@@ -24,13 +24,13 @@ import com.albertoborsetta.formscanner.api.FormQuestion;
 import com.albertoborsetta.formscanner.api.FormPoint;
 import com.albertoborsetta.formscanner.api.FormTemplate;
 import com.albertoborsetta.formscanner.api.commons.Constants.Corners;
+import com.albertoborsetta.formscanner.api.commons.Constants.ShapeType;
 import com.albertoborsetta.formscanner.commons.FormFileUtils;
 import com.albertoborsetta.formscanner.commons.FormScannerConstants;
 import com.albertoborsetta.formscanner.commons.FormScannerConstants.Action;
 import com.albertoborsetta.formscanner.commons.FormScannerConstants.Frame;
 import com.albertoborsetta.formscanner.commons.FormScannerConstants.Language;
 import com.albertoborsetta.formscanner.commons.FormScannerConstants.Mode;
-import com.albertoborsetta.formscanner.commons.FormScannerConstants.ShapeType;
 import com.albertoborsetta.formscanner.commons.FormScannerFont;
 import com.albertoborsetta.formscanner.commons.configuration.FormScannerConfiguration;
 import com.albertoborsetta.formscanner.commons.configuration.FormScannerConfigurationKeys;
@@ -181,7 +181,7 @@ public class FormScannerModel {
 				FormScannerConfigurationKeys.FONT_SIZE,
 				FormScannerConfigurationKeys.DEFAULT_FONT_SIZE);
 		FormScannerFont.getFont(fontType, fontSize);
-
+		
 		String tmpl = configurations.getProperty(
 				FormScannerConfigurationKeys.TEMPLATE, (String) null);
 		if (!StringUtils.isEmpty(tmpl)) {
@@ -697,7 +697,7 @@ public class FormScannerModel {
 	}
 
 	public void saveTemplate(boolean notify) {
-		File template = fileUtils.saveToFile(templatePath, formTemplate);
+		File template = fileUtils.saveToFile(templatePath, formTemplate, notify);
 
 		if (template != null) {
 			if (notify) {
@@ -710,15 +710,10 @@ public class FormScannerModel {
 										.getTranslationFor(FormScannerTranslationKeys.TEMPLATE_SAVED_POPUP),
 								JOptionPane.INFORMATION_MESSAGE);
 			}
-			templatePath = FilenameUtils
-					.getFullPath(template.getAbsolutePath());
-			String templateFile = FilenameUtils.getName(template
-					.getAbsolutePath());
-			configurations.setProperty(FormScannerConfigurationKeys.TEMPLATE,
-					templateFile);
-			configurations.setProperty(
-					FormScannerConfigurationKeys.TEMPLATE_SAVE_PATH,
-					templatePath);
+			templatePath = FilenameUtils.getFullPath(template.getAbsolutePath());
+			String templateFile = FilenameUtils.getName(template.getAbsolutePath());
+			configurations.setProperty(FormScannerConfigurationKeys.TEMPLATE, templateFile);
+			configurations.setProperty(FormScannerConfigurationKeys.TEMPLATE_SAVE_PATH, templatePath);
 			configurations.store();
 		} else {
 			if (notify) {
@@ -750,8 +745,13 @@ public class FormScannerModel {
 
 		try {
 			formTemplate = new FormTemplate(template);
-			if (!FormScannerConstants.CURRENT_TEMPLATE_VERSION
-					.equals(formTemplate.getVersion())) {
+			if (!FormScannerConstants.CURRENT_TEMPLATE_VERSION.equals(formTemplate.getVersion())) {
+				formTemplate.setVersion(FormScannerConstants.CURRENT_TEMPLATE_VERSION);
+				formTemplate.setThreshold(formTemplate.getThreshold() == 0 ? threshold : formTemplate.getThreshold());
+				formTemplate.setDensity(formTemplate.getDensity() == 0 ? density : formTemplate.getDensity());
+				formTemplate.setSize(formTemplate.getSize() == 0 ? shapeSize : formTemplate.getSize());
+				formTemplate.setShape(formTemplate.getShape() == null ? shapeType : formTemplate.getShape());
+				
 				saveTemplate(false);
 				return true;
 			}
@@ -769,12 +769,15 @@ public class FormScannerModel {
 					.getFullPath(template.getAbsolutePath());
 			String templateFile = FilenameUtils.getName(template
 					.getAbsolutePath());
-			configurations.setProperty(FormScannerConfigurationKeys.TEMPLATE,
-					templateFile);
-			configurations.setProperty(
-					FormScannerConfigurationKeys.TEMPLATE_SAVE_PATH,
-					templatePath);
+			configurations.setProperty(FormScannerConfigurationKeys.TEMPLATE, templateFile);
+			configurations.setProperty(FormScannerConfigurationKeys.TEMPLATE_SAVE_PATH, templatePath);
 			configurations.store();
+			
+			threshold = formTemplate.getThreshold();
+			density = formTemplate.getDensity();
+			shapeSize = formTemplate.getSize();
+			shapeType = formTemplate.getShape();
+			
 			return true;
 		} catch (Exception e) {
 			if (notify) {
@@ -875,19 +878,21 @@ public class FormScannerModel {
 		fontType = view.getFontType();
 		fontSize = view.getFontSize();
 
-		configurations.setProperty(FormScannerConfigurationKeys.THRESHOLD,
-				String.valueOf(threshold));
-		configurations.setProperty(FormScannerConfigurationKeys.DENSITY,
-				String.valueOf(density));
-		configurations.setProperty(FormScannerConfigurationKeys.SHAPE_SIZE,
-				String.valueOf(shapeSize));
-		configurations.setProperty(FormScannerConfigurationKeys.SHAPE_TYPE,
-				shapeType.getName());
-		configurations.setProperty(FormScannerConfigurationKeys.FONT_TYPE,
-				fontType);
-		configurations.setProperty(FormScannerConfigurationKeys.FONT_SIZE,
-				fontSize);
+		configurations.setProperty(FormScannerConfigurationKeys.THRESHOLD, String.valueOf(threshold));
+		configurations.setProperty(FormScannerConfigurationKeys.DENSITY, String.valueOf(density));
+		configurations.setProperty(FormScannerConfigurationKeys.SHAPE_SIZE, String.valueOf(shapeSize));
+		configurations.setProperty(FormScannerConfigurationKeys.SHAPE_TYPE, shapeType.getName());
+		configurations.setProperty(FormScannerConfigurationKeys.FONT_TYPE, fontType);
+		configurations.setProperty(FormScannerConfigurationKeys.FONT_SIZE, fontSize);
 		configurations.store();
+		
+		if (formTemplate != null) {
+			formTemplate.setThreshold(threshold);
+			formTemplate.setDensity(density);
+			formTemplate.setSize(shapeSize);
+			formTemplate.setShape(shapeType);
+			saveTemplate(false);
+		}
 	}
 
 	public void resetFirstPass() {

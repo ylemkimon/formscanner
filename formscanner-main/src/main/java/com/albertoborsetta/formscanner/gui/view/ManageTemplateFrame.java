@@ -237,6 +237,7 @@ public class ManageTemplateFrame extends InternalFrame implements TabbedView {
 		 * 
 		 */
 		private static final long serialVersionUID = 1L;
+		private ArrayList<ArrayList<Integer>> rowColHeight = new ArrayList<ArrayList<Integer>>();
 
 		public FieldsTableCellRenderer() {
 			setLineWrap(true);
@@ -484,7 +485,7 @@ public class ManageTemplateFrame extends InternalFrame implements TabbedView {
 			String name = questionLabel.getText();
 			FormQuestion field = new FormQuestion(name);
 			for (int i = 0; i < rows; i++) {
-				for (int j = 1; j < cols; j += 2) {
+				for (int j = 1; j < (2 * cols) + 1; j += 2) {
 					String value = (String) positionsTable.getValueAt(i, j - 1);
 					FormPoint p = getPointFromTable(i, j);
 					field.setPoint(value, p);
@@ -554,9 +555,9 @@ public class ManageTemplateFrame extends InternalFrame implements TabbedView {
 		case FormScannerConstants.BARCODE:
 			for (int i = 0; i < rows; i++) {
 				for (int j = 0; j < cols; j++) {
-					int index = ((i % 2) * cols) + (j % 2);
+					int index = (i * cols) + j;
 					FormPoint p = points.get(index);
-					positionsTable.setValueAt(p.toString(), i, ((2 * j) + 1));
+					positionsTable.setValueAt(p.toString(), i, (2 * j) + 1);
 				}
 			}
 			break;
@@ -628,19 +629,27 @@ public class ManageTemplateFrame extends InternalFrame implements TabbedView {
 		case FormScannerConstants.RESPONSES_BY_GRID:
 		case FormScannerConstants.BARCODE:
 			return StringUtils.isNotBlank(questionLabel.getText());
+		default:
+			return true;
 		}
-		return true;
 	}
 
 	private boolean verifyPropertiesValues() {
-		if (colsNumber != null && (Integer) colsNumber.getValue() < 0) {
-			colsNumber.setValue(0);
+		switch (fieldsType) {
+		case FormScannerConstants.QUESTIONS_BY_COLS:
+		case FormScannerConstants.QUESTIONS_BY_ROWS:
+			if ((Integer) colsNumber.getValue() < 0) {
+				colsNumber.setValue(0);
+			}
+			if ((Integer) rowsNumber.getValue() < 0) {
+				rowsNumber.setValue(0);
+			}
+			return (((Integer) colsNumber.getValue() > 0) && ((Integer) rowsNumber.getValue() > 0));
+		case FormScannerConstants.RESPONSES_BY_GRID:
+		case FormScannerConstants.BARCODE:
+		default:
+			return true;
 		}
-		if (rowsNumber != null && (Integer) rowsNumber.getValue() < 0) {
-			rowsNumber.setValue(0);
-		}
-		return ((colsNumber != null && (Integer) colsNumber.getValue() > 0) && (rowsNumber != null && (Integer) rowsNumber
-				.getValue() > 0));
 	}
 
 	private JTable createSimplePositionsTable(int rows, int cols) {

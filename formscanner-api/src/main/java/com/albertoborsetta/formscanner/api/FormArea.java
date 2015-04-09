@@ -11,7 +11,9 @@ import com.albertoborsetta.formscanner.api.commons.Constants.Corners;
 import com.albertoborsetta.formscanner.api.commons.Constants.FieldType;
 
 /**
- * The <code>FormArea</code> class represents an area (like barcode area) into the scanned form.<p>
+ * The <code>FormArea</code> class represents an area (like barcode area) into
+ * the scanned form.
+ * <p>
  * A FormArea object has the four corners points attributes
  * <ul>
  * <li>A name
@@ -26,7 +28,7 @@ import com.albertoborsetta.formscanner.api.commons.Constants.FieldType;
  * @see Corners
  */
 public class FormArea extends FormField {
-	
+
 	private HashMap<Corners, FormPoint> area;
 	private String text;
 
@@ -34,8 +36,10 @@ public class FormArea extends FormField {
 	 * Instantiates a new FormArea with the corner points.
 	 *
 	 * @author Alberto Borsetta
-	 * @param name the name of the area
-	 * @param points the points which indicates the position of the corners
+	 * @param name
+	 *            the name of the area
+	 * @param points
+	 *            the points which indicates the position of the corners
 	 * @see FormPoint
 	 * @see Corners
 	 */
@@ -43,12 +47,14 @@ public class FormArea extends FormField {
 		super(name);
 		this.area = area;
 	}
-	
+
 	/**
-	 * Instantiates a new empty FormArea. Initialize an empty set of corners points.
+	 * Instantiates a new empty FormArea. Initialize an empty set of corners
+	 * points.
 	 *
 	 * @author Alberto Borsetta
-	 * @param name the name of the area
+	 * @param name
+	 *            the name of the area
 	 * @see FormPoint
 	 * @see Corners
 	 */
@@ -61,26 +67,29 @@ public class FormArea extends FormField {
 	 * Sets a corner of the FormArea object.
 	 *
 	 * @author Alberto Borsetta
-	 * @param corner the corner to set
-	 * @param point the point of the corner
+	 * @param corner
+	 *            the corner to set
+	 * @param point
+	 *            the point of the corner
 	 * @see FormPoint
 	 * @see Corners
 	 */
 	public void setCorner(Corners corner, FormPoint point) {
 		area.put(corner, point);
 	}
-	
+
 	/**
 	 * Returns the point of a corner.
 	 *
 	 * @author Alberto Borsetta
-	 * @param corner the corner of the area
+	 * @param corner
+	 *            the corner of the area
 	 * @return the point of the corner
 	 */
 	public FormPoint getCorner(Corners corner) {
 		return area.get(corner);
 	}
-	
+
 	/**
 	 * Clear all corners of the FormArea object.
 	 *
@@ -89,7 +98,7 @@ public class FormArea extends FormField {
 	public void clearCorners() {
 		area.clear();
 	}
-	
+
 	/**
 	 * Returns the corners of the FormArea object.
 	 *
@@ -101,7 +110,7 @@ public class FormArea extends FormField {
 	public HashMap<Corners, FormPoint> getCorners() {
 		return area;
 	}
-	
+
 	/**
 	 * Returns the xml representation of the FormArea object.
 	 *
@@ -112,11 +121,13 @@ public class FormArea extends FormField {
 	@Override
 	public Element getXml(Document doc) {
 		Element areaElement = doc.createElement("area");
-		
+
 		areaElement.setAttribute("type", type.name());
 		areaElement.setAttribute("name", StringUtils.trim(name));
-		areaElement.setAttribute("group", StringUtils.trim(group));
-		
+		if (StringUtils.isNotBlank(group)) {
+			areaElement.setAttribute("group", StringUtils.trim(group));
+		}
+
 		// corners element
 		Element cornersElement = doc.createElement("corners");
 		areaElement.appendChild(cornersElement);
@@ -136,7 +147,7 @@ public class FormArea extends FormField {
 	public void setText(String text) {
 		this.text = text;
 	}
-	
+
 	// TODO: Javadoc
 	public String getText() {
 		return text;

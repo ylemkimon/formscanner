@@ -138,7 +138,7 @@ public class FormFileUtils extends JFileChooser {
 		setFileFilter(templateFilter);
 	}
 
-	private File saveTemplateAs(File file, Document doc) {
+	private File saveTemplateAs(File file, Document doc, boolean notify) {
 		try {
 			TransformerFactory transformerFactory = TransformerFactory
 					.newInstance();
@@ -154,9 +154,17 @@ public class FormFileUtils extends JFileChooser {
 			setTemplateFilter();
 			setSelectedFile(file);
 
-			int returnValue = showSaveDialog(null);
-			if (returnValue == JFileChooser.APPROVE_OPTION) {
-				file = getSelectedFile();
+			if (notify) {
+				int returnValue = showSaveDialog(null);
+				if (returnValue == JFileChooser.APPROVE_OPTION) {
+					file = getSelectedFile();
+					FileOutputStream fos = new FileOutputStream(file);
+					OutputStreamWriter out = new OutputStreamWriter(fos,
+							Charset.forName("UTF-8"));
+					StreamResult result = new StreamResult(out);
+					transformer.transform(source, result);
+				}
+			} else {
 				FileOutputStream fos = new FileOutputStream(file);
 				OutputStreamWriter out = new OutputStreamWriter(fos,
 						Charset.forName("UTF-8"));
@@ -259,13 +267,13 @@ public class FormFileUtils extends JFileChooser {
 		return header;
 	}
 
-	public File saveToFile(String path, FormTemplate template) {
+	public File saveToFile(String path, FormTemplate template, boolean notify) {
 		File outputFile = null;
 
 		try {
 			outputFile = new File(path + template.getName() + ".xtmpl");
 			Document xml = template.getXml();
-			outputFile = saveTemplateAs(outputFile, xml);
+			outputFile = saveTemplateAs(outputFile, xml, notify);
 		} catch (ParserConfigurationException e) {
 			e.printStackTrace();
 		}
