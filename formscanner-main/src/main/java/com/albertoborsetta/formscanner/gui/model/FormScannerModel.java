@@ -673,9 +673,19 @@ public class FormScannerModel {
 		return delta;
 	}
 
-	public void updateTemplate(HashMap<String, FormQuestion> fields) {
+	public void updateTemplateFields(HashMap<String, FormQuestion> fields) {
 		formTemplate.setFields(fields);
 		resetPoints();
+	}
+	
+	public void updateTemplateAreas(FormArea area) {
+		formTemplate.setArea(area);
+		resetPoints();
+		resetAreas();
+	}
+
+	private void resetAreas() {
+		areas.clear();
 	}
 
 	public ArrayList<FormPoint> getPoints() {

@@ -173,4 +173,5 @@ public class FormScannerTranslationKeys extends TranslationKeys {
 	public static final String BARCODE_LABEL = "barcode.label";
 	public static final String SINGLE_QUESTION_LABEL = "single.question.label";
 	public static final String SET_OF_QUESTIONS_LABEL = "set.of.questions.label";
+	public static final String GROUP_COLUMN = "group.column";
 }

@@ -5,6 +5,7 @@ import javax.swing.JTabbedPane;
 import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Dimension;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -37,6 +38,7 @@ import org.apache.commons.lang3.StringUtils;
 import com.albertoborsetta.formscanner.api.FormArea;
 import com.albertoborsetta.formscanner.api.FormQuestion;
 import com.albertoborsetta.formscanner.api.FormPoint;
+import com.albertoborsetta.formscanner.api.commons.Constants.Corners;
 import com.albertoborsetta.formscanner.api.commons.Constants.FieldType;
 import com.albertoborsetta.formscanner.commons.CharSequenceGenerator;
 import com.albertoborsetta.formscanner.commons.FormScannerConstants;
@@ -92,6 +94,7 @@ public class ManageTemplateFrame extends InternalFrame implements TabbedView {
 	private int previousRowsCount;
 	private InternalFieldType[] types;
 	private JPanel fieldsTypeButtonPanel;
+	private JTextField setOfQuestionsLabel;
 	private JTextField questionLabel;
 	private String fieldsType;
 
@@ -129,18 +132,20 @@ public class ManageTemplateFrame extends InternalFrame implements TabbedView {
 
 		@Override
 		public Class<?> getColumnClass(int columnIndex) {
-			return (columnIndex == 2) ? Boolean.class : super
+			return (columnIndex == 3) ? Boolean.class : super
 					.getColumnClass(columnIndex);
 		}
 	}
 
-	public class PositionsTableCellRenderer extends JTextArea implements TableCellRenderer {
+	public class PositionsTableCellRenderer extends JTextArea implements
+			TableCellRenderer {
 		/**
 		 * 
 		 */
 		private static final long serialVersionUID = 1L;
-		
+
 		private String type;
+		private ArrayList<ArrayList<Integer>> rowColHeight = new ArrayList<ArrayList<Integer>>();
 
 		public PositionsTableCellRenderer(String type) {
 			setLineWrap(true);
@@ -152,7 +157,7 @@ public class ManageTemplateFrame extends InternalFrame implements TabbedView {
 		public Component getTableCellRendererComponent(JTable table,
 				Object value, boolean isSelected, boolean hasFocus, int row,
 				int column) {
-			
+
 			boolean header = false;
 			switch (type) {
 			case FormScannerConstants.QUESTIONS_BY_ROWS:
@@ -193,11 +198,41 @@ public class ManageTemplateFrame extends InternalFrame implements TabbedView {
 			} else {
 				setText("");
 			}
+			adjustRowHeight(table, row, column);
 			return this;
 		}
+
+		/**
+		 * Calculate the new preferred height for a given row, and sets the
+		 * height on the table.
+		 */
+		private void adjustRowHeight(JTable table, int row, int column) {
+			int cWidth = table.getTableHeader().getColumnModel()
+					.getColumn(column).getWidth();
+			setSize(new Dimension(cWidth, 1000));
+			int prefH = getPreferredSize().height;
+			while (rowColHeight.size() <= row) {
+				rowColHeight.add(new ArrayList<Integer>(column));
+			}
+			ArrayList<Integer> colHeights = rowColHeight.get(row);
+			while (colHeights.size() <= column) {
+				colHeights.add(0);
+			}
+			colHeights.set(column, prefH);
+			int maxH = prefH;
+			for (Integer colHeight : colHeights) {
+				if (colHeight > maxH) {
+					maxH = colHeight;
+				}
+			}
+			if (table.getRowHeight(row) != maxH) {
+				table.setRowHeight(row, maxH);
+			}
+		}
 	}
-	
-	public class FieldsTableCellRenderer extends JTextArea implements TableCellRenderer {
+
+	public class FieldsTableCellRenderer extends JTextArea implements
+			TableCellRenderer {
 		/**
 		 * 
 		 */
@@ -213,13 +248,13 @@ public class ManageTemplateFrame extends InternalFrame implements TabbedView {
 				Object value, boolean isSelected, boolean hasFocus, int row,
 				int column) {
 
-				if (isSelected) {
-					setForeground(table.getSelectionForeground());
-					setBackground(table.getSelectionBackground());
-				} else {
-					setForeground(table.getForeground());
-					setBackground(table.getBackground());
-				}
+			if (isSelected) {
+				setForeground(table.getSelectionForeground());
+				setBackground(table.getSelectionBackground());
+			} else {
+				setForeground(table.getForeground());
+				setBackground(table.getBackground());
+			}
 			setFont(table.getFont());
 			if (hasFocus) {
 				setBorder(UIManager.getBorder("Table.focusCellHighlightBorder"));
@@ -237,7 +272,36 @@ public class ManageTemplateFrame extends InternalFrame implements TabbedView {
 			} else {
 				setText("");
 			}
+			adjustRowHeight(table, row, column);
 			return this;
+		}
+		
+		/**
+		 * Calculate the new preferred height for a given row, and sets the
+		 * height on the table.
+		 */
+		private void adjustRowHeight(JTable table, int row, int column) {
+			int cWidth = table.getTableHeader().getColumnModel()
+					.getColumn(column).getWidth();
+			setSize(new Dimension(cWidth, 1000));
+			int prefH = getPreferredSize().height;
+			while (rowColHeight.size() <= row) {
+				rowColHeight.add(new ArrayList<Integer>(column));
+			}
+			ArrayList<Integer> colHeights = rowColHeight.get(row);
+			while (colHeights.size() <= column) {
+				colHeights.add(0);
+			}
+			colHeights.set(column, prefH);
+			int maxH = prefH;
+			for (Integer colHeight : colHeights) {
+				if (colHeight > maxH) {
+					maxH = colHeight;
+				}
+			}
+			if (table.getRowHeight(row) != maxH) {
+				table.setRowHeight(row, maxH);
+			}
 		}
 	}
 
@@ -263,7 +327,6 @@ public class ManageTemplateFrame extends InternalFrame implements TabbedView {
 
 		JPanel fieldListPanel = getFieldListPanel();
 		JPanel fieldTypePanel = getFieldTypePanel();
-		JPanel fieldPositionPanel = getFieldPositionPanel();
 
 		tabbedPane = new TabbedPaneBuilder(JTabbedPane.TOP, orientation)
 				.addTab(FormScannerTranslation
@@ -277,7 +340,7 @@ public class ManageTemplateFrame extends InternalFrame implements TabbedView {
 						null)
 				.addTab(FormScannerTranslation
 						.getTranslationFor(FormScannerTranslationKeys.FIELD_POSITION_TAB_NAME),
-						fieldPositionPanel).build();
+						null).build();
 
 		getContentPane().add(tabbedPane, BorderLayout.CENTER);
 
@@ -305,12 +368,12 @@ public class ManageTemplateFrame extends InternalFrame implements TabbedView {
 				case FormScannerConstants.QUESTIONS_BY_COLS:
 				case FormScannerConstants.QUESTIONS_BY_ROWS:
 				case FormScannerConstants.RESPONSES_BY_GRID:
-				HashMap<String, FormQuestion> fields = createFields();
-				model.updateTemplate(fields);
-				break;
+					HashMap<String, FormQuestion> fields = createFields();
+					model.updateTemplateFields(fields);
+					break;
 				case FormScannerConstants.BARCODE:
-					HashMap<String, FormArea> area = createArea();
-					model.updateTemplate(area);
+					FormArea area = createArea();
+					model.updateTemplateAreas(area);
 					break;
 				}
 				setupFieldsTable();
@@ -322,7 +385,8 @@ public class ManageTemplateFrame extends InternalFrame implements TabbedView {
 				tabbedPane.setComponentAt(nextTab, fieldPropertiesPanel);
 				break;
 			case 3:
-				resetPositionsTable();
+				JPanel fieldPositionPanel = getFieldPositionPanel();
+				tabbedPane.setComponentAt(nextTab, fieldPositionPanel);
 				model.createTemplateImageFrame(fieldsType);
 				break;
 			default:
@@ -359,16 +423,44 @@ public class ManageTemplateFrame extends InternalFrame implements TabbedView {
 		tabbedPane.setSelectedIndex(nextTab);
 	}
 
+	private FormArea createArea() {
+		String name = questionLabel.getText();
+		FormArea area = new FormArea(name);
+		area.setType(getFieldType());
+		area.setGroup(setOfQuestionsLabel.getText());
+		for (int i = 0; i < 2; i++) {
+			for (int j = 1; j < 5; j += 2) {
+				FormPoint corner = getPointFromTable(i, j);
+				switch (i + j) {
+				case 1:
+					area.setCorner(Corners.TOP_LEFT, corner);
+					break;
+				case 2:
+					area.setCorner(Corners.BOTTOM_LEFT, corner);
+					break;
+				case 3:
+					area.setCorner(Corners.TOP_RIGHT, corner);
+					break;
+				case 4:
+					area.setCorner(Corners.BOTTOM_RIGHT, corner);
+					break;
+				}
+			}
+		}
+
+		return area;
+	}
+
 	private void resetFieldsType() {
 		typeComboBox.setSelectedIndex(0);
 	}
 
 	private HashMap<String, FormQuestion> createFields() {
 		HashMap<String, FormQuestion> fields = new HashMap<String, FormQuestion>();
-		
+
 		Integer rows = (Integer) rowsNumber.getValue();
 		Integer cols = (Integer) colsNumber.getValue();
-		
+
 		switch (fieldsType) {
 		case FormScannerConstants.QUESTIONS_BY_ROWS:
 		case FormScannerConstants.QUESTIONS_BY_COLS:
@@ -384,6 +476,7 @@ public class ManageTemplateFrame extends InternalFrame implements TabbedView {
 				field.setMultiple(isMultiple.isSelected());
 				field.setRejectMultiple(!isMultiple.isSelected()
 						&& rejectMultiple.isSelected());
+				field.setGroup(setOfQuestionsLabel.getText());
 				fields.put(name, field);
 			}
 			break;
@@ -391,8 +484,8 @@ public class ManageTemplateFrame extends InternalFrame implements TabbedView {
 			String name = questionLabel.getText();
 			FormQuestion field = new FormQuestion(name);
 			for (int i = 0; i < rows; i++) {
-				for (int j = 1; j < cols; j+=2) {
-					String value = (String) positionsTable.getValueAt(i, j-1);
+				for (int j = 1; j < cols; j += 2) {
+					String value = (String) positionsTable.getValueAt(i, j - 1);
 					FormPoint p = getPointFromTable(i, j);
 					field.setPoint(value, p);
 				}
@@ -401,6 +494,7 @@ public class ManageTemplateFrame extends InternalFrame implements TabbedView {
 			field.setMultiple(isMultiple.isSelected());
 			field.setRejectMultiple(!isMultiple.isSelected()
 					&& rejectMultiple.isSelected());
+			field.setGroup(setOfQuestionsLabel.getText());
 			fields.put(name, field);
 			break;
 		}
@@ -438,12 +532,14 @@ public class ManageTemplateFrame extends InternalFrame implements TabbedView {
 	}
 
 	public void setupPositionTable(List<FormPoint> points) {
-		Integer rows = (rowsNumber != null) ? (Integer) rowsNumber.getValue() : 2;
-		Integer cols = (colsNumber != null) ? (Integer) colsNumber.getValue() : 2;
+		Integer rows = 2;
+		Integer cols = 2;
 
 		switch (fieldsType) {
 		case FormScannerConstants.QUESTIONS_BY_ROWS:
 		case FormScannerConstants.QUESTIONS_BY_COLS:
+			rows = (Integer) rowsNumber.getValue();
+			cols = (Integer) colsNumber.getValue();
 			for (int i = 0; i < rows; i++) {
 				for (int j = 0; j < cols; j++) {
 					int index = (cols * i) + j;
@@ -452,66 +548,46 @@ public class ManageTemplateFrame extends InternalFrame implements TabbedView {
 				}
 			}
 			break;
-		case FormScannerConstants.BARCODE:
-			rows = 2;
-			cols = 2;
 		case FormScannerConstants.RESPONSES_BY_GRID:
+			rows = (Integer) rowsNumber.getValue();
+			cols = (Integer) colsNumber.getValue();
+		case FormScannerConstants.BARCODE:
 			for (int i = 0; i < rows; i++) {
 				for (int j = 0; j < cols; j++) {
-					int index = ((cols % 2) * i) + (j % 2);
+					int index = ((i % 2) * cols) + (j % 2);
 					FormPoint p = points.get(index);
-					positionsTable.setValueAt(p.toString(), i, ((2 * j) +1));
+					positionsTable.setValueAt(p.toString(), i, ((2 * j) + 1));
 				}
 			}
 			break;
 		}
 	}
 
-	private void removePositionsTable() {
-		positionsTableScrollPane.remove(positionsTable);
-	}
-
-	private void resetPositionsTable() {
-		removePositionsTable();
-
-		switch (fieldsType) {
-		case FormScannerConstants.QUESTIONS_BY_ROWS:
-		case FormScannerConstants.QUESTIONS_BY_COLS:
-			positionsTable = createSimplePositionsTable(
-					((Integer) rowsNumber.getValue()) + 1,
-					((Integer) colsNumber.getValue()) + 1);
-			break;
-		case FormScannerConstants.RESPONSES_BY_GRID:
-			positionsTable = createGridPositionsTable(
-					((Integer) rowsNumber.getValue()),
-					((Integer) colsNumber.getValue()) * 2);
-			break;
-		case FormScannerConstants.BARCODE:
-			positionsTable = createBarcodePositionsTable(2, 4);
-			break;
-		}
-
-		positionsTableScrollPane.setViewportView(positionsTable);
-		positionsTable.setVisible(true);
-	}
-
 	private void setupFieldsTable() {
-		HashMap<String, FormQuestion> fields = model.getTemplate().getFields();
 		FieldsTableModel fieldsTableModel = (FieldsTableModel) fieldsTable
 				.getModel();
 		while (fieldsTable.getRowCount() > 0) {
 			fieldsTableModel.removeRow(fieldsTable.getRowCount() - 1);
 		}
 
+		HashMap<String, FormQuestion> fields = model.getTemplate().getFields();
 		for (FormQuestion field : fields.values()) {
 			fieldsTableModel.addRow(new Object[] {
+					field.getGroup(),
 					field.getName(),
 					FormScannerTranslation.getTranslationFor(field.getType()
 							.getValue()), field.isMultiple(),
 					field.getPoints().size() });
 		}
 
-		// TODO: Add Areas.
+		HashMap<String, FormArea> areas = model.getTemplate().getAreas();
+		for (FormArea area : areas.values()) {
+			fieldsTableModel.addRow(new Object[] {
+					area.getGroup(),
+					area.getName(),
+					FormScannerTranslation.getTranslationFor(area.getType()
+							.getValue()), null, null });
+		}
 	}
 
 	private void resetSelectedValues() {
@@ -521,7 +597,7 @@ public class ManageTemplateFrame extends InternalFrame implements TabbedView {
 			isMultiple.setSelected(false);
 			rejectMultiple.setSelected(false);
 		}
-		questionLabel.setText(StringUtils.EMPTY);
+		setOfQuestionsLabel.setText(StringUtils.EMPTY);
 	}
 
 	public FieldType getFieldType() {
@@ -538,12 +614,22 @@ public class ManageTemplateFrame extends InternalFrame implements TabbedView {
 			break;
 		case 2:
 			okPropertiesButton.setEnabled(verifyPropertiesValues());
+			break;
 		case 3:
-			okPositionButton.setEnabled(true);
+			okPositionButton.setEnabled(verifyQuestionLabel());
 			break;
 		default:
 			break;
 		}
+	}
+
+	private boolean verifyQuestionLabel() {
+		switch (fieldsType) {
+		case FormScannerConstants.RESPONSES_BY_GRID:
+		case FormScannerConstants.BARCODE:
+			return StringUtils.isNotBlank(questionLabel.getText());
+		}
+		return true;
 	}
 
 	private boolean verifyPropertiesValues() {
@@ -553,11 +639,8 @@ public class ManageTemplateFrame extends InternalFrame implements TabbedView {
 		if (rowsNumber != null && (Integer) rowsNumber.getValue() < 0) {
 			rowsNumber.setValue(0);
 		}
-		return (((colsNumber != null && (Integer) colsNumber.getValue() > 0)
-				&& (rowsNumber != null && (Integer) rowsNumber.getValue() > 0) && StringUtils
-					.isNotBlank(questionLabel.getText())) || (colsNumber == null
-				&& rowsNumber == null && StringUtils.isNotBlank(questionLabel
-				.getText())));
+		return ((colsNumber != null && (Integer) colsNumber.getValue() > 0) && (rowsNumber != null && (Integer) rowsNumber
+				.getValue() > 0));
 	}
 
 	private JTable createSimplePositionsTable(int rows, int cols) {
@@ -590,7 +673,8 @@ public class ManageTemplateFrame extends InternalFrame implements TabbedView {
 			}
 		}, columnModel);
 
-		table.setDefaultRenderer(Object.class, new PositionsTableCellRenderer(fieldsType));
+		table.setDefaultRenderer(Object.class, new PositionsTableCellRenderer(
+				fieldsType));
 
 		CharSequenceGenerator charSequence = new CharSequenceGenerator();
 
@@ -609,6 +693,7 @@ public class ManageTemplateFrame extends InternalFrame implements TabbedView {
 		table.setComponentOrientation(orientation);
 		table.setCellSelectionEnabled(true);
 		table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+		table.setVisible(true);
 		return table;
 	}
 
@@ -639,7 +724,8 @@ public class ManageTemplateFrame extends InternalFrame implements TabbedView {
 			}
 		}, columnModel);
 
-		table.setDefaultRenderer(Object.class, new PositionsTableCellRenderer(fieldsType));
+		table.setDefaultRenderer(Object.class, new PositionsTableCellRenderer(
+				fieldsType));
 
 		CharSequenceGenerator charSequence = new CharSequenceGenerator();
 
@@ -681,7 +767,8 @@ public class ManageTemplateFrame extends InternalFrame implements TabbedView {
 			}
 		}, columnModel);
 
-		table.setDefaultRenderer(Object.class, new PositionsTableCellRenderer(fieldsType));
+		table.setDefaultRenderer(Object.class, new PositionsTableCellRenderer(
+				fieldsType));
 
 		table.setValueAt(FormScannerTranslation
 				.getTranslationFor(FormScannerTranslationKeys.TOP_LEFT_CORNER),
@@ -770,26 +857,69 @@ public class ManageTemplateFrame extends InternalFrame implements TabbedView {
 	}
 
 	private JPanel getBarcodePanel() {
-		questionLabel = new TextFieldBuilder(10, orientation)
+		setOfQuestionsLabel = new TextFieldBuilder(10, orientation)
 				.withActionListener(manageTemplateController).build();
 
-		return new PanelBuilder(orientation).withLayout(new SpringLayout())
-				.add(getLabel(FormScannerTranslationKeys.BARCODE_LABEL))
-				.add(questionLabel).withGrid(1, 2).build();
+		return new PanelBuilder(orientation)
+				.withLayout(new SpringLayout())
+				.add(getLabel(FormScannerTranslationKeys.SET_OF_QUESTIONS_LABEL))
+				.add(setOfQuestionsLabel).withGrid(1, 2).build();
 	}
 
 	protected JPanel getFieldPositionPanel() {
 
 		JPanel positionButtonPanel = getPositionButtonPanel();
 
-		positionsTable = new JTable();
+		positionsTable = getPositionsTable();
+		
 		positionsTableScrollPane = new ScrollPaneBuilder(positionsTable,
 				orientation).build();
 
-		return new PanelBuilder(orientation).withLayout(new BorderLayout())
+		PanelBuilder positionPanelBuilder = new PanelBuilder(orientation)
+				.withLayout(new BorderLayout())
 				.addComponent(positionButtonPanel, BorderLayout.SOUTH)
-				.addComponent(positionsTableScrollPane, BorderLayout.CENTER)
-				.build();
+				.addComponent(positionsTableScrollPane, BorderLayout.CENTER);
+
+		boolean isGrid = false;
+		switch (fieldsType) {
+		case FormScannerConstants.RESPONSES_BY_GRID:
+			isGrid = true;
+		case FormScannerConstants.BARCODE:
+			questionLabel = new TextFieldBuilder(10, orientation)
+					.withActionListener(manageTemplateController).build();
+			JPanel questionPanel = new PanelBuilder(orientation)
+					.withLayout(new SpringLayout())
+					.add(getLabel(isGrid ? FormScannerTranslationKeys.SINGLE_QUESTION_LABEL
+							: FormScannerTranslationKeys.BARCODE_LABEL))
+					.add(questionLabel).withGrid(1, 2).build();
+			positionPanelBuilder.add(questionPanel, BorderLayout.NORTH);
+			break;
+		}
+
+		return positionPanelBuilder.build();
+	}
+	
+	private JTable getPositionsTable() {
+		JTable table = null;
+		
+		switch (fieldsType) {
+		case FormScannerConstants.QUESTIONS_BY_ROWS:
+		case FormScannerConstants.QUESTIONS_BY_COLS:
+			table = createSimplePositionsTable(
+					((Integer) rowsNumber.getValue()) + 1,
+					((Integer) colsNumber.getValue()) + 1);
+			break;
+		case FormScannerConstants.RESPONSES_BY_GRID:
+			table = createGridPositionsTable(
+					((Integer) rowsNumber.getValue()),
+					((Integer) colsNumber.getValue()) * 2);
+			break;
+		case FormScannerConstants.BARCODE:
+			table = createBarcodePositionsTable(2, 4);
+			break;
+		}
+
+		return table;
 	}
 
 	private JPanel getFieldTypePanel() {
@@ -823,7 +953,7 @@ public class ManageTemplateFrame extends InternalFrame implements TabbedView {
 		boolean isGrid = fieldsType
 				.equals(FormScannerConstants.RESPONSES_BY_GRID);
 
-		questionLabel = new TextFieldBuilder(10, orientation)
+		setOfQuestionsLabel = new TextFieldBuilder(10, orientation)
 				.withActionListener(manageTemplateController).build();
 
 		isMultiple = new CheckBoxBuilder(FormScannerConstants.IS_MULTIPLE,
@@ -844,21 +974,11 @@ public class ManageTemplateFrame extends InternalFrame implements TabbedView {
 				orientation).withActionListener(manageTemplateController)
 				.withFocusListener(manageTemplateController).build();
 
-		PanelBuilder propertiesPanelBuilder = new PanelBuilder(orientation)
-				.withLayout(new SpringLayout());
-		switch (fieldsType) {
-		case FormScannerConstants.RESPONSES_BY_GRID:
-			propertiesPanelBuilder.add(getLabel(isGrid ? FormScannerTranslationKeys.SINGLE_QUESTION_LABEL
-					: FormScannerTranslationKeys.SET_OF_QUESTIONS_LABEL))
-					.add(questionLabel).withGrid(5, 2);
-			break;
-		case FormScannerConstants.QUESTIONS_BY_ROWS:
-		case FormScannerConstants.QUESTIONS_BY_COLS:
-					propertiesPanelBuilder.withGrid(4, 2);
-			break;
-		}
-		
-		return propertiesPanelBuilder.add(getLabel(FormScannerTranslationKeys.FIELD_PROPERTIES_IS_MULTIPLE))
+		return new PanelBuilder(orientation)
+				.withLayout(new SpringLayout())
+				.add(getLabel(FormScannerTranslationKeys.SET_OF_QUESTIONS_LABEL))
+				.add(setOfQuestionsLabel)
+				.add(getLabel(FormScannerTranslationKeys.FIELD_PROPERTIES_IS_MULTIPLE))
 				.add(isMultiple)
 				.add(getLabel(FormScannerTranslationKeys.FIELD_PROPERTIES_REJECT_MULTIPLE))
 				.add(rejectMultiple)
@@ -867,7 +987,7 @@ public class ManageTemplateFrame extends InternalFrame implements TabbedView {
 				.add(rowsNumber)
 				.add(getLabel(isGrid ? FormScannerTranslationKeys.FIELD_PROPERTIES_N_COLS_LABEL
 						: FormScannerTranslationKeys.FIELD_PROPERTIES_N_VALUES_LABEL))
-				.add(colsNumber).build();
+				.add(colsNumber).withGrid(5, 2).build();
 	}
 
 	private JLabel getLabel(String value) {
