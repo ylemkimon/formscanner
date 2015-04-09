@@ -54,10 +54,6 @@ public class FormScannerConstants extends Constants {
 	private static final Rectangle OPTIONS_FRAME_POSITION = new Rectangle(100, 100, 400, 500);
 	private static final Rectangle DESKTOP_SIZE = new Rectangle(0, 0, 1024, 768);
 
-	// ShapeType
-	public static final String SQUARE = "SQUARE";
-	public static final String CIRCLE = "CIRCLE";
-
 	// Properties
 	public static final String IS_MULTIPLE = "IS_MULTIPLE";
 	public static final String NUMBER_COLS = "NUMBER_VALUES";
@@ -200,33 +196,6 @@ public class FormScannerConstants extends Constants {
 		SETUP_POINTS, 
 		MODIFY_POINTS, 
 		SETUP_AREA;
-	}
-
-	public enum ShapeType {
-		SQUARE(0, FormScannerConstants.SQUARE, FormScannerTranslationKeys.SQUARE), 
-		CIRCLE(1, FormScannerConstants.CIRCLE, FormScannerTranslationKeys.CIRCLE);
-
-		private int index;
-		private String name;
-		private String value;
-
-		private ShapeType(int index, String name, String value) {
-			this.index = index;
-			this.name = name;
-			this.value = value;
-		}
-
-		public int getIndex() {
-			return index;
-		}
-
-		public String getValue() {
-			return value;
-		}
-
-		public String getName() {
-			return name;
-		}
 	}
 
 	public enum Zoom {

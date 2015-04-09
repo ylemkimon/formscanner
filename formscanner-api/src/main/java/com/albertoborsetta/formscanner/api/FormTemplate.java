@@ -13,6 +13,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
 import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.lang3.StringUtils;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -28,6 +29,7 @@ import com.albertoborsetta.formscanner.api.FormPoint;
 import com.albertoborsetta.formscanner.api.commons.Constants;
 import com.albertoborsetta.formscanner.api.commons.Constants.Corners;
 import com.albertoborsetta.formscanner.api.commons.Constants.FieldType;
+import com.albertoborsetta.formscanner.api.commons.Constants.ShapeType;;
 
 /**
  * The <code>FormTemplate</code> class represents the scanned form.
@@ -178,7 +180,11 @@ public class FormTemplate {
 	private int width;
 	private double diagonal;
 	private ArrayList<FormArea> areaList;
-	private String version;
+	private String version = null;
+	private Integer threshold;
+	private Integer density;
+	private Integer size;
+	private ShapeType shape;
 
 	private static class FormTemplateWrapper {
 
@@ -191,14 +197,27 @@ public class FormTemplate {
 			// root element
 			Document doc = docBuilder.newDocument();
 			Element templateElement = doc.createElement("template");
-			templateElement.setAttribute("version",
-					Constants.CURRENT_TEMPLATE_VERSION);
+			templateElement.setAttribute("version", Constants.CURRENT_TEMPLATE_VERSION);
+			if (template.getThreshold() != null) {
+				templateElement.setAttribute("threshols", String.valueOf(template.getThreshold()));
+			}
+			
+			if (template.getDensity() != null) {
+				templateElement.setAttribute("density", String.valueOf(template.getDensity()));
+			}
+			
+			if (template.getSize() != null) {
+				templateElement.setAttribute("size", String.valueOf(template.getSize()));
+			}
+			
+			if (template.getShape() != null) {
+				templateElement.setAttribute("shape", template.getShape().getName());
+			}
 
 			// rotation element
 			doc.appendChild(templateElement);
 			Element rotationElement = doc.createElement("rotation");
-			rotationElement.setAttribute("angle",
-					String.valueOf(template.getRotation()));
+			rotationElement.setAttribute("angle", String.valueOf(template.getRotation()));
 			templateElement.appendChild(rotationElement);
 
 			// corners element
@@ -206,11 +225,9 @@ public class FormTemplate {
 			templateElement.appendChild(cornersElement);
 
 			// corner elements
-			for (Entry<Corners, FormPoint> corner : template.getCorners()
-					.entrySet()) {
+			for (Entry<Corners, FormPoint> corner : template.getCorners().entrySet()) {
 				Element cornerElement = doc.createElement("corner");
-				cornerElement.setAttribute("position", corner.getKey()
-						.getName());
+				cornerElement.setAttribute("position", corner.getKey().getName());
 				cornerElement.appendChild(corner.getValue().getXml(doc));
 				cornersElement.appendChild(cornerElement);
 			}
@@ -243,19 +260,19 @@ public class FormTemplate {
 
 			Element templateElement = (Element) doc.getDocumentElement();
 			template.setVersion(templateElement.getAttribute("version"));
-			Element rotationElement = (Element) templateElement
-					.getElementsByTagName("rotation").item(0);
-			template.setRotation(Double.parseDouble(rotationElement
-					.getAttribute("angle")));
+			template.setThreshold(Integer.parseInt(StringUtils.defaultIfBlank(templateElement.getAttribute("threshold"), "0")));
+			template.setDensity(Integer.parseInt(StringUtils.defaultIfBlank(templateElement.getAttribute("density"), "0")));
+			template.setSize(Integer.parseInt(StringUtils.defaultIfBlank(templateElement.getAttribute("size"), "0")));
+			template.setShape(StringUtils.isNotBlank(templateElement.getAttribute("shape")) ? ShapeType.valueOf(templateElement.getAttribute("shape")) : null);
+			Element rotationElement = (Element) templateElement.getElementsByTagName("rotation").item(0);
+			template.setRotation(Double.parseDouble(rotationElement.getAttribute("angle")));
 
-			Element cornersElement = (Element) templateElement
-					.getElementsByTagName("corners").item(0);
+			Element cornersElement = (Element) templateElement.getElementsByTagName("corners").item(0);
 			addCorners(template, cornersElement);
 
 			template.calculateDiagonal();
 
-			Element fieldsElement = (Element) templateElement
-					.getElementsByTagName("fields").item(0);
+			Element fieldsElement = (Element) templateElement.getElementsByTagName("fields").item(0);
 
 			addQuestions(template, fieldsElement);
 			addAreas(template, fieldsElement);
@@ -1010,5 +1027,37 @@ public class FormTemplate {
 		int hsubImageHeight = maxY - minY;
 		BufferedImage subImage = image.getSubimage(minX, minY, subImageWidth, hsubImageHeight);
 		return subImage;
+	}
+
+	public Integer getThreshold() {
+		return threshold;
+	}
+
+	public void setThreshold(Integer threshold) {
+		this.threshold = threshold;
+	}
+
+	public Integer getDensity() {
+		return density;
+	}
+
+	public void setDensity(Integer density) {
+		this.density = density;
+	}
+
+	public Integer getSize() {
+		return size;
+	}
+
+	public void setSize(Integer size) {
+		this.size = size;
+	}
+
+	public ShapeType getShape() {
+		return shape;
+	}
+
+	public void setShape(ShapeType shape) {
+		this.shape = shape;
 	}
 }

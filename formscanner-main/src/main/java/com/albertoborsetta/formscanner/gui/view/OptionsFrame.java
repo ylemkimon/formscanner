@@ -15,7 +15,7 @@ import javax.swing.SpringLayout;
 import com.albertoborsetta.formscanner.commons.FormScannerConstants;
 import com.albertoborsetta.formscanner.commons.FormScannerConstants.FontSize;
 import com.albertoborsetta.formscanner.commons.FormScannerConstants.Frame;
-import com.albertoborsetta.formscanner.commons.FormScannerConstants.ShapeType;
+import com.albertoborsetta.formscanner.api.commons.Constants.ShapeType;
 import com.albertoborsetta.formscanner.commons.translation.FormScannerTranslation;
 import com.albertoborsetta.formscanner.commons.translation.FormScannerTranslationKeys;
 import com.albertoborsetta.formscanner.gui.builder.ButtonBuilder;
@@ -133,13 +133,15 @@ public class OptionsFrame extends InternalFrame {
 	}
 
 	private JPanel getOptionsPanel() {
-		thresholdValue = new SpinnerBuilder(FormScannerConstants.THRESHOLD,
-				orientation).withActionListener(optionsFrameController)
-				.withActionListener(optionsFrameController).build();
+		thresholdValue = new SpinnerBuilder(FormScannerConstants.THRESHOLD, orientation)
+			.withActionListener(optionsFrameController)
+			.withActionListener(optionsFrameController)
+			.build();
 
-		densityValue = new SpinnerBuilder(FormScannerConstants.DENSITY,
-				orientation).withActionListener(optionsFrameController)
-				.withActionListener(optionsFrameController).build();
+		densityValue = new SpinnerBuilder(FormScannerConstants.DENSITY, orientation)
+			.withActionListener(optionsFrameController)
+			.withActionListener(optionsFrameController)
+			.build();
 
 		return new PanelBuilder(orientation)
 				.withLayout(new SpringLayout())

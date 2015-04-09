@@ -173,9 +173,40 @@ public class Constants {
 	public static final HashMap<DecodeHintType,Object> HINTS_PURE = new HashMap<DecodeHintType, Object>();
 	
 	static {
-	    HINTS.put(DecodeHintType.TRY_HARDER, Boolean.TRUE);
-	    HINTS.put(DecodeHintType.POSSIBLE_FORMATS, EnumSet.allOf(BarcodeFormat.class));
-	    HINTS_PURE.putAll(HINTS);
-	    HINTS_PURE.put(DecodeHintType.PURE_BARCODE, Boolean.TRUE);
-	  }
+		HINTS.put(DecodeHintType.TRY_HARDER, Boolean.TRUE);
+		HINTS.put(DecodeHintType.POSSIBLE_FORMATS, EnumSet.allOf(BarcodeFormat.class));
+		HINTS_PURE.putAll(HINTS);
+		HINTS_PURE.put(DecodeHintType.PURE_BARCODE, Boolean.TRUE);
+	}
+	
+	// ShapeType
+	public static final String SQUARE = "SQUARE";
+	public static final String CIRCLE = "CIRCLE";
+	
+	public enum ShapeType {
+		SQUARE(0, Constants.SQUARE, TranslationKeys.SQUARE), 
+		CIRCLE(1, Constants.CIRCLE, TranslationKeys.CIRCLE);
+
+		private int index;
+		private String name;
+		private String value;
+
+		private ShapeType(int index, String name, String value) {
+			this.index = index;
+			this.name = name;
+			this.value = value;
+		}
+
+		public int getIndex() {
+			return index;
+		}
+
+		public String getValue() {
+			return value;
+		}
+
+		public String getName() {
+			return name;
+		}
+	}
 }

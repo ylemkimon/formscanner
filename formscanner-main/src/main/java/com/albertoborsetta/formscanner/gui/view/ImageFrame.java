@@ -4,12 +4,12 @@ import com.albertoborsetta.formscanner.api.FormArea;
 import com.albertoborsetta.formscanner.api.FormPoint;
 import com.albertoborsetta.formscanner.api.FormTemplate;
 import com.albertoborsetta.formscanner.api.commons.Constants.Corners;
+import com.albertoborsetta.formscanner.api.commons.Constants.ShapeType;
 import com.albertoborsetta.formscanner.commons.FormScannerConstants;
 import com.albertoborsetta.formscanner.commons.FormScannerConstants.Zoom;
 import com.albertoborsetta.formscanner.commons.FormScannerFont;
 import com.albertoborsetta.formscanner.commons.FormScannerConstants.Frame;
 import com.albertoborsetta.formscanner.commons.FormScannerConstants.Mode;
-import com.albertoborsetta.formscanner.commons.FormScannerConstants.ShapeType;
 import com.albertoborsetta.formscanner.commons.resources.FormScannerResources;
 import com.albertoborsetta.formscanner.commons.resources.FormScannerResourcesKeys;
 import com.albertoborsetta.formscanner.commons.translation.FormScannerTranslation;
@@ -469,7 +469,7 @@ public class ImageFrame extends InternalFrame implements ScrollableImageView {
 				AffineTransform orig = g.getTransform();
 				g.rotate(template.getRotation());
 
-				g.setFont(FormScannerFont.getImageFont((int) (24 * zoom)));
+				g.setFont(FormScannerFont.getImageFont((int) (marker * zoom)));
 				int textHeight = (int) g.getFontMetrics().getStringBounds(area.getText(), g).getHeight();
 				String[] stringArray = StringUtils.split(area.getText(), "\n");
 
