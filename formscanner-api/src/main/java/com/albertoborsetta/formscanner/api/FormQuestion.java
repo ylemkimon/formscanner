@@ -152,8 +152,9 @@ public class FormQuestion extends FormField {
 	public Element getXml(Document doc) {
 		Element questionElement = doc.createElement("question");
 		
+		questionElement.setAttribute("group", StringUtils.trim(group));
 		questionElement.setAttribute("type", type.name());
-		questionElement.setAttribute("question", name);
+		questionElement.setAttribute("question", StringUtils.trim(name));
 		questionElement.setAttribute("multiple", String.valueOf(multiple));
 		questionElement.setAttribute("rejectMultiple", String.valueOf(rejectMultiple));
 		

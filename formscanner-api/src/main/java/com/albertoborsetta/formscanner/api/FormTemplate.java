@@ -265,18 +265,18 @@ public class FormTemplate {
 			NodeList fieldList = element.getElementsByTagName("area");
 			for (int i = 0; i < fieldList.getLength(); i++) {
 				Element fieldElement = (Element) fieldList.item(i);
-				String fieldName = fieldElement.getAttribute("name");
 
-				FormArea field = getArea(fieldElement, fieldName);
-				template.setArea(fieldName, field);
+				FormArea field = getArea(fieldElement);
+				template.setArea(field);
 			}
 
 		}
 
-		private static FormArea getArea(Element element, String name) {
-			FormArea area = new FormArea(name);
+		private static FormArea getArea(Element element) {
+			FormArea area = new FormArea(element.getAttribute("name"));
 
 			area.setType(FieldType.valueOf(element.getAttribute("type")));
+			area.setGroup(element.getAttribute("group"));
 
 			Element cornersElement = (Element) element.getElementsByTagName(
 					"corners").item(0);
@@ -323,7 +323,7 @@ public class FormTemplate {
 				template.setField(fieldName, field);
 			}
 
-			// Tag "field" deprecated. To be removed
+			// TODO: Tag "field" deprecated. To be removed
 			fieldList = element.getElementsByTagName("field");
 			for (int i = 0; i < fieldList.getLength(); i++) {
 				Element fieldElement = (Element) fieldList.item(i);
@@ -341,10 +341,11 @@ public class FormTemplate {
 			field.setRejectMultiple(Boolean.parseBoolean(element
 					.getAttribute("rejectMultiple")));
 
-			// Attribute "orientation" deprecated. To be removed
+			// TODO: Attribute "orientation" deprecated. To be removed
 			field.setType(FieldType.valueOf((element
 					.getAttribute("orientation").isEmpty()) ? element
 					.getAttribute("type") : element.getAttribute("orientation")));
+			field.setGroup(element.getAttribute("group"));
 
 			Element valuesElement = (Element) element.getElementsByTagName(
 					"values").item(0);
@@ -531,16 +532,18 @@ public class FormTemplate {
 	}
 
 	// TODO: Javadoc
+	public void setArea(FormArea area) {
+			areas.put(area.getName(), area);
+			areaList.add(area);
+		}
+	
+	// TODO: Javadoc
 	public void setArea(String fieldName, FormArea area) {
 		areas.put(fieldName, area);
 		areaList.add(area);
 	}
 
-	// TODO: Javadoc
-	public void setAreas(HashMap<String, FormArea> areas) {
-		this.areas = areas;
-		areaList.addAll(areas.values());
-	}
+
 
 	/**
 	 * Returns the list of the areas of the FormTemplate object.

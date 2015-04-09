@@ -21,6 +21,7 @@ public abstract class FormField {
 	
 	protected String name;
 	protected FieldType type;
+	protected String group;
 
 	/**
 	 * Instantiates a new FormField with the responses points.
@@ -101,5 +102,15 @@ public abstract class FormField {
 		fieldElement.setAttribute("name", name);
 		
 		return fieldElement;
+	}
+	
+	// TODO: javadoc
+	public void setGroup(String group) {
+		this.group = group;
+	}
+	
+	//TODO: javadoc
+	public String getGroup() {
+		return group;
 	}
 }

@@ -3,6 +3,7 @@ package com.albertoborsetta.formscanner.api;
 import java.util.HashMap;
 import java.util.Map.Entry;
 
+import org.apache.commons.lang3.StringUtils;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
@@ -113,7 +114,8 @@ public class FormArea extends FormField {
 		Element areaElement = doc.createElement("area");
 		
 		areaElement.setAttribute("type", type.name());
-		areaElement.setAttribute("name", name);
+		areaElement.setAttribute("name", StringUtils.trim(name));
+		areaElement.setAttribute("group", StringUtils.trim(group));
 		
 		// corners element
 		Element cornersElement = doc.createElement("corners");
