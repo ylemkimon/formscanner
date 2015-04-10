@@ -22,6 +22,9 @@ public abstract class FormField {
 	protected String name;
 	protected FieldType type;
 	protected String group;
+	
+	public FormField() {
+	}
 
 	/**
 	 * Instantiates a new FormField with the responses points.

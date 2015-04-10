@@ -443,10 +443,21 @@ public class ImageFrame extends InternalFrame implements ScrollableImageView {
 			int height = (int) (imageHeight * zoom);
 			setPreferredSize(new Dimension(width, height));
 			g.drawImage(image, 0, 0, width, height, this);
-			showPoint((Graphics2D) g, temporaryPoint);
+			showTemporaryPoints((Graphics2D) g);
 			showPoints((Graphics2D) g);
 			showArea((Graphics2D) g);
 			showCorners((Graphics2D) g);
+		}
+
+		private void showTemporaryPoints(Graphics2D g) {
+			showPoint((Graphics2D) g, temporaryPoint, true);
+			
+			if (!model.getPoints().isEmpty()) {
+				for (FormPoint point : model.getPoints()) {
+					showPoint(g, point, true);
+				}
+			}
+			
 		}
 
 		private void showArea(Graphics2D g) {
@@ -491,23 +502,17 @@ public class ImageFrame extends InternalFrame implements ScrollableImageView {
 
 		private void showPoints(Graphics2D g) {
 			for (FormPoint point : template.getFieldPoints()) {
-				showPoint(g, point);
-			}
-
-			if (!model.getPoints().isEmpty()) {
-				for (FormPoint point : model.getPoints()) {
-					showPoint(g, point);
-				}
+				showPoint(g, point, false);
 			}
 		}
 
-		private void showPoint(Graphics2D g, FormPoint point) {
+		private void showPoint(Graphics2D g, FormPoint point, boolean isTemp) {
 			if (point != null) {
 				int x = (int) ((point.getX() * zoom) - border);
 				int y = (int) ((point.getY() * zoom) - border);
 
 				g.setColor(Color.RED);
-				if (mode.equals(Mode.SETUP_AREA)) {
+				if (mode.equals(Mode.SETUP_AREA) && isTemp) {
 					g.drawLine(x - (marker/2), y, x + (marker/2), y);
 					g.drawLine(x, y - (marker/2), x, y + (marker/2));
 				} else {

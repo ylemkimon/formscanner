@@ -31,15 +31,18 @@ public class FormArea extends FormField {
 
 	private HashMap<Corners, FormPoint> area;
 	private String text;
+	
+	public FormArea() {
+		super();
+		area = new HashMap<Corners, FormPoint>();
+	}
 
 	/**
 	 * Instantiates a new FormArea with the corner points.
 	 *
 	 * @author Alberto Borsetta
-	 * @param name
-	 *            the name of the area
-	 * @param points
-	 *            the points which indicates the position of the corners
+	 * @param name the name of the area
+	 * @param points the points which indicates the position of the corners
 	 * @see FormPoint
 	 * @see Corners
 	 */
@@ -53,8 +56,7 @@ public class FormArea extends FormField {
 	 * points.
 	 *
 	 * @author Alberto Borsetta
-	 * @param name
-	 *            the name of the area
+	 * @param name the name of the area
 	 * @see FormPoint
 	 * @see Corners
 	 */
