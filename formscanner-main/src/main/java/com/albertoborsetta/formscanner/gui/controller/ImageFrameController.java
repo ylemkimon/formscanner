@@ -145,7 +145,7 @@ public class ImageFrameController implements MouseMotionListener,
 					view.repaint();
 					view.resetCornerButtons();
 				} else {
-					model.clearTemporaryPoint(view);
+					view.clearTemporaryPoint();
 					model.addPoint(view, p);
 				}
 				break;

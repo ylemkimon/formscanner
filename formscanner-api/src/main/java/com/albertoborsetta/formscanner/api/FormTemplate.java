@@ -199,7 +199,7 @@ public class FormTemplate {
 			Element templateElement = doc.createElement("template");
 			templateElement.setAttribute("version", Constants.CURRENT_TEMPLATE_VERSION);
 			if (template.getThreshold() != null) {
-				templateElement.setAttribute("threshols", String.valueOf(template.getThreshold()));
+				templateElement.setAttribute("threshold", String.valueOf(template.getThreshold()));
 			}
 			
 			if (template.getDensity() != null) {
@@ -260,9 +260,9 @@ public class FormTemplate {
 
 			Element templateElement = (Element) doc.getDocumentElement();
 			template.setVersion(templateElement.getAttribute("version"));
-			template.setThreshold(Integer.parseInt(StringUtils.defaultIfBlank(templateElement.getAttribute("threshold"), "0")));
-			template.setDensity(Integer.parseInt(StringUtils.defaultIfBlank(templateElement.getAttribute("density"), "0")));
-			template.setSize(Integer.parseInt(StringUtils.defaultIfBlank(templateElement.getAttribute("size"), "0")));
+			template.setThreshold(Integer.parseInt(StringUtils.defaultIfBlank(templateElement.getAttribute("threshold"), "-1")));
+			template.setDensity(Integer.parseInt(StringUtils.defaultIfBlank(templateElement.getAttribute("density"), "-1")));
+			template.setSize(Integer.parseInt(StringUtils.defaultIfBlank(templateElement.getAttribute("size"), "-1")));
 			template.setShape(StringUtils.isNotBlank(templateElement.getAttribute("shape")) ? ShapeType.valueOf(templateElement.getAttribute("shape")) : null);
 			Element rotationElement = (Element) templateElement.getElementsByTagName("rotation").item(0);
 			template.setRotation(Double.parseDouble(rotationElement.getAttribute("angle")));
@@ -742,12 +742,9 @@ public class FormTemplate {
 	 * </ul>
 	 *
 	 * @author Alberto Borsetta
-	 * @param image
-	 *            the image on which to find the corners
-	 * @param threshold
-	 *            the value of threshold parameter
-	 * @param density
-	 *            the value of density parameter
+	 * @param image the image on which to find the corners
+	 * @param threshold the value of threshold parameter
+	 * @param density the value of density parameter
 	 */
 	public void findCorners(BufferedImage image, int threshold, int density) {
 		height = image.getHeight();
@@ -757,8 +754,7 @@ public class FormTemplate {
 		HashMap<Corners, Future<FormPoint>> cornerDetectorThreads = new HashMap<Corners, Future<FormPoint>>();
 
 		for (Corners position : Corners.values()) {
-			Future<FormPoint> future = threadPool.submit(new CornerDetector(
-					threshold, density, position, image));
+			Future<FormPoint> future = threadPool.submit(new CornerDetector(threshold, density, position, image));
 			cornerDetectorThreads.put(position, future);
 		}
 
@@ -795,14 +791,10 @@ public class FormTemplate {
 	 * Find points.
 	 *
 	 * @author Alberto Borsetta
-	 * @param image
-	 *            the image on which to find the corners
-	 * @param threshold
-	 *            the value of threshold parameter
-	 * @param density
-	 *            the value of density parameter
-	 * @param size
-	 *            the size of the area of a single point
+	 * @param image the image on which to find the corners
+	 * @param threshold the value of threshold parameter
+	 * @param density the value of density parameter
+	 * @param size the size of the area of a single point
 	 */
 	public void findPoints(BufferedImage image, int threshold, int density,
 			int size) {
@@ -857,8 +849,7 @@ public class FormTemplate {
 	 * Removes the nearest point to the given one from the FromTemplate object.
 	 *
 	 * @author Alberto Borsetta
-	 * @param cursorPoint
-	 *            the point to remove
+	 * @param cursorPoint the point to remove
 	 * @see FormPoint
 	 */
 	public void removePoint(FormPoint cursorPoint) {
@@ -892,8 +883,7 @@ public class FormTemplate {
 	 * Adds the given point to the FormTemplateobject.
 	 *
 	 * @author Alberto Borsetta
-	 * @param cursorPoint
-	 *            the point to add
+	 * @param cursorPoint the point to add
 	 * @see FormPoint
 	 */
 	public void addPoint(FormPoint cursorPoint) {
@@ -962,8 +952,7 @@ public class FormTemplate {
 	 * Returns the point at the given index from the FormTemplate object.
 	 *
 	 * @author Alberto Borsetta
-	 * @param i
-	 *            the index
+	 * @param i the index
 	 * @return the point at the given index
 	 */
 	public FormPoint getPoint(int i) {
