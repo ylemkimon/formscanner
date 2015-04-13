@@ -179,7 +179,7 @@ public class FormFileUtils extends JFileChooser {
 		return file;
 	}
 
-	public File saveCsvAs(File file, HashMap<String, FormTemplate> filledForms) {
+	public File saveCsvAs(File file, HashMap<String, FormTemplate> filledForms, boolean notify) {
 		String aKey = (String) filledForms.keySet().toArray()[0];
 		FormTemplate aForm = filledForms.get(aKey);
 		String[] header = getHeader(aForm);
@@ -189,6 +189,7 @@ public class FormFileUtils extends JFileChooser {
 		ICsvMapWriter mapWriter = null;
 		try {
 			try {
+				if (notify) {
 				setMultiSelectionEnabled(false);
 				setCsvFilter();
 				setSelectedFile(file);
@@ -197,10 +198,18 @@ public class FormFileUtils extends JFileChooser {
 				if (returnValue == JFileChooser.APPROVE_OPTION) {
 					file = getSelectedFile();
 					FileOutputStream fos = new FileOutputStream(file);
-					OutputStreamWriter out = new OutputStreamWriter(fos,
-							Charset.forName("UTF-8"));
-					mapWriter = new CsvMapWriter(out,
-							CsvPreference.EXCEL_NORTH_EUROPE_PREFERENCE);
+					OutputStreamWriter out = new OutputStreamWriter(fos, Charset.forName("UTF-8"));
+					mapWriter = new CsvMapWriter(out, CsvPreference.EXCEL_NORTH_EUROPE_PREFERENCE);
+					mapWriter.writeHeader(header);
+
+					for (HashMap<String, String> result : results) {
+						mapWriter.write(result, header);
+					}
+				} 
+				} else {
+					FileOutputStream fos = new FileOutputStream(file);
+					OutputStreamWriter out = new OutputStreamWriter(fos, Charset.forName("UTF-8"));
+					mapWriter = new CsvMapWriter(out, CsvPreference.EXCEL_NORTH_EUROPE_PREFERENCE);
 					mapWriter.writeHeader(header);
 
 					for (HashMap<String, String> result : results) {
@@ -249,8 +258,11 @@ public class FormFileUtils extends JFileChooser {
 		HashMap<String, FormArea> areas = template.getAreas();
 		String[] header = new String[fields.size() + areas.size() + 1];
 		int i = 0;
-		header[i++] = FormScannerTranslation
-				.getTranslationFor(FormScannerTranslationKeys.FIRST_CSV_COLUMN);
+		try {
+			header[i++] = FormScannerTranslation.getTranslationFor(FormScannerTranslationKeys.FIRST_CSV_COLUMN);
+		} catch (Exception e) {
+			header[i] = StringUtils.EMPTY;
+		}
 
 		ArrayList<String> fieldKeys = new ArrayList<String>(fields.keySet());
 		Collections.sort(fieldKeys);
