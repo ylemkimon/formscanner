@@ -58,8 +58,7 @@ import com.albertoborsetta.formscanner.api.commons.Constants.ShapeType;;
  * BufferedImage image = ImageIO.read(imageFile);
  * filledForm = new FormTemplate(imageFile.getName(), formTemplate);
  * filledForm.findCorners(image, threshold, density);
- * filledForm.findPoints(image, threshold, density,
- * 	shapeSize);
+ * filledForm.findPoints(image, threshold, density, shapeSize);
  * }
  * </pre>
  * 
@@ -68,7 +67,7 @@ import com.albertoborsetta.formscanner.api.commons.Constants.ShapeType;;
  * <pre>
  * {@code
  * <?xml version="1.0" encoding="UTF-8" standalone="no"?>
- * <template version="1.0">
+ * <template density="40" shape="SQUARE" size="20" threshold="127" version="1.0">
  * 	<rotation angle="0.0"/>
  * 	<corners>
  * 		<corner position="TOP_RIGHT">
@@ -85,7 +84,7 @@ import com.albertoborsetta.formscanner.api.commons.Constants.ShapeType;;
  * 		</corner>
  * 	</corners>
  * 	<fields>
- * 		<question multiple="false" type="QUESTIONS_BY_ROWS" question="Question 01">
+ * 		<question group="first" multiple="false" type="QUESTIONS_BY_ROWS" question="Question 01">
  * 			<values>
  * 				<value response="Response 01">
  * 					<point x="800.0" y="1300.0" />
@@ -101,7 +100,7 @@ import com.albertoborsetta.formscanner.api.commons.Constants.ShapeType;;
  * 				</value>
  * 			</values>
  * 		</question>
- * 		<question multiple="false" type="QUESTIONS_BY_COLS" question="Question 02">
+ * 		<question group="second" multiple="false" type="QUESTIONS_BY_COLS" question="Question 02">
  * 			<values>
  * 				<value response="Response 01">
  * 					<point x="800.0" y="1400.0" />
@@ -117,7 +116,7 @@ import com.albertoborsetta.formscanner.api.commons.Constants.ShapeType;;
  * 				</value>
  * 			</values>
  * 		</question>
- * 		<question multiple="false" type="RESPONSES_BY_GRID" question="Question 03">
+ * 		<question group="third" multiple="false" type="RESPONSES_BY_GRID" question="Question 03">
  * 			<values>
  * 				<value response="Response A">
  * 					<point x="800.0" y="1850.0" />

@@ -135,18 +135,14 @@ public class FormScannerModel {
 
 		propertiesPath = propertiesPath + formScannerVersion + "/properties/";
 
-		configurations = FormScannerConfiguration.getConfiguration(
-				propertiesPath, installPath + "/");
+		configurations = FormScannerConfiguration.getConfiguration(propertiesPath, installPath + "/");
 
-		templatePath = configurations.getProperty(
-				FormScannerConfigurationKeys.TEMPLATE_SAVE_PATH, templatePath
+		templatePath = configurations.getProperty(FormScannerConfigurationKeys.TEMPLATE_SAVE_PATH, templatePath
 						+ "/FormScanner/templates/");
-		resultsPath = configurations.getProperty(
-				FormScannerConfigurationKeys.RESULTS_SAVE_PATH, resultsPath
+		resultsPath = configurations.getProperty(FormScannerConfigurationKeys.RESULTS_SAVE_PATH, resultsPath
 						+ "/FormScanner/results/");
 
-		lang = configurations.getProperty(FormScannerConfigurationKeys.LANG,
-				getDefaultLanguage(installationLanguage));
+		lang = configurations.getProperty(FormScannerConfigurationKeys.LANG, getDefaultLanguage(installationLanguage));
 
 		String[] locales = StringUtils.split(lang, '_');
 		if (locales.length == 2) {
@@ -291,10 +287,7 @@ public class FormScannerModel {
 				try {
 					BufferedImage image = ImageIO.read(imageFile);
 					imageFrame.updateImage(image);
-					renameFileFrame = new RenameFileFrame(this,
-							getFileNameByIndex(renamedFileIndex));
-					// renameFileFrame
-					// .updateRenamedFile(getFileNameByIndex(renamedFileIndex));
+					renameFileFrame = new RenameFileFrame(this, getFileNameByIndex(renamedFileIndex));
 					view.arrangeFrame(renameFileFrame);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -348,15 +341,11 @@ public class FormScannerModel {
 					}
 
 					Date today = Calendar.getInstance().getTime();
-					SimpleDateFormat sdf = new SimpleDateFormat(
-							"yyyyMMddHHmmss");
-					File outputFile = new File(
-							resultsPath
-									+ FormScannerTranslation
-											.getTranslationFor(FormScannerTranslationKeys.RESULTS_DEFAULT_FILE)
+					SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
+					File outputFile = new File(resultsPath
+									+ FormScannerTranslation.getTranslationFor(FormScannerTranslationKeys.RESULTS_DEFAULT_FILE)
 									+ "_" + sdf.format(today) + ".csv");
-					File savedFile = fileUtils.saveCsvAs(outputFile,
-							filledForms);
+					File savedFile = fileUtils.saveCsvAs(outputFile, filledForms, true);
 					configurations.setProperty(
 							FormScannerConfigurationKeys.RESULTS_SAVE_PATH,
 							FilenameUtils.getFullPath(savedFile
@@ -415,8 +404,7 @@ public class FormScannerModel {
 										+ FormScannerTranslation
 												.getTranslationFor(FormScannerTranslationKeys.RESULTS_DEFAULT_FILE)
 										+ "_" + sdf.format(today) + ".csv");
-						File savedFile = fileUtils.saveCsvAs(outputFile,
-								filledForms);
+						File savedFile = fileUtils.saveCsvAs(outputFile, filledForms, true);
 						configurations.setProperty(
 								FormScannerConfigurationKeys.RESULTS_SAVE_PATH,
 								FilenameUtils.getFullPath(savedFile
@@ -726,6 +714,11 @@ public class FormScannerModel {
 	}
 
 	public void saveTemplate(boolean notify) {
+		formTemplate.setThreshold(threshold);
+		formTemplate.setDensity(density);
+		formTemplate.setSize(shapeSize);
+		formTemplate.setShape(shapeType);
+		
 		File template = fileUtils.saveToFile(templatePath, formTemplate, notify);
 
 		if (template != null) {
@@ -774,13 +767,13 @@ public class FormScannerModel {
 
 		try {
 			formTemplate = new FormTemplate(template);
+
+			threshold = formTemplate.getThreshold() < 0 ? threshold : formTemplate.getThreshold();
+			density = formTemplate.getDensity() < 0 ? density : formTemplate.getDensity();
+			shapeSize = formTemplate.getSize() < 0 ? shapeSize : formTemplate.getSize();
+			shapeType = formTemplate.getShape() == null ? shapeType : formTemplate.getShape();
+			
 			if (!FormScannerConstants.CURRENT_TEMPLATE_VERSION.equals(formTemplate.getVersion())) {
-				formTemplate.setVersion(FormScannerConstants.CURRENT_TEMPLATE_VERSION);
-				formTemplate.setThreshold(formTemplate.getThreshold() < 0 ? threshold : formTemplate.getThreshold());
-				formTemplate.setDensity(formTemplate.getDensity() < 0 ? density : formTemplate.getDensity());
-				formTemplate.setSize(formTemplate.getSize() < 0 ? shapeSize : formTemplate.getSize());
-				formTemplate.setShape(formTemplate.getShape() == null ? shapeType : formTemplate.getShape());
-				
 				saveTemplate(false);
 				return true;
 			}
@@ -802,10 +795,6 @@ public class FormScannerModel {
 			configurations.setProperty(FormScannerConfigurationKeys.TEMPLATE_SAVE_PATH, templatePath);
 			configurations.store();
 			
-			threshold = formTemplate.getThreshold() < 0 ? threshold : formTemplate.getThreshold();
-			density = formTemplate.getDensity() < 0 ? density : formTemplate.getDensity();
-			shapeSize = formTemplate.getSize() < 0 ? shapeSize : formTemplate.getSize();
-			shapeType = formTemplate.getShape() == null ? shapeType : formTemplate.getShape();
 			
 			return true;
 		} catch (Exception e) {
@@ -916,10 +905,6 @@ public class FormScannerModel {
 		configurations.store();
 		
 		if (formTemplate != null) {
-			formTemplate.setThreshold(threshold);
-			formTemplate.setDensity(density);
-			formTemplate.setSize(shapeSize);
-			formTemplate.setShape(shapeType);
 			saveTemplate(false);
 		}
 	}
