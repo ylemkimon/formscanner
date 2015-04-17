@@ -35,12 +35,13 @@ public class Constants {
 	/** Identifies the QUESTIONS_BY_COLS field type. */
 	public static final String QUESTIONS_BY_COLS = "QUESTIONS_BY_COLS";
 
-	/** Identifies the RESPONSES_BY_GRID field type. 0.11 */
+	/** Identifies the RESPONSES_BY_GRID field type. */
 	public static final String RESPONSES_BY_GRID = "RESPONSES_BY_GRID";
 
-	/** Identifies the QRCODE_BARCODE field type. 0.11 */
+	/** Identifies the QRCODE_BARCODE field type. */
 	public static final String BARCODE = "BARCODE";
 	
+	/** Identifies the current version of the template */
 	public static final String CURRENT_TEMPLATE_VERSION = "1.0";
 
 	/**
@@ -169,7 +170,10 @@ public class Constants {
 		}
 	}
 	
+	/** The HINTS for barcode detecting */
 	public static final HashMap<DecodeHintType,Object> HINTS = new HashMap<DecodeHintType, Object>();
+	
+	/** The HINTS_PURE for barcode detecting */
 	public static final HashMap<DecodeHintType,Object> HINTS_PURE = new HashMap<DecodeHintType, Object>();
 	
 	static {
@@ -180,31 +184,71 @@ public class Constants {
 	}
 	
 	// ShapeType
+	/** Identifies the SQUARE marker shape. */
 	public static final String SQUARE = "SQUARE";
+	
+	/** Identifies the CIRCLE marker shape. */
 	public static final String CIRCLE = "CIRCLE";
 	
+	
+	/**
+	 * The Enum ShapeType.
+	 * 
+	 * @author Alberto Borsetta
+	 * @version 0.11-SNAPSHOT
+	 */
 	public enum ShapeType {
-		SQUARE(0, Constants.SQUARE, TranslationKeys.SQUARE), 
+		
+		/** The SQUARE marker shape */
+		SQUARE(0, Constants.SQUARE, TranslationKeys.SQUARE),
+		
+		/** The CIRCLE marker shape */
 		CIRCLE(1, Constants.CIRCLE, TranslationKeys.CIRCLE);
 
 		private int index;
 		private String name;
 		private String value;
 
+		/**
+		 * Instantiates a new shape type.
+		 *
+		 * @author Alberto Borsetta
+		 * @param index the index
+		 * @param name the name
+		 * @param value the value
+		 */
 		private ShapeType(int index, String name, String value) {
 			this.index = index;
 			this.name = name;
 			this.value = value;
 		}
 
+		/**
+		 * Returns the index.
+		 *
+		 * @author Alberto Borsetta
+		 * @return the index
+		 */
 		public int getIndex() {
 			return index;
 		}
 
+		/**
+		 * Returns the value.
+		 *
+		 * @author Alberto Borsetta
+		 * @return the value
+		 */
 		public String getValue() {
 			return value;
 		}
 
+		/**
+		 * Returns the name.
+		 *
+		 * @author Alberto Borsetta
+		 * @return the name
+		 */
 		public String getName() {
 			return name;
 		}

@@ -8,7 +8,6 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
 import com.albertoborsetta.formscanner.api.commons.Constants.Corners;
-import com.albertoborsetta.formscanner.api.commons.Constants.FieldType;
 
 /**
  * The <code>FormArea</code> class represents an area (like barcode area) into
@@ -16,15 +15,13 @@ import com.albertoborsetta.formscanner.api.commons.Constants.FieldType;
  * <p>
  * A FormArea object has the four corners points attributes
  * <ul>
- * <li>A name
- * <li>A specific type
- * <li>A set of points which indicates the position of the corners
+ * <li>A set of corners that identify the area
+ * <li>A text content
  * </ul>
  * 
  * @author Alberto Borsetta
  * @version 0.11-SNAPSHOT
  * @see FormPoint
- * @see FieldType
  * @see Corners
  */
 public class FormArea extends FormField {
@@ -69,10 +66,8 @@ public class FormArea extends FormField {
 	 * Sets a corner of the FormArea object.
 	 *
 	 * @author Alberto Borsetta
-	 * @param corner
-	 *            the corner to set
-	 * @param point
-	 *            the point of the corner
+	 * @param corner the corner to set
+	 * @param point the point of the corner
 	 * @see FormPoint
 	 * @see Corners
 	 */
@@ -84,8 +79,7 @@ public class FormArea extends FormField {
 	 * Returns the point of a corner.
 	 *
 	 * @author Alberto Borsetta
-	 * @param corner
-	 *            the corner of the area
+	 * @param corner the corner of the area
 	 * @return the point of the corner
 	 */
 	public FormPoint getCorner(Corners corner) {
@@ -145,12 +139,22 @@ public class FormArea extends FormField {
 		return areaElement;
 	}
 
-	// TODO: Javadoc
+	/**
+	 * Sets the FormArea object text.
+	 *
+	 * @author Alberto Borsetta
+	 * @param text the text
+	 */
 	public void setText(String text) {
 		this.text = text;
 	}
 
-	// TODO: Javadoc
+	/**
+	 * Returns the FormArea text.
+	 *
+	 * @author Alberto Borsetta
+	 * @return the text
+	 */
 	public String getText() {
 		return text;
 	}

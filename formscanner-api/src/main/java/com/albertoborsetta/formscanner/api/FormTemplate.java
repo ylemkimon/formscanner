@@ -294,8 +294,7 @@ public class FormTemplate {
 			area.setType(FieldType.valueOf(element.getAttribute("type")));
 			area.setGroup(element.getAttribute("group"));
 
-			Element cornersElement = (Element) element.getElementsByTagName(
-					"corners").item(0);
+			Element cornersElement = (Element) element.getElementsByTagName("corners").item(0);
 			NodeList cornerList = cornersElement.getElementsByTagName("corner");
 			for (int i = 0; i < cornerList.getLength(); i++) {
 				Element cornerElement = (Element) cornerList.item(i);
@@ -403,14 +402,10 @@ public class FormTemplate {
 	 * Instantiates a new form template from an xml representation.
 	 *
 	 * @author Alberto Borsetta
-	 * @param file
-	 *            the file with the xml representation of the FormTemplate
-	 * @throws ParserConfigurationException
-	 *             Signals that a parser configuration exception has occurred.
-	 * @throws SAXException
-	 *             Signals that a SAX exception has occurred.
-	 * @throws IOException
-	 *             Signals that an I/O exception has occurred.
+	 * @param file the file with the xml representation of the FormTemplate
+	 * @throws ParserConfigurationException Signals that a parser configuration exception has occurred.
+	 * @throws SAXException Signals that a SAX exception has occurred.
+	 * @throws IOException Signals that an I/O exception has occurred.
 	 */
 	public FormTemplate(File file) throws ParserConfigurationException,
 			SAXException, IOException {
@@ -423,10 +418,8 @@ public class FormTemplate {
 	 * template.
 	 *
 	 * @author Alberto Borsetta
-	 * @param name
-	 *            the name of the FormTemplate object
-	 * @param template
-	 *            the parent template
+	 * @param name the name of the FormTemplate object
+	 * @param template the parent template
 	 */
 	public FormTemplate(String name, FormTemplate template) {
 		this.template = template;
@@ -485,8 +478,7 @@ public class FormTemplate {
 	 * Returns the field identified by the given name.
 	 *
 	 * @author Alberto Borsetta
-	 * @param name
-	 *            the name of the field
+	 * @param name the name of the field
 	 * @return the FormField object
 	 * @see FormQuestion
 	 */
@@ -509,10 +501,8 @@ public class FormTemplate {
 	 * Sets the field with the given name.
 	 *
 	 * @author Alberto Borsetta
-	 * @param name
-	 *            the name of the field
-	 * @param field
-	 *            the field to set
+	 * @param name the name of the field
+	 * @param field the field to set
 	 * @see FormQuestion
 	 */
 	public void setField(String name, FormQuestion field) {
@@ -528,8 +518,7 @@ public class FormTemplate {
 	 * Sets all the fields in the FormTemplate object.
 	 *
 	 * @author Alberto Borsetta
-	 * @param fields
-	 *            the fields to set
+	 * @param fields the fields to set
 	 */
 	public void setFields(HashMap<String, FormQuestion> fields) {
 		for (Entry<String, FormQuestion> field : fields.entrySet()) {
@@ -575,8 +564,7 @@ public class FormTemplate {
 	 * Sets the corners of the FormTemplate object.
 	 *
 	 * @author Alberto Borsetta
-	 * @param corners
-	 *            the corners to set
+	 * @param corners the corners to set
 	 * @see Corners
 	 * @see FormPoint
 	 */
@@ -589,10 +577,8 @@ public class FormTemplate {
 	 * Sets the given corner into the FormTemplate object.
 	 *
 	 * @author Alberto Borsetta
-	 * @param corner
-	 *            the corner to set
-	 * @param point
-	 *            the point of the corner
+	 * @param corner the corner to set
+	 * @param point the point of the corner
 	 * @see Corners
 	 * @see FormPoint
 	 */
@@ -628,8 +614,7 @@ public class FormTemplate {
 	 * Sets the rotation of the FormTemplate object.
 	 *
 	 * @author Alberto Borsetta
-	 * @param rotation
-	 *            the new rotation of the FormTemplate object
+	 * @param rotation the new rotation of the FormTemplate object
 	 */
 	public void setRotation(double rotation) {
 		this.rotation = rotation;
@@ -649,8 +634,7 @@ public class FormTemplate {
 	 * Removes the field identified by the given name.
 	 *
 	 * @author Alberto Borsetta
-	 * @param fieldName
-	 *            the name of the field to remove
+	 * @param fieldName the name of the field to remove
 	 */
 	public void removeFieldByName(String fieldName) {
 
@@ -676,8 +660,7 @@ public class FormTemplate {
 	 *
 	 * @author Alberto Borsetta
 	 * @return the xml representation of the FormTemplate object
-	 * @throws ParserConfigurationException
-	 *             the parser configuration exception
+	 * @throws ParserConfigurationException the parser configuration exception
 	 */
 	public Document getXml() throws ParserConfigurationException {
 		return FormTemplateWrapper.getXml(this);
@@ -697,8 +680,7 @@ public class FormTemplate {
 	 * Returns the point of the given corner of the FormTemplate object.
 	 *
 	 * @author Alberto Borsetta
-	 * @param corner
-	 *            the corner
+	 * @param corner the corner
 	 * @return the point of the corner
 	 */
 	public FormPoint getCorner(Corners corner) {
@@ -719,8 +701,7 @@ public class FormTemplate {
 	 * Sets the diagonal to the FormTemplate object.
 	 *
 	 * @author Alberto Borsetta
-	 * @param diag
-	 *            the new diagonal
+	 * @param diag the new diagonal
 	 */
 	public void setDiagonal(double diag) {
 		diagonal = diag;
@@ -968,11 +949,22 @@ public class FormTemplate {
 		return template;
 	}
 
+	/**
+	 * Returns the version of the template.
+	 *
+	 * @author Alberto Borsetta
+	 * @return the version
+	 */
 	public String getVersion() {
 		return version;
 	}
 
-	// TODO: javadoc
+	/**
+	 * Find the areas with barcodes from a FormTemplate object.
+	 *
+	 * @author Alberto Borsetta
+	 * @param image the image on which to find the barcode
+	 */
 	public void findAreas(BufferedImage image) {
 		height = image.getHeight();
 		width = image.getWidth();
@@ -1017,34 +1009,83 @@ public class FormTemplate {
 		return subImage;
 	}
 
+	/**
+	 * Returns the threshold of the template.
+	 *
+	 * @author Alberto Borsetta
+	 * @return the threshold
+	 */
 	public Integer getThreshold() {
 		return threshold;
 	}
 
+	/**
+	 * Sets the threshold of the template.
+	 *
+	 * @author Alberto Borsetta
+	 * @param threshold the threshold
+	 */
 	public void setThreshold(Integer threshold) {
 		this.threshold = threshold;
 	}
 
+	/**
+	 * Returns the density of the template.
+	 *
+	 * @author Alberto Borsetta
+	 * @return the density
+	 */
 	public Integer getDensity() {
 		return density;
 	}
 
+	/**
+	 * Sets the density of the template.
+	 *
+	 * @author Alberto Borsetta
+	 * @param density the density
+	 */
 	public void setDensity(Integer density) {
 		this.density = density;
 	}
 
+	/**
+	 * Returns the size of the marker of the template.
+	 *
+	 * @author Alberto Borsetta
+	 * @return the size of the marker
+	 */
 	public Integer getSize() {
 		return size;
 	}
 
+	/**
+	 * Sets the size of the marker of the template.
+	 *
+	 * @author Alberto Borsetta
+	 * @param size the size of the marker 
+	 */
 	public void setSize(Integer size) {
 		this.size = size;
 	}
 
+	/**
+	 * Returns the shape of the marker of the template.
+	 *
+	 * @author Alberto Borsetta
+	 * @return the shape of the marker
+	 */
 	public ShapeType getShape() {
 		return shape;
 	}
 
+	/**
+	 * Sets the shape of the marker of the template.
+	 *
+	 * @author Alberto Borsetta
+	 * @param shape the shape of the marker
+	 * @see ShapeType
+	 */
 	public void setShape(ShapeType shape) {
 		this.shape = shape;
 	}

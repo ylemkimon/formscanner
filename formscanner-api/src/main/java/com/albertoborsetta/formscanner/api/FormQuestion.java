@@ -15,8 +15,6 @@ import com.albertoborsetta.formscanner.api.FormPoint;
  * The <code>FormQuestion</code> class represents a question field into the scanned form.<p>
  * A FormQuestion object has this attributes:
  * <ul>
- * <li>A name
- * <li>A specific type
  * <li>A set of points which indicates the position of the responses
  * <li>Can be a multiple choice field
  * <li>Can be rejected if the response is multiple (default <code>false</code>

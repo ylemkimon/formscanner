@@ -27,7 +27,6 @@ public class BarcodeDetector implements Callable<HashMap<String, FormArea>> {
 	private HashMap<String, FormArea> barcodes;
 	private BufferedImage image;
 
-	// TODO Javadoc
 	public BarcodeDetector(FormTemplate template, FormArea barcodeArea,
 			BufferedImage image) {
 		this.template = template;
@@ -37,7 +36,6 @@ public class BarcodeDetector implements Callable<HashMap<String, FormArea>> {
 		barcodes = new HashMap<String, FormArea>();
 	}
 
-	// TODO Javadoc
 	public HashMap<String, FormArea> call() throws Exception {
 		LuminanceSource source = new BufferedImageLuminanceSource(image);
 		BinaryBitmap bitmap = new BinaryBitmap(new GlobalHistogramBinarizer(
@@ -108,5 +106,4 @@ public class BarcodeDetector implements Callable<HashMap<String, FormArea>> {
 				template.getRotation(), false);
 		return point;
 	}
-
 }
