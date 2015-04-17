@@ -978,31 +978,27 @@ public class FormTemplate {
 		width = image.getWidth();
 		
 		ExecutorService threadPool = Executors.newFixedThreadPool(8);
-		HashSet<Future<HashMap<String, FormArea>>> areaDetectorThreads = new HashSet<Future<HashMap<String, FormArea>>>();
+		HashSet<Future<HashMap<String, FormArea>>> barcodeDetectorThreads = new HashSet<Future<HashMap<String, FormArea>>>();
 		
-		HashMap<String, FormArea> areaFields = template.getAreas();
-		ArrayList<String> areaNames = new ArrayList<String>(areaFields.keySet());
-		Collections.sort(areaNames);
+		HashMap<String, FormArea> barcodeFields = template.getAreas();
+		ArrayList<String> barcodeNames = new ArrayList<String>(barcodeFields.keySet());
+		Collections.sort(barcodeNames);
 
-		for (String areaName: areaNames) {
-			FormArea area = areaFields.get(areaName);
+		for (String barcodeName: barcodeNames) {
+			FormArea area = barcodeFields.get(barcodeName);
 			BufferedImage subImage = getAreaImage(image, area);
-			Future<HashMap<String, FormArea>> future = null;
-			if (area.getType().equals(FieldType.BARCODE)) {
-				future = threadPool.submit(new BarcodeDetector(this, area, subImage));
-			} else {
-				future = threadPool.submit(new TextDetector(this, area, subImage));
-			}
-			areaDetectorThreads.add(future);
+			Future<HashMap<String, FormArea>> future = threadPool.submit(new BarcodeDetector(
+					this, area, subImage));
+			barcodeDetectorThreads.add(future);
 		}
 		
-		for (Future<HashMap<String, FormArea>> thread: areaDetectorThreads) {
+		for (Future<HashMap<String, FormArea>> thread: barcodeDetectorThreads) {
 			try {
 				HashMap<String, FormArea> threadFields = thread.get();
-				for (String areaName: threadFields.keySet()) {
-					FormArea area = threadFields.get(areaName);
-					areas.put(areaName, area);
-					areaList.add(area);
+				for (String barcodeName: threadFields.keySet()) {
+					FormArea barcode = threadFields.get(barcodeName);
+					areas.put(barcodeName, barcode);
+					areaList.add(barcode);
 				}
 			} catch (Exception e) {
 				e.printStackTrace();

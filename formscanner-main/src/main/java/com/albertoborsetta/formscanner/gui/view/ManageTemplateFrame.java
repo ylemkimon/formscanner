@@ -166,7 +166,6 @@ public class ManageTemplateFrame extends InternalFrame implements TabbedView {
 				break;
 			case FormScannerConstants.RESPONSES_BY_GRID:
 			case FormScannerConstants.BARCODE:
-			case FormScannerConstants.TEXT:
 				header = ((column % 2) == 0);
 				break;
 			}
@@ -374,7 +373,6 @@ public class ManageTemplateFrame extends InternalFrame implements TabbedView {
 					model.updateTemplateFields(fields);
 					break;
 				case FormScannerConstants.BARCODE:
-				case FormScannerConstants.TEXT:
 					FormArea area = createArea();
 					model.updateTemplateAreas(area);
 					break;
@@ -594,7 +592,7 @@ public class ManageTemplateFrame extends InternalFrame implements TabbedView {
 	}
 
 	private void resetSelectedValues() {
-		if (!fieldsType.equals(FormScannerConstants.BARCODE) && !fieldsType.equals(FormScannerConstants.TEXT)) {
+		if (!fieldsType.equals(FormScannerConstants.BARCODE)) {
 			rowsNumber.setValue(0);
 			colsNumber.setValue(0);
 			isMultiple.setSelected(false);
@@ -630,7 +628,6 @@ public class ManageTemplateFrame extends InternalFrame implements TabbedView {
 		switch (fieldsType) {
 		case FormScannerConstants.RESPONSES_BY_GRID:
 		case FormScannerConstants.BARCODE:
-		case FormScannerConstants.TEXT:
 			return StringUtils.isNotBlank(questionLabel.getText());
 		default:
 			return true;
@@ -650,7 +647,6 @@ public class ManageTemplateFrame extends InternalFrame implements TabbedView {
 			return (((Integer) colsNumber.getValue() > 0) && ((Integer) rowsNumber.getValue() > 0));
 		case FormScannerConstants.RESPONSES_BY_GRID:
 		case FormScannerConstants.BARCODE:
-		case FormScannerConstants.TEXT:
 		default:
 			return true;
 		}
@@ -753,7 +749,7 @@ public class ManageTemplateFrame extends InternalFrame implements TabbedView {
 		return table;
 	}
 
-	private JTable createAreaPositionsTable(int rows, int cols) {
+	private JTable createBarcodePositionsTable(int rows, int cols) {
 		TableColumnModel columnModel = new DefaultTableColumnModel();
 
 		for (int i = 0; i < cols; i++) {
@@ -855,9 +851,8 @@ public class ManageTemplateFrame extends InternalFrame implements TabbedView {
 
 		switch (fieldsType) {
 		case FormScannerConstants.BARCODE:
-		case FormScannerConstants.TEXT:
-			JPanel areaPanel = getAreaPanel();
-			pPanelBuilder.add(areaPanel, BorderLayout.NORTH);
+			JPanel barcodePanel = getBarcodePanel();
+			pPanelBuilder.add(barcodePanel, BorderLayout.NORTH);
 			break;
 		case FormScannerConstants.RESPONSES_BY_GRID:
 		case FormScannerConstants.QUESTIONS_BY_ROWS:
@@ -870,7 +865,7 @@ public class ManageTemplateFrame extends InternalFrame implements TabbedView {
 		return pPanelBuilder.build();
 	}
 
-	private JPanel getAreaPanel() {
+	private JPanel getBarcodePanel() {
 		setOfQuestionsLabel = new TextFieldBuilder(10, orientation)
 				.withActionListener(manageTemplateController).build();
 
@@ -897,7 +892,6 @@ public class ManageTemplateFrame extends InternalFrame implements TabbedView {
 		boolean isGrid = false;
 		switch (fieldsType) {
 		case FormScannerConstants.RESPONSES_BY_GRID:
-		case FormScannerConstants.TEXT:
 			isGrid = true;
 		case FormScannerConstants.BARCODE:
 			questionLabel = new TextFieldBuilder(10, orientation)
@@ -930,8 +924,7 @@ public class ManageTemplateFrame extends InternalFrame implements TabbedView {
 					((Integer) colsNumber.getValue()) * 2);
 			break;
 		case FormScannerConstants.BARCODE:
-		case FormScannerConstants.TEXT:
-			table = createAreaPositionsTable(2, 4);
+			table = createBarcodePositionsTable(2, 4);
 			break;
 		}
 
@@ -1054,7 +1047,7 @@ public class ManageTemplateFrame extends InternalFrame implements TabbedView {
 								.getTranslationFor(FormScannerTranslationKeys.OK_BUTTON_TOOLTIP))
 				.withActionCommand(FormScannerConstants.CONFIRM)
 				.withActionListener(manageTemplateController)
-				.setEnabled(fieldsType.equals(FormScannerConstants.BARCODE) || fieldsType.equals(FormScannerConstants.TEXT))
+				.setEnabled(fieldsType.equals(FormScannerConstants.BARCODE))
 				.build();
 
 		cancelPropertiesButton = new ButtonBuilder(orientation)

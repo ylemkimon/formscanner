@@ -41,9 +41,6 @@ public class Constants {
 	/** Identifies the QRCODE_BARCODE field type. 0.11 */
 	public static final String BARCODE = "BARCODE";
 	
-	/** Identifies the TEXT field type. 0.11 */
-	public static final String TEXT = "TEXT";
-
 	public static final String CURRENT_TEMPLATE_VERSION = "1.0";
 
 	/**
@@ -102,7 +99,6 @@ public class Constants {
 		}
 	}
 
-
 	
 	/**
 	 * The Enum FieldType.
@@ -122,10 +118,7 @@ public class Constants {
 		RESPONSES_BY_GRID(2, Constants.RESPONSES_BY_GRID, TranslationKeys.RESPONSES_BY_GRID),
 		
 		/** The QRCODE_BARCODE field type. */
-		BARCODE(3, Constants.BARCODE, TranslationKeys.BARCODE),
-		
-		/** The TEXT field type. */
-		TEXT(3, Constants.TEXT, TranslationKeys.TEXT);
+		BARCODE(3, Constants.BARCODE, TranslationKeys.BARCODE);
 
 		private int index;
 		private String name;
