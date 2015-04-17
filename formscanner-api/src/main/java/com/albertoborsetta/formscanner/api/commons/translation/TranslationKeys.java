@@ -20,9 +20,6 @@ public class TranslationKeys {
 	/** The Translation Key for QRCODE_BARCODE. 0.11 */
 	public static final String BARCODE = "qrcode.barcode";
 	
-	/** The Translation Key for TEXT. 0.11 */
-	public static final String TEXT = "text.area";
-
 	/** The Translation Key for TOP_LEFT_CORNER. */
 	public static final String TOP_LEFT_CORNER = "top.left.corner";
 	
