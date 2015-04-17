@@ -7,12 +7,10 @@ import java.awt.BorderLayout;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.FileSystem;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Locale;
 
 import javax.imageio.ImageIO;
@@ -22,7 +20,6 @@ import javax.swing.UIManager;
 import javax.swing.UIManager.LookAndFeelInfo;
 import javax.xml.parsers.ParserConfigurationException;
 
-import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.xml.sax.SAXException;
 
@@ -73,38 +70,29 @@ public class FormScanner extends JFrame {
 		} else {
 			File templateFile = new File(args[0]);
 			FormTemplate template = null;
+			File imageFile = new File(args[1]);
+			BufferedImage image = null;
 			try {
 				template = new FormTemplate(templateFile);
+				image = ImageIO.read(imageFile);
 			} catch (ParserConfigurationException | SAXException | IOException e) {
 				e.printStackTrace();
-				System.exit(-1);
 			}
-			String[] extensions = ImageIO.getReaderFileSuffixes();
-			Iterator<?> fileIterator = FileUtils.iterateFiles(new File(args[1]), extensions, false);
+			FormTemplate filledForm = new FormTemplate(imageFile.getName(), template);
+			filledForm.findCorners(image, template.getThreshold(), template.getDensity());
+			filledForm.findPoints(image, template.getThreshold(), template.getDensity(), template.getSize());
+			filledForm.findAreas(image);
 			HashMap<String, FormTemplate> filledForms = new HashMap<String, FormTemplate>();
-			while (fileIterator.hasNext()) {
-				File imageFile = (File) fileIterator.next();
-				BufferedImage image = null;
-				try {
-					image = ImageIO.read(imageFile);
-				} catch (IOException e) {
-					e.printStackTrace();
-					System.exit(-1);
-				}
-				FormTemplate filledForm = new FormTemplate(imageFile.getName(), template);
-				filledForm.findCorners(image, template.getThreshold(), template.getDensity());
-				filledForm.findPoints(image, template.getThreshold(), template.getDensity(), template.getSize());
-				filledForm.findAreas(image);
-				filledForms.put(FilenameUtils.getName(imageFile.toString()), filledForm);
-			}
+			filledForms.put(FilenameUtils.getName(args[1]), filledForm);
+			
 			Locale locale = Locale.getDefault();
 			FormFileUtils fileUtils = FormFileUtils.getInstance(locale);
 			
 			Date today = Calendar.getInstance().getTime();
 			SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
-			
-			File outputFile = new File(args[1] + System.getProperty("file.separator") + "results_" + sdf.format(today) + ".csv");
+			File outputFile = new File(FilenameUtils.getFullPath(args[1]) + "results_" + sdf.format(today) + ".csv");
 			fileUtils.saveCsvAs(outputFile, filledForms, false);
+			System.out.println("saved");
 			System.exit(0);
 		}
 	}
