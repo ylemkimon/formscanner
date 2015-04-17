@@ -32,6 +32,9 @@ public class TranslationKeys {
 	/** The Translation Key for BOTTOM_RIGHT_CORNER. */
 	public static final String BOTTOM_RIGHT_CORNER = "bottom.right.corner";
 	
+	/** The Translation Key for SQUARE. */
 	public static final String SQUARE = "square";
+	
+	/** The Translation Key for CIRCLE. */
 	public static final String CIRCLE = "circle";
 }

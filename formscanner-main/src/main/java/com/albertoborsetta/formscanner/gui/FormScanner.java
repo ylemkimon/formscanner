@@ -7,7 +7,6 @@ import java.awt.BorderLayout;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.FileSystem;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -19,7 +18,6 @@ import javax.imageio.ImageIO;
 import javax.swing.JFrame;
 import javax.swing.JDesktopPane;
 import javax.swing.UIManager;
-import javax.swing.UIManager.LookAndFeelInfo;
 import javax.xml.parsers.ParserConfigurationException;
 
 import org.apache.commons.io.FileUtils;
@@ -55,14 +53,7 @@ public class FormScanner extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-//					UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 			    	UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
-//				    for (LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
-//				        if ("Nimbus".equals(info.getName())) {
-//				            UIManager.setLookAndFeel(info.getClassName());
-//				            break;
-//				        }
-//				    }
 				    FormScanner window = new FormScanner();
 					window.setIconImage(null);
 				} catch (Exception e) {

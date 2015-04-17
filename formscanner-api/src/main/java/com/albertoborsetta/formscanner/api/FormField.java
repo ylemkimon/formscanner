@@ -11,6 +11,7 @@ import com.albertoborsetta.formscanner.api.commons.Constants.FieldType;
  * <ul>
  * <li>A name
  * <li>A specific type
+ * <li>A group
  * </ul>
  * 
  * @author Alberto Borsetta
@@ -23,6 +24,11 @@ public abstract class FormField {
 	protected FieldType type;
 	protected String group;
 	
+	/**
+	 * Instantiates an empty FormField.
+	 *
+	 * @author Alberto Borsetta
+	 */
 	public FormField() {
 	}
 
@@ -42,7 +48,6 @@ public abstract class FormField {
 	 * @author Alberto Borsetta
 	 * @param name the name of the field
 	 * @param type the type of the field
-	 * @see FieldType
 	 */
 	public FormField(String name, FieldType type) {
 		this.name = name;
@@ -54,7 +59,6 @@ public abstract class FormField {
 	 *
 	 * @author Alberto Borsetta
 	 * @param type the new field type
-	 * @see FieldType
 	 */
 	public void setType(FieldType type) {
 		this.type = type;
@@ -65,7 +69,6 @@ public abstract class FormField {
 	 *
 	 * @author Alberto Borsetta
 	 * @return the field type
-	 * @see FieldType
 	 */
 	public FieldType getType() {
 		return type;
@@ -107,12 +110,22 @@ public abstract class FormField {
 		return fieldElement;
 	}
 	
-	// TODO: javadoc
+	/**
+	 * Sets the FormField object group.
+	 *
+	 * @author Alberto Borsetta
+	 * @param group the new field group
+	 */
 	public void setGroup(String group) {
 		this.group = group;
 	}
 	
-	//TODO: javadoc
+	/**
+	 * Returns the FormField object group.
+	 *
+	 * @author Alberto Borsetta
+	 * @return the field group
+	 */
 	public String getGroup() {
 		return group;
 	}
