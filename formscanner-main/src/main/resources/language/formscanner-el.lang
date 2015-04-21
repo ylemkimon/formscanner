@@ -141,3 +141,13 @@ font.size.label=Μέγεθος γραμματοσειράς
 gui.options=Επιλογές γραφικού περιβάλλοντος (Απαιτεί επανεκκίνηση)
 zoom.fit.width=Προσαρμογή στο πλάτος
 zoom.fit.page=Προσαρμογή στο παράθυρο
+
+# added 0.11
+field.type.panel=Field type
+field.orientation=Orientation
+field.properties.rows.number=Number of rows
+field.properties.cols.number=Number of columns
+barcode.label=Barcode/QRCode
+single.question.label=Question label
+set.of.questions.label=Group of questions
+group.column=Group

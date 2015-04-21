@@ -141,3 +141,13 @@ font.size.label=Dimesione carattere
 gui.options=Opzioni interfaccia (Richiede riavvio)
 zoom.fit.width=Adatta alla larghezza
 zoom.fit.page=Adatta alla finestra
+
+# added 0.11
+field.type.panel=Tipo campo
+field.orientation=Orientamento
+field.properties.rows.number=Numero righe
+field.properties.cols.number=Numero colonne
+barcode.label=Barcode/QRCode
+single.question.label=Quesito
+set.of.questions.label=Gruppo
+group.column=Gruppo
