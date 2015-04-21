@@ -39,7 +39,7 @@ public class FormArea extends FormField {
 	 *
 	 * @author Alberto Borsetta
 	 * @param name the name of the area
-	 * @param points the points which indicates the position of the corners
+	 * @param area the points which indicates the position of the corners
 	 * @see FormPoint
 	 * @see Corners
 	 */
