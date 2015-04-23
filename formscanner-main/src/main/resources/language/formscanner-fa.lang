@@ -133,7 +133,7 @@ name.column=نام سوال
 type.column=نوع سوال
 multiple.column=چند گزینه ای
 responses.column=تعداد گزینه ها
-field.properties.reject.multiple=از پاسخ های چند گزینه ای پشم پوشی کن
+field.properties.reject.multiple=از پاسخ های چند گزینه ای چشم پوشی کن
 
 # added 0.10
 font.type.label=نوع قلم
@@ -143,11 +143,11 @@ zoom.fit.width=مناسب برای عرض
 zoom.fit.page=مناسب برای پنجره
 
 # added 0.11
-field.type.panel=Field type
-field.orientation=Orientation
-field.properties.rows.number=Number of rows
-field.properties.cols.number=Number of columns
-barcode.label=Barcode/QRCode
-single.question.label=Question label
-set.of.questions.label=Group of questions
-group.column=Group
+field.type.panel=نوع سوالات
+field.orientation=جهت
+field.properties.rows.number=تعداد سوالات سطری
+field.properties.cols.number=تعداد سوالات ستونی
+barcode.label=بارکد
+single.question.label=برچسب سوالات
+set.of.questions.label=گرو ه سوالات
+group.column=گروه
