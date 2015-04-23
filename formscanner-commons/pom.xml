@@ -27,9 +27,15 @@
 			<artifactId>watchmaker-swing</artifactId>
 			<version>${watchmaker-swing.version}</version>
 		</dependency>
+		<dependency>
+			<groupId>net.sourceforge.jexcelapi</groupId>
+			<artifactId>jxl</artifactId>
+			<version>${jexcelapi.version}</version>
+		</dependency>
 	</dependencies>
 	<properties>
 		<super-csv.version>2.1.0</super-csv.version>
 		<watchmaker-swing.version>0.7.1</watchmaker-swing.version>
+		<jexcelapi.version>2.6.12</jexcelapi.version>
 	</properties>
 </project>
