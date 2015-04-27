@@ -151,3 +151,5 @@ barcode.label=بارکد
 single.question.label=برچسب سوالات
 set.of.questions.label=گرو ه سوالات
 group.column=گروه
+responses.by.grid=پاسخ های سطری و ستونی
+qrcode.barcode=بارکد
