@@ -151,3 +151,5 @@ barcode.label=Barcode/QRCode
 single.question.label=Question label
 set.of.questions.label=Group of questions
 group.column=Group
+responses.by.grid=Responses by rows and columns
+qrcode.barcode=Barcode/QRCode
