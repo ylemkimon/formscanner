@@ -21,4 +21,4 @@ java -jar -DFormScanner_HOME={FormScanner_HOME} -DFormScanner_VERSION={FormScann
 
 example:
 
-java -jar -DFormScanner_HOME=/usr/share/FormScanner_0.11-SNAPSHOT -DFormScanner_VERSION=0.11-SNAPSHOT /usr/share/FormScanner_0.11-SNAPSHOT/lib/formscanner-main-0.11-SNAPSHOT.jar
+java -jar -DFormScanner_HOME=/usr/share/FormScanner_0.11-M -DFormScanner_VERSION=0.11-M /usr/share/FormScanner_0.11-M/lib/formscanner-main-0.11-M.jar

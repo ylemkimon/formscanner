@@ -163,7 +163,6 @@ public class FormScannerTranslationKeys extends TranslationKeys {
 	public static final String FIT_WIDTH = "zoom.fit.width";
 	public static final String FIT_PAGE = "zoom.fit.page";
 	
-	// added 0.11
 	public static final String FIELD_TYPE_TAB_NAME = "field.type.panel";
 	public static final String FIELD_PROPERTIES_ORIENTATION = "field.orientation";
 	public static final String FIELD_PROPERTIES_N_ROWS_LABEL = "field.properties.rows.number";

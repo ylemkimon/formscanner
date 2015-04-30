@@ -160,7 +160,7 @@ import com.albertoborsetta.formscanner.api.commons.Constants.ShapeType;;
  * </pre>
  * 
  * @author Alberto Borsetta
- * @version 0.11-SNAPSHOT
+ * @version 0.11-M
  * @see FormPoint
  * @see FormQuestion
  * @see FieldType

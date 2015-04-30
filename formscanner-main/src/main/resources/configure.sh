@@ -22,5 +22,5 @@ INSTALL_DIR=$PWD
 FS_EXECUTABLE=$(ls $INSTALL_DIR/lib/formscanner-main*)
 
 echo "#!/bin/sh" > $INSTALL_DIR/bin/run.sh
-echo "$JAVA_PATH -jar -DFormScanner_HOME=$INSTALL_DIR -DFormScanner_VERSION=0.11-SNAPSHOT $FS_EXECUTABLE" >> $INSTALL_DIR/bin/run.sh
+echo "$JAVA_PATH -jar -DFormScanner_HOME=$INSTALL_DIR -DFormScanner_VERSION=0.11-M $FS_EXECUTABLE" >> $INSTALL_DIR/bin/run.sh
 chmod +x $INSTALL_DIR/bin/run.sh

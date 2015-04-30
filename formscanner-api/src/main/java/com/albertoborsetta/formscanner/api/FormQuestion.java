@@ -21,7 +21,7 @@ import com.albertoborsetta.formscanner.api.FormPoint;
  * </ul>
  * 
  * @author Alberto Borsetta
- * @version 0.11-SNAPSHOT
+ * @version 0.11-M
  * @see FormField
  * @see FormPoint
  */
