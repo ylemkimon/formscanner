@@ -15,61 +15,64 @@ import java.awt.event.KeyListener;
 import javax.swing.JTextField;
 
 public class RenameFileController implements KeyListener, ActionListener, FocusListener {
-	
-	private FormScannerModel model;
-	private RenameFileFrame view;
-	
-	public RenameFileController(FormScannerModel model) {
-		this.model = model;
-	}
-	
-	public void add(RenameFileFrame view) {
-		this.view = view;		
-	}
 
-	// KeyListener	
-	public void keyTyped(KeyEvent e) {
-		// TODO Auto-generated method stub
-	}
+    private final FormScannerModel model;
+    private RenameFileFrame view;
 
-	public void keyPressed(KeyEvent e) {
-		if ((e.getKeyCode() == KeyEvent.VK_ENTER) && (view.isOkEnabled())) {
-			view.setOkEnabled(false);
-			model.renameFiles(FormScannerConstants.RENAME_FILES_CURRENT);
-		} else if ((e.getKeyCode() == KeyEvent.VK_ENTER) && (!view.isOkEnabled())) {
-			model.renameFiles(FormScannerConstants.RENAME_FILES_SKIP);
-		} else {
-			view.setOkEnabled(true);
-		}
-	}
+    public RenameFileController(FormScannerModel model) {
+        this.model = model;
+    }
 
-	public void keyReleased(KeyEvent e) {
-		// TODO Auto-generated method stub			
-	}
+    public void add(RenameFileFrame view) {
+        this.view = view;
+    }
 
-	// ActionListener
-	public void actionPerformed(ActionEvent e) {
-		Action act = Action.valueOf(e.getActionCommand());
-		switch (act) {
-		case RENAME_FILES_CURRENT:
-			model.renameFiles(FormScannerConstants.RENAME_FILES_CURRENT);
-			break;
-		case RENAME_FILES_SKIP:
-			model.renameFiles(FormScannerConstants.RENAME_FILES_SKIP);
-			break;
-		default:
-			break;
-		}
-	}
+    // KeyListener	
+    @Override
+    public void keyTyped(KeyEvent e) {
+        // TODO Auto-generated method stub
+    }
 
-	@Override
-	public void focusGained(FocusEvent e) {
-		((JTextField) e.getComponent()).selectAll();
-		
-	}
+    @Override
+    public void keyPressed(KeyEvent e) {
+        if ((e.getKeyCode() == KeyEvent.VK_ENTER) && (view.isOkEnabled())) {
+            view.setOkEnabled(false);
+            model.renameFiles(FormScannerConstants.RENAME_FILES_CURRENT);
+        } else if ((e.getKeyCode() == KeyEvent.VK_ENTER) && (!view.isOkEnabled())) {
+            model.renameFiles(FormScannerConstants.RENAME_FILES_SKIP);
+        } else {
+            view.setOkEnabled(true);
+        }
+    }
 
-	@Override
-	public void focusLost(FocusEvent e) {
-		view.setOkEnabled(true);		
-	}
+    @Override
+    public void keyReleased(KeyEvent e) {
+    }
+
+    // ActionListener
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        Action act = Action.valueOf(e.getActionCommand());
+        switch (act) {
+            case RENAME_FILES_CURRENT:
+                model.renameFiles(FormScannerConstants.RENAME_FILES_CURRENT);
+                break;
+            case RENAME_FILES_SKIP:
+                model.renameFiles(FormScannerConstants.RENAME_FILES_SKIP);
+                break;
+            default:
+                break;
+        }
+    }
+
+    @Override
+    public void focusGained(FocusEvent e) {
+        ((JTextField) e.getComponent()).selectAll();
+
+    }
+
+    @Override
+    public void focusLost(FocusEvent e) {
+        view.setOkEnabled(true);
+    }
 }

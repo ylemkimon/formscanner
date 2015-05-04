@@ -8,123 +8,120 @@ import java.util.concurrent.Callable;
 
 import com.albertoborsetta.formscanner.api.commons.Constants.Corners;
 
-import com.albertoborsetta.formscanner.api.FormQuestion;
-import com.albertoborsetta.formscanner.api.FormPoint;
-import com.albertoborsetta.formscanner.api.FormTemplate;
-
 public class FieldDetector implements Callable<HashMap<String, FormQuestion>> {
-	
-	private FormTemplate template;
-	private int threshold;
-	private int density;
-	private FormQuestion templateField;
-	private int size;
-	private FormTemplate parent;
-	private HashMap<String, FormQuestion> fields;
-	private BufferedImage image;
 
-	FieldDetector(int threshold, int density, int size, FormTemplate template,
-			FormQuestion templateField, BufferedImage image) {
-		this.template = template;
-		parent = template.getParentTemplate();
-		this.threshold = threshold;
-		this.density = density;
-		this.templateField = templateField;
-		this.size = size;
-		fields = new HashMap<String, FormQuestion>();
-		this.image = image;
-	}
+    private final FormTemplate template;
+    private final int threshold;
+    private final int density;
+    private final FormQuestion templateField;
+    private final int size;
+    private final FormTemplate parent;
+    private final HashMap<String, FormQuestion> fields;
+    private final BufferedImage image;
 
-	public HashMap<String, FormQuestion> call() throws Exception {
-		boolean found = false;
-		int count = 0;
+    FieldDetector(int threshold, int density, int size, FormTemplate template,
+            FormQuestion templateField, BufferedImage image) {
+        this.template = template;
+        parent = template.getParentTemplate();
+        this.threshold = threshold;
+        this.density = density;
+        this.templateField = templateField;
+        this.size = size;
+        fields = new HashMap<>();
+        this.image = image;
+    }
 
-		HashMap<String, FormPoint> templatePoints = templateField.getPoints();
-		String fieldName = templateField.getName();
+    @Override
+    public HashMap<String, FormQuestion> call() throws Exception {
+        boolean found = false;
+        int count = 0;
 
-		ArrayList<String> pointNames = new ArrayList<String>(
-				templatePoints.keySet());
-		Collections.sort(pointNames);
+        HashMap<String, FormPoint> templatePoints = templateField.getPoints();
+        String fieldName = templateField.getName();
 
-		for (String pointName : pointNames) {
-			FormPoint responsePoint = calcResponsePoint(templatePoints
-					.get(pointName));
+        ArrayList<String> pointNames = new ArrayList<>(
+                templatePoints.keySet());
+        Collections.sort(pointNames);
 
-			if (found = isFilled(responsePoint)) {
-				count++;
-				FormQuestion filledField = getField(templateField, fieldName);
-				
-				filledField.setPoint(pointName, responsePoint);
-				fields.put(fieldName, filledField);
-				
-				if (!templateField.isMultiple()) {
-					if (templateField.rejectMultiple() && count > 1) {
-						filledField.clearPoints();
-						filledField.setPoint("", null);
-						fields.clear();
-						fields.put(fieldName, filledField);
-						break;
-					} 
-					if (!templateField.rejectMultiple()) {
-						break;
-					}
-				}
-			}
-		}
+        for (String pointName : pointNames) {
+            FormPoint responsePoint = calcResponsePoint(templatePoints
+                    .get(pointName));
 
-		if (!found) {
-			FormQuestion filledField = getField(templateField, fieldName);
-			filledField.setPoint("", null);
-			fields.put(fieldName, filledField);
-		}
+            if (found = isFilled(responsePoint)) {
+                count++;
+                FormQuestion filledField = getField(templateField, fieldName);
 
-		return fields;
-	}
+                filledField.setPoint(pointName, responsePoint);
+                fields.put(fieldName, filledField);
 
-	private FormPoint calcResponsePoint(FormPoint responsePoint) {
-		FormPoint point = responsePoint.clone();
+                if (!templateField.isMultiple()) {
+                    if (templateField.rejectMultiple() && count > 1) {
+                        filledField.clearPoints();
+                        filledField.setPoint("", null);
+                        fields.clear();
+                        fields.put(fieldName, filledField);
+                        break;
+                    }
+                    if (!templateField.rejectMultiple()) {
+                        break;
+                    }
+                }
+            }
+        }
 
-		FormPoint templateOrigin = parent.getCorner(Corners.TOP_LEFT);
-		double templateRotation = parent.getRotation();
-		double scale = Math.sqrt(template.getDiagonal() / parent.getDiagonal());
+        if (!found) {
+            FormQuestion filledField = getField(templateField, fieldName);
+            filledField.setPoint("", null);
+            fields.put(fieldName, filledField);
+        }
 
-		point.rotoTranslate(templateOrigin, templateRotation, true);
-		point.scale(scale);
-		point.rotoTranslate(template.getCorners().get(Corners.TOP_LEFT), template.getRotation(), false);
-		return point;
-	}
+        return fields;
+    }
 
-	private boolean isFilled(FormPoint responsePoint) {
-		int total = size * size;
-		int halfSize = (int) size / 2;
-		int[] rgbArray = new int[total];
-		int count = 0;
+    private FormPoint calcResponsePoint(FormPoint responsePoint) {
+        FormPoint point = responsePoint.clone();
 
-		int xCoord = (int) responsePoint.getX();
-		int yCoord = (int) responsePoint.getY();
+        FormPoint templateOrigin = parent.getCorner(Corners.TOP_LEFT);
+        double templateRotation = parent.getRotation();
+        double scale = Math.sqrt(template.getDiagonal() / parent.getDiagonal());
 
-		try {
-			image.getRGB(xCoord - halfSize, yCoord - halfSize,
-					size, size, rgbArray, 0, size);
-			for (int i = 0; i < total; i++) {
-				if ((rgbArray[i] & (0xFF)) < threshold) {
-					count++;
-				}
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return (count / (double) total) >= (density / 100.0);
-	}
+        point.rotoTranslate(templateOrigin, templateRotation, true);
+        point.scale(scale);
+        point.rotoTranslate(template.getCorners().get(Corners.TOP_LEFT), template.getRotation(), false);
+        return point;
+    }
 
-	private FormQuestion getField(FormQuestion field, String fieldName) {
-		FormQuestion filledField = fields.get(fieldName);
+    private boolean isFilled(FormPoint responsePoint) {
+        int total = size * size;
+        int halfSize = (int) size / 2;
+        int[] rgbArray = new int[total];
+        int count = 0;
 
-		if (filledField == null) {
-			filledField = new FormQuestion(fieldName);
-			filledField.setMultiple(field.isMultiple());
-		}
+        int xCoord = (int) responsePoint.getX();
+        int yCoord = (int) responsePoint.getY();
 
-		return filledField;
-	}
+        try {
+            image.getRGB(xCoord - halfSize, yCoord - halfSize,
+                    size, size, rgbArray, 0, size);
+            for (int i = 0; i < total; i++) {
+                if ((rgbArray[i] & (0xFF)) < threshold) {
+                    count++;
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return (count / (double) total) >= (density / 100.0);
+    }
+
+    private FormQuestion getField(FormQuestion field, String fieldName) {
+        FormQuestion filledField = fields.get(fieldName);
+
+        if (filledField == null) {
+            filledField = new FormQuestion(fieldName);
+            filledField.setMultiple(field.isMultiple());
+        }
+
+        return filledField;
+    }
 }

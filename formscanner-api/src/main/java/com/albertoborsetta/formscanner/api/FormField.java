@@ -13,120 +13,120 @@ import com.albertoborsetta.formscanner.api.commons.Constants.FieldType;
  * <li>A specific type
  * <li>A group
  * </ul>
- * 
+ *
  * @author Alberto Borsetta
  * @version 0.11-SNAPSHOT
  * @see FieldType
  */
 public abstract class FormField {
-	
-	protected String name;
-	protected FieldType type;
-	protected String group;
-	
-	/**
-	 * Instantiates an empty FormField.
-	 *
-	 * @author Alberto Borsetta
-	 */
-	public FormField() {
-	}
 
-	/**
-	 * Instantiates a new FormField with the responses points.
-	 *
-	 * @author Alberto Borsetta
-	 * @param name the name of the field
-	 */
-	public FormField(String name) {
-		this.name = name;
-	}
+    protected String name;
+    protected FieldType type;
+    protected String group;
 
-	/**
-	 * Instantiates a new FormField with the responses points.
-	 *
-	 * @author Alberto Borsetta
-	 * @param name the name of the field
-	 * @param type the type of the field
-	 */
-	public FormField(String name, FieldType type) {
-		this.name = name;
-		this.type = type;
-	}
-	
-	/**
-	 * Sets the FormField object type.
-	 *
-	 * @author Alberto Borsetta
-	 * @param type the new field type
-	 */
-	public void setType(FieldType type) {
-		this.type = type;
-	}
+    /**
+     * Instantiates an empty FormField.
+     *
+     * @author Alberto Borsetta
+     */
+    public FormField() {
+    }
 
-	/**
-	 * Returns the FormField object type.
-	 *
-	 * @author Alberto Borsetta
-	 * @return the field type
-	 */
-	public FieldType getType() {
-		return type;
-	}
+    /**
+     * Instantiates a new FormField with the responses points.
+     *
+     * @author Alberto Borsetta
+     * @param name the name of the field
+     */
+    public FormField(String name) {
+        this.name = name;
+    }
 
-	/**
-	 * Sets the FormField object name.
-	 *
-	 * @author Alberto Borsetta
-	 * @param name the new field name
-	 */
-	public void setName(String name) {
-		this.name = name;
-	}
+    /**
+     * Instantiates a new FormField with the responses points.
+     *
+     * @author Alberto Borsetta
+     * @param name the name of the field
+     * @param type the type of the field
+     */
+    public FormField(String name, FieldType type) {
+        this.name = name;
+        this.type = type;
+    }
 
-	/**
-	 * Returns the FormField object name.
-	 *
-	 * @author Alberto Borsetta
-	 * @return the field name
-	 */
-	public String getName() {
-		return name;
-	}
+    /**
+     * Sets the FormField object type.
+     *
+     * @author Alberto Borsetta
+     * @param type the new field type
+     */
+    public void setType(FieldType type) {
+        this.type = type;
+    }
 
-	/**
-	 * Returns the xml representation of the FormField object.
-	 *
-	 * @author Alberto Borsetta
-	 * @param doc the parent document
-	 * @return the xml representation of the FormQuestion object
-	 */
-	public Element getXml(Document doc) {
-		Element fieldElement = doc.createElement("field");
-		
-		fieldElement.setAttribute("type", type.name());
-		fieldElement.setAttribute("name", name);
-		
-		return fieldElement;
-	}
-	
-	/**
-	 * Sets the FormField object group.
-	 *
-	 * @author Alberto Borsetta
-	 * @param group the new field group
-	 */
-	public void setGroup(String group) {
-		this.group = group;
-	}
-	
-	/**
-	 * Returns the FormField object group.
-	 *
-	 * @author Alberto Borsetta
-	 * @return the field group
-	 */
-	public String getGroup() {
-		return group;
-	}
+    /**
+     * Returns the FormField object type.
+     *
+     * @author Alberto Borsetta
+     * @return the field type
+     */
+    public FieldType getType() {
+        return type;
+    }
+
+    /**
+     * Sets the FormField object name.
+     *
+     * @author Alberto Borsetta
+     * @param name the new field name
+     */
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    /**
+     * Returns the FormField object name.
+     *
+     * @author Alberto Borsetta
+     * @return the field name
+     */
+    public String getName() {
+        return name;
+    }
+
+    /**
+     * Returns the xml representation of the FormField object.
+     *
+     * @author Alberto Borsetta
+     * @param doc the parent document
+     * @return the xml representation of the FormQuestion object
+     */
+    public Element getXml(Document doc) {
+        Element fieldElement = doc.createElement("field");
+
+        fieldElement.setAttribute("type", type.name());
+        fieldElement.setAttribute("name", name);
+
+        return fieldElement;
+    }
+
+    /**
+     * Sets the FormField object group.
+     *
+     * @author Alberto Borsetta
+     * @param group the new field group
+     */
+    public void setGroup(String group) {
+        this.group = group;
+    }
+
+    /**
+     * Returns the FormField object group.
+     *
+     * @author Alberto Borsetta
+     * @return the field group
+     */
+    public String getGroup() {
+        return group;
+    }
 }

@@ -18,59 +18,61 @@ import com.albertoborsetta.formscanner.gui.model.FormScannerModel;
 import com.albertoborsetta.formscanner.gui.view.OptionsFrame;
 
 public class OptionsFrameController implements ActionListener, ChangeListener,
-		ItemListener, FocusListener {
+        ItemListener, FocusListener {
 
-	private FormScannerModel formScannerModel;
-	private OptionsFrame optionsFrame;
+    private final FormScannerModel formScannerModel;
+    private OptionsFrame optionsFrame;
 
-	public OptionsFrameController(FormScannerModel formScannerModel) {
-		this.formScannerModel = formScannerModel;
-	}
+    public OptionsFrameController(FormScannerModel formScannerModel) {
+        this.formScannerModel = formScannerModel;
+    }
 
-	public void add(OptionsFrame optionsFrame) {
-		this.optionsFrame = optionsFrame;
-	}
+    public void add(OptionsFrame optionsFrame) {
+        this.optionsFrame = optionsFrame;
+    }
 
-	@Override
-	public void actionPerformed(ActionEvent e) {
-		Action act = Action.valueOf(e.getActionCommand());
-		switch (act) {
-		case SAVE_OPTIONS:
-			formScannerModel.saveOptions(optionsFrame);
-		case CANCEL:
-			optionsFrame.dispose();
-			break;
-		default:
-			break;
-		}
-	}
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        Action act = Action.valueOf(e.getActionCommand());
+        switch (act) {
+            case SAVE_OPTIONS:
+                formScannerModel.saveOptions(optionsFrame);
+            case CANCEL:
+                optionsFrame.dispose();
+                break;
+            default:
+                break;
+        }
+    }
 
-	@Override
-	public void stateChanged(ChangeEvent e) {
-		optionsFrame.setSaveEnabled();
-	}
+    @Override
+    public void stateChanged(ChangeEvent e) {
+        optionsFrame.setSaveEnabled();
+    }
 
-	@Override
-	public void itemStateChanged(ItemEvent e) {
-		optionsFrame.setSaveEnabled();
-	}
+    @Override
+    public void itemStateChanged(ItemEvent e) {
+        optionsFrame.setSaveEnabled();
+    }
 
-	@Override
-	public void focusGained(FocusEvent e) {
-		Component c = e.getComponent();
-		if (c instanceof JFormattedTextField) {
-			final JFormattedTextField textField = (JFormattedTextField) c;
-			SwingUtilities.invokeLater(new Runnable() {
-				public void run() {
-					textField.selectAll();
-				}
-			});
-		}
-	}
+    @Override
+    public void focusGained(FocusEvent e) {
+        Component c = e.getComponent();
+        if (c instanceof JFormattedTextField) {
+            final JFormattedTextField textField = (JFormattedTextField) c;
+            SwingUtilities.invokeLater(new Runnable() {
 
-	@Override
-	public void focusLost(FocusEvent e) {
-		optionsFrame.setSaveEnabled();
-	}
+                @Override
+                public void run() {
+                    textField.selectAll();
+                }
+            });
+        }
+    }
+
+    @Override
+    public void focusLost(FocusEvent e) {
+        optionsFrame.setSaveEnabled();
+    }
 
 }

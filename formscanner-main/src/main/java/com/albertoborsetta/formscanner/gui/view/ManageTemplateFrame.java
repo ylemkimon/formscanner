@@ -66,7 +66,7 @@ public class ManageTemplateFrame extends InternalFrame implements TabbedView {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	private JTabbedPane tabbedPane;
+	private final JTabbedPane tabbedPane;
 	private JScrollPane positionsTableScrollPane;
 	private JScrollPane fieldsTableScrollPane;
 
@@ -90,7 +90,7 @@ public class ManageTemplateFrame extends InternalFrame implements TabbedView {
 	private JButton okPositionButton;
 	private JButton cancelPositionButton;
 
-	private ManageTemplateController manageTemplateController;
+	private final ManageTemplateController manageTemplateController;
 	private int previousRowsCount;
 	private InternalFieldType[] types;
 	private JPanel fieldsTypeButtonPanel;
@@ -100,7 +100,7 @@ public class ManageTemplateFrame extends InternalFrame implements TabbedView {
 
 	private class InternalFieldType {
 
-		private FieldType type;
+		private final FieldType type;
 
 		protected InternalFieldType(FieldType type) {
 			this.type = type;
@@ -110,6 +110,7 @@ public class ManageTemplateFrame extends InternalFrame implements TabbedView {
 			return type;
 		}
 
+                @Override
 		public String toString() {
 			return FormScannerTranslation.getTranslationFor(type.getValue());
 		}
@@ -126,6 +127,7 @@ public class ManageTemplateFrame extends InternalFrame implements TabbedView {
 			super();
 		}
 
+                @Override
 		public boolean isCellEditable(int row, int col) {
 			return false;
 		}
@@ -144,8 +146,8 @@ public class ManageTemplateFrame extends InternalFrame implements TabbedView {
 		 */
 		private static final long serialVersionUID = 1L;
 
-		private String type;
-		private ArrayList<ArrayList<Integer>> rowColHeight = new ArrayList<ArrayList<Integer>>();
+		private final String type;
+		private final ArrayList<ArrayList<Integer>> rowColHeight = new ArrayList<>();
 
 		public PositionsTableCellRenderer(String type) {
 			setLineWrap(true);

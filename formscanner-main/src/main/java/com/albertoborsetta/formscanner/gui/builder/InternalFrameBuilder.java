@@ -7,16 +7,16 @@ import javax.swing.JInternalFrame;
 import com.albertoborsetta.formscanner.commons.FormScannerFont;
 
 public class InternalFrameBuilder {
-	
-	private JInternalFrame internalFrame;
-	
-	public InternalFrameBuilder(ComponentOrientation orientation) {
-		internalFrame = new JInternalFrame();
-		internalFrame.setFont(FormScannerFont.getFont());
-		internalFrame.setComponentOrientation(orientation);
-	}
-	
-	public JInternalFrame build() {
-		return internalFrame;
-	}
+
+    private final JInternalFrame internalFrame;
+
+    public InternalFrameBuilder(ComponentOrientation orientation) {
+        internalFrame = new JInternalFrame();
+        internalFrame.setFont(FormScannerFont.getFont());
+        internalFrame.setComponentOrientation(orientation);
+    }
+
+    public JInternalFrame build() {
+        return internalFrame;
+    }
 }

@@ -8,52 +8,47 @@ import com.albertoborsetta.formscanner.gui.view.InternalFrame;
 
 public class InternalFrameController implements InternalFrameListener {
 
-	private FormScannerModel model;
-	private static InternalFrameController instance;
-	
-	public static InternalFrameController getInstance(FormScannerModel model) {
-		if (instance == null) {
-			instance = new InternalFrameController(model); 
-		}
-		return instance;
-	}
-	
-	private InternalFrameController(FormScannerModel model) {
-		this.model = model;
-	}
+    private final FormScannerModel model;
+    private static InternalFrameController instance;
 
-	// InternalFrameListener
-	public void internalFrameOpened(InternalFrameEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
+    public static InternalFrameController getInstance(FormScannerModel model) {
+        if (instance == null) {
+            instance = new InternalFrameController(model);
+        }
+        return instance;
+    }
 
-	public void internalFrameClosing(InternalFrameEvent e) {
-		model.disposeRelatedFrame((InternalFrame) e.getInternalFrame());
-	}
+    private InternalFrameController(FormScannerModel model) {
+        this.model = model;
+    }
 
-	public void internalFrameClosed(InternalFrameEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
+    // InternalFrameListener
+    @Override
+    public void internalFrameOpened(InternalFrameEvent e) {
+    }
 
-	public void internalFrameIconified(InternalFrameEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
+    @Override
+    public void internalFrameClosing(InternalFrameEvent e) {
+        model.disposeRelatedFrame((InternalFrame) e.getInternalFrame());
+    }
 
-	public void internalFrameDeiconified(InternalFrameEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
+    @Override
+    public void internalFrameClosed(InternalFrameEvent e) {
+    }
 
-	public void internalFrameActivated(InternalFrameEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
+    @Override
+    public void internalFrameIconified(InternalFrameEvent e) {
+    }
 
-	public void internalFrameDeactivated(InternalFrameEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
+    @Override
+    public void internalFrameDeiconified(InternalFrameEvent e) {
+    }
+
+    @Override
+    public void internalFrameActivated(InternalFrameEvent e) {
+    }
+
+    @Override
+    public void internalFrameDeactivated(InternalFrameEvent e) {
+    }
 }
