@@ -25,93 +25,101 @@ import com.albertoborsetta.formscanner.gui.model.FormScannerModel;
 import com.albertoborsetta.formscanner.gui.view.ManageTemplateFrame;
 
 public class ManageTemplateController implements ActionListener,
-		ChangeListener, ItemListener, TableModelListener, ListSelectionListener, FocusListener, KeyListener {
+        ChangeListener, ItemListener, TableModelListener, ListSelectionListener, FocusListener, KeyListener {
 
-	private FormScannerModel formScannerModel;
-	private ManageTemplateFrame view;
+    private final FormScannerModel formScannerModel;
+    private ManageTemplateFrame view;
 
-	public ManageTemplateController(FormScannerModel model) {
-		this.formScannerModel = model;
-	}
+    public ManageTemplateController(FormScannerModel model) {
+        this.formScannerModel = model;
+    }
 
-	public void add(ManageTemplateFrame view) {
-		this.view = view;
-	}
+    public void add(ManageTemplateFrame view) {
+        this.view = view;
+    }
 
-	public void actionPerformed(ActionEvent e) {
-		Action act = Action.valueOf(e.getActionCommand());
-		switch (act) {
-		case ADD_FIELD:
-			view.setupNextTab(FormScannerConstants.CONFIRM);
-			break;
-		case REMOVE_FIELD:
-			String fieldName = view.getSelectedItem();
-			formScannerModel.removeField(fieldName);
-			view.removeSelectedField();
-			break;
-		case SAVE_TEMPLATE:
-			formScannerModel.saveTemplate(true);
-			view.dispose();
-			break;
-		case CONFIRM:
-			view.setupNextTab(FormScannerConstants.CONFIRM);
-			break;
-		case CANCEL:
-			view.setupNextTab(FormScannerConstants.CANCEL);
-			break;
-		case IS_MULTIPLE:
-			view.enableRejectMultiple(!view.getIsMultiple());
-			break;
-		default:
-			break;
-		}
-
-	}
-
-	public void stateChanged(ChangeEvent e) {
-		view.setAdvanceable();
-	}
-
-	public void itemStateChanged(ItemEvent e) {
-		view.setAdvanceable();
-	}
-
-	public void tableChanged(TableModelEvent e) {
-		view.setAdvanceable();
-	}
-
-	public void valueChanged(ListSelectionEvent e) {
-		view.enableRemoveFields();
-	}
-
-	public void focusGained(FocusEvent e) {
-		Component c = e.getComponent();
-        if (c instanceof JFormattedTextField) {
-          final JFormattedTextField textField = (JFormattedTextField) c;
-          SwingUtilities.invokeLater(new Runnable() {
-            public void run() {
-              textField.selectAll();
-            }
-          });
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        Action act = Action.valueOf(e.getActionCommand());
+        switch (act) {
+            case ADD_FIELD:
+                view.setupNextTab(FormScannerConstants.CONFIRM);
+                break;
+            case REMOVE_FIELD:
+                String fieldName = view.getSelectedItem();
+                formScannerModel.removeField(fieldName);
+                view.removeSelectedField();
+                break;
+            case SAVE_TEMPLATE:
+                formScannerModel.saveTemplate(true);
+                view.dispose();
+                break;
+            case CONFIRM:
+                view.setupNextTab(FormScannerConstants.CONFIRM);
+                break;
+            case CANCEL:
+                view.setupNextTab(FormScannerConstants.CANCEL);
+                break;
+            case IS_MULTIPLE:
+                view.enableRejectMultiple(!view.getIsMultiple());
+                break;
+            default:
+                break;
         }
-	}
+    }
 
-	public void focusLost(FocusEvent e) {
-		view.setAdvanceable();
-	}
+    @Override
+    public void stateChanged(ChangeEvent e) {
+        view.setAdvanceable();
+    }
 
-	@Override
-	public void keyTyped(KeyEvent e) {
-		view.setAdvanceable();
-	}
+    @Override
+    public void itemStateChanged(ItemEvent e) {
+        view.setAdvanceable();
+    }
 
-	@Override
-	public void keyPressed(KeyEvent e) {
-		view.setAdvanceable();
-	}
+    @Override
+    public void tableChanged(TableModelEvent e) {
+        view.setAdvanceable();
+    }
 
-	@Override
-	public void keyReleased(KeyEvent e) {
-		view.setAdvanceable();
-	}
+    @Override
+    public void valueChanged(ListSelectionEvent e) {
+        view.enableRemoveFields();
+    }
+
+    @Override
+    public void focusGained(FocusEvent e) {
+        Component c = e.getComponent();
+        if (c instanceof JFormattedTextField) {
+            final JFormattedTextField textField = (JFormattedTextField) c;
+            SwingUtilities.invokeLater(new Runnable() {
+
+                @Override
+                public void run() {
+                    textField.selectAll();
+                }
+            });
+        }
+    }
+
+    @Override
+    public void focusLost(FocusEvent e) {
+        view.setAdvanceable();
+    }
+
+    @Override
+    public void keyTyped(KeyEvent e) {
+        view.setAdvanceable();
+    }
+
+    @Override
+    public void keyPressed(KeyEvent e) {
+        view.setAdvanceable();
+    }
+
+    @Override
+    public void keyReleased(KeyEvent e) {
+        view.setAdvanceable();
+    }
 }

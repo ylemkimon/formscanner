@@ -8,16 +8,16 @@ import javax.swing.JScrollPane;
 import com.albertoborsetta.formscanner.commons.FormScannerFont;
 
 public class ScrollPaneBuilder {
-	
-	private JScrollPane scrollPane;
-	
-	public ScrollPaneBuilder(JComponent component, ComponentOrientation orientation) {
-		scrollPane = new JScrollPane(component);
-		scrollPane.setFont(FormScannerFont.getFont());
-		scrollPane.setComponentOrientation(orientation);
-	}
 
-	public JScrollPane build() {
-		return scrollPane;
-	}
+    private final JScrollPane scrollPane;
+
+    public ScrollPaneBuilder(JComponent component, ComponentOrientation orientation) {
+        scrollPane = new JScrollPane(component);
+        scrollPane.setFont(FormScannerFont.getFont());
+        scrollPane.setComponentOrientation(orientation);
+    }
+
+    public JScrollPane build() {
+        return scrollPane;
+    }
 }

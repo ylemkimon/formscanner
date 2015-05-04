@@ -11,35 +11,35 @@ import com.albertoborsetta.formscanner.gui.model.FormScannerModel;
 import com.albertoborsetta.formscanner.gui.view.AboutFrame;
 
 public class AboutFrameController implements ActionListener, HyperlinkListener {
-	
-	private FormScannerModel formScannerModel;
-	private AboutFrame aboutFrame;
 
-	public AboutFrameController(FormScannerModel formScannerModel) {
-		this.formScannerModel = formScannerModel;
-	}
+    private final FormScannerModel formScannerModel;
+    private AboutFrame aboutFrame;
 
-	public void add(AboutFrame aboutFrame) {
-		 this.aboutFrame = aboutFrame;
-	}
+    public AboutFrameController(FormScannerModel formScannerModel) {
+        this.formScannerModel = formScannerModel;
+    }
 
-	@Override
-	public void actionPerformed(ActionEvent e) {
-		Action act = Action.valueOf(e.getActionCommand());
-		switch (act) {
-		case CONFIRM:
-			aboutFrame.dispose();
-			break;
-		default:
-			break;
-		}
-	}
+    public void add(AboutFrame aboutFrame) {
+        this.aboutFrame = aboutFrame;
+    }
 
-	@Override
-	public void hyperlinkUpdate(HyperlinkEvent e) {
-		if (HyperlinkEvent.EventType.ACTIVATED.equals(e.getEventType())) {
-			formScannerModel.linkToHelp(e.getURL());
-		}
-	}
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        Action act = Action.valueOf(e.getActionCommand());
+        switch (act) {
+            case CONFIRM:
+                aboutFrame.dispose();
+                break;
+            default:
+                break;
+        }
+    }
+
+    @Override
+    public void hyperlinkUpdate(HyperlinkEvent e) {
+        if (HyperlinkEvent.EventType.ACTIVATED.equals(e.getEventType())) {
+            formScannerModel.linkToHelp(e.getURL());
+        }
+    }
 
 }

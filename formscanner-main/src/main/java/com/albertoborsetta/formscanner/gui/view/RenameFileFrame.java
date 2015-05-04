@@ -23,102 +23,105 @@ import java.awt.BorderLayout;
 
 public class RenameFileFrame extends InternalFrame implements View {
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	private JTextField fileNameField;
-	private JLabel fileExtensionField;
-	private JButton okButton;
-	private JButton cancelButton;
-	private RenameFileController renameFileController;
-	private JPanel buttonPanel;
-	private JPanel renamePanel;
+    private JTextField fileNameField;
+    private JLabel fileExtensionField;
+    private JButton okButton;
+    private JButton cancelButton;
+    private final RenameFileController renameFileController;
+    private final JPanel buttonPanel;
+    private final JPanel renamePanel;
 
-	/**
-	 * Create the frame.
-	 */
-	public RenameFileFrame(FormScannerModel model, String fileName) {
-		super(model);
-		renameFileController = new RenameFileController(model);
-		renameFileController.add(this);
+    /**
+     * Create the frame.
+     *
+     * @param model
+     * @param fileName
+     */
+    public RenameFileFrame(FormScannerModel model, String fileName) {
+        super(model);
+        renameFileController = new RenameFileController(model);
+        renameFileController.add(this);
 
-		setBounds(model.getLastPosition(Frame.RENAME_FILES_FRAME));
-		setName(Frame.RENAME_FILES_FRAME.name());
-		setClosable(true);
-		setLayout(new BorderLayout());
+        setBounds(model.getLastPosition(Frame.RENAME_FILES_FRAME));
+        setName(Frame.RENAME_FILES_FRAME.name());
+        setClosable(true);
+        setLayout(new BorderLayout());
 
-		renamePanel = getRenamePanel();
-		buttonPanel = getButtonPanel();
+        renamePanel = getRenamePanel();
+        buttonPanel = getButtonPanel();
 
-		add(renamePanel, BorderLayout.NORTH);
-		add(buttonPanel, BorderLayout.SOUTH);
+        add(renamePanel, BorderLayout.NORTH);
+        add(buttonPanel, BorderLayout.SOUTH);
 
-		updateRenamedFile(fileName);
-	}
+        updateRenamedFile(fileName);
+    }
 
-	public boolean isOkEnabled() {
-		return okButton.isEnabled();
-	}
+    public boolean isOkEnabled() {
+        return okButton.isEnabled();
+    }
 
-	public boolean isCancelEnabled() {
-		return cancelButton.isEnabled();
-	}
+    public boolean isCancelEnabled() {
+        return cancelButton.isEnabled();
+    }
 
-	public void setOkEnabled(boolean value) {
-		okButton.setEnabled(value);
-	}
+    public void setOkEnabled(boolean value) {
+        okButton.setEnabled(value);
+    }
 
-	private void updateRenamedFile(String fileName) {
-		setTitle(FormScannerTranslation
-				.getTranslationFor(FormScannerTranslationKeys.RENAME_FILE_FRAME_TITLE)
-				+ ": " + fileName);
-		fileNameField.setText(FilenameUtils.removeExtension(fileName));
-		fileExtensionField.setText('.' + FilenameUtils.getExtension(fileName));
-		fileNameField.selectAll();
-	}
+    private void updateRenamedFile(String fileName) {
+        setTitle(FormScannerTranslation
+                .getTranslationFor(FormScannerTranslationKeys.RENAME_FILE_FRAME_TITLE)
+                + ": " + fileName);
+        fileNameField.setText(FilenameUtils.removeExtension(fileName));
+        fileExtensionField.setText('.' + FilenameUtils.getExtension(fileName));
+        fileNameField.selectAll();
+    }
 
-	public String getNewFileName() {
-		String fileName = fileNameField.getText()
-				+ fileExtensionField.getText();
-		return fileName;
-	}
+    public String getNewFileName() {
+        String fileName = fileNameField.getText()
+                + fileExtensionField.getText();
+        return fileName;
+    }
 
-	private JPanel getRenamePanel() {
-		fileNameField = new TextFieldBuilder(10, orientation)
-				.withActionListener(renameFileController).build();
+    private JPanel getRenamePanel() {
+        fileNameField = new TextFieldBuilder(10, orientation)
+                .withActionListener(renameFileController).build();
 
-		fileExtensionField = new LabelBuilder(orientation).build();
+        fileExtensionField = new LabelBuilder(orientation).build();
 
-		return new PanelBuilder(orientation)
-				.withLayout(new SpringLayout()).add(getLabel(FormScannerTranslationKeys.RENAME_FILE_FRAME_LABEL))
-				.add(fileNameField).add(fileExtensionField).withGrid(1, 3).build();
-	}
+        return new PanelBuilder(orientation)
+                .withLayout(new SpringLayout()).add(getLabel(FormScannerTranslationKeys.RENAME_FILE_FRAME_LABEL))
+                .add(fileNameField).add(fileExtensionField).withGrid(1, 3).build();
+    }
 
-	private JLabel getLabel(String value) {
-		return new LabelBuilder(FormScannerTranslation.getTranslationFor(value)
-				+ ": ", orientation).build();
-	}
+    private JLabel getLabel(String value) {
+        return new LabelBuilder(FormScannerTranslation.getTranslationFor(value)
+                + ": ", orientation).build();
+    }
 
-	private JPanel getButtonPanel() {
-		okButton = new ButtonBuilder(orientation)
-				.withText(
-						FormScannerTranslation
-								.getTranslationFor(FormScannerTranslationKeys.OK_BUTTON))
-				.setEnabled(false)
-				.withActionCommand(FormScannerConstants.RENAME_FILES_CURRENT)
-				.withActionListener(renameFileController).build();
+    private JPanel getButtonPanel() {
+        okButton = new ButtonBuilder(orientation)
+                .withText(
+                        FormScannerTranslation
+                        .getTranslationFor(FormScannerTranslationKeys.OK_BUTTON))
+                .setEnabled(false)
+                .withActionCommand(FormScannerConstants.RENAME_FILES_CURRENT)
+                .withActionListener(renameFileController).build();
 
-		cancelButton = new ButtonBuilder(orientation)
-				.withText(
-						FormScannerTranslation
-								.getTranslationFor(FormScannerTranslationKeys.CANCEL_BUTTON))
-				.withActionCommand(FormScannerConstants.RENAME_FILES_SKIP)
-				.withActionListener(renameFileController).build();
+        cancelButton = new ButtonBuilder(orientation)
+                .withText(
+                        FormScannerTranslation
+                        .getTranslationFor(FormScannerTranslationKeys.CANCEL_BUTTON))
+                .withActionCommand(FormScannerConstants.RENAME_FILES_SKIP)
+                .withActionListener(renameFileController).build();
 
-		JPanel innerPanel = new PanelBuilder(orientation)
-				.withLayout(new SpringLayout()).add(okButton).add(cancelButton)
-				.withGrid(1, 2).build();
+        JPanel innerPanel = new PanelBuilder(orientation)
+                .withLayout(new SpringLayout()).add(okButton).add(cancelButton)
+                .withGrid(1, 2).build();
 
-		return new PanelBuilder(orientation).withLayout(new BorderLayout())
-				.add(innerPanel, BorderLayout.EAST).build();
-	}
+        return new PanelBuilder(orientation).withLayout(new BorderLayout())
+                .add(innerPanel, BorderLayout.EAST).build();
+    }
 }
