@@ -10,3 +10,4 @@ formscanner-distribution/.classpath
 formscanner-distribution/.settings
 formscanner-distribution/.project
 syntax: glob
+formscanner-main/nbactions.xml

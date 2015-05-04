@@ -824,8 +824,7 @@ public class FormScannerModel {
 								.append("rundll32   url.dll,FileProtocolHandler ")
 								.append(url).toString());
 			} else {
-				String browsers[] = { "firefox", "opera", "konqueror",
-						"epiphany", "mozilla", "netscape" };
+				String browsers[] = {"firefox", "opera", "konqueror", "epiphany", "mozilla", "netscape", "safari"};
 				String browser = null;
 				for (int i = 0; i < browsers.length && browser == null; i++) {
 					if (Runtime.getRuntime()
