@@ -729,8 +729,9 @@ public class FormTemplate {
 	public void findCorners(BufferedImage image, int threshold, int density) {
 		height = image.getHeight();
 		width = image.getWidth();
-
-		ExecutorService threadPool = Executors.newFixedThreadPool(4);
+                int cores = Runtime.getRuntime().availableProcessors();
+                
+		ExecutorService threadPool = Executors.newFixedThreadPool(cores-1);
 		HashMap<Corners, Future<FormPoint>> cornerDetectorThreads = new HashMap<Corners, Future<FormPoint>>();
 
 		for (Corners position : Corners.values()) {
@@ -760,7 +761,7 @@ public class FormTemplate {
 	 * <ul>
 	 * <li>threshold: is the value of the RGB components beyond which the pixels
 	 * are considered "blacks", for example, if Threshold = 127 the software
-	 * considers as blacks all pixels whose value is less than 127, if the pixel
+	 * considers as blacks all pixels whose value is less than 127, if the pi xel
 	 * value is greater than or equal to 127 then it is considered as white.
 	 * <li>density: is the amount (in percentage) of black pixels (determined as
 	 * described above) that must be present in the bubble in order to identify
@@ -780,8 +781,9 @@ public class FormTemplate {
 			int size) {
 		height = image.getHeight();
 		width = image.getWidth();
-
-		ExecutorService threadPool = Executors.newFixedThreadPool(8);
+                int cores = Runtime.getRuntime().availableProcessors();
+                
+		ExecutorService threadPool = Executors.newFixedThreadPool(cores-1);
 		HashSet<Future<HashMap<String, FormQuestion>>> fieldDetectorThreads = new HashSet<Future<HashMap<String, FormQuestion>>>();
 
 		HashMap<String, FormQuestion> templateFields = template.getFields();
@@ -968,8 +970,9 @@ public class FormTemplate {
 	public void findAreas(BufferedImage image) {
 		height = image.getHeight();
 		width = image.getWidth();
+                int cores  = Runtime.getRuntime().availableProcessors();
 		
-		ExecutorService threadPool = Executors.newFixedThreadPool(8);
+		ExecutorService threadPool = Executors.newFixedThreadPool(cores-1);
 		HashSet<Future<HashMap<String, FormArea>>> barcodeDetectorThreads = new HashSet<Future<HashMap<String, FormArea>>>();
 		
 		HashMap<String, FormArea> barcodeFields = template.getAreas();
