@@ -76,15 +76,6 @@ public final class MenuBar extends JMenuBar implements MenuView {
                         .getMnemonicFor(FormScannerTranslationKeys.OPEN_IMAGES_MNEMONIC))
                 .build();
 
-		// saveMenuItem = new
-        // MenuItemBuilder(FormScannerTranslation.getTranslationFor(FormScannerTranslationKeys.SAVE_RESULTS))
-        // .withActionCommand(FormScannerConstants.SAVE_RESULTS)
-        // .withActionListener(formScannerController)
-        // .withMnemonic(FormScannerTranslation.getMnemonicFor(FormScannerTranslationKeys.SAVE_RESULTS_MNEMONIC))
-        // .withAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S,
-        // InputEvent.CTRL_MASK))
-        // .setEnabled(false)
-        // .build();
         exitMenuItem = new MenuItemBuilder(
                 FormScannerTranslation
                 .getTranslationFor(FormScannerTranslationKeys.EXIT), orientation)
@@ -104,7 +95,6 @@ public final class MenuBar extends JMenuBar implements MenuView {
                         FormScannerTranslation
                         .getMnemonicFor(FormScannerTranslationKeys.FILE_MENU_MNEMONIC))
                 .add(openMenuItem)
-                // .add(saveMenuItem)
                 .add(new JSeparator(JSeparator.HORIZONTAL)).add(exitMenuItem)
                 .build();
     }
@@ -187,14 +177,7 @@ public final class MenuBar extends JMenuBar implements MenuView {
                 .withAccelerator(
                         KeyStroke.getKeyStroke(KeyEvent.VK_L,
                                 InputEvent.CTRL_MASK)).build();
-		// editTemplateMenuItem = new
-        // MenuItemBuilder(FormScannerTranslation.getTranslationFor(FormScannerTranslationKeys.EDIT_TEMPLATE))
-        // .withActionCommand(FormScannerConstants.EDIT_TEMPLATE)
-        // .withActionListener(formScannerController)
-        // .withMnemonic(FormScannerTranslation.getMnemonicFor(FormScannerTranslationKeys.EDIT_TEMPLATE_MNEMONIC))
-        // .withAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_E,
-        // InputEvent.CTRL_MASK))
-        // .build();
+
 
         return new MenuBuilder(
                 FormScannerTranslation
@@ -203,7 +186,6 @@ public final class MenuBar extends JMenuBar implements MenuView {
                         FormScannerTranslation
                         .getMnemonicFor(FormScannerTranslationKeys.TEMPLATE_MENU_MNEMONIC))
                 .add(createTemplateMenuItem)
-                // .add(editTemplateMenuItem)
                 .add(new JSeparator(JSeparator.HORIZONTAL))
                 .add(loadTemplateMenuItem).build();
 
