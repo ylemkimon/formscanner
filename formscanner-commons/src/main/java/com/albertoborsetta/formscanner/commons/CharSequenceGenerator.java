@@ -5,7 +5,7 @@ import com.google.common.collect.AbstractIterator;
 public class CharSequenceGenerator extends AbstractIterator<String> {
 	private int now = -1;
 	private String prefix = "";
-	private static char[] vs;
+	private static final char[] vs;
 	static {
 		vs = new char['Z' - 'A' + 1];
 		for (char i = 'A'; i <= 'Z'; i++)

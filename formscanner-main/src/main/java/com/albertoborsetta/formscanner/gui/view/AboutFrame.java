@@ -33,136 +33,136 @@ import com.albertoborsetta.formscanner.gui.model.FormScannerModel;
 
 public class AboutFrame extends InternalFrame {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	private AboutFrameController aboutFrameController;
+    /**
+     *
+     */
+    private static final long serialVersionUID = 1L;
+    private AboutFrameController aboutFrameController;
 
-	/**
-	 * Create the frame.
-	 */
-	public AboutFrame(FormScannerModel model) {
-		super(model);
+    /**
+     * Create the frame.
+     */
+    public AboutFrame(FormScannerModel model) {
+        super(model);
 
-		aboutFrameController = new AboutFrameController(this.model);
-		aboutFrameController.add(this);
+        aboutFrameController = new AboutFrameController(this.model);
+        aboutFrameController.add(this);
 
-		setName(Frame.ABOUT_FRAME.name());
-		setTitle(FormScannerTranslation
-				.getTranslationFor(FormScannerTranslationKeys.ABOUT_FRAME_TITLE));
-		setBounds(model.getLastPosition(Frame.ABOUT_FRAME));
-		setMinimumSize(new Dimension(300, 500));
-		setResizable(false);
+        setName(Frame.ABOUT_FRAME.name());
+        setTitle(FormScannerTranslation
+                .getTranslationFor(FormScannerTranslationKeys.ABOUT_FRAME_TITLE));
+        setBounds(model.getLastPosition(Frame.ABOUT_FRAME));
+        setMinimumSize(new Dimension(300, 500));
+        setResizable(false);
 
-		JPanel aboutPanel = getAboutPanel();
-		JPanel licensePanel = getLicensePanel();
-		JPanel buttonPanel = getButtonPanel();
+        JPanel aboutPanel = getAboutPanel();
+        JPanel licensePanel = getLicensePanel();
+        JPanel buttonPanel = getButtonPanel();
 
-		JTabbedPane tabbedPane = new TabbedPaneBuilder(JTabbedPane.TOP, orientation)
-				.addTab(FormScannerTranslation
-						.getTranslationFor(FormScannerTranslationKeys.ABOUT_TAB_NAME),
-						aboutPanel)
-				.addTab(FormScannerTranslation
-						.getTranslationFor(FormScannerTranslationKeys.LICENSE_TAB_NAME),
-						licensePanel).build();
-		getContentPane().add(tabbedPane, BorderLayout.CENTER);
-		getContentPane().add(buttonPanel, BorderLayout.SOUTH);
+        JTabbedPane tabbedPane = new TabbedPaneBuilder(JTabbedPane.TOP, orientation)
+                .addTab(FormScannerTranslation
+                        .getTranslationFor(FormScannerTranslationKeys.ABOUT_TAB_NAME),
+                        aboutPanel)
+                .addTab(FormScannerTranslation
+                        .getTranslationFor(FormScannerTranslationKeys.LICENSE_TAB_NAME),
+                        licensePanel).build();
+        getContentPane().add(tabbedPane, BorderLayout.CENTER);
+        getContentPane().add(buttonPanel, BorderLayout.SOUTH);
 
-		tabbedPane.setEnabledAt(1, true);
-	}
+        tabbedPane.setEnabledAt(1, true);
+    }
 
-	private JPanel getLicensePanel() {
-		JScrollPane licenseTextPanel = getLiceseTextPanel();
+    private JPanel getLicensePanel() {
+        JScrollPane licenseTextPanel = getLiceseTextPanel();
 
-		return new PanelBuilder(orientation).withLayout(new BorderLayout())
-				.addComponent(licenseTextPanel, BorderLayout.CENTER).build();
-	}
+        return new PanelBuilder(orientation).withLayout(new BorderLayout())
+                .addComponent(licenseTextPanel, BorderLayout.CENTER).build();
+    }
 
-	private JScrollPane getLiceseTextPanel() {
-		JTextArea textArea = new JTextArea(300, 500);
-		textArea.setEditable(false);
-		textArea.setTabSize(4);
-		textArea.getCaret().setDot(0);
-		textArea.setLineWrap(true);
-		textArea.setWrapStyleWord(true);
-		textArea.setEnabled(true);
+    private JScrollPane getLiceseTextPanel() {
+        JTextArea textArea = new JTextArea(300, 500);
+        textArea.setEditable(false);
+        textArea.setTabSize(4);
+        textArea.getCaret().setDot(0);
+        textArea.setLineWrap(true);
+        textArea.setWrapStyleWord(true);
+        textArea.setEnabled(true);
 
-		JScrollPane scrollPane = new JScrollPane(textArea);
-		scrollPane.setPreferredSize(new Dimension(400, 300));
-		scrollPane.setAlignmentX(Component.CENTER_ALIGNMENT);
-		scrollPane.setAlignmentY(Component.TOP_ALIGNMENT);
+        JScrollPane scrollPane = new JScrollPane(textArea);
+        scrollPane.setPreferredSize(new Dimension(400, 300));
+        scrollPane.setAlignmentX(Component.CENTER_ALIGNMENT);
+        scrollPane.setAlignmentY(Component.TOP_ALIGNMENT);
 
-		String licenseText = "";
-		try {
-			File license = FormScannerResources.getLicense();
-			FileReader fileReader;
-			fileReader = new FileReader(license);
-			BufferedReader reader = new BufferedReader(fileReader);
+        String licenseText = "";
+        try {
+            File license = FormScannerResources.getLicense();
+            FileReader fileReader;
+            fileReader = new FileReader(license);
+            BufferedReader reader = new BufferedReader(fileReader);
 
-			String temp;
-			while ((temp = reader.readLine()) != null) {
-				licenseText += temp + "\n";
-			}
+            String temp;
+            while ((temp = reader.readLine()) != null) {
+                licenseText += temp + "\n";
+            }
 
-			reader.close();
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+            reader.close();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
-		textArea.append(licenseText);
-		textArea.getCaret().setDot(0);
+        textArea.append(licenseText);
+        textArea.getCaret().setDot(0);
 
-		return scrollPane;
-	}
+        return scrollPane;
+    }
 
-	private JPanel getAboutPanel() {
-		JLabel logo = new JLabel(
-				FormScannerResources
-						.getIconFor(FormScannerResourcesKeys.FORMSCANNER_SPLASH));
+    private JPanel getAboutPanel() {
+        JLabel logo = new JLabel(
+                FormScannerResources
+                .getIconFor(FormScannerResourcesKeys.FORMSCANNER_SPLASH));
 
-		JScrollPane aboutTextPanel = getAboutTextPanel();
+        JScrollPane aboutTextPanel = getAboutTextPanel();
 
-		return new PanelBuilder(orientation).withLayout(new BorderLayout())
-				.withBackgroundColor(Color.white)
-				.addComponent(logo, BorderLayout.CENTER)
-				.addComponent(aboutTextPanel, BorderLayout.SOUTH).build();
-	}
+        return new PanelBuilder(orientation).withLayout(new BorderLayout())
+                .withBackgroundColor(Color.white)
+                .addComponent(logo, BorderLayout.CENTER)
+                .addComponent(aboutTextPanel, BorderLayout.SOUTH).build();
+    }
 
-	private JScrollPane getAboutTextPanel() {
-		JEditorPane text = new JEditorPane();
-		text.setAlignmentX(Component.CENTER_ALIGNMENT);
-		text.setAlignmentY(Component.TOP_ALIGNMENT);
-		text.setContentType("text/html");
-		text.setOpaque(true);
-		text.addHyperlinkListener(aboutFrameController);
-		text.setText(FormScannerTranslation
-				.getTranslationFor(FormScannerTranslationKeys.ABOUT_TEXT));
-		text.setEditable(false);
-		
-		JScrollPane scrollPane = new JScrollPane(text);
-		scrollPane.setPreferredSize(new Dimension(400, 300));
+    private JScrollPane getAboutTextPanel() {
+        JEditorPane text = new JEditorPane();
+        text.setAlignmentX(Component.CENTER_ALIGNMENT);
+        text.setAlignmentY(Component.TOP_ALIGNMENT);
+        text.setContentType("text/html");
+        text.setOpaque(true);
+        text.addHyperlinkListener(aboutFrameController);
+        text.setText(FormScannerTranslation
+                .getTranslationFor(FormScannerTranslationKeys.ABOUT_TEXT));
+        text.setEditable(false);
 
-		return scrollPane;
-	}
+        JScrollPane scrollPane = new JScrollPane(text);
+        scrollPane.setPreferredSize(new Dimension(400, 300));
 
-	private JPanel getButtonPanel() {
-		JButton okButton = new ButtonBuilder(orientation)
-				.withText(
-						FormScannerTranslation
-								.getTranslationFor(FormScannerTranslationKeys.OK_BUTTON))
-				.withToolTip(
-						FormScannerTranslation
-								.getTranslationFor(FormScannerTranslationKeys.OK_BUTTON_TOOLTIP))
-				.withActionCommand(FormScannerConstants.CONFIRM)
-				.withActionListener(aboutFrameController).setEnabled(true)
-				.build();
+        return scrollPane;
+    }
 
-		JPanel innerButtonPanel = new PanelBuilder(orientation).withLayout(new SpringLayout())
-				.addComponent(okButton).withGrid(1, 1).build();
+    private JPanel getButtonPanel() {
+        JButton okButton = new ButtonBuilder(orientation)
+                .withText(
+                        FormScannerTranslation
+                        .getTranslationFor(FormScannerTranslationKeys.OK_BUTTON))
+                .withToolTip(
+                        FormScannerTranslation
+                        .getTranslationFor(FormScannerTranslationKeys.OK_BUTTON_TOOLTIP))
+                .withActionCommand(FormScannerConstants.CONFIRM)
+                .withActionListener(aboutFrameController).setEnabled(true)
+                .build();
 
-		return new PanelBuilder(orientation).withLayout(new BorderLayout()).add(innerButtonPanel, BorderLayout.EAST).build();
-	}
+        JPanel innerButtonPanel = new PanelBuilder(orientation).withLayout(new SpringLayout())
+                .addComponent(okButton).withGrid(1, 1).build();
+
+        return new PanelBuilder(orientation).withLayout(new BorderLayout()).add(innerButtonPanel, BorderLayout.EAST).build();
+    }
 }

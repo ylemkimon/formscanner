@@ -36,260 +36,260 @@ import com.albertoborsetta.formscanner.commons.translation.FormScannerTranslatio
 
 public class FormFileUtils extends JFileChooser {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	private static FormFileUtils instance;
+    /**
+     *
+     */
+    private static final long serialVersionUID = 1L;
+    private static FormFileUtils instance;
 
-	public static FormFileUtils getInstance(Locale locale) {
-		if (instance == null) {
-			instance = new FormFileUtils(locale);
-		}
-		return instance;
-	}
+    public static FormFileUtils getInstance(Locale locale) {
+        if (instance == null) {
+            instance = new FormFileUtils(locale);
+        }
+        return instance;
+    }
 
-	private FormFileUtils(Locale locale) {
-		super();
-		setFont(FormScannerFont.getFont());
-		setLocale(locale);
-		updateUI();
-	}
+    private FormFileUtils(Locale locale) {
+        super();
+        setFont(FormScannerFont.getFont());
+        setLocale(locale);
+        updateUI();
+    }
 
-	private File chooseFile() {
-		File file = null;
-		int returnValue = showOpenDialog(null);
+    private File chooseFile() {
+        File file = null;
+        int returnValue = showOpenDialog(null);
 
-		if (returnValue == JFileChooser.APPROVE_OPTION) {
-			file = getSelectedFile();
-		}
-		return file;
-	}
+        if (returnValue == JFileChooser.APPROVE_OPTION) {
+            file = getSelectedFile();
+        }
+        return file;
+    }
 
-	private File[] chooseFiles() {
-		File[] files = null;
-		int returnValue = showOpenDialog(null);
+    private File[] chooseFiles() {
+        File[] files = null;
+        int returnValue = showOpenDialog(null);
 
-		if (returnValue == JFileChooser.APPROVE_OPTION) {
-			files = getSelectedFiles();
-		}
-		return files;
-	}
+        if (returnValue == JFileChooser.APPROVE_OPTION) {
+            files = getSelectedFiles();
+        }
+        return files;
+    }
 
-	public File[] chooseImages() {
-		setMultiSelectionEnabled(true);
-		setImagesFilter();
-		return chooseFiles();
-	}
+    public File[] chooseImages() {
+        setMultiSelectionEnabled(true);
+        setImagesFilter();
+        return chooseFiles();
+    }
 
-	public File chooseImage() {
-		setMultiSelectionEnabled(false);
-		setImagesFilter();
-		return chooseFile();
-	}
+    public File chooseImage() {
+        setMultiSelectionEnabled(false);
+        setImagesFilter();
+        return chooseFile();
+    }
 
-	public File chooseTemplate() {
-		setMultiSelectionEnabled(false);
-		setTemplateFilter();
-		return chooseFile();
-	}
+    public File chooseTemplate() {
+        setMultiSelectionEnabled(false);
+        setTemplateFilter();
+        return chooseFile();
+    }
 
-	private void setImagesFilter() {
-		resetChoosableFileFilters();
+    private void setImagesFilter() {
+        resetChoosableFileFilters();
 
-		// Creating a set for preveting duplication of entries
-		ArrayList<String> setOfExtensions = new ArrayList<String>();
-		// Iterating all possible image suffixes the current jvm can open
-		for (String suffix : ImageIO.getReaderFileSuffixes()) {
-			if (StringUtils.isNotBlank(suffix)) {
-				setFileFilter(new FileNameExtensionFilter(
-						FormScannerTranslation.getTranslationFor(suffix + ".images"),
-						suffix));
-				setOfExtensions.add(suffix);
-			}
-		}
+        // Creating a set for preveting duplication of entries
+        ArrayList<String> setOfExtensions = new ArrayList<>();
+        // Iterating all possible image suffixes the current jvm can open
+        for (String suffix : ImageIO.getReaderFileSuffixes()) {
+            if (StringUtils.isNotBlank(suffix)) {
+                setFileFilter(new FileNameExtensionFilter(
+                        FormScannerTranslation.getTranslationFor(suffix + ".images"),
+                        suffix));
+                setOfExtensions.add(suffix);
+            }
+        }
 
 		// Creating "all images" file filter (the one which opens any supported
-		// image type)
-		String[] arrayOfExtensions = new String[setOfExtensions.size()];
-		arrayOfExtensions = setOfExtensions.toArray(arrayOfExtensions);
-		FileNameExtensionFilter allImagesFilter = new FileNameExtensionFilter(
-				FormScannerTranslation
-						.getTranslationFor(FormScannerTranslationKeys.ALL_IMAGES),
-						arrayOfExtensions);
-		setFileFilter(allImagesFilter);
-	}
+        // image type)
+        String[] arrayOfExtensions = new String[setOfExtensions.size()];
+        arrayOfExtensions = setOfExtensions.toArray(arrayOfExtensions);
+        FileNameExtensionFilter allImagesFilter = new FileNameExtensionFilter(
+                FormScannerTranslation
+                .getTranslationFor(FormScannerTranslationKeys.ALL_IMAGES),
+                arrayOfExtensions);
+        setFileFilter(allImagesFilter);
+    }
 
-	private void setTemplateFilter() {
-		resetChoosableFileFilters();
-		FileNameExtensionFilter templateFilter = new FileNameExtensionFilter(
-				FormScannerTranslation
-						.getTranslationFor(FormScannerTranslationKeys.TEMPLATE_FILE),
-				"xtmpl");
-		setFileFilter(templateFilter);
-	}
+    private void setTemplateFilter() {
+        resetChoosableFileFilters();
+        FileNameExtensionFilter templateFilter = new FileNameExtensionFilter(
+                FormScannerTranslation
+                .getTranslationFor(FormScannerTranslationKeys.TEMPLATE_FILE),
+                "xtmpl");
+        setFileFilter(templateFilter);
+    }
 
-	private void setCsvFilter() {
-		resetChoosableFileFilters();
-		FileNameExtensionFilter templateFilter = new FileNameExtensionFilter(
-				FormScannerTranslation
-						.getTranslationFor(FormScannerTranslationKeys.CSV_FILE),
-				"csv");
-		setFileFilter(templateFilter);
-	}
+    private void setCsvFilter() {
+        resetChoosableFileFilters();
+        FileNameExtensionFilter templateFilter = new FileNameExtensionFilter(
+                FormScannerTranslation
+                .getTranslationFor(FormScannerTranslationKeys.CSV_FILE),
+                "csv");
+        setFileFilter(templateFilter);
+    }
 
-	private File saveTemplateAs(File file, Document doc, boolean notify) {
-		try {
-			TransformerFactory transformerFactory = TransformerFactory
-					.newInstance();
-			Transformer transformer = transformerFactory.newTransformer();
-			transformer.setOutputProperty(OutputKeys.INDENT, "yes");
-			transformer.setOutputProperty(OutputKeys.METHOD, "xml");
-			transformer.setOutputProperty(
-					"{http://xml.apache.org/xslt}indent-amount", "4");
-			transformer.setOutputProperty(OutputKeys.ENCODING, "UTF-8");
-			DOMSource source = new DOMSource(doc);
+    private File saveTemplateAs(File file, Document doc, boolean notify) {
+        try {
+            TransformerFactory transformerFactory = TransformerFactory
+                    .newInstance();
+            Transformer transformer = transformerFactory.newTransformer();
+            transformer.setOutputProperty(OutputKeys.INDENT, "yes");
+            transformer.setOutputProperty(OutputKeys.METHOD, "xml");
+            transformer.setOutputProperty(
+                    "{http://xml.apache.org/xslt}indent-amount", "4");
+            transformer.setOutputProperty(OutputKeys.ENCODING, "UTF-8");
+            DOMSource source = new DOMSource(doc);
 
-			setMultiSelectionEnabled(false);
-			setTemplateFilter();
-			setSelectedFile(file);
+            setMultiSelectionEnabled(false);
+            setTemplateFilter();
+            setSelectedFile(file);
 
-			if (notify) {
-				int returnValue = showSaveDialog(null);
-				if (returnValue == JFileChooser.APPROVE_OPTION) {
-					file = getSelectedFile();
-					FileOutputStream fos = new FileOutputStream(file);
-					OutputStreamWriter out = new OutputStreamWriter(fos,
-							Charset.forName("UTF-8"));
-					StreamResult result = new StreamResult(out);
-					transformer.transform(source, result);
-				}
-			} else {
-				FileOutputStream fos = new FileOutputStream(file);
-				OutputStreamWriter out = new OutputStreamWriter(fos,
-						Charset.forName("UTF-8"));
-				StreamResult result = new StreamResult(out);
-				transformer.transform(source, result);
-			}
-		} catch (TransformerException e) {
-			e.printStackTrace();
-		} catch (IOException e1) {
-			e1.printStackTrace();
-		}
-		return file;
-	}
+            if (notify) {
+                int returnValue = showSaveDialog(null);
+                if (returnValue == JFileChooser.APPROVE_OPTION) {
+                    file = getSelectedFile();
+                    FileOutputStream fos = new FileOutputStream(file);
+                    OutputStreamWriter out = new OutputStreamWriter(fos,
+                            Charset.forName("UTF-8"));
+                    StreamResult result = new StreamResult(out);
+                    transformer.transform(source, result);
+                }
+            } else {
+                FileOutputStream fos = new FileOutputStream(file);
+                OutputStreamWriter out = new OutputStreamWriter(fos,
+                        Charset.forName("UTF-8"));
+                StreamResult result = new StreamResult(out);
+                transformer.transform(source, result);
+            }
+        } catch (TransformerException e) {
+            e.printStackTrace();
+        } catch (IOException e1) {
+            e1.printStackTrace();
+        }
+        return file;
+    }
 
-	public File saveCsvAs(File file, HashMap<String, FormTemplate> filledForms, boolean notify) {
-		String aKey = (String) filledForms.keySet().toArray()[0];
-		FormTemplate aForm = filledForms.get(aKey);
-		String[] header = getHeader(aForm);
-		ArrayList<HashMap<String, String>> results = getResults(filledForms,
-				header);
+    public File saveCsvAs(File file, HashMap<String, FormTemplate> filledForms, boolean notify) {
+        String aKey = (String) filledForms.keySet().toArray()[0];
+        FormTemplate aForm = filledForms.get(aKey);
+        String[] header = getHeader(aForm);
+        ArrayList<HashMap<String, String>> results = getResults(filledForms,
+                header);
 
-		ICsvMapWriter mapWriter = null;
-		try {
-			try {
-				if (notify) {
-				setMultiSelectionEnabled(false);
-				setCsvFilter();
-				setSelectedFile(file);
+        ICsvMapWriter mapWriter = null;
+        try {
+            try {
+                if (notify) {
+                    setMultiSelectionEnabled(false);
+                    setCsvFilter();
+                    setSelectedFile(file);
 
-				int returnValue = showSaveDialog(null);
-				if (returnValue == JFileChooser.APPROVE_OPTION) {
-					file = getSelectedFile();
-					FileOutputStream fos = new FileOutputStream(file);
-					OutputStreamWriter out = new OutputStreamWriter(fos, Charset.forName("UTF-8"));
-					mapWriter = new CsvMapWriter(out, CsvPreference.EXCEL_NORTH_EUROPE_PREFERENCE);
-					mapWriter.writeHeader(header);
+                    int returnValue = showSaveDialog(null);
+                    if (returnValue == JFileChooser.APPROVE_OPTION) {
+                        file = getSelectedFile();
+                        FileOutputStream fos = new FileOutputStream(file);
+                        OutputStreamWriter out = new OutputStreamWriter(fos, Charset.forName("UTF-8"));
+                        mapWriter = new CsvMapWriter(out, CsvPreference.EXCEL_NORTH_EUROPE_PREFERENCE);
+                        mapWriter.writeHeader(header);
 
-					for (HashMap<String, String> result : results) {
-						mapWriter.write(result, header);
-					}
-				} 
-				} else {
-					FileOutputStream fos = new FileOutputStream(file);
-					OutputStreamWriter out = new OutputStreamWriter(fos, Charset.forName("UTF-8"));
-					mapWriter = new CsvMapWriter(out, CsvPreference.EXCEL_NORTH_EUROPE_PREFERENCE);
-					mapWriter.writeHeader(header);
+                        for (HashMap<String, String> result : results) {
+                            mapWriter.write(result, header);
+                        }
+                    }
+                } else {
+                    FileOutputStream fos = new FileOutputStream(file);
+                    OutputStreamWriter out = new OutputStreamWriter(fos, Charset.forName("UTF-8"));
+                    mapWriter = new CsvMapWriter(out, CsvPreference.EXCEL_NORTH_EUROPE_PREFERENCE);
+                    mapWriter.writeHeader(header);
 
-					for (HashMap<String, String> result : results) {
-						mapWriter.write(result, header);
-					}
-				}
-			} finally {
-				if (mapWriter != null) {
-					mapWriter.close();
-				}
-			}
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		return file;
-	}
+                    for (HashMap<String, String> result : results) {
+                        mapWriter.write(result, header);
+                    }
+                }
+            } finally {
+                if (mapWriter != null) {
+                    mapWriter.close();
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return file;
+    }
 
-	private ArrayList<HashMap<String, String>> getResults(
-			HashMap<String, FormTemplate> filledForms, String[] header) {
-		ArrayList<HashMap<String, String>> results = new ArrayList<HashMap<String, String>>();
-		for (Entry<String, FormTemplate> filledForm : filledForms.entrySet()) {
-			FormTemplate form = filledForm.getValue();
-			HashMap<String, FormQuestion> fields = form.getFields();
-			HashMap<String, FormArea> areas = form.getAreas();
+    private ArrayList<HashMap<String, String>> getResults(
+            HashMap<String, FormTemplate> filledForms, String[] header) {
+        ArrayList<HashMap<String, String>> results = new ArrayList<>();
+        for (Entry<String, FormTemplate> filledForm : filledForms.entrySet()) {
+            FormTemplate form = filledForm.getValue();
+            HashMap<String, FormQuestion> fields = form.getFields();
+            HashMap<String, FormArea> areas = form.getAreas();
 
-			HashMap<String, String> result = new HashMap<String, String>();
-			result.put(header[0], filledForm.getKey());
-			
-			for (int i = 1; i < header.length; i++) {
-				FormQuestion field = fields.get(header[i]);
-				if (field != null) {
-					result.put(header[i], field.getValues());
-				} else {
-					FormArea area = areas.get(header[i]);
-					result.put(header[i], area.getText());
-				}
-			}
+            HashMap<String, String> result = new HashMap<>();
+            result.put(header[0], filledForm.getKey());
 
-			results.add(result);
-		}
-		return results;
-	}
+            for (int i = 1; i < header.length; i++) {
+                FormQuestion field = fields.get(header[i]);
+                if (field != null) {
+                    result.put(header[i], field.getValues());
+                } else {
+                    FormArea area = areas.get(header[i]);
+                    result.put(header[i], area.getText());
+                }
+            }
 
-	public String[] getHeader(FormTemplate template) {
-		HashMap<String, FormQuestion> fields = template.getFields();
-		HashMap<String, FormArea> areas = template.getAreas();
-		String[] header = new String[fields.size() + areas.size() + 1];
-		int i = 0;
-		try {
-			header[i++] = FormScannerTranslation.getTranslationFor(FormScannerTranslationKeys.FIRST_CSV_COLUMN);
-		} catch (Exception e) {
-			header[i] = StringUtils.EMPTY;
-		}
+            results.add(result);
+        }
+        return results;
+    }
 
-		ArrayList<String> fieldKeys = new ArrayList<String>(fields.keySet());
-		Collections.sort(fieldKeys);
-		for (String fieldKey : fieldKeys) {
-			header[i++] = fieldKey;
-		}
-		
-		ArrayList<String> areaKeys = new ArrayList<String>(areas.keySet());
-		Collections.sort(areaKeys);
-		for (String areaKey : areaKeys) {
-			header[i++] = areaKey;
-		}
-		
-		return header;
-	}
+    public String[] getHeader(FormTemplate template) {
+        HashMap<String, FormQuestion> fields = template.getFields();
+        HashMap<String, FormArea> areas = template.getAreas();
+        String[] header = new String[fields.size() + areas.size() + 1];
+        int i = 0;
+        try {
+            header[i++] = FormScannerTranslation.getTranslationFor(FormScannerTranslationKeys.FIRST_CSV_COLUMN);
+        } catch (Exception e) {
+            header[i] = StringUtils.EMPTY;
+        }
 
-	public File saveToFile(String path, FormTemplate template, boolean notify) {
-		File outputFile = null;
+        ArrayList<String> fieldKeys = new ArrayList<>(fields.keySet());
+        Collections.sort(fieldKeys);
+        for (String fieldKey : fieldKeys) {
+            header[i++] = fieldKey;
+        }
 
-		try {
-			outputFile = new File(path + template.getName() + ".xtmpl");
-			Document xml = template.getXml();
-			outputFile = saveTemplateAs(outputFile, xml, notify);
-		} catch (ParserConfigurationException e) {
-			e.printStackTrace();
-		}
+        ArrayList<String> areaKeys = new ArrayList<>(areas.keySet());
+        Collections.sort(areaKeys);
+        for (String areaKey : areaKeys) {
+            header[i++] = areaKey;
+        }
 
-		return outputFile;
-	}
+        return header;
+    }
+
+    public File saveToFile(String path, FormTemplate template, boolean notify) {
+        File outputFile = null;
+
+        try {
+            outputFile = new File(path + template.getName() + ".xtmpl");
+            Document xml = template.getXml();
+            outputFile = saveTemplateAs(outputFile, xml, notify);
+        } catch (ParserConfigurationException e) {
+            e.printStackTrace();
+        }
+
+        return outputFile;
+    }
 }
