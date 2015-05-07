@@ -8,6 +8,7 @@ NEW FEATURES
 * Grouping requests
 * Support for Safari browser
 * Support MacOsX systems in installation script
+* Batch execution of FormScanner from command line
 
 FIXES
 ---
