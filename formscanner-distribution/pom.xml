@@ -3,7 +3,7 @@
   <parent>
     <artifactId>formscanner</artifactId>
     <groupId>com.albertoborsetta</groupId>
-    <version>0.11-SNAPSHOT</version>
+    <version>0.12-SNAPSHOT</version>
   </parent>
   <artifactId>formscanner-distribution</artifactId>
   <packaging>pom</packaging>
