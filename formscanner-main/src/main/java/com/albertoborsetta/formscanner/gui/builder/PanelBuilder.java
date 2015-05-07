@@ -109,8 +109,8 @@ public class PanelBuilder {
         } else if (layout instanceof SpringLayout) {
             panel.setLayout((SpringLayout) layout);
 
-            for (int i = 0; i < componentsArray.size(); i++) {
-                panel.add(componentsArray.get(i));
+            for (JComponent component: componentsArray) {
+                panel.add(component);
             }
             SpringUtilities.makeCompactGrid(panel, rows, cols, 3, 3, 3, 3);
         }
