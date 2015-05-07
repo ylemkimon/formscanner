@@ -36,7 +36,7 @@ sleep 1
 
 sleep 1
 echo "#!/bin/sh" > $INSTALL_DIR/bin/run.sh
-echo "$JAVA_PATH -jar -DFormScanner_HOME=$INSTALL_DIR -DFormScanner_VERSION=0.11.0 $FS_EXECUTABLE" >> $INSTALL_DIR/bin/run.sh
+echo "$JAVA_PATH -jar -DFormScanner_HOME=$INSTALL_DIR -DFormScanner_VERSION=0.11.1-SNAPSHOT $FS_EXECUTABLE" >> $INSTALL_DIR/bin/run.sh
 chmod +x $INSTALL_DIR/bin/run.sh
 echo "Installation finished"
 echo
