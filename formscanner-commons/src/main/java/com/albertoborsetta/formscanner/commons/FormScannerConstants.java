@@ -111,7 +111,7 @@ public class FormScannerConstants extends Constants {
 
 	// Fields Table Columns
     // support
-    public static final String WIKI_PAGE = "http://sourceforge.net/p/formscanner/wiki/Home/";
+    public static final String WIKI_PAGE = "http://www.formscanner.org/forum";
     public static final String THRESHOLD = "THRESHOLD";
     public static final String DENSITY = "DENSITY";
     public static final String SAVE_OPTIONS = "SAVE_OPTIONS";
@@ -138,9 +138,9 @@ public class FormScannerConstants extends Constants {
         ABOUT_FRAME(ABOUT_FRAME_NAME, FormScannerConfigurationKeys.ABOUT_FRAME, ABOUT_FRAME_POSITION),
         DESKTOP_FRAME(DESKTOP_NAME, FormScannerConfigurationKeys.DESKTOP_FRAME, DESKTOP_SIZE);
 
-        private String value;
-        private String key;
-        private Rectangle position;
+        private final String value;
+        private final String key;
+        private final Rectangle position;
 
         private Frame(String value, String key, Rectangle position) {
             this.value = value;
@@ -212,7 +212,7 @@ public class FormScannerConstants extends Constants {
         ZOOM_WIDTH(FormScannerConstants.FIT_WIDTH),
         ZOOM_PAGE(FormScannerConstants.FIT_PAGE);
 
-        private Integer value;
+        private final Integer value;
 
         private Zoom(Integer value) {
             this.value = value;
@@ -234,7 +234,7 @@ public class FormScannerConstants extends Constants {
         SIZE_30(30),
         SIZE_36(36);
 
-        private Integer value;
+        private final Integer value;
 
         private FontSize(Integer value) {
             this.value = value;
@@ -256,9 +256,9 @@ public class FormScannerConstants extends Constants {
         POLISH("pl", FormScannerTranslationKeys.POLISH, POLISH_LANGUAGES),
         GREEK("el", FormScannerTranslationKeys.GREEK, GREEK_LANGUAGES);
 
-        private String value;
-        private String translation;
-        private Set<String> installationLanguages;
+        private final String value;
+        private final String translation;
+        private final Set<String> installationLanguages;
 
         private Language(String value, String translation,
                 Set<String> installationLanguages) {
@@ -288,7 +288,7 @@ public class FormScannerConstants extends Constants {
         MULTIPLE_COLUMN(FormScannerTranslationKeys.MULTIPLE_COLUMN),
         RESPONSES_COLUMN(FormScannerTranslationKeys.RESPONSES_COLUMN);
 
-        private String value;
+        private final String value;
 
         private FieldsTableColumn(String value) {
             this.value = value;
