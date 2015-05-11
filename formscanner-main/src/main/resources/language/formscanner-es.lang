@@ -143,13 +143,13 @@ zoom.fit.width=Ajustar al ancho
 zoom.fit.page=Ajustar a ventana
 
 # added 0.11
-field.type.panel=Field type
-field.orientation=Orientation
-field.properties.rows.number=Number of rows
-field.properties.cols.number=Number of columns
-barcode.label=Barcode/QRCode
-single.question.label=Question label
-set.of.questions.label=Group of questions
-group.column=Group
-responses.by.grid=Responses by rows and columns
-qrcode.barcode=Barcode/QRCode
+field.type.panel=Tipo de campo
+field.orientation=Orientación
+field.properties.rows.number=Número de filas
+field.properties.cols.number=Número de columnas
+barcode.label=Código de barras/Código QR
+single.question.label=Etiqueta de pregunta
+set.of.questions.label=Grupo de preguntas
+group.column=Grupo
+responses.by.grid=Respuestas por filas y columnas
+qrcode.barcode=Código de barras/Código QR
