@@ -25,6 +25,8 @@ import com.albertoborsetta.formscanner.commons.translation.FormScannerTranslatio
 import com.albertoborsetta.formscanner.commons.translation.FormScannerTranslationKeys;
 import com.albertoborsetta.formscanner.gui.builder.ScrollPaneBuilder;
 import com.albertoborsetta.formscanner.gui.model.FormScannerModel;
+import java.util.Collections;
+import java.util.HashMap;
 
 public class ResultsGridFrame extends InternalFrame {
 
@@ -184,13 +186,22 @@ public class ResultsGridFrame extends InternalFrame {
 
     private void setupTable() {
         int i = 1;
-        for (FormQuestion field : form.getFields().values()) {
+        HashMap<String, FormQuestion> fields = form.getFields();
+        ArrayList<String> fieldKeys = new ArrayList<>(fields.keySet());
+        Collections.sort(fieldKeys);
+        for (String fieldKey : fieldKeys) {
+            FormQuestion field = fields.get(fieldKey);
             if (field != null) {
                 table.setValueAt(field.getValues(), i, 1);
             }
             i++;
         }
-        for (FormArea area : form.getAreas().values()) {
+
+        HashMap<String, FormArea> areas = form.getAreas();
+        ArrayList<String> areaKeys = new ArrayList<>(areas.keySet());
+        Collections.sort(areaKeys);
+        for (String areaKey : areaKeys) {
+            FormArea area = areas.get(areaKey);
             if (area != null) {
                 table.setValueAt(area.getText(), i, 1);
             }
