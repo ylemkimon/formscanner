@@ -26,6 +26,7 @@ import org.xml.sax.SAXException;
 
 import com.albertoborsetta.formscanner.api.FormTemplate;
 import com.albertoborsetta.formscanner.commons.FormFileUtils;
+import com.albertoborsetta.formscanner.commons.FormScannerConstants;
 import com.albertoborsetta.formscanner.commons.FormScannerConstants.Frame;
 import com.albertoborsetta.formscanner.commons.translation.FormScannerTranslation;
 import com.albertoborsetta.formscanner.commons.translation.FormScannerTranslationKeys;
@@ -35,6 +36,7 @@ import com.albertoborsetta.formscanner.gui.view.InternalFrame;
 import com.albertoborsetta.formscanner.gui.view.MenuBar;
 import com.albertoborsetta.formscanner.gui.view.ToolBar;
 import javax.swing.UnsupportedLookAndFeelException;
+import org.apache.commons.lang3.StringUtils;
 
 public class FormScanner extends JFrame {
 
@@ -114,7 +116,7 @@ public class FormScanner extends JFrame {
 
         setName(Frame.DESKTOP_FRAME.name());
 
-        setTitle(FormScannerTranslation.getTranslationFor(FormScannerTranslationKeys.FORMSCANNER_MAIN_TITLE));
+        setTitle(StringUtils.replace(FormScannerTranslation.getTranslationFor(FormScannerTranslationKeys.FORMSCANNER_MAIN_TITLE), FormScannerConstants.VERSION_KEY, FormScannerConstants.VERSION));
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         getContentPane().setLayout(new BorderLayout(0, 0));
