@@ -837,6 +837,8 @@ public final class FormTemplate {
                 e.printStackTrace();
             }
         }
+        
+        threadPool.shutdown();
     }
 
     private void calculateRotation() {
@@ -1021,6 +1023,8 @@ public final class FormTemplate {
                 e.printStackTrace();
             }
         }
+        
+        threadPool.shutdown();
     }
 
     private BufferedImage getAreaImage(BufferedImage image, FormArea area) {

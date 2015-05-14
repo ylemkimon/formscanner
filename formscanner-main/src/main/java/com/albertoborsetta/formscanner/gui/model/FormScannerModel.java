@@ -103,27 +103,12 @@ public class FormScannerModel {
     public FormScannerModel(FormScanner view) {
         this.view = view;
 
-        String installPath = StringUtils.defaultIfBlank(
-                System.getProperty("FormScanner_HOME"),
-                System.getenv("FormScanner_HOME"));
-
-        String formScannerVersion = StringUtils.defaultIfBlank(
-                System.getProperty("FormScanner_VERSION"),
-                System.getenv("FormScanner_VERSION"));
+        String installPath = System.getProperty("user.dir");
 
         String installationLanguage = StringUtils.defaultIfBlank(
                 System.getProperty("FormScanner_LANGUAGE"),
                 System.getenv("FormScanner_LANGUAGE"));
 
-        // if ((installPath == null) || (formScannerVersion == null)) {
-        // JOptionPane
-        // .showMessageDialog(
-        // null,
-        // "Error running FormScanner",
-        // "Error running FormScanner: please restart the system or reinstall it",
-        // JOptionPane.ERROR_MESSAGE);
-        // exitFormScanner();
-        // }
         String userHome = System.getProperty("user.home");
         String osName = System.getProperty("os.name");
 
@@ -131,12 +116,12 @@ public class FormScannerModel {
         templatePath = userHome + "/Documents";
 
         if (StringUtils.contains(osName, "Windows")) {
-            propertiesPath = userHome + "/AppData/Local/FormScanner_";
+            propertiesPath = userHome + "/AppData/Local/FormScanner";
         } else {
-            propertiesPath = userHome + "/.FormScanner_";
+            propertiesPath = userHome + "/.FormScanner";
         }
 
-        propertiesPath = propertiesPath + formScannerVersion + "/properties/";
+        propertiesPath = propertiesPath + "/properties/";
 
         configurations = FormScannerConfiguration.getConfiguration(propertiesPath, installPath + "/");
 
@@ -338,7 +323,7 @@ public class FormScannerModel {
                                 filledForm.findAreas(image);
                                 filledForms.put(filledForm.getName(), filledForm);
                             } catch (Exception e) {
-//							e.printStackTrace();
+                                e.printStackTrace();
                             }
 
                         }
@@ -396,7 +381,7 @@ public class FormScannerModel {
                                         Mode.MODIFY_POINTS);
                                 createResultsGridFrame();
                             } catch (Exception e) {
-//							e.printStackTrace();
+                                e.printStackTrace();
                             }
                         } else {
                             Date today = Calendar.getInstance().getTime();
@@ -441,7 +426,7 @@ public class FormScannerModel {
                         createFormImageFrame(image, filledForm, Mode.MODIFY_POINTS);
                         createResultsGridFrame();
                     } catch (Exception e) {
-//					e.printStackTrace();
+                        e.printStackTrace();
                     }
                     break;
                 default:
@@ -538,7 +523,7 @@ public class FormScannerModel {
 
                 view.arrangeFrame(manageTemplateFrame);
             } catch (Exception e) {
-//				e.printStackTrace();
+                e.printStackTrace();
             }
         }
     }

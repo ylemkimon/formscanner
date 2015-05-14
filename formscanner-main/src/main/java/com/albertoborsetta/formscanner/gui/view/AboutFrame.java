@@ -30,6 +30,7 @@ import com.albertoborsetta.formscanner.gui.builder.PanelBuilder;
 import com.albertoborsetta.formscanner.gui.builder.TabbedPaneBuilder;
 import com.albertoborsetta.formscanner.gui.controller.AboutFrameController;
 import com.albertoborsetta.formscanner.gui.model.FormScannerModel;
+import org.apache.commons.lang3.StringUtils;
 
 public class AboutFrame extends InternalFrame {
 
@@ -138,8 +139,8 @@ public class AboutFrame extends InternalFrame {
         text.setContentType("text/html");
         text.setOpaque(true);
         text.addHyperlinkListener(aboutFrameController);
-        text.setText(FormScannerTranslation
-                .getTranslationFor(FormScannerTranslationKeys.ABOUT_TEXT));
+        text.setText(StringUtils.replace(FormScannerTranslation
+                .getTranslationFor(FormScannerTranslationKeys.ABOUT_TEXT), FormScannerConstants.VERSION_KEY, FormScannerConstants.VERSION));
         text.setEditable(false);
 
         JScrollPane scrollPane = new JScrollPane(text);
