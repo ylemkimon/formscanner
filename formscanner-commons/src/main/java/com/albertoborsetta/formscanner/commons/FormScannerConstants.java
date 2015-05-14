@@ -10,7 +10,11 @@ import com.albertoborsetta.formscanner.commons.configuration.FormScannerConfigur
 import com.albertoborsetta.formscanner.commons.translation.FormScannerTranslationKeys;
 
 public class FormScannerConstants extends Constants {
-
+    
+    // Verion
+    public static final String VERSION_KEY = "$VERSION";
+    public static final String VERSION = "0.11.1-SNAPSHOT";
+    
     // Actions
     public static final String RENAME_FILES_FIRST = "RENAME_FILES_FIRST";
     public static final String RENAME_FILES_CURRENT = "RENAME_FILES_CURRENT";
@@ -90,7 +94,7 @@ public class FormScannerConstants extends Constants {
     public static final String INSTALLATION_RUSSIAN = "Russian";
     public static final String INSTALLATION_TURKISH = "T�rk‡e";
 
-    public static final Set<String> ENGLISH_LANGUAGES = new HashSet<String>(Arrays.asList(new String[]{
+    public static final Set<String> ENGLISH_LANGUAGES = new HashSet<>(Arrays.asList(new String[]{
         INSTALLATION_ARABIC,
         INSTALLATION_CHINESE,
         INSTALLATION_ENGLISH,
@@ -101,17 +105,17 @@ public class FormScannerConstants extends Constants {
         INSTALLATION_TURKISH,
         INSTALLATION_SPANISH,
         INSTALLATION_GERMAN}));
-    public static final Set<String> ITALIAN_LANGUAGES = new HashSet<String>(Arrays.asList(new String[]{INSTALLATION_ITALIAN}));
-    public static final Set<String> PORTUGUES_LANGUAGES = new HashSet<String>(Arrays.asList(new String[]{INSTALLATION_PORTUGUES}));
-	// public static final Set<String> SPANISH_LANGUAGES = new HashSet<String> (Arrays.asList(new String[] {INSTALLATION_SPANISH}));
+    public static final Set<String> ITALIAN_LANGUAGES = new HashSet<>(Arrays.asList(new String[]{INSTALLATION_ITALIAN}));
+    public static final Set<String> PORTUGUES_LANGUAGES = new HashSet<>(Arrays.asList(new String[]{INSTALLATION_PORTUGUES}));
+    public static final Set<String> SPANISH_LANGUAGES = new HashSet<> (Arrays.asList(new String[] {INSTALLATION_SPANISH}));
     // public static final Set<String> GERMAN_LANGUAGES = new String[] {INSTALLATION_GERMAN}));
-    public static final Set<String> GREEK_LANGUAGES = new HashSet<String>(Arrays.asList(new String[]{INSTALLATION_GREEK}));
-    public static final Set<String> POLISH_LANGUAGES = new HashSet<String>(Arrays.asList(new String[]{}));
-    public static final Set<String> FARSI_LANGUAGES = new HashSet<String>(Arrays.asList(new String[]{}));
+    public static final Set<String> GREEK_LANGUAGES = new HashSet<>(Arrays.asList(new String[]{INSTALLATION_GREEK}));
+    public static final Set<String> POLISH_LANGUAGES = new HashSet<>(Arrays.asList(new String[]{}));
+    public static final Set<String> FARSI_LANGUAGES = new HashSet<>(Arrays.asList(new String[]{}));
 
 	// Fields Table Columns
     // support
-    public static final String WIKI_PAGE = "http://sourceforge.net/p/formscanner/wiki/Home/";
+    public static final String WIKI_PAGE = "http://www.formscanner.org/forum";
     public static final String THRESHOLD = "THRESHOLD";
     public static final String DENSITY = "DENSITY";
     public static final String SAVE_OPTIONS = "SAVE_OPTIONS";
@@ -138,9 +142,9 @@ public class FormScannerConstants extends Constants {
         ABOUT_FRAME(ABOUT_FRAME_NAME, FormScannerConfigurationKeys.ABOUT_FRAME, ABOUT_FRAME_POSITION),
         DESKTOP_FRAME(DESKTOP_NAME, FormScannerConfigurationKeys.DESKTOP_FRAME, DESKTOP_SIZE);
 
-        private String value;
-        private String key;
-        private Rectangle position;
+        private final String value;
+        private final String key;
+        private final Rectangle position;
 
         private Frame(String value, String key, Rectangle position) {
             this.value = value;
@@ -212,7 +216,7 @@ public class FormScannerConstants extends Constants {
         ZOOM_WIDTH(FormScannerConstants.FIT_WIDTH),
         ZOOM_PAGE(FormScannerConstants.FIT_PAGE);
 
-        private Integer value;
+        private final Integer value;
 
         private Zoom(Integer value) {
             this.value = value;
@@ -234,7 +238,7 @@ public class FormScannerConstants extends Constants {
         SIZE_30(30),
         SIZE_36(36);
 
-        private Integer value;
+        private final Integer value;
 
         private FontSize(Integer value) {
             this.value = value;
@@ -250,15 +254,15 @@ public class FormScannerConstants extends Constants {
         ENGLISH("en", FormScannerTranslationKeys.ENGLISH, ENGLISH_LANGUAGES),
         ITALIAN("it", FormScannerTranslationKeys.ITALIAN, ITALIAN_LANGUAGES),
         PORTUGUES("pt_BR", FormScannerTranslationKeys.PORTUGUES, PORTUGUES_LANGUAGES),
-        // SPANISH("es", FormScannerTranslationKeys.SPANISH, SPANISH_LANGUAGES),
+        SPANISH("es", FormScannerTranslationKeys.SPANISH, SPANISH_LANGUAGES),
         // GERMAN("de", FormScannerTranslationKeys.GERMAN, GERMAN_LANGUAGES),
         FARSI("fa", FormScannerTranslationKeys.FARSI, FARSI_LANGUAGES),
         POLISH("pl", FormScannerTranslationKeys.POLISH, POLISH_LANGUAGES),
         GREEK("el", FormScannerTranslationKeys.GREEK, GREEK_LANGUAGES);
 
-        private String value;
-        private String translation;
-        private Set<String> installationLanguages;
+        private final String value;
+        private final String translation;
+        private final Set<String> installationLanguages;
 
         private Language(String value, String translation,
                 Set<String> installationLanguages) {
@@ -288,7 +292,7 @@ public class FormScannerConstants extends Constants {
         MULTIPLE_COLUMN(FormScannerTranslationKeys.MULTIPLE_COLUMN),
         RESPONSES_COLUMN(FormScannerTranslationKeys.RESPONSES_COLUMN);
 
-        private String value;
+        private final String value;
 
         private FieldsTableColumn(String value) {
             this.value = value;

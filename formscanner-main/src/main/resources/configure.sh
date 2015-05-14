@@ -30,19 +30,19 @@ INSTALL_DIR=$PWD
 echo "Found FormScanner in $INSTALL_DIR"
 sleep 1
 
-FS_EXECUTABLE=$(ls $INSTALL_DIR/lib/formscanner-main*)
+FS_EXECUTABLE=$(ls lib/formscanner-main*)
 echo "Found FormScanner executable: $FS_EXECUTABLE"
 sleep 1
 
 sleep 1
-echo "#!/bin/sh" > $INSTALL_DIR/bin/run.sh
-echo "$JAVA_PATH -jar -DFormScanner_HOME=$INSTALL_DIR -DFormScanner_VERSION=0.12-SNAPSHOT $FS_EXECUTABLE" >> $INSTALL_DIR/bin/run.sh
-chmod +x $INSTALL_DIR/bin/run.sh
+echo "#!/bin/sh" > $INSTALL_DIR/run.sh
+echo "$JAVA_PATH -jar $FS_EXECUTABLE" >> $INSTALL_DIR/run.sh
+chmod +x $INSTALL_DIR/run.sh
 echo "Installation finished"
 echo
 echo "**********************************************************"
 echo "*                                                        *"
-echo "*    Type .$INSTALL_DIR/bin/run.sh to start FormScanner.     *"
+echo "*           Type ./run.sh to start FormScanner.          *"
 echo "*                                                        *"
 echo "**********************************************************"
 
