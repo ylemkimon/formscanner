@@ -48,6 +48,8 @@ import com.albertoborsetta.formscanner.gui.ResultsGridFrame;
 import com.albertoborsetta.formscanner.gui.FormScannerDesktop;
 import java.awt.HeadlessException;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import javax.xml.parsers.ParserConfigurationException;
 import org.xml.sax.SAXException;
 
@@ -100,10 +102,12 @@ public class FormScannerModel {
     private Integer fontSize;
     private ArrayList<FormArea> areas = new ArrayList<>();
 
-    public FormScannerModel(FormScannerDesktop view) {
+    public FormScannerModel(FormScannerDesktop view) throws UnsupportedEncodingException {
         this.view = view;
 
-        String installPath = System.getProperty("user.dir");
+        String path = FormScannerModel.class.getProtectionDomain().getCodeSource().getLocation().getPath();
+        String installPath = URLDecoder.decode(path, "UTF-8");
+        installPath = StringUtils.substringBeforeLast(installPath, "lib");
 
         String installationLanguage = StringUtils.defaultIfBlank(
                 System.getProperty("FormScanner_LANGUAGE"),

@@ -1,9 +1,6 @@
 package com.albertoborsetta.formscanner.main;
 
-import java.awt.Component;
-import java.awt.ComponentOrientation;
 import java.awt.EventQueue;
-import java.awt.BorderLayout;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -25,6 +22,9 @@ import org.xml.sax.SAXException;
 import com.albertoborsetta.formscanner.api.FormTemplate;
 import com.albertoborsetta.formscanner.commons.FormFileUtils;
 import com.albertoborsetta.formscanner.gui.FormScannerDesktop;
+import java.io.UnsupportedEncodingException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.UnsupportedLookAndFeelException;
 
 public class FormScanner {
@@ -42,11 +42,11 @@ public class FormScanner {
                 @Override
                 public void run() {
                     try {
-                        UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
+                        UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
                         FormScannerDesktop window = new FormScannerDesktop();
                         window.setIconImage(null);
-                    } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException e) {
-                        e.printStackTrace();
+                    } catch (UnsupportedEncodingException | ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException e) {
+                        Logger.getLogger(FormScanner.class.getName()).log(Level.SEVERE, null, e);
                     }
                 }
             });

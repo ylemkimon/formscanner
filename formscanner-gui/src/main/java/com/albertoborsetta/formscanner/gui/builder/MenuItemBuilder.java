@@ -42,6 +42,8 @@ public class MenuItemBuilder {
         menuItem.setEnabled(enabled);
         return this;
     }
+    
+    public MenuItemBuilder withIcon()
 
     public JMenuItem build() {
         return menuItem;
