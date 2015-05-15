@@ -14,6 +14,8 @@ import javax.swing.KeyStroke;
 
 import com.albertoborsetta.formscanner.commons.FormScannerConstants;
 import com.albertoborsetta.formscanner.commons.FormScannerConstants.Language;
+import com.albertoborsetta.formscanner.commons.resources.FormScannerResources;
+import com.albertoborsetta.formscanner.commons.resources.FormScannerResourcesKeys;
 import com.albertoborsetta.formscanner.commons.translation.FormScannerTranslation;
 import com.albertoborsetta.formscanner.commons.translation.FormScannerTranslationKeys;
 import com.albertoborsetta.formscanner.gui.builder.MenuBuilder;
@@ -74,6 +76,9 @@ public final class MenuBar extends JMenuBar implements MenuView {
                 .withMnemonic(
                         FormScannerTranslation
                         .getMnemonicFor(FormScannerTranslationKeys.OPEN_IMAGES_MNEMONIC))
+                .withIcon(
+                        FormScannerResources
+                        .getIconFor(FormScannerResourcesKeys.OPEN_IMAGES_ICON))
                 .build();
 
         exitMenuItem = new MenuItemBuilder(

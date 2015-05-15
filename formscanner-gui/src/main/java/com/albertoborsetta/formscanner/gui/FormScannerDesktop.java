@@ -11,8 +11,10 @@ import com.albertoborsetta.formscanner.commons.translation.FormScannerTranslatio
 import com.albertoborsetta.formscanner.controller.FormScannerController;
 import com.albertoborsetta.formscanner.model.FormScannerModel;
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.ComponentOrientation;
+import java.io.UnsupportedEncodingException;
 import javax.swing.JDesktopPane;
 import javax.swing.JFrame;
 import static javax.swing.JFrame.setDefaultLookAndFeelDecorated;
@@ -32,8 +34,9 @@ public class FormScannerDesktop extends JFrame {
     
     /**
      * Create the application.
+     * @throws java.io.UnsupportedEncodingException
      */
-    public FormScannerDesktop() {
+    public FormScannerDesktop() throws UnsupportedEncodingException {
         model = new FormScannerModel(this);
         mainFrameController = FormScannerController.getInstance(model);
         addWindowListener(mainFrameController);
@@ -51,6 +54,7 @@ public class FormScannerDesktop extends JFrame {
         getContentPane().add(toolBar, BorderLayout.NORTH);
 
         desktopPane = new JDesktopPane();
+        desktopPane.setBackground(new Color(252, 252, 252, 255));
         getContentPane().add(desktopPane, BorderLayout.CENTER);
 
         model.setDefaultFramePositions();
