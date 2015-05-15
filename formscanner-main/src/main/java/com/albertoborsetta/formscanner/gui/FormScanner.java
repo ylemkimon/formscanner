@@ -35,6 +35,9 @@ import com.albertoborsetta.formscanner.gui.model.FormScannerModel;
 import com.albertoborsetta.formscanner.gui.view.InternalFrame;
 import com.albertoborsetta.formscanner.gui.view.MenuBar;
 import com.albertoborsetta.formscanner.gui.view.ToolBar;
+import java.io.UnsupportedEncodingException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.UnsupportedLookAndFeelException;
 import org.apache.commons.lang3.StringUtils;
 
@@ -62,8 +65,8 @@ public class FormScanner extends JFrame {
                         UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
                         FormScanner window = new FormScanner();
                         window.setIconImage(null);
-                    } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException e) {
-                        e.printStackTrace();
+                    } catch (UnsupportedEncodingException | ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException e) {
+                        Logger.getLogger(FormScanner.class.getName()).log(Level.SEVERE, null, e);
                     }
                 }
             });
@@ -109,7 +112,7 @@ public class FormScanner extends JFrame {
     /**
      * Create the application.
      */
-    private FormScanner() {
+    private FormScanner() throws UnsupportedEncodingException {
         model = new FormScannerModel(this);
         mainFrameController = FormScannerController.getInstance(model);
         addWindowListener(mainFrameController);
