@@ -7,6 +7,7 @@ import javax.swing.JMenuItem;
 import javax.swing.KeyStroke;
 
 import com.albertoborsetta.formscanner.commons.FormScannerFont;
+import javax.swing.ImageIcon;
 
 public class MenuItemBuilder {
 
@@ -43,7 +44,15 @@ public class MenuItemBuilder {
         return this;
     }
     
-    public MenuItemBuilder withIcon()
+    public MenuItemBuilder withIcon(ImageIcon icon) {
+        menuItem.setIcon(icon);
+        return this;
+    }
+    
+    public MenuItemBuilder withSelectedIcon(ImageIcon icon) {
+        menuItem.setSelectedIcon(icon);
+        return this;
+    }
 
     public JMenuItem build() {
         return menuItem;

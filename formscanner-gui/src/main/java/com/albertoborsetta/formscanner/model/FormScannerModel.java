@@ -108,6 +108,7 @@ public class FormScannerModel {
         String path = FormScannerModel.class.getProtectionDomain().getCodeSource().getLocation().getPath();
         String installPath = URLDecoder.decode(path, "UTF-8");
         installPath = StringUtils.substringBeforeLast(installPath, "lib");
+        installPath = StringUtils.defaultIfBlank(System.getProperty("FormScanner_HOME"), installPath);
 
         String installationLanguage = StringUtils.defaultIfBlank(
                 System.getProperty("FormScanner_LANGUAGE"),

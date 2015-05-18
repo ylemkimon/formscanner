@@ -13,4 +13,10 @@ public class FormScannerResourcesKeys {
     public static final String ANALYZE_FILES_ALL_ICON = "start_all.png";
     public static final String ANALYZE_FILES_CURRENT_ICON = "reload.png";
     public static final String FORMSCANNER_SPLASH = "splash.png";
+    public static final String EXIT_ICON = "exit.png";
+    public static final String EDIT_ICON = "edit.png";
+    public static final String CONFIG_ICON = "config.png";
+    public static final String HELP_ICON = "help.png";
+    public static final String LANGUAGE_ICON = "spelldialog.png";
+    public static final String ABOUT_ICON = "about.png";
 }
