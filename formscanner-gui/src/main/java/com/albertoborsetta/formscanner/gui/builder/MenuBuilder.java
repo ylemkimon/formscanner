@@ -6,6 +6,7 @@ import javax.swing.JComponent;
 import javax.swing.JMenu;
 
 import com.albertoborsetta.formscanner.commons.FormScannerFont;
+import javax.swing.ImageIcon;
 
 public class MenuBuilder {
 
@@ -24,6 +25,16 @@ public class MenuBuilder {
 
     public MenuBuilder add(JComponent component) {
         menu.add(component);
+        return this;
+    }
+
+    public MenuBuilder withIcon(ImageIcon icon) {
+        menu.setIcon(icon);
+        return this;
+    }
+
+    public MenuBuilder withSelectedIcon(ImageIcon icon) {
+        menu.setSelectedIcon(icon);
         return this;
     }
 
