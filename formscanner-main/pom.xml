@@ -4,9 +4,12 @@
     <parent>
         <artifactId>formscanner</artifactId>
         <groupId>com.albertoborsetta</groupId>
-        <version>0.11.1-SNAPSHOT</version>
+        <version>0.12-SNAPSHOT</version>
     </parent>
     <artifactId>formscanner-main</artifactId>
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
     <name>FormScanner - Main</name>
     <dependencies>
         <dependency>
@@ -17,6 +20,11 @@
         <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>formscanner-commons</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>formscanner-gui</artifactId>
             <version>${project.version}</version>
         </dependency>
     </dependencies>
