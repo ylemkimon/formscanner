@@ -17,7 +17,6 @@ import java.awt.ComponentOrientation;
 import java.io.UnsupportedEncodingException;
 import javax.swing.JDesktopPane;
 import javax.swing.JFrame;
-import static javax.swing.JFrame.setDefaultLookAndFeelDecorated;
 import org.apache.commons.lang3.StringUtils;
 
 /**
@@ -26,7 +25,12 @@ import org.apache.commons.lang3.StringUtils;
  */
 public class FormScannerDesktop extends JFrame {
     
-    private final FormScannerModel model;
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	
+	private final FormScannerModel model;
     private final FormScannerController mainFrameController;
     private final MenuBar menuBar;
     private final ToolBar toolBar;

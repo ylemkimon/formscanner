@@ -9,6 +9,8 @@ import java.util.Properties;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.log4j.Level;
+import org.apache.log4j.Logger;
 
 public class FormScannerConfiguration extends Properties {
 
@@ -27,7 +29,8 @@ public class FormScannerConfiguration extends Properties {
         try {
             load(new FileInputStream(userConfigFile));
         } catch (IOException e) {
-            e.printStackTrace();
+        	Logger.getLogger(FormScannerConfiguration.class.getName()).log(
+					Level.DEBUG, null, e);
         }
     }
 
@@ -60,9 +63,11 @@ public class FormScannerConfiguration extends Properties {
         try {
             store(new FileOutputStream(userConfigFile), null);
         } catch (FileNotFoundException e) {
-            e.printStackTrace();
+        	Logger.getLogger(FormScannerConfiguration.class.getName()).log(
+					Level.DEBUG, null, e);
         } catch (IOException e) {
-            e.printStackTrace();
+        	Logger.getLogger(FormScannerConfiguration.class.getName()).log(
+					Level.DEBUG, null, e);
         }
     }
 

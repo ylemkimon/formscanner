@@ -39,4 +39,6 @@ public class FormScannerConfigurationKeys {
 
     public static final String FONT_SIZE = "font.size";
     public static final Integer DEFAULT_FONT_SIZE = 12;
+	public static final String CORNER_TYPE = "corner.type";
+	public static final String DEFAULT_CORNER_TYPE = "ROUND";
 }

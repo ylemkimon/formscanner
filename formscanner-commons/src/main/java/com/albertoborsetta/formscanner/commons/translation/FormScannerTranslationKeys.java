@@ -172,4 +172,8 @@ public class FormScannerTranslationKeys extends TranslationKeys {
     public static final String SINGLE_QUESTION_LABEL = "single.question.label";
     public static final String SET_OF_QUESTIONS_LABEL = "set.of.questions.label";
     public static final String GROUP_COLUMN = "group.column";
+    
+    // added 0.12
+	public static final String CORNERS_OPTIONS = "corners.options";
+	public static final String CORNER_TYPE_OPTION_LABEL = "corner.type.option.label";
 }
