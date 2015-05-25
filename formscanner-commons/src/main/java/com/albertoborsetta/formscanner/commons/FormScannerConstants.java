@@ -121,6 +121,7 @@ public class FormScannerConstants extends Constants {
     public static final String SAVE_OPTIONS = "SAVE_OPTIONS";
     public static final String SHAPE_COMBO_BOX = "SHAPE_COMBO_BOX";
     public static final String SHAPE_SIZE = "SHAPE_SIZE";
+    public static final String LOOK_AND_FEEL_COMBO_BOX = "LOOK_AND_FEEL_COMBO_BOX";
 
     // Zoom
     public static final Integer FIT_WIDTH = 0;

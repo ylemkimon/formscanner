@@ -176,4 +176,5 @@ public class FormScannerTranslationKeys extends TranslationKeys {
     // added 0.12
 	public static final String CORNERS_OPTIONS = "corners.options";
 	public static final String CORNER_TYPE_OPTION_LABEL = "corner.type.option.label";
+	public static final String LOOK_AND_FEEL_OPTION_LABEL = "look.and.feel.option.label";
 }
