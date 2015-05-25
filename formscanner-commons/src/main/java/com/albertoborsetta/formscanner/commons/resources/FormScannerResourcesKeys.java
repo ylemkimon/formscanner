@@ -19,4 +19,5 @@ public class FormScannerResourcesKeys {
     public static final String HELP_ICON = "help.png";
     public static final String LANGUAGE_ICON = "spelldialog.png";
     public static final String ABOUT_ICON = "about.png";
+    public static final String FORMSCANNER_ICON = "formscanner.png";
 }

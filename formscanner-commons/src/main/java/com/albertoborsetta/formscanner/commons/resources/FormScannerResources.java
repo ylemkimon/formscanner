@@ -39,7 +39,7 @@ public class FormScannerResources {
 
     public static Image getFormScannerIcon() {
         try {
-            Image icon = ImageIO.read(new File(iconsPath + "formscanner.png"));
+            Image icon = ImageIO.read(new File(iconsPath + FormScannerResourcesKeys.FORMSCANNER_ICON));
             return icon;
         } catch (IOException ex) {
             Logger.getLogger(FormScannerResources.class.getName()).log(Level.SEVERE, null, ex);

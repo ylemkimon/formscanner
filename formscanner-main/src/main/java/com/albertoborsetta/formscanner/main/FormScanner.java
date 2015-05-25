@@ -45,15 +45,17 @@ public class FormScanner {
 				@Override
 				public void run() {
 					try {
-                                                FormScannerModel model = new FormScannerModel();
-                                                for (LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
-                                                    if (model.getLookAndFeel().equals(info.getName())) {
-                                                        UIManager.setLookAndFeel(info.getClassName());
-                                                        break;
-                                                    }
-                                                }
-						FormScannerDesktop desktop = new FormScannerDesktop(model);
-                                                model.setDesktop(desktop);
+						FormScannerModel model = new FormScannerModel();
+						for (LookAndFeelInfo info : UIManager
+								.getInstalledLookAndFeels()) {
+							if (model.getLookAndFeel().equals(info.getName())) {
+								UIManager.setLookAndFeel(info.getClassName());
+								break;
+							}
+						}
+						FormScannerDesktop desktop = new FormScannerDesktop(
+								model);
+						model.setDesktop(desktop);
 						desktop.setIconImage(model.getIcon());
 					} catch (UnsupportedEncodingException
 							| ClassNotFoundException | InstantiationException
@@ -88,12 +90,14 @@ public class FormScanner {
 							Level.DEBUG, null, e);
 					System.exit(-1);
 				}
-				FormTemplate filledForm = new FormTemplate(imageFile.getName(),
-						template);
+				FormTemplate filledForm = new FormTemplate(
+						imageFile.getName(), template);
 				try {
-					filledForm.findCorners(image, template.getThreshold(),
+					filledForm.findCorners(
+							image, template.getThreshold(),
 							template.getDensity());
-					filledForm.findPoints(image, template.getThreshold(),
+					filledForm.findPoints(
+							image, template.getThreshold(),
 							template.getDensity(), template.getSize());
 					filledForm.findAreas(image);
 				} catch (FormScannerException e) {
@@ -101,8 +105,10 @@ public class FormScanner {
 							Level.DEBUG, null, e);
 					System.exit(-1);
 				}
-				filledForms.put(FilenameUtils.getName(imageFile.toString()),
-						filledForm);
+				filledForms
+						.put(
+								FilenameUtils.getName(imageFile.toString()),
+								filledForm);
 			}
 			Locale locale = Locale.getDefault();
 			FormFileUtils fileUtils = FormFileUtils.getInstance(locale);
@@ -110,9 +116,9 @@ public class FormScanner {
 			Date today = Calendar.getInstance().getTime();
 			SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
 
-			File outputFile = new File(args[1]
-					+ System.getProperty("file.separator") + "results_"
-					+ sdf.format(today) + ".csv");
+			File outputFile = new File(
+					args[1] + System.getProperty("file.separator") + "results_" + sdf
+							.format(today) + ".csv");
 			fileUtils.saveCsvAs(outputFile, filledForms, false);
 			System.exit(0);
 		}

@@ -28,7 +28,6 @@ import com.albertoborsetta.formscanner.gui.builder.PanelBuilder;
 import com.albertoborsetta.formscanner.gui.builder.SpinnerBuilder;
 import com.albertoborsetta.formscanner.controller.OptionsFrameController;
 import com.albertoborsetta.formscanner.model.FormScannerModel;
-import javax.swing.LookAndFeel;
 
 public class OptionsFrame extends InternalFrame {
 
