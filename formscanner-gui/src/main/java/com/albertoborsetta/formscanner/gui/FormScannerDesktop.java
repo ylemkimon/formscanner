@@ -40,8 +40,8 @@ public class FormScannerDesktop extends JFrame {
      * Create the application.
      * @throws java.io.UnsupportedEncodingException
      */
-    public FormScannerDesktop() throws UnsupportedEncodingException {
-        model = new FormScannerModel(this);
+    public FormScannerDesktop(FormScannerModel model) throws UnsupportedEncodingException {
+        this.model = model;
         mainFrameController = FormScannerController.getInstance(model);
         addWindowListener(mainFrameController);
 

@@ -1,6 +1,11 @@
 package com.albertoborsetta.formscanner.commons.resources;
 
+import java.awt.Image;
 import java.io.File;
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.imageio.ImageIO;
 
 import javax.swing.ImageIcon;
 
@@ -30,5 +35,15 @@ public class FormScannerResources {
 
     public static File getLicense() {
         return new File(licensePath + "license.txt");
+    }
+
+    public static Image getFormScannerIcon() {
+        try {
+            Image icon = ImageIO.read(new File(iconsPath + "formscanner.png"));
+            return icon;
+        } catch (IOException ex) {
+            Logger.getLogger(FormScannerResources.class.getName()).log(Level.SEVERE, null, ex);
+            return null;
+        }
     }
 }
