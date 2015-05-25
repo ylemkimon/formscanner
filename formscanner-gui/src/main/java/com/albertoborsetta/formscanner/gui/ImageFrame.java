@@ -458,7 +458,7 @@ public class ImageFrame extends InternalFrame implements ScrollableImageView {
         }
 
         private void showTemporaryPoints(Graphics2D g) {
-            showPoint((Graphics2D) g, temporaryPoint, true);
+            showPoint(g, temporaryPoint, true);
 
             if (!model.getPoints().isEmpty()) {
                 for (FormPoint point : model.getPoints()) {

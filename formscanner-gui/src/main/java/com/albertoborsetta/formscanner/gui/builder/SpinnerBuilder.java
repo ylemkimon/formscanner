@@ -15,9 +15,10 @@ public class SpinnerBuilder {
 
     public SpinnerBuilder(String name, ComponentOrientation orientation) {
         spinner = new JSpinner();
-        spinner.setName(name);
         spinner.setFont(FormScannerFont.getFont());
         spinner.setComponentOrientation(orientation);
+        
+        spinner.setName(name);
     }
 
     public SpinnerBuilder(ComponentOrientation orientation) {

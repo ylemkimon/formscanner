@@ -11,7 +11,7 @@ import com.albertoborsetta.formscanner.commons.translation.FormScannerTranslatio
 
 public class FormScannerConstants extends Constants {
     
-    // Verion
+    // Version
     public static final String VERSION_KEY = "$VERSION";
     public static final String VERSION = "0.11.1-SNAPSHOT";
     
@@ -130,6 +130,9 @@ public class FormScannerConstants extends Constants {
     // Font
     public static final String FONT_TYPE_COMBO_BOX = "FONT_TYPE_COMBO_BOX";
     public static final String FONT_SIZE_COMBO_BOX = "FONT_SIZE_COMBO_BOX";
+    
+    // Corner types
+	public static final String CORNER_TYPE_COMBO_BOX = "CORNER_TYPE_COMBO_BOX";
 
     public enum Frame {
 

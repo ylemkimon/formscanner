@@ -19,16 +19,16 @@ public class FormScannerFont extends Font {
         if (font == null) {
             font = new FormScannerFont(Font.SANS_SERIF, Font.PLAIN, 12);
         }
-        return (Font) font;
+        return font;
 
     }
 
     public static Font getFont(String fontType, Integer fontSize) {
         font = new FormScannerFont(fontType, Font.PLAIN, fontSize);
-        return (Font) font;
+        return font;
     }
 
     public static Font getImageFont(Integer fontSize) {
-        return (Font) new FormScannerFont(font.getFamily(), Font.PLAIN, fontSize);
+        return new FormScannerFont(font.getFamily(), Font.PLAIN, fontSize);
     }
 }

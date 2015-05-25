@@ -158,7 +158,7 @@ public class ResultsGridFrame extends InternalFrame {
         form = model.getFilledForm();
 
         FormTemplate template = model.getTemplate();
-        header = (String[]) fileUtils.getHeader(template);
+        header = fileUtils.getHeader(template);
         rows = template.getFields().size() + template.getAreas().size() + 1;
         cols = 2;
 
@@ -223,7 +223,7 @@ public class ResultsGridFrame extends InternalFrame {
         newTable.setDefaultRenderer(Object.class, new MultilineTableCellRenderer());
 
         for (int i = 1; i < cols; i++) {
-            newTable.setValueAt((String) FormScannerTranslation
+            newTable.setValueAt(FormScannerTranslation
                     .getTranslationFor(FormScannerTranslationKeys.RESULTS), 0,
                     i);
         }

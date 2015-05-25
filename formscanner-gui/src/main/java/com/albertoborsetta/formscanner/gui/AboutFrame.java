@@ -9,6 +9,8 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.swing.JButton;
 import javax.swing.JEditorPane;
@@ -30,6 +32,7 @@ import com.albertoborsetta.formscanner.gui.builder.PanelBuilder;
 import com.albertoborsetta.formscanner.gui.builder.TabbedPaneBuilder;
 import com.albertoborsetta.formscanner.controller.AboutFrameController;
 import com.albertoborsetta.formscanner.model.FormScannerModel;
+
 import org.apache.commons.lang3.StringUtils;
 
 public class AboutFrame extends InternalFrame {
@@ -81,7 +84,7 @@ public class AboutFrame extends InternalFrame {
                 .addComponent(licenseTextPanel, BorderLayout.CENTER).build();
     }
 
-    private JScrollPane getLiceseTextPanel() {
+    private static JScrollPane getLiceseTextPanel() {
         JTextArea textArea = new JTextArea(300, 500);
         textArea.setEditable(false);
         textArea.setTabSize(4);
@@ -109,9 +112,11 @@ public class AboutFrame extends InternalFrame {
 
             reader.close();
         } catch (FileNotFoundException e) {
-            e.printStackTrace();
+        	Logger.getLogger(AboutFrame.class.getName()).log(
+					Level.SEVERE, null, e);
         } catch (IOException e) {
-            e.printStackTrace();
+        	Logger.getLogger(AboutFrame.class.getName()).log(
+					Level.SEVERE, null, e);
         }
 
         textArea.append(licenseText);
