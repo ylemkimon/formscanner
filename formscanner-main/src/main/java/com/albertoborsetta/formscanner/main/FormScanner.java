@@ -21,15 +21,18 @@ import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.xml.sax.SAXException;
 
+import ch.randelshofer.quaqua.QuaquaLookAndFeel;
+
 import com.albertoborsetta.formscanner.api.FormTemplate;
 import com.albertoborsetta.formscanner.api.exceptions.FormScannerException;
 import com.albertoborsetta.formscanner.commons.FormFileUtils;
 import com.albertoborsetta.formscanner.gui.FormScannerDesktop;
 import com.albertoborsetta.formscanner.model.FormScannerModel;
+import com.seaglasslookandfeel.SeaGlassLookAndFeel;
 
 import java.io.UnsupportedEncodingException;
-import javax.swing.UIManager.LookAndFeelInfo;
 
+import javax.swing.UIManager.LookAndFeelInfo;
 import javax.swing.UnsupportedLookAndFeelException;
 
 public class FormScanner {
@@ -46,6 +49,10 @@ public class FormScanner {
 				public void run() {
 					try {
 						FormScannerModel model = new FormScannerModel();
+						
+						UIManager.installLookAndFeel("Quaqua", QuaquaLookAndFeel.class.getName());
+						UIManager.installLookAndFeel("Seaglass", SeaGlassLookAndFeel.class.getName());
+						
 						for (LookAndFeelInfo info : UIManager
 								.getInstalledLookAndFeels()) {
 							if (model.getLookAndFeel().equals(info.getName())) {
