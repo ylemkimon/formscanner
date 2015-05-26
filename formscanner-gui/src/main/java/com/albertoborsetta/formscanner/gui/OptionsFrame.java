@@ -149,11 +149,12 @@ public class OptionsFrame extends InternalFrame {
 		String[] fonts;
 		fonts = e.getAvailableFontFamilyNames(model.getLocale());
 		
-                LookAndFeelInfo[] lookAndFeelInfo = UIManager.getInstalledLookAndFeels();
+		LookAndFeelInfo[] lookAndFeelInfo = UIManager
+				.getInstalledLookAndFeels();
 		String[] looks = new String[lookAndFeelInfo.length];
-                for (int i=0; i< lookAndFeelInfo.length; i++) {
-                    looks[i] = lookAndFeelInfo[i].getName();
-                }
+		for (int i = 0; i < lookAndFeelInfo.length; i++) {
+			looks[i] = lookAndFeelInfo[i].getName();
+		}
 
 		FontSize[] fontSizes = FontSize.values();
 		Integer[] sizes = new Integer[fontSizes.length];
@@ -169,7 +170,8 @@ public class OptionsFrame extends InternalFrame {
 				FormScannerConstants.FONT_SIZE_COMBO_BOX, orientation)
 				.withModel(new DefaultComboBoxModel<>(sizes))
 				.withActionListener(optionsFrameController).build();
-		lookAndFeelComboBox = new ComboBoxBuilder<String>(FormScannerConstants.LOOK_AND_FEEL_COMBO_BOX, orientation)
+		lookAndFeelComboBox = new ComboBoxBuilder<String>(
+				FormScannerConstants.LOOK_AND_FEEL_COMBO_BOX, orientation)
 				.withModel(new DefaultComboBoxModel<>(looks))
 				.withActionListener(optionsFrameController).build();
 
@@ -186,8 +188,7 @@ public class OptionsFrame extends InternalFrame {
 				.add(fontSizeComboBox)
 				.add(
 						getLabel(FormScannerTranslationKeys.LOOK_AND_FEEL_OPTION_LABEL))
-				.add(lookAndFeelComboBox)
-				.withGrid(3, 2).build();
+				.add(lookAndFeelComboBox).withGrid(3, 2).build();
 	}
 
 	private void setDefaultValues() {
@@ -316,7 +317,7 @@ public class OptionsFrame extends InternalFrame {
 	public Integer getFontSize() {
 		return (Integer) fontSizeComboBox.getSelectedItem();
 	}
-	
+
 	public String getLookAndFeel() {
 		return (String) lookAndFeelComboBox.getSelectedItem();
 	}
