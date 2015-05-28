@@ -46,8 +46,9 @@ public class ManageTemplateController implements ActionListener,
                 view.setupNextTab(FormScannerConstants.CONFIRM);
                 break;
             case REMOVE_FIELD:
-                String fieldName = view.getSelectedItem();
-                formScannerModel.removeField(fieldName);
+                String fieldName = view.getSelectedField();
+                String groupName = view.getSelectedGroup();
+                formScannerModel.removeField(groupName, fieldName);
                 view.removeSelectedField();
                 break;
             case SAVE_TEMPLATE:

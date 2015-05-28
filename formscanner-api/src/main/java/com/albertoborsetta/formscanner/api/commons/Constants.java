@@ -71,7 +71,7 @@ public class Constants {
 	/**
 	 * Identifies the current version of the template
 	 */
-	public static final String CURRENT_TEMPLATE_VERSION = "1.0";
+	public static final String CURRENT_TEMPLATE_VERSION = "2.0";
 
 	/**
 	 * The Enum Corners.
@@ -235,6 +235,11 @@ public class Constants {
 	 * Identifies the CIRCLE marker shape.
 	 */
 	public static final String CIRCLE = "CIRCLE";
+
+	/**
+	 * Default name for empty group name
+	 */
+	public static final String EMPTY_GROUP_NAME = "EMPTY";
 
 	/**
 	 * The Enum ShapeType.

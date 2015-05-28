@@ -120,9 +120,9 @@ public class FormArea extends FormField {
 
         areaElement.setAttribute("type", type.name());
         areaElement.setAttribute("name", StringUtils.trim(name));
-        if (StringUtils.isNotBlank(group)) {
-            areaElement.setAttribute("group", StringUtils.trim(group));
-        }
+//        if (StringUtils.isNotBlank(group)) {
+//            areaElement.setAttribute("group", StringUtils.trim(group));
+//        }
 
         // corners element
         Element cornersElement = doc.createElement("corners");

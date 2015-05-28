@@ -31,6 +31,7 @@ import org.supercsv.prefs.CsvPreference;
 import org.w3c.dom.Document;
 
 import com.albertoborsetta.formscanner.api.FormArea;
+import com.albertoborsetta.formscanner.api.FormGroup;
 import com.albertoborsetta.formscanner.api.FormQuestion;
 import com.albertoborsetta.formscanner.api.FormTemplate;
 import com.albertoborsetta.formscanner.commons.translation.FormScannerTranslation;
@@ -239,31 +240,50 @@ public class FormFileUtils extends JFileChooser {
 		ArrayList<HashMap<String, String>> results = new ArrayList<>();
 		for (Entry<String, FormTemplate> filledForm : filledForms.entrySet()) {
 			FormTemplate form = filledForm.getValue();
-			HashMap<String, FormQuestion> fields = form.getFields();
-			HashMap<String, FormArea> areas = form.getAreas();
-
-			HashMap<String, String> result = new HashMap<>();
-			result.put(header[0], filledForm.getKey());
-
-			for (int i = 1; i < header.length; i++) {
-				FormQuestion field = fields.get(header[i]);
-				if (field != null) {
-					result.put(header[i], field.getValues());
-				} else {
-					FormArea area = areas.get(header[i]);
-					result.put(header[i], area.getText());
+			HashMap<String, FormGroup> groups = form.getGroups();
+			for (Entry<String, FormGroup> group : groups.entrySet()) {
+				HashMap<String, FormQuestion> fields = group.getValue().getFields();
+				HashMap<String, FormArea> areas = group.getValue().getAreas();
+				
+				HashMap<String, String> result = new HashMap<>();
+				result.put(header[0], filledForm.getKey());
+				
+				for (int i = 1; i < header.length; i++) {
+					FormQuestion field = fields.get(header[i]);
+					if (field != null) {
+						result.put(header[i], field.getValues());
+					} else {
+						FormArea area = areas.get(header[i]);
+						result.put(header[i], area.getText());
+					}
 				}
+				
+				results.add(result);
 			}
 
-			results.add(result);
 		}
 		return results;
 	}
 
 	public String[] getHeader(FormTemplate template) {
-		HashMap<String, FormQuestion> fields = template.getFields();
-		HashMap<String, FormArea> areas = template.getAreas();
-		String[] header = new String[fields.size() + areas.size() + 1];
+		ArrayList<String> headerKeys = new ArrayList<String>();
+		
+		HashMap<String, FormGroup> groups = template.getGroups();
+		for (Entry<String, FormGroup> groupEntry : groups.entrySet()) {
+			FormGroup group = groupEntry.getValue();
+			HashMap<String, FormQuestion> fields = group.getFields();
+			for (Entry<String, FormQuestion> fieldEntry : fields.entrySet()) {
+				headerKeys.add(groupEntry.getKey() + "-" + fieldEntry.getKey());
+			}
+		}
+		for (Entry<String, FormGroup> groupEntry : groups.entrySet()) {
+			FormGroup group = groupEntry.getValue();
+			HashMap<String, FormArea> areas = group.getAreas();
+			for (Entry<String, FormArea> areaEntry : areas.entrySet()) {
+				headerKeys.add(groupEntry.getKey() + "-" + areaEntry.getKey());
+			}
+		}
+		String[] header = new String[headerKeys.size() + 1];
 		int i = 0;
 		try {
 			header[i++] = FormScannerTranslation
@@ -272,16 +292,9 @@ public class FormFileUtils extends JFileChooser {
 			header[i] = StringUtils.EMPTY;
 		}
 
-		ArrayList<String> fieldKeys = new ArrayList<>(fields.keySet());
-		Collections.sort(fieldKeys);
-		for (String fieldKey : fieldKeys) {
-			header[i++] = fieldKey;
-		}
-
-		ArrayList<String> areaKeys = new ArrayList<>(areas.keySet());
-		Collections.sort(areaKeys);
-		for (String areaKey : areaKeys) {
-			header[i++] = areaKey;
+		Collections.sort(headerKeys);
+		for (String headerKey : headerKeys) {
+			header[i++] = headerKey;
 		}
 
 		return header;
