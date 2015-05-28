@@ -9,6 +9,7 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map.Entry;
 
 import javax.swing.BorderFactory;
 import javax.swing.JPanel;
@@ -39,6 +40,7 @@ import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 
 import com.albertoborsetta.formscanner.api.FormArea;
+import com.albertoborsetta.formscanner.api.FormGroup;
 import com.albertoborsetta.formscanner.api.FormQuestion;
 import com.albertoborsetta.formscanner.api.FormPoint;
 import com.albertoborsetta.formscanner.api.commons.Constants.Corners;
@@ -364,11 +366,11 @@ public class ManageTemplateFrame extends InternalFrame implements TabbedView {
 				case FormScannerConstants.QUESTIONS_BY_ROWS:
 				case FormScannerConstants.RESPONSES_BY_GRID:
 					HashMap<String, FormQuestion> fields = createFields();
-					model.updateTemplateFields(fields);
+					model.updateTemplateFields(setOfQuestionsLabel.getText(), fields);
 					break;
 				case FormScannerConstants.BARCODE:
 					FormArea area = createArea();
-					model.updateTemplateAreas(area);
+					model.updateTemplateAreas(setOfQuestionsLabel.getText(), area);
 					break;
 				}
 				setupFieldsTable();
@@ -422,7 +424,7 @@ public class ManageTemplateFrame extends InternalFrame implements TabbedView {
 		String name = questionLabel.getText();
 		FormArea area = new FormArea(name);
 		area.setType(getFieldType());
-		area.setGroup(setOfQuestionsLabel.getText());
+//		area.setGroup(setOfQuestionsLabel.getText());
 		for (int i = 0; i < 2; i++) {
 			for (int j = 1; j < 5; j += 2) {
 				FormPoint corner = getPointFromTable(i, j);
@@ -470,7 +472,7 @@ public class ManageTemplateFrame extends InternalFrame implements TabbedView {
 				}
 				field.setMultiple(isMultiple.isSelected());
 				field.setRejectMultiple(!isMultiple.isSelected() && rejectMultiple.isSelected());
-				field.setGroup(setOfQuestionsLabel.getText());
+//				field.setGroup(setOfQuestionsLabel.getText());
 				fields.put(name, field);
 			}
 			break;
@@ -487,7 +489,7 @@ public class ManageTemplateFrame extends InternalFrame implements TabbedView {
 			field.setType(getFieldType());
 			field.setMultiple(isMultiple.isSelected());
 			field.setRejectMultiple(!isMultiple.isSelected() && rejectMultiple.isSelected());
-			field.setGroup(setOfQuestionsLabel.getText());
+//			field.setGroup(setOfQuestionsLabel.getText());
 			fields.put(name, field);
 			break;
 		}
@@ -567,22 +569,27 @@ public class ManageTemplateFrame extends InternalFrame implements TabbedView {
 			fieldsTableModel.removeRow(fieldsTable.getRowCount() - 1);
 		}
 
-		HashMap<String, FormQuestion> fields = model.getTemplate().getFields();
-		for (FormQuestion field : fields.values()) {
-			fieldsTableModel.addRow(new Object[] {
-					field.getGroup(),
-					field.getName(),
-					FormScannerTranslation.getTranslationFor(field.getType().getValue()),
-					field.isMultiple(), field.getPoints().size() });
-		}
-
-		HashMap<String, FormArea> areas = model.getTemplate().getAreas();
-		for (FormArea area : areas.values()) {
-			fieldsTableModel.addRow(new Object[] {
-					area.getGroup(),
-					area.getName(),
-					FormScannerTranslation.getTranslationFor(area.getType().getValue()),
-					null, null });
+		HashMap<String, FormGroup> groups = model.getTemplate().getGroups();
+		
+		for (Entry<String, FormGroup> group : groups.entrySet()) {
+			
+			HashMap<String, FormQuestion> fields = group.getValue().getFields();
+			for (FormQuestion field : fields.values()) {
+				fieldsTableModel.addRow(new Object[] {
+						group.getKey(),
+						field.getName(),
+						FormScannerTranslation.getTranslationFor(field.getType().getValue()),
+						field.isMultiple(), field.getPoints().size() });
+			}
+			
+			HashMap<String, FormArea> areas = group.getValue().getAreas();
+			for (FormArea area : areas.values()) {
+				fieldsTableModel.addRow(new Object[] {
+						group.getKey(),
+						area.getName(),
+						FormScannerTranslation.getTranslationFor(area.getType().getValue()),
+						null, null });
+			}
 		}
 	}
 
@@ -983,10 +990,15 @@ public class ManageTemplateFrame extends InternalFrame implements TabbedView {
 	}
 
 	@Override
-	public String getSelectedItem() {
-
-		String fieldName = (String) fieldsTable.getValueAt(fieldsTable.getSelectedRow(), 0);
+	public String getSelectedField() {
+		String fieldName = (String) fieldsTable.getValueAt(fieldsTable.getSelectedRow(), 1);
 		return fieldName;
+	}
+	
+	@Override
+	public String getSelectedGroup() {
+		String groupName = (String) fieldsTable.getValueAt(fieldsTable.getSelectedRow(), 0);
+		return groupName;
 	}
 
 	@Override

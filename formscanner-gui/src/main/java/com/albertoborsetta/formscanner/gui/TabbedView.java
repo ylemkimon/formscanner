@@ -6,7 +6,9 @@ public interface TabbedView extends View {
 
     public void setAdvanceable();
 
-    public String getSelectedItem();
+    public String getSelectedField();
+    
+    public String getSelectedGroup();
 
     public void enableRemoveFields();
 

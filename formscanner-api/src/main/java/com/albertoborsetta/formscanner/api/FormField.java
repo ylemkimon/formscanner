@@ -22,7 +22,7 @@ public abstract class FormField {
 
     protected String name;
     protected FieldType type;
-    protected String group;
+//    protected String group;
 
     /**
      * Instantiates an empty FormField.
@@ -110,23 +110,23 @@ public abstract class FormField {
         return fieldElement;
     }
 
-    /**
-     * Sets the FormField object group.
-     *
-     * @author Alberto Borsetta
-     * @param group the new field group
-     */
-    public void setGroup(String group) {
-        this.group = group;
-    }
-
-    /**
-     * Returns the FormField object group.
-     *
-     * @author Alberto Borsetta
-     * @return the field group
-     */
-    public String getGroup() {
-        return group;
-    }
+//    /**
+//     * Sets the FormField object group.
+//     *
+//     * @author Alberto Borsetta
+//     * @param group the new field group
+//     */
+//    public void setGroup(String group) {
+//        this.group = group;
+//    }
+//
+//    /**
+//     * Returns the FormField object group.
+//     *
+//     * @author Alberto Borsetta
+//     * @return the field group
+//     */
+//    public String getGroup() {
+//        return group;
+//    }
 }

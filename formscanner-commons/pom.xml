@@ -27,15 +27,22 @@
 			<artifactId>watchmaker-swing</artifactId>
 			<version>${watchmaker-swing.version}</version>
 		</dependency>
-		<dependency>
-			<groupId>log4j</groupId>
-			<artifactId>log4j</artifactId>
-			<version>${log4j.version}</version>
-		</dependency>
+		<dependencies>
+			<dependency>
+				<groupId>org.apache.logging.log4j</groupId>
+				<artifactId>log4j-api</artifactId>
+				<version>${log4j.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.logging.log4j</groupId>
+				<artifactId>log4j-core</artifactId>
+				<version>${log4j.version}</version>
+			</dependency>
+		</dependencies>
 	</dependencies>
 	<properties>
 		<super-csv.version>2.1.0</super-csv.version>
 		<watchmaker-swing.version>0.7.1</watchmaker-swing.version>
-		<log4j.version>1.2.17</log4j.version>
+		<log4j.version>2.3</log4j.version>
 	</properties>
 </project>

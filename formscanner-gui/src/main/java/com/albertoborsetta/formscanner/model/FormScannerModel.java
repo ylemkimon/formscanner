@@ -720,13 +720,13 @@ public class FormScannerModel {
 		return delta;
 	}
 
-	public void updateTemplateFields(HashMap<String, FormQuestion> fields) {
-		formTemplate.setFields(fields);
+	public void updateTemplateFields(String groupName, HashMap<String, FormQuestion> fields) {
+		formTemplate.addFields(groupName, fields);
 		resetPoints();
 	}
 
-	public void updateTemplateAreas(FormArea area) {
-		formTemplate.setArea(area);
+	public void updateTemplateAreas(String groupName, FormArea area) {
+		formTemplate.addArea(groupName, area);
 		resetPoints();
 		resetAreas();
 	}
@@ -739,8 +739,8 @@ public class FormScannerModel {
 		return points;
 	}
 
-	public void removeField(String fieldName) {
-		formTemplate.removeFieldByName(fieldName);
+	public void removeField(String groupName, String fieldName) {
+		formTemplate.removeFieldByName(groupName, fieldName);
 	}
 
 	public void saveTemplate(boolean notify) {

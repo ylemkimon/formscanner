@@ -17,6 +17,7 @@ import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
 
 import com.albertoborsetta.formscanner.api.FormArea;
+import com.albertoborsetta.formscanner.api.FormGroup;
 import com.albertoborsetta.formscanner.api.FormQuestion;
 import com.albertoborsetta.formscanner.api.FormTemplate;
 import com.albertoborsetta.formscanner.commons.FormFileUtils;
@@ -25,221 +26,233 @@ import com.albertoborsetta.formscanner.commons.translation.FormScannerTranslatio
 import com.albertoborsetta.formscanner.commons.translation.FormScannerTranslationKeys;
 import com.albertoborsetta.formscanner.gui.builder.ScrollPaneBuilder;
 import com.albertoborsetta.formscanner.model.FormScannerModel;
+
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.Map.Entry;
 
 public class ResultsGridFrame extends InternalFrame {
 
-    /**
+	/**
      *
      */
-    private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 1L;
 
-    private final JTable table;
+	private final JTable table;
 
-    private final JScrollPane responsesGridPanel;
-    private FormTemplate form;
-    private final int rows;
-    private final int cols;
-    private final FormFileUtils fileUtils;
-    private final String[] header;
+	private final JScrollPane responsesGridPanel;
+	private FormTemplate form;
+	private final int rows;
+	private final int cols;
+	private final FormFileUtils fileUtils;
+	private final String[] header;
 
-    private class TemplateTableModel extends DefaultTableModel {
+	private class TemplateTableModel extends DefaultTableModel {
 
-        /**
+		/**
          *
          */
-        private static final long serialVersionUID = 1L;
+		private static final long serialVersionUID = 1L;
 
-        public TemplateTableModel(int rows, int cols) {
-            super(rows, cols);
-        }
+		public TemplateTableModel(int rows, int cols) {
+			super(rows, cols);
+		}
 
-        @Override
-        public boolean isCellEditable(int row, int col) {
-            return false;
-        }
-    }
+		@Override
+		public boolean isCellEditable(int row, int col) {
+			return false;
+		}
+	}
 
-    /**
-     * Multiline Table Cell Renderer.
-     */
-    public class MultilineTableCellRenderer extends JTextArea implements
-            TableCellRenderer {
+	/**
+	 * Multiline Table Cell Renderer.
+	 */
+	public class MultilineTableCellRenderer extends JTextArea
+			implements TableCellRenderer {
 
-        /**
+		/**
          *
          */
-        private static final long serialVersionUID = 1L;
+		private static final long serialVersionUID = 1L;
 
-        private final ArrayList<ArrayList<Integer>> rowColHeight = new ArrayList<>();
+		private final ArrayList<ArrayList<Integer>> rowColHeight = new ArrayList<>();
 
-        public MultilineTableCellRenderer() {
-            setLineWrap(true);
-            setWrapStyleWord(true);
-            setOpaque(true);
-        }
+		public MultilineTableCellRenderer() {
+			setLineWrap(true);
+			setWrapStyleWord(true);
+			setOpaque(true);
+		}
 
-        @Override
-        public Component getTableCellRendererComponent(JTable table,
-                Object value, boolean isSelected, boolean hasFocus, int row,
-                int column) {
+		@Override
+		public Component getTableCellRendererComponent(JTable table,
+				Object value, boolean isSelected, boolean hasFocus, int row,
+				int column) {
 
-            if (row == 0 || column == 0) {
-                setBackground(new java.awt.Color(238, 238, 238));
-            } else {
-                if (isSelected && row != 0 && column != 0) {
-                    setForeground(table.getSelectionForeground());
-                    setBackground(table.getSelectionBackground());
-                } else {
-                    setForeground(table.getForeground());
-                    setBackground(table.getBackground());
-                }
-            }
-            setFont(table.getFont());
-            if (hasFocus && row != 0 && column != 0) {
-                setBorder(UIManager.getBorder("Table.focusCellHighlightBorder"));
-                if (table.isCellEditable(row, column)) {
-                    setForeground(UIManager
-                            .getColor("Table.focusCellForeground"));
-                    setBackground(UIManager
-                            .getColor("Table.focusCellBackground"));
-                }
-            } else {
-                setBorder(new EmptyBorder(1, 2, 1, 2));
-            }
-            if (value != null) {
-                setText(value.toString());
-            } else {
-                setText("");
-            }
-            adjustRowHeight(table, row, column);
-            return this;
-        }
+			if (row == 0 || column == 0) {
+				setBackground(new java.awt.Color(238, 238, 238));
+			} else {
+				if (isSelected && row != 0 && column != 0) {
+					setForeground(table.getSelectionForeground());
+					setBackground(table.getSelectionBackground());
+				} else {
+					setForeground(table.getForeground());
+					setBackground(table.getBackground());
+				}
+			}
+			setFont(table.getFont());
+			if (hasFocus && row != 0 && column != 0) {
+				setBorder(UIManager.getBorder("Table.focusCellHighlightBorder"));
+				if (table.isCellEditable(row, column)) {
+					setForeground(UIManager
+							.getColor("Table.focusCellForeground"));
+					setBackground(UIManager
+							.getColor("Table.focusCellBackground"));
+				}
+			} else {
+				setBorder(new EmptyBorder(1, 2, 1, 2));
+			}
+			if (value != null) {
+				setText(value.toString());
+			} else {
+				setText("");
+			}
+			adjustRowHeight(table, row, column);
+			return this;
+		}
 
-        /**
-         * Calculate the new preferred height for a given row, and sets the
-         * height on the table.
-         */
-        private void adjustRowHeight(JTable table, int row, int column) {
-            int cWidth = table.getTableHeader().getColumnModel()
-                    .getColumn(column).getWidth();
-            setSize(new Dimension(cWidth, 1000));
-            int prefH = getPreferredSize().height;
-            while (rowColHeight.size() <= row) {
-                rowColHeight.add(new ArrayList<Integer>(column));
-            }
-            ArrayList<Integer> colHeights = rowColHeight.get(row);
-            while (colHeights.size() <= column) {
-                colHeights.add(0);
-            }
-            colHeights.set(column, prefH);
-            int maxH = prefH;
-            for (Integer colHeight : colHeights) {
-                if (colHeight > maxH) {
-                    maxH = colHeight;
-                }
-            }
-            if (table.getRowHeight(row) != maxH) {
-                table.setRowHeight(row, maxH);
-            }
-        }
-    }
+		/**
+		 * Calculate the new preferred height for a given row, and sets the
+		 * height on the table.
+		 */
+		private void adjustRowHeight(JTable table, int row, int column) {
+			int cWidth = table
+					.getTableHeader().getColumnModel().getColumn(column)
+					.getWidth();
+			setSize(new Dimension(cWidth, 1000));
+			int prefH = getPreferredSize().height;
+			while (rowColHeight.size() <= row) {
+				rowColHeight.add(new ArrayList<Integer>(column));
+			}
+			ArrayList<Integer> colHeights = rowColHeight.get(row);
+			while (colHeights.size() <= column) {
+				colHeights.add(0);
+			}
+			colHeights.set(column, prefH);
+			int maxH = prefH;
+			for (Integer colHeight : colHeights) {
+				if (colHeight > maxH) {
+					maxH = colHeight;
+				}
+			}
+			if (table.getRowHeight(row) != maxH) {
+				table.setRowHeight(row, maxH);
+			}
+		}
+	}
 
-    /**
-     * Create the frame.
-     *
-     * @param model
-     */
-    public ResultsGridFrame(FormScannerModel model) {
-        super(model);
-        fileUtils = FormFileUtils.getInstance(model.getLocale());
+	/**
+	 * Create the frame.
+	 *
+	 * @param model
+	 */
+	public ResultsGridFrame(FormScannerModel model) {
+		super(model);
+		fileUtils = FormFileUtils.getInstance(model.getLocale());
 
-        form = model.getFilledForm();
+		form = model.getFilledForm();
 
-        FormTemplate template = model.getTemplate();
-        header = fileUtils.getHeader(template);
-        rows = template.getFields().size() + template.getAreas().size() + 1;
-        cols = 2;
+		FormTemplate template = model.getTemplate();
+		header = fileUtils.getHeader(template);
+		rows = header.length + 1;
+		cols = 3;
 
-        setBounds(model.getLastPosition(Frame.RESULTS_GRID_FRAME));
-        setName(Frame.RESULTS_GRID_FRAME.name());
-        setTitle(FormScannerTranslation
-                .getTranslationFor(FormScannerTranslationKeys.RESULTS_GRID_FRAME_TITLE));
-        setClosable(true);
-        setIconifiable(true);
-        setResizable(true);
-        setMaximizable(true);
+		setBounds(model.getLastPosition(Frame.RESULTS_GRID_FRAME));
+		setName(Frame.RESULTS_GRID_FRAME.name());
+		setTitle(FormScannerTranslation
+				.getTranslationFor(FormScannerTranslationKeys.RESULTS_GRID_FRAME_TITLE));
+		setClosable(true);
+		setIconifiable(true);
+		setResizable(true);
+		setMaximizable(true);
 
-        table = createTable();
-        clearTable();
-        setupTable();
-        responsesGridPanel = new ScrollPaneBuilder(table, orientation).build();
+		table = createTable();
+		clearTable();
+		setupTable();
+		responsesGridPanel = new ScrollPaneBuilder(table, orientation).build();
 
-        getContentPane().add(responsesGridPanel, BorderLayout.CENTER);
-    }
+		getContentPane().add(responsesGridPanel, BorderLayout.CENTER);
+	}
 
-    private void clearTable() {
-        table.selectAll();
-        table.clearSelection();
-    }
+	private void clearTable() {
+		table.selectAll();
+		table.clearSelection();
+	}
 
-    private void setupTable() {
-        int i = 1;
-        HashMap<String, FormQuestion> fields = form.getFields();
-        ArrayList<String> fieldKeys = new ArrayList<>(fields.keySet());
-        Collections.sort(fieldKeys);
-        for (String fieldKey : fieldKeys) {
-            FormQuestion field = fields.get(fieldKey);
-            if (field != null) {
-                table.setValueAt(field.getValues(), i, 1);
-            }
-            i++;
-        }
+	private void setupTable() {
+		int i = 1;
+		HashMap<String, FormGroup> groups = form.getGroups();
+		for (Entry<String, FormGroup> group : groups.entrySet()) {
+			
+			HashMap<String, FormQuestion> fields = group.getValue().getFields();
+			ArrayList<String> fieldKeys = new ArrayList<>(fields.keySet());
+			Collections.sort(fieldKeys);
+			for (String fieldKey : fieldKeys) {
+				FormQuestion field = fields.get(fieldKey);
+				if (field != null) {
+					table.setValueAt(group.getKey(), i, 1);
+					table.setValueAt(field.getValues(), i, 2);
+				}
+				i++;
+			}
 
-        HashMap<String, FormArea> areas = form.getAreas();
-        ArrayList<String> areaKeys = new ArrayList<>(areas.keySet());
-        Collections.sort(areaKeys);
-        for (String areaKey : areaKeys) {
-            FormArea area = areas.get(areaKey);
-            if (area != null) {
-                table.setValueAt(area.getText(), i, 1);
-            }
-            i++;
-        }
-    }
+			HashMap<String, FormArea> areas = group.getValue().getAreas();
+			ArrayList<String> areaKeys = new ArrayList<>(areas.keySet());
+			Collections.sort(areaKeys);
+			for (String areaKey : areaKeys) {
+				FormArea area = areas.get(areaKey);
+				if (area != null) {
+					table.setValueAt(group.getKey(), i, 1);
+					table.setValueAt(area.getText(), i, 2);
+				}
+				i++;
+			}
+		}
+	}
 
-    private JTable createTable() {
-        TemplateTableModel tableModel = new TemplateTableModel(rows, cols);
-        TableColumnModel columnModel = new DefaultTableColumnModel();
+	private JTable createTable() {
+		TemplateTableModel tableModel = new TemplateTableModel(rows, cols);
+		TableColumnModel columnModel = new DefaultTableColumnModel();
 
-        for (int i = 0; i < cols; i++) {
-            TableColumn column = new TableColumn(i);
-            column.setMinWidth(100);
-            columnModel.addColumn(column);
-        }
+		for (int i = 0; i < cols; i++) {
+			TableColumn column = new TableColumn(i);
+			column.setMinWidth(100);
+			columnModel.addColumn(column);
+		}
 
-        JTable newTable = new JTable(tableModel, columnModel);
-        newTable.setDefaultRenderer(Object.class, new MultilineTableCellRenderer());
+		JTable newTable = new JTable(tableModel, columnModel);
+		newTable.setDefaultRenderer(
+				Object.class, new MultilineTableCellRenderer());
 
-        for (int i = 1; i < cols; i++) {
-            newTable.setValueAt(FormScannerTranslation
-                    .getTranslationFor(FormScannerTranslationKeys.RESULTS), 0,
-                    i);
-        }
+		for (int i = 1; i < cols; i++) {
+			newTable
+					.setValueAt(
+							FormScannerTranslation
+									.getTranslationFor(FormScannerTranslationKeys.RESULTS),
+							0, i);
+		}
 
-        for (int i = 1; i < rows; i++) {
-            newTable.setValueAt(header[i], i, 0);
-        }
-        newTable.setComponentOrientation(orientation);
-        newTable.setCellSelectionEnabled(true);
-        newTable.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
-        return newTable;
-    }
+		for (int i = 1; i < rows; i++) {
+			newTable.setValueAt(header[i], i, 0);
+		}
+		newTable.setComponentOrientation(orientation);
+		newTable.setCellSelectionEnabled(true);
+		newTable.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
+		return newTable;
+	}
 
-    public void updateResults() {
-        form = model.getFilledForm();
-        clearTable();
-        setupTable();
-    }
+	public void updateResults() {
+		form = model.getFilledForm();
+		clearTable();
+		setupTable();
+	}
 }
