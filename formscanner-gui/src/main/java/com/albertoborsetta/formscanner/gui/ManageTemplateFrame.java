@@ -532,7 +532,7 @@ public class ManageTemplateFrame extends InternalFrame implements TabbedView {
 		try {
 			return FormPoint.toPoint((String) positionsTable.getValueAt(i, j));
 		} catch (ParseException e) {
-			logger.debug(e);
+			logger.debug("Error", e);
 			return new FormPoint();
 		}
 	}

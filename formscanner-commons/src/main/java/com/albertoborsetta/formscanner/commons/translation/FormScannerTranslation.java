@@ -28,7 +28,7 @@ public class FormScannerTranslation extends Properties {
 
 			load(translationInputStream);
 		} catch (IOException e) {
-			logger.debug(e);
+			logger.debug("Error", e);
 		}
 	}
 
@@ -41,7 +41,7 @@ public class FormScannerTranslation extends Properties {
 		try {
 			value = new String(value.getBytes("ISO-8859-1"), "UTF-8");
 		} catch (UnsupportedEncodingException e) {
-			logger.debug(e);
+			logger.debug("Error", e);
 		}
 		return value;
 	}
@@ -51,7 +51,7 @@ public class FormScannerTranslation extends Properties {
 		try {
 			value = new String(value.getBytes("ISO-8859-1"), "UTF-8");
 		} catch (UnsupportedEncodingException e) {
-			logger.debug(e);
+			logger.debug("Error", e);
 		}
 		return value.charAt(0);
 	}
