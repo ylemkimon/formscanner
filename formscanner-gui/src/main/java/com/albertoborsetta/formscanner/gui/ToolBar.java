@@ -44,7 +44,6 @@ public final class ToolBar extends JPanel implements MenuView {
 
 		formScannerController = FormScannerController.getInstance(model);
 
-		// setBorder(new EtchedBorder(EtchedBorder.RAISED, null, null));
 		setComponentOrientation(model.getOrientation());
 
 		if (orientation.isLeftToRight()) {

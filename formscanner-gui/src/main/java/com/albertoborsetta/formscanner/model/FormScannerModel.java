@@ -18,8 +18,8 @@ import javax.swing.JOptionPane;
 
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.log4j.Level;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import com.albertoborsetta.formscanner.api.FormArea;
 import com.albertoborsetta.formscanner.api.FormQuestion;
@@ -111,6 +111,8 @@ public class FormScannerModel {
 	private CornerType cornerType;
 	private String lookAndFeel;
 	private Image defaultIcon;
+	
+	private static final Logger logger = LogManager.getLogger(FormScannerModel.class.getName());
 
 	public FormScannerModel() throws UnsupportedEncodingException {
 		String path = FormScannerModel.class
@@ -278,8 +280,7 @@ public class FormScannerModel {
 							this, getFileNameByIndex(renamedFileIndex));
 					view.arrangeFrame(renameFileFrame);
 				} catch (Exception e) {
-					Logger.getLogger(FormScannerModel.class.getName()).log(
-							Level.DEBUG, null, e);
+					logger.debug(e);
 				}
 			}
 			break;
@@ -307,8 +308,7 @@ public class FormScannerModel {
 							this, getFileNameByIndex(renamedFileIndex));
 					view.arrangeFrame(renameFileFrame);
 				} catch (Exception e) {
-					Logger.getLogger(FormScannerModel.class.getName()).log(
-							Level.DEBUG, null, e);
+					logger.debug(e);
 				}
 			} else {
 				view.disposeFrame(renameFileFrame);
@@ -353,9 +353,7 @@ public class FormScannerModel {
 							filledForm.findAreas(image);
 							filledForms.put(filledForm.getName(), filledForm);
 						} catch (Exception e) {
-							Logger
-									.getLogger(FormScannerModel.class.getName())
-									.log(Level.DEBUG, null, e);
+							logger.debug(e);
 						}
 
 					}
@@ -416,9 +414,7 @@ public class FormScannerModel {
 									image, filledForm, Mode.MODIFY_POINTS);
 							createResultsGridFrame();
 						} catch (Exception e) {
-							Logger
-									.getLogger(FormScannerModel.class.getName())
-									.log(Level.DEBUG, null, e);
+							logger.debug(e);
 						}
 					} else {
 						Date today = Calendar.getInstance().getTime();
@@ -463,8 +459,7 @@ public class FormScannerModel {
 					createFormImageFrame(image, filledForm, Mode.MODIFY_POINTS);
 					createResultsGridFrame();
 				} catch (Exception e) {
-					Logger.getLogger(FormScannerModel.class.getName()).log(
-							Level.DEBUG, null, e);
+					logger.debug(e);
 				}
 				break;
 			default:
@@ -561,8 +556,7 @@ public class FormScannerModel {
 
 				view.arrangeFrame(manageTemplateFrame);
 			} catch (Exception e) {
-				Logger.getLogger(FormScannerModel.class.getName()).log(
-						Level.DEBUG, null, e);
+				logger.debug(e);
 			}
 		}
 	}
@@ -855,8 +849,7 @@ public class FormScannerModel {
 										.getTranslationFor(FormScannerTranslationKeys.TEMPLATE_NOT_LOADED_POPUP),
 								JOptionPane.ERROR_MESSAGE);
 			}
-			Logger.getLogger(FormScannerModel.class.getName()).log(
-					Level.DEBUG, null, e);
+			logger.debug(e);
 			return false;
 		}
 

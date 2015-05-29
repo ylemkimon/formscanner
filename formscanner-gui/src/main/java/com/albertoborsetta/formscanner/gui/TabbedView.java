@@ -2,21 +2,21 @@ package com.albertoborsetta.formscanner.gui;
 
 public interface TabbedView extends View {
 
-    public void setupNextTab(String action);
+	public void setupNextTab(String action);
 
-    public void setAdvanceable();
+	public void setAdvanceable();
 
-    public String getSelectedField();
-    
-    public String getSelectedGroup();
+	public String getSelectedField();
 
-    public void enableRemoveFields();
+	public String getSelectedGroup();
 
-    public void removeSelectedField();
+	public void enableRemoveFields();
 
-    public boolean getIsMultiple();
+	public void removeSelectedField();
 
-    public void enableRejectMultiple(boolean enable);
+	public boolean getIsMultiple();
 
-    public void dispose();
+	public void enableRejectMultiple(boolean enable);
+
+	public void dispose();
 }

@@ -192,7 +192,7 @@ public class ResultsGridFrame extends InternalFrame {
 		int i = 1;
 		HashMap<String, FormGroup> groups = form.getGroups();
 		for (Entry<String, FormGroup> group : groups.entrySet()) {
-			
+
 			HashMap<String, FormQuestion> fields = group.getValue().getFields();
 			ArrayList<String> fieldKeys = new ArrayList<>(fields.keySet());
 			Collections.sort(fieldKeys);

@@ -17,11 +17,9 @@ import javax.xml.parsers.ParserConfigurationException;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
-import org.apache.log4j.Level;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.xml.sax.SAXException;
-
-import ch.randelshofer.quaqua.QuaquaLookAndFeel;
 
 import com.albertoborsetta.formscanner.api.FormTemplate;
 import com.albertoborsetta.formscanner.api.exceptions.FormScannerException;
@@ -35,8 +33,12 @@ import java.io.UnsupportedEncodingException;
 import javax.swing.UIManager.LookAndFeelInfo;
 import javax.swing.UnsupportedLookAndFeelException;
 
+import ch.randelshofer.quaqua.QuaquaLookAndFeel;
+
 public class FormScanner {
 
+	private static final Logger logger = LogManager.getLogger(FormScanner.class.getName());
+	
 	/**
 	 * Launch the application.
 	 *
@@ -68,8 +70,7 @@ public class FormScanner {
 							| ClassNotFoundException | InstantiationException
 							| IllegalAccessException
 							| UnsupportedLookAndFeelException e) {
-						Logger.getLogger(FormScanner.class.getName()).log(
-								Level.DEBUG, null, e);
+						logger.debug(e);
 					}
 				}
 			});
@@ -79,8 +80,7 @@ public class FormScanner {
 			try {
 				template = new FormTemplate(templateFile);
 			} catch (ParserConfigurationException | SAXException | IOException e) {
-				Logger.getLogger(FormScanner.class.getName()).log(
-						Level.DEBUG, null, e);
+				logger.debug(e);
 				System.exit(-1);
 			}
 			String[] extensions = ImageIO.getReaderFileSuffixes();
@@ -93,8 +93,7 @@ public class FormScanner {
 				try {
 					image = ImageIO.read(imageFile);
 				} catch (IOException e) {
-					Logger.getLogger(FormScanner.class.getName()).log(
-							Level.DEBUG, null, e);
+					logger.debug(e);
 					System.exit(-1);
 				}
 				FormTemplate filledForm = new FormTemplate(
@@ -108,8 +107,7 @@ public class FormScanner {
 							template.getDensity(), template.getSize());
 					filledForm.findAreas(image);
 				} catch (FormScannerException e) {
-					Logger.getLogger(FormScanner.class.getName()).log(
-							Level.DEBUG, null, e);
+					logger.debug(e);
 					System.exit(-1);
 				}
 				filledForms
