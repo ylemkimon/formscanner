@@ -37,7 +37,7 @@ import ch.randelshofer.quaqua.QuaquaLookAndFeel;
 
 public class FormScanner {
 
-	private static final Logger logger = LogManager.getLogger(FormScanner.class.getName());
+	private static Logger logger;
 	
 	/**
 	 * Launch the application.
@@ -51,6 +51,8 @@ public class FormScanner {
 				public void run() {
 					try {
 						FormScannerModel model = new FormScannerModel();
+						
+						logger = LogManager.getLogger(FormScanner.class.getName());
 						
 						UIManager.installLookAndFeel("Quaqua", QuaquaLookAndFeel.class.getName());
 						UIManager.installLookAndFeel("Seaglass", SeaGlassLookAndFeel.class.getName());
@@ -70,7 +72,7 @@ public class FormScanner {
 							| ClassNotFoundException | InstantiationException
 							| IllegalAccessException
 							| UnsupportedLookAndFeelException e) {
-						logger.debug(e);
+						logger.debug("Error", e);
 					}
 				}
 			});
@@ -80,7 +82,7 @@ public class FormScanner {
 			try {
 				template = new FormTemplate(templateFile);
 			} catch (ParserConfigurationException | SAXException | IOException e) {
-				logger.debug(e);
+				logger.debug("Error", e);
 				System.exit(-1);
 			}
 			String[] extensions = ImageIO.getReaderFileSuffixes();
@@ -93,7 +95,7 @@ public class FormScanner {
 				try {
 					image = ImageIO.read(imageFile);
 				} catch (IOException e) {
-					logger.debug(e);
+					logger.debug("Error", e);
 					System.exit(-1);
 				}
 				FormTemplate filledForm = new FormTemplate(
@@ -107,7 +109,7 @@ public class FormScanner {
 							template.getDensity(), template.getSize());
 					filledForm.findAreas(image);
 				} catch (FormScannerException e) {
-					logger.debug(e);
+					logger.debug("Error", e);
 					System.exit(-1);
 				}
 				filledForms

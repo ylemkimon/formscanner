@@ -176,7 +176,7 @@ public class FormFileUtils extends JFileChooser {
 				transformer.transform(source, result);
 			}
 		} catch (TransformerException | IOException e) {
-			logger.debug(e);
+			logger.debug("Error", e);
 		}
 		return file;
 	}
@@ -229,7 +229,7 @@ public class FormFileUtils extends JFileChooser {
 				}
 			}
 		} catch (IOException e) {
-			logger.debug(e);
+			logger.debug("Error", e);
 		}
 		return file;
 	}
@@ -307,7 +307,7 @@ public class FormFileUtils extends JFileChooser {
 			Document xml = template.getXml();
 			outputFile = saveTemplateAs(outputFile, xml, notify);
 		} catch (ParserConfigurationException e) {
-			logger.debug(e);
+			logger.debug("Error", e);
 		}
 
 		return outputFile;

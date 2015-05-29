@@ -6,7 +6,6 @@ import java.awt.Component;
 import java.awt.Dimension;
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 
@@ -113,7 +112,7 @@ public class AboutFrame extends InternalFrame {
 
             reader.close();
         } catch (IOException e) {
-        	logger.debug(e);
+        	logger.debug("Error", e);
         }
 
         textArea.append(licenseText);
