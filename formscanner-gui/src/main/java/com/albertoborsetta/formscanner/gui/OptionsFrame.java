@@ -148,7 +148,7 @@ public class OptionsFrame extends InternalFrame {
 				.getLocalGraphicsEnvironment();
 		String[] fonts;
 		fonts = e.getAvailableFontFamilyNames(model.getLocale());
-		
+
 		LookAndFeelInfo[] lookAndFeelInfo = UIManager
 				.getInstalledLookAndFeels();
 		String[] looks = new String[lookAndFeelInfo.length];

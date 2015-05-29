@@ -9,8 +9,6 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import javax.swing.JButton;
 import javax.swing.JEditorPane;
@@ -34,6 +32,8 @@ import com.albertoborsetta.formscanner.controller.AboutFrameController;
 import com.albertoborsetta.formscanner.model.FormScannerModel;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class AboutFrame extends InternalFrame {
 
@@ -42,6 +42,7 @@ public class AboutFrame extends InternalFrame {
      */
     private static final long serialVersionUID = 1L;
     private final AboutFrameController aboutFrameController;
+    private static final Logger logger = LogManager.getLogger(AboutFrame.class.getName());
 
     /**
      * Create the frame.
@@ -111,12 +112,8 @@ public class AboutFrame extends InternalFrame {
             }
 
             reader.close();
-        } catch (FileNotFoundException e) {
-        	Logger.getLogger(AboutFrame.class.getName()).log(
-					Level.SEVERE, null, e);
         } catch (IOException e) {
-        	Logger.getLogger(AboutFrame.class.getName()).log(
-					Level.SEVERE, null, e);
+        	logger.debug(e);
         }
 
         textArea.append(licenseText);

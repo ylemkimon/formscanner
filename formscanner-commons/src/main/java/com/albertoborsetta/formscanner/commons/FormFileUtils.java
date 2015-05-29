@@ -23,8 +23,8 @@ import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
 import org.apache.commons.lang3.StringUtils;
-import org.apache.log4j.Level;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
 import org.supercsv.io.CsvMapWriter;
 import org.supercsv.io.ICsvMapWriter;
 import org.supercsv.prefs.CsvPreference;
@@ -44,6 +44,7 @@ public class FormFileUtils extends JFileChooser {
      */
 	private static final long serialVersionUID = 1L;
 	private static FormFileUtils instance;
+	private static final Logger logger = LogManager.getLogger(FormFileUtils.class.getName());
 
 	public static FormFileUtils getInstance(Locale locale) {
 		if (instance == null) {
@@ -175,8 +176,7 @@ public class FormFileUtils extends JFileChooser {
 				transformer.transform(source, result);
 			}
 		} catch (TransformerException | IOException e) {
-			Logger.getLogger(FormFileUtils.class.getName()).log(
-					Level.DEBUG, null, e);
+			logger.debug(e);
 		}
 		return file;
 	}
@@ -229,8 +229,7 @@ public class FormFileUtils extends JFileChooser {
 				}
 			}
 		} catch (IOException e) {
-			Logger.getLogger(FormFileUtils.class.getName()).log(
-					Level.DEBUG, null, e);
+			logger.debug(e);
 		}
 		return file;
 	}
@@ -308,8 +307,7 @@ public class FormFileUtils extends JFileChooser {
 			Document xml = template.getXml();
 			outputFile = saveTemplateAs(outputFile, xml, notify);
 		} catch (ParserConfigurationException e) {
-			Logger.getLogger(FormFileUtils.class.getName()).log(
-					Level.DEBUG, null, e);
+			logger.debug(e);
 		}
 
 		return outputFile;
