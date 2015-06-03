@@ -11,9 +11,9 @@ import com.albertoborsetta.formscanner.commons.translation.FormScannerTranslatio
 
 public class FormScannerConstants extends Constants {
     
-    // Verion
+    // Version
     public static final String VERSION_KEY = "$VERSION";
-    public static final String VERSION = "0.11.1-SNAPSHOT";
+    public static final String VERSION = "0.11.1";
     
     // Actions
     public static final String RENAME_FILES_FIRST = "RENAME_FILES_FIRST";
