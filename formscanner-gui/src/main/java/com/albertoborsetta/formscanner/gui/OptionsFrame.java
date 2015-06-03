@@ -2,6 +2,7 @@ package com.albertoborsetta.formscanner.gui;
 
 import java.awt.BorderLayout;
 import java.awt.GraphicsEnvironment;
+import java.util.ArrayList;
 
 import javax.swing.BorderFactory;
 import javax.swing.DefaultComboBoxModel;
@@ -10,6 +11,7 @@ import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSpinner;
+import javax.swing.JTabbedPane;
 import javax.swing.SpringLayout;
 import javax.swing.UIManager;
 import javax.swing.UIManager.LookAndFeelInfo;
@@ -26,10 +28,11 @@ import com.albertoborsetta.formscanner.gui.builder.ComboBoxBuilder;
 import com.albertoborsetta.formscanner.gui.builder.LabelBuilder;
 import com.albertoborsetta.formscanner.gui.builder.PanelBuilder;
 import com.albertoborsetta.formscanner.gui.builder.SpinnerBuilder;
+import com.albertoborsetta.formscanner.gui.builder.TabbedPaneBuilder;
 import com.albertoborsetta.formscanner.controller.OptionsFrameController;
 import com.albertoborsetta.formscanner.model.FormScannerModel;
 
-public class OptionsFrame extends InternalFrame {
+public class OptionsFrame extends InternalFrame implements TabbedView {
 
 	/**
      *
@@ -39,8 +42,7 @@ public class OptionsFrame extends InternalFrame {
 	private InternalShapeType[] types;
 	private JSpinner thresholdValue;
 	private JSpinner densityValue;
-	private JButton saveButton;
-	private JButton cancelButton;
+	private ArrayList<JButton> saveButtons = new ArrayList<>();
 	private JComboBox<InternalShapeType> shapeTypeComboBox;
 	private JSpinner shapeSizeValue;
 	private JComboBox<String> fontTypeComboBox;
@@ -101,25 +103,40 @@ public class OptionsFrame extends InternalFrame {
 		setTitle(FormScannerTranslation
 				.getTranslationFor(FormScannerTranslationKeys.OPTIONS_FRAME_TITLE));
 		setResizable(true);
-
+		
 		JPanel optionsPanel = getOptionsPanel();
 		JPanel shapePanel = getShapePanel();
 		JPanel cornerPanel = getCornerPanel();
 		JPanel guiPanel = getGuiPanel();
 
-		JPanel masterPanel = new PanelBuilder(orientation)
-				.withLayout(new SpringLayout()).add(optionsPanel)
-				.add(shapePanel).add(cornerPanel).add(guiPanel).withGrid(4, 1)
-				.build();
-
-		JPanel buttonPanel = getButtonPanel();
 		setDefaultValues();
 
-		getContentPane().add(masterPanel, BorderLayout.NORTH);
-		getContentPane().add(buttonPanel, BorderLayout.SOUTH);
+		JTabbedPane masterPanel = new TabbedPaneBuilder(
+				JTabbedPane.TOP, orientation)
+				.addTab(
+						FormScannerTranslation
+								.getTranslationFor(FormScannerTranslationKeys.SCAN_OPTIONS),
+						optionsPanel)
+				.addTab(
+						FormScannerTranslation
+								.getTranslationFor(FormScannerTranslationKeys.MARKER_OPTIONS),
+						shapePanel)
+				.addTab(
+						FormScannerTranslation
+								.getTranslationFor(FormScannerTranslationKeys.CORNERS_OPTIONS),
+						cornerPanel)
+				.addTab(
+						FormScannerTranslation
+								.getTranslationFor(FormScannerTranslationKeys.GUI_OPTIONS),
+						guiPanel).build();
+
+		getContentPane().add(masterPanel, BorderLayout.CENTER);
 	}
 
 	private JPanel getCornerPanel() {
+		
+		JPanel buttonsPanel = getButtonPanel();
+		
 		CornerType cornerTypes[] = CornerType.values();
 		corners = new InternalCornerType[cornerTypes.length];
 
@@ -132,18 +149,21 @@ public class OptionsFrame extends InternalFrame {
 				.withModel(new DefaultComboBoxModel<>(corners))
 				.withActionListener(optionsFrameController).build();
 
-		return new PanelBuilder(orientation)
+		JPanel optionsPanel = new PanelBuilder(orientation)
 				.withLayout(new SpringLayout())
-				.withBorder(
-						BorderFactory.createTitledBorder(FormScannerTranslation
-								.getTranslationFor(FormScannerTranslationKeys.CORNERS_OPTIONS)))
 				.add(
 						getLabel(FormScannerTranslationKeys.CORNER_TYPE_OPTION_LABEL))
 				.add(cornerTypeComboBox).withGrid(1, 2).build();
+
+		return new PanelBuilder(orientation)
+				.withLayout(new BorderLayout()).add(optionsPanel, BorderLayout.NORTH)
+				.add(buttonsPanel, BorderLayout.SOUTH).build();
 	}
 
 	private JPanel getGuiPanel() {
 
+		JPanel buttonsPanel = getButtonPanel();
+		
 		GraphicsEnvironment e = GraphicsEnvironment
 				.getLocalGraphicsEnvironment();
 		String[] fonts;
@@ -175,11 +195,8 @@ public class OptionsFrame extends InternalFrame {
 				.withModel(new DefaultComboBoxModel<>(looks))
 				.withActionListener(optionsFrameController).build();
 
-		return new PanelBuilder(orientation)
+		JPanel optionsPanel = new PanelBuilder(orientation)
 				.withLayout(new SpringLayout())
-				.withBorder(
-						BorderFactory.createTitledBorder(FormScannerTranslation
-								.getTranslationFor(FormScannerTranslationKeys.GUI_OPTIONS)))
 				.add(
 						getLabel(FormScannerTranslationKeys.FONT_TYPE_OPTION_LABEL))
 				.add(fontTypeComboBox)
@@ -189,6 +206,10 @@ public class OptionsFrame extends InternalFrame {
 				.add(
 						getLabel(FormScannerTranslationKeys.LOOK_AND_FEEL_OPTION_LABEL))
 				.add(lookAndFeelComboBox).withGrid(3, 2).build();
+
+		return new PanelBuilder(orientation)
+				.withLayout(new BorderLayout()).add(optionsPanel, BorderLayout.NORTH)
+				.add(buttonsPanel, BorderLayout.SOUTH).build();
 	}
 
 	private void setDefaultValues() {
@@ -203,6 +224,9 @@ public class OptionsFrame extends InternalFrame {
 	}
 
 	private JPanel getOptionsPanel() {
+		
+		JPanel buttonsPanel = getButtonPanel();
+		
 		thresholdValue = new SpinnerBuilder(
 				FormScannerConstants.THRESHOLD, orientation)
 				.withActionListener(optionsFrameController)
@@ -213,20 +237,23 @@ public class OptionsFrame extends InternalFrame {
 				.withActionListener(optionsFrameController)
 				.withActionListener(optionsFrameController).build();
 
-		return new PanelBuilder(orientation)
+		JPanel optionsPanel = new PanelBuilder(orientation)
 				.withLayout(new SpringLayout())
-				.withBorder(
-						BorderFactory.createTitledBorder(FormScannerTranslation
-								.getTranslationFor(FormScannerTranslationKeys.SCAN_OPTIONS)))
 				.add(
 						getLabel(FormScannerTranslationKeys.THRESHOLD_OPTION_LABEL))
 				.add(thresholdValue)
 				.add(getLabel(FormScannerTranslationKeys.DENSITY_OPTION_LABEL))
 				.add(densityValue).withGrid(2, 2).build();
+
+		return new PanelBuilder(orientation)
+				.withLayout(new BorderLayout()).add(optionsPanel, BorderLayout.NORTH)
+				.add(buttonsPanel, BorderLayout.SOUTH).build();
 	}
 
 	private JPanel getShapePanel() {
 
+		JPanel buttonsPanel = getButtonPanel();
+		
 		ShapeType shapes[] = ShapeType.values();
 		types = new InternalShapeType[shapes.length];
 
@@ -244,17 +271,18 @@ public class OptionsFrame extends InternalFrame {
 				.withActionListener(optionsFrameController)
 				.withActionListener(optionsFrameController).build();
 
-		return new PanelBuilder(orientation)
+		JPanel optionsPanel = new PanelBuilder(orientation)
 				.withLayout(new SpringLayout())
-				.withBorder(
-						BorderFactory.createTitledBorder(FormScannerTranslation
-								.getTranslationFor(FormScannerTranslationKeys.MARKER_OPTIONS)))
 				.add(
 						getLabel(FormScannerTranslationKeys.SHAPE_TYPE_OPTION_LABEL))
 				.add(shapeTypeComboBox)
 				.add(
 						getLabel(FormScannerTranslationKeys.SHAPE_SIZE_OPTION_LABEL))
 				.add(shapeSizeValue).withGrid(2, 2).build();
+
+		return new PanelBuilder(orientation)
+				.withLayout(new BorderLayout()).add(optionsPanel, BorderLayout.NORTH)
+				.add(buttonsPanel, BorderLayout.SOUTH).build();
 	}
 
 	private JLabel getLabel(String value) {
@@ -264,7 +292,7 @@ public class OptionsFrame extends InternalFrame {
 	}
 
 	private JPanel getButtonPanel() {
-		saveButton = new ButtonBuilder(orientation)
+		JButton saveButton = new ButtonBuilder(orientation)
 				.withText(
 						FormScannerTranslation
 								.getTranslationFor(FormScannerTranslationKeys.SAVE_OPTIONS_BUTTON))
@@ -275,7 +303,7 @@ public class OptionsFrame extends InternalFrame {
 				.withActionListener(optionsFrameController).setEnabled(false)
 				.build();
 
-		cancelButton = new ButtonBuilder(orientation)
+		JButton cancelButton = new ButtonBuilder(orientation)
 				.withText(
 						FormScannerTranslation
 								.getTranslationFor(FormScannerTranslationKeys.CANCEL_BUTTON))
@@ -288,6 +316,8 @@ public class OptionsFrame extends InternalFrame {
 		JPanel innerPanel = new PanelBuilder(orientation)
 				.withLayout(new SpringLayout()).add(saveButton)
 				.add(cancelButton).withGrid(1, 2).build();
+		
+		saveButtons.add(saveButton);
 
 		return new PanelBuilder(orientation)
 				.withLayout(new BorderLayout())
@@ -322,11 +352,7 @@ public class OptionsFrame extends InternalFrame {
 		return (String) lookAndFeelComboBox.getSelectedItem();
 	}
 
-	public void setSaveEnabled() {
-		saveButton.setEnabled(verifySpinnerValues());
-	}
-
-	private boolean verifySpinnerValues() {
+	private void verifySpinnerValues() {
 		if ((Integer) thresholdValue.getValue() < 0) {
 			thresholdValue.setValue(0);
 		}
@@ -347,16 +373,41 @@ public class OptionsFrame extends InternalFrame {
 		if ((Integer) shapeSizeValue.getValue() > 100) {
 			shapeSizeValue.setValue(100);
 		}
-
-		return (((Integer) thresholdValue.getValue() != model.getThreshold()) || ((Integer) densityValue
-				.getValue() != model.getDensity()) || ((Integer) shapeSizeValue
-				.getValue() != model.getShapeSize()) || (shapeTypeComboBox
-				.getSelectedIndex() != model.getShapeType().getIndex()) || (!((String) fontTypeComboBox
-				.getSelectedItem()).equals(model.getFontType())) || ((Integer) fontSizeComboBox
-					.getSelectedItem() != model.getFontSize()));
 	}
 
 	public CornerType getCornerType() {
 		return (corners[cornerTypeComboBox.getSelectedIndex()]).getType();
+	}
+
+	@Override
+	public void setupNextTab(String action) {
+		// TODO Auto-generated method stub
+	}
+
+	@Override
+	public void setAdvanceable() {
+		for (JButton button : saveButtons) {
+			button.setEnabled(isAdvanceable());
+		}
+	}
+
+	@Override
+	public boolean isAdvanceable(int tab) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+	
+	@Override
+	public boolean isAdvanceable() {
+		verifySpinnerValues();
+		
+		return (((Integer) thresholdValue.getValue() != model.getThreshold()) || 
+				((Integer) densityValue.getValue() != model.getDensity()) || 
+				((Integer) shapeSizeValue.getValue() != model.getShapeSize()) || 
+				(shapeTypeComboBox.getSelectedIndex() != model.getShapeType().getIndex()) || 
+				(cornerTypeComboBox.getSelectedIndex() != model.getCornerType().getIndex()) ||
+				(!((String) fontTypeComboBox.getSelectedItem()).equals(model.getFontType())) || 
+				((Integer) fontSizeComboBox.getSelectedItem() != model.getFontSize()) ||
+				(!((String) lookAndFeelComboBox.getSelectedItem()).equals(model.getLookAndFeel())));
 	}
 }
