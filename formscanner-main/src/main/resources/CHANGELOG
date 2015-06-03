@@ -1,3 +1,18 @@
+FormScanner 0.11.1 (released 2015-06-03)
+===
+NEW FEATURES
+---
+
+* Added Spanish translations (thanks to Roberto Villanueva)
+
+FIXES
+---
+
+* Fixed bug in multiple core CPU's usage
+* Improved MacOsX systems in installation script
+* Fixed ordering problem of responses in results grid
+* Minor BugFix
+
 FormScanner 0.11.0 (released 2015-05-08)
 ===
 NEW FEATURES
