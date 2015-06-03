@@ -47,12 +47,12 @@ public class OptionsFrameController implements ActionListener, ChangeListener,
 
     @Override
     public void stateChanged(ChangeEvent e) {
-        optionsFrame.setSaveEnabled();
+        optionsFrame.setAdvanceable();
     }
 
     @Override
     public void itemStateChanged(ItemEvent e) {
-        optionsFrame.setSaveEnabled();
+        optionsFrame.setAdvanceable();
     }
 
     @Override
@@ -72,7 +72,7 @@ public class OptionsFrameController implements ActionListener, ChangeListener,
 
     @Override
     public void focusLost(FocusEvent e) {
-        optionsFrame.setSaveEnabled();
+        optionsFrame.setAdvanceable();
     }
 
 }

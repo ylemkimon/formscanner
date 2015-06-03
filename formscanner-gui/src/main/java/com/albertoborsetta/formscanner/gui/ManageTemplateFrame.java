@@ -651,10 +651,10 @@ public class ManageTemplateFrame extends InternalFrame implements TabbedView {
 		case 1:
 			break;
 		case 2:
-			okPropertiesButton.setEnabled(verifyPropertiesValues());
+			okPropertiesButton.setEnabled(isAdvanceable(currTab));
 			break;
 		case 3:
-			okPositionButton.setEnabled(verifyQuestionLabel());
+			okPositionButton.setEnabled(isAdvanceable(currTab));
 			break;
 		default:
 			break;
@@ -1222,26 +1222,22 @@ public class ManageTemplateFrame extends InternalFrame implements TabbedView {
 				.add(innerPanel, BorderLayout.EAST).build();
 	}
 
-	@Override
 	public String getSelectedField() {
 		String fieldName = (String) fieldsTable.getValueAt(
 				fieldsTable.getSelectedRow(), 1);
 		return fieldName;
 	}
 
-	@Override
 	public String getSelectedGroup() {
 		String groupName = (String) fieldsTable.getValueAt(
 				fieldsTable.getSelectedRow(), 0);
 		return groupName;
 	}
 
-	@Override
 	public void enableRemoveFields() {
 		removeFieldButton.setEnabled(true);
 	}
 
-	@Override
 	public void removeSelectedField() {
 		FieldsTableModel fieldsTableModel = (FieldsTableModel) fieldsTable
 				.getModel();
@@ -1249,13 +1245,36 @@ public class ManageTemplateFrame extends InternalFrame implements TabbedView {
 		fieldsTableModel.removeRow(fieldsTable.getSelectedRow());
 	}
 
-	@Override
 	public boolean getIsMultiple() {
 		return isMultiple.isSelected();
 	}
 
-	@Override
 	public void enableRejectMultiple(boolean enable) {
 		rejectMultiple.setEnabled(enable);
+	}
+
+	@Override
+	public boolean isAdvanceable(int tab) {
+		boolean advanceable = false;
+		switch (tab) {
+		case 0:
+			break;
+		case 1:
+			break;
+		case 2:
+			advanceable = verifyPropertiesValues();
+		case 3:
+			advanceable = verifyQuestionLabel();
+			break;
+		default:
+			break;
+		}
+		return advanceable;
+	}
+
+	@Override
+	public boolean isAdvanceable() {
+		// TODO Auto-generated method stub
+		return false;
 	}
 }
