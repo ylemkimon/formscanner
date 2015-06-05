@@ -66,18 +66,35 @@ public class FormScannerConfiguration extends Properties {
 		}
 	}
 
-	@Override
-	public String getProperty(String key, String defaultValue) {
+	public <T> Object getProperty(String key, T defaultValue) {
 		String val = getProperty(key);
-		return (StringUtils.isEmpty(val)) ? defaultValue : val;
+
+		if (StringUtils.isEmpty(val))
+			return defaultValue;
+		
+		if (defaultValue instanceof Integer)
+			return Integer.valueOf(val);
+		
+		if (defaultValue instanceof Boolean)
+			return Boolean.valueOf(val);
+		
+		if (defaultValue instanceof String)
+			return val;
+		
+		return val;
 	}
 
-	public Integer getProperty(String key, Integer defaultValue) {
-		String val = getProperty(key);
-		return (StringUtils.isEmpty(val)) ? defaultValue : Integer.valueOf(val);
-	}
+//	public Integer getProperty(String key, Integer defaultValue) {
+//		String val = getProperty(key);
+//		return (StringUtils.isEmpty(val)) ? defaultValue : Integer.valueOf(val);
+//	}
+//	
+//	public boolean getProperty(String key, boolean defaultValue) {
+//		String val = getProperty(key);
+//		return (StringUtils.isEmpty(val)) ? defaultValue : Boolean.parseBoolean(val);
+//	}
 
-	public void setProperty(String fontSize, Integer value) {
-		setProperty(fontSize, value.toString());
+	public <T> void setProperty(String key, T value) {
+		setProperty(key, String.valueOf(value));
 	}
 }

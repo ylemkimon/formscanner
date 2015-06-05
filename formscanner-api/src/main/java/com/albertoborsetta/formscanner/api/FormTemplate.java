@@ -1254,4 +1254,9 @@ public final class FormTemplate {
 	public void setShape(ShapeType shape) {
 		this.shape = shape;
 	}
+
+	public int lastIndexOfGroup(String text) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
 }
