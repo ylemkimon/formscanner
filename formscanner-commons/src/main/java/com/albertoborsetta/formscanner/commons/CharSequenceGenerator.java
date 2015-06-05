@@ -1,11 +1,14 @@
 package com.albertoborsetta.formscanner.commons;
 
+import org.apache.commons.lang3.StringUtils;
+
 import com.google.common.collect.AbstractIterator;
 
 public class CharSequenceGenerator extends AbstractIterator<String> {
 	private int now = -1;
-	private String prefix = "";
+	private String prefix = StringUtils.EMPTY;
 	private static final char[] vs;
+	
 	static {
 		vs = new char['Z' - 'A' + 1];
 		for (char i = 'A'; i <= 'Z'; i++)
@@ -27,6 +30,7 @@ public class CharSequenceGenerator extends AbstractIterator<String> {
 		if (++now == vs.length)
 			prefix = fixPrefix(prefix);
 		now %= vs.length;
-		return new StringBuilder().append(prefix).append(vs[now]).toString();
+		String val = new StringBuilder().append(prefix).append(vs[now]).toString();
+		return val;
 	}
 }

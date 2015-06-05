@@ -45,4 +45,6 @@ public class FormScannerConfigurationKeys {
 
 	public static final String LOOK_AND_FEEL = "lookAndFeel";
 	public static final String DEFAULT_LOOK_AND_FEEL = "javax.swing.plaf.metal.MetalLookAndFeel";
+	public static final String RESET_AUTO_NUMBERING = "resetAutoNumbering";
+	public static final Boolean DEFAULT_RESET_AUTO_NUMBERING = false;
 }

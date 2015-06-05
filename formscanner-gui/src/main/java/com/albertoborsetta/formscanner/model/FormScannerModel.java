@@ -111,8 +111,9 @@ public class FormScannerModel {
 	private CornerType cornerType;
 	private String lookAndFeel;
 	private Image defaultIcon;
-	
+
 	private final Logger logger;
+	private Boolean resetAutoNumbering;
 
 	public FormScannerModel() throws UnsupportedEncodingException {
 		String path = FormScannerModel.class
@@ -121,8 +122,10 @@ public class FormScannerModel {
 		installPath = StringUtils.substringBeforeLast(installPath, "lib");
 		installPath = StringUtils.defaultIfBlank(
 				System.getProperty("FormScanner_HOME"), installPath);
-		
-		System.setProperty("log4j.configurationFile", "file://" + installPath + "/config/log4j.xml");
+
+		System.setProperty(
+				"log4j.configurationFile",
+				"file://" + installPath + "/config/log4j.xml");
 		logger = LogManager.getLogger(FormScannerModel.class.getName());
 
 		String installationLanguage = StringUtils.defaultIfBlank(
@@ -170,13 +173,13 @@ public class FormScannerModel {
 		FormScannerTranslation.setTranslation(installPath, lang);
 		FormScannerResources.setResources(installPath);
 
-		threshold = configurations.getProperty(
+		threshold = (Integer) configurations.getProperty(
 				FormScannerConfigurationKeys.THRESHOLD,
 				FormScannerConfigurationKeys.DEFAULT_THRESHOLD);
-		density = configurations.getProperty(
+		density = (Integer) configurations.getProperty(
 				FormScannerConfigurationKeys.DENSITY,
 				FormScannerConfigurationKeys.DEFAULT_DENSITY);
-		shapeSize = configurations.getProperty(
+		shapeSize = (Integer) configurations.getProperty(
 				FormScannerConfigurationKeys.SHAPE_SIZE,
 				FormScannerConfigurationKeys.DEFAULT_SHAPE_SIZE);
 		shapeType = ShapeType.valueOf(configurations.getProperty(
@@ -185,14 +188,17 @@ public class FormScannerModel {
 		cornerType = CornerType.valueOf(configurations.getProperty(
 				FormScannerConfigurationKeys.CORNER_TYPE,
 				FormScannerConfigurationKeys.DEFAULT_CORNER_TYPE));
+		resetAutoNumbering = (Boolean) configurations.getProperty(
+				FormScannerConfigurationKeys.RESET_AUTO_NUMBERING,
+				FormScannerConfigurationKeys.DEFAULT_RESET_AUTO_NUMBERING);
+
 		lookAndFeel = configurations.getProperty(
 				FormScannerConfigurationKeys.LOOK_AND_FEEL,
 				FormScannerConfigurationKeys.DEFAULT_LOOK_AND_FEEL);
-
 		fontType = configurations.getProperty(
 				FormScannerConfigurationKeys.FONT_TYPE,
 				FormScannerConfigurationKeys.DEFAULT_FONT_TYPE);
-		fontSize = configurations.getProperty(
+		fontSize = (Integer) configurations.getProperty(
 				FormScannerConfigurationKeys.FONT_SIZE,
 				FormScannerConfigurationKeys.DEFAULT_FONT_SIZE);
 		FormScannerFont.getFont(fontType, fontSize);
@@ -717,7 +723,8 @@ public class FormScannerModel {
 		return delta;
 	}
 
-	public void updateTemplateFields(String groupName, HashMap<String, FormQuestion> fields) {
+	public void updateTemplateFields(String groupName,
+			HashMap<String, FormQuestion> fields) {
 		formTemplate.addFields(groupName, fields);
 		resetPoints();
 	}
@@ -1102,5 +1109,13 @@ public class FormScannerModel {
 
 	public Image getIcon() {
 		return defaultIcon;
+	}
+
+	public boolean isResetAutoNumberingQuestions() {
+		return resetAutoNumbering;
+	}
+
+	public int lastIndexOfGroup(String text) {
+		return formTemplate.lastIndexOfGroup(text);
 	}
 }

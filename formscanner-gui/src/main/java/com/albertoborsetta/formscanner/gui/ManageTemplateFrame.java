@@ -286,7 +286,7 @@ public class ManageTemplateFrame extends InternalFrame implements TabbedView {
 			if (value != null) {
 				setText(value.toString());
 			} else {
-				setText("");
+				setText(StringUtils.EMPTY);
 			}
 			adjustRowHeight(table, row, column);
 			return this;
@@ -411,6 +411,9 @@ public class ManageTemplateFrame extends InternalFrame implements TabbedView {
 				tabbedPane.setComponentAt(nextTab, fieldPropertiesPanel);
 				break;
 			case 3:
+				if (model.isResetAutoNumberingQuestions()) {
+					previousRowsCount = model.lastIndexOfGroup(setOfQuestionsLabel.getText());
+				}
 				JPanel fieldPositionPanel = getFieldPositionPanel();
 				tabbedPane.setComponentAt(nextTab, fieldPositionPanel);
 				model.createTemplateImageFrame(fieldsType);
