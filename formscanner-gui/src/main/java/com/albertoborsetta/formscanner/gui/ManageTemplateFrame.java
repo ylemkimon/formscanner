@@ -103,8 +103,11 @@ public class ManageTemplateFrame extends InternalFrame implements TabbedView {
 	private JTextField setOfQuestionsLabel;
 	private JTextField questionLabel;
 	private String fieldsType;
-	
-	private static final Logger logger = LogManager.getLogger(ManageTemplateFrame.class.getName());
+	private int previousBarcodeCount;
+	private int previousGroupCount;
+
+	private static final Logger logger = LogManager
+			.getLogger(ManageTemplateFrame.class.getName());
 
 	private class InternalFieldType {
 
@@ -142,8 +145,11 @@ public class ManageTemplateFrame extends InternalFrame implements TabbedView {
 
 		@Override
 		public Class<?> getColumnClass(int columnIndex) {
-			return (columnIndex == 3) ? Boolean.class : super
-					.getColumnClass(columnIndex);
+			if ((model.isGroupsEnabled() && columnIndex == 3) || (!model
+					.isGroupsEnabled() && columnIndex == 2)) {
+				return Boolean.class;
+			}
+			return super.getColumnClass(columnIndex);
 		}
 	}
 
@@ -343,6 +349,8 @@ public class ManageTemplateFrame extends InternalFrame implements TabbedView {
 		setIconifiable(true);
 		setResizable(true);
 		previousRowsCount = 1;
+		previousBarcodeCount = 1;
+		previousGroupCount = 1;
 
 		JPanel fieldListPanel = getFieldListPanel();
 		JPanel fieldTypePanel = getFieldTypePanel();
@@ -381,6 +389,10 @@ public class ManageTemplateFrame extends InternalFrame implements TabbedView {
 		case CONFIRM:
 			nextTab = (currTab + 1) % tabbedPane.getTabCount();
 
+			if (StringUtils.equals(fieldsType, FormScannerConstants.BARCODE) && !model
+					.isGroupsEnabled())
+				nextTab++;
+
 			switch (nextTab) {
 			case 0:
 				for (int i = nextTab + 1; i < tabbedPane.getTabCount(); i++) {
@@ -393,13 +405,15 @@ public class ManageTemplateFrame extends InternalFrame implements TabbedView {
 				case FormScannerConstants.QUESTIONS_BY_ROWS:
 				case FormScannerConstants.RESPONSES_BY_GRID:
 					HashMap<String, FormQuestion> fields = createFields();
-					model.updateTemplateFields(
-							setOfQuestionsLabel.getText(), fields);
+					model.updateTemplateFields(model.isGroupsEnabled()
+							? setOfQuestionsLabel.getText()
+							: FormScannerConstants.EMPTY_GROUP_NAME, fields);
 					break;
 				case FormScannerConstants.BARCODE:
 					FormArea area = createArea();
-					model.updateTemplateAreas(
-							setOfQuestionsLabel.getText(), area);
+					model.updateTemplateAreas(model.isGroupsEnabled()
+							? setOfQuestionsLabel.getText()
+							: FormScannerConstants.EMPTY_GROUP_NAME, area);
 					break;
 				}
 				setupFieldsTable();
@@ -411,8 +425,10 @@ public class ManageTemplateFrame extends InternalFrame implements TabbedView {
 				tabbedPane.setComponentAt(nextTab, fieldPropertiesPanel);
 				break;
 			case 3:
-				if (model.isResetAutoNumberingQuestions()) {
-					previousRowsCount = model.lastIndexOfGroup(setOfQuestionsLabel.getText());
+				if (model.isGroupsEnabled() && model
+						.isResetAutoNumberingQuestions()) {
+					previousRowsCount = model
+							.lastIndexOfGroup(setOfQuestionsLabel.getText());
 				}
 				JPanel fieldPositionPanel = getFieldPositionPanel();
 				tabbedPane.setComponentAt(nextTab, fieldPositionPanel);
@@ -448,15 +464,16 @@ public class ManageTemplateFrame extends InternalFrame implements TabbedView {
 			break;
 		}
 
-		tabbedPane.setEnabledAt(nextTab, true);
-		tabbedPane.setSelectedIndex(nextTab);
+		if (nextTab >= 0) {
+			tabbedPane.setEnabledAt(nextTab, true);
+			tabbedPane.setSelectedIndex(nextTab);
+		}
 	}
 
 	private FormArea createArea() {
 		String name = questionLabel.getText();
 		FormArea area = new FormArea(name);
 		area.setType(getFieldType());
-		// area.setGroup(setOfQuestionsLabel.getText());
 		for (int i = 0; i < 2; i++) {
 			for (int j = 1; j < 5; j += 2) {
 				FormPoint corner = getPointFromTable(i, j);
@@ -506,7 +523,6 @@ public class ManageTemplateFrame extends InternalFrame implements TabbedView {
 				field
 						.setRejectMultiple(!isMultiple.isSelected() && rejectMultiple
 								.isSelected());
-				// field.setGroup(setOfQuestionsLabel.getText());
 				fields.put(name, field);
 			}
 			break;
@@ -524,7 +540,6 @@ public class ManageTemplateFrame extends InternalFrame implements TabbedView {
 			field.setMultiple(isMultiple.isSelected());
 			field.setRejectMultiple(!isMultiple.isSelected() && rejectMultiple
 					.isSelected());
-			// field.setGroup(setOfQuestionsLabel.getText());
 			fields.put(name, field);
 			break;
 		}
@@ -611,21 +626,37 @@ public class ManageTemplateFrame extends InternalFrame implements TabbedView {
 
 			HashMap<String, FormQuestion> fields = group.getValue().getFields();
 			for (FormQuestion field : fields.values()) {
-				fieldsTableModel.addRow(new Object[] {
-						group.getKey(),
-						field.getName(),
-						FormScannerTranslation.getTranslationFor(field
-								.getType().getValue()), field.isMultiple(),
-						field.getPoints().size() });
+				if (model.isGroupsEnabled()) {
+					fieldsTableModel.addRow(new Object[] {
+							group.getKey(),
+							field.getName(),
+							FormScannerTranslation.getTranslationFor(field
+									.getType().getValue()), field.isMultiple(),
+							field.getPoints().size() });
+				} else {
+					fieldsTableModel.addRow(new Object[] {
+							field.getName(),
+							FormScannerTranslation.getTranslationFor(field
+									.getType().getValue()), field.isMultiple(),
+							field.getPoints().size() });
+				}
 			}
 
 			HashMap<String, FormArea> areas = group.getValue().getAreas();
 			for (FormArea area : areas.values()) {
-				fieldsTableModel.addRow(new Object[] {
-						group.getKey(),
-						area.getName(),
-						FormScannerTranslation.getTranslationFor(area
-								.getType().getValue()), null, null });
+				if (model.isGroupsEnabled()) {
+					fieldsTableModel.addRow(new Object[] {
+							group.getKey(),
+							area.getName(),
+							FormScannerTranslation.getTranslationFor(area
+									.getType().getValue()), null, null });
+				} else {
+					fieldsTableModel.addRow(new Object[] {
+							group.getKey(),
+							area.getName(),
+							FormScannerTranslation.getTranslationFor(area
+									.getType().getValue()), null, null });
+				}
 			}
 		}
 	}
@@ -637,7 +668,8 @@ public class ManageTemplateFrame extends InternalFrame implements TabbedView {
 			isMultiple.setSelected(false);
 			rejectMultiple.setSelected(false);
 		}
-		setOfQuestionsLabel.setText(StringUtils.EMPTY);
+		if (model.isGroupsEnabled())
+			setOfQuestionsLabel.setText(StringUtils.EMPTY);
 	}
 
 	public FieldType getFieldType() {
@@ -734,18 +766,37 @@ public class ManageTemplateFrame extends InternalFrame implements TabbedView {
 		}
 
 		for (int i = 1; i < rows; i++) {
-			table
-					.setValueAt(
-							FormScannerTranslation
-									.getTranslationFor(FormScannerTranslationKeys.QUESTION) + " " + StringUtils
-									.leftPad("" + previousRowsCount++, 3, "0"),
-							i, 0);
+			table.setValueAt(
+					getNameFromTemplate(FormScannerConstants.QUESTION), i, 0);
 		}
 		table.setComponentOrientation(orientation);
 		table.setCellSelectionEnabled(true);
 		table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 		table.setVisible(true);
 		return table;
+	}
+
+	private String getNameFromTemplate(String type) {
+		String nameTemplate = model.getNameTemplate(type);
+		int length = StringUtils.countMatches(nameTemplate, "#");
+
+		int count;
+		switch (type) {
+		case FormScannerConstants.BARCODE:
+			count = previousBarcodeCount++;
+			break;
+		case FormScannerConstants.GROUP:
+			count = previousGroupCount++;
+			break;
+		case FormScannerConstants.QUESTION:
+		default:
+			count = previousRowsCount++;
+			break;
+		}
+
+		return StringUtils.replace(
+				nameTemplate, StringUtils.repeat("#", length),
+				StringUtils.leftPad("" + count, length, "0"));
 	}
 
 	private JTable createGridPositionsTable(int rows, int cols) {
@@ -939,17 +990,24 @@ public class ManageTemplateFrame extends InternalFrame implements TabbedView {
 				.addComponent(positionButtonPanel, BorderLayout.SOUTH)
 				.addComponent(positionsTableScrollPane, BorderLayout.CENTER);
 
-		boolean isGrid = false;
 		switch (fieldsType) {
 		case FormScannerConstants.RESPONSES_BY_GRID:
-			isGrid = true;
 		case FormScannerConstants.BARCODE:
+
 			questionLabel = new TextFieldBuilder(10, orientation)
-					.withActionListener(manageTemplateController).build();
+					.withActionListener(manageTemplateController)
+					.setText(
+							getNameFromTemplate(StringUtils.equals(
+									fieldsType,
+									FormScannerConstants.RESPONSES_BY_GRID)
+									? FormScannerConstants.QUESTION
+									: FormScannerConstants.BARCODE)).build();
 			JPanel questionPanel = new PanelBuilder(orientation)
 					.withLayout(new SpringLayout())
 					.add(
-							getLabel(isGrid
+							getLabel(StringUtils.equals(
+									fieldsType,
+									FormScannerConstants.RESPONSES_BY_GRID)
 									? FormScannerTranslationKeys.SINGLE_QUESTION_LABEL
 									: FormScannerTranslationKeys.BARCODE_LABEL))
 					.add(questionLabel).withGrid(1, 2).build();
@@ -1016,9 +1074,6 @@ public class ManageTemplateFrame extends InternalFrame implements TabbedView {
 		boolean isGrid = fieldsType
 				.equals(FormScannerConstants.RESPONSES_BY_GRID);
 
-		setOfQuestionsLabel = new TextFieldBuilder(10, orientation)
-				.withActionListener(manageTemplateController).build();
-
 		isMultiple = new CheckBoxBuilder(
 				FormScannerConstants.IS_MULTIPLE, orientation)
 				.withActionCommand(FormScannerConstants.IS_MULTIPLE)
@@ -1039,11 +1094,24 @@ public class ManageTemplateFrame extends InternalFrame implements TabbedView {
 				.withActionListener(manageTemplateController)
 				.withFocusListener(manageTemplateController).build();
 
-		return new PanelBuilder(orientation)
-				.withLayout(new SpringLayout())
-				.add(
-						getLabel(FormScannerTranslationKeys.SET_OF_QUESTIONS_LABEL))
-				.add(setOfQuestionsLabel)
+		PanelBuilder panelBuilder = new PanelBuilder(orientation)
+				.withLayout(new SpringLayout());
+
+		if (model.isGroupsEnabled()) {
+			setOfQuestionsLabel = new TextFieldBuilder(10, orientation)
+					.withActionListener(manageTemplateController)
+					.setText(getNameFromTemplate(FormScannerConstants.GROUP))
+					.build();
+			panelBuilder
+					.withGrid(5, 2)
+					.add(
+							getLabel(FormScannerTranslationKeys.SET_OF_QUESTIONS_LABEL))
+					.add(setOfQuestionsLabel);
+		} else {
+			panelBuilder.withGrid(4, 2);
+		}
+
+		return panelBuilder
 				.add(
 						getLabel(FormScannerTranslationKeys.FIELD_PROPERTIES_IS_MULTIPLE))
 				.add(isMultiple)
@@ -1059,7 +1127,7 @@ public class ManageTemplateFrame extends InternalFrame implements TabbedView {
 						getLabel(isGrid
 								? FormScannerTranslationKeys.FIELD_PROPERTIES_N_COLS_LABEL
 								: FormScannerTranslationKeys.FIELD_PROPERTIES_N_VALUES_LABEL))
-				.add(colsNumber).withGrid(5, 2).build();
+				.add(colsNumber).build();
 	}
 
 	private JLabel getLabel(String value) {
@@ -1266,6 +1334,7 @@ public class ManageTemplateFrame extends InternalFrame implements TabbedView {
 			break;
 		case 2:
 			advanceable = verifyPropertiesValues();
+			break;
 		case 3:
 			advanceable = verifyQuestionLabel();
 			break;

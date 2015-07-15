@@ -21,6 +21,7 @@ import com.albertoborsetta.formscanner.api.FormGroup;
 import com.albertoborsetta.formscanner.api.FormQuestion;
 import com.albertoborsetta.formscanner.api.FormTemplate;
 import com.albertoborsetta.formscanner.commons.FormFileUtils;
+import com.albertoborsetta.formscanner.commons.FormScannerConstants;
 import com.albertoborsetta.formscanner.commons.FormScannerConstants.Frame;
 import com.albertoborsetta.formscanner.commons.translation.FormScannerTranslation;
 import com.albertoborsetta.formscanner.commons.translation.FormScannerTranslationKeys;
@@ -88,10 +89,11 @@ public class ResultsGridFrame extends InternalFrame {
 				Object value, boolean isSelected, boolean hasFocus, int row,
 				int column) {
 
-			if (row == 0 || column == 0) {
+			int rowHead = (model.isGroupsEnabled()) ? 1 : 0;
+			if (row == 0 || column <= rowHead) {
 				setBackground(new java.awt.Color(238, 238, 238));
 			} else {
-				if (isSelected && row != 0 && column != 0) {
+				if (isSelected && row != 0 && column > rowHead) {
 					setForeground(table.getSelectionForeground());
 					setBackground(table.getSelectionBackground());
 				} else {
@@ -100,7 +102,7 @@ public class ResultsGridFrame extends InternalFrame {
 				}
 			}
 			setFont(table.getFont());
-			if (hasFocus && row != 0 && column != 0) {
+			if (hasFocus && row != 0 && column > rowHead) {
 				setBorder(UIManager.getBorder("Table.focusCellHighlightBorder"));
 				if (table.isCellEditable(row, column)) {
 					setForeground(UIManager
@@ -163,8 +165,8 @@ public class ResultsGridFrame extends InternalFrame {
 
 		FormTemplate template = model.getTemplate();
 		header = fileUtils.getHeader(template);
-		rows = header.length + 1;
-		cols = 3;
+		rows = header.length;
+		cols = (model.isGroupsEnabled()) ? 3 : 2;
 
 		setBounds(model.getLastPosition(Frame.RESULTS_GRID_FRAME));
 		setName(Frame.RESULTS_GRID_FRAME.name());
@@ -199,8 +201,17 @@ public class ResultsGridFrame extends InternalFrame {
 			for (String fieldKey : fieldKeys) {
 				FormQuestion field = fields.get(fieldKey);
 				if (field != null) {
-					table.setValueAt(group.getKey(), i, 1);
-					table.setValueAt(field.getValues(), i, 2);
+					int c = 0;
+					if (model.isGroupsEnabled()) {
+						if (!group.getKey().equals(
+								FormScannerConstants.EMPTY_GROUP_NAME)) {
+							table.setValueAt(group.getKey(), i, c++);
+						} else {
+							c++;
+						}
+					}
+					table.setValueAt(field.getName(), i, c++);
+					table.setValueAt(field.getValues(), i, c);
 				}
 				i++;
 			}
@@ -211,8 +222,17 @@ public class ResultsGridFrame extends InternalFrame {
 			for (String areaKey : areaKeys) {
 				FormArea area = areas.get(areaKey);
 				if (area != null) {
-					table.setValueAt(group.getKey(), i, 1);
-					table.setValueAt(area.getText(), i, 2);
+					int c = 0;
+					if (model.isGroupsEnabled()) {
+						if (!group.getKey().equals(
+								FormScannerConstants.EMPTY_GROUP_NAME)) {
+							table.setValueAt(group.getKey(), i, c++);
+						} else {
+							c++;
+						}
+					}
+					table.setValueAt(area.getName(), i, c++);
+					table.setValueAt(area.getText(), i, c);
 				}
 				i++;
 			}
@@ -233,17 +253,24 @@ public class ResultsGridFrame extends InternalFrame {
 		newTable.setDefaultRenderer(
 				Object.class, new MultilineTableCellRenderer());
 
-		for (int i = 1; i < cols; i++) {
-			newTable
-					.setValueAt(
-							FormScannerTranslation
-									.getTranslationFor(FormScannerTranslationKeys.RESULTS),
-							0, i);
+		int c = 0;
+		if (model.isGroupsEnabled()) {
+			newTable.setValueAt(
+					FormScannerTranslation
+							.getTranslationFor(FormScannerTranslationKeys.GROUP),
+					0, c++);
 		}
+		
+		newTable.setValueAt(
+				FormScannerTranslation
+						.getTranslationFor(FormScannerTranslationKeys.QUESTION),
+				0, c++);
+		
+		newTable.setValueAt(
+				FormScannerTranslation
+						.getTranslationFor(FormScannerTranslationKeys.RESULTS),
+				0, c++);
 
-		for (int i = 1; i < rows; i++) {
-			newTable.setValueAt(header[i], i, 0);
-		}
 		newTable.setComponentOrientation(orientation);
 		newTable.setCellSelectionEnabled(true);
 		newTable.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);

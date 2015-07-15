@@ -1,5 +1,8 @@
 package com.albertoborsetta.formscanner.commons.configuration;
 
+import com.albertoborsetta.formscanner.commons.translation.FormScannerTranslation;
+import com.albertoborsetta.formscanner.commons.translation.FormScannerTranslationKeys;
+
 public class FormScannerConfigurationKeys {
 	/*
 	 * Configuration Constants
@@ -44,7 +47,23 @@ public class FormScannerConfigurationKeys {
 	public static final String DEFAULT_CORNER_TYPE = "ROUND";
 
 	public static final String LOOK_AND_FEEL = "lookAndFeel";
-	public static final String DEFAULT_LOOK_AND_FEEL = "javax.swing.plaf.metal.MetalLookAndFeel";
+	public static final String DEFAULT_LOOK_AND_FEEL = "MetalLookAndFeel";
+	
 	public static final String RESET_AUTO_NUMBERING = "resetAutoNumbering";
 	public static final Boolean DEFAULT_RESET_AUTO_NUMBERING = false;
+	
+	public static final String GROUPS_ENABLED = "groupsEnabled";
+	public static final Boolean DEFAULT_GROUPS_ENABLED = true;
+	
+	public static final String GROUP_NAME_TEMPLATE = "groupNameTemplate";
+	public static final String DEFAULT_GROUP_NAME_TEMPLATE = FormScannerTranslation.getTranslationFor(FormScannerTranslationKeys.GROUP) + "###";
+	public static final String HISTORY_GROUP_NAME_TEMPLATE = "historyGroupNameTemplate";
+	
+	public static final String QUESTION_NAME_TEMPLATE = "questionNameTemplate";
+	public static final String DEFAULT_QUESTION_NAME_TEMPLATE = FormScannerTranslation.getTranslationFor(FormScannerTranslationKeys.QUESTION) + "###";
+	public static final String HISTORY_QUESTION_NAME_TEMPLATE = "historyQuestionNameTemplate";
+	
+	public static final String BARCODE_NAME_TEMPLATE = "barcodeNameTemplate";
+	public static final String DEFAULT_BARCODE_NAME_TEMPLATE = FormScannerTranslation.getTranslationFor(FormScannerTranslationKeys.BARCODE) + "###";
+	public static final String HISTORY_BARCODE_NAME_TEMPLATE = "historyBarcodeNameTemplate";
 }

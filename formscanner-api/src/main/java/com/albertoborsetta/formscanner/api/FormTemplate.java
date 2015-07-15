@@ -85,7 +85,7 @@ import java.util.concurrent.ExecutionException;
  * 			<point x="153.7844387755102" y="3353.5"/>
  * 		</corner>
  * 	</corners>
- * 	<fields>
+ * 	<fields groups="true">
  * 		<group name="first">
  * 			<question group="first" multiple="false" type="QUESTIONS_BY_ROWS" question="Question 01">
  * 				<values>
@@ -195,6 +195,7 @@ public final class FormTemplate {
 	private Integer threshold;
 	private Integer density;
 	private Integer size;
+	private boolean isGroupsEnabled = false;
 
 	private static class FormTemplateWrapper {
 
@@ -253,29 +254,31 @@ public final class FormTemplate {
 				cornerElement.appendChild(corner.getValue().getXml(doc));
 				cornersElement.appendChild(cornerElement);
 			}
+			
+			// fields element
+			Element fieldsElement = doc.createElement("fields");
+			fieldsElement.setAttribute("groups", String.valueOf(template.isGroupsEnabled()));
+			templateElement.appendChild(fieldsElement);
 
 			for (Entry<String, FormGroup> group : template
 					.getGroups().entrySet()) {
 				// group element
 				Element groupElement = doc.createElement("group");
 				groupElement.setAttribute("name", group.getKey());
-				templateElement.appendChild(groupElement);
-
-				// fields element
-				Element fieldsElement = doc.createElement("fields");
-				groupElement.appendChild(fieldsElement);
 
 				// question elements
 				for (Entry<String, FormQuestion> field : group
 						.getValue().getFields().entrySet()) {
-					fieldsElement.appendChild(field.getValue().getXml(doc));
+					groupElement.appendChild(field.getValue().getXml(doc));
 				}
 
 				// area elements
 				for (Entry<String, FormArea> area : group
 						.getValue().getAreas().entrySet()) {
-					fieldsElement.appendChild(area.getValue().getXml(doc));
+					groupElement.appendChild(area.getValue().getXml(doc));
 				}
+				
+				fieldsElement.appendChild(groupElement);
 			}
 
 			return doc;
@@ -314,15 +317,15 @@ public final class FormTemplate {
 			addCorners(template, cornersElement);
 
 			template.calculateDiagonal();
+			
+			Element fieldsElement = (Element) templateElement.getElementsByTagName("fields").item(0);
+			template.setGroupsEnabled(Boolean.parseBoolean(fieldsElement.getAttribute("groups")));
 
-			NodeList groupsList = templateElement.getElementsByTagName("group");
+			NodeList groupsList = fieldsElement.getElementsByTagName("group");
 
 			if (groupsList.getLength() > 0) {
 				for (int i = 0; i < groupsList.getLength(); i++) {
 					Element groupElement = (Element) groupsList.item(i);
-
-					FormGroup group = new FormGroup();
-					template.addGroup(groupElement.getAttribute("name"), group);
 
 					addQuestions(template, groupElement);
 					addAreas(template, groupElement);
@@ -374,45 +377,40 @@ public final class FormTemplate {
 		}
 		
 		private static void addAreas(FormTemplate template, Element element) {
-			Element fieldsElement = (Element) element.getElementsByTagName(
-					"fields").item(0);
 			
-			NodeList fieldList = fieldsElement.getElementsByTagName("area");
-			for (int i = 0; i < fieldList.getLength(); i++) {
-				Element fieldElement = (Element) fieldList.item(i);
+			NodeList areasList = element.getElementsByTagName("area");
+			for (int i = 0; i < areasList.getLength(); i++) {
+				Element areaElement = (Element) areasList.item(i);
 				
-				FormArea field = getArea(fieldElement);
+				FormArea area = getArea(areaElement);
 				
-				String groupName = "group".equals(element.getNodeName()) ? element.getAttribute("name") : fieldElement.getAttribute("group");
+				String groupName = "group".equals(element.getNodeName()) ? element.getAttribute("name") : areaElement.getAttribute("group");
 				groupName = StringUtils.defaultIfBlank(groupName, Constants.EMPTY_GROUP_NAME);
 				
-				template.addArea(groupName, field);
+				template.addArea(groupName, area);
 			}
 			
 		}
 		
 		private static void addQuestions(FormTemplate template, Element element) {
-			
-			Element fieldsElement = (Element) element.getElementsByTagName(
-					"fields").item(0);
 
-			NodeList fieldList = fieldsElement.getElementsByTagName("question");
-			for (int i = 0; i < fieldList.getLength(); i++) {
-				Element fieldElement = (Element) fieldList.item(i);
-				String fieldName = fieldElement.getAttribute("question");
+			NodeList questionsList = element.getElementsByTagName("question");
+			for (int i = 0; i < questionsList.getLength(); i++) {
+				Element questionElement = (Element) questionsList.item(i);
+				String questionName = questionElement.getAttribute("question");
 
-				FormQuestion field = getQuestion(fieldElement, fieldName);
+				FormQuestion field = getQuestion(questionElement, questionName);
 				
-				String groupName = "group".equals(element.getNodeName()) ? element.getAttribute("name") : fieldElement.getAttribute("group");
+				String groupName = "group".equals(element.getNodeName()) ? element.getAttribute("name") : questionElement.getAttribute("group");
 				groupName = StringUtils.defaultIfBlank(groupName, Constants.EMPTY_GROUP_NAME);
 				
-				template.addField(groupName, fieldName, field);
+				template.addField(groupName, questionName, field);
 			}
 
 			// TODO: Tag "field" deprecated. To be removed
-			fieldList = element.getElementsByTagName("field");
-			for (int i = 0; i < fieldList.getLength(); i++) {
-				Element fieldElement = (Element) fieldList.item(i);
+			questionsList = element.getElementsByTagName("field");
+			for (int i = 0; i < questionsList.getLength(); i++) {
+				Element fieldElement = (Element) questionsList.item(i);
 				String fieldName = fieldElement.getAttribute("question");
 
 				FormQuestion field = getQuestion(fieldElement, fieldName);
@@ -459,6 +457,26 @@ public final class FormTemplate {
 	 */
 	public FormTemplate(String name) {
 		this(name, null);
+	}
+
+	/**
+	 * Returns the GroupsEnabled field.
+	 *
+	 * @author Alberto Borsetta
+	 * @return isGroupsEnabled
+	 */
+	public boolean isGroupsEnabled() {
+		return isGroupsEnabled;
+	}
+	
+	/**
+	 * Sets the GroupsEnabled field.
+	 *
+	 * @author Alberto Borsetta
+	 * @param enabled
+	 */
+	public void setGroupsEnabled(boolean enabled) {
+		isGroupsEnabled = enabled;
 	}
 
 	/**
@@ -1255,8 +1273,15 @@ public final class FormTemplate {
 		this.shape = shape;
 	}
 
-	public int lastIndexOfGroup(String text) {
-		// TODO Auto-generated method stub
-		return 0;
+	/**
+	 * Returns the last index for the named group.
+	 *
+	 * @author Alberto Borsetta
+	 * @param groupName the name of the group
+	 * @return the index for the group
+	 */
+	public int lastIndexOfGroup(String groupName) {
+		FormGroup group = groups.get(groupName);
+		return group.getLastFieldIndex();
 	}
 }
