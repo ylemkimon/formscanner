@@ -6,17 +6,19 @@ public class FormGroup {
 
 	private HashMap<String, FormQuestion> fields;
 	private HashMap<String, FormArea> areas;
+	private int lastFieldIndex;
 
 	public FormGroup() {
 		fields = new HashMap<>();
 		areas = new HashMap<>();
+		lastFieldIndex = 0;
 	}
 
 	/**
-	 * Returns all the fields in the FormTemplate object.
+	 * Returns all the fields in the FormGroup object.
 	 *
 	 * @author Alberto Borsetta
-	 * @return the fields of the FormTemplate object
+	 * @return the fields of the FormGroup object
 	 * @see FormQuestion
 	 */
 	public HashMap<String, FormQuestion> getFields() {
@@ -32,14 +34,15 @@ public class FormGroup {
 	 * @see FormQuestion
 	 */
 	public void setField(String name, FormQuestion field) {
+		if (fields.get(name) == null) lastFieldIndex++;
 		fields.put(name, field);
 	}
 
 	/**
-	 * Returns the areas of the FormTemplate object.
+	 * Returns the areas of the FormGroup object.
 	 *
 	 * @author Alberto Borsetta
-	 * @return the areas of the FormTemplate object
+	 * @return the areas of the FormGroup object
 	 * @see FormArea
 	 */
 	public HashMap<String, FormArea> getAreas() {
@@ -47,13 +50,14 @@ public class FormGroup {
 	}
 
 	/**
-	 * Sets an area in the FormTemplate object.
+	 * Sets an area in the FormGroup object.
 	 *
 	 * @author Alberto Borsetta
 	 * @param areaName the name of the area to set
 	 * @param area the area to set
 	 */
 	public void setArea(String areaName, FormArea area) {
+		if (areas.get(areaName) == null) lastFieldIndex++;
 		areas.put(areaName, area);
 	}
 
@@ -64,6 +68,7 @@ public class FormGroup {
 	 */
 	public void clearFields() {
 		fields.clear();
+		lastFieldIndex = 0;
 	}
 
 	/**
@@ -73,5 +78,16 @@ public class FormGroup {
 	 */
 	public void removeField(String fieldName) {
 		fields.remove(fieldName);
+		lastFieldIndex--;
+	}
+
+	/**
+	 * Returns the last index of the FormGroup object.
+	 *
+	 * @author Alberto Borsetta
+	 * @return the last index of the FormGroup object
+	 */
+	public int getLastFieldIndex() {
+		return lastFieldIndex;
 	}
 }

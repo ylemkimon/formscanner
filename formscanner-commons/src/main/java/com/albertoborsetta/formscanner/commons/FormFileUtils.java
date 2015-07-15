@@ -101,7 +101,7 @@ public class FormFileUtils extends JFileChooser {
 	private void setImagesFilter() {
 		resetChoosableFileFilters();
 
-		// Creating a set for preveting duplication of entries
+		// Creating a set for preventing duplication of entries
 		ArrayList<String> setOfExtensions = new ArrayList<>();
 		// Iterating all possible image suffixes the current jvm can open
 		for (String suffix : ImageIO.getReaderFileSuffixes()) {
