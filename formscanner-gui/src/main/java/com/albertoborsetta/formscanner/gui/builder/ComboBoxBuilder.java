@@ -41,4 +41,14 @@ public class ComboBoxBuilder<T> {
     public JComboBox<T> build() {
         return comboBox;
     }
+
+	public ComboBoxBuilder<T> setEditable(boolean b) {
+		comboBox.setEditable(b);
+		return this;
+	}
+
+	public ComboBoxBuilder<T> withActionCommand(String command) {
+		comboBox.setActionCommand(command);
+		return this;
+	}
 }

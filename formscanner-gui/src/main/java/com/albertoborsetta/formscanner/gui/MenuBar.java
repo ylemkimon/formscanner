@@ -78,7 +78,7 @@ public final class MenuBar extends JMenuBar implements MenuView {
 								.getMnemonicFor(FormScannerTranslationKeys.OPEN_IMAGES_MNEMONIC))
 				.withIcon(
 						FormScannerResources
-								.getIconFor(FormScannerResourcesKeys.OPEN_IMAGES_ICON))
+								.getIconFor(FormScannerResourcesKeys.OPEN_IMAGES_ICON_16))
 				.build();
 
 		exitMenuItem = new MenuItemBuilder(
@@ -95,7 +95,7 @@ public final class MenuBar extends JMenuBar implements MenuView {
 								KeyEvent.VK_X, InputEvent.CTRL_MASK))
 				.withIcon(
 						FormScannerResources
-								.getIconFor(FormScannerResourcesKeys.EXIT_ICON))
+								.getIconFor(FormScannerResourcesKeys.EXIT_ICON_16))
 				.build();
 
 		return new MenuBuilder(
@@ -125,7 +125,7 @@ public final class MenuBar extends JMenuBar implements MenuView {
 								KeyEvent.VK_R, InputEvent.CTRL_MASK))
 				.withIcon(
 						FormScannerResources
-								.getIconFor(FormScannerResourcesKeys.RENAME_FILES_ICON))
+								.getIconFor(FormScannerResourcesKeys.RENAME_FILES_ICON_16))
 				.setEnabled(false).build();
 
 		scanAllMenuItem = new MenuItemBuilder(
@@ -142,7 +142,7 @@ public final class MenuBar extends JMenuBar implements MenuView {
 								KeyEvent.VK_A, InputEvent.CTRL_MASK))
 				.withIcon(
 						FormScannerResources
-								.getIconFor(FormScannerResourcesKeys.ANALYZE_FILES_ALL_ICON))
+								.getIconFor(FormScannerResourcesKeys.ANALYZE_FILES_ALL_ICON_16))
 				.setEnabled(false).build();
 
 		scanMenuItem = new MenuItemBuilder(
@@ -159,7 +159,7 @@ public final class MenuBar extends JMenuBar implements MenuView {
 								KeyEvent.VK_I, InputEvent.CTRL_MASK))
 				.withIcon(
 						FormScannerResources
-								.getIconFor(FormScannerResourcesKeys.ANALYZE_FILES_ICON))
+								.getIconFor(FormScannerResourcesKeys.ANALYZE_FILES_ICON_16))
 				.setEnabled(false).build();
 
 		return new MenuBuilder(
@@ -189,7 +189,7 @@ public final class MenuBar extends JMenuBar implements MenuView {
 								KeyEvent.VK_C, InputEvent.CTRL_MASK))
 				.withIcon(
 						FormScannerResources
-								.getIconFor(FormScannerResourcesKeys.EDIT_ICON))
+								.getIconFor(FormScannerResourcesKeys.EDIT_ICON_16))
 				.build();
 
 		loadTemplateMenuItem = new MenuItemBuilder(
@@ -206,7 +206,7 @@ public final class MenuBar extends JMenuBar implements MenuView {
 								KeyEvent.VK_L, InputEvent.CTRL_MASK))
 				.withIcon(
 						FormScannerResources
-								.getIconFor(FormScannerResourcesKeys.OPEN_IMAGES_ICON))
+								.getIconFor(FormScannerResourcesKeys.IMPORT_ICON_16))
 				.build();
 
 		return new MenuBuilder(
@@ -233,7 +233,7 @@ public final class MenuBar extends JMenuBar implements MenuView {
 				.withAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F1, 0))
 				.withIcon(
 						FormScannerResources
-								.getIconFor(FormScannerResourcesKeys.HELP_ICON))
+								.getIconFor(FormScannerResourcesKeys.HELP_ICON_16))
 				.build();
 
 		aboutMenuItem = new MenuItemBuilder(
@@ -247,7 +247,7 @@ public final class MenuBar extends JMenuBar implements MenuView {
 								KeyEvent.VK_F1, InputEvent.ALT_MASK))
 				.withIcon(
 						FormScannerResources
-								.getIconFor(FormScannerResourcesKeys.ABOUT_ICON))
+								.getIconFor(FormScannerResourcesKeys.ABOUT_ICON_16))
 				.build();
 
 		return new MenuBuilder(
@@ -273,7 +273,7 @@ public final class MenuBar extends JMenuBar implements MenuView {
 								KeyEvent.VK_PLUS, InputEvent.CTRL_MASK))
 				.withIcon(
 						FormScannerResources
-								.getIconFor(FormScannerResourcesKeys.CONFIG_ICON))
+								.getIconFor(FormScannerResourcesKeys.CONFIG_ICON_16))
 				.build();
 
 		return new MenuBuilder(
@@ -292,8 +292,9 @@ public final class MenuBar extends JMenuBar implements MenuView {
 		MenuBuilder menuBuilder = new MenuBuilder(
 				FormScannerTranslation
 						.getTranslationFor(FormScannerTranslationKeys.LANGUAGE),
-				orientation).withIcon(FormScannerResources
-				.getIconFor(FormScannerResourcesKeys.LANGUAGE_ICON));
+				orientation)
+				.withIcon(FormScannerResources
+						.getIconFor(FormScannerResourcesKeys.LANGUAGE_ICON_16));
 
 		JRadioButtonMenuItem languageItem;
 		ButtonGroup buttonGroup = new ButtonGroup();
@@ -307,6 +308,8 @@ public final class MenuBar extends JMenuBar implements MenuView {
 			languageItem.addActionListener(formScannerController);
 			languageItem.setActionCommand(FormScannerConstants.LANGUAGE);
 			languageItem.setName(language.getValue());
+			languageItem.setIcon(FormScannerResources
+						.getIconFor(language.getValue()));
 			buttonGroup.add(languageItem);
 			menuBuilder.add(languageItem);
 		}
