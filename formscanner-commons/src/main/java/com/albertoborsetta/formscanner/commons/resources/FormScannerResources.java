@@ -12,6 +12,7 @@ import org.apache.logging.log4j.LogManager;
 
 public class FormScannerResources {
 
+	private static final String PNG = ".png";
 	private static String iconsPath;
 	private static String licensePath;
 	private static String template;
@@ -24,7 +25,7 @@ public class FormScannerResources {
 	}
 
 	public static ImageIcon getIconFor(String key) {
-		ImageIcon icon = new ImageIcon(iconsPath + key);
+		ImageIcon icon = new ImageIcon(iconsPath + key + PNG);
 		return icon;
 	}
 
@@ -43,7 +44,7 @@ public class FormScannerResources {
 	public static Image getFormScannerIcon() {
 		try {
 			Image icon = ImageIO.read(new File(
-					iconsPath + FormScannerResourcesKeys.FORMSCANNER_ICON));
+					iconsPath + FormScannerResourcesKeys.FORMSCANNER_ICON + PNG));
 			return icon;
 		} catch (IOException e) {
 			logger.catching(e);

@@ -38,4 +38,9 @@ public class TextFieldBuilder {
         textField.addFocusListener(listener);
         return this;
     }
+
+	public TextFieldBuilder setText(String text) {
+		textField.setText(text);
+		return this;
+	}
 }

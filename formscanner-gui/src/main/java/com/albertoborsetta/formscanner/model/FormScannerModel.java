@@ -7,6 +7,7 @@ import java.io.File;
 import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
@@ -66,6 +67,8 @@ public class FormScannerModel {
 	public static final String COL_DY = "COL_DY";
 	public static final String ROW_DX = "ROW_DX";
 	public static final String ROW_DY = "ROW_DY";
+	
+	public static final String HISTORY_SEPARATOR = "|";
 
 	private String templatePath;
 	private String resultsPath;
@@ -114,6 +117,13 @@ public class FormScannerModel {
 
 	private final Logger logger;
 	private Boolean resetAutoNumbering;
+	private Boolean groupsEnabled;
+	private String questionNameTemplate;
+	private String barcodeNameTemplate;
+	private String groupNameTemplate;
+	private ArrayList<String> historyQuestionNameTemplate;
+	private ArrayList<String> historyBarcodeNameTemplate;
+	private ArrayList<String> historyGroupNameTemplate;
 
 	public FormScannerModel() throws UnsupportedEncodingException {
 		String path = FormScannerModel.class
@@ -191,6 +201,39 @@ public class FormScannerModel {
 		resetAutoNumbering = (Boolean) configurations.getProperty(
 				FormScannerConfigurationKeys.RESET_AUTO_NUMBERING,
 				FormScannerConfigurationKeys.DEFAULT_RESET_AUTO_NUMBERING);
+		groupsEnabled = (Boolean) configurations.getProperty(
+				FormScannerConfigurationKeys.GROUPS_ENABLED,
+				FormScannerConfigurationKeys.DEFAULT_GROUPS_ENABLED);
+		questionNameTemplate = configurations.getProperty(
+				FormScannerConfigurationKeys.QUESTION_NAME_TEMPLATE,
+				FormScannerConfigurationKeys.DEFAULT_QUESTION_NAME_TEMPLATE);
+		barcodeNameTemplate = configurations.getProperty(
+				FormScannerConfigurationKeys.BARCODE_NAME_TEMPLATE,
+				FormScannerConfigurationKeys.DEFAULT_BARCODE_NAME_TEMPLATE);
+		groupNameTemplate = configurations.getProperty(
+				FormScannerConfigurationKeys.GROUP_NAME_TEMPLATE,
+				FormScannerConfigurationKeys.DEFAULT_GROUP_NAME_TEMPLATE);
+		historyGroupNameTemplate = new ArrayList<String>(
+				Arrays.asList(StringUtils.split(
+						configurations
+								.getProperty(
+										FormScannerConfigurationKeys.HISTORY_GROUP_NAME_TEMPLATE,
+										FormScannerConfigurationKeys.DEFAULT_GROUP_NAME_TEMPLATE),
+										HISTORY_SEPARATOR)));
+		historyBarcodeNameTemplate = new ArrayList<String>(
+				Arrays.asList(StringUtils.split(
+						configurations
+								.getProperty(
+										FormScannerConfigurationKeys.HISTORY_BARCODE_NAME_TEMPLATE,
+										FormScannerConfigurationKeys.DEFAULT_BARCODE_NAME_TEMPLATE),
+										HISTORY_SEPARATOR)));
+		historyQuestionNameTemplate = new ArrayList<String>(
+				Arrays.asList(StringUtils.split(
+						configurations
+								.getProperty(
+										FormScannerConfigurationKeys.HISTORY_QUESTION_NAME_TEMPLATE,
+										FormScannerConfigurationKeys.DEFAULT_QUESTION_NAME_TEMPLATE),
+										HISTORY_SEPARATOR)));
 
 		lookAndFeel = configurations.getProperty(
 				FormScannerConfigurationKeys.LOOK_AND_FEEL,
@@ -753,6 +796,7 @@ public class FormScannerModel {
 		formTemplate.setSize(shapeSize);
 		formTemplate.setShape(shapeType);
 		formTemplate.setCornerType(cornerType);
+		formTemplate.setGroupsEnabled(groupsEnabled);
 
 		File template = fileUtils
 				.saveToFile(templatePath, formTemplate, notify);
@@ -819,6 +863,7 @@ public class FormScannerModel {
 					? shapeType : formTemplate.getShape();
 			cornerType = formTemplate.getCornerType() == null
 					? cornerType : formTemplate.getCornerType();
+			groupsEnabled = formTemplate.isGroupsEnabled();
 
 			if (!FormScannerConstants.CURRENT_TEMPLATE_VERSION
 					.equals(formTemplate.getVersion())) {
@@ -953,6 +998,14 @@ public class FormScannerModel {
 		fontType = view.getFontType();
 		fontSize = view.getFontSize();
 		lookAndFeel = view.getLookAndFeel();
+		resetAutoNumbering = view.isResetAutoNumberingQuestions();
+		groupsEnabled = view.isGroupsEnabled();
+		historyGroupNameTemplate = view.getHistoryNameTemplate(FormScannerConstants.GROUP);
+		groupNameTemplate = historyGroupNameTemplate.get(0);
+		historyQuestionNameTemplate = view.getHistoryNameTemplate(FormScannerConstants.QUESTION);
+		questionNameTemplate = historyQuestionNameTemplate.get(0);
+		historyBarcodeNameTemplate = view.getHistoryNameTemplate(FormScannerConstants.BARCODE);
+		barcodeNameTemplate = historyBarcodeNameTemplate.get(0);
 
 		configurations.setProperty(
 				FormScannerConfigurationKeys.THRESHOLD,
@@ -972,6 +1025,29 @@ public class FormScannerModel {
 				FormScannerConfigurationKeys.FONT_SIZE, fontSize);
 		configurations.setProperty(
 				FormScannerConfigurationKeys.LOOK_AND_FEEL, lookAndFeel);
+		configurations.setProperty(
+				FormScannerConfigurationKeys.RESET_AUTO_NUMBERING,
+				resetAutoNumbering);
+		configurations.setProperty(
+				FormScannerConfigurationKeys.GROUPS_ENABLED, groupsEnabled);
+		configurations.setProperty(
+				FormScannerConfigurationKeys.QUESTION_NAME_TEMPLATE,
+				questionNameTemplate);
+		configurations.setProperty(
+				FormScannerConfigurationKeys.BARCODE_NAME_TEMPLATE,
+				barcodeNameTemplate);
+		configurations.setProperty(
+				FormScannerConfigurationKeys.GROUP_NAME_TEMPLATE,
+				groupNameTemplate);
+		configurations.setProperty(
+				FormScannerConfigurationKeys.HISTORY_GROUP_NAME_TEMPLATE,
+				StringUtils.join(historyGroupNameTemplate, HISTORY_SEPARATOR));
+		configurations.setProperty(
+				FormScannerConfigurationKeys.HISTORY_QUESTION_NAME_TEMPLATE,
+				StringUtils.join(historyQuestionNameTemplate, HISTORY_SEPARATOR));
+		configurations.setProperty(
+				FormScannerConfigurationKeys.HISTORY_BARCODE_NAME_TEMPLATE,
+				StringUtils.join(historyBarcodeNameTemplate, HISTORY_SEPARATOR));
 		configurations.store();
 
 		if (formTemplate != null) {
@@ -1117,5 +1193,33 @@ public class FormScannerModel {
 
 	public int lastIndexOfGroup(String text) {
 		return formTemplate.lastIndexOfGroup(text);
+	}
+
+	public boolean isGroupsEnabled() {
+		return groupsEnabled;
+	}
+
+	public String getNameTemplate(String type) {
+		switch (type) {
+		case FormScannerConstants.BARCODE:
+			return barcodeNameTemplate;
+		case FormScannerConstants.GROUP:
+			return groupNameTemplate;
+		case FormScannerConstants.QUESTION:
+		default:
+			return questionNameTemplate;
+		}
+	}
+
+	public ArrayList<String> getHistoryNameTemplate(String type) {
+		switch (type) {
+		case FormScannerConstants.BARCODE:
+			return historyBarcodeNameTemplate;
+		case FormScannerConstants.GROUP:
+			return historyGroupNameTemplate;
+		case FormScannerConstants.QUESTION:
+		default:
+			return historyQuestionNameTemplate;
+		}
 	}
 }
