@@ -1,3 +1,52 @@
+FormScanner 0.12-SNAPSHOT (released AAAA-MM-DD)
+===
+NEW FEATURES
+---
+
+* Added Dutch translation (thanks to Maikel P.H. Verouden)
+* Implement corner detection for different marker pattern
+* Reset autoNumbering question for new group
+
+FIXES
+---
+
+* Manage set of question
+* Minor BugFix
+
+FormScanner 0.11.1 (released 2015-06-03)
+===
+NEW FEATURES
+---
+
+* Added Spanish translation (thanks to Roberto Villanueva)
+
+FIXES
+---
+
+* Fixed bug in multiple core CPU's usage
+* Improved MacOsX systems in installation script
+* Fixed ordering problem of responses in results grid
+* Minor BugFix
+
+FormScanner 0.11.0 (released 2015-05-08)
+===
+NEW FEATURES
+---
+
+* QRCode/Barcode scanning
+* Questions by grid and columns
+* Grouping requests
+* Support for Safari browser
+* Support MacOsX systems in installation script
+* Batch execution of FormScanner from command line
+
+FIXES
+---
+
+* Fixed bug in multiple core CPU's usage
+* Fixed some translations
+* Minor BugFix
+
 FormScanner 0.11.0 (released 2015-05-08)
 ===
 NEW FEATURES
