@@ -127,8 +127,6 @@ square=Quadrato
 circle=Cerchio
 shape.type.option.label=Forma marcatore
 shape.size.option.label=Dimensione marcatore (px)
-marker.options=Opzioni marcatore
-scan.options=Opzioni scansione
 name.column=Nome campo
 type.column=Tipo campo
 multiple.column=Risposta multipla
@@ -136,9 +134,6 @@ responses.column=N. risposte
 field.properties.reject.multiple=Ignora risposte multiple
 
 # added 0.10
-font.type.label=Tipo carattere
-font.size.label=Dimesione carattere
-gui.options=Opzioni interfaccia (Richiede riavvio)
 zoom.fit.width=Adatta alla larghezza
 zoom.fit.page=Adatta alla finestra
 
@@ -153,3 +148,36 @@ set.of.questions.label=Gruppo
 group.column=Gruppo
 responses.by.grid=Risposte su righe e colonne
 qrcode.barcode=Barcode/QRCode
+
+# added 0.12
+corners.options=Marcatore angolo
+corner.type.option.label=Tipo marcatore angolo
+preferred.look.and.feel.option.label=Look and feel preferito (*)
+template.options=Template
+accuracy.options=Precisione scansione
+font.options=Carattere
+look.and.feel=Look and feel
+groups.options=Gruppi
+enable.groups.option.label=Abilita gruppi
+question.options=Questiti
+reset.auto.numbering.option.label=Resetta numerazione automatica
+requires.restart= (*) Richiede riavvio
+round.corner.type=Circolare
+angular.corner.type=Angolare
+image.preprocessing.options=Elaborazione immagini
+dutch.label=Nederlands
+groups.name.template.label=Template nome gruppi
+questions.name.template.label=Template nome quesiti
+barcode.name.template.label=Template nome barcode/QRCode
+crop.options=Ritaglio bordo
+crop.from.top=Dall'alto
+crop.from.left=Da sinistra
+crop.from.right=Da destra
+crop.from.bottom=Dal basso
+
+# modified 0.12
+font.type.label=Tipo carattere (*)
+font.size.label=Dimesione carattere (*)
+gui.options=Interfaccia
+marker.options=Marcatore risposta
+scan.options=Scansione
