@@ -14,6 +14,27 @@ import com.google.zxing.DecodeHintType;
  * @version 0.12-SNAPSHOT
  */
 public class Constants {
+	
+	// Margins
+	/**
+	 * Identifies the TOP margin
+	 */
+	public static final String TOP = "TOP";
+	
+	/**
+	 * Identifies the LEFT margin
+	 */
+	public static final String LEFT = "LEFT";
+	
+	/**
+	 * Identifies the RIGHT margin
+	 */
+	public static final String RIGHT = "RIGHT";
+	
+	/**
+	 * Identifies the BOTTOM margin
+	 */
+	public static final String BOTTOM = "BOTTOM";
 
 	// Corners
 	/**
@@ -71,7 +92,7 @@ public class Constants {
 	/**
 	 * Identifies the current version of the template
 	 */
-	public static final String CURRENT_TEMPLATE_VERSION = "2.0";
+	public static final String CURRENT_TEMPLATE_VERSION = "2.1";
 
 	/**
 	 * The Enum Corners.

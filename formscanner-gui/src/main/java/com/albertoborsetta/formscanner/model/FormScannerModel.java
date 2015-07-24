@@ -124,6 +124,7 @@ public class FormScannerModel {
 	private ArrayList<String> historyQuestionNameTemplate;
 	private ArrayList<String> historyBarcodeNameTemplate;
 	private ArrayList<String> historyGroupNameTemplate;
+	private HashMap<String, Integer> crop = new HashMap<>();
 
 	public FormScannerModel() throws UnsupportedEncodingException {
 		String path = FormScannerModel.class
@@ -245,6 +246,11 @@ public class FormScannerModel {
 				FormScannerConfigurationKeys.FONT_SIZE,
 				FormScannerConfigurationKeys.DEFAULT_FONT_SIZE);
 		FormScannerFont.getFont(fontType, fontSize);
+		
+		crop.put(FormScannerConstants.TOP, 0);
+		crop.put(FormScannerConstants.LEFT, 0);
+		crop.put(FormScannerConstants.RIGHT, 0);
+		crop.put(FormScannerConstants.BOTTOM, 0);
 
 		String tmpl = configurations.getProperty(
 				FormScannerConfigurationKeys.TEMPLATE, (String) null);
@@ -399,7 +405,7 @@ public class FormScannerModel {
 							String name = FilenameUtils
 									.removeExtension(imageFile.getName());
 							filledForm = new FormTemplate(name, formTemplate);
-							filledForm.findCorners(image, threshold, density);
+							filledForm.findCorners(image, threshold, density, cornerType, crop);
 							filledForm.findPoints(
 									image, threshold, density, shapeSize);
 							filledForm.findAreas(image);
@@ -455,7 +461,7 @@ public class FormScannerModel {
 							String name = FilenameUtils
 									.removeExtension(imageFile.getName());
 							filledForm = new FormTemplate(name, formTemplate);
-							filledForm.findCorners(image, threshold, density);
+							filledForm.findCorners(image, threshold, density, cornerType, crop);
 							filledForm.findPoints(
 									image, threshold, density, shapeSize);
 							filledForm.findAreas(image);
@@ -603,7 +609,7 @@ public class FormScannerModel {
 				String name = FilenameUtils.removeExtension(templateFile
 						.getName());
 				formTemplate = new FormTemplate(name);
-				formTemplate.findCorners(templateImage, threshold, density);
+				formTemplate.findCorners(templateImage, threshold, density, cornerType, crop);
 				manageTemplateFrame = new ManageTemplateFrame(this);
 
 				view.arrangeFrame(manageTemplateFrame);
@@ -797,6 +803,7 @@ public class FormScannerModel {
 		formTemplate.setShape(shapeType);
 		formTemplate.setCornerType(cornerType);
 		formTemplate.setGroupsEnabled(groupsEnabled);
+		formTemplate.setCrop(crop);
 
 		File template = fileUtils
 				.saveToFile(templatePath, formTemplate, notify);
@@ -864,6 +871,8 @@ public class FormScannerModel {
 			cornerType = formTemplate.getCornerType() == null
 					? cornerType : formTemplate.getCornerType();
 			groupsEnabled = formTemplate.isGroupsEnabled();
+			
+			crop = formTemplate.getCrop();
 
 			if (!FormScannerConstants.CURRENT_TEMPLATE_VERSION
 					.equals(formTemplate.getVersion())) {
@@ -1006,6 +1015,7 @@ public class FormScannerModel {
 		questionNameTemplate = historyQuestionNameTemplate.get(0);
 		historyBarcodeNameTemplate = view.getHistoryNameTemplate(FormScannerConstants.BARCODE);
 		barcodeNameTemplate = historyBarcodeNameTemplate.get(0);
+		crop = view.getCrop();
 
 		configurations.setProperty(
 				FormScannerConfigurationKeys.THRESHOLD,
@@ -1221,5 +1231,9 @@ public class FormScannerModel {
 		default:
 			return historyQuestionNameTemplate;
 		}
+	}
+
+	public HashMap<String, Integer> getCrop() {
+		return crop;
 	}
 }

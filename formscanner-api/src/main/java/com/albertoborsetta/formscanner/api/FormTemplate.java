@@ -69,9 +69,10 @@ import java.util.concurrent.ExecutionException;
  * <pre>
  * {@code
  * <?xml version="1.0" encoding="UTF-8" standalone="no"?>
- * <template corner="ANGULAR" density="40" shape="SQUARE" size="20" threshold="127" version="2.0">
+ * <template density="40" threshold="127" version="2.1">
  * 	<rotation angle="0.0"/>
- * 	<corners>
+ * <crop top="0" left="0" right="0" bottom="0"/>
+ * 	<corners type="ANGULAR">
  * 		<corner position="TOP_RIGHT">
  * 			<point x="2324.627551020408" y="153.5"/>
  * 		</corner>
@@ -85,7 +86,7 @@ import java.util.concurrent.ExecutionException;
  * 			<point x="153.7844387755102" y="3353.5"/>
  * 		</corner>
  * 	</corners>
- * 	<fields groups="true">
+ * 	<fields groups="true" shape="SQUARE" size="20">
  * 		<group name="first">
  * 			<question group="first" multiple="false" type="QUESTIONS_BY_ROWS" question="Question 01">
  * 				<values>
@@ -196,6 +197,7 @@ public final class FormTemplate {
 	private Integer density;
 	private Integer size;
 	private boolean isGroupsEnabled = false;
+	private HashMap<String, Integer> crop = new HashMap<>();
 
 	private static class FormTemplateWrapper {
 
@@ -213,29 +215,34 @@ public final class FormTemplate {
 				templateElement.setAttribute(
 						"threshold", String.valueOf(template.getThreshold()));
 			}
-
 			if (template.getDensity() != null) {
 				templateElement.setAttribute(
 						"density", String.valueOf(template.getDensity()));
 			}
+			doc.appendChild(templateElement);
 
-			if (template.getSize() != null) {
-				templateElement.setAttribute(
-						"size", String.valueOf(template.getSize()));
-			}
-
-			if (template.getShape() != null) {
-				templateElement.setAttribute("shape", template
-						.getShape().getName());
-			}
-
-			if (template.getCornerType() != null) {
-				templateElement.setAttribute("corner", template
-						.getCornerType().getName());
-			}
+			// crop element
+			Element cropElement = doc.createElement("crop");
+			HashMap<String, Integer> crop = template.getCrop();
+			cropElement.setAttribute(
+					"top",
+					crop.isEmpty() ? "0" : String.valueOf(crop
+							.get(Constants.TOP)));
+			cropElement.setAttribute(
+					"left",
+					crop.isEmpty() ? "0" : String.valueOf(crop
+							.get(Constants.LEFT)));
+			cropElement.setAttribute(
+					"right",
+					crop.isEmpty() ? "0" : String.valueOf(crop
+							.get(Constants.RIGHT)));
+			cropElement.setAttribute(
+					"bottom",
+					crop.isEmpty() ? "0" : String.valueOf(crop
+							.get(Constants.BOTTOM)));
+			templateElement.appendChild(cropElement);
 
 			// rotation element
-			doc.appendChild(templateElement);
 			Element rotationElement = doc.createElement("rotation");
 			rotationElement.setAttribute(
 					"angle", String.valueOf(template.getRotation()));
@@ -243,6 +250,10 @@ public final class FormTemplate {
 
 			// corners element
 			Element cornersElement = doc.createElement("corners");
+			if (template.getCornerType() != null) {
+				cornersElement.setAttribute("type", template
+						.getCornerType().getName());
+			}
 			templateElement.appendChild(cornersElement);
 
 			// corner elements
@@ -254,10 +265,19 @@ public final class FormTemplate {
 				cornerElement.appendChild(corner.getValue().getXml(doc));
 				cornersElement.appendChild(cornerElement);
 			}
-			
+
 			// fields element
 			Element fieldsElement = doc.createElement("fields");
-			fieldsElement.setAttribute("groups", String.valueOf(template.isGroupsEnabled()));
+			fieldsElement.setAttribute(
+					"groups", String.valueOf(template.isGroupsEnabled()));
+			if (template.getSize() != null) {
+				templateElement.setAttribute(
+						"size", String.valueOf(template.getSize()));
+			}
+			if (template.getShape() != null) {
+				templateElement.setAttribute("shape", template
+						.getShape().getName());
+			}
 			templateElement.appendChild(fieldsElement);
 
 			for (Entry<String, FormGroup> group : template
@@ -277,7 +297,7 @@ public final class FormTemplate {
 						.getValue().getAreas().entrySet()) {
 					groupElement.appendChild(area.getValue().getXml(doc));
 				}
-				
+
 				fieldsElement.appendChild(groupElement);
 			}
 
@@ -297,29 +317,47 @@ public final class FormTemplate {
 					templateElement.getAttribute("threshold"), "-1")));
 			template.setDensity(Integer.parseInt(StringUtils.defaultIfBlank(
 					templateElement.getAttribute("density"), "-1")));
-			template.setSize(Integer.parseInt(StringUtils.defaultIfBlank(
-					templateElement.getAttribute("size"), "-1")));
-			template.setShape(StringUtils.isNotBlank(templateElement
-					.getAttribute("shape")) ? ShapeType.valueOf(templateElement
-					.getAttribute("shape")) : ShapeType.CIRCLE);
-			template
-					.setCornerType(StringUtils.isNotBlank(templateElement
-							.getAttribute("corner"))
-							? CornerType.valueOf(templateElement
-									.getAttribute("corner")) : CornerType.ROUND);
+
 			Element rotationElement = (Element) templateElement
 					.getElementsByTagName("rotation").item(0);
 			template.setRotation(Double.parseDouble(rotationElement
 					.getAttribute("angle")));
 
+			Element cropElement = (Element) templateElement
+					.getElementsByTagName("crop").item(0);
+			template.setCrop(Integer.parseInt(
+							(cropElement != null) ? 
+									cropElement.getAttribute("top") : "0"), 
+					Integer.parseInt(
+							(cropElement != null) ? 
+									cropElement.getAttribute("left") : "0"),
+					Integer.parseInt(
+							(cropElement != null) ? 
+									cropElement.getAttribute("right") : "0"), 
+					Integer.parseInt(
+							(cropElement != null) ? 
+									cropElement.getAttribute("bottom") : "0"));
+
 			Element cornersElement = (Element) templateElement
 					.getElementsByTagName("corners").item(0);
+			template.setCornerType(StringUtils.isNotBlank(cornersElement
+					.getAttribute("type")) ? CornerType.valueOf(cornersElement
+					.getAttribute("type")) : CornerType.ROUND);
 			addCorners(template, cornersElement);
 
 			template.calculateDiagonal();
-			
-			Element fieldsElement = (Element) templateElement.getElementsByTagName("fields").item(0);
-			template.setGroupsEnabled(Boolean.parseBoolean(fieldsElement.getAttribute("groups")));
+
+			Element fieldsElement = (Element) templateElement
+					.getElementsByTagName("fields").item(0);
+
+			template.setSize(Integer.parseInt(StringUtils.defaultIfBlank(
+					fieldsElement.getAttribute("size"), "-1")));
+			template.setShape(StringUtils.isNotBlank(fieldsElement
+					.getAttribute("shape")) ? ShapeType.valueOf(fieldsElement
+					.getAttribute("shape")) : ShapeType.CIRCLE);
+
+			template.setGroupsEnabled(Boolean.parseBoolean(fieldsElement
+					.getAttribute("groups")));
 
 			NodeList groupsList = fieldsElement.getElementsByTagName("group");
 
@@ -353,7 +391,7 @@ public final class FormTemplate {
 			}
 			return area;
 		}
-		
+
 		private static void addCorners(FormTemplate template, Element element) {
 			NodeList cornerList = element.getElementsByTagName("corner");
 			for (int i = 0; i < cornerList.getLength(); i++) {
@@ -375,23 +413,26 @@ public final class FormTemplate {
 					Double.parseDouble(xCoord), Double.parseDouble(yCoord));
 			return point;
 		}
-		
+
 		private static void addAreas(FormTemplate template, Element element) {
-			
+
 			NodeList areasList = element.getElementsByTagName("area");
 			for (int i = 0; i < areasList.getLength(); i++) {
 				Element areaElement = (Element) areasList.item(i);
-				
+
 				FormArea area = getArea(areaElement);
-				
-				String groupName = "group".equals(element.getNodeName()) ? element.getAttribute("name") : areaElement.getAttribute("group");
-				groupName = StringUtils.defaultIfBlank(groupName, Constants.EMPTY_GROUP_NAME);
-				
+
+				String groupName = "group".equals(element.getNodeName())
+						? element.getAttribute("name") : areaElement
+								.getAttribute("group");
+				groupName = StringUtils.defaultIfBlank(
+						groupName, Constants.EMPTY_GROUP_NAME);
+
 				template.addArea(groupName, area);
 			}
-			
+
 		}
-		
+
 		private static void addQuestions(FormTemplate template, Element element) {
 
 			NodeList questionsList = element.getElementsByTagName("question");
@@ -400,10 +441,13 @@ public final class FormTemplate {
 				String questionName = questionElement.getAttribute("question");
 
 				FormQuestion field = getQuestion(questionElement, questionName);
-				
-				String groupName = "group".equals(element.getNodeName()) ? element.getAttribute("name") : questionElement.getAttribute("group");
-				groupName = StringUtils.defaultIfBlank(groupName, Constants.EMPTY_GROUP_NAME);
-				
+
+				String groupName = "group".equals(element.getNodeName())
+						? element.getAttribute("name") : questionElement
+								.getAttribute("group");
+				groupName = StringUtils.defaultIfBlank(
+						groupName, Constants.EMPTY_GROUP_NAME);
+
 				template.addField(groupName, questionName, field);
 			}
 
@@ -414,7 +458,7 @@ public final class FormTemplate {
 				String fieldName = fieldElement.getAttribute("question");
 
 				FormQuestion field = getQuestion(fieldElement, fieldName);
-				
+
 				template.addField(Constants.EMPTY_GROUP_NAME, fieldName, field);
 			}
 		}
@@ -468,7 +512,7 @@ public final class FormTemplate {
 	public boolean isGroupsEnabled() {
 		return isGroupsEnabled;
 	}
-	
+
 	/**
 	 * Sets the GroupsEnabled field.
 	 *
@@ -873,7 +917,7 @@ public final class FormTemplate {
 	 * @param density the value of density parameter
 	 * @throws FormScannerException
 	 */
-	public void findCorners(BufferedImage image, int threshold, int density) throws FormScannerException {
+	public void findCorners(BufferedImage image, int threshold, int density, CornerType cornerType, HashMap<String, Integer> crop) throws FormScannerException {
 		height = image.getHeight();
 		width = image.getWidth();
 		int cores = Runtime.getRuntime().availableProcessors();
@@ -883,8 +927,7 @@ public final class FormTemplate {
 
 		for (Corners position : Corners.values()) {
 			Future<FormPoint> future = threadPool.submit(new CornerDetector(
-					threshold, density, position, image,
-					Constants.CornerType.ANGULAR));
+					threshold, density, position, image, cornerType, crop));
 			cornerDetectorThreads.put(position, future);
 		}
 
@@ -902,7 +945,6 @@ public final class FormTemplate {
 		calculateDiagonal();
 		calculateRotation();
 		threadPool.shutdown();
-
 	}
 
 	/**
@@ -1283,5 +1325,42 @@ public final class FormTemplate {
 	public int lastIndexOfGroup(String groupName) {
 		FormGroup group = groups.get(groupName);
 		return group.getLastFieldIndex();
+	}
+
+	/**
+	 * Returns the crop values for images scanned using current template.
+	 *
+	 * @author Alberto Borsetta
+	 * @return the crop values
+	 */
+	public HashMap<String, Integer> getCrop() {
+		return crop;
+	}
+
+	/**
+	 * Sets crop values for images scanned using current template
+	 * 
+	 * @author Alberto Borsetta
+	 * @param cropFromTop the padding from top margin
+	 * @param cropFromLeft the padding from left margin
+	 * @param cropFromRight the padding from right margin
+	 * @param cropFromBottom the padding from bottom margin
+	 */
+	public void setCrop(Integer cropFromTop, Integer cropFromLeft,
+			Integer cropFromRight, Integer cropFromBottom) {
+		crop.put(Constants.TOP, cropFromTop);
+		crop.put(Constants.LEFT, cropFromLeft);
+		crop.put(Constants.RIGHT, cropFromRight);
+		crop.put(Constants.BOTTOM, cropFromBottom);
+	}
+
+	/**
+	 * Sets crop values for images scanned using current template
+	 * 
+	 * @author Alberto Borsetta
+	 * @param crop the padding from margin
+	 */
+	public void setCrop(HashMap<String, Integer> crop) {
+		this.crop = crop;
 	}
 }

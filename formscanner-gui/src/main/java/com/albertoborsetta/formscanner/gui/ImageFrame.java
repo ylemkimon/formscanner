@@ -460,6 +460,38 @@ public class ImageFrame extends InternalFrame implements ScrollableImageView {
 			showPoints((Graphics2D) g);
 			showArea((Graphics2D) g);
 			showCorners((Graphics2D) g);
+			showCrop((Graphics2D) g);
+		}
+
+		private void showCrop(Graphics2D g) {
+			
+			HashMap<String, Integer> crop = model.getCrop();
+			if (crop.isEmpty()) {
+				return;
+			}
+
+			HashMap<Corners, FormPoint> cropCorners = new HashMap<>();
+			cropCorners.put(
+					Corners.TOP_LEFT,
+					new FormPoint(
+							crop.get(FormScannerConstants.LEFT), 
+							crop.get(FormScannerConstants.TOP)));
+			cropCorners.put(
+					Corners.TOP_RIGHT,
+					new FormPoint(
+							imageWidth - crop.get(FormScannerConstants.RIGHT), 
+							crop.get(FormScannerConstants.TOP)));
+			cropCorners.put(
+					Corners.BOTTOM_LEFT,
+					new FormPoint(
+							crop.get(FormScannerConstants.LEFT), 
+							imageHeight - crop.get(FormScannerConstants.BOTTOM)));
+			cropCorners.put(
+					Corners.BOTTOM_RIGHT,
+					new FormPoint(
+							imageWidth - crop.get(FormScannerConstants.RIGHT), 
+							imageHeight - crop.get(FormScannerConstants.BOTTOM)));
+			showArea(g, cropCorners, Color.BLUE);
 		}
 
 		private void showTemporaryPoints(Graphics2D g) {

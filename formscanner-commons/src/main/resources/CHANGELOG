@@ -6,6 +6,8 @@ NEW FEATURES
 * Added Dutch translation (thanks to Maikel P.H. Verouden)
 * Implement corner detection for different marker pattern
 * Reset autoNumbering question for new group
+* Crop images in order to prevent corner detection problems during scanning process
+* Added platform dependent look and feels for different operating systems
 
 FIXES
 ---

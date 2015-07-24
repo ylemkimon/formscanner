@@ -103,7 +103,7 @@ public class FormScanner {
 				try {
 					filledForm.findCorners(
 							image, template.getThreshold(),
-							template.getDensity());
+							template.getDensity(), template.getCornerType(), template.getCrop());
 					filledForm.findPoints(
 							image, template.getThreshold(),
 							template.getDensity(), template.getSize());

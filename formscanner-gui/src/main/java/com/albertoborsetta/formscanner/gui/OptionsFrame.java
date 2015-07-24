@@ -1,15 +1,20 @@
 package com.albertoborsetta.formscanner.gui;
 
 import java.awt.BorderLayout;
+import java.awt.Component;
 import java.awt.GraphicsEnvironment;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import javax.swing.BorderFactory;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.DefaultListCellRenderer;
+import javax.swing.Icon;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
+import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JSpinner;
 import javax.swing.JTabbedPane;
@@ -22,6 +27,7 @@ import com.albertoborsetta.formscanner.commons.FormScannerConstants.FontSize;
 import com.albertoborsetta.formscanner.commons.FormScannerConstants.Frame;
 import com.albertoborsetta.formscanner.api.commons.Constants.CornerType;
 import com.albertoborsetta.formscanner.api.commons.Constants.ShapeType;
+import com.albertoborsetta.formscanner.commons.resources.FormScannerResources;
 import com.albertoborsetta.formscanner.commons.translation.FormScannerTranslation;
 import com.albertoborsetta.formscanner.commons.translation.FormScannerTranslationKeys;
 import com.albertoborsetta.formscanner.gui.builder.ButtonBuilder;
@@ -61,6 +67,38 @@ public class OptionsFrame extends InternalFrame implements TabbedView {
 	private JSpinner cropFromBottom;
 	private JSpinner cropFromLeft;
 	private JSpinner cropFromRight;
+
+	public class IconListRenderer extends DefaultListCellRenderer {
+
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = 1L;
+		private HashMap<Object, Icon> icons = null;
+
+		public IconListRenderer(HashMap<Object, Icon> icons) {
+			this.icons = icons;
+		}
+		
+		@Override
+		public Component getListCellRendererComponent(JList<?> list, Object value,
+				int index, boolean isSelected, boolean cellHasFocus) {
+
+			// Get the renderer component from parent class
+
+			JLabel label = (JLabel) super.getListCellRendererComponent(
+					list, value, index, isSelected, cellHasFocus);
+
+			// Get icon to use for the list item value
+
+			Icon icon = icons.get(value);
+
+			// Set icon to display for value
+
+			label.setIcon(icon);
+			return label;
+		}
+	}
 
 	private class InternalShapeType {
 
@@ -139,8 +177,7 @@ public class OptionsFrame extends InternalFrame implements TabbedView {
 				.addTab(
 						FormScannerTranslation
 								.getTranslationFor(FormScannerTranslationKeys.IMAGE_PREPROCESSING_OPTIONS),
-						imagePreprocessingPanel)
-						.build();
+						imagePreprocessingPanel).build();
 
 		getContentPane().add(masterPanel, BorderLayout.CENTER);
 	}
@@ -148,11 +185,11 @@ public class OptionsFrame extends InternalFrame implements TabbedView {
 	private JPanel getImagePreprocessingPanel() {
 		JPanel buttonsPanel = getButtonPanel();
 		JPanel cropPanel = getCropPanel();
-		
+
 		return new PanelBuilder(orientation)
-		.withLayout(new BorderLayout())
-		.add(cropPanel, BorderLayout.NORTH)
-		.add(buttonsPanel, BorderLayout.SOUTH).build();
+				.withLayout(new BorderLayout())
+				.add(cropPanel, BorderLayout.NORTH)
+				.add(buttonsPanel, BorderLayout.SOUTH).build();
 	}
 
 	private JPanel getCropPanel() {
@@ -172,23 +209,22 @@ public class OptionsFrame extends InternalFrame implements TabbedView {
 				FormScannerConstants.CROP_FROM_RIGHT, orientation)
 				.withActionListener(optionsFrameController)
 				.withActionListener(optionsFrameController).build();
-		
-		// TODO: ...
+
 		return new PanelBuilder(orientation)
-		.withLayout(new SpringLayout())
-		.withBorder(
-				BorderFactory.createTitledBorder(FormScannerTranslation
-						.getTranslationFor(FormScannerTranslationKeys.CROP_OPTIONS)))
-		.add(getLabel("")).add(getLabel(""))
-		.add(getLabel(FormScannerTranslationKeys.CROP_FROM_TOP)).add(cropFromTop)
-		.add(getLabel("")).add(getLabel(""))
-		.add(getLabel(FormScannerTranslationKeys.CROP_FROM_LEFT)).add(cropFromLeft)
-		.add(getLabel("")).add(getLabel(""))
-		.add(getLabel(FormScannerTranslationKeys.CROP_FROM_RIGHT)).add(cropFromRight)
-		.add(getLabel("")).add(getLabel(""))
-		.add(getLabel(FormScannerTranslationKeys.CROP_FROM_BOTTOM)).add(cropFromBottom)
-		.add(getLabel("")).add(getLabel(""))
-		.withGrid(3, 6).build();
+				.withLayout(new SpringLayout())
+				.withBorder(
+						BorderFactory.createTitledBorder(FormScannerTranslation
+								.getTranslationFor(FormScannerTranslationKeys.CROP_OPTIONS)))
+				.add(getLabel("")).add(getLabel(""))
+				.add(getLabel(FormScannerTranslationKeys.CROP_FROM_TOP))
+				.add(cropFromTop).add(getLabel("")).add(getLabel(""))
+				.add(getLabel(FormScannerTranslationKeys.CROP_FROM_LEFT))
+				.add(cropFromLeft).add(getLabel("")).add(getLabel(""))
+				.add(getLabel(FormScannerTranslationKeys.CROP_FROM_RIGHT))
+				.add(cropFromRight).add(getLabel("")).add(getLabel(""))
+				.add(getLabel(FormScannerTranslationKeys.CROP_FROM_BOTTOM))
+				.add(cropFromBottom).add(getLabel("")).add(getLabel(""))
+				.withGrid(3, 6).build();
 	}
 
 	private JPanel getTemplateOptionsPanel() {
@@ -224,8 +260,7 @@ public class OptionsFrame extends InternalFrame implements TabbedView {
 				FormScannerConstants.QUESTION_NAME_TEMPLATE, orientation)
 				.withModel(new DefaultComboBoxModel<>(historyNameTemplates))
 				.setEditable(true).withActionListener(optionsFrameController)
-				.withActionCommand(FormScannerConstants.QUESTION)
-				.build();
+				.withActionCommand(FormScannerConstants.QUESTION).build();
 
 		historyNameTemplatesList = model
 				.getHistoryNameTemplate(FormScannerConstants.BARCODE);
@@ -236,8 +271,7 @@ public class OptionsFrame extends InternalFrame implements TabbedView {
 				FormScannerConstants.BARCODE_NAME_TEMPLATE, orientation)
 				.withModel(new DefaultComboBoxModel<>(historyNameTemplates))
 				.setEditable(true).withActionListener(optionsFrameController)
-				.withActionCommand(FormScannerConstants.BARCODE)
-				.build();
+				.withActionCommand(FormScannerConstants.BARCODE).build();
 
 		return new PanelBuilder(orientation)
 				.withLayout(new SpringLayout())
@@ -263,7 +297,8 @@ public class OptionsFrame extends InternalFrame implements TabbedView {
 
 		ArrayList<String> historyNameTemplatesList;
 		String[] historyNameTemplates;
-		historyNameTemplatesList = model.getHistoryNameTemplate(FormScannerConstants.GROUP);
+		historyNameTemplatesList = model
+				.getHistoryNameTemplate(FormScannerConstants.GROUP);
 		historyNameTemplates = new String[historyNameTemplatesList.size()];
 		historyNameTemplatesList.toArray(historyNameTemplates);
 
@@ -271,8 +306,7 @@ public class OptionsFrame extends InternalFrame implements TabbedView {
 				FormScannerConstants.GROUP_NAME_TEMPLATE, orientation)
 				.withModel(new DefaultComboBoxModel<>(historyNameTemplates))
 				.setEditable(true).withActionListener(optionsFrameController)
-				.withActionCommand(FormScannerConstants.GROUP)
-				.build();
+				.withActionCommand(FormScannerConstants.GROUP).build();
 
 		return new PanelBuilder(orientation)
 				.withLayout(new SpringLayout())
@@ -307,13 +341,20 @@ public class OptionsFrame extends InternalFrame implements TabbedView {
 		CornerType cornerTypes[] = CornerType.values();
 		corners = new InternalCornerType[cornerTypes.length];
 
+		HashMap<Object, Icon> icons = new HashMap<>();
 		for (CornerType corner : cornerTypes) {
-			corners[corner.getIndex()] = new InternalCornerType(corner);
+			InternalCornerType internalCornerType = new InternalCornerType(
+					corner);
+			corners[corner.getIndex()] = internalCornerType;
+			icons.put(
+					internalCornerType,
+					FormScannerResources.getIconFor(corner.getName()));
 		}
 
 		cornerTypeComboBox = new ComboBoxBuilder<InternalCornerType>(
 				FormScannerConstants.CORNER_TYPE_COMBO_BOX, orientation)
 				.withModel(new DefaultComboBoxModel<>(corners))
+				.withRenderer(new IconListRenderer(icons))
 				.withActionListener(optionsFrameController).build();
 
 		return new PanelBuilder(orientation)
@@ -407,10 +448,12 @@ public class OptionsFrame extends InternalFrame implements TabbedView {
 		resetAutoNumberingQuestions.setSelected(model
 				.isResetAutoNumberingQuestions());
 		resetAutoNumberingQuestions.setEnabled(model.isGroupsEnabled());
-		cropFromTop.setValue(0);
-		cropFromBottom.setValue(0);
-		cropFromLeft.setValue(0);
-		cropFromRight.setValue(0);
+
+		HashMap<String, Integer> crop = model.getCrop();
+		cropFromTop.setValue(crop.get(FormScannerConstants.TOP));
+		cropFromBottom.setValue(crop.get(FormScannerConstants.BOTTOM));
+		cropFromLeft.setValue(crop.get(FormScannerConstants.LEFT));
+		cropFromRight.setValue(crop.get(FormScannerConstants.RIGHT));
 	}
 
 	private JPanel getOptionsPanel() {
@@ -437,16 +480,23 @@ public class OptionsFrame extends InternalFrame implements TabbedView {
 	}
 
 	private JPanel getShapePanel() {
+		
 		ShapeType shapes[] = ShapeType.values();
 		types = new InternalShapeType[shapes.length];
 
+		HashMap<Object, Icon> icons = new HashMap<>();
 		for (ShapeType shape : shapes) {
-			types[shape.getIndex()] = new InternalShapeType(shape);
+			InternalShapeType internalShapeType = new InternalShapeType(shape);
+			types[shape.getIndex()] = internalShapeType;
+			icons.put(
+					internalShapeType,
+					FormScannerResources.getIconFor(shape.getName()));
 		}
 
 		shapeTypeComboBox = new ComboBoxBuilder<InternalShapeType>(
 				FormScannerConstants.SHAPE_COMBO_BOX, orientation)
 				.withModel(new DefaultComboBoxModel<>(types))
+				.withRenderer(new IconListRenderer(icons))
 				.withActionListener(optionsFrameController).build();
 
 		shapeSizeValue = new SpinnerBuilder(
@@ -563,6 +613,18 @@ public class OptionsFrame extends InternalFrame implements TabbedView {
 		if ((Integer) shapeSizeValue.getValue() > 100) {
 			shapeSizeValue.setValue(100);
 		}
+		if ((Integer) cropFromTop.getValue() < 0) {
+			shapeSizeValue.setValue(0);
+		}
+		if ((Integer) cropFromLeft.getValue() < 0) {
+			shapeSizeValue.setValue(0);
+		}
+		if ((Integer) cropFromRight.getValue() < 0) {
+			shapeSizeValue.setValue(0);
+		}
+		if ((Integer) cropFromBottom.getValue() < 0) {
+			shapeSizeValue.setValue(0);
+		}
 	}
 
 	public CornerType getCornerType() {
@@ -596,11 +658,15 @@ public class OptionsFrame extends InternalFrame implements TabbedView {
 
 	private boolean verifyTemplatePanel() {
 		return ((groupsEnabled.isSelected() ^ model.isGroupsEnabled()) || (resetAutoNumberingQuestions
-				.isEnabled()) ^ model.isResetAutoNumberingQuestions() || 
-				model.getHistoryNameTemplate(FormScannerConstants.GROUP).containsAll(getHistoryNameTemplate(FormScannerConstants.GROUP)) ||
-				model.getHistoryNameTemplate(FormScannerConstants.QUESTION).containsAll(getHistoryNameTemplate(FormScannerConstants.QUESTION)) ||
-				model.getHistoryNameTemplate(FormScannerConstants.BARCODE).containsAll(getHistoryNameTemplate(FormScannerConstants.BARCODE))
-				);
+				.isEnabled()) ^ model.isResetAutoNumberingQuestions() || model
+				.getHistoryNameTemplate(FormScannerConstants.GROUP)
+				.containsAll(getHistoryNameTemplate(FormScannerConstants.GROUP)) || model
+				.getHistoryNameTemplate(FormScannerConstants.QUESTION)
+				.containsAll(
+						getHistoryNameTemplate(FormScannerConstants.QUESTION)) || model
+				.getHistoryNameTemplate(FormScannerConstants.BARCODE)
+				.containsAll(
+						getHistoryNameTemplate(FormScannerConstants.BARCODE)));
 	}
 
 	private boolean verifyGuiPanel() {
@@ -668,5 +734,19 @@ public class OptionsFrame extends InternalFrame implements TabbedView {
 			questionsNameTemplate.addActionListener(optionsFrameController);
 			break;
 		}
+	}
+
+	public HashMap<String, Integer> getCrop() {
+		HashMap<String, Integer> crop = new HashMap<>();
+		crop.put(FormScannerConstants.TOP, (Integer) cropFromTop.getValue());
+		crop.put(FormScannerConstants.LEFT, (Integer) cropFromLeft.getValue());
+		crop
+				.put(
+						FormScannerConstants.RIGHT,
+						(Integer) cropFromRight.getValue());
+		crop.put(
+				FormScannerConstants.BOTTOM,
+				(Integer) cropFromBottom.getValue());
+		return crop;
 	}
 }
