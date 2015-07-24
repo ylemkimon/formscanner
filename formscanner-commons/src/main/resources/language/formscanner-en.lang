@@ -125,8 +125,6 @@ square=Square
 circle=Circle
 shape.type.option.label=Marker shape
 shape.size.option.label=Marker size (px)
-marker.options=Marker options
-scan.options=Scan options
 template.not.saved=Template not saved
 template.not.saved.popup=Template
 name.column=Field name
@@ -136,9 +134,6 @@ responses.column=N. of responses
 field.properties.reject.multiple=Ignore multiple responses
 
 # added 0.10
-font.type.label=Font type
-font.size.label=Font size
-gui.options=Graphical interface options (Requires restart)
 zoom.fit.width=Fit to width
 zoom.fit.page=Fit to window
 
@@ -153,3 +148,36 @@ set.of.questions.label=Group of questions
 group.column=Group
 responses.by.grid=Responses by rows and columns
 qrcode.barcode=Barcode/QRCode
+
+# added 0.12
+corners.options=Corner marker
+corner.type.option.label=Corner marker type
+preferred.look.and.feel.option.label=Preferred Look and feel (*)
+template.options=Template
+accuracy.options=Scanning accuracy
+font.options=Font
+look.and.feel=Look and feel
+groups.options=Groups
+enable.groups.option.label=Enable groups
+question.options=Questions
+reset.auto.numbering.option.label=Reset auto-numbering
+requires.restart= (*) Requires Restart
+round.corner.type=Circular
+angular.corner.type=Angular
+image.preprocessing.options=Image preprocessing
+dutch.label=Nederlands
+groups.name.template.label=Groups name template
+questions.name.template.label=Question name template
+barcode.name.template.label=Barcode/QRCode name template
+crop.options=Crop
+crop.from.top=Top
+crop.from.left=Left
+crop.from.right=Right
+crop.from.bottom=Bottom
+
+# modified 0.12
+font.type.label=Font type (*)
+font.size.label=Font size (*)
+gui.options=Graphical interface options
+marker.options=Response marker
+scan.options=Scanning

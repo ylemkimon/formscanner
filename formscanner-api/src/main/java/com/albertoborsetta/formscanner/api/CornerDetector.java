@@ -1,8 +1,10 @@
 package com.albertoborsetta.formscanner.api;
 
+import com.albertoborsetta.formscanner.api.commons.Constants;
 import com.albertoborsetta.formscanner.api.commons.Constants.CornerType;
 
 import java.awt.image.BufferedImage;
+import java.util.HashMap;
 import java.util.concurrent.Callable;
 
 import com.albertoborsetta.formscanner.api.commons.Constants.Corners;
@@ -18,15 +20,25 @@ public class CornerDetector extends FormScannerDetector
 
 	private final Corners position;
 	private CornerType type;
+	private HashMap<String, Integer> crop;
 
-	CornerDetector(int threshold, int density, Corners position, BufferedImage image, CornerType type) {
+	CornerDetector(int threshold, int density, Corners position, BufferedImage image, CornerType type, HashMap<String, Integer> crop) {
 		super(threshold, density, image);
 		this.type = type;
 		this.position = position;
+		if (!crop.isEmpty()) {
+			this.crop = crop;
+		} else {
+			this.crop = new HashMap<>();
+			this.crop.put(Constants.TOP, 0);
+			this.crop.put(Constants.LEFT, 0);
+			this.crop.put(Constants.BOTTOM, 0);
+			this.crop.put(Constants.RIGHT, 0);
+		}
 	}
 
 	CornerDetector(int threshold, int density, Corners position, BufferedImage image) {
-		this(threshold, density, position, image, CornerType.ROUND);
+		this(threshold, density, position, image, CornerType.ROUND, new HashMap<String, Integer>());
 	}
 
 	@Override
@@ -35,8 +47,8 @@ public class CornerDetector extends FormScannerDetector
 		int dy = 1;
 		int x = HALF_WINDOW_SIZE;
 		int y = HALF_WINDOW_SIZE;
-		int x0 = 0;
-		int y0 = 0;
+		int x0 = crop.get(Constants.LEFT);
+		int y0 = crop.get(Constants.TOP);
 
 		switch (position) {
 		case TOP_RIGHT:
@@ -71,39 +83,49 @@ public class CornerDetector extends FormScannerDetector
 		Long sumX = 0L;
 		Long sumY = 0L;
 		Integer count = 0;
+		int croppedSubImageWidth = subImageWidth;
+		int croppedSubImageHeight = subImageHeight;
 
 		int pixel;
 		int old_pixel;
 
-		int[] rgbArray = new int[subImageWidth * subImageHeight];
 		int stato = BEFORE;
 		
 		FormPoint p = null;
 		
 		switch (position) {
 		case TOP_LEFT:
-			p = new FormPoint(0, 0);
+			p = new FormPoint(crop.get(Constants.LEFT), crop.get(Constants.TOP));
+			croppedSubImageWidth = subImageWidth - crop.get(Constants.LEFT);
+			croppedSubImageHeight = subImageHeight - crop.get(Constants.TOP);
 			break;
 		case TOP_RIGHT:
-			p = new FormPoint(0, width);
+			p = new FormPoint(width - crop.get(Constants.RIGHT), crop.get(Constants.TOP));
+			croppedSubImageWidth = subImageWidth - crop.get(Constants.RIGHT);
+			croppedSubImageHeight = subImageHeight - crop.get(Constants.TOP);
 			break;
 		case BOTTOM_RIGHT:
-			p = new FormPoint(height, width);
+			p = new FormPoint(width - crop.get(Constants.RIGHT), height - crop.get(Constants.TOP));
+			croppedSubImageWidth = subImageWidth - crop.get(Constants.RIGHT);
+			croppedSubImageHeight = subImageHeight - crop.get(Constants.BOTTOM);
 			break;
 		case BOTTOM_LEFT:
-			p = new FormPoint(height, 0);
+			p = new FormPoint(crop.get(Constants.LEFT), height - crop.get(Constants.TOP));
+			croppedSubImageWidth = subImageWidth - crop.get(Constants.LEFT);
+			croppedSubImageHeight = subImageHeight - crop.get(Constants.BOTTOM);
 			break;
 		default:
 			break;
 		}
 
-		image.getRGB(x0, y0, subImageWidth, subImageHeight, rgbArray, 0, subImageWidth);
+		int[] rgbArray = new int[croppedSubImageWidth * croppedSubImageHeight];
+		image.getRGB(x0, y0, croppedSubImageWidth, croppedSubImageHeight, rgbArray, 0, croppedSubImageWidth);
 
-		for (int yi = y; (yi < (subImageHeight - HALF_WINDOW_SIZE)) && (yi >= HALF_WINDOW_SIZE); yi += dy) {
+		for (int yi = y; (yi < (croppedSubImageHeight - HALF_WINDOW_SIZE)) && (yi >= HALF_WINDOW_SIZE); yi += dy) {
 			pixel = WHITE_PIXEL;
 			old_pixel = pixel;
 
-			for (int xi = x; (xi < (subImageWidth - HALF_WINDOW_SIZE)) && (xi >= HALF_WINDOW_SIZE); xi += dx) {
+			for (int xi = x; (xi < (croppedSubImageWidth - HALF_WINDOW_SIZE)) && (xi >= HALF_WINDOW_SIZE); xi += dx) {
 
 				pixel = isWhite(xi, yi, rgbArray);
 				double delta = dx * (x0 + xi - p.getX());
@@ -157,8 +179,9 @@ public class CornerDetector extends FormScannerDetector
 			int dy) {
 		int pixel;
 		int old_pixel;
+		int croppedSubImageWidth = subImageWidth;
+		int croppedSubImageHeight = subImageHeight;
 
-		int[] rgbArray = new int[subImageWidth * subImageHeight];
 
 		int stato = BEFORE;
 
@@ -166,28 +189,37 @@ public class CornerDetector extends FormScannerDetector
 
 		switch (position) {
 		case TOP_LEFT:
-			p = new FormPoint(0, 0);
+			p = new FormPoint(crop.get(Constants.LEFT), crop.get(Constants.TOP));
+			croppedSubImageWidth = subImageWidth - crop.get(Constants.LEFT);
+			croppedSubImageHeight = subImageHeight - crop.get(Constants.TOP);
 			break;
 		case TOP_RIGHT:
-			p = new FormPoint(0, width);
+			p = new FormPoint(width - crop.get(Constants.RIGHT), crop.get(Constants.TOP));
+			croppedSubImageWidth = subImageWidth - crop.get(Constants.RIGHT);
+			croppedSubImageHeight = subImageHeight - crop.get(Constants.TOP);
 			break;
 		case BOTTOM_RIGHT:
-			p = new FormPoint(height, width);
+			p = new FormPoint(width - crop.get(Constants.RIGHT), height - crop.get(Constants.TOP));
+			croppedSubImageWidth = subImageWidth - crop.get(Constants.RIGHT);
+			croppedSubImageHeight = subImageHeight - crop.get(Constants.BOTTOM);
 			break;
 		case BOTTOM_LEFT:
-			p = new FormPoint(height, 0);
+			p = new FormPoint(crop.get(Constants.LEFT), height - crop.get(Constants.TOP));
+			croppedSubImageWidth = subImageWidth - crop.get(Constants.LEFT);
+			croppedSubImageHeight = subImageHeight - crop.get(Constants.BOTTOM);
 			break;
 		default:
 			break;
 		}
 
-		image.getRGB(x0, y0, subImageWidth, subImageHeight, rgbArray, 0, subImageWidth);
+		int[] rgbArray = new int[croppedSubImageWidth * croppedSubImageHeight];
+		image.getRGB(x0, y0, croppedSubImageWidth, croppedSubImageHeight, rgbArray, 0, croppedSubImageWidth);
 
-		for (int yi = y; (yi < (subImageHeight - HALF_WINDOW_SIZE)) && (yi >= HALF_WINDOW_SIZE); yi += dy) {
+		for (int yi = y; (yi < (croppedSubImageHeight - HALF_WINDOW_SIZE)) && (yi >= HALF_WINDOW_SIZE); yi += dy) {
 			pixel = WHITE_PIXEL;
 			old_pixel = pixel;
 
-			for (int xi = x; (xi < (subImageWidth - HALF_WINDOW_SIZE)) && (xi >= HALF_WINDOW_SIZE); xi += dx) {
+			for (int xi = x; (xi < (croppedSubImageWidth - HALF_WINDOW_SIZE)) && (xi >= HALF_WINDOW_SIZE); xi += dx) {
 
 				pixel = isWhite(xi, yi, rgbArray);
 

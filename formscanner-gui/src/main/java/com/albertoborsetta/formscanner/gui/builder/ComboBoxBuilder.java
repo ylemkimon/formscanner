@@ -8,6 +8,7 @@ import javax.swing.JComboBox;
 import javax.swing.JLabel;
 
 import com.albertoborsetta.formscanner.commons.FormScannerFont;
+import com.albertoborsetta.formscanner.gui.OptionsFrame.IconListRenderer;
 
 public class ComboBoxBuilder<T> {
 
@@ -49,6 +50,11 @@ public class ComboBoxBuilder<T> {
 
 	public ComboBoxBuilder<T> withActionCommand(String command) {
 		comboBox.setActionCommand(command);
+		return this;
+	}
+
+	public ComboBoxBuilder<T> withRenderer(IconListRenderer countryItemRenderer) {
+		comboBox.setRenderer(countryItemRenderer);
 		return this;
 	}
 }
