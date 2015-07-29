@@ -46,11 +46,14 @@ import com.albertoborsetta.formscanner.gui.view.ManageTemplateFrame;
 import com.albertoborsetta.formscanner.gui.view.OptionsFrame;
 import com.albertoborsetta.formscanner.gui.view.RenameFileFrame;
 import com.albertoborsetta.formscanner.gui.view.ResultsGridFrame;
+
 import java.awt.HeadlessException;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
+
 import javax.xml.parsers.ParserConfigurationException;
+
 import org.xml.sax.SAXException;
 
 public class FormScannerModel {
@@ -108,6 +111,8 @@ public class FormScannerModel {
         String path = FormScannerModel.class.getProtectionDomain().getCodeSource().getLocation().getPath();
         String installPath = URLDecoder.decode(path, "UTF-8");
         installPath = StringUtils.substringBeforeLast(installPath, "lib");
+        installPath = StringUtils.defaultIfBlank(
+				System.getProperty("FormScanner_HOME"), installPath);
 
         String installationLanguage = StringUtils.defaultIfBlank(
                 System.getProperty("FormScanner_LANGUAGE"),
