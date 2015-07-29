@@ -99,6 +99,7 @@ greek.label=Ελληνικά
 polish.label=Polski
 persian.label=فارسی
 german.label=Deutsch
+dutch.label=Nederlands
 language.changed=برای اعمال تغییرات، نرم افزار را ببندبد و دوباره اجرا کنید.
 settings.popup.title=تنطيمات
 template.saved.popup.title=کليد ديجيتالي پاسخنامه
