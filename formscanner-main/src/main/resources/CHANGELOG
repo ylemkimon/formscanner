@@ -1,3 +1,16 @@
+FormScanner 0.11.2 (released 2015-07-30)
+===
+NEW FEATURES
+---
+
+* Added Dutch translation (thanks to Maikel P.H. Verouden)
+
+FIXES
+---
+
+* Fixed bug in single core CPU's usage
+* Minor BugFix
+
 FormScanner 0.11.1 (released 2015-06-03)
 ===
 NEW FEATURES
