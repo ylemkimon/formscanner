@@ -99,6 +99,7 @@ greek.label=Ελληνικά
 polish.label=Polski
 persian.label=فارسی
 german.label=Deutsch
+dutch.label=Nederlands
 language.changed=A aplicação deve ser reinicializada para que o FormScanner possa aplicar as alterações
 settings.popup.title=Configurações
 template.saved.popup.title=Modelo

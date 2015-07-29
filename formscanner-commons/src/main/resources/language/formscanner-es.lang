@@ -99,6 +99,7 @@ greek.label=Ελληνικά
 polish.label=Polski
 persian.label=فارسی
 german.label=Deutsch
+dutch.label=Nederlands
 language.changed=Reiniciar FormScanner para que los cambios surjan efecto 
 settings.popup.title=Ajustes
 template.saved.popup.title=Plantilla
