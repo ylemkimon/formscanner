@@ -11,7 +11,7 @@ import com.google.zxing.DecodeHintType;
  * The Class Constants.
  *
  * @author Alberto Borsetta
- * @version 0.11.2
+ * @version 0.11.3-SNAPSHOT
  */
 public class Constants {
 
@@ -66,7 +66,7 @@ public class Constants {
      * The Enum Corners.
      *
      * @author Alberto Borsetta
-     * @version 0.11.2
+     * @version 0.11.3-SNAPSHOT
      */
     public enum Corners {
 
@@ -127,7 +127,7 @@ public class Constants {
      * The Enum FieldType.
      *
      * @author Alberto Borsetta
-     * @version 0.11.2
+     * @version 0.11.3-SNAPSHOT
      */
     public enum FieldType {
 
@@ -229,7 +229,7 @@ public class Constants {
      * The Enum ShapeType.
      *
      * @author Alberto Borsetta
-     * @version 0.11.2
+     * @version 0.11.3-SNAPSHOT
      */
     public enum ShapeType {
 
