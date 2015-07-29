@@ -753,7 +753,7 @@ public final class FormTemplate {
         width = image.getWidth();
         int cores = Runtime.getRuntime().availableProcessors();
 
-        ExecutorService threadPool = Executors.newFixedThreadPool(cores - 1);
+        ExecutorService threadPool = Executors.newFixedThreadPool(--cores <= 0 ? 1 : cores);
         HashMap<Corners, Future<FormPoint>> cornerDetectorThreads = new HashMap<>();
 
         for (Corners position : Corners.values()) {
@@ -805,7 +805,7 @@ public final class FormTemplate {
         width = image.getWidth();
         int cores = Runtime.getRuntime().availableProcessors();
 
-        ExecutorService threadPool = Executors.newFixedThreadPool(cores - 1);
+        ExecutorService threadPool = Executors.newFixedThreadPool(--cores <= 0 ? 1 : cores);
         HashSet<Future<HashMap<String, FormQuestion>>> fieldDetectorThreads = new HashSet<>();
 
         HashMap<String, FormQuestion> templateFields = template.getFields();
@@ -996,7 +996,7 @@ public final class FormTemplate {
         width = image.getWidth();
         int cores = Runtime.getRuntime().availableProcessors();
 
-        ExecutorService threadPool = Executors.newFixedThreadPool(cores - 1);
+        ExecutorService threadPool = Executors.newFixedThreadPool(--cores <= 0 ? 1 : cores);
         HashSet<Future<HashMap<String, FormArea>>> barcodeDetectorThreads = new HashSet<>();
 
         HashMap<String, FormArea> barcodeFields = template.getAreas();
