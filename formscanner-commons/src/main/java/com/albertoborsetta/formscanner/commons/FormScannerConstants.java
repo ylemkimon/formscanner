@@ -79,6 +79,7 @@ public class FormScannerConstants extends Constants {
     public static final String GREEK = "GREEK";
     public static final String POLISH = "POLISH";
     public static final String FARSI = "FARSI";
+    public static final String DUTCH = "DUTCH";
 
     public static final String INSTALLATION_ARABIC = "Arabic";
     public static final String INSTALLATION_CHINESE = "Chinese (Simplified)";
@@ -112,6 +113,7 @@ public class FormScannerConstants extends Constants {
     public static final Set<String> GREEK_LANGUAGES = new HashSet<>(Arrays.asList(new String[]{INSTALLATION_GREEK}));
     public static final Set<String> POLISH_LANGUAGES = new HashSet<>(Arrays.asList(new String[]{}));
     public static final Set<String> FARSI_LANGUAGES = new HashSet<>(Arrays.asList(new String[]{}));
+    public static final Set<String> DUTCH_LANGUAGES = new HashSet<>(Arrays.asList(new String[]{}));
 
 	// Fields Table Columns
     // support
@@ -258,7 +260,8 @@ public class FormScannerConstants extends Constants {
         // GERMAN("de", FormScannerTranslationKeys.GERMAN, GERMAN_LANGUAGES),
         FARSI("fa", FormScannerTranslationKeys.FARSI, FARSI_LANGUAGES),
         POLISH("pl", FormScannerTranslationKeys.POLISH, POLISH_LANGUAGES),
-        GREEK("el", FormScannerTranslationKeys.GREEK, GREEK_LANGUAGES);
+        GREEK("el", FormScannerTranslationKeys.GREEK, GREEK_LANGUAGES),
+        DUTCH("nl", FormScannerTranslationKeys.DUTCH, DUTCH_LANGUAGES);
 
         private final String value;
         private final String translation;
