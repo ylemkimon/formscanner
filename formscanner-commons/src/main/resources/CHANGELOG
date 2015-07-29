@@ -3,7 +3,6 @@ FormScanner 0.12-SNAPSHOT (released AAAA-MM-DD)
 NEW FEATURES
 ---
 
-* Added Dutch translation (thanks to Maikel P.H. Verouden)
 * Implement corner detection for different marker pattern
 * Reset autoNumbering question for new group
 * Crop images in order to prevent corner detection problems during scanning process
@@ -14,6 +13,18 @@ FIXES
 
 * Manage set of question
 * Minor BugFix
+
+FormScanner 0.11.2 (released 2015-07-30)
+===
+NEW FEATURES
+---
+
+* Added Dutch translation (thanks to Maikel P.H. Verouden)
+
+FIXES
+---
+
+* Fixed bug in single core CPU's usage
 
 FormScanner 0.11.1 (released 2015-06-03)
 ===
