@@ -41,5 +41,4 @@ public class AboutFrameController implements ActionListener, HyperlinkListener {
             formScannerModel.linkToHelp(e.getURL());
         }
     }
-
 }

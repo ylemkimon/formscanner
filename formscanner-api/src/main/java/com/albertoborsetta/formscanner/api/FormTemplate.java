@@ -517,7 +517,7 @@ public final class FormTemplate {
 	 * Sets the GroupsEnabled field.
 	 *
 	 * @author Alberto Borsetta
-	 * @param enabled
+	 * @param enabled is enabled
 	 */
 	public void setGroupsEnabled(boolean enabled) {
 		isGroupsEnabled = enabled;
@@ -691,12 +691,12 @@ public final class FormTemplate {
 	}
 
 	/**
-	 * Add a field to the group with the given name.
+	 * Add an Area to the group with the given name.
 	 *
 	 * @author Alberto Borsetta
 	 * @param groupName the name of the group
-	 * @param fieldName tha name of the field
-	 * @param field the field to set
+	 * @param areaName the name of the Area
+	 * @param area the Area to set
 	 * @see FormQuestion
 	 * @see FormGroup
 	 */
@@ -715,6 +715,7 @@ public final class FormTemplate {
 	 * Sets all the fields in the FormTemplate object.
 	 *
 	 * @author Alberto Borsetta
+	 * @param groupName the group name
 	 * @param fields the fields to set
 	 */
 	public void addFields(String groupName, HashMap<String, FormQuestion> fields) {
@@ -728,6 +729,7 @@ public final class FormTemplate {
 	 * Sets an area in the FormTemplate object.
 	 *
 	 * @author Alberto Borsetta
+	 * @param groupName the group name
 	 * @param area the area to set
 	 */
 	public void addArea(String groupName, FormArea area) {
@@ -818,6 +820,7 @@ public final class FormTemplate {
 	 * Removes the field identified by the given name.
 	 *
 	 * @author Alberto Borsetta
+	 * @param groupName the group name
 	 * @param fieldName the name of the field to remove
 	 */
 	public void removeFieldByName(String groupName, String fieldName) {
@@ -915,7 +918,10 @@ public final class FormTemplate {
 	 * @param image the image on which to find the corners
 	 * @param threshold the value of threshold parameter
 	 * @param density the value of density parameter
-	 * @throws FormScannerException
+	 * @param cornerType the corner type
+	 * @param crop the crop values
+	 * @throws FormScannerException throws FormScannerException
+	 * @see CornerType
 	 */
 	public void findCorners(BufferedImage image, int threshold, int density, CornerType cornerType, HashMap<String, Integer> crop) throws FormScannerException {
 		height = image.getHeight();
@@ -967,7 +973,7 @@ public final class FormTemplate {
 	 * @param threshold the value of threshold parameter
 	 * @param density the value of density parameter
 	 * @param size the size of the area of a single point
-	 * @throws FormScannerException
+	 * @throws FormScannerException throws FormScannerException
 	 */
 	public void findPoints(BufferedImage image, int threshold, int density,
 			int size) throws FormScannerException {
@@ -1172,7 +1178,7 @@ public final class FormTemplate {
 	 *
 	 * @author Alberto Borsetta
 	 * @param image the image on which to find the barcode
-	 * @throws FormScannerException
+	 * @throws FormScannerException throws FormScannerException
 	 */
 	public void findAreas(BufferedImage image) throws FormScannerException {
 		height = image.getHeight();

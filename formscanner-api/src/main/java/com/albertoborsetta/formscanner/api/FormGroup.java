@@ -75,6 +75,7 @@ public class FormGroup {
 	 * Remove a named field from a Group
 	 * 
 	 * @author Alberto Borsetta
+	 * @param fieldName the field name
 	 */
 	public void removeField(String fieldName) {
 		fields.remove(fieldName);
