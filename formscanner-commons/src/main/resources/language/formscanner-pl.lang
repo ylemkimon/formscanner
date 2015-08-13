@@ -126,8 +126,6 @@ square=Kwadrat
 circle=Koło
 shape.type.option.label=Kształt znacznika
 shape.size.option.label=Rozmiar znacznika (w pikselach)
-marker.options=Opcje markera
-scan.options=Opcje skanowania
 template.not.saved=Nie zapisano szablonu 
 template.not.saved.popup=Szablon
 name.column=Nazwa pola
@@ -137,9 +135,6 @@ responses.column=Liczba odpowiedzi
 field.properties.reject.multiple=Ignoruj wielokrotne odpowiedzi
 
 # added 0.10
-font.type.label=Typ czcionki
-font.size.label=Rozmiar czcionki
-gui.options=Opcje interfejsu graficznego (wymaga ponownego uruchomienia programu)
 zoom.fit.width=Dopasuj do szerokości
 zoom.fit.page=Dopasuj do strony
 
@@ -154,3 +149,38 @@ set.of.questions.label=Grupy pytań
 group.column=Grupa
 responses.by.grid=Odpowiedzi w rzędach i kolumnach
 qrcode.barcode=Kod kreskowy/Kod QR
+
+
+# added 0.12
+corners.options=Róg marker
+corner.type.option.label=Marker typu róg
+preferred.look.and.feel.option.label=Preferowane wyglądać i czuć (*)
+template.options=Szablon
+accuracy.options=Dokładność skanowania
+font.options=Czcionki
+look.and.feel=Widzieć i czuć
+groups.options=Grupy
+enable.groups.option.label=Włącz grupy
+question.options=Pytania
+reset.auto.numbering.option.label=Zresetować numerację automatyczną
+requires.restart= (*) Wymaga ponownego uruchomienia
+round.corner.type=Okrągły
+angular.corner.type=Kanciasty
+image.preprocessing.options=Przerób zdjęcie
+dutch.label=Holenderski
+groups.name.template.label=Nazwa grupy szablonu
+questions.name.template.label=Nazwa pytania szablonu
+barcode.name.template.label=Nazwa Barcode/QRCode szablonu
+crop.options=Przyciąć
+crop.from.top=Od góry
+crop.from.left=Od lewej
+crop.from.right=Od prawej
+crop.from.bottom=Od dołu
+
+# modified 0.12
+font.type.label=Typ czcionki (*)
+font.size.label=Rozmiar czcionki (*)
+gui.options=Opcje interfejsu graficznego
+marker.options=Odpowiedzi markera
+scan.options=Scanning
+scan.options=Skanowanie
