@@ -100,7 +100,7 @@ public class FormScannerTranslationKeys extends TranslationKeys {
 	public static final String RESULTS_DEFAULT_FILE = "results.default.file";
 	public static final String CSV_FILE = "csv.file";
 
-	// Language
+	// Languages
 	public static final String ENGLISH = "english.label";
 	public static final String ITALIAN = "italian.label";
 	public static final String PORTUGUES = "portugues.label";
@@ -110,6 +110,7 @@ public class FormScannerTranslationKeys extends TranslationKeys {
 	public static final String GREEK = "greek.label";
 	public static final String POLISH = "polish.label";
 	public static final String DUTCH = "dutch.label";
+	public static final String JAPANESE = "japanese.label";
 
 	public static final String HELP = "help";
 	public static final String ABOUT = "about";

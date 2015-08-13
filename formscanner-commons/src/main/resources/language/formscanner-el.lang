@@ -126,8 +126,6 @@ square=Τετράγωνο
 circle=Κύκλος
 shape.type.option.label=Σχήμα σήμανσης
 shape.size.option.label=Μέγεθος σήμανσης (px)
-marker.options=Επιλογές δείκτη
-scan.options=Επιλογές σάρωσης
 template.not.saved=Το πρότυπο δεν αποθηκεύτηκε
 template.not.saved.popup=Πρότυπο
 name.column=Όνομα πεδίου
@@ -137,9 +135,6 @@ responses.column=Αρ. απαντήσεων
 field.properties.reject.multiple=Παράβλεψη πολλαπλών απαντήσεων
 
 # added 0.10
-font.type.label=Τύπος γραμματοσειράς
-font.size.label=Μέγεθος γραμματοσειράς
-gui.options=Επιλογές γραφικού περιβάλλοντος (Απαιτεί επανεκκίνηση)
 zoom.fit.width=Προσαρμογή στο πλάτος
 zoom.fit.page=Προσαρμογή στο παράθυρο
 
@@ -154,3 +149,36 @@ set.of.questions.label=Ομάδα ερωτήσεων
 group.column=Ομάδα
 responses.by.grid=Απαντήσεις ανά πλέγμα
 qrcode.barcode=Γραμμικός κώδικας/Κώδικας QR
+
+# added 0.12
+corners.options=δείκτη γωνία
+corner.type.option.label=Γωνία τύπου δείκτη
+preferred.look.and.feel.option.label=Προτεινόμενα εμφάνιση και την αίσθηση ( * )
+template.options=Πρότυπο
+accuracy.options=ακρίβεια σάρωσης
+font.options=γραμματοσειρά
+look.and.feel=Κοίτα και νιώσε
+groups.options=ομάδες
+enable.groups.option.label=Ενεργοποίηση ομάδες
+question.options=ερωτήσεις
+reset.auto.numbering.option.label=Επαναφορά αυτόματη αρίθμηση
+requires.restart= (*) Απαιτείται επανεκκίνηση
+round.corner.type=εγκύκλιος
+angular.corner.type=γωνιώδης
+image.preprocessing.options=προεπεξεργασίας εικόνας
+dutch.label=Ολλανδός
+groups.name.template.label=Ομάδες πρότυπο όνομα
+questions.name.template.label=Ερώτηση πρότυπο όνομα
+barcode.name.template.label=Γραμμικός κώδικας/Κώδικας QR πρότυπο όνομα 
+crop.options=κόψιμο
+crop.from.top=από πάνω
+crop.from.left=από αριστερά
+crop.from.right=από δεξιά
+crop.from.bottom=από πυθμένα
+
+# modified 0.12
+font.type.label=Τύπος γραμματοσειράς (*)
+font.size.label=Μέγεθος γραμματοσειράς (*)
+gui.options=Επιλογές γραφικού περιβάλλοντος
+marker.options=ανταπόκριση δείκτη
+scan.options=σάρωση
