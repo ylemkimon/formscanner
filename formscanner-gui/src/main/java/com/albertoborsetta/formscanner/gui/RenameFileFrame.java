@@ -4,6 +4,8 @@ import org.apache.commons.io.FilenameUtils;
 
 import com.albertoborsetta.formscanner.commons.FormScannerConstants;
 import com.albertoborsetta.formscanner.commons.FormScannerConstants.Frame;
+import com.albertoborsetta.formscanner.commons.resources.FormScannerResources;
+import com.albertoborsetta.formscanner.commons.resources.FormScannerResourcesKeys;
 import com.albertoborsetta.formscanner.commons.translation.FormScannerTranslation;
 import com.albertoborsetta.formscanner.commons.translation.FormScannerTranslationKeys;
 import com.albertoborsetta.formscanner.gui.builder.ButtonBuilder;
@@ -48,6 +50,7 @@ public class RenameFileFrame extends InternalFrame implements View {
 		setName(Frame.RENAME_FILES_FRAME.name());
 		setClosable(true);
 		setLayout(new BorderLayout());
+		setFrameIcon(FormScannerResources.getIconFor(FormScannerResourcesKeys.RENAME_FILES_ICON_16));
 
 		renamePanel = getRenamePanel();
 		buttonPanel = getButtonPanel();
