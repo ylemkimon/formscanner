@@ -348,6 +348,8 @@ public class ManageTemplateFrame extends InternalFrame implements TabbedView {
 		setMaximizable(true);
 		setIconifiable(true);
 		setResizable(true);
+		setFrameIcon(FormScannerResources.getIconFor(FormScannerResourcesKeys.EDIT_ICON_16));
+		
 		previousRowsCount = 1;
 		previousBarcodeCount = 1;
 		previousGroupCount = 1;

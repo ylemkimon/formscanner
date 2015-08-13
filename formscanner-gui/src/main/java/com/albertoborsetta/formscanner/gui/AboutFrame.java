@@ -29,10 +29,13 @@ import com.albertoborsetta.formscanner.gui.builder.PanelBuilder;
 import com.albertoborsetta.formscanner.gui.builder.TabbedPaneBuilder;
 import com.albertoborsetta.formscanner.controller.AboutFrameController;
 import com.albertoborsetta.formscanner.model.FormScannerModel;
+import com.albertoborsetta.formscanner.utils.FormScannerListener;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+
+import  javafx.application.Application;
 
 public class AboutFrame extends InternalFrame {
 
@@ -59,6 +62,7 @@ public class AboutFrame extends InternalFrame {
 		setBounds(model.getLastPosition(Frame.ABOUT_FRAME));
 		setMinimumSize(new Dimension(300, 500));
 		setResizable(false);
+		setFrameIcon(FormScannerResources.getIconFor(FormScannerResourcesKeys.ABOUT_ICON_16));
 
 		JPanel aboutPanel = getAboutPanel();
 		JPanel licensePanel = getLicensePanel();
@@ -110,7 +114,9 @@ public class AboutFrame extends InternalFrame {
 
 		textArea.append(licenseText);
 		textArea.getCaret().setDot(0);
-		// textArea.addKeyListener(aboutFrameController);
+		
+		FormScannerListener listener = new FormScannerListener();
+		textArea.addKeyListener(listener);
 
 		JScrollPane scrollPane = new JScrollPane(textArea);
 		scrollPane.setPreferredSize(new Dimension(400, 300));

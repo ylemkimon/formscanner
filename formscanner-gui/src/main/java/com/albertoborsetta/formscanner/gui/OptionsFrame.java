@@ -28,6 +28,7 @@ import com.albertoborsetta.formscanner.commons.FormScannerConstants.Frame;
 import com.albertoborsetta.formscanner.api.commons.Constants.CornerType;
 import com.albertoborsetta.formscanner.api.commons.Constants.ShapeType;
 import com.albertoborsetta.formscanner.commons.resources.FormScannerResources;
+import com.albertoborsetta.formscanner.commons.resources.FormScannerResourcesKeys;
 import com.albertoborsetta.formscanner.commons.translation.FormScannerTranslation;
 import com.albertoborsetta.formscanner.commons.translation.FormScannerTranslationKeys;
 import com.albertoborsetta.formscanner.gui.builder.ButtonBuilder;
@@ -84,16 +85,10 @@ public class OptionsFrame extends InternalFrame implements TabbedView {
 		public Component getListCellRendererComponent(JList<?> list, Object value,
 				int index, boolean isSelected, boolean cellHasFocus) {
 
-			// Get the renderer component from parent class
-
 			JLabel label = (JLabel) super.getListCellRendererComponent(
 					list, value, index, isSelected, cellHasFocus);
 
-			// Get icon to use for the list item value
-
 			Icon icon = icons.get(value);
-
-			// Set icon to display for value
 
 			label.setIcon(icon);
 			return label;
@@ -152,6 +147,7 @@ public class OptionsFrame extends InternalFrame implements TabbedView {
 		setTitle(FormScannerTranslation
 				.getTranslationFor(FormScannerTranslationKeys.OPTIONS_FRAME_TITLE));
 		setResizable(true);
+		setFrameIcon(FormScannerResources.getIconFor(FormScannerResourcesKeys.CONFIG_ICON_16));
 
 		JPanel scanOptionsPanel = getScanOptionsPanel();
 		JPanel templateOptionsPanel = getTemplateOptionsPanel();
