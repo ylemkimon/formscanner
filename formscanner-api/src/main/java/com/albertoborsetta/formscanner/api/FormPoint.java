@@ -100,7 +100,7 @@ public class FormPoint {
 	 * @author Alberto Borsetta
 	 * @param str the string representation of a FormPoint object
 	 * @return the FormPoint object
-	 * @throws ParseException
+	 * @throws ParseException throws ParseExcepion
 	 */
 	public static FormPoint toPoint(String str) throws ParseException {
 		String vals = StringUtils.remove(str, '[');

@@ -11,6 +11,7 @@
 	<packaging>jar</packaging>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<seaglasslookandfeel.version>0.2</seaglasslookandfeel.version>
 	</properties>
 	<name>FormScanner - GUI</name>
 	<dependencies>
@@ -27,12 +28,7 @@
 		<dependency>
 			<groupId>com.seaglasslookandfeel</groupId>
 			<artifactId>seaglasslookandfeel</artifactId>
-			<version>0.2</version>
+			<version>${seaglasslookandfeel.version}</version>
 		</dependency>
-<!-- 		<dependency> -->
-<!-- 			<groupId>org.devzendo</groupId> -->
-<!-- 			<artifactId>Quaqua</artifactId> -->
-<!-- 			<version>7.3.4</version> -->
-<!-- 		</dependency> -->
 	</dependencies>
 </project>
