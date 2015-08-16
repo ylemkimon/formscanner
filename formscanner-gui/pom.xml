@@ -13,6 +13,7 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<quaqua.version>8.0</quaqua.version>
 		<formscanner-utils.version>1.0</formscanner-utils.version>
+		<javafx.version>2.2.51</javafx.version>
 	</properties>
 	<name>FormScanner - GUI</name>
 	<dependencies>
@@ -35,6 +36,11 @@
 			<groupId>com.albertoborsetta</groupId>
 			<artifactId>formscanner-utils</artifactId>
 			<version>${formscanner-utils.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.oracle</groupId>
+			<artifactId>javafx</artifactId>
+			<version>${javafx.version}</version>
 		</dependency>
 	</dependencies>
 </project>
