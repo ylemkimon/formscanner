@@ -23,7 +23,8 @@
 						<outputDirectory>/config</outputDirectory>
 						<directory>src/main/resources/config</directory>
 						<includes>
-							<include>*.properties</include>
+							<include>formscanner.properties</include>
+							<include>log4j.xml</include>
 						</includes>
 					</fileSet>
 					<fileSet>
