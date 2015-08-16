@@ -9,6 +9,7 @@
     <artifactId>formscanner-main</artifactId>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <quaqua.version>8.0</quaqua.version>
     </properties>
     <name>FormScanner - Main</name>
     <dependencies>
