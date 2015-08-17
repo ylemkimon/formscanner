@@ -73,13 +73,6 @@
 						</includes>
 					</fileSet>
 					<fileSet>
-						<outputDirectory>/lib</outputDirectory>
-						<directory>src/main/resources/lib</directory>
-						<includes>
-							<include>*.jar</include>
-						</includes>
-					</fileSet>
-					<fileSet>
 						<outputDirectory>/</outputDirectory>
 						<directory>src/main/resources</directory>
 						<includes>
