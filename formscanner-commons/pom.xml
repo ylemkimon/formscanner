@@ -38,6 +38,18 @@
 			<version>${log4j.version}</version>
 		</dependency>
 	</dependencies>
+	<build>
+		<resources>
+			<resource>
+				<directory>src/main/resources</directory>
+				<excludes>
+					<exclude>*.*</exclude>
+					<exclude>**/*.*</exclude>
+					<exclude>*</exclude>
+				</excludes>
+			</resource>
+		</resources>
+	</build>
 	<properties>
 		<super-csv.version>2.1.0</super-csv.version>
 		<watchmaker-swing.version>0.7.1</watchmaker-swing.version>
