@@ -817,14 +817,21 @@ public class FormScannerModel {
 	}
 
 	public void linkToHelp(URL url) {
-		String osName = System.getProperty("os.name");
+		String osName = System.getProperty("os.name").toLowerCase();
 		try {
 
-			if (osName.startsWith("Windows")) {
+			if (osName.indexOf( "win" ) >= 0) {
+				// Windows
 				Runtime.getRuntime().exec(
-						(new StringBuilder()).append("rundll32   url.dll,FileProtocolHandler ").append(url).toString());
-			} else {
-				String browsers[] = { "firefox", "opera", "konqueror", "epiphany", "mozilla", "netscape", "safari" };
+						(new StringBuilder()).append("rundll32 url.dll,FileProtocolHandler ").append(url).toString());
+			}
+			else if (osName.indexOf( "mac" ) >= 0) {
+				// Mac
+				Runtime.getRuntime().exec(
+						(new StringBuilder()).append("open ").append(url).toString());
+			} else if (osName.indexOf( "nix") >=0 || osName.indexOf( "nux") >=0) {
+				// Linux/Unix
+				String browsers[] = {"firefox", "opera", "konqueror", "epiphany", "mozilla", "netscape", "safari", "links","lynx"};
 				String browser = null;
 				for (int i = 0; i < browsers.length && browser == null; i++) {
 					if (Runtime.getRuntime().exec(new String[] { "which", browsers[i] }).waitFor() == 0) {
