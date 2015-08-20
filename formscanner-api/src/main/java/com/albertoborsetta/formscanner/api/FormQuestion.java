@@ -21,7 +21,7 @@ import org.w3c.dom.Element;
  * </ul>
  *
  * @author Alberto Borsetta
- * @version 1.0.0
+ * @version 1.0.1-SNAPSHOT
  * @see FormField
  * @see FormPoint
  */
