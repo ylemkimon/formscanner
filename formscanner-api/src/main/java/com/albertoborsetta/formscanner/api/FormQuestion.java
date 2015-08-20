@@ -152,10 +152,6 @@ public class FormQuestion extends FormField {
 	public Element getXml(Document doc) {
 		Element questionElement = doc.createElement("question");
 
-		// if (StringUtils.isNotBlank(group)) {
-		// questionElement.setAttribute("group", StringUtils.trim(group));
-		// }
-
 		questionElement.setAttribute("type", type.name());
 		questionElement.setAttribute("question", StringUtils.trim(name));
 		questionElement.setAttribute("multiple", String.valueOf(multiple));

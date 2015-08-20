@@ -88,7 +88,7 @@ import java.util.concurrent.ExecutionException;
  * 	</corners>
  * 	<fields groups="true" shape="SQUARE" size="20">
  * 		<group name="first">
- * 			<question group="first" multiple="false" type="QUESTIONS_BY_ROWS" question="Question 01">
+ * 			<question multiple="false" type="QUESTIONS_BY_ROWS" question="Question 01">
  * 				<values>
  * 					<value response="Response 01">
  * 						<point x="800.0" y="1300.0" />

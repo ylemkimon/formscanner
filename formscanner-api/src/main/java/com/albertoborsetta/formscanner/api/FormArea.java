@@ -26,136 +26,141 @@ import com.albertoborsetta.formscanner.api.commons.Constants.Corners;
  */
 public class FormArea extends FormField {
 
-    private final HashMap<Corners, FormPoint> area;
-    private String text;
+	private final HashMap<Corners, FormPoint> area;
+	private String text;
 
-    public FormArea() {
-        super();
-        area = new HashMap<>();
-    }
+	public FormArea() {
+		super();
+		area = new HashMap<>();
+	}
 
-    /**
-     * Instantiates a new FormArea with the corner points.
-     *
-     * @author Alberto Borsetta
-     * @param name the name of the area
-     * @param area the points which indicates the position of the corners
-     * @see FormPoint
-     * @see Corners
-     */
-    public FormArea(String name, HashMap<Corners, FormPoint> area) {
-        super(name);
-        this.area = area;
-    }
+	/**
+	 * Instantiates a new FormArea with the corner points.
+	 *
+	 * @author Alberto Borsetta
+	 * @param name
+	 *            the name of the area
+	 * @param area
+	 *            the points which indicates the position of the corners
+	 * @see FormPoint
+	 * @see Corners
+	 */
+	public FormArea(String name, HashMap<Corners, FormPoint> area) {
+		super(name);
+		this.area = area;
+	}
 
-    /**
-     * Instantiates a new empty FormArea. Initialize an empty set of corners
-     * points.
-     *
-     * @author Alberto Borsetta
-     * @param name the name of the area
-     * @see FormPoint
-     * @see Corners
-     */
-    public FormArea(String name) {
-        super(name);
-        area = new HashMap<>();
-    }
+	/**
+	 * Instantiates a new empty FormArea. Initialize an empty set of corners
+	 * points.
+	 *
+	 * @author Alberto Borsetta
+	 * @param name
+	 *            the name of the area
+	 * @see FormPoint
+	 * @see Corners
+	 */
+	public FormArea(String name) {
+		super(name);
+		area = new HashMap<>();
+	}
 
-    /**
-     * Sets a corner of the FormArea object.
-     *
-     * @author Alberto Borsetta
-     * @param corner the corner to set
-     * @param point the point of the corner
-     * @see FormPoint
-     * @see Corners
-     */
-    public void setCorner(Corners corner, FormPoint point) {
-        area.put(corner, point);
-    }
+	/**
+	 * Sets a corner of the FormArea object.
+	 *
+	 * @author Alberto Borsetta
+	 * @param corner
+	 *            the corner to set
+	 * @param point
+	 *            the point of the corner
+	 * @see FormPoint
+	 * @see Corners
+	 */
+	public void setCorner(Corners corner, FormPoint point) {
+		area.put(corner, point);
+	}
 
-    /**
-     * Returns the point of a corner.
-     *
-     * @author Alberto Borsetta
-     * @param corner the corner of the area
-     * @return the point of the corner
-     */
-    public FormPoint getCorner(Corners corner) {
-        return area.get(corner);
-    }
+	/**
+	 * Returns the point of a corner.
+	 *
+	 * @author Alberto Borsetta
+	 * @param corner
+	 *            the corner of the area
+	 * @return the point of the corner
+	 */
+	public FormPoint getCorner(Corners corner) {
+		return area.get(corner);
+	}
 
-    /**
-     * Clear all corners of the FormArea object.
-     *
-     * @author Alberto Borsetta
-     */
-    public void clearCorners() {
-        area.clear();
-    }
+	/**
+	 * Clear all corners of the FormArea object.
+	 *
+	 * @author Alberto Borsetta
+	 */
+	public void clearCorners() {
+		area.clear();
+	}
 
-    /**
-     * Returns the corners of the FormArea object.
-     *
-     * @author Alberto Borsetta
-     * @return the corners
-     * @see FormPoint
-     * @see Corners
-     */
-    public HashMap<Corners, FormPoint> getCorners() {
-        return area;
-    }
+	/**
+	 * Returns the corners of the FormArea object.
+	 *
+	 * @author Alberto Borsetta
+	 * @return the corners
+	 * @see FormPoint
+	 * @see Corners
+	 */
+	public HashMap<Corners, FormPoint> getCorners() {
+		return area;
+	}
 
-    /**
-     * Returns the xml representation of the FormArea object.
-     *
-     * @author Alberto Borsetta
-     * @param doc the parent document
-     * @return the xml representation of the FormArea object
-     */
-    @Override
-    public Element getXml(Document doc) {
-        Element areaElement = doc.createElement("area");
+	/**
+	 * Returns the xml representation of the FormArea object.
+	 *
+	 * @author Alberto Borsetta
+	 * @param doc
+	 *            the parent document
+	 * @return the xml representation of the FormArea object
+	 */
+	@Override
+	public Element getXml(Document doc) {
+		Element areaElement = doc.createElement("area");
 
-        areaElement.setAttribute("type", type.name());
-        areaElement.setAttribute("name", StringUtils.trim(name));
-//        if (StringUtils.isNotBlank(group)) {
-//            areaElement.setAttribute("group", StringUtils.trim(group));
-//        }
+		areaElement.setAttribute("type", type.name());
+		areaElement.setAttribute("name", StringUtils.trim(name));
 
-        // corners element
-        Element cornersElement = doc.createElement("corners");
-        areaElement.appendChild(cornersElement);
+		// corners element
+		Element cornersElement = doc.createElement("corners");
+		areaElement.appendChild(cornersElement);
 
-        // corner elements
-        for (Entry<Corners, FormPoint> corner : area.entrySet()) {
-            Element cornerElement = doc.createElement("corner");
-            cornerElement.setAttribute("position", corner.getKey().getName());
-            cornerElement.appendChild(corner.getValue().getXml(doc));
-            cornersElement.appendChild(cornerElement);
-        }
+		// corner elements
+		for (Entry<Corners, FormPoint> corner : area.entrySet()) {
+			Element cornerElement = doc.createElement("corner");
+			cornerElement.setAttribute("position", corner.getKey().getName());
+			cornerElement.appendChild(corner.getValue().getXml(doc));
+			cornersElement.appendChild(cornerElement);
+		}
 
-        return areaElement;
-    }
+		return areaElement;
+	}
 
-    /**
-     * Sets the FormArea object text.
-     *
-     * @author Alberto Borsetta
-     * @param text the text
-     */
-    public void setText(String text) {
-        this.text = text;
-    }
+	/**
+	 * Sets the FormArea object text.
+	 *
+	 * @author Alberto Borsetta
+	 * @param text
+	 *            the text
+	 */
+	public void setText(String text) {
+		this.text = text;
+	}
 
-    /**
-     * Returns the FormArea text.
-     *
-     * @author Alberto Borsetta
-     * @return the text
-     */
-    public String getText() {
-        return text;
-    }
+	/**
+	 * Returns the FormArea text.
+	 *
+	 * @author Alberto Borsetta
+	 * @return the text
+	 */
+	public String getText() {
+		return text;
+	}
 }
