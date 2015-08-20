@@ -5,7 +5,7 @@
 	<parent>
 		<groupId>com.albertoborsetta</groupId>
 		<artifactId>formscanner</artifactId>
-		<version>0.12-SNAPSHOT</version>
+		<version>1.0.0</version>
 	</parent>
 	<artifactId>formscanner-gui</artifactId>
 	<packaging>jar</packaging>
