@@ -5,12 +5,15 @@ NEW FEATURES
 
 * Implement corner detection for different marker pattern
 * Reset autoNumbering question for new group
+* Naming template for Questions, QRCodes/Barcodes and Groups
 * Crop images in order to prevent corner detection problems during scanning process
 * Added platform dependent look and feels for different operating systems
+* Added Japanese translation (thanks to Atsushi Yamaoka)
 
 FIXES
 ---
 
+* Start browser on MacOsX operating system
 * Manage set of question
 * Minor BugFix
 
