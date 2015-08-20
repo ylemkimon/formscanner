@@ -20,7 +20,7 @@ import com.albertoborsetta.formscanner.api.commons.Constants.Corners;
  * </ul>
  *
  * @author Alberto Borsetta
- * @version 0.11.3-SNAPSHOT
+ * @version 0.12-SNAPSHOT
  * @see FormPoint
  * @see Corners
  */
@@ -120,9 +120,9 @@ public class FormArea extends FormField {
 
         areaElement.setAttribute("type", type.name());
         areaElement.setAttribute("name", StringUtils.trim(name));
-        if (StringUtils.isNotBlank(group)) {
-            areaElement.setAttribute("group", StringUtils.trim(group));
-        }
+//        if (StringUtils.isNotBlank(group)) {
+//            areaElement.setAttribute("group", StringUtils.trim(group));
+//        }
 
         // corners element
         Element cornersElement = doc.createElement("corners");
