@@ -15,7 +15,7 @@ import org.w3c.dom.Element;
  * A FormPoint object has only the (x,y) coordinates attributes
  *
  * @author Alberto Borsetta
- * @version 0.12-SNAPSHOT
+ * @version 1.0.0
  * @see Point
  */
 public class FormPoint {
