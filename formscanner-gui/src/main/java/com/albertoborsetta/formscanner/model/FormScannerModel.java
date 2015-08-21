@@ -4,7 +4,9 @@ import java.awt.ComponentOrientation;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.net.MalformedURLException;
 import java.net.URL;
+import java.net.URLClassLoader;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -13,6 +15,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map.Entry;
+import java.util.ResourceBundle.Control;
 
 import javax.imageio.ImageIO;
 import javax.swing.JOptionPane;
@@ -49,6 +52,10 @@ import com.albertoborsetta.formscanner.gui.ManageTemplateFrame;
 import com.albertoborsetta.formscanner.gui.OptionsFrame;
 import com.albertoborsetta.formscanner.gui.RenameFileFrame;
 import com.albertoborsetta.formscanner.gui.ResultsGridFrame;
+
+import javafx.geometry.NodeOrientation;
+import javafx.stage.Stage;
+
 import com.albertoborsetta.formscanner.gui.FormScannerDesktop;
 
 import java.awt.HeadlessException;
@@ -107,7 +114,6 @@ public class FormScannerModel {
 	private Rectangle optionsFramePosition;
 	private Rectangle desktopSize;
 	private final Locale locale;
-	private final ComponentOrientation orientation;
 	private String fontType;
 	private Integer fontSize;
 	private ArrayList<FormArea> areas = new ArrayList<>();
@@ -125,6 +131,9 @@ public class FormScannerModel {
 	private ArrayList<String> historyBarcodeNameTemplate;
 	private ArrayList<String> historyGroupNameTemplate;
 	private HashMap<String, Integer> crop = new HashMap<>();
+	private final NodeOrientation orientation;
+	
+	private Stage formScannerDesktop;
 
 	public FormScannerModel() throws UnsupportedEncodingException {
 		String path = FormScannerModel.class.getProtectionDomain().getCodeSource().getLocation().getPath();
@@ -160,6 +169,7 @@ public class FormScannerModel {
 				resultsPath + "/FormScanner/results/");
 
 		lang = configurations.getProperty(FormScannerConfigurationKeys.LANG, getDefaultLanguage(installationLanguage));
+		orientation =  FormScannerConstants.Language.valueOf(lang).getOrientation();
 
 		String[] locales = StringUtils.split(lang, '_');
 		if (locales.length == 2) {
@@ -168,8 +178,6 @@ public class FormScannerModel {
 			locale = new Locale(locales[0]);
 		}
 		fileUtils = FormFileUtils.getInstance(locale);
-
-		orientation = ComponentOrientation.getOrientation(locale);
 
 		FormScannerTranslation.setTranslation(installPath, lang);
 		FormScannerResources.setResources(installPath);
@@ -820,18 +828,17 @@ public class FormScannerModel {
 		String osName = System.getProperty("os.name").toLowerCase();
 		try {
 
-			if (osName.indexOf( "win" ) >= 0) {
+			if (osName.indexOf("win") >= 0) {
 				// Windows
 				Runtime.getRuntime().exec(
 						(new StringBuilder()).append("rundll32 url.dll,FileProtocolHandler ").append(url).toString());
-			}
-			else if (osName.indexOf( "mac" ) >= 0) {
+			} else if (osName.indexOf("mac") >= 0) {
 				// Mac
-				Runtime.getRuntime().exec(
-						(new StringBuilder()).append("open ").append(url).toString());
-			} else if (osName.indexOf( "nix") >=0 || osName.indexOf( "nux") >=0) {
+				Runtime.getRuntime().exec((new StringBuilder()).append("open ").append(url).toString());
+			} else if (osName.indexOf("nix") >= 0 || osName.indexOf("nux") >= 0) {
 				// Linux/Unix
-				String browsers[] = {"firefox", "opera", "konqueror", "epiphany", "mozilla", "netscape", "safari", "links","lynx"};
+				String browsers[] = { "firefox", "opera", "konqueror", "epiphany", "mozilla", "netscape", "safari",
+						"links", "lynx" };
 				String browser = null;
 				for (int i = 0; i < browsers.length && browser == null; i++) {
 					if (Runtime.getRuntime().exec(new String[] { "which", browsers[i] }).waitFor() == 0) {
@@ -1032,7 +1039,7 @@ public class FormScannerModel {
 		return locale;
 	}
 
-	public ComponentOrientation getOrientation() {
+	public NodeOrientation getOrientation() {
 		return orientation;
 	}
 
@@ -1098,5 +1105,21 @@ public class FormScannerModel {
 
 	public HashMap<String, Integer> getCrop() {
 		return crop;
+	}
+
+	public void setPrimaryStage(Stage stage) {
+		formScannerDesktop = stage;
+	}
+
+	public Control getResourceLoader() {
+		String translationPath = installPath + "/language/";
+		try {
+			File file = new File(translationPath);
+			URL[] url={file.toURI().toURL()};
+			return new URLClassLoader(url);
+		} catch (MalformedURLException e) {// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
 	}
 }

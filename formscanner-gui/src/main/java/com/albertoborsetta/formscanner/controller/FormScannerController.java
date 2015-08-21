@@ -14,21 +14,26 @@ import com.albertoborsetta.formscanner.commons.FormScannerConstants.Action;
 import com.albertoborsetta.formscanner.commons.FormScannerConstants.Frame;
 import com.albertoborsetta.formscanner.model.FormScannerModel;
 
+import javafx.fxml.FXML;
+
 public class FormScannerController implements ActionListener, WindowListener {
 
-    private final FormScannerModel model;
-    private static FormScannerController instance;
+    private FormScannerModel model;
 
-    public static FormScannerController getInstance(FormScannerModel model) {
-        if (instance == null) {
-            instance = new FormScannerController(model);
-        }
-        return instance;
-    }
-
-    private FormScannerController(FormScannerModel model) {
-        this.model = model;
-    }
+    /**
+	 * The constructor. The constructor is called before the initialize()
+	 * method.
+	 */
+	public FormScannerController() {
+	}
+	
+	/**
+	 * Initializes the controller class. This method is automatically called
+	 * after the fxml file has been loaded.
+	 */
+	@FXML
+	private void initialize() {
+	}
 
     @Override
     public void actionPerformed(ActionEvent e) {
@@ -112,4 +117,18 @@ public class FormScannerController implements ActionListener, WindowListener {
     @Override
     public void windowDeactivated(WindowEvent e) {
     }
+
+	public void setMainApp(FormScannerModel formScannerModel) {
+		this.model = formScannerModel;
+	}
+	
+	@FXML
+	private void handleOpenImages() {
+		model.openImages();
+	}
+	
+	@FXML
+	private void handleExit() {
+		model.exitFormScanner();
+	}
 }
