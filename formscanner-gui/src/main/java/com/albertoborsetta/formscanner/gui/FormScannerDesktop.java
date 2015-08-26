@@ -10,6 +10,9 @@ import com.albertoborsetta.formscanner.commons.translation.FormScannerTranslatio
 import com.albertoborsetta.formscanner.commons.translation.FormScannerTranslationKeys;
 import com.albertoborsetta.formscanner.controller.FormScannerController;
 import com.albertoborsetta.formscanner.model.FormScannerModel;
+
+import javafx.scene.layout.BorderPane;
+
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
@@ -23,107 +26,115 @@ import org.apache.commons.lang3.StringUtils;
  *
  * @author aborsetta
  */
-public class FormScannerDesktop extends JFrame {
-    
-    /**
+public class FormScannerDesktop extends BorderPane {
+
+	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	
+
 	private final FormScannerModel model;
-    private final FormScannerController mainFrameController;
-    private final MenuBar menuBar;
-    private final ToolBar toolBar;
-    private final JDesktopPane desktopPane;
-    
-    /**
-     * Create the application.
-     * @throws java.io.UnsupportedEncodingException
-     */
-    public FormScannerDesktop(FormScannerModel model) throws UnsupportedEncodingException {
-        this.model = model;
-        mainFrameController = FormScannerController.getInstance(model);
-        addWindowListener(mainFrameController);
+	private final FormScannerController mainFrameController;
+//	private final MenuBar menuBar;
+//	private final ToolBar toolBar;
+//	private final JDesktopPane desktopPane;
 
-        setName(FormScannerConstants.Frame.DESKTOP_FRAME.name());
+	/**
+	 * Create the application.
+	 * 
+	 * @throws java.io.UnsupportedEncodingException
+	 */
+	public FormScannerDesktop(FormScannerModel model) throws UnsupportedEncodingException {
+		this.model = model;
+		mainFrameController = FormScannerController.getInstance(model);
 
-        setTitle(StringUtils.replace(FormScannerTranslation.getTranslationFor(FormScannerTranslationKeys.FORMSCANNER_MAIN_TITLE), FormScannerConstants.VERSION_KEY, FormScannerConstants.VERSION));
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		prefHeightProperty().bind(model.getPrimaryStage().heightProperty());
+		prefWidthProperty().bind(model.getPrimaryStage().heightProperty());
 
-        getContentPane().setLayout(new BorderLayout(0, 0));
-        menuBar = new MenuBar(model);
-        setJMenuBar(menuBar);
+		setNodeOrientation(model.getOrientation());
+//		addWindowListener(mainFrameController);
+//
+//		setName(FormScannerConstants.Frame.DESKTOP_FRAME.name());
+//
+//		setTitle(StringUtils.replace(
+//				FormScannerTranslation.getTranslationFor(FormScannerTranslationKeys.FORMSCANNER_MAIN_TITLE),
+//				FormScannerConstants.VERSION_KEY, FormScannerConstants.VERSION));
+//		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+//
+//		getContentPane().setLayout(new BorderLayout(0, 0));
+//		menuBar = new MenuBar(model);
+//		setJMenuBar(menuBar);
+//
+//		toolBar = new ToolBar(model);
+//		getContentPane().add(toolBar, BorderLayout.NORTH);
+//
+//		desktopPane = new JDesktopPane();
+//		desktopPane.setBackground(new Color(252, 252, 252, 255));
+//		getContentPane().add(desktopPane, BorderLayout.CENTER);
+//
+//		model.setDefaultFramePositions();
+//		setBounds(model.getLastPosition(FormScannerConstants.Frame.DESKTOP_FRAME));
+//		setVisible(true);
+//		setDefaultLookAndFeelDecorated(true);
+//		setComponentOrientation(model.getOrientation());
+	}
 
-        toolBar = new ToolBar(model);
-        getContentPane().add(toolBar, BorderLayout.NORTH);
+	public void arrangeFrame(InternalFrame frame) {
+//		boolean found = false;
+//
+//		for (Component component : desktopPane.getComponents()) {
+//			if (frame.getName().equals(component.getName())) {
+//				component.setVisible(false);
+//				desktopPane.remove(component);
+//				found = true;
+//				break;
+//			}
+//		}
+//
+//		if (!found) {
+//			desktopPane.add(frame);
+//			frame.setVisible(true);
+//		} else {
+//			arrangeFrame(frame);
+//		}
+	}
 
-        desktopPane = new JDesktopPane();
-        desktopPane.setBackground(new Color(252, 252, 252, 255));
-        getContentPane().add(desktopPane, BorderLayout.CENTER);
+	public void disposeFrame(InternalFrame frame) {
+		if (frame != null) {
+			model.setLastPosition(FormScannerConstants.Frame.valueOf(frame.getName()), frame.getBounds());
+			frame.dispose();
+		}
+		setDefaultControllersEnabled();
+		model.resetFirstPass();
+	}
 
-        model.setDefaultFramePositions();
-        setBounds(model.getLastPosition(FormScannerConstants.Frame.DESKTOP_FRAME));
-        setVisible(true);
-        setDefaultLookAndFeelDecorated(true);
-        setComponentOrientation(ComponentOrientation.RIGHT_TO_LEFT);
-    }
+	public void setDefaultControllersEnabled() {
+//		toolBar.setRenameControllersEnabled(true);
+//		toolBar.setScanControllersEnabled(true);
+//		toolBar.setScanAllControllersEnabled(true);
+//		toolBar.setScanCurrentControllersEnabled(false);
+//		menuBar.setRenameControllersEnabled(true);
+//		menuBar.setScanControllersEnabled(true);
+//		menuBar.setScanAllControllersEnabled(true);
+	}
 
-    public void arrangeFrame(InternalFrame frame) {
-        boolean found = false;
+	public void setRenameControllersEnabled(boolean enable) {
+//		toolBar.setRenameControllersEnabled(enable);
+//		menuBar.setRenameControllersEnabled(enable);
+	}
 
-        for (Component component : desktopPane.getComponents()) {
-            if (frame.getName().equals(component.getName())) {
-                component.setVisible(false);
-                desktopPane.remove(component);
-                found = true;
-                break;
-            }
-        }
+	public void setScanControllersEnabled(boolean enable) {
+//		toolBar.setScanControllersEnabled(enable);
+//		menuBar.setScanControllersEnabled(enable);
+	}
 
-        if (!found) {
-            desktopPane.add(frame);
-            frame.setVisible(true);
-        } else {
-            arrangeFrame(frame);
-        }
-    }
+	public void setScanAllControllersEnabled(boolean enable) {
+//		toolBar.setScanAllControllersEnabled(enable);
+//		menuBar.setScanAllControllersEnabled(enable);
+	}
 
-    public void disposeFrame(InternalFrame frame) {
-        if (frame != null) {
-            model.setLastPosition(FormScannerConstants.Frame.valueOf(frame.getName()), frame.getBounds());
-            frame.dispose();
-        }
-        setDefaultControllersEnabled();
-        model.resetFirstPass();
-    }
+	public void setScanCurrentControllersEnabled(boolean enable) {
+//		toolBar.setScanCurrentControllersEnabled(enable);
+	}
 
-    public void setDefaultControllersEnabled() {
-        toolBar.setRenameControllersEnabled(true);
-        toolBar.setScanControllersEnabled(true);
-        toolBar.setScanAllControllersEnabled(true);
-        toolBar.setScanCurrentControllersEnabled(false);
-        menuBar.setRenameControllersEnabled(true);
-        menuBar.setScanControllersEnabled(true);
-        menuBar.setScanAllControllersEnabled(true);
-    }
-
-    public void setRenameControllersEnabled(boolean enable) {
-        toolBar.setRenameControllersEnabled(enable);
-        menuBar.setRenameControllersEnabled(enable);
-    }
-
-    public void setScanControllersEnabled(boolean enable) {
-        toolBar.setScanControllersEnabled(enable);
-        menuBar.setScanControllersEnabled(enable);
-    }
-
-    public void setScanAllControllersEnabled(boolean enable) {
-        toolBar.setScanAllControllersEnabled(enable);
-        menuBar.setScanAllControllersEnabled(enable);
-    }
-
-    public void setScanCurrentControllersEnabled(boolean enable) {
-        toolBar.setScanCurrentControllersEnabled(enable);
-    }
-    
 }

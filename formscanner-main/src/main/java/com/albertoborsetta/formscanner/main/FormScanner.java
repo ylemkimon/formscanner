@@ -33,8 +33,11 @@ import javax.swing.UIManager.LookAndFeelInfo;
 import javax.swing.UnsupportedLookAndFeelException;
 
 import ch.randelshofer.quaqua.QuaquaLookAndFeel;
+import javafx.application.Application;
+import javafx.scene.Scene;
+import javafx.stage.Stage;
 
-public class FormScanner {
+public class FormScanner extends Application {
 
 	private static Logger logger;
 	
@@ -45,35 +48,36 @@ public class FormScanner {
 	 */
 	public static void main(String[] args) {
 		if (args.length == 0) {
-			EventQueue.invokeLater(new Runnable() {
-				@Override
-				public void run() {
-					try {
-						FormScannerModel model = new FormScannerModel();
-						
-						logger = LogManager.getLogger(FormScanner.class.getName());
-						
-						UIManager.installLookAndFeel("Quaqua", QuaquaLookAndFeel.class.getName());
-						
-						for (LookAndFeelInfo info : UIManager
-								.getInstalledLookAndFeels()) {
-							if (model.getLookAndFeel().equals(info.getName())) {
-								UIManager.setLookAndFeel(info.getClassName());
-								break;
-							}
-						}
-						FormScannerDesktop desktop = new FormScannerDesktop(
-								model);
-						model.setDesktop(desktop);
-						desktop.setIconImage(model.getIcon());
-					} catch (UnsupportedEncodingException
-							| ClassNotFoundException | InstantiationException
-							| IllegalAccessException
-							| UnsupportedLookAndFeelException e) {
-						logger.debug("Error", e);
-					}
-				}
-			});
+			launch(args);
+//			EventQueue.invokeLater(new Runnable() {
+//				@Override
+//				public void run() {
+//					try {
+//						FormScannerModel model = new FormScannerModel();
+//						
+//						logger = LogManager.getLogger(FormScanner.class.getName());
+//						
+//						UIManager.installLookAndFeel("Quaqua", QuaquaLookAndFeel.class.getName());
+//						
+//						for (LookAndFeelInfo info : UIManager
+//								.getInstalledLookAndFeels()) {
+//							if (model.getLookAndFeel().equals(info.getName())) {
+//								UIManager.setLookAndFeel(info.getClassName());
+//								break;
+//							}
+//						}
+//						FormScannerDesktop desktop = new FormScannerDesktop(
+//								model);
+//						model.setDesktop(desktop);
+//						desktop.setIconImage(model.getIcon());
+//					} catch (UnsupportedEncodingException
+//							| ClassNotFoundException | InstantiationException
+//							| IllegalAccessException
+//							| UnsupportedLookAndFeelException e) {
+//						logger.debug("Error", e);
+//					}
+//				}
+//			});
 		} else {
 			File templateFile = new File(args[0]);
 			FormTemplate template = null;
@@ -127,5 +131,41 @@ public class FormScanner {
 			fileUtils.saveCsvAs(outputFile, filledForms, false);
 			System.exit(0);
 		}
+	}
+
+	@Override
+	public void start(Stage primaryStage) throws Exception {
+		Stage stage = primaryStage;
+//		BorderPane formScannerDesktop;
+
+		try {
+			logger = LogManager.getLogger(FormScanner.class.getName());
+
+			FormScannerModel model = new FormScannerModel();
+			model.setPrimaryStage(stage);
+			
+			FormScannerDesktop desktop = new FormScannerDesktop(model);
+			
+			// Load root layout from fxml file.
+//			FXMLLoader loader = new FXMLLoader();
+//			
+//			loader.setResources(ResourceBundle.getBundle("formscanner", model.getLocale(), model.getResourceLoader()));
+//			loader.setLocation(FormScanner.class.getResource("../gui/FormScannerDesktop.fxml"));
+//			formScannerDesktop = (BorderPane) loader.load();
+
+			// Show the scene containing the root layout.
+			Scene scene = new Scene(desktop);
+			scene.setNodeOrientation(model.getOrientation());
+//			FormScannerController formScannerController = loader.getController();
+//			formScannerController.setMainApp(model);
+
+//			stage.setTitle("AddressApp");
+			stage.setScene(scene);
+			
+			stage.show();
+		} catch (IOException e) {
+			logger.debug("Error", e);
+		}
+
 	}
 }

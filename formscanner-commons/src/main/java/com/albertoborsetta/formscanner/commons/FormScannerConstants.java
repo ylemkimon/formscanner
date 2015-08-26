@@ -9,11 +9,13 @@ import com.albertoborsetta.formscanner.api.commons.Constants;
 import com.albertoborsetta.formscanner.commons.configuration.FormScannerConfigurationKeys;
 import com.albertoborsetta.formscanner.commons.translation.FormScannerTranslationKeys;
 
+import javafx.geometry.NodeOrientation;
+
 public class FormScannerConstants extends Constants {
 
 	// Version
 	public static final String VERSION_KEY = "$VERSION";
-	public static final String VERSION = "0.11.1-SNAPSHOT";
+	public static final String VERSION = "1.1-SNAPSHOT";
 
 	// Actions
 	public static final String RENAME_FILES_FIRST = "RENAME_FILES_FIRST";
@@ -288,25 +290,27 @@ public class FormScannerConstants extends Constants {
 	// Languages
 	public enum Language {
 
-		ENGLISH("en", FormScannerTranslationKeys.ENGLISH, ENGLISH_LANGUAGES),
-		ITALIAN("it", FormScannerTranslationKeys.ITALIAN, ITALIAN_LANGUAGES),
-		PORTUGUES("pt_BR", FormScannerTranslationKeys.PORTUGUES, PORTUGUES_LANGUAGES),
-		SPANISH("es", FormScannerTranslationKeys.SPANISH, SPANISH_LANGUAGES),
+		ENGLISH("en", FormScannerTranslationKeys.ENGLISH, ENGLISH_LANGUAGES, NodeOrientation.LEFT_TO_RIGHT),
+		ITALIAN("it", FormScannerTranslationKeys.ITALIAN, ITALIAN_LANGUAGES, NodeOrientation.LEFT_TO_RIGHT),
+		PORTUGUES("pt_BR", FormScannerTranslationKeys.PORTUGUES, PORTUGUES_LANGUAGES, NodeOrientation.LEFT_TO_RIGHT),
+		SPANISH("es", FormScannerTranslationKeys.SPANISH, SPANISH_LANGUAGES, NodeOrientation.LEFT_TO_RIGHT),
 		// GERMAN("de", FormScannerTranslationKeys.GERMAN, GERMAN_LANGUAGES),
-		FARSI("fa", FormScannerTranslationKeys.FARSI, FARSI_LANGUAGES),
-		POLISH("pl", FormScannerTranslationKeys.POLISH, POLISH_LANGUAGES),
-		GREEK("el", FormScannerTranslationKeys.GREEK, GREEK_LANGUAGES),
-		DUTCH("nl", FormScannerTranslationKeys.DUTCH, DUTCH_LANGUAGES),
-		JAPANESE("jp", FormScannerTranslationKeys.JAPANESE, JAPANESE_LANGUAGES);
+		FARSI("fa", FormScannerTranslationKeys.FARSI, FARSI_LANGUAGES, NodeOrientation.RIGHT_TO_LEFT),
+		POLISH("pl", FormScannerTranslationKeys.POLISH, POLISH_LANGUAGES, NodeOrientation.LEFT_TO_RIGHT),
+		GREEK("el", FormScannerTranslationKeys.GREEK, GREEK_LANGUAGES, NodeOrientation.LEFT_TO_RIGHT),
+		DUTCH("nl", FormScannerTranslationKeys.DUTCH, DUTCH_LANGUAGES, NodeOrientation.LEFT_TO_RIGHT),
+		JAPANESE("jp", FormScannerTranslationKeys.JAPANESE, JAPANESE_LANGUAGES, NodeOrientation.LEFT_TO_RIGHT);
 
 		private final String value;
 		private final String translation;
 		private final Set<String> installationLanguages;
+		private final NodeOrientation orientation;
 
-		private Language(String value, String translation, Set<String> installationLanguages) {
+		private Language(String value, String translation, Set<String> installationLanguages, NodeOrientation orientation) {
 			this.value = value;
 			this.translation = translation;
 			this.installationLanguages = installationLanguages;
+			this.orientation = orientation;
 		}
 
 		public String getValue() {
@@ -319,6 +323,10 @@ public class FormScannerConstants extends Constants {
 
 		public Set<String> getInstallationLanguages() {
 			return installationLanguages;
+		}
+		
+		public NodeOrientation getOrientation() {
+			return orientation;
 		}
 	}
 

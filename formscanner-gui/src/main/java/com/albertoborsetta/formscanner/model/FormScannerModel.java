@@ -49,6 +49,10 @@ import com.albertoborsetta.formscanner.gui.ManageTemplateFrame;
 import com.albertoborsetta.formscanner.gui.OptionsFrame;
 import com.albertoborsetta.formscanner.gui.RenameFileFrame;
 import com.albertoborsetta.formscanner.gui.ResultsGridFrame;
+
+import javafx.geometry.NodeOrientation;
+import javafx.stage.Stage;
+
 import com.albertoborsetta.formscanner.gui.FormScannerDesktop;
 
 import java.awt.HeadlessException;
@@ -107,7 +111,7 @@ public class FormScannerModel {
 	private Rectangle optionsFramePosition;
 	private Rectangle desktopSize;
 	private final Locale locale;
-	private final ComponentOrientation orientation;
+	private final NodeOrientation orientation;
 	private String fontType;
 	private Integer fontSize;
 	private ArrayList<FormArea> areas = new ArrayList<>();
@@ -125,6 +129,7 @@ public class FormScannerModel {
 	private ArrayList<String> historyBarcodeNameTemplate;
 	private ArrayList<String> historyGroupNameTemplate;
 	private HashMap<String, Integer> crop = new HashMap<>();
+	private Stage primaryStage;
 
 	public FormScannerModel() throws UnsupportedEncodingException {
 		String path = FormScannerModel.class.getProtectionDomain().getCodeSource().getLocation().getPath();
@@ -160,7 +165,9 @@ public class FormScannerModel {
 				resultsPath + "/FormScanner/results/");
 
 		lang = configurations.getProperty(FormScannerConfigurationKeys.LANG, getDefaultLanguage(installationLanguage));
+		orientation =  FormScannerConstants.Language.valueOf(lang).getOrientation();
 
+		
 		String[] locales = StringUtils.split(lang, '_');
 		if (locales.length == 2) {
 			locale = new Locale(locales[0], locales[1]);
@@ -169,7 +176,7 @@ public class FormScannerModel {
 		}
 		fileUtils = FormFileUtils.getInstance(locale);
 
-		orientation = ComponentOrientation.getOrientation(locale);
+//		orientation = ComponentOrientation.getOrientation(locale);
 
 		FormScannerTranslation.setTranslation(installPath, lang);
 		FormScannerResources.setResources(installPath);
@@ -761,7 +768,7 @@ public class FormScannerModel {
 	}
 
 	public void exitFormScanner() {
-		view.dispose();
+//		view.dispose();
 		System.exit(0);
 	}
 
@@ -941,7 +948,7 @@ public class FormScannerModel {
 		} else {
 			formTemplate.removePoint(cursorPoint);
 		}
-		view.repaint();
+//		view.repaint();
 	}
 
 	public int getShapeSize() {
@@ -1032,7 +1039,7 @@ public class FormScannerModel {
 		return locale;
 	}
 
-	public ComponentOrientation getOrientation() {
+	public NodeOrientation getOrientation() {
 		return orientation;
 	}
 
@@ -1098,5 +1105,13 @@ public class FormScannerModel {
 
 	public HashMap<String, Integer> getCrop() {
 		return crop;
+	}
+
+	public void setPrimaryStage(Stage stage) {
+		this.primaryStage = stage;
+	}
+	
+	public Stage getPrimaryStage() {
+		return primaryStage;
 	}
 }
