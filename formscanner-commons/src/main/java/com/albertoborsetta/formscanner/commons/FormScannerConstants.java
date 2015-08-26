@@ -13,7 +13,7 @@ public class FormScannerConstants extends Constants {
 
 	// Version
 	public static final String VERSION_KEY = "$VERSION";
-	public static final String VERSION = "0.11.1-SNAPSHOT";
+	public static final String VERSION = "1.0.1-SNAPSHOT";
 
 	// Actions
 	public static final String RENAME_FILES_FIRST = "RENAME_FILES_FIRST";
