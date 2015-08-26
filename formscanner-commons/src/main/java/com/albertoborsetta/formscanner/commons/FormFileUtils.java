@@ -253,7 +253,9 @@ public class FormFileUtils extends JFileChooser {
 						result.put(header[i], field.getValues());
 					} else {
 						FormArea area = areas.get(header[i]);
-						result.put(header[i], area.getText());
+						if (area != null) {
+							result.put(header[i], area.getText());
+						}
 					}
 				}
 				

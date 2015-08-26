@@ -994,10 +994,7 @@ public final class FormTemplate {
 			Collections.sort(fieldNames);
 
 			for (String fieldName : fieldNames) {
-				Future<HashMap<String, FormQuestion>> future = threadPool
-						.submit(new FieldDetector(
-								threshold, density, size, this, templateFields
-										.get(fieldName), image));
+				Future<HashMap<String, FormQuestion>> future = threadPool.submit(new FieldDetector(threshold, density, size, this, templateFields.get(fieldName), image));
 				fieldDetectorThreads.add(future);
 			}
 
@@ -1012,8 +1009,8 @@ public final class FormTemplate {
 					throw new FormScannerException(e.getCause());
 				}
 			}
-			threadPool.shutdown();
 		}
+		threadPool.shutdown();
 	}
 
 	private void calculateRotation() {
@@ -1216,10 +1213,8 @@ public final class FormTemplate {
 					throw new FormScannerException(e.getCause());
 				}
 			}
-
-			threadPool.shutdown();
 		}
-
+		threadPool.shutdown();
 	}
 
 	private static BufferedImage getAreaImage(BufferedImage image, FormArea area) {
