@@ -169,7 +169,7 @@ import java.util.concurrent.ExecutionException;
  * </pre>
  *
  * @author Alberto Borsetta
- * @version 1.1-SNAPSHOT
+ * @version javafx-SNAPSHOT
  * @see FormPoint
  * @see FormQuestion
  * @see FieldType
