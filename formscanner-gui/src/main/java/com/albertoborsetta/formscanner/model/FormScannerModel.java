@@ -4,6 +4,7 @@ import java.awt.ComponentOrientation;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.FileInputStream;
 import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -13,6 +14,8 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map.Entry;
+import java.util.PropertyResourceBundle;
+import java.util.ResourceBundle;
 
 import javax.imageio.ImageIO;
 import javax.swing.JOptionPane;
@@ -49,8 +52,13 @@ import com.albertoborsetta.formscanner.gui.ManageTemplateFrame;
 import com.albertoborsetta.formscanner.gui.OptionsFrame;
 import com.albertoborsetta.formscanner.gui.RenameFileFrame;
 import com.albertoborsetta.formscanner.gui.ResultsGridFrame;
+import com.albertoborsetta.formscanner.gui.desktop.DesktopController;
+import com.albertoborsetta.formscanner.gui.menubar.MenuBarController;
 
 import javafx.geometry.NodeOrientation;
+import javafx.scene.Scene;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 
 import com.albertoborsetta.formscanner.gui.FormScannerDesktop;
@@ -58,6 +66,8 @@ import com.albertoborsetta.formscanner.gui.FormScannerDesktop;
 import java.awt.HeadlessException;
 import java.awt.Image;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 
@@ -111,7 +121,7 @@ public class FormScannerModel {
 	private Rectangle optionsFramePosition;
 	private Rectangle desktopSize;
 	private final Locale locale;
-	private final NodeOrientation orientation;
+	private NodeOrientation orientation;
 	private String fontType;
 	private Integer fontSize;
 	private ArrayList<FormArea> areas = new ArrayList<>();
@@ -130,10 +140,11 @@ public class FormScannerModel {
 	private ArrayList<String> historyGroupNameTemplate;
 	private HashMap<String, Integer> crop = new HashMap<>();
 	private Stage primaryStage;
+	private String installPath;
 
 	public FormScannerModel() throws UnsupportedEncodingException {
 		String path = FormScannerModel.class.getProtectionDomain().getCodeSource().getLocation().getPath();
-		String installPath = URLDecoder.decode(path, "UTF-8");
+		installPath = URLDecoder.decode(path, "UTF-8");
 		installPath = StringUtils.substringBeforeLast(installPath, "lib");
 		installPath = StringUtils.defaultIfBlank(System.getProperty("FormScanner_HOME"), installPath);
 
@@ -164,8 +175,13 @@ public class FormScannerModel {
 		resultsPath = configurations.getProperty(FormScannerConfigurationKeys.RESULTS_SAVE_PATH,
 				resultsPath + "/FormScanner/results/");
 
+		orientation = NodeOrientation.LEFT_TO_RIGHT;
 		lang = configurations.getProperty(FormScannerConfigurationKeys.LANG, getDefaultLanguage(installationLanguage));
-		orientation =  FormScannerConstants.Language.valueOf(lang).getOrientation();
+		for (Language language : Language.values()) {
+			if (language.getValue().equals(lang)) {
+				orientation = language.getOrientation();
+			}
+		}
 
 		
 		String[] locales = StringUtils.split(lang, '_');
@@ -175,8 +191,6 @@ public class FormScannerModel {
 			locale = new Locale(locales[0]);
 		}
 		fileUtils = FormFileUtils.getInstance(locale);
-
-//		orientation = ComponentOrientation.getOrientation(locale);
 
 		FormScannerTranslation.setTranslation(installPath, lang);
 		FormScannerResources.setResources(installPath);
@@ -1113,5 +1127,51 @@ public class FormScannerModel {
 	
 	public Stage getPrimaryStage() {
 		return primaryStage;
+	}
+	
+	public ResourceBundle getResourceBundle() throws UnsupportedEncodingException, IOException {
+		String translationFile = installPath + "/language/formscanner-" + lang
+				+ ".lang";
+		final InputStream stream = new FileInputStream(translationFile);
+		ResourceBundle bundle = null;
+		if (stream != null) {
+			try {
+				bundle = new PropertyResourceBundle(new InputStreamReader(stream, "UTF-8"));
+			} finally {
+				stream.close();
+			}
+		}
+		return bundle;
+	}
+
+	private String getTitle() {
+		return StringUtils.replace(
+				FormScannerTranslation.getTranslationFor(FormScannerTranslationKeys.FORMSCANNER_MAIN_TITLE),
+				FormScannerConstants.VERSION_KEY, FormScannerConstants.VERSION);
+	}
+	
+	public void show() throws UnsupportedEncodingException {
+		DesktopController desktop = new DesktopController(this);
+		// FormScannerDesktop desktop = new FormScannerDesktop(this);
+		
+		// Load root layout from fxml file.
+//		FXMLLoader loader = new FXMLLoader();
+//		
+//		loader.setResources(ResourceBundle.getBundle("formscanner", model.getLocale(), model.getResourceLoader()));
+//		loader.setLocation(FormScanner.class.getResource("../gui/FormScannerDesktop.fxml"));
+//		formScannerDesktop = (BorderPane) loader.load();
+
+		// Show the scene containing the root layout.
+		AnchorPane main = new AnchorPane();
+		main.setNodeOrientation(getOrientation());
+		main.getChildren().add(desktop.getDesktop());
+		Scene scene = new Scene(main);
+		scene.setNodeOrientation(getOrientation());
+//		FormScannerController formScannerController = loader.getController();
+//		formScannerController.setMainApp(model);
+
+		primaryStage.setTitle(getTitle());
+		primaryStage.setScene(scene);
+		primaryStage.show();
 	}
 }

@@ -143,8 +143,9 @@ public class FormScanner extends Application {
 
 			FormScannerModel model = new FormScannerModel();
 			model.setPrimaryStage(stage);
+			model.show();
 			
-			FormScannerDesktop desktop = new FormScannerDesktop(model);
+//			FormScannerDesktop desktop = new FormScannerDesktop(model);
 			
 			// Load root layout from fxml file.
 //			FXMLLoader loader = new FXMLLoader();
@@ -154,15 +155,16 @@ public class FormScanner extends Application {
 //			formScannerDesktop = (BorderPane) loader.load();
 
 			// Show the scene containing the root layout.
-			Scene scene = new Scene(desktop);
-			scene.setNodeOrientation(model.getOrientation());
+//			Scene scene = new Scene(desktop);
+//			scene.setNodeOrientation(model.getOrientation());
 //			FormScannerController formScannerController = loader.getController();
 //			formScannerController.setMainApp(model);
 
 //			stage.setTitle("AddressApp");
-			stage.setScene(scene);
 			
-			stage.show();
+//			stage.setTitle(model.getTitle());
+//			stage.setScene(scene);
+//			stage.show();
 		} catch (IOException e) {
 			logger.debug("Error", e);
 		}
