@@ -15,7 +15,7 @@ import com.albertoborsetta.formscanner.api.commons.Constants.FieldType;
  * </ul>
  *
  * @author Alberto Borsetta
- * @version 1.0.1
+ * @version 1.0.2-SNAPSHOT
  * @see FieldType
  */
 public abstract class FormField {
