@@ -16,7 +16,7 @@ public class FormGroup {
 	public FormGroup() {
 		fields = new HashMap<>();
 		areas = new HashMap<>();
-		lastFieldIndex = 0;
+		lastFieldIndex = 1;
 	}
 
 	/**
@@ -73,7 +73,7 @@ public class FormGroup {
 	 */
 	public void clearFields() {
 		fields.clear();
-		lastFieldIndex = 0;
+		lastFieldIndex = 1;
 	}
 
 	/**

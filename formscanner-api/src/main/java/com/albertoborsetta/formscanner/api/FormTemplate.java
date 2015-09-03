@@ -1355,7 +1355,10 @@ public final class FormTemplate {
 	 */
 	public int lastIndexOfGroup(String groupName) {
 		FormGroup group = groups.get(groupName);
-		return group.getLastFieldIndex();
+		if (group != null) {
+			return group.getLastFieldIndex();
+		}
+		return 1;
 	}
 
 	/**
