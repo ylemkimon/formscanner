@@ -3,6 +3,7 @@ package com.albertoborsetta.formscanner.api.commons;
 import java.util.EnumSet;
 import java.util.HashMap;
 
+import com.albertoborsetta.formscanner.api.FormPoint;
 import com.albertoborsetta.formscanner.api.commons.translation.TranslationKeys;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.DecodeHintType;
@@ -14,6 +15,9 @@ import com.google.zxing.DecodeHintType;
  * @version 1.0.2-SNAPSHOT
  */
 public class Constants {
+
+	public static final String NO_RESPONSE = "";
+	public static final FormPoint EMPTY_POINT = null;
 	
 	// Margins
 	/**
