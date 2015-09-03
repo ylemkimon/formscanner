@@ -529,15 +529,20 @@ public class FormScannerModel {
 		switch (frm) {
 		case RENAME_FILES_FRAME:
 			view.disposeFrame(imageFrame);
+			imageFrame = null;
 			break;
 		case IMAGE_FRAME:
 			view.disposeFrame(renameFileFrame);
 			view.disposeFrame(manageTemplateFrame);
 			view.disposeFrame(resultsGridFrame);
+			renameFileFrame = null;
+			manageTemplateFrame = null;
+			resultsGridFrame = null;
 			resetPoints();
 			break;
 		case MANAGE_TEMPLATE_FRAME:
 			view.disposeFrame(imageFrame);
+			imageFrame = null;
 			break;
 		default:
 			break;
