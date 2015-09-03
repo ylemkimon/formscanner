@@ -3,6 +3,7 @@ package com.albertoborsetta.formscanner.api;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -18,6 +19,12 @@ import org.apache.commons.lang3.StringUtils;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.OutputKeys;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -219,7 +226,7 @@ public final class FormTemplate {
 				templateElement.setAttribute(
 						"density", String.valueOf(template.getDensity()));
 			}
-			doc.appendChild(templateElement);
+			// doc.appendChild(templateElement);
 
 			// crop element
 			Element cropElement = doc.createElement("crop");
@@ -301,6 +308,7 @@ public final class FormTemplate {
 				fieldsElement.appendChild(groupElement);
 			}
 
+			doc.appendChild(templateElement);
 			return doc;
 		}
 
@@ -488,8 +496,15 @@ public final class FormTemplate {
 			return field;
 		}
 
-		public static String toString(FormTemplate template) throws ParserConfigurationException {
-			return getXml(template).toString();
+		public static String toString(FormTemplate template) throws ParserConfigurationException, TransformerException {
+			Transformer transformer = TransformerFactory.newInstance().newTransformer();
+			transformer.setOutputProperty(OutputKeys.INDENT, "yes");
+			//initialize StreamResult with File object to save to file
+			StreamResult result = new StreamResult(new StringWriter());
+			DOMSource source = new DOMSource(getXml(template));
+			transformer.transform(source, result);
+			String xmlString = result.getWriter().toString();
+			return xmlString;
 		}
 	}
 
@@ -589,6 +604,7 @@ public final class FormTemplate {
 	 * @author Alberto Borsetta
 	 * @param name the name of the FormTemplate object
 	 * @param template the parent template
+	 * @throws ParserConfigurationException 
 	 */
 	public FormTemplate(String name, FormTemplate template) {
 		this.template = template;
@@ -601,6 +617,20 @@ public final class FormTemplate {
 		pointList = new ArrayList<>();
 		areaList = new ArrayList<>();
 		groups = new HashMap<>();
+		if (template != null) {
+			presetFromTemplate();
+		}
+		
+	}
+
+	private void presetFromTemplate() {
+		cornerType = template.getCornerType();
+		crop = template.getCrop();
+		density = template.getDensity();
+		shape = template.getShape();
+		size = template.getSize();
+		threshold = template.getThreshold();
+		version = template.getVersion();
 	}
 
 	/**
@@ -981,11 +1011,11 @@ public final class FormTemplate {
 		width = image.getWidth();
 		int cores = Runtime.getRuntime().availableProcessors();
 
-		ExecutorService threadPool = Executors.newFixedThreadPool(--cores <= 0 ? 1 : cores);
-		HashSet<Future<HashMap<String, FormQuestion>>> fieldDetectorThreads = new HashSet<>();
 
 		HashMap<String, FormGroup> templateGroups = template.getGroups();
 		for (Entry<String, FormGroup> templateGroup : templateGroups.entrySet()) {
+			ExecutorService threadPool = Executors.newFixedThreadPool(--cores <= 0 ? 1 : cores);
+			HashSet<Future<HashMap<String, FormQuestion>>> fieldDetectorThreads = new HashSet<>();
 
 			HashMap<String, FormQuestion> templateFields = templateGroup
 					.getValue().getFields();
@@ -1009,8 +1039,8 @@ public final class FormTemplate {
 					throw new FormScannerException(e.getCause());
 				}
 			}
+			threadPool.shutdown();
 		}
-		threadPool.shutdown();
 	}
 
 	private void calculateRotation() {
@@ -1182,11 +1212,11 @@ public final class FormTemplate {
 		width = image.getWidth();
 		int cores = Runtime.getRuntime().availableProcessors();
 
-		ExecutorService threadPool = Executors.newFixedThreadPool(--cores <= 0 ? 1 : cores);
-		HashSet<Future<HashMap<String, FormArea>>> barcodeDetectorThreads = new HashSet<>();
 
 		HashMap<String, FormGroup> templateGroups = template.getGroups();
 		for (Entry<String, FormGroup> templateGroup : templateGroups.entrySet()) {
+			ExecutorService threadPool = Executors.newFixedThreadPool(--cores <= 0 ? 1 : cores);
+			HashSet<Future<HashMap<String, FormArea>>> barcodeDetectorThreads = new HashSet<>();
 
 			HashMap<String, FormArea> barcodeFields = templateGroup
 					.getValue().getAreas();
@@ -1213,8 +1243,8 @@ public final class FormTemplate {
 					throw new FormScannerException(e.getCause());
 				}
 			}
+			threadPool.shutdown();
 		}
-		threadPool.shutdown();
 	}
 
 	private static BufferedImage getAreaImage(BufferedImage image, FormArea area) {
