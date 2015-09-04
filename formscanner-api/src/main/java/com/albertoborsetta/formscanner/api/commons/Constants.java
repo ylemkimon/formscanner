@@ -16,7 +16,14 @@ import com.google.zxing.DecodeHintType;
  */
 public class Constants {
 
+	/*
+	 * Identifies a field with no response
+	 */
 	public static final String NO_RESPONSE = "";
+	
+	/*
+	 * Identifies a point with no response
+	 */
 	public static final FormPoint EMPTY_POINT = null;
 	
 	// Margins
