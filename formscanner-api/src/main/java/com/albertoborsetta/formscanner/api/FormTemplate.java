@@ -176,7 +176,7 @@ import java.util.concurrent.ExecutionException;
  * </pre>
  *
  * @author Alberto Borsetta
- * @version 1.0.2-SNAPSHOT
+ * @version 1.0.2
  * @see FormPoint
  * @see FormQuestion
  * @see FieldType
@@ -604,7 +604,6 @@ public final class FormTemplate {
 	 * @author Alberto Borsetta
 	 * @param name the name of the FormTemplate object
 	 * @param template the parent template
-	 * @throws ParserConfigurationException 
 	 */
 	public FormTemplate(String name, FormTemplate template) {
 		this.template = template;
