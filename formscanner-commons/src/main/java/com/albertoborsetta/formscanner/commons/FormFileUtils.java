@@ -199,6 +199,8 @@ public class FormFileUtils extends JFileChooser {
 				FormScannerTranslation.getTranslationFor(FormScannerTranslationKeys.CSV_FILE), "csv");
 		setFileFilter(templateFilter);
 	}
+	
+	
 
 	private File saveTemplateAs(File file, Document doc, boolean notify) {
 		try {
@@ -211,10 +213,10 @@ public class FormFileUtils extends JFileChooser {
 			DOMSource source = new DOMSource(doc);
 
 			setMultiSelectionEnabled(false);
-			setTemplateFilter();
 			setSelectedFile(file);
 
 			if (notify) {
+				setTemplateFilter();
 				int returnValue = showSaveDialog(null);
 				if (returnValue == JFileChooser.APPROVE_OPTION) {
 					file = getSelectedFile();
@@ -309,27 +311,6 @@ public class FormFileUtils extends JFileChooser {
 			}
 			
 			results.add(result);
-
-			
-			
-//			for (Entry<String, FormGroup> group : groups.entrySet()) {
-//				HashMap<String, FormQuestion> fields = group.getValue().getFields();
-//				HashMap<String, FormArea> areas = group.getValue().getAreas();
-//
-//				for (int i = 1; i < header.size(); i++) {
-//					FormQuestion field = fields.get(header.getFieldNameAt(i));
-//					if (field != null) {
-//						result.put(header.getHeaderKeyAt(i), field.getValues());
-//					} else {
-//						FormArea area = areas.get(header.getFieldNameAt(i));
-//						if (area != null) {
-//							result.put(header.getHeaderKeyAt(i), area.getText());
-//						}
-//					}
-//				}
-//
-//				results.add(result);
-//			}
 
 		}
 		return results;

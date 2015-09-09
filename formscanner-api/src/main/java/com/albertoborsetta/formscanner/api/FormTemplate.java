@@ -278,11 +278,11 @@ public final class FormTemplate {
 			fieldsElement.setAttribute(
 					"groups", String.valueOf(template.isGroupsEnabled()));
 			if (template.getSize() != null) {
-				templateElement.setAttribute(
+				fieldsElement.setAttribute(
 						"size", String.valueOf(template.getSize()));
 			}
 			if (template.getShape() != null) {
-				templateElement.setAttribute("shape", template
+				fieldsElement.setAttribute("shape", template
 						.getShape().getName());
 			}
 			templateElement.appendChild(fieldsElement);
@@ -325,6 +325,10 @@ public final class FormTemplate {
 					templateElement.getAttribute("threshold"), "-1")));
 			template.setDensity(Integer.parseInt(StringUtils.defaultIfBlank(
 					templateElement.getAttribute("density"), "-1")));
+			
+			// Compatibility with version 1.0
+			String shapeType = templateElement.getAttribute("shape");
+			String size = templateElement.getAttribute("size");
 
 			Element rotationElement = (Element) templateElement
 					.getElementsByTagName("rotation").item(0);
@@ -358,11 +362,10 @@ public final class FormTemplate {
 			Element fieldsElement = (Element) templateElement
 					.getElementsByTagName("fields").item(0);
 
-			template.setSize(Integer.parseInt(StringUtils.defaultIfBlank(
-					fieldsElement.getAttribute("size"), "-1")));
-			template.setShape(StringUtils.isNotBlank(fieldsElement
-					.getAttribute("shape")) ? ShapeType.valueOf(fieldsElement
-					.getAttribute("shape")) : ShapeType.CIRCLE);
+			template.setSize(Integer.parseInt(StringUtils.defaultIfBlank(size, 
+					fieldsElement.getAttribute("size"))));
+			template.setShape(StringUtils.isNotBlank(shapeType) ? ShapeType.valueOf(shapeType) : ShapeType.valueOf(fieldsElement
+					.getAttribute("shape")));
 
 			template.setGroupsEnabled(Boolean.parseBoolean(fieldsElement
 					.getAttribute("groups")));
