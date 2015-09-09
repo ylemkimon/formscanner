@@ -24,6 +24,7 @@ import org.xml.sax.SAXException;
 import com.albertoborsetta.formscanner.api.FormTemplate;
 import com.albertoborsetta.formscanner.api.exceptions.FormScannerException;
 import com.albertoborsetta.formscanner.commons.FormFileUtils;
+import com.albertoborsetta.formscanner.commons.FormScannerConstants;
 import com.albertoborsetta.formscanner.gui.FormScannerDesktop;
 import com.albertoborsetta.formscanner.model.FormScannerModel;
 
@@ -75,10 +76,16 @@ public class FormScanner {
 				}
 			});
 		} else {
+			Locale locale = Locale.getDefault();
+			FormFileUtils fileUtils = FormFileUtils.getInstance(locale);
+			
 			File templateFile = new File(args[0]);
 			FormTemplate template = null;
 			try {
 				template = new FormTemplate(templateFile);
+				if (!FormScannerConstants.CURRENT_TEMPLATE_VERSION.equals(template.getVersion())) {
+					fileUtils.saveToFile(FilenameUtils.getFullPath(args[0]), template, false);
+				}
 			} catch (ParserConfigurationException | SAXException | IOException e) {
 				logger.debug("Error", e);
 				System.exit(-1);
@@ -115,12 +122,9 @@ public class FormScanner {
 								FilenameUtils.getName(imageFile.toString()),
 								filledForm);
 			}
-			Locale locale = Locale.getDefault();
-			FormFileUtils fileUtils = FormFileUtils.getInstance(locale);
 
 			Date today = Calendar.getInstance().getTime();
 			SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
-
 			File outputFile = new File(
 					args[1] + System.getProperty("file.separator") + "results_" + sdf
 							.format(today) + ".csv");
