@@ -151,7 +151,7 @@ group.column=Grupa
 responses.by.grid=Odpowiedzi w rzędach i kolumnach
 qrcode.barcode=Kod kreskowy/Kod QR
 
-# added 0.12
+# added 1.0
 corners.options=Róg marker
 corner.type.option.label=Marker typu róg
 preferred.look.and.feel.option.label=Preferowane wyglądać i czuć (*)
@@ -176,7 +176,7 @@ crop.from.left=Od lewej
 crop.from.right=Od prawej
 crop.from.bottom=Od dołu
 
-# modified 0.12
+# modified 1.0
 font.type.label=Typ czcionki (*)
 font.size.label=Rozmiar czcionki (*)
 gui.options=Opcje interfejsu graficznego

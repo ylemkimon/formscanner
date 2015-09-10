@@ -151,7 +151,7 @@ group.column=گروه
 responses.by.grid=پاسخ های سطری و ستونی
 qrcode.barcode=بارکد
 
-# added 0.12
+# added 1.0
 corners.options=نشانگر گوشه ها
 corner.type.option.label=نوع نشانگر گوشه ها
 preferred.look.and.feel.option.label=نگاه و احساس ترجیحی (*)
@@ -176,7 +176,7 @@ crop.from.left=چپ
 crop.from.right=راست
 crop.from.bottom=پایین
 
-# modified 0.12
+# modified 1.0
 font.type.label=نوع قلم (*)
 font.size.label=اندازه قلم (*)
 gui.options=گزینه های ظاهر کاربری

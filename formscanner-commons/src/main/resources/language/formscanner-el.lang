@@ -151,7 +151,7 @@ group.column=Ομάδα
 responses.by.grid=Απαντήσεις ανά πλέγμα
 qrcode.barcode=Γραμμικός κώδικας/Κώδικας QR
 
-# added 0.12
+# added 1.0
 corners.options=δείκτη γωνία
 corner.type.option.label=Γωνία τύπου δείκτη
 preferred.look.and.feel.option.label=Προτεινόμενα εμφάνιση και την αίσθηση ( * )
@@ -176,7 +176,7 @@ crop.from.left=από αριστερά
 crop.from.right=από δεξιά
 crop.from.bottom=από πυθμένα
 
-# modified 0.12
+# modified 1.0
 font.type.label=Τύπος γραμματοσειράς (*)
 font.size.label=Μέγεθος γραμματοσειράς (*)
 gui.options=Επιλογές γραφικού περιβάλλοντος

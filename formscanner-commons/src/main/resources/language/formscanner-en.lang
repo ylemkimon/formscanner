@@ -99,7 +99,7 @@ greek.label=Ελληνικά
 polish.label=Polski
 persian.label=فارسی
 german.label=Deutsch
-dutch.label=Nederlandse
+dutch.label=Nederlands
 japanese.label=倭人
 language.changed=Restart FormScanner application for the changes to take effect 
 settings.popup.title=Settings
@@ -151,7 +151,7 @@ group.column=Group
 responses.by.grid=Responses by rows and columns
 qrcode.barcode=Barcode/QRCode
 
-# added 0.12
+# added 1.0
 corners.options=Corner marker
 corner.type.option.label=Corner marker type
 preferred.look.and.feel.option.label=Preferred Look and feel (*)
@@ -176,7 +176,7 @@ crop.from.left=Left
 crop.from.right=Right
 crop.from.bottom=Bottom
 
-# modified 0.12
+# modified 1.0
 font.type.label=Font type (*)
 font.size.label=Font size (*)
 gui.options=Graphical interface options
