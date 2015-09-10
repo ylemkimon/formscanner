@@ -1,10 +1,9 @@
-FormScanner 1.0.3-SNAPSHOT (released AAAA-MM-DD)
+FormScanner 1.0.3 (released 2015-09-10)
 ===
-NEW FEATURES
----
-
 FIXES
 ---
+* All options are marked as answers in batch processing
+* Fixed some Dutch translations
 
 FormScanner 1.0.2 (released 2015-09-08)
 ===
