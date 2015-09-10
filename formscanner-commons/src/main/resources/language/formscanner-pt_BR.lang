@@ -151,7 +151,7 @@ group.column=Grupo
 responses.by.grid=Respostas de linhas e colunas
 qrcode.barcode=Código de Barras/QRCode
 
-# added 0.12
+# added 1.0
 corners.options=Marcador de canto
 corner.type.option.label=Canto: tipo de marcador
 preferred.look.and.feel.option.label=Preferido: veja e defina (*)
@@ -176,7 +176,7 @@ crop.from.left=Esquerda
 crop.from.right=Direita
 crop.from.bottom=Inferior
 
-# modified 0.12
+# modified 1.0
 font.type.label=Tipo de fonte (*)
 font.size.label=Tamanho da fonte (*)
 gui.options=Opções de interface gráfica
