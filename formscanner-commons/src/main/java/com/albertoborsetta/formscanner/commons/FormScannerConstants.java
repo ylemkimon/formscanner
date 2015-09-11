@@ -201,8 +201,57 @@ public class FormScannerConstants extends Constants {
 		}
 	}
 
+    public enum ApplicationControlAction {
+    	RENAME_FILES_FIRST,
+		RENAME_FILES_CURRENT,
+		RENAME_FILES_SKIP,
+		OPEN_IMAGES,
+		SAVE_RESULTS,
+		ANALYZE_FILES_FIRST,
+		LOAD_TEMPLATE,
+		USE_TEMPLATE,
+		EDIT_TEMPLATE,
+		CONFIRM,
+		CANCEL,
+		SAVE_TEMPLATE,
+		REMOVE_FIELD,
+		ADD_FIELD,
+		HELP,
+		ABOUT,
+		LANGUAGE,
+		EXIT,
+		TOP_LEFT,
+		TOP_RIGHT,
+		BOTTOM_LEFT,
+		BOTTOM_RIGHT,
+		OPTIONS,
+		SAVE_OPTIONS,
+		ANALYZE_FILES_ALL,
+		ANALYZE_FILES_CURRENT,
+		IS_MULTIPLE,
+		GROUPS_ENABLED,
+		RESET_AUTO_NUMBERING, 
+		BARCODE,
+		QUESTION,
+		GROUP;
+    }
+    
+//    public enum ToolTheme {
+//
+//        DEFAULT {
+//                    @Override
+//                    public String toString() {
+//                        return I18N.getString("prefs.tool.theme.default");
+//                    }
+//                },
+//        DARK {
+//                    @Override
+//                    public String toString() {
+//                        return I18N.getString("prefs.tool.theme.dark");
+//                    }
+//                }
+//    }
 	public enum Action {
-
 		RENAME_FILES_FIRST,
 		RENAME_FILES_CURRENT,
 		RENAME_FILES_SKIP,

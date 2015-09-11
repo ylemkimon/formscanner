@@ -9,6 +9,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Locale;
 
 import javax.imageio.ImageIO;
@@ -23,8 +24,9 @@ import org.xml.sax.SAXException;
 
 import com.albertoborsetta.formscanner.api.FormTemplate;
 import com.albertoborsetta.formscanner.api.exceptions.FormScannerException;
-import com.albertoborsetta.formscanner.commons.FormFileUtils;
+import com.albertoborsetta.formscanner.commons.FormScannerFileUtils;
 import com.albertoborsetta.formscanner.gui.FormScannerDesktop;
+import com.albertoborsetta.formscanner.gui.desktop.DesktopController;
 import com.albertoborsetta.formscanner.model.FormScannerModel;
 
 import java.io.UnsupportedEncodingException;
@@ -35,6 +37,7 @@ import javax.swing.UnsupportedLookAndFeelException;
 import ch.randelshofer.quaqua.QuaquaLookAndFeel;
 import javafx.application.Application;
 import javafx.scene.Scene;
+import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 
 public class FormScanner extends Application {
@@ -119,8 +122,7 @@ public class FormScanner extends Application {
 								FilenameUtils.getName(imageFile.toString()),
 								filledForm);
 			}
-			Locale locale = Locale.getDefault();
-			FormFileUtils fileUtils = FormFileUtils.getInstance(locale);
+			FormScannerFileUtils fileUtils = FormScannerFileUtils.getInstance(null);
 
 			Date today = Calendar.getInstance().getTime();
 			SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
@@ -136,37 +138,25 @@ public class FormScanner extends Application {
 	@Override
 	public void start(Stage primaryStage) throws Exception {
 		Stage stage = primaryStage;
-//		BorderPane formScannerDesktop;
 
 		try {
 			logger = LogManager.getLogger(FormScanner.class.getName());
+			
+			DesktopController desktop = new DesktopController(stage);
+			
+			Scene scene = new Scene(desktop.getDesktop());
+			scene.setNodeOrientation(desktop.getOrientation());
 
-			FormScannerModel model = new FormScannerModel();
-			model.setPrimaryStage(stage);
-			model.show();
+			stage.setTitle(desktop.getTitle());
+			stage.setScene(scene);
+			stage.show();
 			
-//			FormScannerDesktop desktop = new FormScannerDesktop(model);
-			
-			// Load root layout from fxml file.
-//			FXMLLoader loader = new FXMLLoader();
+//			FormScannerFileUtils fileUtils = FormScannerFileUtils.getInstance(stage);
+//			List<File> files = fileUtils.chooseImages();
 //			
-//			loader.setResources(ResourceBundle.getBundle("formscanner", model.getLocale(), model.getResourceLoader()));
-//			loader.setLocation(FormScanner.class.getResource("../gui/FormScannerDesktop.fxml"));
-//			formScannerDesktop = (BorderPane) loader.load();
-
-			// Show the scene containing the root layout.
-//			Scene scene = new Scene(desktop);
-//			scene.setNodeOrientation(model.getOrientation());
-//			FormScannerController formScannerController = loader.getController();
-//			formScannerController.setMainApp(model);
-
-//			stage.setTitle("AddressApp");
-			
-//			stage.setTitle(model.getTitle());
-//			stage.setScene(scene);
-//			stage.show();
+//			System.out.println(files.toString());
 		} catch (IOException e) {
-			logger.debug("Error", e);
+			logger.debug("Error starting FormScanner", e);
 		}
 
 	}

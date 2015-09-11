@@ -53,8 +53,8 @@ public final class MenuBar extends JMenuBar implements MenuView {
 		JMenu fileMenu = getFileMenu();
 		JMenu editMenu = getEditMenu();
 		JMenu templateMenu = getTemplateMenu();
-		JMenu helpMenu = getHelpMenu();
 		JMenu settingsMenu = getSettingsMenu();
+		JMenu helpMenu = getHelpMenu();
 		add(fileMenu);
 		add(editMenu);
 		add(templateMenu);

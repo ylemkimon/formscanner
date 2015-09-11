@@ -1,10 +1,8 @@
 package com.albertoborsetta.formscanner.model;
 
-import java.awt.ComponentOrientation;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.io.File;
-import java.io.FileInputStream;
 import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -12,10 +10,9 @@ import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map.Entry;
-import java.util.PropertyResourceBundle;
-import java.util.ResourceBundle;
 
 import javax.imageio.ImageIO;
 import javax.swing.JOptionPane;
@@ -32,9 +29,10 @@ import com.albertoborsetta.formscanner.api.FormTemplate;
 import com.albertoborsetta.formscanner.api.commons.Constants.CornerType;
 import com.albertoborsetta.formscanner.api.commons.Constants.Corners;
 import com.albertoborsetta.formscanner.api.commons.Constants.ShapeType;
-import com.albertoborsetta.formscanner.commons.FormFileUtils;
+import com.albertoborsetta.formscanner.commons.FormScannerFileUtils;
 import com.albertoborsetta.formscanner.commons.FormScannerConstants;
 import com.albertoborsetta.formscanner.commons.FormScannerConstants.Action;
+import com.albertoborsetta.formscanner.commons.FormScannerConstants.ApplicationControlAction;
 import com.albertoborsetta.formscanner.commons.FormScannerConstants.Frame;
 import com.albertoborsetta.formscanner.commons.FormScannerConstants.Language;
 import com.albertoborsetta.formscanner.commons.FormScannerConstants.Mode;
@@ -53,12 +51,8 @@ import com.albertoborsetta.formscanner.gui.OptionsFrame;
 import com.albertoborsetta.formscanner.gui.RenameFileFrame;
 import com.albertoborsetta.formscanner.gui.ResultsGridFrame;
 import com.albertoborsetta.formscanner.gui.desktop.DesktopController;
-import com.albertoborsetta.formscanner.gui.menubar.MenuBarController;
 
 import javafx.geometry.NodeOrientation;
-import javafx.scene.Scene;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 
 import com.albertoborsetta.formscanner.gui.FormScannerDesktop;
@@ -66,8 +60,6 @@ import com.albertoborsetta.formscanner.gui.FormScannerDesktop;
 import java.awt.HeadlessException;
 import java.awt.Image;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 
@@ -76,6 +68,8 @@ import javax.xml.parsers.ParserConfigurationException;
 import org.xml.sax.SAXException;
 
 public class FormScannerModel {
+
+	private static FormScannerModel model;
 
 	public static final String COL_DX = "COL_DX";
 	public static final String COL_DY = "COL_DY";
@@ -100,7 +94,7 @@ public class FormScannerModel {
 	private ImageFrame imageFrame;
 	private FormTemplate formTemplate;
 	private BufferedImage templateImage;
-	private final FormFileUtils fileUtils;
+	private final FormScannerFileUtils fileUtils;
 	private final HashMap<String, FormTemplate> filledForms = new HashMap<>();
 
 	private ArrayList<FormPoint> points = new ArrayList<>();
@@ -139,10 +133,17 @@ public class FormScannerModel {
 	private ArrayList<String> historyBarcodeNameTemplate;
 	private ArrayList<String> historyGroupNameTemplate;
 	private HashMap<String, Integer> crop = new HashMap<>();
-	private Stage primaryStage;
 	private String installPath;
+	private Stage stage;
 
-	public FormScannerModel() throws UnsupportedEncodingException {
+	public static FormScannerModel getInstance() {
+		return model;
+	}
+
+	public FormScannerModel(Stage stage) throws UnsupportedEncodingException {
+		assert model == null;
+		model = this;
+		this.stage = stage;
 		String path = FormScannerModel.class.getProtectionDomain().getCodeSource().getLocation().getPath();
 		installPath = URLDecoder.decode(path, "UTF-8");
 		installPath = StringUtils.substringBeforeLast(installPath, "lib");
@@ -183,14 +184,13 @@ public class FormScannerModel {
 			}
 		}
 
-		
 		String[] locales = StringUtils.split(lang, '_');
 		if (locales.length == 2) {
 			locale = new Locale(locales[0], locales[1]);
 		} else {
 			locale = new Locale(locales[0]);
 		}
-		fileUtils = FormFileUtils.getInstance(locale);
+		fileUtils = FormScannerFileUtils.getInstance(stage);
 
 		FormScannerTranslation.setTranslation(installPath, lang);
 		FormScannerResources.setResources(installPath);
@@ -250,7 +250,7 @@ public class FormScannerModel {
 			openTemplate(FormScannerResources.getTemplate(), false);
 		}
 
-		defaultIcon = FormScannerResources.getFormScannerIcon();
+		// defaultIcon = FormScannerResources.getFormScannerIcon();
 	}
 
 	private static String getDefaultLanguage(String installationLanguage) {
@@ -280,23 +280,24 @@ public class FormScannerModel {
 		}
 	}
 
-	public void openImages() {
+	public void openImages(DesktopController desktopController) {
 		filledForms.clear();
 		openedFiles.clear();
 		firstPass = true;
-		File[] fileArray = fileUtils.chooseImages();
+		List<File> fileArray = fileUtils.chooseImages();
 		if (fileArray != null) {
 			Integer fileIndex = 0;
 			for (File file : fileArray) {
 				openedFiles.put(fileIndex++, file);
 			}
 			if (!openedFiles.isEmpty()) {
-				fileListFrame = new FileListFrame(this, getOpenedFileList());
-				view.arrangeFrame(fileListFrame);
-				view.setRenameControllersEnabled(true);
-				view.setScanControllersEnabled(true);
-				view.setScanAllControllersEnabled(true);
-				view.setScanCurrentControllersEnabled(false);
+				desktopController.setupFileList(getOpenedFileList());
+//				fileListFrame = new FileListFrame(this, getOpenedFileList());
+//				view.arrangeFrame(fileListFrame);
+//				view.setRenameControllersEnabled(true);
+//				view.setScanControllersEnabled(true);
+//				view.setScanAllControllersEnabled(true);
+//				view.setScanCurrentControllersEnabled(false);
 			}
 		}
 	}
@@ -782,7 +783,7 @@ public class FormScannerModel {
 	}
 
 	public void exitFormScanner() {
-//		view.dispose();
+		// view.dispose();
 		System.exit(0);
 	}
 
@@ -841,18 +842,17 @@ public class FormScannerModel {
 		String osName = System.getProperty("os.name").toLowerCase();
 		try {
 
-			if (osName.indexOf( "win" ) >= 0) {
+			if (osName.indexOf("win") >= 0) {
 				// Windows
 				Runtime.getRuntime().exec(
 						(new StringBuilder()).append("rundll32 url.dll,FileProtocolHandler ").append(url).toString());
-			}
-			else if (osName.indexOf( "mac" ) >= 0) {
+			} else if (osName.indexOf("mac") >= 0) {
 				// Mac
-				Runtime.getRuntime().exec(
-						(new StringBuilder()).append("open ").append(url).toString());
-			} else if (osName.indexOf( "nix") >=0 || osName.indexOf( "nux") >=0) {
+				Runtime.getRuntime().exec((new StringBuilder()).append("open ").append(url).toString());
+			} else if (osName.indexOf("nix") >= 0 || osName.indexOf("nux") >= 0) {
 				// Linux/Unix
-				String browsers[] = {"firefox", "opera", "konqueror", "epiphany", "mozilla", "netscape", "safari", "links","lynx"};
+				String browsers[] = { "firefox", "opera", "konqueror", "epiphany", "mozilla", "netscape", "safari",
+						"links", "lynx" };
 				String browser = null;
 				for (int i = 0; i < browsers.length && browser == null; i++) {
 					if (Runtime.getRuntime().exec(new String[] { "which", browsers[i] }).waitFor() == 0) {
@@ -962,7 +962,7 @@ public class FormScannerModel {
 		} else {
 			formTemplate.removePoint(cursorPoint);
 		}
-//		view.repaint();
+		// view.repaint();
 	}
 
 	public int getShapeSize() {
@@ -1121,57 +1121,33 @@ public class FormScannerModel {
 		return crop;
 	}
 
-	public void setPrimaryStage(Stage stage) {
-		this.primaryStage = stage;
-	}
-	
-	public Stage getPrimaryStage() {
-		return primaryStage;
-	}
-	
-	public ResourceBundle getResourceBundle() throws UnsupportedEncodingException, IOException {
-		String translationFile = installPath + "/language/formscanner-" + lang
-				+ ".lang";
-		final InputStream stream = new FileInputStream(translationFile);
-		ResourceBundle bundle = null;
-		if (stream != null) {
-			try {
-				bundle = new PropertyResourceBundle(new InputStreamReader(stream, "UTF-8"));
-			} finally {
-				stream.close();
-			}
-		}
-		return bundle;
+	public String getIstallPath() {
+		return installPath;
 	}
 
-	private String getTitle() {
-		return StringUtils.replace(
-				FormScannerTranslation.getTranslationFor(FormScannerTranslationKeys.FORMSCANNER_MAIN_TITLE),
-				FormScannerConstants.VERSION_KEY, FormScannerConstants.VERSION);
-	}
-	
-	public void show() throws UnsupportedEncodingException {
-		DesktopController desktop = new DesktopController(this);
-		// FormScannerDesktop desktop = new FormScannerDesktop(this);
+	public boolean canPerformControlAction(ApplicationControlAction controlAction,
+			DesktopController desktopController) {
+		boolean result = true;
 		
-		// Load root layout from fxml file.
-//		FXMLLoader loader = new FXMLLoader();
-//		
-//		loader.setResources(ResourceBundle.getBundle("formscanner", model.getLocale(), model.getResourceLoader()));
-//		loader.setLocation(FormScanner.class.getResource("../gui/FormScannerDesktop.fxml"));
-//		formScannerDesktop = (BorderPane) loader.load();
+		switch (controlAction) {
+		case OPEN_IMAGES:
+			result = openedFiles.isEmpty();
+			break;
+		default:
+			result = true;
+			break;
+		}
+		return result;
+	}
 
-		// Show the scene containing the root layout.
-		AnchorPane main = new AnchorPane();
-		main.setNodeOrientation(getOrientation());
-		main.getChildren().add(desktop.getDesktop());
-		Scene scene = new Scene(main);
-		scene.setNodeOrientation(getOrientation());
-//		FormScannerController formScannerController = loader.getController();
-//		formScannerController.setMainApp(model);
-
-		primaryStage.setTitle(getTitle());
-		primaryStage.setScene(scene);
-		primaryStage.show();
+	public void performControlAction(ApplicationControlAction controlAction, DesktopController desktopController) {
+		switch (controlAction) {
+		case OPEN_IMAGES:
+			openImages(desktopController);
+			break;
+		default:
+			System.out.println("prova");
+			break;
+		}
 	}
 }

@@ -20,7 +20,7 @@ import com.albertoborsetta.formscanner.api.FormArea;
 import com.albertoborsetta.formscanner.api.FormGroup;
 import com.albertoborsetta.formscanner.api.FormQuestion;
 import com.albertoborsetta.formscanner.api.FormTemplate;
-import com.albertoborsetta.formscanner.commons.FormFileUtils;
+import com.albertoborsetta.formscanner.commons.FormScannerFileUtils;
 import com.albertoborsetta.formscanner.commons.FormScannerConstants;
 import com.albertoborsetta.formscanner.commons.FormScannerConstants.Frame;
 import com.albertoborsetta.formscanner.commons.translation.FormScannerTranslation;
@@ -45,7 +45,7 @@ public class ResultsGridFrame extends InternalFrame {
 	private FormTemplate form;
 	private final int rows;
 	private final int cols;
-	private final FormFileUtils fileUtils;
+	private final FormScannerFileUtils fileUtils;
 	private final String[] header;
 
 	private class TemplateTableModel extends DefaultTableModel {
@@ -159,7 +159,7 @@ public class ResultsGridFrame extends InternalFrame {
 	 */
 	public ResultsGridFrame(FormScannerModel model) {
 		super(model);
-		fileUtils = FormFileUtils.getInstance(model.getLocale());
+		fileUtils = FormScannerFileUtils.getInstance(model.getLocale());
 
 		form = model.getFilledForm();
 

@@ -1,13 +1,11 @@
 package com.albertoborsetta.formscanner.commons.resources;
 
-import java.awt.Image;
 import java.io.File;
-import java.io.IOException;
-
-import javax.imageio.ImageIO;
-import javax.swing.ImageIcon;
+import java.net.MalformedURLException;
+import java.net.URL;
 
 import org.apache.logging.log4j.Logger;
+import javafx.scene.image.Image;
 import org.apache.logging.log4j.LogManager;
 
 public class FormScannerResources {
@@ -16,17 +14,17 @@ public class FormScannerResources {
 	private static String iconsPath;
 	private static String licensePath;
 	private static String template;
-	private static final Logger logger = LogManager
-			.getLogger(FormScannerResources.class.getName());
+	private static final Logger logger = LogManager.getLogger(FormScannerResources.class.getName());
 
 	public static void setResources(String path) {
 		iconsPath = path + "/icons/";
 		licensePath = path + "/license/";
 	}
 
-	public static ImageIcon getIconFor(String key) {
-		ImageIcon icon = new ImageIcon(iconsPath + key + PNG);
-		return icon;
+	public static Image getIconFor(String key) {
+		return new Image("file:" + iconsPath + key + PNG);
+//		Image icon = new Image(new URL(iconsPath + key + PNG));
+//		return null;
 	}
 
 	public static void setTemplate(String tpl) {
@@ -42,13 +40,7 @@ public class FormScannerResources {
 	}
 
 	public static Image getFormScannerIcon() {
-		try {
-			Image icon = ImageIO.read(new File(
-					iconsPath + FormScannerResourcesKeys.FORMSCANNER_ICON + PNG));
-			return icon;
-		} catch (IOException e) {
-			logger.catching(e);
-			return null;
-		}
+		Image icon = new Image(iconsPath + FormScannerResourcesKeys.FORMSCANNER_ICON + PNG);
+		return icon;
 	}
 }

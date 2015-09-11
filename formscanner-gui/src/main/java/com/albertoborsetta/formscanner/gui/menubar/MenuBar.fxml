@@ -1,31 +1,258 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.input.*?>
 <?import java.lang.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.image.*?>
 
 
-<StackPane xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8.0.40">
-   <children>
-      <MenuBar fx:id="menuBar">
-        <menus>
-          <Menu fx:id="fileMenu" text="%file.menu">
-            <items>
-              <MenuItem mnemonicParsing="false" text="Close" />
-            </items>
-          </Menu>
-          <Menu mnemonicParsing="false" text="Edit">
-            <items>
-              <MenuItem mnemonicParsing="false" text="Delete" />
-            </items>
-          </Menu>
-          <Menu mnemonicParsing="false" text="Help">
-            <items>
-              <MenuItem mnemonicParsing="false" text="About" />
-            </items>
-          </Menu>
-        </menus>
-      </MenuBar>
-   </children>
-</StackPane>
+		<MenuBar fx:id="menuBar" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1">
+			<menus>
+				<Menu fx:id="fileMenu" mnemonicParsing="true" text="%file.menu">
+					<items>
+						<MenuItem fx:id="openImagesMenuItem" mnemonicParsing="true" text="%open.images">
+							<graphic>
+								<ImageView>
+									<image>
+										<Image url="@../resources/icons/open_16.png" />
+									</image>
+								</ImageView>
+							</graphic>
+							<accelerator>
+								<KeyCodeCombination alt="UP" code="O" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
+							</accelerator>
+						</MenuItem>
+						<SeparatorMenuItem mnemonicParsing="false" />
+						<MenuItem fx:id="exitMenuItem" mnemonicParsing="true" text="%exit">
+							<graphic>
+								<ImageView>
+									<image>
+										<Image url="@../resources/icons/exit_16.png" />
+									</image>
+								</ImageView>
+							</graphic>
+							<accelerator>
+								<KeyCodeCombination alt="UP" code="X" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
+							</accelerator>
+						</MenuItem>
+					</items>
+				</Menu>
+				<Menu fx:id="editMenu" mnemonicParsing="true" text="%edit.menu">
+					<items>
+						<MenuItem fx:id="renameFilesMenuItem" mnemonicParsing="true" text="%rename.files">
+							<graphic>
+								<ImageView>
+									<image>
+										<Image url="@../resources/icons/rename_16.png" />
+									</image>
+								</ImageView>
+							</graphic>
+							<accelerator>
+								<KeyCodeCombination alt="UP" code="R" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
+							</accelerator>
+						</MenuItem>
+						<SeparatorMenuItem mnemonicParsing="false" />
+						<MenuItem fx:id="analyzeFilesAllMenuItem" mnemonicParsing="true" text="%analyze.files.all">
+							<graphic>
+								<ImageView>
+									<image>
+										<Image url="@../resources/icons/start_all_16.png" />
+									</image>
+								</ImageView>
+							</graphic>
+							<accelerator>
+								<KeyCodeCombination alt="UP" code="A" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
+							</accelerator>
+						</MenuItem>
+						<MenuItem fx:id="analyzeFilesMenuItem" mnemonicParsing="true" text="%analyze.files">
+							<graphic>
+								<ImageView>
+									<image>
+										<Image url="@../resources/icons/start_16.png" />
+									</image>
+								</ImageView>
+							</graphic>
+							<accelerator>
+								<KeyCodeCombination alt="UP" code="I" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
+							</accelerator>
+						</MenuItem>
+					</items>
+				</Menu>
+				<Menu fx:id="templateMenu" mnemonicParsing="true" text="%template.menu">
+					<items>
+						<MenuItem fx:id="createTemplateMenuItem" mnemonicParsing="true" text="%create.template">
+							<graphic>
+								<ImageView>
+									<image>
+										<Image url="@../resources/icons/edit_16.png" />
+									</image>
+								</ImageView>
+							</graphic>
+							<accelerator>
+								<KeyCodeCombination alt="UP" code="C" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
+							</accelerator>
+						</MenuItem>
+						<SeparatorMenuItem mnemonicParsing="false" />
+						<MenuItem fx:id="loadTemplateMenuItem" mnemonicParsing="true" text="%load.template">
+							<graphic>
+								<ImageView>
+									<image>
+										<Image url="@../resources/icons/import_16.png" />
+									</image>
+								</ImageView>
+							</graphic>
+							<accelerator>
+								<KeyCodeCombination alt="UP" code="L" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
+							</accelerator>
+						</MenuItem>
+					</items>
+				</Menu>
+				<Menu fx:id="settingsMenu" mnemonicParsing="true" text="%settings.menu">
+					<items>
+						<Menu fx:id="languageMenuItem" mnemonicParsing="true" text="%language">
+							<graphic>
+								<ImageView>
+									<image>
+										<Image url="@../resources/icons/spelldialog_16.png" />
+									</image>
+								</ImageView>
+							</graphic>
+							<items>
+								<RadioMenuItem fx:id="englishLanguageMenuItem" mnemonicParsing="false" text="%english.label">
+								<graphic>
+									<ImageView>
+										<image>
+											<Image url="@../resources/icons/en.png" />
+										</image>
+									</ImageView>
+								</graphic>
+								</RadioMenuItem>
+								<RadioMenuItem fx:id="italianLanguageMenuItem" mnemonicParsing="false" text="%italian.label">
+								<graphic>
+									<ImageView>
+										<image>
+											<Image url="@../resources/icons/it.png" />
+										</image>
+									</ImageView>
+								</graphic>
+								</RadioMenuItem>
+								<RadioMenuItem fx:id="portuguesLanguageMenuItem" mnemonicParsing="false" text="%portugues.label">
+								<graphic>
+									<ImageView>
+										<image>
+											<Image url="@../resources/icons/pt_BR.png" />
+										</image>
+									</ImageView>
+								</graphic>
+								</RadioMenuItem>
+								<RadioMenuItem fx:id="spanishLanguageMenuItem" mnemonicParsing="false" text="%spanish.label">
+								<graphic>
+									<ImageView>
+										<image>
+											<Image url="@../resources/icons/es.png" />
+										</image>
+									</ImageView>
+								</graphic>
+								</RadioMenuItem>
+								<RadioMenuItem fx:id="germanLanguageMenuItem" disable="true" mnemonicParsing="false" text="%german.label" visible="false">
+								<graphic>
+									<ImageView>
+										<image>
+											<Image url="@../resources/icons/de.png" />
+										</image>
+									</ImageView>
+								</graphic>
+								</RadioMenuItem>
+								<RadioMenuItem fx:id="persianLanhueageMenuItem" mnemonicParsing="false" text="%persian.label">
+								<graphic>
+									<ImageView>
+										<image>
+											<Image url="@../resources/icons/fa.png" />
+										</image>
+									</ImageView>
+								</graphic>
+								</RadioMenuItem>
+								<RadioMenuItem fx:id="greekLanguageMenuItem" mnemonicParsing="false" text="%greek.label">
+								<graphic>
+									<ImageView>
+										<image>
+											<Image url="@../resources/icons/el.png" />
+										</image>
+									</ImageView>
+								</graphic>
+								</RadioMenuItem>
+								<RadioMenuItem fx:id="polishLanguageMenuItem" mnemonicParsing="false" text="%polish.label">
+								<graphic>
+									<ImageView>
+										<image>
+											<Image url="@../resources/icons/pl.png" />
+										</image>
+									</ImageView>
+								</graphic>
+								</RadioMenuItem>
+								<RadioMenuItem fx:id="dutchLanguageMenuItem" mnemonicParsing="false" text="%dutch.label">
+								<graphic>
+									<ImageView>
+										<image>
+											<Image url="@../resources/icons/nl.png" />
+										</image>
+									</ImageView>
+								</graphic>
+								</RadioMenuItem>
+								<RadioMenuItem fx:id="japaneseLanguageMenuItem" mnemonicParsing="false" text="%japanese.label">
+								<graphic>
+									<ImageView>
+										<image>
+											<Image url="@../resources/icons/jp.png" />
+										</image>
+									</ImageView>
+								</graphic>
+								</RadioMenuItem>
+							</items>
+						</Menu>
+						<MenuItem fx:id="optionsMenuItem" mnemonicParsing="true" text="%options">
+							<graphic>
+								<ImageView>
+									<image>
+										<Image url="@../resources/icons/config_16.png" />
+									</image>
+								</ImageView>
+							</graphic>
+							<accelerator>
+								<KeyCodeCombination alt="UP" code="PLUS" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
+							</accelerator>
+						</MenuItem>
+					</items>
+				</Menu>
+				<Menu fx:id="helpMenu" mnemonicParsing="true" text="%help.menu">
+					<items>
+						<MenuItem fx:id="helpMenuItem" mnemonicParsing="true" text="%help">
+							<graphic>
+								<ImageView>
+									<image>
+										<Image url="@../resources/icons/help_16.png" />
+									</image>
+								</ImageView>
+							</graphic>
+							<accelerator>
+								<KeyCodeCombination alt="UP" code="F1" control="UP" meta="UP" shift="UP" shortcut="UP" />
+							</accelerator>
+						</MenuItem>
+						<MenuItem fx:id="aboutMenuItem" mnemonicParsing="true" text="%about">
+							<graphic>
+								<ImageView>
+									<image>
+										<Image url="@../resources/icons/about_16.png" />
+									</image>
+								</ImageView>
+							</graphic>
+							<accelerator>
+								<KeyCodeCombination alt="DOWN" code="F1" control="UP" meta="UP" shift="UP" shortcut="UP" />
+							</accelerator>
+						</MenuItem>
+					</items>
+				</Menu>
+			</menus>
+		</MenuBar>

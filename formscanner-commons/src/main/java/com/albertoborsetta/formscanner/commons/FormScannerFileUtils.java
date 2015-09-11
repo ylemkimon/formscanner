@@ -1,6 +1,10 @@
 package com.albertoborsetta.formscanner.commons;
 
 import java.io.File;
+import javafx.stage.FileChooser;
+import javafx.stage.FileChooser.ExtensionFilter;
+import javafx.stage.Stage;
+
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
@@ -8,6 +12,7 @@ import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map.Entry;
 
@@ -37,79 +42,80 @@ import com.albertoborsetta.formscanner.api.FormTemplate;
 import com.albertoborsetta.formscanner.commons.translation.FormScannerTranslation;
 import com.albertoborsetta.formscanner.commons.translation.FormScannerTranslationKeys;
 
-public class FormFileUtils extends JFileChooser {
+public class FormScannerFileUtils {
 
 	/**
-     *
-     */
+	 *
+	 */
 	private static final long serialVersionUID = 1L;
-	private static FormFileUtils instance;
-	private static final Logger logger = LogManager.getLogger(FormFileUtils.class.getName());
+	private static FormScannerFileUtils instance;
+	private static ArrayList<ExtensionFilter> extensionFilter;
+	private static final Logger logger = LogManager.getLogger(FormScannerFileUtils.class.getName());
 
-	public static FormFileUtils getInstance(Locale locale) {
+	public static FormScannerFileUtils getInstance(Stage stage) {
 		if (instance == null) {
-			instance = new FormFileUtils(locale);
+			instance = new FormScannerFileUtils(stage);
 		}
 		return instance;
 	}
 
-	private FormFileUtils(Locale locale) {
+	private Stage stage;
+
+	private FormScannerFileUtils(Stage stage) {
 		super();
-		setFont(FormScannerFont.getFont());
-		setLocale(locale);
-		updateUI();
+		extensionFilter = new ArrayList<>();
+		this.stage = stage;
 	}
 
 	private File chooseFile() {
-		File file = null;
-		int returnValue = showOpenDialog(null);
+		FileChooser fileChooser = new FileChooser();
 
-		if (returnValue == JFileChooser.APPROVE_OPTION) {
-			file = getSelectedFile();
-		}
+		// Set extension filter
+		fileChooser.getExtensionFilters().addAll(extensionFilter);
+
+		// Show save file dialog
+		File file = fileChooser.showOpenDialog(stage);
 		return file;
 	}
 
-	private File[] chooseFiles() {
-		File[] files = null;
-		int returnValue = showOpenDialog(null);
+	private List<File> chooseFiles() {
+		FileChooser fileChooser = new FileChooser();
 
-		if (returnValue == JFileChooser.APPROVE_OPTION) {
-			files = getSelectedFiles();
-		}
+		// Set extension filter
+		fileChooser.getExtensionFilters().addAll(extensionFilter);
+
+		// Show save file dialog
+		List<File> files = fileChooser.showOpenMultipleDialog(stage);
+
 		return files;
 	}
 
-	public File[] chooseImages() {
-		setMultiSelectionEnabled(true);
+	public List<File> chooseImages() {
 		setImagesFilter();
 		return chooseFiles();
 	}
 
 	public File chooseImage() {
-		setMultiSelectionEnabled(false);
 		setImagesFilter();
 		return chooseFile();
 	}
 
 	public File chooseTemplate() {
-		setMultiSelectionEnabled(false);
 		setTemplateFilter();
 		return chooseFile();
 	}
 
 	private void setImagesFilter() {
-		resetChoosableFileFilters();
+		extensionFilter.clear();
 
 		// Creating a set for preventing duplication of entries
 		ArrayList<String> setOfExtensions = new ArrayList<>();
 		// Iterating all possible image suffixes the current jvm can open
 		for (String suffix : ImageIO.getReaderFileSuffixes()) {
 			if (StringUtils.isNotBlank(suffix)) {
-				setFileFilter(new FileNameExtensionFilter(
-						FormScannerTranslation.getTranslationFor(suffix
-								+ ".images"), suffix));
-				setOfExtensions.add(suffix);
+				extensionFilter.add(new ExtensionFilter(FormScannerTranslation.getTranslationFor(suffix + ".images"),
+						"*." + suffix));
+				setOfExtensions.add("*." + suffix);
 			}
 		}
 
@@ -117,40 +123,29 @@ public class FormFileUtils extends JFileChooser {
 		// image type)
 		String[] arrayOfExtensions = new String[setOfExtensions.size()];
 		arrayOfExtensions = setOfExtensions.toArray(arrayOfExtensions);
-		FileNameExtensionFilter allImagesFilter = new FileNameExtensionFilter(
-				FormScannerTranslation
-						.getTranslationFor(FormScannerTranslationKeys.ALL_IMAGES),
-				arrayOfExtensions);
-		setFileFilter(allImagesFilter);
+		extensionFilter.add(new ExtensionFilter(
+				FormScannerTranslation.getTranslationFor(FormScannerTranslationKeys.ALL_IMAGES), arrayOfExtensions));
 	}
 
 	private void setTemplateFilter() {
-		resetChoosableFileFilters();
-		FileNameExtensionFilter templateFilter = new FileNameExtensionFilter(
-				FormScannerTranslation
-						.getTranslationFor(FormScannerTranslationKeys.TEMPLATE_FILE),
-				"xtmpl");
-		setFileFilter(templateFilter);
+		extensionFilter.clear();
+		extensionFilter.add(new ExtensionFilter(
+				FormScannerTranslation.getTranslationFor(FormScannerTranslationKeys.TEMPLATE_FILE), "xtmpl"));
 	}
 
 	private void setCsvFilter() {
-		resetChoosableFileFilters();
-		FileNameExtensionFilter templateFilter = new FileNameExtensionFilter(
-				FormScannerTranslation
-						.getTranslationFor(FormScannerTranslationKeys.CSV_FILE),
-				"csv");
-		setFileFilter(templateFilter);
+		extensionFilter.clear();
+		extensionFilter.add(new ExtensionFilter(
+				FormScannerTranslation.getTranslationFor(FormScannerTranslationKeys.CSV_FILE), "csv"));
 	}
 
 	private File saveTemplateAs(File file, Document doc, boolean notify) {
 		try {
-			TransformerFactory transformerFactory = TransformerFactory
-					.newInstance();
+			TransformerFactory transformerFactory = TransformerFactory.newInstance();
 			Transformer transformer = transformerFactory.newTransformer();
 			transformer.setOutputProperty(OutputKeys.INDENT, "yes");
 			transformer.setOutputProperty(OutputKeys.METHOD, "xml");
-			transformer.setOutputProperty(
-					"{http://xml.apache.org/xslt}indent-amount", "4");
+			transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "4");
 			transformer.setOutputProperty(OutputKeys.ENCODING, "UTF-8");
 			DOMSource source = new DOMSource(doc);
 
@@ -163,15 +158,13 @@ public class FormFileUtils extends JFileChooser {
 				if (returnValue == JFileChooser.APPROVE_OPTION) {
 					file = getSelectedFile();
 					FileOutputStream fos = new FileOutputStream(file);
-					OutputStreamWriter out = new OutputStreamWriter(fos,
-							Charset.forName("UTF-8"));
+					OutputStreamWriter out = new OutputStreamWriter(fos, Charset.forName("UTF-8"));
 					StreamResult result = new StreamResult(out);
 					transformer.transform(source, result);
 				}
 			} else {
 				FileOutputStream fos = new FileOutputStream(file);
-				OutputStreamWriter out = new OutputStreamWriter(fos,
-						Charset.forName("UTF-8"));
+				OutputStreamWriter out = new OutputStreamWriter(fos, Charset.forName("UTF-8"));
 				StreamResult result = new StreamResult(out);
 				transformer.transform(source, result);
 			}
@@ -181,13 +174,11 @@ public class FormFileUtils extends JFileChooser {
 		return file;
 	}
 
-	public File saveCsvAs(File file, HashMap<String, FormTemplate> filledForms,
-			boolean notify) {
+	public File saveCsvAs(File file, HashMap<String, FormTemplate> filledForms, boolean notify) {
 		String aKey = (String) filledForms.keySet().toArray()[0];
 		FormTemplate aForm = filledForms.get(aKey);
 		String[] header = getHeader(aForm);
-		ArrayList<HashMap<String, String>> results = getResults(filledForms,
-				header);
+		ArrayList<HashMap<String, String>> results = getResults(filledForms, header);
 
 		ICsvMapWriter mapWriter = null;
 		try {
@@ -201,10 +192,8 @@ public class FormFileUtils extends JFileChooser {
 					if (returnValue == JFileChooser.APPROVE_OPTION) {
 						file = getSelectedFile();
 						FileOutputStream fos = new FileOutputStream(file);
-						OutputStreamWriter out = new OutputStreamWriter(fos,
-								Charset.forName("UTF-8"));
-						mapWriter = new CsvMapWriter(out,
-								CsvPreference.EXCEL_NORTH_EUROPE_PREFERENCE);
+						OutputStreamWriter out = new OutputStreamWriter(fos, Charset.forName("UTF-8"));
+						mapWriter = new CsvMapWriter(out, CsvPreference.EXCEL_NORTH_EUROPE_PREFERENCE);
 						mapWriter.writeHeader(header);
 
 						for (HashMap<String, String> result : results) {
@@ -213,10 +202,8 @@ public class FormFileUtils extends JFileChooser {
 					}
 				} else {
 					FileOutputStream fos = new FileOutputStream(file);
-					OutputStreamWriter out = new OutputStreamWriter(fos,
-							Charset.forName("UTF-8"));
-					mapWriter = new CsvMapWriter(out,
-							CsvPreference.EXCEL_NORTH_EUROPE_PREFERENCE);
+					OutputStreamWriter out = new OutputStreamWriter(fos, Charset.forName("UTF-8"));
+					mapWriter = new CsvMapWriter(out, CsvPreference.EXCEL_NORTH_EUROPE_PREFERENCE);
 					mapWriter.writeHeader(header);
 
 					for (HashMap<String, String> result : results) {
@@ -234,8 +221,8 @@ public class FormFileUtils extends JFileChooser {
 		return file;
 	}
 
-	private static ArrayList<HashMap<String, String>> getResults(
-			HashMap<String, FormTemplate> filledForms, String[] header) {
+	private static ArrayList<HashMap<String, String>> getResults(HashMap<String, FormTemplate> filledForms,
+			String[] header) {
 		ArrayList<HashMap<String, String>> results = new ArrayList<>();
 		for (Entry<String, FormTemplate> filledForm : filledForms.entrySet()) {
 			FormTemplate form = filledForm.getValue();
@@ -243,10 +230,10 @@ public class FormFileUtils extends JFileChooser {
 			for (Entry<String, FormGroup> group : groups.entrySet()) {
 				HashMap<String, FormQuestion> fields = group.getValue().getFields();
 				HashMap<String, FormArea> areas = group.getValue().getAreas();
-				
+
 				HashMap<String, String> result = new HashMap<>();
 				result.put(header[0], filledForm.getKey());
-				
+
 				for (int i = 1; i < header.length; i++) {
 					FormQuestion field = fields.get(header[i]);
 					if (field != null) {
@@ -256,7 +243,7 @@ public class FormFileUtils extends JFileChooser {
 						result.put(header[i], area.getText());
 					}
 				}
-				
+
 				results.add(result);
 			}
 
@@ -266,7 +253,7 @@ public class FormFileUtils extends JFileChooser {
 
 	public String[] getHeader(FormTemplate template) {
 		ArrayList<String> headerKeys = new ArrayList<String>();
-		
+
 		HashMap<String, FormGroup> groups = template.getGroups();
 		for (Entry<String, FormGroup> groupEntry : groups.entrySet()) {
 			FormGroup group = groupEntry.getValue();
@@ -285,8 +272,7 @@ public class FormFileUtils extends JFileChooser {
 		String[] header = new String[headerKeys.size() + 1];
 		int i = 0;
 		try {
-			header[i++] = FormScannerTranslation
-					.getTranslationFor(FormScannerTranslationKeys.FIRST_CSV_COLUMN);
+			header[i++] = FormScannerTranslation.getTranslationFor(FormScannerTranslationKeys.FIRST_CSV_COLUMN);
 		} catch (Exception e) {
 			header[i] = StringUtils.EMPTY;
 		}
