@@ -140,10 +140,10 @@ public class FormScannerModel {
 		return model;
 	}
 
-	public FormScannerModel(Stage stage) throws UnsupportedEncodingException {
+	public FormScannerModel() throws UnsupportedEncodingException {
 		assert model == null;
 		model = this;
-		this.stage = stage;
+//		this.stage = stage;
 		String path = FormScannerModel.class.getProtectionDomain().getCodeSource().getLocation().getPath();
 		installPath = URLDecoder.decode(path, "UTF-8");
 		installPath = StringUtils.substringBeforeLast(installPath, "lib");

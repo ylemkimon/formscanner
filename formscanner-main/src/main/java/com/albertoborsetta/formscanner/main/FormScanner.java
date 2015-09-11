@@ -142,19 +142,16 @@ public class FormScanner extends Application {
 		try {
 			logger = LogManager.getLogger(FormScanner.class.getName());
 			
-			DesktopController desktop = new DesktopController(stage);
+			FormScannerModel model = new FormScannerModel();
+			DesktopController desktop = new DesktopController();
 			
 			Scene scene = new Scene(desktop.getDesktop());
-			scene.setNodeOrientation(desktop.getOrientation());
+			scene.setNodeOrientation(model.getOrientation());
 
 			stage.setTitle(desktop.getTitle());
 			stage.setScene(scene);
 			stage.show();
 			
-//			FormScannerFileUtils fileUtils = FormScannerFileUtils.getInstance(stage);
-//			List<File> files = fileUtils.chooseImages();
-//			
-//			System.out.println(files.toString());
 		} catch (IOException e) {
 			logger.debug("Error starting FormScanner", e);
 		}

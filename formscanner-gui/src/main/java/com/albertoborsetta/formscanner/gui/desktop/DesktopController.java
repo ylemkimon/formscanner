@@ -6,6 +6,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.net.URL;
+import java.time.format.FormatStyle;
 import java.util.PropertyResourceBundle;
 import java.util.ResourceBundle;
 
@@ -32,8 +33,7 @@ import javafx.stage.Stage;
 
 public class DesktopController {
 
-	private FormScannerModel model;
-	private MenuBarController menuBarController;
+	private MenuBarController menuBarController = new MenuBarController(this);
 	private Parent root;
 	private Stage stage;
 	private static final Logger logger = LogManager.getLogger(DesktopController.class.getName());
@@ -42,10 +42,12 @@ public class DesktopController {
 	private VBox desktop;
 	@FXML
 	private SplitPane verticalSplitPane;
+	private URL fxmlURL;
+	private ResourceBundle resources;
 
-	public DesktopController(Stage stage) throws UnsupportedEncodingException {
-		model = new FormScannerModel(stage);
-		menuBarController = new MenuBarController(this);
+	public DesktopController() throws UnsupportedEncodingException {
+		this.resources = FormScannerTranslation.getResourceBundle();
+		this.fxmlURL = DesktopController.class.getResource("Desktop.fxml");
 	}
 
 	public VBox getDesktop() {
@@ -69,9 +71,8 @@ public class DesktopController {
 	private void makeRoot() {
 		// Load root layout from fxml file.
 		FXMLLoader loader = new FXMLLoader();
-		final URL fxmlURL = DesktopController.class.getResource("Desktop.fxml");
 		try {
-			loader.setResources(FormScannerTranslation.getResourceBundle());
+			loader.setResources(resources);
 			loader.setLocation(fxmlURL);
 			loader.setController(this);
 			setRoot((Region) loader.load());
@@ -99,10 +100,6 @@ public class DesktopController {
 		return StringUtils.replace(
 				FormScannerTranslation.getTranslationFor(FormScannerTranslationKeys.FORMSCANNER_MAIN_TITLE),
 				FormScannerConstants.VERSION_KEY, FormScannerConstants.VERSION);
-	}
-
-	public NodeOrientation getOrientation() {
-		return model.getOrientation();
 	}
 
 	public void setupFileList(String[] openedFileList) {
