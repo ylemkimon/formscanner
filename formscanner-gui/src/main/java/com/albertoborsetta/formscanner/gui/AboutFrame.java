@@ -29,7 +29,6 @@ import com.albertoborsetta.formscanner.gui.builder.PanelBuilder;
 import com.albertoborsetta.formscanner.gui.builder.TabbedPaneBuilder;
 import com.albertoborsetta.formscanner.controller.AboutFrameController;
 import com.albertoborsetta.formscanner.model.FormScannerModel;
-import com.albertoborsetta.formscanner.utils.FormScannerListener;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
@@ -113,8 +112,6 @@ public class AboutFrame extends InternalFrame {
 		textArea.append(licenseText);
 		textArea.getCaret().setDot(0);
 		
-		FormScannerListener listener = new FormScannerListener();
-		textArea.addKeyListener(listener);
 
 		JScrollPane scrollPane = new JScrollPane(textArea);
 		scrollPane.setPreferredSize(new Dimension(400, 300));
