@@ -956,22 +956,34 @@ public final class FormTemplate {
 	 * @see CornerType
 	 */
 	public void findCorners(BufferedImage image, int threshold, int density, CornerType cornerType, HashMap<String, Integer> crop) throws FormScannerException {
-		height = image.getHeight();
-		width = image.getWidth();
+		Integer top = crop.get(Constants.TOP);
+		Integer bottom = crop.get(Constants.BOTTOM);
+		Integer left = crop.get(Constants.LEFT);
+		Integer right = crop.get(Constants.RIGHT);
+
+		width = image.getWidth() - (left + right);
+		height = image.getHeight() - (top + bottom);
+		
+		BufferedImage croppedImage = image.getSubimage(left, top, width, height);
+				
 		int cores = Runtime.getRuntime().availableProcessors();
 
+// 		Only for debug
+//		ExecutorService threadPool = Executors.newFixedThreadPool(1);
 		ExecutorService threadPool = Executors.newFixedThreadPool(--cores<=0 ? 1 : cores);
 		HashMap<Corners, Future<FormPoint>> cornerDetectorThreads = new HashMap<>();
+		
 
 		for (Corners position : Corners.values()) {
-			Future<FormPoint> future = threadPool.submit(new CornerDetector(
-					threshold, density, position, image, cornerType, crop));
+			Future<FormPoint> future = threadPool.submit(new CornerDetector(threshold, density, position, croppedImage, cornerType));
 			cornerDetectorThreads.put(position, future);
 		}
 
 		for (Corners position : Corners.values()) {
 			try {
 				FormPoint corner = cornerDetectorThreads.get(position).get();
+				corner.setX(corner.getX() + left);
+				corner.setY(corner.getY() + top);
 				if (corner != null) {
 					corners.put(position, corner);
 				}
@@ -1016,6 +1028,8 @@ public final class FormTemplate {
 
 		HashMap<String, FormGroup> templateGroups = template.getGroups();
 		for (Entry<String, FormGroup> templateGroup : templateGroups.entrySet()) {
+//			Only for debug
+//			ExecutorService threadPool = Executors.newFixedThreadPool(1);
 			ExecutorService threadPool = Executors.newFixedThreadPool(--cores <= 0 ? 1 : cores);
 			HashSet<Future<HashMap<String, FormQuestion>>> fieldDetectorThreads = new HashSet<>();
 
