@@ -946,7 +946,6 @@ public class FormScannerModel {
 		} else {
 			formTemplate.removePoint(cursorPoint);
 		}
-		view.repaint();
 	}
 
 	public int getShapeSize() {
