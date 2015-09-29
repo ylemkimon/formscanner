@@ -1115,7 +1115,6 @@ public final class FormTemplate {
 	 * @see FormPoint
 	 */
 	public void addPoint(FormPoint cursorPoint) {
-		pointList.add(cursorPoint);
 		FormPoint templateOrigin = template.getCorner(Corners.TOP_LEFT);
 		double templateRotation = template.getRotation();
 		double scale = Math.sqrt(diagonal / template.getDiagonal());
