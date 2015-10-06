@@ -35,8 +35,8 @@
 						</includes>
 					</fileSet>
 					<fileSet>
-						<outputDirectory>/template</outputDirectory>
-						<directory>src/main/resources/template</directory>
+						<outputDirectory>/samples</outputDirectory>
+						<directory>src/main/resources/samples</directory>
 						<includes>
 							<include>*.jpg</include>
 							<include>*.xtmpl</include>
@@ -54,15 +54,8 @@
 						<outputDirectory>/bin</outputDirectory>
 						<directory>src/main/resources/bin</directory>
 						<includes>
-							<include>*.ico</include>
-							<include>*.png</include>
-						</includes>
-					</fileSet>
-					<fileSet>
-						<outputDirectory>/results</outputDirectory>
-						<directory>src/main/resources/results</directory>
-						<includes>
-							<include>*.csv</include>
+							<include>formscanner.*</include>
+							<include>formscanner</include>
 						</includes>
 					</fileSet>
 					<fileSet>
@@ -76,13 +69,9 @@
 						<outputDirectory>/</outputDirectory>
 						<directory>src/main/resources</directory>
 						<includes>
-							<include>*.sh</include>
 							<include>CHANGELOG</include>
 							<include>README</include>
 						</includes>
-						<excludes>
-							<exclude>install</exclude>
-						</excludes>
 					</fileSet>
 				</fileSets>
 			</sources>
