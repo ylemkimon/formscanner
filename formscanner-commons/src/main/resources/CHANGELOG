@@ -1,3 +1,15 @@
+FormScanner 1.1.0 (released 2015-10-09)
+===
+NEW FEATURES
+---
+* Semplified MacOsX installation procedure with DMG
+* New startup script for Linux OS
+
+FIXES
+---
+* Corners and point detection fails when set crop values
+* In the image frame must right-click twice for delete the new point markers
+
 FormScanner 1.0.3 (released 2015-09-10)
 ===
 FIXES
