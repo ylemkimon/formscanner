@@ -9,6 +9,8 @@ import org.apache.commons.lang3.StringUtils;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
+import com.albertoborsetta.formscanner.api.commons.Constants;
+
 /**
  * The <code>FormQuestion</code> class represents a question field into the
  * scanned form.
@@ -35,8 +37,10 @@ public class FormQuestion extends FormField {
 	 * Instantiates a new FormQuestion with the responses points.
 	 *
 	 * @author Alberto Borsetta
-	 * @param name the name of the field
-	 * @param points the points which indicates the position of the responses
+	 * @param name
+	 *            the name of the field
+	 * @param points
+	 *            the points which indicates the position of the responses
 	 * @see FormPoint
 	 */
 	public FormQuestion(String name, HashMap<String, FormPoint> points) {
@@ -49,7 +53,8 @@ public class FormQuestion extends FormField {
 	 * response points.
 	 *
 	 * @author Alberto Borsetta
-	 * @param name the name of the field
+	 * @param name
+	 *            the name of the field
 	 * @see FormPoint
 	 */
 	public FormQuestion(String name) {
@@ -61,8 +66,10 @@ public class FormQuestion extends FormField {
 	 * Sets a point of a single response.
 	 *
 	 * @author Alberto Borsetta
-	 * @param value the value of the response
-	 * @param point the point of the response
+	 * @param value
+	 *            the value of the response
+	 * @param point
+	 *            the point of the response
 	 * @see FormPoint
 	 */
 	public void setPoint(String value, FormPoint point) {
@@ -73,7 +80,8 @@ public class FormQuestion extends FormField {
 	 * Returns a point of a single response.
 	 *
 	 * @author Alberto Borsetta
-	 * @param value the value of the response
+	 * @param value
+	 *            the value of the response
 	 * @return the point of the response
 	 */
 	public FormPoint getPoint(String value) {
@@ -114,8 +122,8 @@ public class FormQuestion extends FormField {
 	 * Sets if it is a multiple choice FormQuestion object.
 	 *
 	 * @author Alberto Borsetta
-	 * @param multiple <code>true</code> if it is a multiple choice FormField
-	 *            object
+	 * @param multiple
+	 *            <code>true</code> if it is a multiple choice FormField object
 	 */
 	public void setMultiple(boolean multiple) {
 		this.multiple = multiple;
@@ -145,7 +153,8 @@ public class FormQuestion extends FormField {
 	 * Returns the xml representation of the FormQuestion object.
 	 *
 	 * @author Alberto Borsetta
-	 * @param doc the parent document
+	 * @param doc
+	 *            the parent document
 	 * @return the xml representation of the FormQuestion object
 	 */
 	@Override
@@ -155,8 +164,7 @@ public class FormQuestion extends FormField {
 		questionElement.setAttribute("type", type.name());
 		questionElement.setAttribute("question", StringUtils.trim(name));
 		questionElement.setAttribute("multiple", String.valueOf(multiple));
-		questionElement.setAttribute(
-				"rejectMultiple", String.valueOf(rejectMultiple));
+		questionElement.setAttribute("rejectMultiple", String.valueOf(rejectMultiple));
 
 		// values element
 		Element valuesElement = doc.createElement("values");
@@ -164,10 +172,12 @@ public class FormQuestion extends FormField {
 
 		// value elements
 		for (Entry<String, FormPoint> point : points.entrySet()) {
-			Element valueElement = doc.createElement("value");
-			valueElement.setAttribute("response", point.getKey());
-			valueElement.appendChild(point.getValue().getXml(doc));
-			valuesElement.appendChild(valueElement);
+			if (point.getValue() != Constants.EMPTY_POINT) {
+				Element valueElement = doc.createElement("value");
+				valueElement.setAttribute("response", point.getKey());
+				valueElement.appendChild(point.getValue().getXml(doc));
+				valuesElement.appendChild(valueElement);
+			}
 		}
 
 		return questionElement;
@@ -178,8 +188,9 @@ public class FormQuestion extends FormField {
 	 * responses.
 	 *
 	 * @author Alberto Borsetta
-	 * @param rejectMultiple <code>true</code> if the FormQuestion object has to
-	 *            be rejected in case of multiple responses
+	 * @param rejectMultiple
+	 *            <code>true</code> if the FormQuestion object has to be
+	 *            rejected in case of multiple responses
 	 */
 	public void setRejectMultiple(boolean rejectMultiple) {
 		this.rejectMultiple = rejectMultiple;

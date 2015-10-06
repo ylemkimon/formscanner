@@ -6,6 +6,8 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.concurrent.Callable;
 
+import com.albertoborsetta.formscanner.api.commons.Constants;
+
 public class FieldDetector extends FormScannerDetector
 		implements Callable<HashMap<String, FormQuestion>> {
 
@@ -34,17 +36,18 @@ public class FieldDetector extends FormScannerDetector
 		for (String pointName : pointNames) {
 			FormPoint responsePoint = calcResponsePoint(templatePoints.get(pointName));
 
-			if (found = isFilled(responsePoint)) {
+			if (isFilled(responsePoint)) {
+				found = true;
 				count++;
-				FormQuestion filledField = getField(templateField, fieldName);
+				FormQuestion filledField = getField(fieldName);
 
 				filledField.setPoint(pointName, responsePoint);
 				fields.put(fieldName, filledField);
 
 				if (!templateField.isMultiple()) {
-					if (templateField.rejectMultiple() && count > 1) {
+					if (templateField.rejectMultiple() && count > 1) { 
 						filledField.clearPoints();
-						filledField.setPoint("", null);
+						filledField.setPoint(Constants.NO_RESPONSE, Constants.EMPTY_POINT);
 						fields.clear();
 						fields.put(fieldName, filledField);
 						break;
@@ -57,8 +60,8 @@ public class FieldDetector extends FormScannerDetector
 		}
 
 		if (!found) {
-			FormQuestion filledField = getField(templateField, fieldName);
-			filledField.setPoint("", null);
+			FormQuestion filledField = getField(fieldName);
+			filledField.setPoint(Constants.NO_RESPONSE, Constants.EMPTY_POINT);
 			fields.put(fieldName, filledField);
 		}
 
@@ -83,12 +86,14 @@ public class FieldDetector extends FormScannerDetector
 		return (count / (double) total) >= (density / 100.0);
 	}
 
-	private FormQuestion getField(FormQuestion field, String fieldName) {
+	private FormQuestion getField(String fieldName) {
 		FormQuestion filledField = fields.get(fieldName);
 
 		if (filledField == null) {
 			filledField = new FormQuestion(fieldName);
-			filledField.setMultiple(field.isMultiple());
+			filledField.setMultiple(templateField.isMultiple());
+			filledField.setType(templateField.getType());
+			filledField.setRejectMultiple(templateField.rejectMultiple());
 		}
 
 		return filledField;

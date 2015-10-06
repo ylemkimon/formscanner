@@ -1,6 +1,6 @@
 # Greek Translation
 formscanner.main.title=FormScanner $VERSION
-about.text=<html><h2 align=\"center\">FormScanner - Free OMR Software</h2><h3 align=\"center\">Έκδοση $VERSION</h3><h3 align=\"center\">Το FormScanner σχεδιάστηκε και αναπτύχθηκε από:</h3><center><a href=\"http://albertoborsetta.com/\">Alberto Borsetta</a></center><h3 align=\"center\">Διασφάλιση ποιότητας και έλεγχος:</h3><center><a href=\"http://www.dies.uniud.it/battauz.html\">Michela Battauz</a><br /><a href=\"http://www.nicholls.edu/physical-sciences/faculty-staff/c-young/\">Chadwick Young</a><br /><a href=\"http://www.columbia.edu/~ns2224/\">Nicol&aacute;s E. Stier-Moses</a></center><h3 align=\"center\">Μετάφραση στα Πορτογαλικά:</h3><center>Milennia Maria Moura Phereira<br />FranChasing Phereira<br />Giuliana (Jule) Benedetti</center><h3 align=\"center\">Μετάφραση στα Ελληνικά:</h3><center><a href=\"http://www.geogeo.gr\">geogeo.gr</a></center><h3 align=\"center\">Μετάφραση στα Πολωνικά:</h3><center>Marek Lewandowski</center><h3 align=\"center\">Μετάφραση στα Πέρσης:</h3><center>Majid Gholipasandi</center><h3 align=\"center\">Μετάφραση στα ισπανικά:</h3><center>Roberto Villanueva</center><h3 align=\"center\">Μετάφραση στα ολλανδικά:</h3><center><a href=\"https://www.vcard.wur.nl/Views/Profile/View.aspx?id=61838&ln=eng\">Maikel P.H. Verouden</a></center><h3 align=\"center\">Μετάφραση στα ιαπωνικά:</h3><center>Atsushi Yamaoka</center><p align=\"center\">Επισκεφθείτε την <a href=\"http://www.formscanner.org/\">Ιστοσελίδα του έργου</a> για περισσότερες πληροφορίες σχετικά με το προϊόν.</p><p align=\"center\">Copyright 2013-2014 <a href=\"http://albertoborsetta.com/\">Alberto Borsetta</a></p><br /><center><a title=\"Κάντε μια δωρεά\" href=\"https://www.paypal.com/cgi-bin/webscr?cmd=_donations&amp;business=alberto%2eborsetta%40gmail%2ecom&amp;lc=GB&amp;item_name=FormScanner&amp;item_number=FS%2d1976&amp;currency_code=EUR&amp;bn=PP%2dDonationsBF%3abtn_donateCC_LG%2egif%3aNonHosted\" target=\"_blank\"><img class=\"aligncenter\" src=\"https://www.paypal.com/en_US/i/btn/x-click-but04.gif\" alt=\"Κάντε μια δωρεά\" /></a></center></html>
+about.text=<html><h2 align=\"center\">FormScanner - Free OMR Software</h2><h3 align=\"center\">Έκδοση $VERSION</h3><h3 align=\"center\">Το FormScanner σχεδιάστηκε και αναπτύχθηκε από:</h3><center><a href=\"http://albertoborsetta.com/\">Alberto Borsetta</a></center><h3 align=\"center\">Διασφάλιση ποιότητας και έλεγχος:</h3><center><a href=\"http://www.dies.uniud.it/battauz.html\">Michela Battauz</a><br /><a href=\"http://www.nicholls.edu/physical-sciences/faculty-staff/c-young/\">Chadwick Young</a><br /><a href=\"http://www.columbia.edu/~ns2224/\">Nicol&aacute;s E. Stier-Moses</a></center><h3 align=\"center\">Μετάφραση στα Πορτογαλικά:</h3><center>Milennia Maria Moura Phereira<br />FranChasing Phereira<br />Giuliana (Jule) Benedetti</center><h3 align=\"center\">Μετάφραση στα Ελληνικά:</h3><center><a href=\"http://www.geogeo.gr\">geogeo.gr</a></center><h3 align=\"center\">Μετάφραση στα Πολωνικά:</h3><center>Marek Lewandowski</center><h3 align=\"center\">Μετάφραση στα Πέρσης:</h3><center>Majid Gholipasandi</center><h3 align=\"center\">Μετάφραση στα ισπανικά:</h3><center>Roberto Villanueva</center><h3 align=\"center\">Μετάφραση στα Ολλανδικά:</h3><center><a href=\"https://www.vcard.wur.nl/Views/Profile/View.aspx?id=61838&ln=eng\">Maikel P.H. Verouden</a></center><h3 align=\"center\">Μετάφραση στα ιαπωνικά:</h3><center>Atsushi Yamaoka</center><p align=\"center\">Επισκεφθείτε την <a href=\"http://www.formscanner.org/\">Ιστοσελίδα του έργου</a> για περισσότερες πληροφορίες σχετικά με το προϊόν.</p><p align=\"center\">Copyright 2013-2014 <a href=\"http://albertoborsetta.com/\">Alberto Borsetta</a></p><br /><center><a title=\"Κάντε μια δωρεά\" href=\"https://www.paypal.com/cgi-bin/webscr?cmd=_donations&amp;business=alberto%2eborsetta%40gmail%2ecom&amp;lc=GB&amp;item_name=FormScanner&amp;item_number=FS%2d1976&amp;currency_code=EUR&amp;bn=PP%2dDonationsBF%3abtn_donateCC_LG%2egif%3aNonHosted\" target=\"_blank\"><img class=\"aligncenter\" src=\"https://www.paypal.com/en_US/i/btn/x-click-but04.gif\" alt=\"Κάντε μια δωρεά\" /></a></center></html>
 image.frame.title=Εικόνα
 open.images=Άνοιγμα εικόνων
 open.images.tooltip=Άνοιγμα εικόνων
@@ -99,7 +99,7 @@ greek.label=Ελληνικά
 polish.label=Polski
 persian.label=فارسی
 german.label=Deutsch
-dutch.label=Nederlandse
+dutch.label=Nederlands
 japanese.label=倭人
 language.changed=Για να ισχύσουν οι αλλαγές χρειάζεται επανεκκίνηση του FormScanner
 settings.popup.title=Ρυθμίσεις
@@ -151,34 +151,36 @@ group.column=Ομάδα
 responses.by.grid=Απαντήσεις ανά πλέγμα
 qrcode.barcode=Γραμμικός κώδικας/Κώδικας QR
 
-# added 0.12
-corners.options=δείκτη γωνία
-corner.type.option.label=Γωνία τύπου δείκτη
-preferred.look.and.feel.option.label=Προτεινόμενα εμφάνιση και την αίσθηση ( * )
-template.options=Πρότυπο
-accuracy.options=ακρίβεια σάρωσης
-font.options=γραμματοσειρά
-look.and.feel=Κοίτα και νιώσε
-groups.options=ομάδες
-enable.groups.option.label=Ενεργοποίηση ομάδες
-question.options=ερωτήσεις
-reset.auto.numbering.option.label=Επαναφορά αυτόματη αρίθμηση
-requires.restart= (*) Απαιτείται επανεκκίνηση
-round.corner.type=εγκύκλιος
-angular.corner.type=γωνιώδης
+# added 1.0
+corners.options=Σήμανση γωνίας
+corner.type.option.label=Τύπος σήμανσης γωνίας
+preferred.look.and.feel.option.label=Προτιμώμενη εμφάνιση και αίσθηση (*)
+template.options=Πρώτυπο
+accuracy.options=Ακρίβεια σάρωσης
+font.options=Γραμματοσειρά
+look.and.feel=Εμφάνιση και αίσθηση
+groups.options=Ομάδες
+enable.groups.option.label=Ενεργοποίηση ομάδων
+question.options=Ερωτήσεις
+reset.auto.numbering.option.label=Επαναφορά αυτόματης αρίθμησης
+requires.restart= (*) Απαιτεί επανεκκίνηση
+round.corner.type=Κυκλική
+angular.corner.type=Γωνιώδης
+image.preprocessing.options=Προεπεξεργασία εικόνας
 image.preprocessing.options=προεπεξεργασίας εικόνας
-groups.name.template.label=Ομάδες πρότυπο όνομα
-questions.name.template.label=Ερώτηση πρότυπο όνομα
-barcode.name.template.label=Γραμμικός κώδικας/Κώδικας QR πρότυπο όνομα 
-crop.options=κόψιμο
-crop.from.top=από πάνω
-crop.from.left=από αριστερά
-crop.from.right=από δεξιά
-crop.from.bottom=από πυθμένα
+groups.name.template.label=Πρώτυπο ονόματος ομάδων
+questions.name.template.label=Πρώτυπο ονόματος ερώτησης
+barcode.name.template.label=Πρώτυπο ονόματος Γραμμικού κώδικα/Κώδικα QR 
+crop.options=Περικοπή
+crop.from.top=Πάνω
+crop.from.left=Αριστερά
+crop.from.right=Δεξιά
+crop.from.bottom=Κάτω
 
-# modified 0.12
+# modified 1.0
 font.type.label=Τύπος γραμματοσειράς (*)
 font.size.label=Μέγεθος γραμματοσειράς (*)
 gui.options=Επιλογές γραφικού περιβάλλοντος
-marker.options=ανταπόκριση δείκτη
-scan.options=σάρωση
+marker.options=Σήμανση απάντησης
+scan.options=Σάρωση
+

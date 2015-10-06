@@ -99,7 +99,7 @@ greek.label=Ελληνικά
 polish.label=Polski
 persian.label=فارسی
 german.label=Deutsch
-dutch.label=Nederlandse
+dutch.label=Nederlands
 japanese.label=倭人
 language.changed=Riavvia FormScanner per rendere attive le nuove impostazioni
 settings.popup.title=Impostazioni
@@ -151,7 +151,7 @@ group.column=Gruppo
 responses.by.grid=Risposte su righe e colonne
 qrcode.barcode=Barcode/QRCode
 
-# added 0.12
+# added 1.0
 corners.options=Marcatore angolo
 corner.type.option.label=Tipo marcatore angolo
 preferred.look.and.feel.option.label=Look and feel preferito (*)
@@ -176,7 +176,7 @@ crop.from.left=Da sinistra
 crop.from.right=Da destra
 crop.from.bottom=Dal basso
 
-# modified 0.12
+# modified 1.0
 font.type.label=Tipo carattere (*)
 font.size.label=Dimesione carattere (*)
 gui.options=Interfaccia

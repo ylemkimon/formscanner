@@ -1,12 +1,27 @@
-FormScanner 1.1-SNAPSHOT (released YYYY-MM-DD)
+FormScanner 1.0.3 (released 2015-09-10)
 ===
-NEW FEATURES
----
-
 FIXES
 ---
+* All options are marked as answers in batch processing
+* Fixed some Dutch translations
 
-FormScanner 1.0.0 (released 2018-08-26)
+FormScanner 1.0.2 (released 2015-09-08)
+===
+FIXES
+---
+* Empty CSV output file
+
+FormScanner 1.0.1 (released 2015-08-31)
+===
+FIXES
+---
+* Corner marker type not saved
+* Windows title is 0.11.1�SNAPSHOT
+* Image window does not appear during processing an image
+* Processing keeps running endlessly
+* CSV output is not produced
+
+FormScanner 1.0.0 (released 2015-08-26)
 ===
 NEW FEATURES
 ---

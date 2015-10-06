@@ -94,6 +94,7 @@ public class ImageFrameController implements MouseMotionListener,
                 if (e.getButton() == MouseEvent.BUTTON3) {
                     model.deleteNearestPointTo(getCursorPoint(e));
                 }
+                view.repaint();
                 break;
             case VIEW:
             default:

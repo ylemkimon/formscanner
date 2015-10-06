@@ -437,7 +437,7 @@ public class OptionsFrame extends InternalFrame implements TabbedView {
 		shapeSizeValue.setValue(model.getShapeSize());
 		fontTypeComboBox.setSelectedItem(model.getFontType());
 		fontSizeComboBox.setSelectedItem(model.getFontSize());
-		cornerTypeComboBox.setSelectedItem(model.getCornerType());
+		cornerTypeComboBox.setSelectedIndex(model.getCornerType().getIndex());
 		lookAndFeelComboBox.setSelectedItem(model.getLookAndFeel());
 		groupsEnabled.setSelected(model.isGroupsEnabled());
 		groupsNameTemplate.setEnabled(model.isGroupsEnabled());

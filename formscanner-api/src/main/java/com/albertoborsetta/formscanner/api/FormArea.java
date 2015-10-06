@@ -29,6 +29,11 @@ public class FormArea extends FormField {
 	private final HashMap<Corners, FormPoint> area;
 	private String text;
 
+	/**
+	 * Instantiates a new Empty FormArea.
+	 *
+	 * @author Alberto Borsetta
+	 */
 	public FormArea() {
 		super();
 		area = new HashMap<>();

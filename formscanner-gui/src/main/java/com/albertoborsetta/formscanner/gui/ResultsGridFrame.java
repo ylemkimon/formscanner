@@ -46,7 +46,7 @@ public class ResultsGridFrame extends InternalFrame {
 	private final int rows;
 	private final int cols;
 	private final FormFileUtils fileUtils;
-	private final String[] header;
+//	private final String[] header;
 
 	private class TemplateTableModel extends DefaultTableModel {
 
@@ -164,8 +164,7 @@ public class ResultsGridFrame extends InternalFrame {
 		form = model.getFilledForm();
 
 		FormTemplate template = model.getTemplate();
-		header = fileUtils.getHeader(template);
-		rows = header.length;
+		rows = fileUtils.getHeader(template).size() + 1;
 		cols = (model.isGroupsEnabled()) ? 3 : 2;
 
 		setBounds(model.getLastPosition(Frame.RESULTS_GRID_FRAME));
