@@ -19,6 +19,11 @@ import com.google.zxing.common.HybridBinarizer;
 import com.google.zxing.client.j2se.BufferedImageLuminanceSource;
 import com.google.zxing.Result;
 
+/**
+*
+* @author Alberto Borsetta
+* @version 1.1-SNAPSHOT
+*/
 public class BarcodeDetector extends FormScannerDetector
 		implements Callable<HashMap<String, FormArea>> {
 
