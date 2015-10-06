@@ -22,7 +22,7 @@
 # Constants
 JAVA_MAJOR=1
 JAVA_MINOR=7
-APP_JAR="formscanner-main-1.0.4-SNAPSHOT.jar"
+APP_JAR="formscanner-main-1.1.0.jar"
 APP_NAME="FormScanner"
 VM_ARGS=""
 
