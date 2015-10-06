@@ -1,8 +1,3 @@
-FormScanner 1.0.4 (released YYYY-MM-DD)
-===
-FIXES
----
-
 FormScanner 1.0.3 (released 2015-09-10)
 ===
 FIXES
@@ -30,7 +25,6 @@ FormScanner 1.0.0 (released 2015-08-26)
 ===
 NEW FEATURES
 ---
-
 * Implement corner detection for different marker pattern
 * Reset autoNumbering question for new group
 * Naming template for Questions, QRCodes/Barcodes and Groups
