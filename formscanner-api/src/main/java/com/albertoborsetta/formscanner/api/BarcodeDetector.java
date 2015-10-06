@@ -22,7 +22,7 @@ import com.google.zxing.Result;
 /**
 *
 * @author Alberto Borsetta
-* @version 1.1.0
+* @version 1.1.1-SNAPSHOT
 */
 public class BarcodeDetector extends FormScannerDetector
 		implements Callable<HashMap<String, FormArea>> {
