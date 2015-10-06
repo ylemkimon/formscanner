@@ -1,5 +1,9 @@
 package com.albertoborsetta.formscanner.api.exceptions;
-
+/**
+*
+* @author @author Alberto Borsetta
+* @version 1.0.4-SNAPSHOT
+*/
 public class FormScannerException extends Exception {
 
 	/**
