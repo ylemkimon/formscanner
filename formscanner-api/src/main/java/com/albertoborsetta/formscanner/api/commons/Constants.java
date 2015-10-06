@@ -3,6 +3,7 @@ package com.albertoborsetta.formscanner.api.commons;
 import java.util.EnumSet;
 import java.util.HashMap;
 
+import com.albertoborsetta.formscanner.api.FormPoint;
 import com.albertoborsetta.formscanner.api.commons.translation.TranslationKeys;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.DecodeHintType;
@@ -14,6 +15,16 @@ import com.google.zxing.DecodeHintType;
  * @version 1.1-SNAPSHOT
  */
 public class Constants {
+
+	/*
+	 * Identifies a field with no response
+	 */
+	public static final String NO_RESPONSE = "";
+	
+	/*
+	 * Identifies a point with no response
+	 */
+	public static final FormPoint EMPTY_POINT = null;
 	
 	// Margins
 	/**
@@ -98,7 +109,6 @@ public class Constants {
 	 * The Enum Corners.
 	 *
 	 * @author Alberto Borsetta
-	 * @version 1.1-SNAPSHOT
 	 */
 	public enum Corners {
 
@@ -159,7 +169,6 @@ public class Constants {
 	 * The Enum FieldType.
 	 *
 	 * @author Alberto Borsetta
-	 * @version 1.1-SNAPSHOT
 	 */
 	public enum FieldType {
 
@@ -266,7 +275,6 @@ public class Constants {
 	 * The Enum ShapeType.
 	 *
 	 * @author Alberto Borsetta
-	 * @version 1.1-SNAPSHOT
 	 */
 	public enum ShapeType {
 
@@ -333,7 +341,6 @@ public class Constants {
 	 * The Enum CornerType.
 	 *
 	 * @author Alberto Borsetta
-	 * @version 1.1-SNAPSHOT
 	 */
 	public enum CornerType {
 

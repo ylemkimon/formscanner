@@ -87,7 +87,7 @@ public class FormScannerModel {
 	private FormTemplate formTemplate;
 	private BufferedImage templateImage;
 	private final FormFileUtils fileUtils;
-	private final HashMap<String, FormTemplate> filledForms = new HashMap<>();
+	private HashMap<String, FormTemplate> filledForms = new HashMap<>();
 
 	private ArrayList<FormPoint> points = new ArrayList<>();
 	private final String lang;
@@ -529,15 +529,20 @@ public class FormScannerModel {
 		switch (frm) {
 		case RENAME_FILES_FRAME:
 			view.disposeFrame(imageFrame);
+			imageFrame = null;
 			break;
 		case IMAGE_FRAME:
 			view.disposeFrame(renameFileFrame);
 			view.disposeFrame(manageTemplateFrame);
 			view.disposeFrame(resultsGridFrame);
+			renameFileFrame = null;
+			manageTemplateFrame = null;
+			resultsGridFrame = null;
 			resetPoints();
 			break;
 		case MANAGE_TEMPLATE_FRAME:
 			view.disposeFrame(imageFrame);
+			imageFrame = null;
 			break;
 		default:
 			break;
@@ -845,8 +850,8 @@ public class FormScannerModel {
 
 				Runtime.getRuntime().exec(new String[] { browser, FormScannerConstants.WIKI_PAGE });
 			}
-		} catch (Exception exception) {
-			System.out.println("An error occured while trying to open the web browser!\n");
+		} catch (Exception e) {
+			logger.debug("An error occured while trying to open the web browser!", e);
 		}
 	}
 
@@ -941,7 +946,6 @@ public class FormScannerModel {
 		} else {
 			formTemplate.removePoint(cursorPoint);
 		}
-		view.repaint();
 	}
 
 	public int getShapeSize() {
