@@ -2,6 +2,11 @@ package com.albertoborsetta.formscanner.api;
 
 import java.util.HashMap;
 
+/**
+*
+* @author Alberto Borsetta
+* @version 1.1-SNAPSHOT
+*/
 public class FormGroup {
 
 	private HashMap<String, FormQuestion> fields;

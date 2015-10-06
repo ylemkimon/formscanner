@@ -1,14 +1,17 @@
 package com.albertoborsetta.formscanner.api;
 
-import com.albertoborsetta.formscanner.api.commons.Constants;
 import com.albertoborsetta.formscanner.api.commons.Constants.CornerType;
 
 import java.awt.image.BufferedImage;
-import java.util.HashMap;
 import java.util.concurrent.Callable;
 
 import com.albertoborsetta.formscanner.api.commons.Constants.Corners;
 
+/**
+*
+* @author Alberto Borsetta
+* @version 1.1-SNAPSHOT
+*/
 public class CornerDetector extends FormScannerDetector
 		implements Callable<FormPoint> {
 
