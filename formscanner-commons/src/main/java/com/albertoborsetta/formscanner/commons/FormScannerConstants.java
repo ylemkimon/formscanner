@@ -87,6 +87,7 @@ public class FormScannerConstants extends Constants {
 	public static final String POLISH = "POLISH";
 	public static final String FARSI = "FARSI";
 	public static final String JAPANESE = "JAPANESE";
+	public static final String FRENCH = "FRENCH";
 
 	public static final String INSTALLATION_ARABIC = "Arabic";
 	public static final String INSTALLATION_CHINESE = "Chinese (Simplified)";
@@ -105,7 +106,7 @@ public class FormScannerConstants extends Constants {
 	public static final Set<String> ENGLISH_LANGUAGES = new HashSet<>(
 			Arrays.asList(new String[] { INSTALLATION_ARABIC,
 					INSTALLATION_CHINESE, INSTALLATION_ENGLISH,
-					INSTALLATION_FRENCH, INSTALLATION_MAGYAR,
+					INSTALLATION_MAGYAR,
 					INSTALLATION_RUSSIAN,
 					INSTALLATION_TURKISH,
 					INSTALLATION_GERMAN }));
@@ -127,6 +128,8 @@ public class FormScannerConstants extends Constants {
 			Arrays.asList(new String[] { INSTALLATION_NEDERLANDS }));
 	public static final Set<String> JAPANESE_LANGUAGES = new HashSet<>(
 			Arrays.asList(new String[] {}));
+	public static final Set<String> FRENCH_LANGUAGES = new HashSet<>(
+			Arrays.asList(new String[] {INSTALLATION_FRENCH}));
 
 	// Fields Table Columns
 	// support
@@ -297,7 +300,8 @@ public class FormScannerConstants extends Constants {
 		POLISH("pl", FormScannerTranslationKeys.POLISH, POLISH_LANGUAGES),
 		GREEK("el", FormScannerTranslationKeys.GREEK, GREEK_LANGUAGES),
 		DUTCH("nl", FormScannerTranslationKeys.DUTCH, DUTCH_LANGUAGES),
-		JAPANESE("jp", FormScannerTranslationKeys.JAPANESE, JAPANESE_LANGUAGES);
+		JAPANESE("jp", FormScannerTranslationKeys.JAPANESE, JAPANESE_LANGUAGES),
+		FRENCH("fr", FormScannerTranslationKeys.FRENCH, FRENCH_LANGUAGES);
 
 		private final String value;
 		private final String translation;
