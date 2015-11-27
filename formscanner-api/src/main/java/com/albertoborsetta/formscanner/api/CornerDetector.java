@@ -10,7 +10,7 @@ import com.albertoborsetta.formscanner.api.commons.Constants.Corners;
 /**
 *
 * @author Alberto Borsetta
-* @version 1.1.1-SNAPSHOT
+* @version 1.1.1
 */
 public class CornerDetector extends FormScannerDetector
 		implements Callable<FormPoint> {
