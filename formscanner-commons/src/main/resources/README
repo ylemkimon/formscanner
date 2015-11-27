@@ -21,4 +21,4 @@ java -jar lib/{FormScanner_MAINJAR}
 
 example:
 
-java -jar lib/formscanner-main-1.1.1.jar
+java -jar lib/formscanner-main-1.1.2-SNAPSHOT.jar
