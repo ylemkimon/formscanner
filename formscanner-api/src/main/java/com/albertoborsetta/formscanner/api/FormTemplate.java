@@ -966,9 +966,9 @@ public final class FormTemplate {
 		BufferedImage croppedImage = image.getSubimage(left, top, width, height);
 				
 		int cores = Runtime.getRuntime().availableProcessors();
+//		Only for debug
+//		cores = 1;
 
-// 		Only for debug
-//		ExecutorService threadPool = Executors.newFixedThreadPool(1);
 		ExecutorService threadPool = Executors.newFixedThreadPool(--cores<=0 ? 1 : cores);
 		HashMap<Corners, Future<FormPoint>> cornerDetectorThreads = new HashMap<>();
 
@@ -1022,12 +1022,11 @@ public final class FormTemplate {
 		height = image.getHeight();
 		width = image.getWidth();
 		int cores = Runtime.getRuntime().availableProcessors();
-
+//		Only for debug
+//		cores = 1;
 
 		HashMap<String, FormGroup> templateGroups = template.getGroups();
 		for (Entry<String, FormGroup> templateGroup : templateGroups.entrySet()) {
-//			Only for debug
-//			ExecutorService threadPool = Executors.newFixedThreadPool(1);
 			ExecutorService threadPool = Executors.newFixedThreadPool(--cores <= 0 ? 1 : cores);
 			HashSet<Future<HashMap<String, FormQuestion>>> fieldDetectorThreads = new HashSet<>();
 
@@ -1224,7 +1223,8 @@ public final class FormTemplate {
 		height = image.getHeight();
 		width = image.getWidth();
 		int cores = Runtime.getRuntime().availableProcessors();
-
+//		Only for debug
+//		cores = 1;
 
 		HashMap<String, FormGroup> templateGroups = template.getGroups();
 		for (Entry<String, FormGroup> templateGroup : templateGroups.entrySet()) {
