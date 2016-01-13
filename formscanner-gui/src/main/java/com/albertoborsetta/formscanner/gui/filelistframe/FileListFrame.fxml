@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.StackPane?>
+
+<AnchorPane fx:id="fileListPanel" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <TableView fx:id="fileListFrame">
+        <columns>
+          <TableColumn fx:id="fileNameColumn" maxWidth="1.7976931348623157E308" minWidth="-Infinity" prefWidth="150.0" text="%file.list.frame.title" />
+            <TableColumn fx:id="fileDoneColumn" maxWidth="1.7976931348623157E308" minWidth="-Infinity" prefWidth="73.0" text="Extension" />
+        </columns>
+      </TableView>
+   </children>
+</AnchorPane>
