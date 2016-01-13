@@ -252,7 +252,7 @@ public class FormScannerConstants extends Constants {
 		DUTCH("nl", FormScannerTranslationKeys.DUTCH, DUTCH_LANGUAGES), 
 		JAPANESE("jp", FormScannerTranslationKeys.JAPANESE, JAPANESE_LANGUAGES), 
 		FRENCH("fr", FormScannerTranslationKeys.FRENCH, FRENCH_LANGUAGES),
-		ARABIC("sa", FormScannerTranslationKeys.ARABIC, ARABIC_LANGUAGES),
+		ARABIC("ar", FormScannerTranslationKeys.ARABIC, ARABIC_LANGUAGES),
 		;
 
 		private final String value;
