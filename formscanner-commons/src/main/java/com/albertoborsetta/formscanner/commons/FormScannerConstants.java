@@ -49,20 +49,13 @@ public class FormScannerConstants extends Constants {
 	public static final String RESULTS_GRID_FRAME_NAME = "RESULTS_GRID_FRAME_NAME";
 
 	// Frames positions and size
-	private static final Rectangle FILE_LIST_FRAME_POSITION = new Rectangle(
-			10, 10, 200, 600);
-	private static final Rectangle RENAME_FILES_FRAME_POSITION = new Rectangle(
-			220, 320, 370, 100);
-	private static final Rectangle MANAGE_TEMPLATE_FRAME_POSITION = new Rectangle(
-			100, 100, 600, 500);
-	private static final Rectangle IMAGE_FRAME_POSITION = new Rectangle(
-			10, 10, 1000, 600);
-	private static final Rectangle RESULTS_GRID_FRAME_POSITION = new Rectangle(
-			100, 100, 230, 300);
-	private static final Rectangle ABOUT_FRAME_POSITION = new Rectangle(
-			100, 100, 600, 500);
-	private static final Rectangle OPTIONS_FRAME_POSITION = new Rectangle(
-			100, 100, 400, 500);
+	private static final Rectangle FILE_LIST_FRAME_POSITION = new Rectangle(10, 10, 200, 600);
+	private static final Rectangle RENAME_FILES_FRAME_POSITION = new Rectangle(220, 320, 370, 100);
+	private static final Rectangle MANAGE_TEMPLATE_FRAME_POSITION = new Rectangle(100, 100, 600, 500);
+	private static final Rectangle IMAGE_FRAME_POSITION = new Rectangle(10, 10, 1000, 600);
+	private static final Rectangle RESULTS_GRID_FRAME_POSITION = new Rectangle(100, 100, 230, 300);
+	private static final Rectangle ABOUT_FRAME_POSITION = new Rectangle(100, 100, 600, 500);
+	private static final Rectangle OPTIONS_FRAME_POSITION = new Rectangle(100, 100, 400, 500);
 	private static final Rectangle DESKTOP_SIZE = new Rectangle(0, 0, 1024, 768);
 
 	// Properties
@@ -88,6 +81,7 @@ public class FormScannerConstants extends Constants {
 	public static final String FARSI = "FARSI";
 	public static final String JAPANESE = "JAPANESE";
 	public static final String FRENCH = "FRENCH";
+	public static final String ARABIC = "ARABIC";
 
 	public static final String INSTALLATION_ARABIC = "Arabic";
 	public static final String INSTALLATION_CHINESE = "Chinese (Simplified)";
@@ -104,32 +98,26 @@ public class FormScannerConstants extends Constants {
 	public static final String INSTALLATION_TURKISH = "T�rk‡e";
 
 	public static final Set<String> ENGLISH_LANGUAGES = new HashSet<>(
-			Arrays.asList(new String[] { INSTALLATION_ARABIC,
-					INSTALLATION_CHINESE, INSTALLATION_ENGLISH,
-					INSTALLATION_MAGYAR,
-					INSTALLATION_RUSSIAN,
-					INSTALLATION_TURKISH,
-					INSTALLATION_GERMAN }));
+			Arrays.asList(new String[] { INSTALLATION_CHINESE, INSTALLATION_ENGLISH,
+					INSTALLATION_MAGYAR, INSTALLATION_RUSSIAN, INSTALLATION_TURKISH }));
 	public static final Set<String> ITALIAN_LANGUAGES = new HashSet<>(
 			Arrays.asList(new String[] { INSTALLATION_ITALIAN }));
 	public static final Set<String> PORTUGUES_LANGUAGES = new HashSet<>(
 			Arrays.asList(new String[] { INSTALLATION_PORTUGUES }));
 	public static final Set<String> SPANISH_LANGUAGES = new HashSet<>(
 			Arrays.asList(new String[] { INSTALLATION_SPANISH }));
-	// public static final Set<String> GERMAN_LANGUAGES = new String[]
-	// {INSTALLATION_GERMAN}));
-	public static final Set<String> GREEK_LANGUAGES = new HashSet<>(
-			Arrays.asList(new String[] { INSTALLATION_GREEK }));
-	public static final Set<String> POLISH_LANGUAGES = new HashSet<>(
-			Arrays.asList(new String[] {}));
-	public static final Set<String> FARSI_LANGUAGES = new HashSet<>(
-			Arrays.asList(new String[] {}));
+	public static final Set<String> GERMAN_LANGUAGES = new HashSet<>(
+			Arrays.asList(new String[] { INSTALLATION_GERMAN }));
+	public static final Set<String> GREEK_LANGUAGES = new HashSet<>(Arrays.asList(new String[] { INSTALLATION_GREEK }));
+	public static final Set<String> POLISH_LANGUAGES = new HashSet<>(Arrays.asList(new String[] {}));
+	public static final Set<String> FARSI_LANGUAGES = new HashSet<>(Arrays.asList(new String[] {}));
 	public static final Set<String> DUTCH_LANGUAGES = new HashSet<>(
 			Arrays.asList(new String[] { INSTALLATION_NEDERLANDS }));
-	public static final Set<String> JAPANESE_LANGUAGES = new HashSet<>(
-			Arrays.asList(new String[] {}));
+	public static final Set<String> JAPANESE_LANGUAGES = new HashSet<>(Arrays.asList(new String[] {}));
 	public static final Set<String> FRENCH_LANGUAGES = new HashSet<>(
-			Arrays.asList(new String[] {INSTALLATION_FRENCH}));
+			Arrays.asList(new String[] { INSTALLATION_FRENCH }));
+	public static final Set<String> ARABIC_LANGUAGES = new HashSet<>(
+			Arrays.asList(new String[] { INSTALLATION_ARABIC }));
 
 	// Fields Table Columns
 	// support
@@ -161,7 +149,7 @@ public class FormScannerConstants extends Constants {
 	public static final String GROUP_NAME_TEMPLATE = "GROUP_NAME_TEMPLATE";
 	public static final String QUESTION_NAME_TEMPLATE = "QUESTION_NAME_TEMPLATE";
 	public static final String BARCODE_NAME_TEMPLATE = "BARCODE_NAME_TEMPLATE";
-	
+
 	// Crop image
 	public static final String CROP_FROM_TOP = "CROP_FROM_TOP";
 	public static final String CROP_FROM_BOTTOM = "CROP_FROM_BOTTOM";
@@ -170,14 +158,21 @@ public class FormScannerConstants extends Constants {
 
 	public enum Frame {
 
-		RENAME_FILES_FRAME(RENAME_FILES_FRAME_NAME, FormScannerConfigurationKeys.RENAME_FILES_FRAME, RENAME_FILES_FRAME_POSITION),
-		FILE_LIST_FRAME(FILE_LIST_FRAME_NAME, FormScannerConfigurationKeys.FILE_LIST_FRAME, FILE_LIST_FRAME_POSITION),
-		MANAGE_TEMPLATE_FRAME(MANAGE_TEMPLATE_FRAME_NAME, FormScannerConfigurationKeys.MANAGE_TEMPLATE_FRAME, MANAGE_TEMPLATE_FRAME_POSITION),
-		IMAGE_FRAME(IMAGE_FRAME_NAME, FormScannerConfigurationKeys.IMAGE_FRAME, IMAGE_FRAME_POSITION),
-		RESULTS_GRID_FRAME(RESULTS_GRID_FRAME_NAME, FormScannerConfigurationKeys.RESULTS_GRID_FRAME, RESULTS_GRID_FRAME_POSITION),
-		OPTIONS_FRAME(OPTIONS_FRAME_NAME, FormScannerConfigurationKeys.OPTIONS_FRAME, OPTIONS_FRAME_POSITION),
-		ABOUT_FRAME(ABOUT_FRAME_NAME, FormScannerConfigurationKeys.ABOUT_FRAME, ABOUT_FRAME_POSITION),
-		DESKTOP_FRAME(DESKTOP_NAME, FormScannerConfigurationKeys.DESKTOP_FRAME, DESKTOP_SIZE);
+		RENAME_FILES_FRAME(RENAME_FILES_FRAME_NAME, FormScannerConfigurationKeys.RENAME_FILES_FRAME,
+				RENAME_FILES_FRAME_POSITION), FILE_LIST_FRAME(FILE_LIST_FRAME_NAME,
+						FormScannerConfigurationKeys.FILE_LIST_FRAME, FILE_LIST_FRAME_POSITION), MANAGE_TEMPLATE_FRAME(
+								MANAGE_TEMPLATE_FRAME_NAME, FormScannerConfigurationKeys.MANAGE_TEMPLATE_FRAME,
+								MANAGE_TEMPLATE_FRAME_POSITION), IMAGE_FRAME(IMAGE_FRAME_NAME,
+										FormScannerConfigurationKeys.IMAGE_FRAME,
+										IMAGE_FRAME_POSITION), RESULTS_GRID_FRAME(RESULTS_GRID_FRAME_NAME,
+												FormScannerConfigurationKeys.RESULTS_GRID_FRAME,
+												RESULTS_GRID_FRAME_POSITION), OPTIONS_FRAME(OPTIONS_FRAME_NAME,
+														FormScannerConfigurationKeys.OPTIONS_FRAME,
+														OPTIONS_FRAME_POSITION), ABOUT_FRAME(ABOUT_FRAME_NAME,
+																FormScannerConfigurationKeys.ABOUT_FRAME,
+																ABOUT_FRAME_POSITION), DESKTOP_FRAME(DESKTOP_NAME,
+																		FormScannerConfigurationKeys.DESKTOP_FRAME,
+																		DESKTOP_SIZE);
 
 		private final String value;
 		private final String key;
@@ -204,38 +199,7 @@ public class FormScannerConstants extends Constants {
 
 	public enum Action {
 
-		RENAME_FILES_FIRST,
-		RENAME_FILES_CURRENT,
-		RENAME_FILES_SKIP,
-		OPEN_IMAGES,
-		SAVE_RESULTS,
-		ANALYZE_FILES_FIRST,
-		LOAD_TEMPLATE,
-		USE_TEMPLATE,
-		EDIT_TEMPLATE,
-		CONFIRM,
-		CANCEL,
-		SAVE_TEMPLATE,
-		REMOVE_FIELD,
-		ADD_FIELD,
-		HELP,
-		ABOUT,
-		LANGUAGE,
-		EXIT,
-		TOP_LEFT,
-		TOP_RIGHT,
-		BOTTOM_LEFT,
-		BOTTOM_RIGHT,
-		OPTIONS,
-		SAVE_OPTIONS,
-		ANALYZE_FILES_ALL,
-		ANALYZE_FILES_CURRENT,
-		IS_MULTIPLE,
-		GROUPS_ENABLED,
-		RESET_AUTO_NUMBERING, 
-		BARCODE,
-		QUESTION,
-		GROUP;
+		RENAME_FILES_FIRST, RENAME_FILES_CURRENT, RENAME_FILES_SKIP, OPEN_IMAGES, SAVE_RESULTS, ANALYZE_FILES_FIRST, LOAD_TEMPLATE, USE_TEMPLATE, EDIT_TEMPLATE, CONFIRM, CANCEL, SAVE_TEMPLATE, REMOVE_FIELD, ADD_FIELD, HELP, ABOUT, LANGUAGE, EXIT, TOP_LEFT, TOP_RIGHT, BOTTOM_LEFT, BOTTOM_RIGHT, OPTIONS, SAVE_OPTIONS, ANALYZE_FILES_ALL, ANALYZE_FILES_CURRENT, IS_MULTIPLE, GROUPS_ENABLED, RESET_AUTO_NUMBERING, BARCODE, QUESTION, GROUP;
 	}
 
 	public enum Mode {
@@ -245,15 +209,8 @@ public class FormScannerConstants extends Constants {
 
 	public enum Zoom {
 
-		ZOOM_25(25),
-		ZOOM_50(50),
-		ZOOM_75(75),
-		ZOOM_100(100),
-		ZOOM_125(125),
-		ZOOM_150(150),
-		ZOOM_200(200),
-		ZOOM_WIDTH(FormScannerConstants.FIT_WIDTH),
-		ZOOM_PAGE(FormScannerConstants.FIT_PAGE);
+		ZOOM_25(25), ZOOM_50(50), ZOOM_75(75), ZOOM_100(100), ZOOM_125(125), ZOOM_150(150), ZOOM_200(200), ZOOM_WIDTH(
+				FormScannerConstants.FIT_WIDTH), ZOOM_PAGE(FormScannerConstants.FIT_PAGE);
 
 		private final Integer value;
 
@@ -268,14 +225,7 @@ public class FormScannerConstants extends Constants {
 
 	public enum FontSize {
 
-		SIZE_10(10),
-		SIZE_12(12),
-		SIZE_14(14),
-		SIZE_16(16),
-		SIZE_20(20),
-		SIZE_24(24),
-		SIZE_30(30),
-		SIZE_36(36);
+		SIZE_10(10), SIZE_12(12), SIZE_14(14), SIZE_16(16), SIZE_20(20), SIZE_24(24), SIZE_30(30), SIZE_36(36);
 
 		private final Integer value;
 
@@ -291,17 +241,19 @@ public class FormScannerConstants extends Constants {
 	// Languages
 	public enum Language {
 
-		ENGLISH("en", FormScannerTranslationKeys.ENGLISH, ENGLISH_LANGUAGES),
-		ITALIAN("it", FormScannerTranslationKeys.ITALIAN, ITALIAN_LANGUAGES),
-		PORTUGUES("pt_BR", FormScannerTranslationKeys.PORTUGUES, PORTUGUES_LANGUAGES),
+		ENGLISH("en", FormScannerTranslationKeys.ENGLISH, ENGLISH_LANGUAGES), 
+		ITALIAN("it", FormScannerTranslationKeys.ITALIAN, ITALIAN_LANGUAGES), 
+		PORTUGUES("pt_BR", FormScannerTranslationKeys.PORTUGUES, PORTUGUES_LANGUAGES), 
 		SPANISH("es", FormScannerTranslationKeys.SPANISH, SPANISH_LANGUAGES),
-		// GERMAN("de", FormScannerTranslationKeys.GERMAN, GERMAN_LANGUAGES),
-		FARSI("fa", FormScannerTranslationKeys.FARSI, FARSI_LANGUAGES),
-		POLISH("pl", FormScannerTranslationKeys.POLISH, POLISH_LANGUAGES),
-		GREEK("el", FormScannerTranslationKeys.GREEK, GREEK_LANGUAGES),
-		DUTCH("nl", FormScannerTranslationKeys.DUTCH, DUTCH_LANGUAGES),
-		JAPANESE("jp", FormScannerTranslationKeys.JAPANESE, JAPANESE_LANGUAGES),
-		FRENCH("fr", FormScannerTranslationKeys.FRENCH, FRENCH_LANGUAGES);
+		GERMAN("de", FormScannerTranslationKeys.GERMAN, GERMAN_LANGUAGES),
+		FARSI("fa", FormScannerTranslationKeys.FARSI, FARSI_LANGUAGES), 
+		POLISH("pl", FormScannerTranslationKeys.POLISH, POLISH_LANGUAGES), 
+		GREEK("el", FormScannerTranslationKeys.GREEK, GREEK_LANGUAGES), 
+		DUTCH("nl", FormScannerTranslationKeys.DUTCH, DUTCH_LANGUAGES), 
+		JAPANESE("jp", FormScannerTranslationKeys.JAPANESE, JAPANESE_LANGUAGES), 
+		FRENCH("fr", FormScannerTranslationKeys.FRENCH, FRENCH_LANGUAGES),
+		ARABIC("sa", FormScannerTranslationKeys.ARABIC, ARABIC_LANGUAGES),
+		;
 
 		private final String value;
 		private final String translation;
@@ -328,11 +280,11 @@ public class FormScannerConstants extends Constants {
 
 	public enum FieldsTableColumn {
 
-		GROUP_COLUMN(FormScannerTranslationKeys.GROUP_COLUMN),
-		NAME_COLUMN(FormScannerTranslationKeys.NAME_COLUMN),
-		TYPE_COLUMN(FormScannerTranslationKeys.TYPE_COLUMN),
-		MULTIPLE_COLUMN(FormScannerTranslationKeys.MULTIPLE_COLUMN),
-		RESPONSES_COLUMN(FormScannerTranslationKeys.RESPONSES_COLUMN);
+		GROUP_COLUMN(FormScannerTranslationKeys.GROUP_COLUMN), NAME_COLUMN(
+				FormScannerTranslationKeys.NAME_COLUMN), TYPE_COLUMN(
+						FormScannerTranslationKeys.TYPE_COLUMN), MULTIPLE_COLUMN(
+								FormScannerTranslationKeys.MULTIPLE_COLUMN), RESPONSES_COLUMN(
+										FormScannerTranslationKeys.RESPONSES_COLUMN);
 
 		private final String value;
 
