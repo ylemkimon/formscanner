@@ -11,7 +11,7 @@ import com.albertoborsetta.formscanner.api.commons.Constants;
 /**
 *
 * @author Alberto Borsetta
-* @version 1.1.2
+* @version 1.1.3-SNAPSHOT
 */
 public class FieldDetector extends FormScannerDetector
 		implements Callable<HashMap<String, FormQuestion>> {
