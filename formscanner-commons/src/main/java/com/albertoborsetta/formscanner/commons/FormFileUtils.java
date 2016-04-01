@@ -23,8 +23,6 @@ import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
 import org.apache.commons.lang3.StringUtils;
-import org.apache.logging.log4j.Logger;
-import org.apache.logging.log4j.LogManager;
 import org.supercsv.io.CsvMapWriter;
 import org.supercsv.io.ICsvMapWriter;
 import org.supercsv.prefs.CsvPreference;
@@ -44,7 +42,6 @@ public class FormFileUtils extends JFileChooser {
 	 */
 	private static final long serialVersionUID = 1L;
 	private static FormFileUtils instance;
-	private static final Logger logger = LogManager.getLogger(FormFileUtils.class.getName());
 
 	public class Header {
 
@@ -199,8 +196,6 @@ public class FormFileUtils extends JFileChooser {
 				FormScannerTranslation.getTranslationFor(FormScannerTranslationKeys.CSV_FILE), "csv");
 		setFileFilter(templateFilter);
 	}
-	
-	
 
 	private File saveTemplateAs(File file, Document doc, boolean notify) {
 		try {
@@ -232,7 +227,7 @@ public class FormFileUtils extends JFileChooser {
 				transformer.transform(source, result);
 			}
 		} catch (TransformerException | IOException e) {
-			logger.debug("Error", e);
+			e.printStackTrace();
 		}
 		return file;
 	}
@@ -280,7 +275,7 @@ public class FormFileUtils extends JFileChooser {
 				}
 			}
 		} catch (IOException e) {
-			logger.debug("Error", e);
+			e.printStackTrace();
 		}
 		return file;
 	}
@@ -351,8 +346,8 @@ public class FormFileUtils extends JFileChooser {
 			outputFile = new File(path + template.getName() + ".xtmpl");
 			Document xml = template.getXml();
 			outputFile = saveTemplateAs(outputFile, xml, notify);
-		} catch (ParserConfigurationException e) {
-			logger.debug("Error", e);
+		} catch (ParserConfigurationException | IOException e) {
+			e.printStackTrace();
 		}
 
 		return outputFile;

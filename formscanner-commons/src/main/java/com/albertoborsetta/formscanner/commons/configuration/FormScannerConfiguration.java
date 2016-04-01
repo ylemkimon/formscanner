@@ -8,8 +8,6 @@ import java.util.Properties;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 public class FormScannerConfiguration extends Properties {
 
@@ -17,12 +15,10 @@ public class FormScannerConfiguration extends Properties {
 	private static String userConfigFile;
 
 	/**
-     *
-     */
+	 *
+	 */
 	private static final long serialVersionUID = 1L;
 
-	private static final Logger logger = LogManager
-			.getLogger(FormScannerConfiguration.class.getName());
 	private static FormScannerConfiguration configurations = null;
 
 	private FormScannerConfiguration() {
@@ -30,12 +26,11 @@ public class FormScannerConfiguration extends Properties {
 		try {
 			load(new FileInputStream(userConfigFile));
 		} catch (IOException e) {
-			logger.debug("Error", e);
+			e.printStackTrace();
 		}
 	}
 
-	public static FormScannerConfiguration getConfiguration(String userPath,
-			String installPath) {
+	public static FormScannerConfiguration getConfiguration(String userPath, String installPath) {
 		if (configurations == null) {
 			userConfigFile = userPath + CONFIG_FILE_NAME;
 
@@ -47,8 +42,7 @@ public class FormScannerConfiguration extends Properties {
 				try {
 					FileUtils.copyFile(defaultFile, userFile);
 				} catch (IOException e) {
-					System.out
-							.println("Cannot load user configurations... try loading defaults");
+					System.out.println("Cannot load user configurations... try loading defaults");
 					userConfigFile = defaultConfigFile;
 				}
 			}
@@ -62,7 +56,7 @@ public class FormScannerConfiguration extends Properties {
 		try {
 			store(new FileOutputStream(userConfigFile), null);
 		} catch (IOException e) {
-			logger.debug("Error", e);
+			e.printStackTrace();
 		}
 	}
 
@@ -71,28 +65,29 @@ public class FormScannerConfiguration extends Properties {
 
 		if (StringUtils.isEmpty(val))
 			return defaultValue;
-		
+
 		if (defaultValue instanceof Integer)
 			return Integer.valueOf(val);
-		
+
 		if (defaultValue instanceof Boolean)
 			return Boolean.valueOf(val);
-		
+
 		if (defaultValue instanceof String)
 			return val;
-		
+
 		return val;
 	}
 
-//	public Integer getProperty(String key, Integer defaultValue) {
-//		String val = getProperty(key);
-//		return (StringUtils.isEmpty(val)) ? defaultValue : Integer.valueOf(val);
-//	}
-//	
-//	public boolean getProperty(String key, boolean defaultValue) {
-//		String val = getProperty(key);
-//		return (StringUtils.isEmpty(val)) ? defaultValue : Boolean.parseBoolean(val);
-//	}
+	// public Integer getProperty(String key, Integer defaultValue) {
+	// String val = getProperty(key);
+	// return (StringUtils.isEmpty(val)) ? defaultValue : Integer.valueOf(val);
+	// }
+	//
+	// public boolean getProperty(String key, boolean defaultValue) {
+	// String val = getProperty(key);
+	// return (StringUtils.isEmpty(val)) ? defaultValue :
+	// Boolean.parseBoolean(val);
+	// }
 
 	public <T> void setProperty(String key, T value) {
 		setProperty(key, String.valueOf(value));

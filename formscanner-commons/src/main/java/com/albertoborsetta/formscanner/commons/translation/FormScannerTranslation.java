@@ -5,9 +5,6 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.Properties;
 
-import org.apache.logging.log4j.Logger;
-import org.apache.logging.log4j.LogManager;
-
 public class FormScannerTranslation extends Properties {
 
 	/**
@@ -15,7 +12,6 @@ public class FormScannerTranslation extends Properties {
      */
 	private static final long serialVersionUID = 1L;
 
-	private static final Logger logger = LogManager.getLogger(FormScannerTranslation.class.getName());
 	protected static FormScannerTranslation translations = null;
 
 	private FormScannerTranslation(String path, String language) {
@@ -28,7 +24,7 @@ public class FormScannerTranslation extends Properties {
 
 			load(translationInputStream);
 		} catch (IOException e) {
-			logger.debug("Error", e);
+			e.printStackTrace();
 		}
 	}
 
@@ -41,7 +37,7 @@ public class FormScannerTranslation extends Properties {
 		try {
 			value = new String(value.getBytes("ISO-8859-1"), "UTF-8");
 		} catch (UnsupportedEncodingException e) {
-			logger.debug("Error", e);
+			e.printStackTrace();
 		}
 		return value;
 	}
@@ -51,7 +47,7 @@ public class FormScannerTranslation extends Properties {
 		try {
 			value = new String(value.getBytes("ISO-8859-1"), "UTF-8");
 		} catch (UnsupportedEncodingException e) {
-			logger.debug("Error", e);
+			e.printStackTrace();
 		}
 		return value.charAt(0);
 	}

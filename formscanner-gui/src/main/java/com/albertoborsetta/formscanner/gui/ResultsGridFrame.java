@@ -32,6 +32,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map.Entry;
 
+@Deprecated
 public class ResultsGridFrame extends InternalFrame {
 
 	/**
@@ -171,10 +172,10 @@ public class ResultsGridFrame extends InternalFrame {
 		setName(Frame.RESULTS_GRID_FRAME.name());
 		setTitle(FormScannerTranslation
 				.getTranslationFor(FormScannerTranslationKeys.RESULTS_GRID_FRAME_TITLE));
-		setClosable(true);
-		setIconifiable(true);
+//		setClosable(true);
+//		setIconifiable(true);
 		setResizable(true);
-		setMaximizable(true);
+//		setMaximizable(true);
 
 		table = createTable();
 		clearTable();

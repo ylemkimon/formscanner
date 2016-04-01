@@ -23,7 +23,7 @@ import javax.swing.SpringLayout;
 
 import java.awt.BorderLayout;
 
-public class RenameFileFrame extends InternalFrame implements View {
+public class RenameFileFrame extends InternalFrame {
 
 	private static final long serialVersionUID = 1L;
 
@@ -48,9 +48,9 @@ public class RenameFileFrame extends InternalFrame implements View {
 
 		setBounds(model.getLastPosition(Frame.RENAME_FILES_FRAME));
 		setName(Frame.RENAME_FILES_FRAME.name());
-		setClosable(true);
+//		setClosable(true);
 		setLayout(new BorderLayout());
-		setFrameIcon(FormScannerResources.getIconFor(FormScannerResourcesKeys.RENAME_FILES_ICON_16));
+//		setFrameIcon(FormScannerResources.getIconFor(FormScannerResourcesKeys.RENAME_FILES_ICON));
 
 		renamePanel = getRenamePanel();
 		buttonPanel = getButtonPanel();

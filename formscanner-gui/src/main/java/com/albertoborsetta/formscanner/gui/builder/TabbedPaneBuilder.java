@@ -17,6 +17,10 @@ public class TabbedPaneBuilder {
 		tabbedPane.setFont(FormScannerFont.getFont());
 		tabbedPane.setComponentOrientation(orientation);
 	}
+	
+	public TabbedPaneBuilder(ComponentOrientation orientation) {
+		this(JTabbedPane.TOP, orientation);
+	}
 
 	public TabbedPaneBuilder addTab(String title, JComponent component) {
 		tabbedPane.addTab(title, null, component, null);

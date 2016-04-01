@@ -10,27 +10,32 @@ import java.awt.event.ItemListener;
 
 import javax.swing.JFormattedTextField;
 import javax.swing.SwingUtilities;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
 
 import com.albertoborsetta.formscanner.commons.FormScannerConstants.Action;
 import com.albertoborsetta.formscanner.model.FormScannerModel;
 import com.albertoborsetta.formscanner.gui.OptionsFrame;
 
-public class OptionsFrameController
-		implements ActionListener, ChangeListener, ItemListener, FocusListener {
+public class OptionsFrameController implements ActionListener, ItemListener, FocusListener {
 
+	private static OptionsFrameController instance;
 	private final FormScannerModel formScannerModel;
 	private OptionsFrame optionsFrame;
 
-	public OptionsFrameController(FormScannerModel formScannerModel) {
+	public static OptionsFrameController getInstance(FormScannerModel model) {
+		if (instance == null) {
+			instance = new OptionsFrameController(model);
+		}
+		return instance;
+	}
+
+	private OptionsFrameController(FormScannerModel formScannerModel) {
 		this.formScannerModel = formScannerModel;
 	}
 
 	public void add(OptionsFrame optionsFrame) {
 		this.optionsFrame = optionsFrame;
 	}
-
+	
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		Action act = Action.valueOf(e.getActionCommand());
@@ -53,11 +58,6 @@ public class OptionsFrameController
 		default:
 			break;
 		}
-	}
-
-	@Override
-	public void stateChanged(ChangeEvent e) {
-		optionsFrame.setAdvanceable();
 	}
 
 	@Override
@@ -84,5 +84,4 @@ public class OptionsFrameController
 	public void focusLost(FocusEvent e) {
 		optionsFrame.setAdvanceable();
 	}
-
 }

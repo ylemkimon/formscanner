@@ -103,7 +103,7 @@ public class Constants {
 	/**
 	 * Identifies the current version of the template
 	 */
-	public static final String CURRENT_TEMPLATE_VERSION = "2.1";
+	public static final String CURRENT_TEMPLATE_VERSION = "3.0";
 
 	/**
 	 * The Enum Corners.

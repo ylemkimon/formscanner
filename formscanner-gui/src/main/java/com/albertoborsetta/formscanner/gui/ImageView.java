@@ -5,7 +5,7 @@ import java.awt.image.BufferedImage;
 
 import com.albertoborsetta.formscanner.commons.FormScannerConstants.Mode;
 
-public interface ImageView extends View {
+public interface ImageView {
 
     public void updateImage(BufferedImage image);
 

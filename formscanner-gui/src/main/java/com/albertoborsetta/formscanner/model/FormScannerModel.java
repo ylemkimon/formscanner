@@ -19,8 +19,6 @@ import javax.swing.JOptionPane;
 
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 import com.albertoborsetta.formscanner.api.FormArea;
 import com.albertoborsetta.formscanner.api.FormQuestion;
@@ -45,11 +43,12 @@ import com.albertoborsetta.formscanner.gui.AboutFrame;
 import com.albertoborsetta.formscanner.gui.FileListFrame;
 import com.albertoborsetta.formscanner.gui.ImageFrame;
 import com.albertoborsetta.formscanner.gui.InternalFrame;
+import com.albertoborsetta.formscanner.gui.OptionsPanel;
 import com.albertoborsetta.formscanner.gui.ManageTemplateFrame;
 import com.albertoborsetta.formscanner.gui.OptionsFrame;
 import com.albertoborsetta.formscanner.gui.RenameFileFrame;
 import com.albertoborsetta.formscanner.gui.ResultsGridFrame;
-import com.albertoborsetta.formscanner.gui.FormScannerDesktop;
+import com.albertoborsetta.formscanner.gui.FormScannerWorkspace;
 
 import java.awt.HeadlessException;
 import java.awt.Image;
@@ -76,7 +75,7 @@ public class FormScannerModel {
 	private final HashMap<Integer, File> openedFiles = new HashMap<>();
 	private FileListFrame fileListFrame;
 	private RenameFileFrame renameFileFrame;
-	private FormScannerDesktop view;
+	private FormScannerWorkspace workspace;
 	private int renamedFileIndex = 0;
 	private int analyzedFileIndex = 0;
 	private boolean firstPass = true;
@@ -115,7 +114,6 @@ public class FormScannerModel {
 	private String lookAndFeel;
 	private Image defaultIcon;
 
-	private final Logger logger;
 	private Boolean resetAutoNumbering;
 	private Boolean groupsEnabled;
 	private String questionNameTemplate;
@@ -131,9 +129,6 @@ public class FormScannerModel {
 		String installPath = URLDecoder.decode(path, "UTF-8");
 		installPath = StringUtils.substringBeforeLast(installPath, "lib");
 		installPath = StringUtils.defaultIfBlank(System.getProperty("FormScanner_HOME"), installPath);
-
-		System.setProperty("log4j.configurationFile", "file://" + installPath + "/config/log4j.xml");
-		logger = LogManager.getLogger(FormScannerModel.class.getName());
 
 		String installationLanguage = StringUtils.defaultIfBlank(System.getProperty("FormScanner_LANGUAGE"),
 				System.getenv("FormScanner_LANGUAGE"));
@@ -223,11 +218,13 @@ public class FormScannerModel {
 		crop.put(FormScannerConstants.RIGHT, 0);
 		crop.put(FormScannerConstants.BOTTOM, 0);
 
-		String tmpl = configurations.getProperty(FormScannerConfigurationKeys.TEMPLATE, (String) null);
-		if (!StringUtils.isEmpty(tmpl)) {
-			FormScannerResources.setTemplate(templatePath + tmpl);
-			openTemplate(FormScannerResources.getTemplate(), false);
-		}
+		// TODO the template must be loaded manually
+		// String tmpl = configurations.getProperty(FormScannerConfigurationKeys.TEMPLATE,
+		// (String) null);
+		// if (!StringUtils.isEmpty(tmpl)) {
+		// FormScannerResources.setTemplate(templatePath + tmpl);
+		// openTemplate(FormScannerResources.getTemplate(), false);
+		// }
 
 		defaultIcon = FormScannerResources.getFormScannerIcon();
 	}
@@ -270,12 +267,12 @@ public class FormScannerModel {
 				openedFiles.put(fileIndex++, file);
 			}
 			if (!openedFiles.isEmpty()) {
+				workspace.
 				fileListFrame = new FileListFrame(this, getOpenedFileList());
-				view.arrangeFrame(fileListFrame);
-				view.setRenameControllersEnabled(true);
-				view.setScanControllersEnabled(true);
-				view.setScanAllControllersEnabled(true);
-				view.setScanCurrentControllersEnabled(false);
+				// desktop.arrangeFrame(fileListFrame);
+				workspace.setScanControllersEnabled(true);
+				workspace.setScanAllControllersEnabled(true);
+				workspace.setScanCurrentControllersEnabled(false);
 			}
 		}
 	}
@@ -285,24 +282,21 @@ public class FormScannerModel {
 		switch (act) {
 		case RENAME_FILES_FIRST:
 			if (!openedFiles.isEmpty()) {
-				view.setRenameControllersEnabled(false);
-				view.setScanControllersEnabled(false);
-				view.setScanAllControllersEnabled(false);
-				view.setScanCurrentControllersEnabled(false);
+				workspace.setScanControllersEnabled(false);
+				workspace.setScanAllControllersEnabled(false);
+				workspace.setScanCurrentControllersEnabled(false);
 
 				renamedFileIndex = fileListFrame.getSelectedItemIndex();
 				fileListFrame.selectFile(renamedFileIndex);
 				File imageFile = openedFiles.get(renamedFileIndex);
 
 				try {
-					BufferedImage image = ImageIO.read(imageFile);
-					String name = FilenameUtils.removeExtension(imageFile.getName());
-					filledForm = new FormTemplate(name);
-					createFormImageFrame(image, filledForm, Mode.VIEW);
+					filledForm = new FormTemplate(imageFile);
+					createFormImageFrame(filledForm, Mode.VIEW);
 					renameFileFrame = new RenameFileFrame(this, getFileNameByIndex(renamedFileIndex));
-					view.arrangeFrame(renameFileFrame);
+					// desktop.arrangeFrame(renameFileFrame);
 				} catch (Exception e) {
-					logger.debug("Error", e);
+					e.printStackTrace();
 				}
 			}
 			break;
@@ -327,18 +321,17 @@ public class FormScannerModel {
 					BufferedImage image = ImageIO.read(imageFile);
 					imageFrame.updateImage(image);
 					renameFileFrame = new RenameFileFrame(this, getFileNameByIndex(renamedFileIndex));
-					view.arrangeFrame(renameFileFrame);
+					// desktop.arrangeFrame(renameFileFrame);
 				} catch (Exception e) {
-					logger.debug("Error", e);
+					e.printStackTrace();
 				}
 			} else {
-				view.disposeFrame(renameFileFrame);
-				view.disposeFrame(imageFrame);
+				workspace.disposeFrame(renameFileFrame);
+				// desktop.disposeFrame(imageFrame);
 
-				view.setRenameControllersEnabled(true);
-				view.setScanControllersEnabled(true);
-				view.setScanAllControllersEnabled(true);
-				view.setScanCurrentControllersEnabled(false);
+				workspace.setScanControllersEnabled(true);
+				workspace.setScanAllControllersEnabled(true);
+				workspace.setScanCurrentControllersEnabled(false);
 			}
 			break;
 		default:
@@ -353,25 +346,22 @@ public class FormScannerModel {
 			switch (act) {
 			case ANALYZE_FILES_ALL:
 				if (!openedFiles.isEmpty()) {
-					view.setRenameControllersEnabled(false);
-					view.setScanControllersEnabled(false);
-					view.setScanAllControllersEnabled(false);
-					view.setScanCurrentControllersEnabled(false);
+					workspace.setScanControllersEnabled(false);
+					workspace.setScanAllControllersEnabled(false);
+					workspace.setScanCurrentControllersEnabled(false);
 
 					for (Entry<Integer, File> openedFile : openedFiles.entrySet()) {
 						analyzedFileIndex = openedFile.getKey();
 						fileListFrame.selectFile(analyzedFileIndex);
 						File imageFile = openedFiles.get(analyzedFileIndex);
 						try {
-							BufferedImage image = ImageIO.read(imageFile);
-							String name = FilenameUtils.removeExtension(imageFile.getName());
-							filledForm = new FormTemplate(name, formTemplate);
-							filledForm.findCorners(image, threshold, density, cornerType, crop);
-							filledForm.findPoints(image, threshold, density, shapeSize);
-							filledForm.findAreas(image);
+							filledForm = new FormTemplate(imageFile, formTemplate);
+							filledForm.findCorners(threshold, density, cornerType, crop);
+							filledForm.findPoints(threshold, density, shapeSize);
+							filledForm.findAreas();
 							filledForms.put(filledForm.getName(), filledForm);
 						} catch (Exception e) {
-							logger.debug("Error", e);
+							e.printStackTrace();
 						}
 
 					}
@@ -386,19 +376,17 @@ public class FormScannerModel {
 							FilenameUtils.getFullPath(savedFile.getAbsolutePath()));
 					configurations.store();
 
-					view.setRenameControllersEnabled(true);
-					view.setScanControllersEnabled(true);
-					view.setScanAllControllersEnabled(true);
-					view.setScanCurrentControllersEnabled(false);
+					workspace.setScanControllersEnabled(true);
+					workspace.setScanAllControllersEnabled(true);
+					workspace.setScanCurrentControllersEnabled(false);
 					resetFirstPass();
 				}
 				break;
 			case ANALYZE_FILES_FIRST:
 				if (!openedFiles.isEmpty()) {
-					view.setRenameControllersEnabled(false);
-					view.setScanAllControllersEnabled(false);
-					view.setScanControllersEnabled(true);
-					view.setScanCurrentControllersEnabled(true);
+					workspace.setScanAllControllersEnabled(false);
+					workspace.setScanControllersEnabled(true);
+					workspace.setScanCurrentControllersEnabled(true);
 
 					if (firstPass) {
 						analyzedFileIndex = fileListFrame.getSelectedItemIndex();
@@ -411,19 +399,17 @@ public class FormScannerModel {
 						fileListFrame.selectFile(analyzedFileIndex);
 						File imageFile = openedFiles.get(analyzedFileIndex);
 						try {
-							BufferedImage image = ImageIO.read(imageFile);
-							String name = FilenameUtils.removeExtension(imageFile.getName());
-							filledForm = new FormTemplate(name, formTemplate);
-							filledForm.findCorners(image, threshold, density, cornerType, crop);
-							filledForm.findPoints(image, threshold, density, shapeSize);
-							filledForm.findAreas(image);
+							filledForm = new FormTemplate(imageFile, formTemplate);
+							filledForm.findCorners(threshold, density, cornerType, crop);
+							filledForm.findPoints(threshold, density, shapeSize);
+							filledForm.findAreas();
 							points = filledForm.getFieldPoints();
 							areas = filledForm.getFieldAreas();
 							filledForms.put(filledForm.getName(), filledForm);
-							createFormImageFrame(image, filledForm, Mode.MODIFY_POINTS);
+							createFormImageFrame(filledForm, Mode.MODIFY_POINTS);
 							createResultsGridFrame();
 						} catch (Exception e) {
-							logger.debug("Error", e);
+							e.printStackTrace();
 						}
 					} else {
 						Date today = Calendar.getInstance().getTime();
@@ -437,34 +423,31 @@ public class FormScannerModel {
 								FilenameUtils.getFullPath(savedFile.getAbsolutePath()));
 						configurations.store();
 
-						view.disposeFrame(imageFrame);
-						view.disposeFrame(resultsGridFrame);
+						// desktop.disposeFrame(imageFrame);
+						workspace.disposeFrame(resultsGridFrame);
 
-						view.setRenameControllersEnabled(true);
-						view.setScanControllersEnabled(true);
-						view.setScanAllControllersEnabled(true);
-						view.setScanCurrentControllersEnabled(false);
+						workspace.setScanControllersEnabled(true);
+						workspace.setScanAllControllersEnabled(true);
+						workspace.setScanCurrentControllersEnabled(false);
 						resetFirstPass();
 					}
 				}
 				break;
 			case ANALYZE_FILES_CURRENT:
 				fileListFrame.selectFile(analyzedFileIndex);
-				File imageFile = openedFiles.get(analyzedFileIndex);
 
 				try {
-					BufferedImage image = ImageIO.read(imageFile);
 					filledForm = imageFrame.getTemplate();
 					filledForm.clearPoints();
-					filledForm.findPoints(image, threshold, density, shapeSize);
-					filledForm.findAreas(image);
+					filledForm.findPoints(threshold, density, shapeSize);
+					filledForm.findAreas();
 					points = filledForm.getFieldPoints();
 					areas = filledForm.getFieldAreas();
 					filledForms.put(filledForm.getName(), filledForm);
-					createFormImageFrame(image, filledForm, Mode.MODIFY_POINTS);
+					createFormImageFrame(filledForm, Mode.MODIFY_POINTS);
 					createResultsGridFrame();
 				} catch (Exception e) {
-					logger.debug("Error", e);
+					e.printStackTrace();
 				}
 				break;
 			default:
@@ -484,7 +467,7 @@ public class FormScannerModel {
 		} else {
 			resultsGridFrame.updateResults();
 		}
-		view.arrangeFrame(resultsGridFrame);
+		// desktop.arrangeFrame(resultsGridFrame);
 	}
 
 	private void updateFileList(Integer index, File file) {
@@ -509,7 +492,7 @@ public class FormScannerModel {
 		return newFile;
 	}
 
-	private String[] getOpenedFileList() {
+	public String[] getOpenedFileList() {
 		String[] fileList = new String[openedFiles.size()];
 
 		for (int i = 0; i < openedFiles.size(); i++) {
@@ -527,22 +510,18 @@ public class FormScannerModel {
 		Frame frm = Frame.valueOf(frame.getName());
 		setLastPosition(frm, frame.getBounds());
 		switch (frm) {
-		case RENAME_FILES_FRAME:
-			view.disposeFrame(imageFrame);
-			imageFrame = null;
-			break;
 		case IMAGE_FRAME:
-			view.disposeFrame(renameFileFrame);
-			view.disposeFrame(manageTemplateFrame);
-			view.disposeFrame(resultsGridFrame);
+			workspace.disposeFrame(renameFileFrame);
+			workspace.disposeFrame(manageTemplateFrame);
+			workspace.disposeFrame(resultsGridFrame);
 			renameFileFrame = null;
 			manageTemplateFrame = null;
 			resultsGridFrame = null;
 			resetPoints();
 			break;
 		case MANAGE_TEMPLATE_FRAME:
-			view.disposeFrame(imageFrame);
-			imageFrame = null;
+			workspace.disposeFrame(frame);
+			frame = null;
 			break;
 		default:
 			break;
@@ -550,20 +529,24 @@ public class FormScannerModel {
 	}
 
 	public void loadTemplate() {
-		File templateFile = fileUtils.chooseImage();
-		if (templateFile != null) {
+		File templateImageFile = fileUtils.chooseImage();
+		if (templateImageFile != null) {
 			try {
-				templateImage = ImageIO.read(templateFile);
-				String name = FilenameUtils.removeExtension(templateFile.getName());
-				formTemplate = new FormTemplate(name);
-				formTemplate.findCorners(templateImage, threshold, density, cornerType, crop);
-				manageTemplateFrame = new ManageTemplateFrame(this);
+				formTemplate = new FormTemplate(templateImageFile);
+				formTemplate.findCorners(threshold, density, cornerType, crop);
 
-				view.arrangeFrame(manageTemplateFrame);
+				loadTemplateImage(Mode.VIEW);
 			} catch (Exception e) {
-				logger.debug("Error", e);
+				e.printStackTrace();
 			}
 		}
+	}
+	
+	public void addField() {
+		loadTemplateImage(Mode.VIEW);
+		
+		manageTemplateFrame = new ManageTemplateFrame(this);
+		workspace.arrangeFrame(manageTemplateFrame);
 	}
 
 	public void createTemplateImageFrame(String fieldsType) {
@@ -571,22 +554,22 @@ public class FormScannerModel {
 		case FormScannerConstants.QUESTIONS_BY_ROWS:
 		case FormScannerConstants.QUESTIONS_BY_COLS:
 		case FormScannerConstants.RESPONSES_BY_GRID:
-			imageFrame = new ImageFrame(this, templateImage, formTemplate, Mode.SETUP_POINTS);
+			imageFrame.setMode(Mode.SETUP_POINTS);
+			loadTemplateImage(Mode.SETUP_POINTS);
 			break;
 		case FormScannerConstants.BARCODE:
-			imageFrame = new ImageFrame(this, templateImage, formTemplate, Mode.SETUP_AREA);
+			loadTemplateImage(Mode.SETUP_AREA);
 			break;
 		}
-		view.arrangeFrame(imageFrame);
 	}
 
-	public void createFormImageFrame(BufferedImage image, FormTemplate template, Mode mode) {
+	public void createFormImageFrame(FormTemplate template, Mode mode) {
 		if (imageFrame == null) {
-			imageFrame = new ImageFrame(this, image, template, mode);
+			imageFrame = new ImageFrame(this, template, mode);
 		} else {
-			imageFrame.updateImage(image, template);
+			imageFrame.updateImage(template);
 		}
-		view.arrangeFrame(imageFrame);
+		// desktop.arrangeFrame(imageFrame);
 	}
 
 	public void addPoint(ImageFrame view, FormPoint p) {
@@ -671,7 +654,7 @@ public class FormScannerModel {
 							resetPoints();
 						}
 
-						view.setMode(Mode.VIEW);
+//						view.setMode(Mode.VIEW);
 					}
 				}
 			}
@@ -733,10 +716,14 @@ public class FormScannerModel {
 	}
 
 	public void saveTemplate(boolean notify) {
+
+		if (formTemplate == null)
+			return;
+
 		formTemplate.setThreshold(threshold);
 		formTemplate.setDensity(density);
 		formTemplate.setSize(shapeSize);
-		formTemplate.setShape(shapeType);
+		formTemplate.setShapeType(shapeType);
 		formTemplate.setCornerType(cornerType);
 		formTemplate.setGroupsEnabled(groupsEnabled);
 		formTemplate.setCrop(crop);
@@ -766,7 +753,10 @@ public class FormScannerModel {
 	}
 
 	public void exitFormScanner() {
-		view.dispose();
+		saveTemplate(false);
+		configurations.store();
+		
+		workspace.dispose();
 		System.exit(0);
 	}
 
@@ -780,12 +770,13 @@ public class FormScannerModel {
 		}
 
 		try {
-			formTemplate = new FormTemplate(template);
+			formTemplate = new FormTemplate();
+			formTemplate.presetFormTemplate(template);
 
 			threshold = formTemplate.getThreshold() < 0 ? threshold : formTemplate.getThreshold();
 			density = formTemplate.getDensity() < 0 ? density : formTemplate.getDensity();
 			shapeSize = formTemplate.getSize() < 0 ? shapeSize : formTemplate.getSize();
-			shapeType = formTemplate.getShape() == null ? shapeType : formTemplate.getShape();
+			shapeType = formTemplate.getShapeType() == null ? shapeType : formTemplate.getShapeType();
 			cornerType = formTemplate.getCornerType() == null ? cornerType : formTemplate.getCornerType();
 			groupsEnabled = formTemplate.isGroupsEnabled();
 
@@ -806,6 +797,8 @@ public class FormScannerModel {
 			configurations.setProperty(FormScannerConfigurationKeys.TEMPLATE, templateFile);
 			configurations.setProperty(FormScannerConfigurationKeys.TEMPLATE_SAVE_PATH, templatePath);
 			configurations.store();
+			
+			loadTemplateImage(Mode.VIEW);
 
 			return true;
 		} catch (ParserConfigurationException | SAXException | IOException | HeadlessException e) {
@@ -815,28 +808,27 @@ public class FormScannerModel {
 						FormScannerTranslation.getTranslationFor(FormScannerTranslationKeys.TEMPLATE_NOT_LOADED_POPUP),
 						JOptionPane.ERROR_MESSAGE);
 			}
-			logger.debug("Error", e);
+			e.printStackTrace();
 			return false;
 		}
-
+		
 	}
 
 	public void linkToHelp(URL url) {
 		String osName = System.getProperty("os.name").toLowerCase();
 		try {
 
-			if (osName.indexOf( "win" ) >= 0) {
+			if (osName.indexOf("win") >= 0) {
 				// Windows
 				Runtime.getRuntime().exec(
 						(new StringBuilder()).append("rundll32 url.dll,FileProtocolHandler ").append(url).toString());
-			}
-			else if (osName.indexOf( "mac" ) >= 0) {
+			} else if (osName.indexOf("mac") >= 0) {
 				// Mac
-				Runtime.getRuntime().exec(
-						(new StringBuilder()).append("open ").append(url).toString());
-			} else if (osName.indexOf( "nix") >=0 || osName.indexOf( "nux") >=0) {
+				Runtime.getRuntime().exec((new StringBuilder()).append("open ").append(url).toString());
+			} else if (osName.indexOf("nix") >= 0 || osName.indexOf("nux") >= 0) {
 				// Linux/Unix
-				String browsers[] = {"firefox", "opera", "konqueror", "epiphany", "mozilla", "netscape", "safari", "links","lynx"};
+				String browsers[] = { "firefox", "opera", "konqueror", "epiphany", "mozilla", "netscape", "safari",
+						"links", "lynx" };
 				String browser = null;
 				for (int i = 0; i < browsers.length && browser == null; i++) {
 					if (Runtime.getRuntime().exec(new String[] { "which", browsers[i] }).waitFor() == 0) {
@@ -851,13 +843,13 @@ public class FormScannerModel {
 				Runtime.getRuntime().exec(new String[] { browser, FormScannerConstants.WIKI_PAGE });
 			}
 		} catch (Exception e) {
-			logger.debug("An error occured while trying to open the web browser!", e);
+			e.printStackTrace();
 		}
 	}
 
 	public void showAboutFrame() {
 		InternalFrame aboutFrame = new AboutFrame(this);
-		view.arrangeFrame(aboutFrame);
+		workspace.arrangeFrame(aboutFrame);
 	}
 
 	public String getLanguage() {
@@ -878,24 +870,34 @@ public class FormScannerModel {
 	}
 
 	public void showOptionsFrame() {
-		InternalFrame optionsFrame = new OptionsFrame(this);
-		view.arrangeFrame(optionsFrame);
+		OptionsFrame optionsFrame = new OptionsFrame(this);
+		optionsFrame.setVisible(true);
 	}
 
-	public int getThreshold() {
+	public Integer getThreshold() {
 		return threshold;
 	}
 
-	public int getDensity() {
+	public Integer getDensity() {
 		return density;
 	}
 
-	public void saveOptions(OptionsFrame view) {
+	public void saveScanningOptions(OptionsPanel view) {
 		threshold = view.getThresholdValue();
 		density = view.getDensityValue();
 		shapeSize = view.getShapeSize();
-		shapeType = view.getShape();
+		shapeType = view.getShapeType();
 		cornerType = view.getCornerType();
+		crop = view.getCrop();
+
+		configurations.setProperty(FormScannerConfigurationKeys.THRESHOLD, String.valueOf(threshold));
+		configurations.setProperty(FormScannerConfigurationKeys.DENSITY, String.valueOf(density));
+		configurations.setProperty(FormScannerConfigurationKeys.SHAPE_SIZE, String.valueOf(shapeSize));
+		configurations.setProperty(FormScannerConfigurationKeys.SHAPE_TYPE, shapeType.getName());
+		configurations.setProperty(FormScannerConfigurationKeys.CORNER_TYPE, cornerType.getName());
+	}
+
+	public void saveOptions(OptionsFrame view) {
 		fontType = view.getFontType();
 		fontSize = view.getFontSize();
 		lookAndFeel = view.getLookAndFeel();
@@ -907,13 +909,7 @@ public class FormScannerModel {
 		questionNameTemplate = historyQuestionNameTemplate.get(0);
 		historyBarcodeNameTemplate = view.getHistoryNameTemplate(FormScannerConstants.BARCODE);
 		barcodeNameTemplate = historyBarcodeNameTemplate.get(0);
-		crop = view.getCrop();
 
-		configurations.setProperty(FormScannerConfigurationKeys.THRESHOLD, String.valueOf(threshold));
-		configurations.setProperty(FormScannerConfigurationKeys.DENSITY, String.valueOf(density));
-		configurations.setProperty(FormScannerConfigurationKeys.SHAPE_SIZE, String.valueOf(shapeSize));
-		configurations.setProperty(FormScannerConfigurationKeys.SHAPE_TYPE, shapeType.getName());
-		configurations.setProperty(FormScannerConfigurationKeys.CORNER_TYPE, cornerType.getName());
 		configurations.setProperty(FormScannerConfigurationKeys.FONT_TYPE, fontType);
 		configurations.setProperty(FormScannerConfigurationKeys.FONT_SIZE, fontSize);
 		configurations.setProperty(FormScannerConfigurationKeys.LOOK_AND_FEEL, lookAndFeel);
@@ -928,11 +924,8 @@ public class FormScannerModel {
 				StringUtils.join(historyQuestionNameTemplate, HISTORY_SEPARATOR));
 		configurations.setProperty(FormScannerConfigurationKeys.HISTORY_BARCODE_NAME_TEMPLATE,
 				StringUtils.join(historyBarcodeNameTemplate, HISTORY_SEPARATOR));
-		configurations.store();
-
-		if (formTemplate != null) {
-			saveTemplate(false);
-		}
+		
+		workspace.setupFieldsTable();
 	}
 
 	public void resetFirstPass() {
@@ -948,7 +941,7 @@ public class FormScannerModel {
 		}
 	}
 
-	public int getShapeSize() {
+	public Integer getShapeSize() {
 		return shapeSize;
 	}
 
@@ -1056,8 +1049,12 @@ public class FormScannerModel {
 		return lookAndFeel;
 	}
 
-	public void setDesktop(FormScannerDesktop desktop) {
-		this.view = desktop;
+	public void setWorkspace(FormScannerWorkspace workspace) {
+		this.workspace = workspace;
+	}
+
+	public FormScannerWorkspace getWorkspace() {
+		return workspace;
 	}
 
 	public Image getIcon() {
@@ -1102,5 +1099,28 @@ public class FormScannerModel {
 
 	public HashMap<String, Integer> getCrop() {
 		return crop;
+	}
+
+	public BufferedImage getTemplateImage() {
+		return templateImage;
+	}
+
+	public void removeAllFields() {
+		formTemplate.removeAllFields();
+		imageFrame.repaint();
+	}
+
+	private void loadTemplateImage(Mode mode) {
+		if (imageFrame == null) {
+			imageFrame = new ImageFrame(this, formTemplate);
+		}
+		imageFrame.setMode(mode);
+		imageFrame.setVisible(true);
+		workspace.arrangeFrame(imageFrame);
+		
+	}
+	
+	public void loadTemplateImage() {
+		loadTemplateImage(Mode.SETUP_POINTS);
 	}
 }

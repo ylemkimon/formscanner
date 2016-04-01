@@ -1,6 +1,6 @@
 package com.albertoborsetta.formscanner.gui;
 
-public interface MenuView extends View {
+public interface MenuView {
 
 	public void setRenameControllersEnabled(boolean enable);
 

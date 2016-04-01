@@ -31,8 +31,6 @@ import com.albertoborsetta.formscanner.controller.AboutFrameController;
 import com.albertoborsetta.formscanner.model.FormScannerModel;
 
 import org.apache.commons.lang3.StringUtils;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 public class AboutFrame extends InternalFrame {
 
@@ -41,7 +39,6 @@ public class AboutFrame extends InternalFrame {
 	 */
 	private static final long serialVersionUID = 1L;
 	private static AboutFrameController aboutFrameController;
-	private static final Logger logger = LogManager.getLogger(AboutFrame.class.getName());
 
 	/**
 	 * Create the frame.
@@ -59,7 +56,7 @@ public class AboutFrame extends InternalFrame {
 		setBounds(model.getLastPosition(Frame.ABOUT_FRAME));
 		setMinimumSize(new Dimension(300, 500));
 		setResizable(false);
-		setFrameIcon(FormScannerResources.getIconFor(FormScannerResourcesKeys.ABOUT_ICON_16));
+//		setFrameIcon(FormScannerResources.getIconFor(FormScannerResourcesKeys.ABOUT_ICON));
 
 		JPanel aboutPanel = getAboutPanel();
 		JPanel licensePanel = getLicensePanel();
@@ -106,7 +103,7 @@ public class AboutFrame extends InternalFrame {
 
 			reader.close();
 		} catch (IOException e) {
-			logger.debug("Error", e);
+			e.printStackTrace();
 		}
 
 		textArea.append(licenseText);

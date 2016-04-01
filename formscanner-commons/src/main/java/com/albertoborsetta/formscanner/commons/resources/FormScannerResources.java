@@ -7,17 +7,12 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 
-import org.apache.logging.log4j.Logger;
-import org.apache.logging.log4j.LogManager;
-
 public class FormScannerResources {
 
 	private static final String PNG = ".png";
 	private static String iconsPath;
 	private static String licensePath;
 	private static String template;
-	private static final Logger logger = LogManager
-			.getLogger(FormScannerResources.class.getName());
 
 	public static void setResources(String path) {
 		iconsPath = path + "/icons/";
@@ -29,6 +24,18 @@ public class FormScannerResources {
 		return icon;
 	}
 
+	public static ImageIcon getIconFor(String key, int size) {
+			try {
+				Image image = ImageIO.read(new File(iconsPath + key + PNG));
+				Image scaledImage = image.getScaledInstance(size, size, Image.SCALE_SMOOTH);
+				ImageIcon icon = new ImageIcon(scaledImage);
+				return icon;
+			} catch (IOException e) {
+				e.printStackTrace();
+				return null;
+			}
+	}
+	
 	public static void setTemplate(String tpl) {
 		template = tpl;
 	}
@@ -47,7 +54,7 @@ public class FormScannerResources {
 					iconsPath + FormScannerResourcesKeys.FORMSCANNER_ICON + PNG));
 			return icon;
 		} catch (IOException e) {
-			logger.catching(e);
+			e.printStackTrace();
 			return null;
 		}
 	}

@@ -8,7 +8,7 @@ import javax.swing.JComboBox;
 import javax.swing.JLabel;
 
 import com.albertoborsetta.formscanner.commons.FormScannerFont;
-import com.albertoborsetta.formscanner.gui.OptionsFrame.IconListRenderer;
+import com.albertoborsetta.formscanner.commons.IconListRenderer;
 
 public class ComboBoxBuilder<T> {
 

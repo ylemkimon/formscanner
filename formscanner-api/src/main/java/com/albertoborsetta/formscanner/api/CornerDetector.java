@@ -3,6 +3,7 @@ package com.albertoborsetta.formscanner.api;
 import com.albertoborsetta.formscanner.api.commons.Constants.CornerType;
 
 import java.awt.image.BufferedImage;
+import java.util.HashMap;
 import java.util.concurrent.Callable;
 
 import com.albertoborsetta.formscanner.api.commons.Constants.Corners;
@@ -66,7 +67,7 @@ public class CornerDetector extends FormScannerDetector
 			break;
 		}
 
-		return (type.equals(CornerType.ROUND))
+		return type.equals(CornerType.ROUND)
 				? searchRoundCorner(x0, y0, x, y, dx, dy)
 				: searchAngularCorner(x0, y0, x, y, dx, dy);
 	}

@@ -165,7 +165,7 @@ public class FormScannerTranslationKeys extends TranslationKeys {
 	public static final String FIT_WIDTH = "zoom.fit.width";
 	public static final String FIT_PAGE = "zoom.fit.page";
 
-	// added 0.11
+	// Added 0.11
 	public static final String FIELD_TYPE_TAB_NAME = "field.type.panel";
 	public static final String FIELD_PROPERTIES_ORIENTATION = "field.orientation";
 	public static final String FIELD_PROPERTIES_N_ROWS_LABEL = "field.properties.rows.number";
@@ -175,7 +175,7 @@ public class FormScannerTranslationKeys extends TranslationKeys {
 	public static final String SET_OF_QUESTIONS_LABEL = "set.of.questions.label";
 	public static final String GROUP_COLUMN = "group.column";
 
-	// added 0.12
+	// Added 1.0
 	public static final String CORNERS_OPTIONS = "corners.options";
 	public static final String CORNER_TYPE_OPTION_LABEL = "corner.type.option.label";
 	public static final String PREFERRED_LOOK_AND_FEEL_OPTION_LABEL = "preferred.look.and.feel.option.label";
@@ -199,4 +199,19 @@ public class FormScannerTranslationKeys extends TranslationKeys {
 	public static final String CROP_FROM_LEFT = "crop.from.left";
 	public static final String CROP_FROM_RIGHT = "crop.from.right";
 	public static final String CROP_FROM_BOTTOM = "crop.from.bottom";
+	public static final String CLEAR_CONSOLE_TOOLTIP = "clear.console.tooltip";
+	
+	// Added 2.0
+	public static final String HIDE_PANEL_TOOLTIP = "hide.panel";
+	public static final String SHOW_PANEL_TOOLTIP = "show.panel";
+	public static final String LEFT_PANEL_DESCRIPTION = "left.panel.description";
+	public static final String BOTTOM_PANEL_DESCRIPTION = "bottom.panel.description";
+	public static final String CONSOLE_LABEL = "console.label";
+	public static final String IMAGES_LABEL = "images.label";
+	public static final String TEMPLATE_LABEL = "template.label";
+	public static final String SAVE_TEMPLATE_TOOLTIP = "save.template.tooltip";
+	public static final String CLEAR_TEMPLATE_BUTTON_TOOLTIP = "clear.template.tooltip";
+	public static final String OPEN_TEMPLATE_IMAGE_TOOLTIP = "open.template.image.tooltip";
+	public static final String CLEAR_IMAGES_BUTTON_TOOLTIP = "clear.images.tooltip";
+	public static final String FILENAME = "file.name";
 }

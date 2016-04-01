@@ -9,30 +9,35 @@ import com.albertoborsetta.formscanner.commons.FormScannerFont;
 
 public class ToolBarBuilder {
 
-    private final JToolBar toolBar;
+	private final JToolBar toolBar;
 
-    public ToolBarBuilder(ComponentOrientation orientation) {
-        toolBar = new JToolBar();
-        toolBar.setFont(FormScannerFont.getFont());
-        toolBar.setComponentOrientation(orientation);
-    }
+	public ToolBarBuilder(ComponentOrientation orientation) {
+		toolBar = new JToolBar();
+		toolBar.setFont(FormScannerFont.getFont());
+		toolBar.setComponentOrientation(orientation);
+	}
 
-    public ToolBarBuilder withAlignmentX(float alignment) {
-        toolBar.setAlignmentX(alignment);
-        return this;
-    }
+	public ToolBarBuilder withAlignmentX(float alignment) {
+		toolBar.setAlignmentX(alignment);
+		return this;
+	}
 
-    public ToolBarBuilder withAlignmentY(float alignment) {
-        toolBar.setAlignmentX(alignment);
-        return this;
-    }
+	public ToolBarBuilder withAlignmentY(float alignment) {
+		toolBar.setAlignmentY(alignment);
+		return this;
+	}
 
-    public ToolBarBuilder add(JComponent component) {
-        toolBar.add(component);
-        return this;
-    }
+	public ToolBarBuilder add(JComponent component) {
+		toolBar.add(component);
+		return this;
+	}
 
-    public JToolBar build() {
-        return toolBar;
-    }
+	public JToolBar build() {
+		return toolBar;
+	}
+
+	public ToolBarBuilder setOrientation(int orientation) {
+		toolBar.setOrientation(orientation);
+		return this;
+	}
 }

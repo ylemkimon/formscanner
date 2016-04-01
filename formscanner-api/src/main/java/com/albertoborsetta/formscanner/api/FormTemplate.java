@@ -1,6 +1,8 @@
 package com.albertoborsetta.formscanner.api;
 
 import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.StringWriter;
@@ -15,7 +17,11 @@ import java.util.concurrent.Future;
 
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.codec.binary.Base64;
 
+import javax.annotation.Resource;
+import javax.imageio.ImageIO;
+import javax.naming.InitialContext;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -38,6 +44,7 @@ import com.albertoborsetta.formscanner.api.commons.Constants.FieldType;
 import com.albertoborsetta.formscanner.api.commons.Constants.ShapeType;
 import com.albertoborsetta.formscanner.api.exceptions.FormScannerException;
 
+import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 
 /**
@@ -76,7 +83,8 @@ import java.util.concurrent.ExecutionException;
  * <pre>
  * {@code
  * <?xml version="1.0" encoding="UTF-8" standalone="no"?>
- * <template density="40" threshold="127" version="2.1">
+ * <template density="40" threshold="127" version="3.0">
+ * <image name="image.jpg"/>BINARY IMAGE DATA</image>
  * 	<rotation angle="0.0"/>
  * <crop top="0" left="0" right="0" bottom="0"/>
  * 	<corners type="ANGULAR">
@@ -194,7 +202,6 @@ public final class FormTemplate {
 	private CornerType cornerType;
 	private ShapeType shape;
 	private FormTemplate template;
-	private String name;
 	private String version = null;
 	private double rotation;
 	private double diagonal;
@@ -205,102 +212,90 @@ public final class FormTemplate {
 	private Integer size;
 	private boolean isGroupsEnabled = false;
 	private HashMap<String, Integer> crop = new HashMap<>();
+	private String imageName;
+	private BufferedImage image;
 
 	private static class FormTemplateWrapper {
 
-		public static Document getXml(FormTemplate template) throws ParserConfigurationException {
-			DocumentBuilderFactory docFactory = DocumentBuilderFactory
-					.newInstance();
+		public static Document getXml(FormTemplate template) throws ParserConfigurationException, IOException {
+			DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
 			DocumentBuilder docBuilder = docFactory.newDocumentBuilder();
 
 			// root element
 			Document doc = docBuilder.newDocument();
 			Element templateElement = doc.createElement("template");
-			templateElement.setAttribute(
-					"version", Constants.CURRENT_TEMPLATE_VERSION);
+			templateElement.setAttribute("version", Constants.CURRENT_TEMPLATE_VERSION);
 			if (template.getThreshold() != null) {
-				templateElement.setAttribute(
-						"threshold", String.valueOf(template.getThreshold()));
+				templateElement.setAttribute("threshold", String.valueOf(template.getThreshold()));
 			}
 			if (template.getDensity() != null) {
-				templateElement.setAttribute(
-						"density", String.valueOf(template.getDensity()));
+				templateElement.setAttribute("density", String.valueOf(template.getDensity()));
 			}
+
+			// imageElement
+			Element imageElement = doc.createElement("image");
+			imageElement.setAttribute("name", template.getImageName());
+			ByteArrayOutputStream baos = new ByteArrayOutputStream();
+			ImageIO.write(template.getImage(), FilenameUtils.getExtension(template.getImageName()), baos);
+			baos.flush();
+			Base64 encoder = new Base64();
+			String encodedImage = encoder.encodeToString(baos.toByteArray());
+			baos.close();
+			imageElement.setTextContent(encodedImage);
+			templateElement.appendChild(imageElement);
 
 			// crop element
 			Element cropElement = doc.createElement("crop");
 			HashMap<String, Integer> crop = template.getCrop();
-			cropElement.setAttribute(
-					"top",
-					crop.isEmpty() ? "0" : String.valueOf(crop
-							.get(Constants.TOP)));
-			cropElement.setAttribute(
-					"left",
-					crop.isEmpty() ? "0" : String.valueOf(crop
-							.get(Constants.LEFT)));
-			cropElement.setAttribute(
-					"right",
-					crop.isEmpty() ? "0" : String.valueOf(crop
-							.get(Constants.RIGHT)));
-			cropElement.setAttribute(
-					"bottom",
-					crop.isEmpty() ? "0" : String.valueOf(crop
-							.get(Constants.BOTTOM)));
+			cropElement.setAttribute("top", crop.isEmpty() ? "0" : String.valueOf(crop.get(Constants.TOP)));
+			cropElement.setAttribute("left", crop.isEmpty() ? "0" : String.valueOf(crop.get(Constants.LEFT)));
+			cropElement.setAttribute("right", crop.isEmpty() ? "0" : String.valueOf(crop.get(Constants.RIGHT)));
+			cropElement.setAttribute("bottom", crop.isEmpty() ? "0" : String.valueOf(crop.get(Constants.BOTTOM)));
 			templateElement.appendChild(cropElement);
 
 			// rotation element
 			Element rotationElement = doc.createElement("rotation");
-			rotationElement.setAttribute(
-					"angle", String.valueOf(template.getRotation()));
+			rotationElement.setAttribute("angle", String.valueOf(template.getRotation()));
 			templateElement.appendChild(rotationElement);
 
 			// corners element
 			Element cornersElement = doc.createElement("corners");
 			if (template.getCornerType() != null) {
-				cornersElement.setAttribute("type", template
-						.getCornerType().getName());
+				cornersElement.setAttribute("type", template.getCornerType().getName());
 			}
 			templateElement.appendChild(cornersElement);
 
 			// corner elements
-			for (Entry<Corners, FormPoint> corner : template
-					.getCorners().entrySet()) {
+			for (Entry<Corners, FormPoint> corner : template.getCorners().entrySet()) {
 				Element cornerElement = doc.createElement("corner");
-				cornerElement.setAttribute("position", corner
-						.getKey().getName());
+				cornerElement.setAttribute("position", corner.getKey().getName());
 				cornerElement.appendChild(corner.getValue().getXml(doc));
 				cornersElement.appendChild(cornerElement);
 			}
 
 			// fields element
 			Element fieldsElement = doc.createElement("fields");
-			fieldsElement.setAttribute(
-					"groups", String.valueOf(template.isGroupsEnabled()));
+			fieldsElement.setAttribute("groups", String.valueOf(template.isGroupsEnabled()));
 			if (template.getSize() != null) {
-				fieldsElement.setAttribute(
-						"size", String.valueOf(template.getSize()));
+				fieldsElement.setAttribute("size", String.valueOf(template.getSize()));
 			}
-			if (template.getShape() != null) {
-				fieldsElement.setAttribute("shape", template
-						.getShape().getName());
+			if (template.getShapeType() != null) {
+				fieldsElement.setAttribute("shape", template.getShapeType().getName());
 			}
 			templateElement.appendChild(fieldsElement);
 
-			for (Entry<String, FormGroup> group : template
-					.getGroups().entrySet()) {
+			for (Entry<String, FormGroup> group : template.getGroups().entrySet()) {
 				// group element
 				Element groupElement = doc.createElement("group");
 				groupElement.setAttribute("name", group.getKey());
 
 				// question elements
-				for (Entry<String, FormQuestion> field : group
-						.getValue().getFields().entrySet()) {
+				for (Entry<String, FormQuestion> field : group.getValue().getFields().entrySet()) {
 					groupElement.appendChild(field.getValue().getXml(doc));
 				}
 
 				// area elements
-				for (Entry<String, FormArea> area : group
-						.getValue().getAreas().entrySet()) {
+				for (Entry<String, FormArea> area : group.getValue().getAreas().entrySet()) {
 					groupElement.appendChild(area.getValue().getXml(doc));
 				}
 
@@ -311,63 +306,54 @@ public final class FormTemplate {
 			return doc;
 		}
 
-		public static void presetFromTemplate(File file, FormTemplate template) throws ParserConfigurationException, SAXException, IOException {
-			DocumentBuilderFactory dbFactory = DocumentBuilderFactory
-					.newInstance();
+		public static void presetFromTemplate(File file, FormTemplate template)
+				throws ParserConfigurationException, SAXException, IOException {
+			DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
 			DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
 			Document doc = dBuilder.parse(file);
 			doc.getDocumentElement().normalize();
 
 			Element templateElement = doc.getDocumentElement();
 			template.setVersion(templateElement.getAttribute("version"));
-			template.setThreshold(Integer.parseInt(StringUtils.defaultIfBlank(
-					templateElement.getAttribute("threshold"), "-1")));
-			template.setDensity(Integer.parseInt(StringUtils.defaultIfBlank(
-					templateElement.getAttribute("density"), "-1")));
-			
+			template.setThreshold(
+					Integer.parseInt(StringUtils.defaultIfBlank(templateElement.getAttribute("threshold"), "-1")));
+			template.setDensity(
+					Integer.parseInt(StringUtils.defaultIfBlank(templateElement.getAttribute("density"), "-1")));
+
 			// Compatibility with version 1.0
 			String shapeType = templateElement.getAttribute("shape");
 			String size = templateElement.getAttribute("size");
 
-			Element rotationElement = (Element) templateElement
-					.getElementsByTagName("rotation").item(0);
-			template.setRotation(Double.parseDouble(rotationElement
-					.getAttribute("angle")));
+			Element imageElement = (Element) templateElement.getElementsByTagName("image").item(0);
+			template.setImageName(imageElement.getAttribute("name"));
+			String encodedImage = imageElement.getTextContent();
+			Base64 decoder = new Base64();
+			byte[] bytes = decoder.decode(encodedImage);
+			template.setImage(ImageIO.read(new ByteArrayInputStream(bytes)));
 
-			Element cropElement = (Element) templateElement
-					.getElementsByTagName("crop").item(0);
-			template.setCrop(Integer.parseInt(
-							(cropElement != null) ? 
-									cropElement.getAttribute("top") : "0"), 
-					Integer.parseInt(
-							(cropElement != null) ? 
-									cropElement.getAttribute("left") : "0"),
-					Integer.parseInt(
-							(cropElement != null) ? 
-									cropElement.getAttribute("right") : "0"), 
-					Integer.parseInt(
-							(cropElement != null) ? 
-									cropElement.getAttribute("bottom") : "0"));
+			Element rotationElement = (Element) templateElement.getElementsByTagName("rotation").item(0);
+			template.setRotation(Double.parseDouble(rotationElement.getAttribute("angle")));
 
-			Element cornersElement = (Element) templateElement
-					.getElementsByTagName("corners").item(0);
-			template.setCornerType(StringUtils.isNotBlank(cornersElement
-					.getAttribute("type")) ? CornerType.valueOf(cornersElement
-					.getAttribute("type")) : CornerType.ROUND);
+			Element cropElement = (Element) templateElement.getElementsByTagName("crop").item(0);
+			template.setCrop(Integer.parseInt((cropElement != null) ? cropElement.getAttribute("top") : "0"),
+					Integer.parseInt((cropElement != null) ? cropElement.getAttribute("left") : "0"),
+					Integer.parseInt((cropElement != null) ? cropElement.getAttribute("right") : "0"),
+					Integer.parseInt((cropElement != null) ? cropElement.getAttribute("bottom") : "0"));
+
+			Element cornersElement = (Element) templateElement.getElementsByTagName("corners").item(0);
+			template.setCornerType(StringUtils.isNotBlank(cornersElement.getAttribute("type"))
+					? CornerType.valueOf(cornersElement.getAttribute("type")) : CornerType.ROUND);
 			addCorners(template, cornersElement);
 
 			template.calculateDiagonal();
 
-			Element fieldsElement = (Element) templateElement
-					.getElementsByTagName("fields").item(0);
+			Element fieldsElement = (Element) templateElement.getElementsByTagName("fields").item(0);
 
-			template.setSize(Integer.parseInt(StringUtils.defaultIfBlank(size, 
-					fieldsElement.getAttribute("size"))));
-			template.setShape(StringUtils.isNotBlank(shapeType) ? ShapeType.valueOf(shapeType) : ShapeType.valueOf(fieldsElement
-					.getAttribute("shape")));
+			template.setSize(Integer.parseInt(StringUtils.defaultIfBlank(size, fieldsElement.getAttribute("size"))));
+			template.setShapeType(StringUtils.isNotBlank(shapeType) ? ShapeType.valueOf(shapeType)
+					: ShapeType.valueOf(fieldsElement.getAttribute("shape")));
 
-			template.setGroupsEnabled(Boolean.parseBoolean(fieldsElement
-					.getAttribute("groups")));
+			template.setGroupsEnabled(Boolean.parseBoolean(fieldsElement.getAttribute("groups")));
 
 			NodeList groupsList = fieldsElement.getElementsByTagName("group");
 
@@ -389,8 +375,7 @@ public final class FormTemplate {
 
 			area.setType(FieldType.valueOf(element.getAttribute("type")));
 
-			Element cornersElement = (Element) element.getElementsByTagName(
-					"corners").item(0);
+			Element cornersElement = (Element) element.getElementsByTagName("corners").item(0);
 			NodeList cornerList = cornersElement.getElementsByTagName("corner");
 			for (int i = 0; i < cornerList.getLength(); i++) {
 				Element cornerElement = (Element) cornerList.item(i);
@@ -414,13 +399,11 @@ public final class FormTemplate {
 		}
 
 		private static FormPoint getPoint(Element element) {
-			Element pointElement = (Element) element.getElementsByTagName(
-					"point").item(0);
+			Element pointElement = (Element) element.getElementsByTagName("point").item(0);
 			String xCoord = pointElement.getAttribute("x");
 			String yCoord = pointElement.getAttribute("y");
 
-			FormPoint point = new FormPoint(
-					Double.parseDouble(xCoord), Double.parseDouble(yCoord));
+			FormPoint point = new FormPoint(Double.parseDouble(xCoord), Double.parseDouble(yCoord));
 			return point;
 		}
 
@@ -432,11 +415,9 @@ public final class FormTemplate {
 
 				FormArea area = getArea(areaElement);
 
-				String groupName = "group".equals(element.getNodeName())
-						? element.getAttribute("name") : areaElement
-								.getAttribute("group");
-				groupName = StringUtils.defaultIfBlank(
-						groupName, Constants.EMPTY_GROUP_NAME);
+				String groupName = "group".equals(element.getNodeName()) ? element.getAttribute("name")
+						: areaElement.getAttribute("group");
+				groupName = StringUtils.defaultIfBlank(groupName, Constants.EMPTY_GROUP_NAME);
 
 				template.addArea(groupName, area);
 			}
@@ -452,11 +433,9 @@ public final class FormTemplate {
 
 				FormQuestion field = getQuestion(questionElement, questionName);
 
-				String groupName = "group".equals(element.getNodeName())
-						? element.getAttribute("name") : questionElement
-								.getAttribute("group");
-				groupName = StringUtils.defaultIfBlank(
-						groupName, Constants.EMPTY_GROUP_NAME);
+				String groupName = "group".equals(element.getNodeName()) ? element.getAttribute("name")
+						: questionElement.getAttribute("group");
+				groupName = StringUtils.defaultIfBlank(groupName, Constants.EMPTY_GROUP_NAME);
 
 				template.addField(groupName, questionName, field);
 			}
@@ -475,20 +454,14 @@ public final class FormTemplate {
 
 		private static FormQuestion getQuestion(Element element, String name) {
 			FormQuestion field = new FormQuestion(name);
-			field.setMultiple(Boolean.parseBoolean(element
-					.getAttribute("multiple")));
-			field.setRejectMultiple(Boolean.parseBoolean(element
-					.getAttribute("rejectMultiple")));
+			field.setMultiple(Boolean.parseBoolean(element.getAttribute("multiple")));
+			field.setRejectMultiple(Boolean.parseBoolean(element.getAttribute("rejectMultiple")));
 
 			// TODO: Attribute "orientation" deprecated. To be removed
-			field
-					.setType(FieldType.valueOf((element
-							.getAttribute("orientation").isEmpty()) ? element
-							.getAttribute("type") : element
-							.getAttribute("orientation")));
+			field.setType(FieldType.valueOf((element.getAttribute("orientation").isEmpty())
+					? element.getAttribute("type") : element.getAttribute("orientation")));
 
-			Element valuesElement = (Element) element.getElementsByTagName(
-					"values").item(0);
+			Element valuesElement = (Element) element.getElementsByTagName("values").item(0);
 			NodeList valueList = valuesElement.getElementsByTagName("value");
 			for (int j = 0; j < valueList.getLength(); j++) {
 				Element valueElement = (Element) valueList.item(j);
@@ -498,10 +471,11 @@ public final class FormTemplate {
 			return field;
 		}
 
-		public static String toString(FormTemplate template) throws ParserConfigurationException, TransformerException {
+		public static String toString(FormTemplate template)
+				throws ParserConfigurationException, TransformerException, IOException {
 			Transformer transformer = TransformerFactory.newInstance().newTransformer();
 			transformer.setOutputProperty(OutputKeys.INDENT, "yes");
-			//initialize StreamResult with File object to save to file
+			// initialize StreamResult with File object to save to file
 			StreamResult result = new StreamResult(new StringWriter());
 			DOMSource source = new DOMSource(getXml(template));
 			transformer.transform(source, result);
@@ -511,13 +485,35 @@ public final class FormTemplate {
 	}
 
 	/**
-	 * Instantiates a new empty FormTemplate object.
+	 * Returns the Image of the FormTemplate object field.
 	 *
 	 * @author Alberto Borsetta
-	 * @param name the name of the FormTemplate object
+	 * @return the image
 	 */
-	public FormTemplate(String name) {
-		this(name, null);
+	public BufferedImage getImage() {
+		return image;
+	}
+
+	/**
+	 * Sets the image of the FormTemplate object.
+	 *
+	 * @author Alberto Borsetta
+	 * @param image
+	 *            the image of the FormTemplate object
+	 */
+	public void setImage(BufferedImage image) {
+		this.image = image;
+	}
+
+	/**
+	 * Sets the name of the template image.
+	 *
+	 * @author Alberto Borsetta
+	 * @param name
+	 *            the name of the image
+	 */
+	public void setImageName(String name) {
+		this.imageName = name;
 	}
 
 	/**
@@ -534,7 +530,8 @@ public final class FormTemplate {
 	 * Sets the GroupsEnabled field.
 	 *
 	 * @author Alberto Borsetta
-	 * @param enabled is enabled
+	 * @param enabled
+	 *            is enabled
 	 */
 	public void setGroupsEnabled(boolean enabled) {
 		isGroupsEnabled = enabled;
@@ -544,8 +541,10 @@ public final class FormTemplate {
 	 * Adds a group to the FormTemplate object
 	 * 
 	 * @author Alberto Borsetta
-	 * @param groupName the name of the group
-	 * @param group the group to add
+	 * @param groupName
+	 *            the name of the group
+	 * @param group
+	 *            the group to add
 	 * @see FormGroup
 	 */
 	public void addGroup(String groupName, FormGroup group) {
@@ -556,7 +555,8 @@ public final class FormTemplate {
 	 * Sets the corner type of the template.
 	 *
 	 * @author Alberto Borsetta
-	 * @param cornerType the corner type
+	 * @param cornerType
+	 *            the corner type
 	 * @see CornerType
 	 */
 	public void setCornerType(CornerType cornerType) {
@@ -577,39 +577,58 @@ public final class FormTemplate {
 	 * Sets the version of the template.
 	 *
 	 * @author Alberto Borsetta
-	 * @param version the version
+	 * @param version
+	 *            the version
 	 */
 	public void setVersion(String version) {
 		this.version = version;
 	}
 
 	/**
-	 * Instantiates a new form template from an xml representation.
+	 * Instantiates a new empty form template.
 	 *
 	 * @author Alberto Borsetta
-	 * @param file the file with the xml representation of the FormTemplate
-	 * @throws ParserConfigurationException Signals that a parser configuration
-	 *             exception has occurred.
-	 * @throws SAXException Signals that a SAX exception has occurred.
-	 * @throws IOException Signals that an I/O exception has occurred.
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred.
 	 */
-	public FormTemplate(File file) throws ParserConfigurationException,
-			SAXException, IOException {
-		this(FilenameUtils.removeExtension(file.getName()), null);
-		FormTemplateWrapper.presetFromTemplate(file, this);
+	public FormTemplate() throws IOException {
+		this(null, null);
 	}
 
 	/**
-	 * Instantiates a new FormTemplate object with the given name and parent
-	 * template.
+	 * Presets an empty form template from an xml representation.
 	 *
 	 * @author Alberto Borsetta
-	 * @param name the name of the FormTemplate object
-	 * @param template the parent template
+	 * @param file
+	 *            the file with the xml representation of the FormTemplate
+	 * @throws ParserConfigurationException
+	 *             Signals that a parser configuration exception has occurred.
+	 * @throws SAXException
+	 *             Signals that a SAX exception has occurred.
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred.
 	 */
-	public FormTemplate(String name, FormTemplate template) {
+	public void presetFormTemplate(File xmlFile) throws ParserConfigurationException, SAXException, IOException {
+		FormTemplateWrapper.presetFromTemplate(xmlFile, this);
+	}
+
+	/**
+	 * Instantiates a new FormTemplate object with the given image file and
+	 * parent template.
+	 *
+	 * @author Alberto Borsetta
+	 * @param image
+	 *            the image of the FormTemplate object
+	 * @param template
+	 *            the parent template
+	 * @throws IOException
+	 */
+	public FormTemplate(File imageFile, FormTemplate template) throws IOException {
 		this.template = template;
-		this.name = name;
+		if (imageFile != null) {
+			image = ImageIO.read(imageFile);
+			imageName = imageFile.getName();
+		}
 
 		corners = new HashMap<>();
 		setDefaultCornerPosition();
@@ -621,14 +640,26 @@ public final class FormTemplate {
 		if (template != null) {
 			presetFromTemplate();
 		}
-		
+
+	}
+
+	/**
+	 * Instantiates a new empty FormTemplate object.
+	 *
+	 * @author Alberto Borsetta
+	 * @param name
+	 *            the name of the FormTemplate object
+	 * @throws IOException
+	 */
+	public FormTemplate(File imageFile) throws IOException {
+		this(imageFile, null);
 	}
 
 	private void presetFromTemplate() {
 		cornerType = template.getCornerType();
 		crop = template.getCrop();
 		density = template.getDensity();
-		shape = template.getShape();
+		shape = template.getShapeType();
 		size = template.getSize();
 		threshold = template.getThreshold();
 		version = template.getVersion();
@@ -640,9 +671,8 @@ public final class FormTemplate {
 	 * @author Alberto Borsetta
 	 */
 	public void calculateDiagonal() {
-		diagonal = (corners.get(Corners.TOP_LEFT).dist2(
-				corners.get(Corners.BOTTOM_RIGHT)) + corners.get(
-				Corners.TOP_RIGHT).dist2(corners.get(Corners.BOTTOM_LEFT))) / 2;
+		diagonal = (corners.get(Corners.TOP_LEFT).dist2(corners.get(Corners.BOTTOM_RIGHT))
+				+ corners.get(Corners.TOP_RIGHT).dist2(corners.get(Corners.BOTTOM_LEFT))) / 2;
 	}
 
 	private void setDefaultCornerPosition() {
@@ -677,7 +707,8 @@ public final class FormTemplate {
 	 * Returns the group identified by the given name.
 	 *
 	 * @author Alberto Borsetta
-	 * @param name the name of the group
+	 * @param name
+	 *            the name of the group
 	 * @return the FormGroup object
 	 * @see FormGroup
 	 */
@@ -700,9 +731,12 @@ public final class FormTemplate {
 	 * Add a field to the group with the given name.
 	 *
 	 * @author Alberto Borsetta
-	 * @param groupName the name of the group
-	 * @param fieldName tha name of the field
-	 * @param field the field to set
+	 * @param groupName
+	 *            the name of the group
+	 * @param fieldName
+	 *            tha name of the field
+	 * @param field
+	 *            the field to set
 	 * @see FormQuestion
 	 * @see FormGroup
 	 */
@@ -725,9 +759,12 @@ public final class FormTemplate {
 	 * Add an Area to the group with the given name.
 	 *
 	 * @author Alberto Borsetta
-	 * @param groupName the name of the group
-	 * @param areaName the name of the Area
-	 * @param area the Area to set
+	 * @param groupName
+	 *            the name of the group
+	 * @param areaName
+	 *            the name of the Area
+	 * @param area
+	 *            the Area to set
 	 * @see FormQuestion
 	 * @see FormGroup
 	 */
@@ -746,8 +783,10 @@ public final class FormTemplate {
 	 * Sets all the fields in the FormTemplate object.
 	 *
 	 * @author Alberto Borsetta
-	 * @param groupName the group name
-	 * @param fields the fields to set
+	 * @param groupName
+	 *            the group name
+	 * @param fields
+	 *            the fields to set
 	 */
 	public void addFields(String groupName, HashMap<String, FormQuestion> fields) {
 
@@ -760,8 +799,10 @@ public final class FormTemplate {
 	 * Sets an area in the FormTemplate object.
 	 *
 	 * @author Alberto Borsetta
-	 * @param groupName the group name
-	 * @param area the area to set
+	 * @param groupName
+	 *            the group name
+	 * @param area
+	 *            the area to set
 	 */
 	public void addArea(String groupName, FormArea area) {
 		addArea(groupName, area.getName(), area);
@@ -781,7 +822,8 @@ public final class FormTemplate {
 	 * Sets the corners of the FormTemplate object.
 	 *
 	 * @author Alberto Borsetta
-	 * @param corners the corners to set
+	 * @param corners
+	 *            the corners to set
 	 * @see Corners
 	 * @see FormPoint
 	 */
@@ -794,8 +836,10 @@ public final class FormTemplate {
 	 * Sets the given corner into the FormTemplate object.
 	 *
 	 * @author Alberto Borsetta
-	 * @param corner the corner to set
-	 * @param point the point of the corner
+	 * @param corner
+	 *            the corner to set
+	 * @param point
+	 *            the point of the corner
 	 * @see Corners
 	 * @see FormPoint
 	 */
@@ -831,7 +875,8 @@ public final class FormTemplate {
 	 * Sets the rotation of the FormTemplate object.
 	 *
 	 * @author Alberto Borsetta
-	 * @param rotation the new rotation of the FormTemplate object
+	 * @param rotation
+	 *            the new rotation of the FormTemplate object
 	 */
 	public void setRotation(double rotation) {
 		this.rotation = rotation;
@@ -851,8 +896,10 @@ public final class FormTemplate {
 	 * Removes the field identified by the given name.
 	 *
 	 * @author Alberto Borsetta
-	 * @param groupName the group name
-	 * @param fieldName the name of the field to remove
+	 * @param groupName
+	 *            the group name
+	 * @param fieldName
+	 *            the name of the field to remove
 	 */
 	public void removeFieldByName(String groupName, String fieldName) {
 
@@ -884,27 +931,30 @@ public final class FormTemplate {
 	 *
 	 * @author Alberto Borsetta
 	 * @return the xml representation of the FormTemplate object
-	 * @throws ParserConfigurationException the parser configuration exception
+	 * @throws ParserConfigurationException
+	 *             the parser configuration exception
+	 * @throws IOException
 	 */
-	public Document getXml() throws ParserConfigurationException {
+	public Document getXml() throws ParserConfigurationException, IOException {
 		return FormTemplateWrapper.getXml(this);
 	}
 
 	/**
-	 * Returns the name of the FormTemplate object.
+	 * Returns the name of the image of the FormTemplate object.
 	 *
 	 * @author Alberto Borsetta
-	 * @return the name of the FormTemplate object
+	 * @return the name of the image of the FormTemplate object
 	 */
-	public String getName() {
-		return name;
+	public String getImageName() {
+		return imageName;
 	}
 
 	/**
 	 * Returns the point of the given corner of the FormTemplate object.
 	 *
 	 * @author Alberto Borsetta
-	 * @param corner the corner
+	 * @param corner
+	 *            the corner
 	 * @return the point of the corner
 	 */
 	public FormPoint getCorner(Corners corner) {
@@ -925,7 +975,8 @@ public final class FormTemplate {
 	 * Sets the diagonal to the FormTemplate object.
 	 *
 	 * @author Alberto Borsetta
-	 * @param diag the new diagonal
+	 * @param diag
+	 *            the new diagonal
 	 */
 	public void setDiagonal(double diag) {
 		diagonal = diag;
@@ -946,15 +997,22 @@ public final class FormTemplate {
 	 * </ul>
 	 *
 	 * @author Alberto Borsetta
-	 * @param image the image on which to find the corners
-	 * @param threshold the value of threshold parameter
-	 * @param density the value of density parameter
-	 * @param cornerType the corner type
-	 * @param crop the crop values
-	 * @throws FormScannerException throws FormScannerException
+	 * @param image
+	 *            the image on which to find the corners
+	 * @param threshold
+	 *            the value of threshold parameter
+	 * @param density
+	 *            the value of density parameter
+	 * @param cornerType
+	 *            the corner type
+	 * @param crop
+	 *            the crop values
+	 * @throws FormScannerException
+	 *             throws FormScannerException
 	 * @see CornerType
 	 */
-	public void findCorners(BufferedImage image, int threshold, int density, CornerType cornerType, HashMap<String, Integer> crop) throws FormScannerException {
+	public void findCorners(int threshold, int density, CornerType cornerType, HashMap<String, Integer> crop)
+			throws FormScannerException {
 		Integer top = crop.get(Constants.TOP);
 		Integer bottom = crop.get(Constants.BOTTOM);
 		Integer left = crop.get(Constants.LEFT);
@@ -962,18 +1020,19 @@ public final class FormTemplate {
 
 		width = image.getWidth() - (left + right);
 		height = image.getHeight() - (top + bottom);
-		
+
 		BufferedImage croppedImage = image.getSubimage(left, top, width, height);
-				
+
 		int cores = Runtime.getRuntime().availableProcessors();
 
-// 		Only for debug
-//		ExecutorService threadPool = Executors.newFixedThreadPool(1);
-		ExecutorService threadPool = Executors.newFixedThreadPool(--cores<=0 ? 1 : cores);
+		// Only for debug
+		// ExecutorService threadPool = Executors.newFixedThreadPool(1);
+		ExecutorService threadPool = Executors.newFixedThreadPool(--cores <= 0 ? 1 : cores);
 		HashMap<Corners, Future<FormPoint>> cornerDetectorThreads = new HashMap<>();
 
 		for (Corners position : Corners.values()) {
-			Future<FormPoint> future = threadPool.submit(new CornerDetector(threshold, density, position, croppedImage, cornerType));
+			Future<FormPoint> future = threadPool
+					.submit(new CornerDetector(threshold, density, position, croppedImage, cornerType));
 			cornerDetectorThreads.put(position, future);
 		}
 
@@ -988,7 +1047,7 @@ public final class FormTemplate {
 			} catch (InterruptedException | ExecutionException e) {
 				throw new FormScannerException(e.getCause());
 			}
-		}
+		 }
 
 		calculateDiagonal();
 		calculateRotation();
@@ -1011,34 +1070,36 @@ public final class FormTemplate {
 	 * Find points.
 	 *
 	 * @author Alberto Borsetta
-	 * @param image the image on which to find the corners
-	 * @param threshold the value of threshold parameter
-	 * @param density the value of density parameter
-	 * @param size the size of the area of a single point
-	 * @throws FormScannerException throws FormScannerException
+	 * @param image
+	 *            the image on which to find the corners
+	 * @param threshold
+	 *            the value of threshold parameter
+	 * @param density
+	 *            the value of density parameter
+	 * @param size
+	 *            the size of the area of a single point
+	 * @throws FormScannerException
+	 *             throws FormScannerException
 	 */
-	public void findPoints(BufferedImage image, int threshold, int density,
-			int size) throws FormScannerException {
+	public void findPoints(int threshold, int density, int size) throws FormScannerException {
 		height = image.getHeight();
 		width = image.getWidth();
 		int cores = Runtime.getRuntime().availableProcessors();
 
-
 		HashMap<String, FormGroup> templateGroups = template.getGroups();
 		for (Entry<String, FormGroup> templateGroup : templateGroups.entrySet()) {
-//			Only for debug
-//			ExecutorService threadPool = Executors.newFixedThreadPool(1);
+			// Only for debug
+			// ExecutorService threadPool = Executors.newFixedThreadPool(1);
 			ExecutorService threadPool = Executors.newFixedThreadPool(--cores <= 0 ? 1 : cores);
 			HashSet<Future<HashMap<String, FormQuestion>>> fieldDetectorThreads = new HashSet<>();
 
-			HashMap<String, FormQuestion> templateFields = templateGroup
-					.getValue().getFields();
-			ArrayList<String> fieldNames = new ArrayList<>(
-					templateFields.keySet());
+			HashMap<String, FormQuestion> templateFields = templateGroup.getValue().getFields();
+			ArrayList<String> fieldNames = new ArrayList<>(templateFields.keySet());
 			Collections.sort(fieldNames);
 
 			for (String fieldName : fieldNames) {
-				Future<HashMap<String, FormQuestion>> future = threadPool.submit(new FieldDetector(threshold, density, size, this, templateFields.get(fieldName), image));
+				Future<HashMap<String, FormQuestion>> future = threadPool.submit(
+						new FieldDetector(threshold, density, size, this, templateFields.get(fieldName), image));
 				fieldDetectorThreads.add(future);
 			}
 
@@ -1071,7 +1132,8 @@ public final class FormTemplate {
 	 * Removes the nearest point to the given one from the FromTemplate object.
 	 *
 	 * @author Alberto Borsetta
-	 * @param cursorPoint the point to remove
+	 * @param cursorPoint
+	 *            the point to remove
 	 * @see FormPoint
 	 */
 	public void removePoint(FormPoint cursorPoint) {
@@ -1088,12 +1150,10 @@ public final class FormTemplate {
 			pointList.remove(nearestPoint);
 
 			for (Entry<String, FormGroup> group : groups.entrySet()) {
-				HashMap<String, FormQuestion> fields = group
-						.getValue().getFields();
+				HashMap<String, FormQuestion> fields = group.getValue().getFields();
 				for (Entry<String, FormQuestion> field : fields.entrySet()) {
 					FormQuestion fieldValue = field.getValue();
-					for (Entry<String, FormPoint> point : fieldValue
-							.getPoints().entrySet()) {
+					for (Entry<String, FormPoint> point : fieldValue.getPoints().entrySet()) {
 						if (nearestPoint.equals(point.getValue())) {
 							fieldValue.getPoints().remove(point.getKey());
 							return;
@@ -1109,7 +1169,8 @@ public final class FormTemplate {
 	 * Adds the given point to the FormTemplateobject.
 	 *
 	 * @author Alberto Borsetta
-	 * @param cursorPoint the point to add
+	 * @param cursorPoint
+	 *            the point to add
 	 * @see FormPoint
 	 */
 	public void addPoint(FormPoint cursorPoint) {
@@ -1132,8 +1193,7 @@ public final class FormTemplate {
 				point = templatePoint.clone();
 				point.rotoTranslate(templateOrigin, templateRotation, true);
 				point.scale(scale);
-				point.rotoTranslate(
-						corners.get(Corners.TOP_LEFT), rotation, false);
+				point.rotoTranslate(corners.get(Corners.TOP_LEFT), rotation, false);
 
 				double lastDistance = cursorPoint.dist2(point);
 				if (lastDistance < firstDistance) {
@@ -1143,25 +1203,16 @@ public final class FormTemplate {
 			}
 
 			HashMap<String, FormGroup> templateGroups = template.getGroups();
-			for (Entry<String, FormGroup> templateGroup : templateGroups
-					.entrySet()) {
-				HashMap<String, FormQuestion> templateFields = templateGroup
-						.getValue().getFields();
-				for (Entry<String, FormQuestion> templateField : templateFields
-						.entrySet()) {
+			for (Entry<String, FormGroup> templateGroup : templateGroups.entrySet()) {
+				HashMap<String, FormQuestion> templateFields = templateGroup.getValue().getFields();
+				for (Entry<String, FormQuestion> templateField : templateFields.entrySet()) {
 					FormQuestion fieldValue = templateField.getValue();
-					for (Entry<String, FormPoint> templatePoint : fieldValue
-							.getPoints().entrySet()) {
-						if (nearestTemplatePoint.equals(templatePoint
-								.getValue())) {
-							FormQuestion currentField = groups
-									.get(templateGroup.getKey()).getFields()
+					for (Entry<String, FormPoint> templatePoint : fieldValue.getPoints().entrySet()) {
+						if (nearestTemplatePoint.equals(templatePoint.getValue())) {
+							FormQuestion currentField = groups.get(templateGroup.getKey()).getFields()
 									.get(templateField.getKey());
-							currentField.setPoint(
-									templatePoint.getKey(), cursorPoint);
-							addField(
-									templateGroup.getKey(),
-									templateField.getKey(), currentField);
+							currentField.setPoint(templatePoint.getKey(), cursorPoint);
+							addField(templateGroup.getKey(), templateField.getKey(), currentField);
 							return;
 						}
 					}
@@ -1186,7 +1237,8 @@ public final class FormTemplate {
 	 * Returns the point at the given index from the FormTemplate object.
 	 *
 	 * @author Alberto Borsetta
-	 * @param i the index
+	 * @param i
+	 *            the index
 	 * @return the point at the given index
 	 */
 	public FormPoint getPoint(int i) {
@@ -1217,31 +1269,29 @@ public final class FormTemplate {
 	 * Find the areas with barcodes from a FormTemplate object.
 	 *
 	 * @author Alberto Borsetta
-	 * @param image the image on which to find the barcode
-	 * @throws FormScannerException throws FormScannerException
+	 * @param image
+	 *            the image on which to find the barcode
+	 * @throws FormScannerException
+	 *             throws FormScannerException
 	 */
-	public void findAreas(BufferedImage image) throws FormScannerException {
+	public void findAreas() throws FormScannerException {
 		height = image.getHeight();
 		width = image.getWidth();
 		int cores = Runtime.getRuntime().availableProcessors();
-
 
 		HashMap<String, FormGroup> templateGroups = template.getGroups();
 		for (Entry<String, FormGroup> templateGroup : templateGroups.entrySet()) {
 			ExecutorService threadPool = Executors.newFixedThreadPool(--cores <= 0 ? 1 : cores);
 			HashSet<Future<HashMap<String, FormArea>>> barcodeDetectorThreads = new HashSet<>();
 
-			HashMap<String, FormArea> barcodeFields = templateGroup
-					.getValue().getAreas();
-			ArrayList<String> barcodeNames = new ArrayList<>(
-					barcodeFields.keySet());
+			HashMap<String, FormArea> barcodeFields = templateGroup.getValue().getAreas();
+			ArrayList<String> barcodeNames = new ArrayList<>(barcodeFields.keySet());
 			Collections.sort(barcodeNames);
 
 			for (String barcodeName : barcodeNames) {
 				FormArea area = barcodeFields.get(barcodeName);
 				BufferedImage subImage = getAreaImage(image, area);
-				Future<HashMap<String, FormArea>> future = threadPool
-						.submit(new BarcodeDetector(this, area, subImage));
+				Future<HashMap<String, FormArea>> future = threadPool.submit(new BarcodeDetector(this, area, subImage));
 				barcodeDetectorThreads.add(future);
 			}
 
@@ -1261,20 +1311,15 @@ public final class FormTemplate {
 	}
 
 	private static BufferedImage getAreaImage(BufferedImage image, FormArea area) {
-		int minX = (int) Math.min(area.getCorner(Corners.TOP_LEFT).getX(), area
-				.getCorner(Corners.BOTTOM_LEFT).getX());
-		int minY = (int) Math.min(area.getCorner(Corners.TOP_LEFT).getY(), area
-				.getCorner(Corners.TOP_RIGHT).getY());
-		int maxX = (int) Math.max(
-				area.getCorner(Corners.TOP_RIGHT).getX(),
+		int minX = (int) Math.min(area.getCorner(Corners.TOP_LEFT).getX(), area.getCorner(Corners.BOTTOM_LEFT).getX());
+		int minY = (int) Math.min(area.getCorner(Corners.TOP_LEFT).getY(), area.getCorner(Corners.TOP_RIGHT).getY());
+		int maxX = (int) Math.max(area.getCorner(Corners.TOP_RIGHT).getX(),
 				area.getCorner(Corners.BOTTOM_RIGHT).getX());
-		int maxY = (int) Math.max(
-				area.getCorner(Corners.BOTTOM_LEFT).getY(),
+		int maxY = (int) Math.max(area.getCorner(Corners.BOTTOM_LEFT).getY(),
 				area.getCorner(Corners.BOTTOM_RIGHT).getY());
 		int subImageWidth = maxX - minX;
 		int hsubImageHeight = maxY - minY;
-		BufferedImage subImage = image.getSubimage(
-				minX, minY, subImageWidth, hsubImageHeight);
+		BufferedImage subImage = image.getSubimage(minX, minY, subImageWidth, hsubImageHeight);
 		return subImage;
 	}
 
@@ -1292,7 +1337,8 @@ public final class FormTemplate {
 	 * Sets the threshold of the template.
 	 *
 	 * @author Alberto Borsetta
-	 * @param threshold the threshold
+	 * @param threshold
+	 *            the threshold
 	 */
 	public void setThreshold(Integer threshold) {
 		this.threshold = threshold;
@@ -1312,7 +1358,8 @@ public final class FormTemplate {
 	 * Sets the density of the template.
 	 *
 	 * @author Alberto Borsetta
-	 * @param density the density
+	 * @param density
+	 *            the density
 	 */
 	public void setDensity(Integer density) {
 		this.density = density;
@@ -1332,7 +1379,8 @@ public final class FormTemplate {
 	 * Sets the size of the marker of the template.
 	 *
 	 * @author Alberto Borsetta
-	 * @param size the size of the marker
+	 * @param size
+	 *            the size of the marker
 	 */
 	public void setSize(Integer size) {
 		this.size = size;
@@ -1344,7 +1392,7 @@ public final class FormTemplate {
 	 * @author Alberto Borsetta
 	 * @return the shape of the marker
 	 */
-	public ShapeType getShape() {
+	public ShapeType getShapeType() {
 		return shape;
 	}
 
@@ -1352,10 +1400,11 @@ public final class FormTemplate {
 	 * Sets the shape of the marker of the template.
 	 *
 	 * @author Alberto Borsetta
-	 * @param shape the shape of the marker
+	 * @param shape
+	 *            the shape of the marker
 	 * @see ShapeType
 	 */
-	public void setShape(ShapeType shape) {
+	public void setShapeType(ShapeType shape) {
 		this.shape = shape;
 	}
 
@@ -1363,7 +1412,8 @@ public final class FormTemplate {
 	 * Returns the last index for the named group.
 	 *
 	 * @author Alberto Borsetta
-	 * @param groupName the name of the group
+	 * @param groupName
+	 *            the name of the group
 	 * @return the index for the group
 	 */
 	public int lastIndexOfGroup(String groupName) {
@@ -1388,13 +1438,16 @@ public final class FormTemplate {
 	 * Sets crop values for images scanned using current template
 	 * 
 	 * @author Alberto Borsetta
-	 * @param cropFromTop the padding from top margin
-	 * @param cropFromLeft the padding from left margin
-	 * @param cropFromRight the padding from right margin
-	 * @param cropFromBottom the padding from bottom margin
+	 * @param cropFromTop
+	 *            the padding from top margin
+	 * @param cropFromLeft
+	 *            the padding from left margin
+	 * @param cropFromRight
+	 *            the padding from right margin
+	 * @param cropFromBottom
+	 *            the padding from bottom margin
 	 */
-	public void setCrop(Integer cropFromTop, Integer cropFromLeft,
-			Integer cropFromRight, Integer cropFromBottom) {
+	public void setCrop(Integer cropFromTop, Integer cropFromLeft, Integer cropFromRight, Integer cropFromBottom) {
 		crop.put(Constants.TOP, cropFromTop);
 		crop.put(Constants.LEFT, cropFromLeft);
 		crop.put(Constants.RIGHT, cropFromRight);
@@ -1405,9 +1458,33 @@ public final class FormTemplate {
 	 * Sets crop values for images scanned using current template
 	 * 
 	 * @author Alberto Borsetta
-	 * @param crop the padding from margin
+	 * @param crop
+	 *            the padding from margin
 	 */
 	public void setCrop(HashMap<String, Integer> crop) {
 		this.crop = crop;
+	}
+
+	/**
+	 * Returns the name of the image file of the FormTemplate object.
+	 *
+	 * @author Alberto Borsetta
+	 * @return the name of the image without extension
+	 */
+	public String getName() {
+		return FilenameUtils.removeExtension(imageName);
+	}
+
+	/**
+	 * Remove all fields from the FormTemplate object
+	 * 
+	 * @author Alberto Borsetta
+	 */
+	public void removeAllFields() {
+		for (FormGroup group : groups.values()) {
+			group.clearFields();
+		}
+		groups.clear();
+		pointList.clear();
 	}
 }

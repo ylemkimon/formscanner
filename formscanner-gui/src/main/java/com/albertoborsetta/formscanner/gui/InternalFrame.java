@@ -1,9 +1,7 @@
 package com.albertoborsetta.formscanner.gui;
 
 import java.awt.ComponentOrientation;
-
 import javax.swing.JInternalFrame;
-
 import com.albertoborsetta.formscanner.controller.InternalFrameController;
 import com.albertoborsetta.formscanner.model.FormScannerModel;
 

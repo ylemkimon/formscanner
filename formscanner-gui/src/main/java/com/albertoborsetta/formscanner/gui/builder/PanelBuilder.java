@@ -4,14 +4,16 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.ComponentOrientation;
 import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.event.MouseListener;
 import java.util.ArrayList;
 import java.util.HashMap;
 
 import javax.swing.JComponent;
-import javax.swing.JPanel;
 import javax.swing.SpringLayout;
 import javax.swing.border.Border;
 
+import org.jdesktop.swingx.JXPanel;
 import org.uncommons.swing.SpringUtilities;
 
 import com.albertoborsetta.formscanner.commons.FormScannerFont;
@@ -27,6 +29,7 @@ public class PanelBuilder {
 	private Dimension size = null;
 	private int rows = 0;
 	private int cols = 0;
+	private MouseListener mouseListener;
 
 	public PanelBuilder(ComponentOrientation orientation) {
 		this.orientation = orientation;
@@ -36,11 +39,11 @@ public class PanelBuilder {
 		this.bgColor = color;
 		return this;
 	}
-
+	
 	public PanelBuilder withLayout(Object layout) {
 		if (layout instanceof BorderLayout) {
 			componentsMap = new HashMap<>();
-		} else if (layout instanceof SpringLayout) {
+		} else if ((layout instanceof SpringLayout) || (layout instanceof FlowLayout)){
 			componentsArray = new ArrayList<>();
 		}
 		this.layout = layout;
@@ -50,11 +53,6 @@ public class PanelBuilder {
 	public PanelBuilder withGrid(int rows, int cols) {
 		this.rows = rows;
 		this.cols = cols;
-		return this;
-	}
-
-	public PanelBuilder withPreferredSize(Dimension size) {
-		this.size = size;
 		return this;
 	}
 
@@ -81,10 +79,11 @@ public class PanelBuilder {
 		return addComponent(component);
 	}
 
-	public JPanel build() {
-		JPanel panel = new JPanel();
+	public JXPanel build() {
+		JXPanel panel = new JXPanel();
 		panel.setFont(FormScannerFont.getFont());
 		panel.setComponentOrientation(orientation);
+		panel.addMouseListener(mouseListener);
 
 		if (bgColor != null) {
 			panel.setBackground(bgColor);
@@ -113,7 +112,13 @@ public class PanelBuilder {
 				panel.add(component);
 			}
 			SpringUtilities.makeCompactGrid(panel, rows, cols, 3, 3, 3, 3);
-		}
+		} else if (layout instanceof FlowLayout) {
+				panel.setLayout((FlowLayout) layout);
+
+				for (JComponent component : componentsArray) {
+					panel.add(component);
+				}
+			}
 
 		if (size != null) {
 			panel.setPreferredSize(size);

@@ -3,6 +3,7 @@ package com.albertoborsetta.formscanner.commons;
 import java.awt.Rectangle;
 import java.util.HashSet;
 import java.util.Set;
+
 import java.util.Arrays;
 
 import com.albertoborsetta.formscanner.api.commons.Constants;
@@ -164,6 +165,17 @@ public class FormScannerConstants extends Constants {
 	public static final String CROP_FROM_BOTTOM = "CROP_FROM_BOTTOM";
 	public static final String CROP_FROM_LEFT = "CROP_FROM_LEFT";
 	public static final String CROP_FROM_RIGHT = "CROP_FROM_RIGHT";
+	
+	public static final String CLEAR_CONSOLE = "CLEAR_CONSOLE";
+	public static final String TOGGLE_LEFT_PANEL = "TOGGLE_LEFT_PANEL";
+	public static final String TOGGLE_BOTTOM_PANEL = "TOGGLE_BOTTOM_PANEL";
+	public static final String LEFT_PANEL = "LEFT_PANEL";
+	public static final String IMAGE_PANEL = "IMAGE_PANEL";
+	public static final String BOTTOM_PANEL = "BOTTOM_PANEL";
+	public static final String CLEAR_TEMPLATE = "CLEAR_TEMPLATE";
+	public static final String OPEN_TEMPLATE_IMAGE = "OPEN_TEMPLATE_IMAGE";
+	public static final String CLEAR_IMAGES = "CLEAR_TEMPLATE";
+	
 
 	public enum Frame {
 
@@ -232,7 +244,13 @@ public class FormScannerConstants extends Constants {
 		RESET_AUTO_NUMBERING, 
 		BARCODE,
 		QUESTION,
-		GROUP;
+		CLEAR_CONSOLE,
+		TOGGLE_LEFT_PANEL,
+		TOGGLE_BOTTOM_PANEL,
+		GROUP, 
+		CLEAR_TEMPLATE,
+		OPEN_TEMPLATE_IMAGE,
+		CLEAR_IMAGES;
 	}
 
 	public enum Mode {

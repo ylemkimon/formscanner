@@ -1,6 +1,6 @@
 package com.albertoborsetta.formscanner.gui;
 
-public interface TabbedView extends View {
+public interface WizardTabView {
 
 	public void setupNextTab(String action);
 
