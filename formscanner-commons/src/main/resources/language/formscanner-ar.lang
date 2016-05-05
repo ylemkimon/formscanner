@@ -1,9 +1,22 @@
-﻿# Arabic Translation
+# Arabic Translation
 formscanner.main.title=FormScanner $VERSION
-about.text=<html><h2 align=\"center\">FormScanner - برنامج الماسح الضوئي المجاني </h2><h3 align=\"center\">$VERSION الاصدار</h3><h3 align=\"center\">FormScanner is designed and developed by:</h3><center><a href=\"http://albertoborsetta.com/\">Alberto Borsetta</a></center><h3 align=\"center\">Quality assurance and test:</h3><center><a href=\"http://www.dies.uniud.it/battauz.html\">Michela Battauz</a><br /><a href=\"http://www.nicholls.edu/physical-sciences/faculty-staff/c-young/\">Chadwick Young</a><br /><a href=\"http://www.columbia.edu/~ns2224/\">Nicol&aacute;s E. Stier-Moses</a></center><h3 align=\"center\">Portugues translation:</h3><center>Milennia Maria Moura Phereira<br />FranChasing Phereira<br />Giuliana (Jule) Benedetti</center><h3 align=\"center\">Greek translation:</h3><center><a href=\"http://www.geogeo.gr\">GeoGeo.gr</a></center><h3 align=\"center\">Polish translation:</h3><center>Marek Lewandowski</center><h3 align=\"center\">Persian translation:</h3><center>Majid Gholipasandi</center><h3 align=\"center\">Spanish translation:</h3><center>Roberto Villanueva</center><h3 align=\"center\">Dutch translation:</h3><center><a href=\"https://www.vcard.wur.nl/Views/Profile/View.aspx?id=61838&ln=eng\">Maikel P.H. Verouden</a></center><h3 align=\"center\">Japanese translation:</h3><center>Atsushi Yamaoka</center><h3 align=\"center\">French translation:</h3><center>Julien Monticolo<br /><a href=\"http://danythibault.profweb.ca/\">Dany Thibault</a></center><h3 align=\"center\">German translation:</h3><center>Eugenia Piccini</center><h3 align=\"center\">Arabic translation:</h3><center>Khalid Alqahtani</center><p align=\"center\">Visit <a href=\"http://www.formscanner.org/\">Project HomePage</a> for more information about the product</p><p align=\"center\">Copyright 2013-2014 <a href=\"http://albertoborsetta.com/\">Alberto Borsetta</a></p><br /><center><a title=\"Make a donation\" href=\"https://www.paypal.com/cgi-bin/webscr?cmd=_donations&amp;business=alberto%2eborsetta%40gmail%2ecom&amp;lc=GB&amp;item_name=FormScanner&amp;item_number=FS%2d1976&amp;currency_code=EUR&amp;bn=PP%2dDonationsBF%3abtn_donateCC_LG%2egif%3aNonHosted\" target=\"_blank\"><img class=\"aligncenter\" src=\"https://www.paypal.com/en_US/i/btn/x-click-but04.gif\" alt=\"Make a donation\" /></a></center></html>
+about.text=<html><h2 align=\"center\">FormScanner - برنامج الماسح الضوئي المجاني </h2> 
+<h3  align=\"center\">$VERSION الاصدار</h3> 
+<h3  align=\"center\"> من خلال: FormScanner تم برمجة وتطوير برنامج</h3><center><a href=\"http://albertoborsetta.com/\">Alberto Borsetta</a></center> 
+<h3  align=\"center\">الاختبار والجودة:</h3><center><a href=\"http://www.dies.uniud.it/battauz.html\">Michela Battauz</a><br /><a href=\"http://www.nicholls.edu/physical-sciences/faculty-staff/c-young/\">Chadwick Young</a><br /><a href=\"http://www.columbia.edu/~ns2224/\">Nicol&aacute;s E. Stier-Moses</a></center> 
+<h3  align=\"center\">الترجمة الى اللغة البرتغالية:</h3><center>Milennia Maria Moura Phereira<br />FranChasing Phereira<br />Giuliana (Jule) Benedetti</center> 
+<h3  align=\"center\">الترجمة الى اللغة اليوناينة:</h3><center><a href=\"http://www.geogeo.gr\">GeoGeo.gr</a></center> 
+<h3  align=\"center\">الترجمة الى اللغة البولونية:</h3><center>Marek Lewandowski</center> 
+<h3  align=\"center\">الترجمة الى اللغة الفارسية:</h3><center>Majid Gholipasandi</center> 
+<h3  align=\"center\">الترجمة الى اللغة الاسبانية:</h3><center>Roberto Villanueva</center> 
+<h3  align=\"center\">الترجمة الى اللغة الهولندية:</h3><center><a href=\"https://www.vcard.wur.nl/Views/Profile/View.aspx?id=61838&ln=eng\">Maikel P.H. Verouden</a></center> 
+<h3  align=\"center\">الترجمة الى اللغة اليابانية:</h3><center>Atsushi Yamaoka</center> 
+<h3  align=\"center\">الترجمة الى اللغة الفرنسية:</h3><center>Julien Monticolo<br /><a href=\"http://danythibault.profweb.ca/\">Dany Thibault</a></center> 
+<h3  align=\"center\">الترجمة الى اللغة الالمانية:</h3><center>Eugenia Piccini</center> 
+<h3  align=\"center\">الترجمة الى اللغة العربية:</h3><center>Khalid Alqahtani</center><p align=\"center\">لمزيد من المعلومات الرجاء زيارة الموقع: <a href=\"http://www.formscanner.org/\">Project HomePage</a></p><p align=\"center\"><a href=\"http://albertoborsetta.com/\">Alberto Borsetta</a> 2013-2016 جميع الحقوق محفوظة</p><br /><center>تبرع<a title=\"Make a donation\" href=\"https://www.paypal.com/cgi-bin/webscr?cmd=_donations&amp;business=alberto%2eborsetta%40gmail%2ecom&amp;lc=GB&amp;item_name=FormScanner&amp;item_number=FS%2d1976&amp;currency_code=EUR&amp;bn=PP%2dDonationsBF%3abtn_donateCC_LG%2egif%3aNonHosted\" target=\"_blank\"><img class=\"aligncenter\" src=\"https://www.paypal.com/en_US/i/btn/x-click-but04.gif\" alt=\"Make a donation\" /></a></center></html>
 image.frame.title=صورة
 open.images=فتح الصور
-open.images.tooltip=Open images-فتح صور
+open.images.tooltip=فتح الصور
 open.images.mnemonic=O
 save.results=حفظ النتائج
 save.results.tooltip=حفظ النتائج
