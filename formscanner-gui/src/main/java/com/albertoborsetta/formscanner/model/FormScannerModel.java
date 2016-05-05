@@ -131,8 +131,8 @@ public class FormScannerModel {
 		String installPath = URLDecoder.decode(path, "UTF-8");
 		installPath = StringUtils.substringBeforeLast(installPath, "lib");
 		installPath = StringUtils.defaultIfBlank(System.getProperty("FormScanner_HOME"), installPath);
-
-		System.setProperty("log4j.configurationFile", "file://" + installPath + "/config/log4j.xml");
+		
+		System.setProperty("log4j.configurationFile", installPath + "config/log4j.xml");
 		logger = LogManager.getLogger(FormScannerModel.class.getName());
 
 		String installationLanguage = StringUtils.defaultIfBlank(System.getProperty("FormScanner_LANGUAGE"),
