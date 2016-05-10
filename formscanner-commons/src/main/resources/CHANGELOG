@@ -1,10 +1,11 @@
 FormScanner 1.1.3-SNAPSHOT (released 2016-14-01)
 ===
-NEW FEATURES
----
-
 FIXES
 ---
+* Fixed some german trasnlations
+* Fixed some arabic trasnlations
+* Warning loading log4j configuration file
+* Fixed "[EMPTY]" string in csv output file when is not defined any group for a question
 
 FormScanner 1.1.2 (released 2016-14-01)
 ===
