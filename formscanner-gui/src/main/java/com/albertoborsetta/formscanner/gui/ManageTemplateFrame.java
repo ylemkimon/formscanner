@@ -390,10 +390,14 @@ public class ManageTemplateFrame extends InternalFrame implements TabbedView {
 		switch (act) {
 		case CONFIRM:
 			nextTab = (currTab + 1) % tabbedPane.getTabCount();
+			
+			if (currTab == 1) {
+				fieldsType=getFieldType().getName();
+				if (StringUtils.equals(fieldsType, FormScannerConstants.BARCODE) && !model
+						.isGroupsEnabled())
+					nextTab++;
+			}
 
-			if (StringUtils.equals(fieldsType, FormScannerConstants.BARCODE) && !model
-					.isGroupsEnabled())
-				nextTab++;
 
 			switch (nextTab) {
 			case 0:
@@ -456,6 +460,10 @@ public class ManageTemplateFrame extends InternalFrame implements TabbedView {
 			case 2:
 				model.resetPoints();
 				model.disposeRelatedFrame(this);
+				
+				if (StringUtils.equals(fieldsType, FormScannerConstants.BARCODE) && !model
+						.isGroupsEnabled()) 
+					nextTab--;
 				break;
 			default:
 				dispose();
@@ -654,7 +662,6 @@ public class ManageTemplateFrame extends InternalFrame implements TabbedView {
 									.getType().getValue()), null, null });
 				} else {
 					fieldsTableModel.addRow(new Object[] {
-							group.getKey(),
 							area.getName(),
 							FormScannerTranslation.getTranslationFor(area
 									.getType().getValue()), null, null });
@@ -909,6 +916,9 @@ public class ManageTemplateFrame extends InternalFrame implements TabbedView {
 		table.setRowSorter(new TableRowSorter<>(fieldsTableModel));
 
 		for (FieldsTableColumn tableColumn : FieldsTableColumn.values()) {
+			if (tableColumn.equals(FieldsTableColumn.GROUP_COLUMN) && !model.isGroupsEnabled()) {
+				continue;
+			}
 			fieldsTableModel.addColumn(FormScannerTranslation
 					.getTranslationFor(tableColumn.getValue()));
 		}

@@ -279,11 +279,11 @@ public class FormScannerConstants extends Constants {
 
 	public enum FieldsTableColumn {
 
-		GROUP_COLUMN(FormScannerTranslationKeys.GROUP_COLUMN), NAME_COLUMN(
-				FormScannerTranslationKeys.NAME_COLUMN), TYPE_COLUMN(
-						FormScannerTranslationKeys.TYPE_COLUMN), MULTIPLE_COLUMN(
-								FormScannerTranslationKeys.MULTIPLE_COLUMN), RESPONSES_COLUMN(
-										FormScannerTranslationKeys.RESPONSES_COLUMN);
+		GROUP_COLUMN(FormScannerTranslationKeys.GROUP_COLUMN), 
+		NAME_COLUMN(FormScannerTranslationKeys.NAME_COLUMN), 
+		TYPE_COLUMN(FormScannerTranslationKeys.TYPE_COLUMN), 
+		MULTIPLE_COLUMN(FormScannerTranslationKeys.MULTIPLE_COLUMN), 
+		RESPONSES_COLUMN(FormScannerTranslationKeys.RESPONSES_COLUMN);
 
 		private final String value;
 
