@@ -192,9 +192,13 @@ public class ResultsGridFrame extends InternalFrame {
 	private void setupTable() {
 		int i = 1;
 		HashMap<String, FormGroup> groups = form.getGroups();
-		for (Entry<String, FormGroup> group : groups.entrySet()) {
+		ArrayList<String> groupKeys = new ArrayList<>(groups.keySet());
+		Collections.sort(groupKeys);
+//		for (Entry<String, FormGroup> group : groups.entrySet()) {
+		for (String groupKey : groupKeys) {
+			FormGroup group = groups.get(groupKey);
 
-			HashMap<String, FormQuestion> fields = group.getValue().getFields();
+			HashMap<String, FormQuestion> fields = group.getFields();
 			ArrayList<String> fieldKeys = new ArrayList<>(fields.keySet());
 			Collections.sort(fieldKeys);
 			for (String fieldKey : fieldKeys) {
@@ -202,9 +206,9 @@ public class ResultsGridFrame extends InternalFrame {
 				if (field != null) {
 					int c = 0;
 					if (model.isGroupsEnabled()) {
-						if (!group.getKey().equals(
+						if (!groupKey.equals(
 								FormScannerConstants.EMPTY_GROUP_NAME)) {
-							table.setValueAt(group.getKey(), i, c++);
+							table.setValueAt(groupKey, i, c++);
 						} else {
 							c++;
 						}
@@ -215,7 +219,7 @@ public class ResultsGridFrame extends InternalFrame {
 				i++;
 			}
 
-			HashMap<String, FormArea> areas = group.getValue().getAreas();
+			HashMap<String, FormArea> areas = group.getAreas();
 			ArrayList<String> areaKeys = new ArrayList<>(areas.keySet());
 			Collections.sort(areaKeys);
 			for (String areaKey : areaKeys) {
@@ -223,9 +227,9 @@ public class ResultsGridFrame extends InternalFrame {
 				if (area != null) {
 					int c = 0;
 					if (model.isGroupsEnabled()) {
-						if (!group.getKey().equals(
+						if (!groupKey.equals(
 								FormScannerConstants.EMPTY_GROUP_NAME)) {
-							table.setValueAt(group.getKey(), i, c++);
+							table.setValueAt(groupKey, i, c++);
 						} else {
 							c++;
 						}
