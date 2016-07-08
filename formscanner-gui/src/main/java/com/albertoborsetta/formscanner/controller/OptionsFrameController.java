@@ -8,6 +8,7 @@ import java.awt.event.FocusListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 
+import javax.swing.JComboBox;
 import javax.swing.JFormattedTextField;
 import javax.swing.SwingUtilities;
 import javax.swing.event.ChangeEvent;
@@ -17,8 +18,7 @@ import com.albertoborsetta.formscanner.commons.FormScannerConstants.Action;
 import com.albertoborsetta.formscanner.model.FormScannerModel;
 import com.albertoborsetta.formscanner.gui.OptionsFrame;
 
-public class OptionsFrameController
-		implements ActionListener, ChangeListener, ItemListener, FocusListener {
+public class OptionsFrameController implements ActionListener, ChangeListener, ItemListener, FocusListener {
 
 	private final FormScannerModel formScannerModel;
 	private OptionsFrame optionsFrame;
@@ -45,11 +45,11 @@ public class OptionsFrameController
 		case RESET_AUTO_NUMBERING:
 			optionsFrame.setAdvanceable();
 			break;
-		case BARCODE:
-		case QUESTION:
-		case GROUP:
-			optionsFrame.addItem(e.getActionCommand());
-			break;
+//		case BARCODE:
+//		case QUESTION:
+//		case GROUP:
+//			optionsFrame.addItem(e.getActionCommand());
+//			break;
 		default:
 			break;
 		}
@@ -62,6 +62,16 @@ public class OptionsFrameController
 
 	@Override
 	public void itemStateChanged(ItemEvent e) {
+		Action act = Action.valueOf(((JComboBox<?>) e.getSource()).getActionCommand());
+		switch (act) {
+			case BARCODE:
+			case QUESTION:
+			case GROUP:
+				optionsFrame.addItem(((JComboBox<?>) e.getSource()).getActionCommand());
+				break;
+		default:
+			break;
+		}
 		optionsFrame.setAdvanceable();
 	}
 

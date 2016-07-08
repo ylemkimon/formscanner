@@ -4,6 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.GraphicsEnvironment;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 
 import javax.swing.BorderFactory;
@@ -192,19 +193,19 @@ public class OptionsFrame extends InternalFrame implements TabbedView {
 		cropFromTop = new SpinnerBuilder(
 				FormScannerConstants.CROP_FROM_TOP, orientation)
 				.withActionListener(optionsFrameController)
-				.withActionListener(optionsFrameController).build();
+				.build();
 		cropFromBottom = new SpinnerBuilder(
 				FormScannerConstants.CROP_FROM_BOTTOM, orientation)
 				.withActionListener(optionsFrameController)
-				.withActionListener(optionsFrameController).build();
+				.build();
 		cropFromLeft = new SpinnerBuilder(
 				FormScannerConstants.CROP_FROM_LEFT, orientation)
 				.withActionListener(optionsFrameController)
-				.withActionListener(optionsFrameController).build();
+				.build();
 		cropFromRight = new SpinnerBuilder(
 				FormScannerConstants.CROP_FROM_RIGHT, orientation)
 				.withActionListener(optionsFrameController)
-				.withActionListener(optionsFrameController).build();
+				.build();
 
 		return new PanelBuilder(orientation)
 				.withLayout(new SpringLayout())
@@ -244,12 +245,10 @@ public class OptionsFrame extends InternalFrame implements TabbedView {
 				.withActionCommand(FormScannerConstants.RESET_AUTO_NUMBERING)
 				.withActionListener(optionsFrameController).build();
 
-		ArrayList<String> historyNameTemplatesList;
-		String[] historyNameTemplates;
-
-		historyNameTemplatesList = model
+		ArrayList<String> historyNameTemplatesList = model
 				.getHistoryNameTemplate(FormScannerConstants.QUESTION);
-		historyNameTemplates = new String[historyNameTemplatesList.size()];
+		Collections.sort(historyNameTemplatesList);
+		String[] historyNameTemplates = new String[historyNameTemplatesList.size()];
 		historyNameTemplatesList.toArray(historyNameTemplates);
 
 		questionsNameTemplate = new ComboBoxBuilder<String>(
@@ -260,6 +259,7 @@ public class OptionsFrame extends InternalFrame implements TabbedView {
 
 		historyNameTemplatesList = model
 				.getHistoryNameTemplate(FormScannerConstants.BARCODE);
+		Collections.sort(historyNameTemplatesList);
 		historyNameTemplates = new String[historyNameTemplatesList.size()];
 		historyNameTemplatesList.toArray(historyNameTemplates);
 
@@ -291,11 +291,10 @@ public class OptionsFrame extends InternalFrame implements TabbedView {
 				.withActionCommand(FormScannerConstants.GROUPS_ENABLED)
 				.withActionListener(optionsFrameController).build();
 
-		ArrayList<String> historyNameTemplatesList;
-		String[] historyNameTemplates;
-		historyNameTemplatesList = model
+		ArrayList<String> historyNameTemplatesList = model
 				.getHistoryNameTemplate(FormScannerConstants.GROUP);
-		historyNameTemplates = new String[historyNameTemplatesList.size()];
+		Collections.sort(historyNameTemplatesList);
+		String[] historyNameTemplates = new String[historyNameTemplatesList.size()];
 		historyNameTemplatesList.toArray(historyNameTemplates);
 
 		groupsNameTemplate = new ComboBoxBuilder<String>(
@@ -351,7 +350,8 @@ public class OptionsFrame extends InternalFrame implements TabbedView {
 				FormScannerConstants.CORNER_TYPE_COMBO_BOX, orientation)
 				.withModel(new DefaultComboBoxModel<>(corners))
 				.withRenderer(new IconListRenderer(icons))
-				.withActionListener(optionsFrameController).build();
+				.withActionListener(optionsFrameController)
+				.withActionCommand(FormScannerConstants.CORNER_TYPE).build();
 
 		return new PanelBuilder(orientation)
 				.withLayout(new SpringLayout())
@@ -387,15 +387,18 @@ public class OptionsFrame extends InternalFrame implements TabbedView {
 		fontTypeComboBox = new ComboBoxBuilder<String>(
 				FormScannerConstants.FONT_TYPE_COMBO_BOX, orientation)
 				.withModel(new DefaultComboBoxModel<>(fonts))
-				.withActionListener(optionsFrameController).build();
+				.withActionListener(optionsFrameController)
+				.withActionCommand(FormScannerConstants.FONT_TYPE).build();
 		fontSizeComboBox = new ComboBoxBuilder<Integer>(
 				FormScannerConstants.FONT_SIZE_COMBO_BOX, orientation)
 				.withModel(new DefaultComboBoxModel<>(sizes))
-				.withActionListener(optionsFrameController).build();
+				.withActionListener(optionsFrameController)
+				.withActionCommand(FormScannerConstants.FONT_SIZE).build();
 		lookAndFeelComboBox = new ComboBoxBuilder<String>(
 				FormScannerConstants.LOOK_AND_FEEL_COMBO_BOX, orientation)
 				.withModel(new DefaultComboBoxModel<>(looks))
-				.withActionListener(optionsFrameController).build();
+				.withActionListener(optionsFrameController)
+				.withActionCommand(FormScannerConstants.LOOK_AND_FEEL).build();
 
 		JPanel fontOptionsPanel = new PanelBuilder(orientation)
 				.withLayout(new SpringLayout())
@@ -456,12 +459,12 @@ public class OptionsFrame extends InternalFrame implements TabbedView {
 		thresholdValue = new SpinnerBuilder(
 				FormScannerConstants.THRESHOLD, orientation)
 				.withActionListener(optionsFrameController)
-				.withActionListener(optionsFrameController).build();
+				.build();
 
 		densityValue = new SpinnerBuilder(
 				FormScannerConstants.DENSITY, orientation)
 				.withActionListener(optionsFrameController)
-				.withActionListener(optionsFrameController).build();
+				.build();
 
 		return new PanelBuilder(orientation)
 				.withLayout(new SpringLayout())
@@ -493,12 +496,13 @@ public class OptionsFrame extends InternalFrame implements TabbedView {
 				FormScannerConstants.SHAPE_COMBO_BOX, orientation)
 				.withModel(new DefaultComboBoxModel<>(types))
 				.withRenderer(new IconListRenderer(icons))
-				.withActionListener(optionsFrameController).build();
+				.withActionListener(optionsFrameController)
+				.withActionCommand(FormScannerConstants.SHAPE_TYPE).build();
 
 		shapeSizeValue = new SpinnerBuilder(
 				FormScannerConstants.SHAPE_SIZE, orientation)
 				.withActionListener(optionsFrameController)
-				.withActionListener(optionsFrameController).build();
+				.build();
 
 		return new PanelBuilder(orientation)
 				.withLayout(new SpringLayout())
@@ -610,16 +614,16 @@ public class OptionsFrame extends InternalFrame implements TabbedView {
 			shapeSizeValue.setValue(100);
 		}
 		if ((Integer) cropFromTop.getValue() < 0) {
-			shapeSizeValue.setValue(0);
+			cropFromTop.setValue(0);
 		}
 		if ((Integer) cropFromLeft.getValue() < 0) {
-			shapeSizeValue.setValue(0);
+			cropFromLeft.setValue(0);
 		}
 		if ((Integer) cropFromRight.getValue() < 0) {
-			shapeSizeValue.setValue(0);
+			cropFromRight.setValue(0);
 		}
 		if ((Integer) cropFromBottom.getValue() < 0) {
-			shapeSizeValue.setValue(0);
+			cropFromBottom.setValue(0);
 		}
 	}
 
@@ -709,27 +713,35 @@ public class OptionsFrame extends InternalFrame implements TabbedView {
 	}
 
 	public void addItem(String type) {
+		ArrayList<String> items = model.getHistoryNameTemplate(type);
+		String item;
 		switch (type) {
 		case FormScannerConstants.BARCODE:
-			barcodeNameTemplate.removeActionListener(optionsFrameController);
+			item = (String) barcodeNameTemplate.getSelectedItem();
+			if (items.contains(item)) break;
+			barcodeNameTemplate.removeItemListener(optionsFrameController);
 			barcodeNameTemplate.insertItemAt(
 					(String) barcodeNameTemplate.getSelectedItem(), 0);
-			barcodeNameTemplate.addActionListener(optionsFrameController);
+			barcodeNameTemplate.addItemListener(optionsFrameController);
 			break;
 		case FormScannerConstants.GROUP:
-			groupsNameTemplate.removeActionListener(optionsFrameController);
-			groupsNameTemplate.insertItemAt(
-					(String) groupsNameTemplate.getSelectedItem(), 0);
-			groupsNameTemplate.addActionListener(optionsFrameController);
+			item = (String) groupsNameTemplate.getSelectedItem();
+			if (items.contains(item)) break;
+			groupsNameTemplate.removeItemListener(optionsFrameController);
+			groupsNameTemplate.insertItemAt(item, 0);
+			groupsNameTemplate.addItemListener(optionsFrameController);
 			break;
 		case FormScannerConstants.QUESTION:
+			item = (String) questionsNameTemplate.getSelectedItem();
+			if (items.contains(item)) break;
+			questionsNameTemplate.removeItemListener(optionsFrameController);
+			questionsNameTemplate.insertItemAt(item, 0);
+			questionsNameTemplate.addItemListener(optionsFrameController);
+			break;
 		default:
-			questionsNameTemplate.removeActionListener(optionsFrameController);
-			questionsNameTemplate.insertItemAt(
-					(String) questionsNameTemplate.getSelectedItem(), 0);
-			questionsNameTemplate.addActionListener(optionsFrameController);
 			break;
 		}
+		model.addHistoryNameTemplate(type, item);
 	}
 
 	public HashMap<String, Integer> getCrop() {
