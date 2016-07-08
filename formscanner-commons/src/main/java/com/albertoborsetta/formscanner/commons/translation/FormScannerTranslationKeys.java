@@ -111,6 +111,7 @@ public class FormScannerTranslationKeys extends TranslationKeys {
 	public static final String POLISH = "polish.label";
 	public static final String DUTCH = "dutch.label";
 	public static final String JAPANESE = "japanese.label";
+	public static final String ARABIC = "arabic.label";
 
 	public static final String HELP = "help";
 	public static final String ABOUT = "about";

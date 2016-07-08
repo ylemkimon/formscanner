@@ -132,25 +132,25 @@ public class FormScannerWorkspace extends JFrame {
 	}
 
 	public void setDefaultControllersEnabled() {
-		toolBar.setScanControllersEnabled(true);
-		toolBar.setScanAllControllersEnabled(true);
-		toolBar.setScanCurrentControllersEnabled(false);
+		dataPanel.setScanControllersEnabled(true);
+		dataPanel.setScanAllControllersEnabled(true);
+		dataPanel.setScanCurrentControllersEnabled(false);
 		menuBar.setScanControllersEnabled(true);
 		menuBar.setScanAllControllersEnabled(true);
 	}
 
 	public void setScanControllersEnabled(boolean enable) {
-		toolBar.setScanControllersEnabled(enable);
+		dataPanel.setScanControllersEnabled(enable);
 		menuBar.setScanControllersEnabled(enable);
 	}
 
 	public void setScanAllControllersEnabled(boolean enable) {
-		toolBar.setScanAllControllersEnabled(enable);
+		dataPanel.setScanAllControllersEnabled(enable);
 		menuBar.setScanAllControllersEnabled(enable);
 	}
 
 	public void setScanCurrentControllersEnabled(boolean enable) {
-		toolBar.setScanCurrentControllersEnabled(enable);
+		dataPanel.setScanCurrentControllersEnabled(enable);
 	}
 
 	public void setTemplateData() {
@@ -182,5 +182,18 @@ public class FormScannerWorkspace extends JFrame {
 
 	public void setupFieldsTable() {
 		dataPanel.setupFieldsTable();
+	}
+
+	public void setupImagesTable() {
+		dataPanel.setupImagesTable();
+	}
+
+	public boolean selectNextImage() {
+		return dataPanel.selectNextImage();
+	}
+
+	public void selectFirstImage() {
+		// TODO Auto-generated method stub
+		
 	}
 }

@@ -12,7 +12,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map.Entry;
-import java.util.Set;
 
 import javax.swing.JButton;
 import javax.swing.JDesktopPane;
@@ -31,10 +30,7 @@ import javax.swing.border.EtchedBorder;
 import javax.swing.border.LineBorder;
 import javax.swing.plaf.basic.BasicSplitPaneUI;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.JTableHeader;
 import javax.swing.table.TableCellRenderer;
-import javax.swing.table.TableColumn;
-import javax.swing.table.TableColumnModel;
 import javax.swing.table.TableRowSorter;
 
 import org.apache.commons.lang3.StringUtils;
@@ -44,11 +40,8 @@ import com.albertoborsetta.formscanner.api.FormArea;
 import com.albertoborsetta.formscanner.api.FormGroup;
 import com.albertoborsetta.formscanner.api.FormQuestion;
 import com.albertoborsetta.formscanner.api.FormTemplate;
-import com.albertoborsetta.formscanner.commons.FormFileUtils;
-import com.albertoborsetta.formscanner.commons.FormScannerConstants;
 import com.albertoborsetta.formscanner.commons.FormScannerFont;
-import com.albertoborsetta.formscanner.commons.GroupableTableHeader;
-import com.albertoborsetta.formscanner.commons.ColumnGroup;
+import com.albertoborsetta.formscanner.commons.FormScannerConstants;
 import com.albertoborsetta.formscanner.commons.TextAreaOutputStream;
 import com.albertoborsetta.formscanner.commons.FormScannerConstants.FieldsTableColumn;
 import com.albertoborsetta.formscanner.commons.resources.FormScannerResources;
@@ -56,6 +49,8 @@ import com.albertoborsetta.formscanner.commons.resources.FormScannerResourcesKey
 import com.albertoborsetta.formscanner.commons.translation.FormScannerTranslation;
 import com.albertoborsetta.formscanner.commons.translation.FormScannerTranslationKeys;
 import com.albertoborsetta.formscanner.controller.DataPanelController;
+import com.albertoborsetta.formscanner.controller.ImagesGridController;
+import com.albertoborsetta.formscanner.controller.FieldsGridController;
 import com.albertoborsetta.formscanner.controller.ConsoleController;
 import com.albertoborsetta.formscanner.gui.builder.ButtonBuilder;
 import com.albertoborsetta.formscanner.gui.builder.PanelBuilder;
@@ -76,6 +71,8 @@ public class DataPanel extends JSplitPane {
 	private JButton newTemplateButton;
 	private JButton saveTemplateButton;
 	private DataPanelController bottomPanelController;
+	private FieldsGridController fieldsGridController;
+	private ImagesGridController imagesGridController;
 	private JPanel bottomPanelControls;
 	private JTable fieldsTable;
 	private JTable imagesTable;
@@ -94,6 +91,9 @@ public class DataPanel extends JSplitPane {
 
 	private JXButton openImagesButton;
 	private JXButton clearImagesButton;
+	private JXButton startButton;
+	private JXButton startAllButton;
+	private JXButton reloadButton;
 
 	private JScrollPane scrollImagesGrid;
 
@@ -105,14 +105,14 @@ public class DataPanel extends JSplitPane {
 		 *
 		 */
 		private static final long serialVersionUID = 1L;
-		
+
 		boolean isTemplateTable;
 
 		public DataTableModel(boolean isTemplateTable) {
 			super();
 			this.isTemplateTable = isTemplateTable;
 		}
-		
+
 		public DataTableModel(int rows, int cols, boolean isTemplateTable) {
 			super(rows, cols);
 			this.isTemplateTable = isTemplateTable;
@@ -120,7 +120,10 @@ public class DataPanel extends JSplitPane {
 
 		@Override
 		public boolean isCellEditable(int row, int col) {
-			return false;
+			if (isTemplateTable)
+				return col <= 1;
+			else 
+				return col == 0;
 		}
 
 		@Override
@@ -254,25 +257,27 @@ public class DataPanel extends JSplitPane {
 		setOneTouchExpandable(false);
 		setContinuousLayout(true);
 		setTopComponent(desktop);
-		setBottomComponent(getContentPanel());
+		setBottomComponent(createContentPanel());
 		setResizeWeight(0.8);
 		setDividerLocation(defaultDividerLocation);
 	}
 
-	private JPanel getContentPanel() {
+	private JPanel createContentPanel() {
 		bottomPanelController = DataPanelController.getInstance(model);
 		bottomPanelController.add(this);
 
-		templatePanel = getTemplatePanel();
-		imagesPanel = getImagesPanel();
+		templatePanel = createTemplatePanel();
+		imagesPanel = createImagesPanel();
 
 		JTabbedPane tabbedPane = new TabbedPaneBuilder(orientation)
 				.addTab(FormScannerTranslation.getTranslationFor(FormScannerTranslationKeys.IMAGES_LABEL),
 						FormScannerResources.getIconFor(FormScannerResourcesKeys.IMAGES_ICON, 16), imagesPanel)
 				.addTab(FormScannerTranslation.getTranslationFor(FormScannerTranslationKeys.TEMPLATE_LABEL),
 						FormScannerResources.getIconFor(FormScannerResourcesKeys.TEMPLATE_ICON, 16), templatePanel)
-				.addTab(FormScannerTranslation.getTranslationFor(FormScannerTranslationKeys.CONSOLE_LABEL),
-						FormScannerResources.getIconFor(FormScannerResourcesKeys.CONSOLE_ICON, 16), getConsole())
+				// TODO Comment for debugging
+				// .addTab(FormScannerTranslation.getTranslationFor(FormScannerTranslationKeys.CONSOLE_LABEL),
+				// FormScannerResources.getIconFor(FormScannerResourcesKeys.CONSOLE_ICON,
+				// 16), createConsolePanel())
 				.build();
 
 		return new PanelBuilder(orientation).withBorder(new EtchedBorder()).withLayout(new BorderLayout())
@@ -286,10 +291,10 @@ public class DataPanel extends JSplitPane {
 		return bottomPanelControls;
 	}
 
-	private JPanel getTemplatePanel() {
-		JPanel templateToolBar = getTemplateToolbar();
+	private JPanel createTemplatePanel() {
+		JPanel templateToolBar = createTemplateToolbar();
 
-		JPanel templateGridPanel = getTemplateGridPanel();
+		JPanel templateGridPanel = createTemplateGridPanel();
 
 		scrollTemplateGrid = new JScrollPane(templateGridPanel);
 
@@ -297,7 +302,7 @@ public class DataPanel extends JSplitPane {
 				.add(scrollTemplateGrid, BorderLayout.CENTER).build();
 	}
 
-	private JPanel getTemplateGridPanel() {
+	private JPanel createTemplateGridPanel() {
 		fieldsTable = createFieldsTable();
 		JScrollPane fieldsTableScrollPane = new ScrollPaneBuilder(fieldsTable, orientation).build();
 
@@ -307,8 +312,12 @@ public class DataPanel extends JSplitPane {
 
 	private JTable createFieldsTable() {
 		DataTableModel fieldsTableModel = new DataTableModel(true);
+		
+		fieldsGridController = FieldsGridController.getInstance(model);
+		fieldsGridController.add(this);
+		fieldsTableModel.addTableModelListener(fieldsGridController);
+		
 		JTable table = new JTable(fieldsTableModel);
-		table.setRowSorter(new TableRowSorter<>(fieldsTableModel));
 
 		for (FieldsTableColumn tableColumn : FieldsTableColumn.values()) {
 			if (tableColumn.equals(FieldsTableColumn.GROUP_COLUMN) && !model.isGroupsEnabled()) {
@@ -318,18 +327,18 @@ public class DataPanel extends JSplitPane {
 		}
 
 		table.setDefaultRenderer(Object.class, new DataTableCellRenderer());
-
+		table.setRowSorter(new TableRowSorter<>(fieldsTableModel));
 		table.setComponentOrientation(orientation);
 		table.setRowSelectionAllowed(true);
 		table.getSelectionModel().setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		table.getSelectionModel().addListSelectionListener(bottomPanelController);
+		table.getSelectionModel().addListSelectionListener(fieldsGridController);
 		table.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
 		return table;
 	}
 
 	public void setupFieldsTable() {
 		templatePanel.remove(scrollTemplateGrid);
-		JPanel templateGridPanel = getTemplateGridPanel();
+		JPanel templateGridPanel = createTemplateGridPanel();
 		scrollTemplateGrid = new JScrollPane(templateGridPanel);
 		templatePanel.add(scrollTemplateGrid, BorderLayout.CENTER);
 
@@ -342,11 +351,13 @@ public class DataPanel extends JSplitPane {
 		HashMap<String, FormGroup> groups = model.getTemplate().getGroups();
 
 		for (Entry<String, FormGroup> group : groups.entrySet()) {
+			
+			String groupName = group.getKey().equals(FormScannerConstants.EMPTY_GROUP_NAME) ? "" : group.getKey();  
 
 			HashMap<String, FormQuestion> fields = group.getValue().getFields();
 			for (FormQuestion field : fields.values()) {
 				if (model.isGroupsEnabled()) {
-					fieldsTableModel.addRow(new Object[] { group.getKey(), field.getName(),
+					fieldsTableModel.addRow(new Object[] { groupName, field.getName(),
 							FormScannerTranslation.getTranslationFor(field.getType().getValue()), field.isMultiple(),
 							field.getPoints().size() });
 				} else {
@@ -359,10 +370,10 @@ public class DataPanel extends JSplitPane {
 			HashMap<String, FormArea> areas = group.getValue().getAreas();
 			for (FormArea area : areas.values()) {
 				if (model.isGroupsEnabled()) {
-					fieldsTableModel.addRow(new Object[] { group.getKey(), area.getName(),
+					fieldsTableModel.addRow(new Object[] { groupName, area.getName(),
 							FormScannerTranslation.getTranslationFor(area.getType().getValue()), null, null });
 				} else {
-					fieldsTableModel.addRow(new Object[] { group.getKey(), area.getName(),
+					fieldsTableModel.addRow(new Object[] { area.getName(),
 							FormScannerTranslation.getTranslationFor(area.getType().getValue()), null, null });
 				}
 			}
@@ -370,7 +381,7 @@ public class DataPanel extends JSplitPane {
 		enableEditTemplate();
 	}
 
-	private JPanel getTemplateToolbar() {
+	private JPanel createTemplateToolbar() {
 		openTemplateButton = new ButtonBuilder(orientation).withActionCommand(FormScannerConstants.LOAD_TEMPLATE)
 				.withActionListener(bottomPanelController)
 				.withToolTip(FormScannerTranslation.getTranslationFor(FormScannerTranslationKeys.LOAD_TEMPLATE_TOOLTIP))
@@ -452,13 +463,13 @@ public class DataPanel extends JSplitPane {
 		enableEditTemplate();
 	}
 
-	private JPanel getImagesPanel() {
+	private JPanel createImagesPanel() {
 		// TODO: add toolbar with openImages/saveResults (enabled only if
 		// results available)
 
-		JPanel imagesToolBar = getImagesToolbar();
-
-		JPanel imagesGridPanel = getImagesGridPanel();
+		JPanel imagesToolBar = createImagesToolbar();
+		
+		JPanel imagesGridPanel = createImagesGridPanel();
 
 		scrollImagesGrid = new JScrollPane(imagesGridPanel);
 
@@ -466,7 +477,7 @@ public class DataPanel extends JSplitPane {
 				.add(scrollImagesGrid, BorderLayout.CENTER).build();
 	}
 
-	private JPanel getImagesGridPanel() {
+	private JPanel createImagesGridPanel() {
 
 		imagesTable = createImagesTable();
 		JScrollPane imagesTableScrollPane = new ScrollPaneBuilder(imagesTable, orientation).build();
@@ -475,11 +486,14 @@ public class DataPanel extends JSplitPane {
 				.addComponent(imagesTableScrollPane, BorderLayout.CENTER).build();
 	}
 
-	private JPanel getImagesToolbar() {
+	private JPanel createImagesToolbar() {
 		openImagesButton = new ButtonBuilder(orientation).withActionCommand(FormScannerConstants.OPEN_IMAGES)
 				.withActionListener(bottomPanelController)
 				.withToolTip(FormScannerTranslation.getTranslationFor(FormScannerTranslationKeys.OPEN_IMAGES))
 				.withIcon(FormScannerResources.getIconFor(FormScannerResourcesKeys.OPEN_IMAGES_ICON, 16)).build();
+
+		JToolBar imagesToolBar = new ToolBarBuilder(orientation).withAlignmentY(Component.CENTER_ALIGNMENT)
+				.withAlignmentX(Component.LEFT_ALIGNMENT).add(openImagesButton).build();
 
 		clearImagesButton = new ButtonBuilder(orientation).withActionCommand(FormScannerConstants.CLEAR_IMAGES)
 				.withActionListener(bottomPanelController)
@@ -488,8 +502,44 @@ public class DataPanel extends JSplitPane {
 				.withIcon(FormScannerResources.getIconFor(FormScannerResourcesKeys.CLEAR_IMAGES_BUTTON, 16))
 				.setEnabled(false).build();
 
-		JToolBar imagesToolBar = new ToolBarBuilder(orientation).withAlignmentY(Component.CENTER_ALIGNMENT)
-				.withAlignmentX(Component.LEFT_ALIGNMENT).add(openImagesButton).add(clearImagesButton).build();
+		JToolBar clearToolBar = new ToolBarBuilder(orientation).withAlignmentY(Component.CENTER_ALIGNMENT)
+				.withAlignmentX(Component.LEFT_ALIGNMENT).add(clearImagesButton).build();
+		
+		startButton = new ButtonBuilder(orientation)
+				.withActionCommand(FormScannerConstants.ANALYZE_FILES_FIRST)
+				.withActionListener(bottomPanelController)
+				.withToolTip(
+						FormScannerTranslation
+								.getTranslationFor(FormScannerTranslationKeys.ANALYZE_FILES_TOOLTIP))
+				.withIcon(
+						FormScannerResources
+								.getIconFor(FormScannerResourcesKeys.ANALYZE_FILES_ICON, 16))
+				.setEnabled(false).build();
+		
+		startAllButton = new ButtonBuilder(orientation)
+				.withActionCommand(FormScannerConstants.ANALYZE_FILES_ALL)
+				.withActionListener(bottomPanelController)
+				.withToolTip(
+						FormScannerTranslation
+								.getTranslationFor(FormScannerTranslationKeys.ANALYZE_FILES_ALL_TOOLTIP))
+				.withIcon(
+						FormScannerResources
+								.getIconFor(FormScannerResourcesKeys.ANALYZE_FILES_ALL_ICON, 16))
+				.setEnabled(false).build();
+		
+		reloadButton = new ButtonBuilder(orientation)
+				.withActionCommand(FormScannerConstants.ANALYZE_FILES_CURRENT)
+				.withActionListener(bottomPanelController)
+				.withToolTip(
+						FormScannerTranslation
+								.getTranslationFor(FormScannerTranslationKeys.ANALYZE_FILES_CURRENT_TOOLTIP))
+				.withIcon(
+						FormScannerResources
+								.getIconFor(FormScannerResourcesKeys.ANALYZE_FILES_CURRENT_ICON, 16))
+				.setEnabled(false).build();
+		
+		JToolBar editToolBar = new ToolBarBuilder(orientation).withAlignmentY(Component.CENTER_ALIGNMENT)
+				.withAlignmentX(Component.LEFT_ALIGNMENT).add(startButton).add(startAllButton).add(reloadButton).build();
 
 		PanelBuilder panel = new PanelBuilder(orientation);
 
@@ -499,10 +549,10 @@ public class DataPanel extends JSplitPane {
 			panel.withLayout(new FlowLayout(FlowLayout.RIGHT));
 		}
 
-		return panel.add(imagesToolBar).build();
+		return panel.add(imagesToolBar).add(editToolBar).add(clearToolBar).build();
 	}
 
-	private JPanel getConsole() {
+	private JPanel createConsolePanel() {
 		JTextArea consoleTextArea = new JTextArea();
 		consoleTextArea.setBackground(Color.BLACK);
 		consoleTextArea.setForeground(Color.LIGHT_GRAY);
@@ -514,11 +564,11 @@ public class DataPanel extends JSplitPane {
 		JScrollPane scrollConsolePanel = new JScrollPane(consoleTextArea);
 
 		return new PanelBuilder(orientation).withLayout(new BorderLayout())
-				.add(getConsoleToolBar(consoleOutputStream), BorderLayout.NORTH)
+				.add(createConsoleToolBar(consoleOutputStream), BorderLayout.NORTH)
 				.add(scrollConsolePanel, BorderLayout.CENTER).build();
 	}
 
-	public JPanel getConsoleToolBar(TextAreaOutputStream consoleOutputStream) {
+	private JPanel createConsoleToolBar(TextAreaOutputStream consoleOutputStream) {
 		ConsoleController consoleController = new ConsoleController(this.model);
 		consoleController.add(consoleOutputStream);
 
@@ -583,101 +633,134 @@ public class DataPanel extends JSplitPane {
 	}
 
 	private JTable createImagesTable() {
+		DataTableModel imagesTableModel = new DataTableModel(false);
+		
+		imagesGridController = ImagesGridController.getInstance(model);
+		imagesGridController.add(this);
+		imagesTableModel.addTableModelListener(imagesGridController);
+		
+		JTable table = new JTable(imagesTableModel);
+		
+		imagesTableModel.addColumn(FormScannerTranslation.getTranslationFor(FormScannerTranslationKeys.FILENAME));
+		
+		if (isLoaded) {
 
-		DataTableModel imagesTableModel = new DataTableModel(0, 0, false);
+			FormTemplate template = model.getTemplate();
 
-		JTable table = new JTable(imagesTableModel) {
+			ArrayList<String> groupNames = new ArrayList<>(template.getGroups().keySet());
+			Collections.sort(groupNames);
 
-			/**
-			 * 
-			 */
-			private static final long serialVersionUID = 1L;
+			for (String groupName : groupNames) {
+				FormGroup group = template.getGroup(groupName);
 
-			protected JTableHeader createDefaultTableHeader() {
-				return new GroupableTableHeader(columnModel);
+				ArrayList<String> fieldNames = new ArrayList<>(group.getFields().keySet());
+				Collections.sort(fieldNames);
+
+				for (String fieldName : fieldNames) {
+					String columnName = fieldName;
+					if (!groupName.equals(FormScannerConstants.EMPTY_GROUP_NAME)) {
+						columnName = "[" + groupName + "] " + columnName;
+					}
+					imagesTableModel.addColumn(columnName);
+				}
+
+				ArrayList<String> areaNames = new ArrayList<>(group.getAreas().keySet());
+				Collections.sort(areaNames);
+
+				for (String areaName : areaNames) {
+					String columnName = areaName;
+					if (!groupName.equals(FormScannerConstants.EMPTY_GROUP_NAME)) {
+						columnName = "[" + groupName + "] " + columnName;
+					}
+					imagesTableModel.addColumn(columnName);
+				}
 			}
-		};
+		}
 
 		table.setDefaultRenderer(Object.class, new DataTableCellRenderer());
 		table.setRowSorter(new TableRowSorter<>(imagesTableModel));
-		
-		TableColumnModel columnModel = table.getColumnModel();
-
-		int i = 0;
-		TableColumn column = new TableColumn(i++);
-		column.setHeaderValue(FormScannerTranslation.getTranslationFor(FormScannerTranslationKeys.FILENAME));
-		column.setMinWidth(100);
-		columnModel.addColumn(column);
-
 		table.setComponentOrientation(orientation);
-		table.setCellSelectionEnabled(true);
+		// table.setCellSelectionEnabled(true);
+		table.setRowSelectionAllowed(true);
 		table.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
+		table.getSelectionModel().setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		table.getSelectionModel().addListSelectionListener(imagesGridController);
 		return table;
-	}
-
-	private void updateImagesTable(FormTemplate template, String[] fileList) {
-
-		TableColumnModel columnModel = imagesTable.getColumnModel();
-
-		int col = 1;
-		TableColumn column;
-
-		
-		ArrayList<String> groupNames = new ArrayList<>(template.getGroups().keySet());
-		Collections.sort(groupNames);
-		
-		for (String groupName : groupNames) {
-			int colStart = col;
-			FormGroup group = template.getGroup(groupName);
-
-			ArrayList<String> fieldNames = new ArrayList<>(group.getFields().keySet());
-			Collections.sort(fieldNames);
-			
-			for (String fieldName : fieldNames) {
-				column = new TableColumn(col++);
-				column.setHeaderValue(fieldName);
-				column.setMinWidth(100);
-				columnModel.addColumn(column);
-			}
-
-			ArrayList<String> areaNames = new ArrayList<>(group.getAreas().keySet());
-			Collections.sort(areaNames);
-			
-			for (String areaName : areaNames) {
-				column = new TableColumn(col++);
-				column.setHeaderValue(areaName);
-				column.setMinWidth(100);
-				columnModel.addColumn(column);
-			}
-			if (model.isGroupsEnabled()) {
-				ColumnGroup tableGroup = new ColumnGroup(groupName);
-
-				for (int i = colStart; i < columnModel.getColumnCount(); i++) {
-					tableGroup.add(columnModel.getColumn(i));
-				}
-
-				GroupableTableHeader header = (GroupableTableHeader) imagesTable.getTableHeader();
-				header.addColumnGroup(tableGroup);
-			}
-		}
 	}
 
 	public void setupImagesTable() {
 		imagesPanel.remove(scrollImagesGrid);
-		JPanel imagesGridPanel = getImagesGridPanel();
+		JPanel imagesGridPanel = createImagesGridPanel();
 		scrollImagesGrid = new JScrollPane(imagesGridPanel);
 		imagesPanel.add(scrollImagesGrid, BorderLayout.CENTER);
-		
-		if (!isLoaded)
-			return;
 
-		FormTemplate template = model.getTemplate();
+		DataTableModel tableModel = (DataTableModel) imagesTable.getModel();
+
 		String[] fileList = model.getOpenedFileList();
-		updateImagesTable(template, fileList);
+
+		int col = 1;
+		if (isLoaded) {
+			
+			FormTemplate template = model.getTemplate();
+			
+			ArrayList<String> groupNames = new ArrayList<>(template.getGroups().keySet());
+			
+			for (String groupName : groupNames) {
+				FormGroup group = template.getGroup(groupName);
+				
+				ArrayList<String> fieldNames = new ArrayList<>(group.getFields().keySet());
+				ArrayList<String> areaNames = new ArrayList<>(group.getAreas().keySet());
+				col = col + fieldNames.size() + areaNames.size();
+			}
+		}
+
+		for (String fileName : fileList) {
+		
+			Object[] values = new Object[col];
+		
+			values[0] = fileName;
+			for (int j=1; j<col; j++) {
+				values[j] = null;
+			}
+			
+			tableModel.addRow(values);
+		}
 	}
 
-	private void clearTable() {
-		imagesTable.selectAll();
-		imagesTable.clearSelection();
+	public void removeImages() {
+		DataTableModel imagesTableModel = (DataTableModel) imagesTable.getModel();
+
+		while (imagesTable.getRowCount() > 0) {
+			imagesTableModel.removeRow(0);
+		}
+	}
+
+	public String getSelectedFileName() {
+		int selectedRow = (imagesTable.getSelectedRow()) < 0 ? 0 : imagesTable.getSelectedRow();
+			
+		return (String) imagesTable.getValueAt(selectedRow, 0);
+	}
+
+	public void setScanControllersEnabled(boolean enable) {
+		startButton.setEnabled(enable);
+	}
+
+	public void setScanAllControllersEnabled(boolean enable) {
+		startAllButton.setEnabled(enable);
+	}
+
+	public void setScanCurrentControllersEnabled(boolean enable) {
+		reloadButton.setEnabled(enable);
+	}
+
+	public boolean selectNextImage() {
+		
+		int nextRow = imagesTable.getSelectedRow() + 1;
+		
+//		imagesTable.getSelectionModel().clearSelection();
+		imagesTable.getSelectionModel().setSelectionInterval(nextRow+1, nextRow);
+		
+		return nextRow > imagesTable.getRowCount();
+			
 	}
 }

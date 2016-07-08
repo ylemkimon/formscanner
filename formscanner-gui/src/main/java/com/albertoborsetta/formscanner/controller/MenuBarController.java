@@ -32,7 +32,7 @@ public class MenuBarController implements ActionListener {
 		Action act = Action.valueOf(e.getActionCommand());
 		switch (act) {
 		case RENAME_FILES_FIRST:
-			model.renameFiles(FormScannerConstants.RENAME_FILES_FIRST);
+			model.renameSelectedFile(FormScannerConstants.RENAME_FILES_FIRST);
 			break;
 		case OPEN_IMAGES:
 			model.openImages();

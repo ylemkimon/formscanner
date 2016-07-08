@@ -3,14 +3,12 @@ package com.albertoborsetta.formscanner.controller;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
-
+import com.albertoborsetta.formscanner.commons.FormScannerConstants;
 import com.albertoborsetta.formscanner.commons.FormScannerConstants.Action;
 import com.albertoborsetta.formscanner.gui.DataPanel;
 import com.albertoborsetta.formscanner.model.FormScannerModel;
 
-public class DataPanelController implements ActionListener, ListSelectionListener {
+public class DataPanelController implements ActionListener {
 
 	private static DataPanelController instance;
 	private FormScannerModel formScannerModel;
@@ -77,16 +75,23 @@ public class DataPanelController implements ActionListener, ListSelectionListene
 			formScannerModel.removeAllFields();
 			bottomPanel.removeAllFields();
 			break;
+		case CLEAR_IMAGES:
+			formScannerModel.removeImages();
+			bottomPanel.removeImages();
 		case OPEN_TEMPLATE_IMAGE:
 			formScannerModel.loadTemplateImage();
+			break;
+		case ANALYZE_FILES_ALL:
+			formScannerModel.analyzeFiles(FormScannerConstants.ANALYZE_FILES_ALL);
+			break;
+		case ANALYZE_FILES_FIRST:
+			formScannerModel.analyzeFiles(FormScannerConstants.ANALYZE_FILES_FIRST);
+			break;
+		case ANALYZE_FILES_CURRENT:
+			formScannerModel.analyzeFiles(FormScannerConstants.ANALYZE_FILES_CURRENT);
 			break;
 		default:
 			break;
 		}
-	}
-
-	@Override
-	public void valueChanged(ListSelectionEvent e) {
-//		bottomPanel.enableRemoveFields();
 	}
 }

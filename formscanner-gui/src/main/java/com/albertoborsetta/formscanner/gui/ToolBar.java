@@ -20,12 +20,11 @@ import com.albertoborsetta.formscanner.commons.resources.FormScannerResources;
 import com.albertoborsetta.formscanner.commons.resources.FormScannerResourcesKeys;
 import com.albertoborsetta.formscanner.commons.translation.FormScannerTranslation;
 import com.albertoborsetta.formscanner.commons.translation.FormScannerTranslationKeys;
-import com.albertoborsetta.formscanner.gui.builder.ButtonBuilder;
+//import com.albertoborsetta.formscanner.gui.builder.ButtonBuilder;
 import com.albertoborsetta.formscanner.gui.builder.ComboBoxBuilder;
 import com.albertoborsetta.formscanner.gui.builder.LabelBuilder;
 import com.albertoborsetta.formscanner.gui.builder.PanelBuilder;
 import com.albertoborsetta.formscanner.gui.builder.ToolBarBuilder;
-import com.albertoborsetta.formscanner.controller.FormScannerController;
 import com.albertoborsetta.formscanner.controller.ImageFrameController;
 import com.albertoborsetta.formscanner.controller.ToolBarController;
 import com.albertoborsetta.formscanner.model.FormScannerModel;
@@ -36,11 +35,11 @@ public final class ToolBar extends JXPanel implements MenuView {
 
 	private final ToolBarController toolBarController;
 
-	private JButton openButton;
-	private JButton renameButton;
-	private JButton startButton;
-	private JButton startAllButton;
-	private JButton reloadButton;
+//	private JButton openButton;
+//	private JButton renameButton;
+//	private JButton startButton;
+//	private JButton startAllButton;
+//	private JButton reloadButton;
 	private final FormScannerModel model;
 	private final ComponentOrientation orientation;
 	private JComboBox<InternalZoom> zoomComboBox;
@@ -97,11 +96,11 @@ public final class ToolBar extends JXPanel implements MenuView {
 			setLayout(new FlowLayout(FlowLayout.RIGHT));
 		}
 
-		JToolBar fileToolBar = getFileToolBar();
-		add(fileToolBar);
+//		JToolBar fileToolBar = getFileToolBar();
+//		add(fileToolBar);
 
-		JToolBar editToolBar = getEditToolBar();
-		add(editToolBar);
+//		JToolBar editToolBar = getEditToolBar();
+//		add(editToolBar);
 		
 		JToolBar imageToolBar = getImageToolBar();
 		add(imageToolBar);
@@ -111,73 +110,73 @@ public final class ToolBar extends JXPanel implements MenuView {
 		zoomComboBox.setSelectedItem(zoomValue);
 	}
 
-	public JToolBar getFileToolBar() {
-
-		openButton = new ButtonBuilder(orientation)
-				.withActionCommand(FormScannerConstants.OPEN_IMAGES)
-				.withActionListener(toolBarController)
-				.withToolTip(
-						FormScannerTranslation
-								.getTranslationFor(FormScannerTranslationKeys.OPEN_IMAGES_TOOLTIP))
-				.withIcon(
-						FormScannerResources
-								.getIconFor(FormScannerResourcesKeys.OPEN_IMAGES_ICON))
-				.build();
-
-		return new ToolBarBuilder(orientation)
-				.withAlignmentY(Component.CENTER_ALIGNMENT)
-				.withAlignmentX(Component.LEFT_ALIGNMENT).add(openButton)
-				.build();
-	}
-
-	public JToolBar getEditToolBar() {
-
-		renameButton = new ButtonBuilder(orientation)
-				.withActionCommand(FormScannerConstants.RENAME_FILES_FIRST)
-				.withActionListener(toolBarController)
-				.withToolTip(
-						FormScannerTranslation
-								.getTranslationFor(FormScannerTranslationKeys.RENAME_FILES_TOOLTIP))
-				.withIcon(
-						FormScannerResources
-								.getIconFor(FormScannerResourcesKeys.RENAME_FILES_ICON))
-				.setEnabled(false).build();
-		startButton = new ButtonBuilder(orientation)
-				.withActionCommand(FormScannerConstants.ANALYZE_FILES_FIRST)
-				.withActionListener(toolBarController)
-				.withToolTip(
-						FormScannerTranslation
-								.getTranslationFor(FormScannerTranslationKeys.ANALYZE_FILES_TOOLTIP))
-				.withIcon(
-						FormScannerResources
-								.getIconFor(FormScannerResourcesKeys.ANALYZE_FILES_ICON))
-				.setEnabled(false).build();
-		startAllButton = new ButtonBuilder(orientation)
-				.withActionCommand(FormScannerConstants.ANALYZE_FILES_ALL)
-				.withActionListener(toolBarController)
-				.withToolTip(
-						FormScannerTranslation
-								.getTranslationFor(FormScannerTranslationKeys.ANALYZE_FILES_ALL_TOOLTIP))
-				.withIcon(
-						FormScannerResources
-								.getIconFor(FormScannerResourcesKeys.ANALYZE_FILES_ALL_ICON))
-				.setEnabled(false).build();
-		reloadButton = new ButtonBuilder(orientation)
-				.withActionCommand(FormScannerConstants.ANALYZE_FILES_CURRENT)
-				.withActionListener(toolBarController)
-				.withToolTip(
-						FormScannerTranslation
-								.getTranslationFor(FormScannerTranslationKeys.ANALYZE_FILES_CURRENT_TOOLTIP))
-				.withIcon(
-						FormScannerResources
-								.getIconFor(FormScannerResourcesKeys.ANALYZE_FILES_CURRENT_ICON))
-				.setEnabled(false).build();
-
-		return new ToolBarBuilder(orientation)
-				.withAlignmentY(Component.CENTER_ALIGNMENT)
-				.withAlignmentX(Component.LEFT_ALIGNMENT).add(renameButton)
-				.add(startAllButton).add(startButton).add(reloadButton).build();
-	}
+//	public JToolBar getFileToolBar() {
+//
+//		openButton = new ButtonBuilder(orientation)
+//				.withActionCommand(FormScannerConstants.OPEN_IMAGES)
+//				.withActionListener(toolBarController)
+//				.withToolTip(
+//						FormScannerTranslation
+//								.getTranslationFor(FormScannerTranslationKeys.OPEN_IMAGES_TOOLTIP))
+//				.withIcon(
+//						FormScannerResources
+//								.getIconFor(FormScannerResourcesKeys.OPEN_IMAGES_ICON))
+//				.build();
+//
+//		return new ToolBarBuilder(orientation)
+//				.withAlignmentY(Component.CENTER_ALIGNMENT)
+//				.withAlignmentX(Component.LEFT_ALIGNMENT).add(openButton)
+//				.build();
+//	}
+//
+//	public JToolBar getEditToolBar() {
+//
+//		renameButton = new ButtonBuilder(orientation)
+//				.withActionCommand(FormScannerConstants.RENAME_FILES_FIRST)
+//				.withActionListener(toolBarController)
+//				.withToolTip(
+//						FormScannerTranslation
+//								.getTranslationFor(FormScannerTranslationKeys.RENAME_FILES_TOOLTIP))
+//				.withIcon(
+//						FormScannerResources
+//								.getIconFor(FormScannerResourcesKeys.RENAME_FILES_ICON))
+//				.setEnabled(false).build();
+//		startButton = new ButtonBuilder(orientation)
+//				.withActionCommand(FormScannerConstants.ANALYZE_FILES_FIRST)
+//				.withActionListener(toolBarController)
+//				.withToolTip(
+//						FormScannerTranslation
+//								.getTranslationFor(FormScannerTranslationKeys.ANALYZE_FILES_TOOLTIP))
+//				.withIcon(
+//						FormScannerResources
+//								.getIconFor(FormScannerResourcesKeys.ANALYZE_FILES_ICON))
+//				.setEnabled(false).build();
+//		startAllButton = new ButtonBuilder(orientation)
+//				.withActionCommand(FormScannerConstants.ANALYZE_FILES_ALL)
+//				.withActionListener(toolBarController)
+//				.withToolTip(
+//						FormScannerTranslation
+//								.getTranslationFor(FormScannerTranslationKeys.ANALYZE_FILES_ALL_TOOLTIP))
+//				.withIcon(
+//						FormScannerResources
+//								.getIconFor(FormScannerResourcesKeys.ANALYZE_FILES_ALL_ICON))
+//				.setEnabled(false).build();
+//		reloadButton = new ButtonBuilder(orientation)
+//				.withActionCommand(FormScannerConstants.ANALYZE_FILES_CURRENT)
+//				.withActionListener(toolBarController)
+//				.withToolTip(
+//						FormScannerTranslation
+//								.getTranslationFor(FormScannerTranslationKeys.ANALYZE_FILES_CURRENT_TOOLTIP))
+//				.withIcon(
+//						FormScannerResources
+//								.getIconFor(FormScannerResourcesKeys.ANALYZE_FILES_CURRENT_ICON))
+//				.setEnabled(false).build();
+//
+//		return new ToolBarBuilder(orientation)
+//				.withAlignmentY(Component.CENTER_ALIGNMENT)
+//				.withAlignmentX(Component.LEFT_ALIGNMENT).add(renameButton)
+//				.add(startAllButton).add(startButton).add(reloadButton).build();
+//	}
 	
 	public JToolBar getImageToolBar() {
 
@@ -205,24 +204,6 @@ public final class ToolBar extends JXPanel implements MenuView {
 
 		return new ToolBarBuilder(orientation).withAlignmentY(Component.CENTER_ALIGNMENT)
 				.withAlignmentX(Component.LEFT_ALIGNMENT).add(zoomPanel).build();
-	}
-
-	@Override
-	public void setRenameControllersEnabled(boolean enable) {
-		renameButton.setEnabled(enable);
-	}
-
-	@Override
-	public void setScanControllersEnabled(boolean enable) {
-		startButton.setEnabled(enable);
-	}
-
-	public void setScanAllControllersEnabled(boolean enable) {
-		startAllButton.setEnabled(enable);
-	}
-
-	public void setScanCurrentControllersEnabled(boolean enable) {
-		reloadButton.setEnabled(enable);
 	}
 
 	public Double getZoom(ImageFrame imagePanel) {

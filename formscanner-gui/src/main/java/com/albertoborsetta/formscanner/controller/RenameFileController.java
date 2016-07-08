@@ -36,9 +36,9 @@ public class RenameFileController implements KeyListener, ActionListener, FocusL
     public void keyPressed(KeyEvent e) {
         if ((e.getKeyCode() == KeyEvent.VK_ENTER) && (view.isOkEnabled())) {
             view.setOkEnabled(false);
-            model.renameFiles(FormScannerConstants.RENAME_FILES_CURRENT);
+            model.renameSelectedFile(FormScannerConstants.RENAME_FILES_CURRENT);
         } else if ((e.getKeyCode() == KeyEvent.VK_ENTER) && (!view.isOkEnabled())) {
-            model.renameFiles(FormScannerConstants.RENAME_FILES_SKIP);
+            model.renameSelectedFile(FormScannerConstants.RENAME_FILES_SKIP);
         } else {
             view.setOkEnabled(true);
         }
@@ -54,10 +54,10 @@ public class RenameFileController implements KeyListener, ActionListener, FocusL
         Action act = Action.valueOf(e.getActionCommand());
         switch (act) {
             case RENAME_FILES_CURRENT:
-                model.renameFiles(FormScannerConstants.RENAME_FILES_CURRENT);
+                model.renameSelectedFile(FormScannerConstants.RENAME_FILES_CURRENT);
                 break;
             case RENAME_FILES_SKIP:
-                model.renameFiles(FormScannerConstants.RENAME_FILES_SKIP);
+                model.renameSelectedFile(FormScannerConstants.RENAME_FILES_SKIP);
                 break;
             default:
                 break;

@@ -40,7 +40,6 @@ import com.albertoborsetta.formscanner.commons.resources.FormScannerResources;
 import com.albertoborsetta.formscanner.commons.translation.FormScannerTranslation;
 import com.albertoborsetta.formscanner.commons.translation.FormScannerTranslationKeys;
 import com.albertoborsetta.formscanner.gui.AboutFrame;
-import com.albertoborsetta.formscanner.gui.FileListFrame;
 import com.albertoborsetta.formscanner.gui.ImageFrame;
 import com.albertoborsetta.formscanner.gui.InternalFrame;
 import com.albertoborsetta.formscanner.gui.OptionsPanel;
@@ -72,12 +71,9 @@ public class FormScannerModel {
 	private String templatePath;
 	private String resultsPath;
 	private String propertiesPath;
-	private final HashMap<Integer, File> openedFiles = new HashMap<>();
-	private FileListFrame fileListFrame;
+	private final HashMap<String, File> openedFiles = new HashMap<>();
 	private RenameFileFrame renameFileFrame;
 	private FormScannerWorkspace workspace;
-	private int renamedFileIndex = 0;
-	private int analyzedFileIndex = 0;
 	private boolean firstPass = true;
 
 	private final FormScannerConfiguration configurations;
@@ -123,6 +119,8 @@ public class FormScannerModel {
 	private ArrayList<String> historyBarcodeNameTemplate;
 	private ArrayList<String> historyGroupNameTemplate;
 	private HashMap<String, Integer> crop = new HashMap<>();
+	private String selectedFileName;
+	private String analyzedFileName;
 
 	public FormScannerModel() throws UnsupportedEncodingException {
 		String path = FormScannerModel.class.getProtectionDomain().getCodeSource().getLocation().getPath();
@@ -262,14 +260,10 @@ public class FormScannerModel {
 		firstPass = true;
 		File[] fileArray = fileUtils.chooseImages();
 		if (fileArray != null) {
-			Integer fileIndex = 0;
 			for (File file : fileArray) {
-				openedFiles.put(fileIndex++, file);
+				openedFiles.put(FilenameUtils.getBaseName(file.getName()), file);
 			}
 			if (!openedFiles.isEmpty()) {
-				workspace.
-				fileListFrame = new FileListFrame(this, getOpenedFileList());
-				// desktop.arrangeFrame(fileListFrame);
 				workspace.setScanControllersEnabled(true);
 				workspace.setScanAllControllersEnabled(true);
 				workspace.setScanCurrentControllersEnabled(false);
@@ -277,65 +271,38 @@ public class FormScannerModel {
 		}
 	}
 
-	public void renameFiles(String action) {
-		Action act = Action.valueOf(action);
-		switch (act) {
-		case RENAME_FILES_FIRST:
-			if (!openedFiles.isEmpty()) {
-				workspace.setScanControllersEnabled(false);
-				workspace.setScanAllControllersEnabled(false);
-				workspace.setScanCurrentControllersEnabled(false);
+	public void updateSelectedFileName(String fileName) {
+		selectedFileName = fileName;
+		
+		File imageFile = openedFiles.get(fileName);
+		try {
+			filledForm = new FormTemplate(imageFile);
+			createFormImageFrame(filledForm, Mode.VIEW);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+				
+	}
+	
+	public void renameSelectedFile(String newFileName) {
+		
+		if (!newFileName.equalsIgnoreCase(selectedFileName)) {
+			
+			File oldFile = openedFiles.get(selectedFileName);
 
-				renamedFileIndex = fileListFrame.getSelectedItemIndex();
-				fileListFrame.selectFile(renamedFileIndex);
-				File imageFile = openedFiles.get(renamedFileIndex);
+			String filePath = FilenameUtils.getFullPath(oldFile.getAbsolutePath());
 
-				try {
-					filledForm = new FormTemplate(imageFile);
-					createFormImageFrame(filledForm, Mode.VIEW);
-					renameFileFrame = new RenameFileFrame(this, getFileNameByIndex(renamedFileIndex));
-					// desktop.arrangeFrame(renameFileFrame);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-			break;
-		case RENAME_FILES_CURRENT:
-			String newFileName = renameFileFrame.getNewFileName();
-			String oldFileName = getFileNameByIndex(renamedFileIndex);
+			File newFile = new File(filePath + newFileName + "." + FilenameUtils.getExtension(oldFile.getName()));
 
-			if (!newFileName.equalsIgnoreCase(oldFileName)) {
-				File newFile = renameFile(renamedFileIndex, newFileName);
-
-				updateFileList(renamedFileIndex, newFile);
+			if (newFile.exists()) {
+				newFile = oldFile;
 			}
 
-			fileListFrame.updateFileList(getOpenedFileList());
-		case RENAME_FILES_SKIP:
-			renamedFileIndex++;
-
-			if (openedFiles.size() > renamedFileIndex) {
-				fileListFrame.selectFile(renamedFileIndex);
-				File imageFile = openedFiles.get(renamedFileIndex);
-				try {
-					BufferedImage image = ImageIO.read(imageFile);
-					imageFrame.updateImage(image);
-					renameFileFrame = new RenameFileFrame(this, getFileNameByIndex(renamedFileIndex));
-					// desktop.arrangeFrame(renameFileFrame);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			} else {
-				workspace.disposeFrame(renameFileFrame);
-				// desktop.disposeFrame(imageFrame);
-
-				workspace.setScanControllersEnabled(true);
-				workspace.setScanAllControllersEnabled(true);
-				workspace.setScanCurrentControllersEnabled(false);
+			if (!oldFile.renameTo(newFile)) {
+				newFile = oldFile;
 			}
-			break;
-		default:
-			break;
+			
+			updateFileList(newFileName, newFile);
 		}
 	}
 
@@ -350,10 +317,12 @@ public class FormScannerModel {
 					workspace.setScanAllControllersEnabled(false);
 					workspace.setScanCurrentControllersEnabled(false);
 
-					for (Entry<Integer, File> openedFile : openedFiles.entrySet()) {
-						analyzedFileIndex = openedFile.getKey();
-						fileListFrame.selectFile(analyzedFileIndex);
-						File imageFile = openedFiles.get(analyzedFileIndex);
+					boolean isLastImage = workspace.selectNextImage();
+					while (!isLastImage) {
+						analyzedFileName = selectedFileName;
+						// TODO: show selected row
+						updateSelectedFileName(analyzedFileName);
+						File imageFile = openedFiles.get(analyzedFileName);
 						try {
 							filledForm = new FormTemplate(imageFile, formTemplate);
 							filledForm.findCorners(threshold, density, cornerType, crop);
@@ -363,8 +332,23 @@ public class FormScannerModel {
 						} catch (Exception e) {
 							e.printStackTrace();
 						}
-
+						isLastImage = workspace.selectNextImage();
 					}
+//					for (Entry<String, File> openedFile : openedFiles.entrySet()) {
+//						analyzedFileName = openedFile.getKey();
+//						// TODO: show selected row
+//						updateSelectedFileName(analyzedFileName);
+//						File imageFile = openedFiles.get(analyzedFileName);
+//						try {
+//							filledForm = new FormTemplate(imageFile, formTemplate);
+//							filledForm.findCorners(threshold, density, cornerType, crop);
+//							filledForm.findPoints(threshold, density, shapeSize);
+//							filledForm.findAreas();
+//							filledForms.put(filledForm.getName(), filledForm);
+//						} catch (Exception e) {
+//							e.printStackTrace();
+//						}
+//					}
 
 					Date today = Calendar.getInstance().getTime();
 					SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
@@ -388,16 +372,32 @@ public class FormScannerModel {
 					workspace.setScanControllersEnabled(true);
 					workspace.setScanCurrentControllersEnabled(true);
 
-					if (firstPass) {
-						analyzedFileIndex = fileListFrame.getSelectedItemIndex();
-						firstPass = false;
-					} else {
-						analyzedFileIndex++;
-					}
+					boolean isLastImage = workspace.selectNextImage();
+//					int analyzedFileIndex = 0;
+//					if (firstPass) {
+//						analyzedFileName = selectedFileName;
+//						firstPass = false;
+//					} else {
+//						isLastImage = workspace.selectNextImage();
+//						boolean found = false;
+//						for (Entry<String, File> openedFile : openedFiles.entrySet()) {
+//							analyzedFileIndex++;
+//							if (found) {
+//								analyzedFileName = openedFile.getKey();
+//								break;
+//							}
+//							if (analyzedFileName.equals(openedFile.getKey())) {
+//								found = true;
+//							}
+//						}
+//					}
 
-					if (openedFiles.size() > analyzedFileIndex) {
-						fileListFrame.selectFile(analyzedFileIndex);
-						File imageFile = openedFiles.get(analyzedFileIndex);
+//					if (openedFiles.size() > analyzedFileIndex) {
+					if (!isLastImage) {
+						analyzedFileName = selectedFileName;
+						// TODO show selected row
+//						updateSelectedFileName(analyzedFileName);
+						File imageFile = openedFiles.get(analyzedFileName);
 						try {
 							filledForm = new FormTemplate(imageFile, formTemplate);
 							filledForm.findCorners(threshold, density, cornerType, crop);
@@ -423,8 +423,8 @@ public class FormScannerModel {
 								FilenameUtils.getFullPath(savedFile.getAbsolutePath()));
 						configurations.store();
 
-						// desktop.disposeFrame(imageFrame);
-						workspace.disposeFrame(resultsGridFrame);
+						workspace.disposeFrame(imageFrame);
+						updateSelectedFileName(analyzedFileName);
 
 						workspace.setScanControllersEnabled(true);
 						workspace.setScanAllControllersEnabled(true);
@@ -434,7 +434,7 @@ public class FormScannerModel {
 				}
 				break;
 			case ANALYZE_FILES_CURRENT:
-				fileListFrame.selectFile(analyzedFileIndex);
+				// TODO show selected row
 
 				try {
 					filledForm = imageFrame.getTemplate();
@@ -470,13 +470,14 @@ public class FormScannerModel {
 		// desktop.arrangeFrame(resultsGridFrame);
 	}
 
-	private void updateFileList(Integer index, File file) {
-		openedFiles.remove(index);
-		openedFiles.put(index, file);
+	private void updateFileList(String newFileName, File file) {
+		openedFiles.remove(selectedFileName);
+		openedFiles.put(newFileName, file);
+		selectedFileName = newFileName;
 	}
 
-	private File renameFile(int index, String newFileName) {
-		File oldFile = openedFiles.get(index);
+	private File renameSelectedFile(String oldFileName, String newFileName) {
+		File oldFile = openedFiles.get(oldFileName);
 
 		String filePath = FilenameUtils.getFullPath(oldFile.getAbsolutePath());
 
@@ -495,15 +496,12 @@ public class FormScannerModel {
 	public String[] getOpenedFileList() {
 		String[] fileList = new String[openedFiles.size()];
 
-		for (int i = 0; i < openedFiles.size(); i++) {
-			fileList[i] = getFileNameByIndex(i);
+		int i = 0;
+		for (File file: openedFiles.values()) {
+			fileList[i++] = FilenameUtils.getBaseName(file.getName());
 		}
 
 		return fileList;
-	}
-
-	private String getFileNameByIndex(int index) {
-		return openedFiles.get(index).getName();
 	}
 
 	public void disposeRelatedFrame(InternalFrame frame) {
@@ -569,7 +567,7 @@ public class FormScannerModel {
 		} else {
 			imageFrame.updateImage(template);
 		}
-		// desktop.arrangeFrame(imageFrame);
+		workspace.arrangeFrame(imageFrame);
 	}
 
 	public void addPoint(ImageFrame view, FormPoint p) {
@@ -1122,5 +1120,9 @@ public class FormScannerModel {
 	
 	public void loadTemplateImage() {
 		loadTemplateImage(Mode.SETUP_POINTS);
+	}
+
+	public void removeImages() {
+		openedFiles.clear();
 	}
 }

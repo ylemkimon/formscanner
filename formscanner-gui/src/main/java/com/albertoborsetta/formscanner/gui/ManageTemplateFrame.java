@@ -298,13 +298,13 @@ public class ManageTemplateFrame extends InternalFrame implements WizardTabView 
 				case FormScannerConstants.RESPONSES_BY_GRID:
 					HashMap<String, FormQuestion> fields = createFields();
 					model.updateTemplateFields(model.isGroupsEnabled()
-							? setOfQuestionsLabel.getText()
+							? StringUtils.defaultIfBlank(setOfQuestionsLabel.getText(), FormScannerConstants.EMPTY_GROUP_NAME)
 							: FormScannerConstants.EMPTY_GROUP_NAME, fields);
 					break;
 				case FormScannerConstants.BARCODE:
 					FormArea area = createArea();
 					model.updateTemplateAreas(model.isGroupsEnabled()
-							? setOfQuestionsLabel.getText()
+							? StringUtils.defaultIfBlank(setOfQuestionsLabel.getText(), FormScannerConstants.EMPTY_GROUP_NAME)
 							: FormScannerConstants.EMPTY_GROUP_NAME, area);
 					break;
 				}

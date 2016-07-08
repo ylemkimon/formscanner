@@ -317,12 +317,10 @@ public final class MenuBar extends JMenuBar implements MenuView {
 		return menuBuilder.build();
 	}
 
-	@Override
 	public void setRenameControllersEnabled(boolean enable) {
 		renameMenuItem.setEnabled(enable);
 	}
 
-	@Override
 	public void setScanControllersEnabled(boolean enable) {
 		scanMenuItem.setEnabled(enable);
 	}

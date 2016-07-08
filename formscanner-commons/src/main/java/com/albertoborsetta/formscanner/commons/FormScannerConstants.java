@@ -104,20 +104,17 @@ public class FormScannerConstants extends Constants {
 	public static final String INSTALLATION_TURKISH = "T�rk‡e";
 
 	public static final Set<String> ENGLISH_LANGUAGES = new HashSet<>(
-			Arrays.asList(new String[] { INSTALLATION_ARABIC,
-					INSTALLATION_CHINESE, INSTALLATION_ENGLISH,
+			Arrays.asList(new String[] { INSTALLATION_CHINESE, INSTALLATION_ENGLISH,
 					INSTALLATION_FRENCH, INSTALLATION_MAGYAR,
-					INSTALLATION_RUSSIAN,
-					INSTALLATION_TURKISH,
-					INSTALLATION_GERMAN }));
+					INSTALLATION_RUSSIAN, INSTALLATION_TURKISH }));
 	public static final Set<String> ITALIAN_LANGUAGES = new HashSet<>(
 			Arrays.asList(new String[] { INSTALLATION_ITALIAN }));
 	public static final Set<String> PORTUGUES_LANGUAGES = new HashSet<>(
 			Arrays.asList(new String[] { INSTALLATION_PORTUGUES }));
 	public static final Set<String> SPANISH_LANGUAGES = new HashSet<>(
 			Arrays.asList(new String[] { INSTALLATION_SPANISH }));
-	// public static final Set<String> GERMAN_LANGUAGES = new String[]
-	// {INSTALLATION_GERMAN}));
+	public static final Set<String> GERMAN_LANGUAGES = new HashSet<>(
+			Arrays.asList(new String[] { INSTALLATION_GERMAN })); 
 	public static final Set<String> GREEK_LANGUAGES = new HashSet<>(
 			Arrays.asList(new String[] { INSTALLATION_GREEK }));
 	public static final Set<String> POLISH_LANGUAGES = new HashSet<>(
@@ -128,6 +125,8 @@ public class FormScannerConstants extends Constants {
 			Arrays.asList(new String[] { INSTALLATION_NEDERLANDS }));
 	public static final Set<String> JAPANESE_LANGUAGES = new HashSet<>(
 			Arrays.asList(new String[] {}));
+	public static final Set<String> ARABIC_LANGUAGES = new HashSet<>(
+			Arrays.asList(new String[] { INSTALLATION_ARABIC }));
 
 	// Fields Table Columns
 	// support
@@ -310,12 +309,13 @@ public class FormScannerConstants extends Constants {
 		ITALIAN("it", FormScannerTranslationKeys.ITALIAN, ITALIAN_LANGUAGES),
 		PORTUGUES("pt_BR", FormScannerTranslationKeys.PORTUGUES, PORTUGUES_LANGUAGES),
 		SPANISH("es", FormScannerTranslationKeys.SPANISH, SPANISH_LANGUAGES),
-		// GERMAN("de", FormScannerTranslationKeys.GERMAN, GERMAN_LANGUAGES),
+		GERMAN("de", FormScannerTranslationKeys.GERMAN, GERMAN_LANGUAGES),
 		FARSI("fa", FormScannerTranslationKeys.FARSI, FARSI_LANGUAGES),
 		POLISH("pl", FormScannerTranslationKeys.POLISH, POLISH_LANGUAGES),
 		GREEK("el", FormScannerTranslationKeys.GREEK, GREEK_LANGUAGES),
 		DUTCH("nl", FormScannerTranslationKeys.DUTCH, DUTCH_LANGUAGES),
-		JAPANESE("jp", FormScannerTranslationKeys.JAPANESE, JAPANESE_LANGUAGES);
+		JAPANESE("jp", FormScannerTranslationKeys.JAPANESE, JAPANESE_LANGUAGES),
+		ARABIC("ar", FormScannerTranslationKeys.ARABIC, ARABIC_LANGUAGES);
 
 		private final String value;
 		private final String translation;
