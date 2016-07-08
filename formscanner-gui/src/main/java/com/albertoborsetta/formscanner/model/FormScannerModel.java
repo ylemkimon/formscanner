@@ -125,6 +125,7 @@ public class FormScannerModel {
 	private ArrayList<String> historyBarcodeNameTemplate;
 	private ArrayList<String> historyGroupNameTemplate;
 	private HashMap<String, Integer> crop = new HashMap<>();
+	private ArrayList<String> usedGroupNamesList = new ArrayList<>();
 
 	public FormScannerModel() throws UnsupportedEncodingException {
 		String path = FormScannerModel.class.getProtectionDomain().getCodeSource().getLocation().getPath();
@@ -788,6 +789,7 @@ public class FormScannerModel {
 			shapeType = formTemplate.getShape() == null ? shapeType : formTemplate.getShape();
 			cornerType = formTemplate.getCornerType() == null ? cornerType : formTemplate.getCornerType();
 			groupsEnabled = formTemplate.isGroupsEnabled();
+			usedGroupNamesList = formTemplate.getUsedGroupNames();
 
 			crop = formTemplate.getCrop();
 
@@ -901,11 +903,11 @@ public class FormScannerModel {
 		lookAndFeel = view.getLookAndFeel();
 		resetAutoNumbering = view.isResetAutoNumberingQuestions();
 		groupsEnabled = view.isGroupsEnabled();
-		historyGroupNameTemplate = view.getHistoryNameTemplate(FormScannerConstants.GROUP);
+//		historyGroupNameTemplate = view.getHistoryNameTemplate(FormScannerConstants.GROUP);
 		groupNameTemplate = historyGroupNameTemplate.get(0);
-		historyQuestionNameTemplate = view.getHistoryNameTemplate(FormScannerConstants.QUESTION);
+//		historyQuestionNameTemplate = view.getHistoryNameTemplate(FormScannerConstants.QUESTION);
 		questionNameTemplate = historyQuestionNameTemplate.get(0);
-		historyBarcodeNameTemplate = view.getHistoryNameTemplate(FormScannerConstants.BARCODE);
+//		historyBarcodeNameTemplate = view.getHistoryNameTemplate(FormScannerConstants.BARCODE);
 		barcodeNameTemplate = historyBarcodeNameTemplate.get(0);
 		crop = view.getCrop();
 
@@ -1095,12 +1097,34 @@ public class FormScannerModel {
 		case FormScannerConstants.GROUP:
 			return historyGroupNameTemplate;
 		case FormScannerConstants.QUESTION:
-		default:
 			return historyQuestionNameTemplate;
+		default:
+			return null;
 		}
 	}
 
 	public HashMap<String, Integer> getCrop() {
 		return crop;
+	}
+
+	public ArrayList<String> getUsedGroupNamesList() {
+		return usedGroupNamesList;
+	}
+	
+	public void addUsedGroupName(String groupName) {
+		usedGroupNamesList.add(groupName);
+	}
+
+	public void addHistoryNameTemplate(String type, String item) {
+		switch (type) {
+		case FormScannerConstants.BARCODE:
+			historyBarcodeNameTemplate.add(item);
+		case FormScannerConstants.GROUP:
+			historyGroupNameTemplate.add(item);
+		case FormScannerConstants.QUESTION:
+			historyQuestionNameTemplate.add(item);
+		default:
+			break;
+		}
 	}
 }

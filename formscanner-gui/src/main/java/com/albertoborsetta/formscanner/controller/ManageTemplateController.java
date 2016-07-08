@@ -10,6 +10,7 @@ import java.awt.event.ItemListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
+import javax.swing.JComboBox;
 import javax.swing.JFormattedTextField;
 import javax.swing.SwingUtilities;
 import javax.swing.event.ChangeEvent;
@@ -76,6 +77,14 @@ public class ManageTemplateController implements ActionListener,
 
     @Override
     public void itemStateChanged(ItemEvent e) {
+    	Action act = Action.valueOf(((JComboBox<?>) e.getSource()).getActionCommand());
+		switch (act) {
+			case GROUP:
+				view.addItem();
+				break;
+		default:
+			break;
+		}
         view.setAdvanceable();
     }
 

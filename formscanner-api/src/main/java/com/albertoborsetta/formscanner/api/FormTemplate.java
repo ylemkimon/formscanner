@@ -205,6 +205,7 @@ public final class FormTemplate {
 	private Integer size;
 	private boolean isGroupsEnabled = false;
 	private HashMap<String, Integer> crop = new HashMap<>();
+	private ArrayList<String> usedGroupNames = new ArrayList<>();
 
 	private static class FormTemplateWrapper {
 
@@ -372,12 +373,15 @@ public final class FormTemplate {
 			NodeList groupsList = fieldsElement.getElementsByTagName("group");
 
 			if (groupsList.getLength() > 0) {
+				ArrayList<String> groupNamesList = new ArrayList<>();
 				for (int i = 0; i < groupsList.getLength(); i++) {
 					Element groupElement = (Element) groupsList.item(i);
+					groupNamesList.add(groupElement.getAttribute("name"));
 
 					addQuestions(template, groupElement);
 					addAreas(template, groupElement);
 				}
+				template.setUsedGroupNames(groupNamesList);
 			} else { // Version < 2.x
 				addQuestions(template, templateElement);
 				addAreas(template, templateElement);
@@ -518,6 +522,10 @@ public final class FormTemplate {
 	 */
 	public FormTemplate(String name) {
 		this(name, null);
+	}
+
+	public void setUsedGroupNames(ArrayList<String> groupNamesList) {
+		usedGroupNames = groupNamesList;
 	}
 
 	/**
@@ -1409,5 +1417,9 @@ public final class FormTemplate {
 	 */
 	public void setCrop(HashMap<String, Integer> crop) {
 		this.crop = crop;
+	}
+
+	public ArrayList<String> getUsedGroupNames() {
+		return usedGroupNames;
 	}
 }
