@@ -714,7 +714,7 @@ public class OptionsFrame extends InternalFrame implements TabbedView {
 
 	public void addItem(String type) {
 		ArrayList<String> items = model.getHistoryNameTemplate(type);
-		String item;
+		String item = null;
 		switch (type) {
 		case FormScannerConstants.BARCODE:
 			item = (String) barcodeNameTemplate.getSelectedItem();

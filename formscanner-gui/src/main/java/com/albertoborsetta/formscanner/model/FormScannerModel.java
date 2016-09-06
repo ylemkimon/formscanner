@@ -133,7 +133,7 @@ public class FormScannerModel {
 		installPath = StringUtils.substringBeforeLast(installPath, "lib");
 		installPath = StringUtils.defaultIfBlank(System.getProperty("FormScanner_HOME"), installPath);
 		
-		System.setProperty("log4j.configurationFile", installPath + "config/log4j.xml");
+		System.setProperty("log4j.configurationFile", "file:\\" + installPath + "/config/log4j.xml");
 		logger = LogManager.getLogger(FormScannerModel.class.getName());
 
 		String installationLanguage = StringUtils.defaultIfBlank(System.getProperty("FormScanner_LANGUAGE"),
@@ -1118,11 +1118,17 @@ public class FormScannerModel {
 	public void addHistoryNameTemplate(String type, String item) {
 		switch (type) {
 		case FormScannerConstants.BARCODE:
-			historyBarcodeNameTemplate.add(item);
+			if (!historyBarcodeNameTemplate.contains(item))
+				historyBarcodeNameTemplate.add(item);
+			break;
 		case FormScannerConstants.GROUP:
-			historyGroupNameTemplate.add(item);
+			if (!historyGroupNameTemplate.contains(item))
+				historyGroupNameTemplate.add(item);
+			break;
 		case FormScannerConstants.QUESTION:
-			historyQuestionNameTemplate.add(item);
+			if (!historyQuestionNameTemplate.contains(item))
+				historyQuestionNameTemplate.add(item);
+			break;
 		default:
 			break;
 		}
