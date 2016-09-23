@@ -98,14 +98,19 @@ public class ManageTemplateFrame extends InternalFrame implements TabbedView {
 	private JButton cancelPositionButton;
 
 	private final ManageTemplateController manageTemplateController;
-	private int previousRowsCount;
 	private InternalFieldType[] types;
 	private JPanel fieldsTypeButtonPanel;
-	private JTextField setOfQuestionsLabel;
 	private JTextField questionLabel;
 	private String fieldsType;
+
+	private int rowsCount;
+	private int barcodeCount;
+	private int groupCount;
+	
+	private int previousRowsCount;
 	private int previousBarcodeCount;
 	private int previousGroupCount;
+	
 	private JComboBox<String> setOfQuestionsCombo;
 
 	private static final Logger logger = LogManager.getLogger(ManageTemplateFrame.class.getName());
@@ -337,9 +342,9 @@ public class ManageTemplateFrame extends InternalFrame implements TabbedView {
 		setResizable(true);
 		setFrameIcon(FormScannerResources.getIconFor(FormScannerResourcesKeys.EDIT_ICON_16));
 
-		previousRowsCount = 1;
-		previousBarcodeCount = 1;
-		previousGroupCount = 1;
+		rowsCount = 1;
+		barcodeCount = 1;
+		groupCount = 1;
 
 		JPanel fieldListPanel = getFieldListPanel();
 		JPanel fieldTypePanel = getFieldTypePanel();
@@ -389,12 +394,12 @@ public class ManageTemplateFrame extends InternalFrame implements TabbedView {
 				case FormScannerConstants.QUESTIONS_BY_ROWS:
 				case FormScannerConstants.RESPONSES_BY_GRID:
 					HashMap<String, FormQuestion> fields = createFields();
-					model.updateTemplateFields(model.isGroupsEnabled() ? setOfQuestionsLabel.getText()
+					model.updateTemplateFields(model.isGroupsEnabled() ? (String) setOfQuestionsCombo.getSelectedItem()
 							: FormScannerConstants.EMPTY_GROUP_NAME, fields);
 					break;
 				case FormScannerConstants.BARCODE:
 					FormArea area = createArea();
-					model.updateTemplateAreas(model.isGroupsEnabled() ? setOfQuestionsLabel.getText()
+					model.updateTemplateAreas(model.isGroupsEnabled() ? (String) setOfQuestionsCombo.getSelectedItem()
 							: FormScannerConstants.EMPTY_GROUP_NAME, area);
 					break;
 				}
@@ -403,12 +408,16 @@ public class ManageTemplateFrame extends InternalFrame implements TabbedView {
 				resetSelectedValues();
 				break;
 			case 2:
+				previousGroupCount = groupCount;
 				JPanel fieldPropertiesPanel = getFieldPropertiesPanel();
 				tabbedPane.setComponentAt(nextTab, fieldPropertiesPanel);
 				break;
 			case 3:
+				previousRowsCount = rowsCount;
+				previousBarcodeCount = barcodeCount;
+				
 				if (model.isGroupsEnabled() && model.isResetAutoNumberingQuestions()) {
-					previousRowsCount = model.lastIndexOfGroup(setOfQuestionsLabel.getText());
+					rowsCount = model.lastIndexOfGroup((String) setOfQuestionsCombo.getSelectedItem());
 				}
 				JPanel fieldPositionPanel = getFieldPositionPanel();
 				tabbedPane.setComponentAt(nextTab, fieldPositionPanel);
@@ -429,9 +438,13 @@ public class ManageTemplateFrame extends InternalFrame implements TabbedView {
 				resetFieldsType();
 				break;
 			case 1:
+				groupCount = previousGroupCount;
 				resetSelectedValues();
 				break;
 			case 2:
+				rowsCount = previousRowsCount;
+				barcodeCount = previousBarcodeCount;
+								
 				model.resetPoints();
 				model.disposeRelatedFrame(this);
 
@@ -636,8 +649,8 @@ public class ManageTemplateFrame extends InternalFrame implements TabbedView {
 			isMultiple.setSelected(false);
 			rejectMultiple.setSelected(false);
 		}
-		if (model.isGroupsEnabled())
-			setOfQuestionsLabel.setText(StringUtils.EMPTY);
+//		if (model.isGroupsEnabled())
+//			setOfQuestionsLabel.setText(StringUtils.EMPTY);
 	}
 
 	public FieldType getFieldType() {
@@ -747,14 +760,14 @@ public class ManageTemplateFrame extends InternalFrame implements TabbedView {
 		int count;
 		switch (type) {
 		case FormScannerConstants.BARCODE:
-			count = previousBarcodeCount++;
+			count = barcodeCount++;
 			break;
 		case FormScannerConstants.GROUP:
-			count = previousGroupCount++;
+			count = groupCount++;
 			break;
 		case FormScannerConstants.QUESTION:
 		default:
-			count = previousRowsCount++;
+			count = rowsCount++;
 			break;
 		}
 
@@ -907,12 +920,26 @@ public class ManageTemplateFrame extends InternalFrame implements TabbedView {
 	}
 
 	private JPanel getBarcodePanel() {
-		setOfQuestionsLabel = new TextFieldBuilder(10, orientation).withActionListener(manageTemplateController)
-				.build();
+		String[] usedGroupNames = getUsedGroupNamesList();
 
+		setOfQuestionsCombo = new ComboBoxBuilder<String>(FormScannerConstants.GROUP, orientation)
+				.withModel(new DefaultComboBoxModel<>(usedGroupNames)).setEditable(true)
+				.withActionListener(manageTemplateController).withActionCommand(FormScannerConstants.GROUP).build();
+		
 		return new PanelBuilder(orientation).withLayout(new SpringLayout())
-				.add(getLabel(FormScannerTranslationKeys.SET_OF_QUESTIONS_LABEL)).add(setOfQuestionsLabel)
+				.add(getLabel(FormScannerTranslationKeys.SET_OF_QUESTIONS_LABEL)).add(setOfQuestionsCombo)
 				.withGrid(1, 2).build();
+	}
+
+	private String[] getUsedGroupNamesList() {
+		ArrayList<String> usedGroupNamesList = model.getUsedGroupNamesList();
+		Collections.sort(usedGroupNamesList);
+		String groupName = getNameFromTemplate(FormScannerConstants.GROUP);
+		if (!usedGroupNamesList.contains(groupName)) 
+			usedGroupNamesList.add(groupName);
+		String[] usedGroupNames = new String[usedGroupNamesList.size()];
+		usedGroupNamesList.toArray(usedGroupNames);
+		return usedGroupNames;
 	}
 
 	protected JPanel getFieldPositionPanel() {
@@ -1010,20 +1037,11 @@ public class ManageTemplateFrame extends InternalFrame implements TabbedView {
 		PanelBuilder panelBuilder = new PanelBuilder(orientation).withLayout(new SpringLayout());
 
 		if (model.isGroupsEnabled()) {
-			ArrayList<String> usedGroupNamesList = model.getUsedGroupNamesList();
-			Collections.sort(usedGroupNamesList);
-			usedGroupNamesList.add(getNameFromTemplate(FormScannerConstants.GROUP));
-			String[] usedGroupNames = new String[usedGroupNamesList.size()];
-			usedGroupNamesList.toArray(usedGroupNames);
-			// setOfQuestionsLabel = new TextFieldBuilder(10, orientation)
-			// .withActionListener(manageTemplateController)
-			// .setText(getNameFromTemplate(FormScannerConstants.GROUP))
-			// .build();
+			String[] usedGroupNames = getUsedGroupNamesList();
 			setOfQuestionsCombo = new ComboBoxBuilder<String>(FormScannerConstants.GROUP, orientation)
 					.withModel(new DefaultComboBoxModel<>(usedGroupNames)).setEditable(true)
 					.withActionListener(manageTemplateController).withActionCommand(FormScannerConstants.GROUP).build();
 			panelBuilder.withGrid(5, 2).add(getLabel(FormScannerTranslationKeys.SET_OF_QUESTIONS_LABEL))
-					// .add(setOfQuestionsLabel);
 					.add(setOfQuestionsCombo);
 		} else {
 			panelBuilder.withGrid(4, 2);
