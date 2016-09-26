@@ -30,7 +30,6 @@ import com.albertoborsetta.formscanner.model.FormScannerModel;
 
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.Map.Entry;
 
 public class ResultsGridFrame extends InternalFrame {
 
