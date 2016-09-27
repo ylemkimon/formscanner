@@ -9,18 +9,18 @@ import java.util.concurrent.Callable;
 import com.albertoborsetta.formscanner.api.commons.Constants;
 
 /**
-*
-* @author Alberto Borsetta
-* @version 1.1.3-SNAPSHOT
-*/
-public class FieldDetector extends FormScannerDetector
-		implements Callable<HashMap<String, FormQuestion>> {
+ *
+ * @author Alberto Borsetta
+ * @version 1.1.3-SNAPSHOT
+ */
+public class FieldDetector extends FormScannerDetector implements Callable<HashMap<String, FormQuestion>> {
 
 	private final FormQuestion templateField;
 	private final int size;
 	private final HashMap<String, FormQuestion> fields;
 
-	FieldDetector(int threshold, int density, int size, FormTemplate template, FormQuestion templateField, BufferedImage image) {
+	FieldDetector(int threshold, int density, int size, FormTemplate template, FormQuestion templateField,
+			BufferedImage image) {
 		super(threshold, density, image, template);
 		this.templateField = templateField;
 		this.size = size;
@@ -32,6 +32,9 @@ public class FieldDetector extends FormScannerDetector
 		boolean found = false;
 		int count = 0;
 
+		double bestFilled = 0d;
+		double lastFilled;
+
 		HashMap<String, FormPoint> templatePoints = templateField.getPoints();
 		String fieldName = templateField.getName();
 
@@ -41,26 +44,29 @@ public class FieldDetector extends FormScannerDetector
 		for (String pointName : pointNames) {
 			FormPoint responsePoint = calcResponsePoint(templatePoints.get(pointName));
 
-			if (isFilled(responsePoint)) {
+			lastFilled = isFilled(responsePoint);
+			if (lastFilled > bestFilled) {
 				found = true;
 				count++;
 				FormQuestion filledField = getField(fieldName);
 
+				if (!templateField.isMultiple()) {
+					if (count > 1) {						
+						filledField.clearPoints();
+						fields.clear();					
+						
+						if (templateField.rejectMultiple()) {
+							filledField.setPoint(Constants.NO_RESPONSE, Constants.EMPTY_POINT);
+							fields.put(fieldName, filledField);
+							break;
+						}
+					}
+					
+					bestFilled = lastFilled;
+				}
+				
 				filledField.setPoint(pointName, responsePoint);
 				fields.put(fieldName, filledField);
-
-				if (!templateField.isMultiple()) {
-					if (templateField.rejectMultiple() && count > 1) { 
-						filledField.clearPoints();
-						filledField.setPoint(Constants.NO_RESPONSE, Constants.EMPTY_POINT);
-						fields.clear();
-						fields.put(fieldName, filledField);
-						break;
-					}
-					if (!templateField.rejectMultiple()) {
-						break;
-					}
-				}
 			}
 		}
 
@@ -73,7 +79,7 @@ public class FieldDetector extends FormScannerDetector
 		return fields;
 	}
 
-	private boolean isFilled(FormPoint responsePoint) {
+	private double isFilled(FormPoint responsePoint) {
 		int total = size * size;
 		int halfSize = size / 2;
 		int[] rgbArray = new int[total];
@@ -88,7 +94,12 @@ public class FieldDetector extends FormScannerDetector
 				count++;
 			}
 		}
-		return (count / (double) total) >= (density / 100.0);
+		double filled = -1d;
+		if ((count / (double) total) >= (density / 100.0)) {
+			filled = count / (double) total;
+		}
+		return filled;
+		// return (count / (double) total) >= (density / 100.0);
 	}
 
 	private FormQuestion getField(String fieldName) {
