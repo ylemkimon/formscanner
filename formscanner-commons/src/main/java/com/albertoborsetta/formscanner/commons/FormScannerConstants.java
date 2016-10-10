@@ -123,8 +123,7 @@ public class FormScannerConstants extends Constants {
 	public static final Set<String> ARABIC_LANGUAGES = new HashSet<>(
 			Arrays.asList(new String[] { INSTALLATION_ARABIC }));
 
-	// Fields Table Columns
-	// support
+	
 	public static final String WIKI_PAGE = "http://www.formscanner.org/forum";
 	public static final String THRESHOLD = "THRESHOLD";
 	public static final String DENSITY = "DENSITY";
@@ -153,6 +152,7 @@ public class FormScannerConstants extends Constants {
 	public static final String GROUP_NAME_TEMPLATE = "GROUP_NAME_TEMPLATE";
 	public static final String QUESTION_NAME_TEMPLATE = "QUESTION_NAME_TEMPLATE";
 	public static final String BARCODE_NAME_TEMPLATE = "BARCODE_NAME_TEMPLATE";
+	public static final String FIELD_TYPE = "FIELD_TYPE";
 
 	// Crop image
 	public static final String CROP_FROM_TOP = "CROP_FROM_TOP";
@@ -238,7 +238,8 @@ public class FormScannerConstants extends Constants {
 		SHAPE_TYPE,
 		FONT_TYPE,
 		FONT_SIZE,
-		LOOK_AND_FEEL;
+		LOOK_AND_FEEL,
+		FIELD_TYPE;
 	}
 
 	public enum Mode {
