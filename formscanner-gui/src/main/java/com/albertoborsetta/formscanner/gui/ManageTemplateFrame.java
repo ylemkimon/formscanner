@@ -1004,7 +1004,7 @@ public class ManageTemplateFrame extends InternalFrame implements TabbedView {
 		}
 
 		typeComboBox = new ComboBoxBuilder<InternalFieldType>(FormScannerConstants.TYPE_COMBO_BOX, orientation)
-				.withModel(new DefaultComboBoxModel<>(types)).withActionListener(manageTemplateController).build();
+				.withModel(new DefaultComboBoxModel<>(types)).withActionListener(manageTemplateController).withActionCommand(FormScannerConstants.FIELD_TYPE).build();
 
 		fieldsTypeButtonPanel = getFieldsTypeButtonPanel();
 
