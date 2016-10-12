@@ -105,11 +105,9 @@ public class ManageTemplateFrame extends InternalFrame implements TabbedView {
 
 	private int rowsCount;
 	private int barcodeCount;
-	private int groupCount;
 	
 	private int previousRowsCount;
 	private int previousBarcodeCount;
-	private int previousGroupCount;
 	
 	private JComboBox<String> setOfQuestionsCombo;
 
@@ -344,7 +342,6 @@ public class ManageTemplateFrame extends InternalFrame implements TabbedView {
 
 		rowsCount = 1;
 		barcodeCount = 1;
-		groupCount = 1;
 
 		JPanel fieldListPanel = getFieldListPanel();
 		JPanel fieldTypePanel = getFieldTypePanel();
@@ -411,12 +408,10 @@ public class ManageTemplateFrame extends InternalFrame implements TabbedView {
 				resetSelectedValues();
 				break;
 			case 2:
-				previousGroupCount = groupCount;
 				JPanel fieldPropertiesPanel = getFieldPropertiesPanel();
 				tabbedPane.setComponentAt(nextTab, fieldPropertiesPanel);
 				break;
 			case 3:
-				groupCount = model.getLastGroupIndex();
 				previousRowsCount = rowsCount;
 				previousBarcodeCount = barcodeCount;
 				
@@ -442,7 +437,6 @@ public class ManageTemplateFrame extends InternalFrame implements TabbedView {
 				resetFieldsType();
 				break;
 			case 1:
-				groupCount = previousGroupCount;
 				resetSelectedValues();
 				break;
 			case 2:
