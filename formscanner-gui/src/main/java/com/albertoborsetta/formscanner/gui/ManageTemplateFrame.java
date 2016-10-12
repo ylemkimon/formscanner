@@ -384,6 +384,9 @@ public class ManageTemplateFrame extends InternalFrame implements TabbedView {
 
 			switch (nextTab) {
 			case 0:
+				if (model.isGroupsEnabled()) {
+						model.addUsedGroupName((String) setOfQuestionsCombo.getSelectedItem());
+				}
 				for (int i = nextTab + 1; i < tabbedPane.getTabCount(); i++) {
 					tabbedPane.setEnabledAt(i, false);
 				}
@@ -413,6 +416,7 @@ public class ManageTemplateFrame extends InternalFrame implements TabbedView {
 				tabbedPane.setComponentAt(nextTab, fieldPropertiesPanel);
 				break;
 			case 3:
+				groupCount = model.getLastGroupIndex();
 				previousRowsCount = rowsCount;
 				previousBarcodeCount = barcodeCount;
 				
@@ -649,8 +653,6 @@ public class ManageTemplateFrame extends InternalFrame implements TabbedView {
 			isMultiple.setSelected(false);
 			rejectMultiple.setSelected(false);
 		}
-//		if (model.isGroupsEnabled())
-//			setOfQuestionsLabel.setText(StringUtils.EMPTY);
 	}
 
 	public FieldType getFieldType() {
@@ -763,7 +765,7 @@ public class ManageTemplateFrame extends InternalFrame implements TabbedView {
 			count = barcodeCount++;
 			break;
 		case FormScannerConstants.GROUP:
-			count = groupCount++;
+			count = model.getLastGroupIndex();
 			break;
 		case FormScannerConstants.QUESTION:
 		default:
@@ -926,13 +928,17 @@ public class ManageTemplateFrame extends InternalFrame implements TabbedView {
 				.withModel(new DefaultComboBoxModel<>(usedGroupNames)).setEditable(true)
 				.withActionListener(manageTemplateController).withActionCommand(FormScannerConstants.GROUP).build();
 		
+		setOfQuestionsCombo.setSelectedIndex(setOfQuestionsCombo.getItemCount()-1);
+		
 		return new PanelBuilder(orientation).withLayout(new SpringLayout())
 				.add(getLabel(FormScannerTranslationKeys.SET_OF_QUESTIONS_LABEL)).add(setOfQuestionsCombo)
 				.withGrid(1, 2).build();
 	}
 
 	private String[] getUsedGroupNamesList() {
-		ArrayList<String> usedGroupNamesList = model.getUsedGroupNamesList();
+		ArrayList<String> usedGroupNamesList = new ArrayList<String>();
+		usedGroupNamesList.addAll(model.getUsedGroupNamesList());
+
 		Collections.sort(usedGroupNamesList);
 		String groupName = getNameFromTemplate(FormScannerConstants.GROUP);
 		if (!usedGroupNamesList.contains(groupName)) 
@@ -1041,6 +1047,9 @@ public class ManageTemplateFrame extends InternalFrame implements TabbedView {
 			setOfQuestionsCombo = new ComboBoxBuilder<String>(FormScannerConstants.GROUP, orientation)
 					.withModel(new DefaultComboBoxModel<>(usedGroupNames)).setEditable(true)
 					.withActionListener(manageTemplateController).withActionCommand(FormScannerConstants.GROUP).build();
+			
+			setOfQuestionsCombo.setSelectedIndex(setOfQuestionsCombo.getItemCount()-1);
+			
 			panelBuilder.withGrid(5, 2).add(getLabel(FormScannerTranslationKeys.SET_OF_QUESTIONS_LABEL))
 					.add(setOfQuestionsCombo);
 		} else {
@@ -1212,12 +1221,16 @@ public class ManageTemplateFrame extends InternalFrame implements TabbedView {
 	}
 
 	public void addItem() {
-		ArrayList<String> items = model.getUsedGroupNamesList();
+		ArrayList<String> items = new ArrayList<String>();
+		for (int i=0; i<setOfQuestionsCombo.getItemCount(); i++) {
+			items.add(setOfQuestionsCombo.getItemAt(i));
+		}
+				// model.getUsedGroupNamesList();
 		String item = (String) setOfQuestionsCombo.getSelectedItem();
 		if (items.contains(item)) return;
 		setOfQuestionsCombo.removeItemListener(manageTemplateController);
 		setOfQuestionsCombo.insertItemAt(item, 0);
 		setOfQuestionsCombo.addItemListener(manageTemplateController);
-		model.addUsedGroupName(item);
+		//model.addUsedGroupName(item);
 	}
 }

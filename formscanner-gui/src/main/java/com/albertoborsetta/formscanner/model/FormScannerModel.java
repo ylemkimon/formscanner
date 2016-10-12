@@ -126,6 +126,7 @@ public class FormScannerModel {
 	private ArrayList<String> historyGroupNameTemplate;
 	private HashMap<String, Integer> crop = new HashMap<>();
 	private ArrayList<String> usedGroupNamesList = new ArrayList<>();
+	private int nextGroupIndex=1;
 
 	public FormScannerModel() throws UnsupportedEncodingException {
 		String path = FormScannerModel.class.getProtectionDomain().getCodeSource().getLocation().getPath();
@@ -1111,8 +1112,15 @@ public class FormScannerModel {
 		return usedGroupNamesList;
 	}
 	
+	public int getLastGroupIndex() {
+		return nextGroupIndex;
+	}
+	
 	public void addUsedGroupName(String groupName) {
+		if (usedGroupNamesList.contains(groupName))
+			return;
 		usedGroupNamesList.add(groupName);
+		nextGroupIndex++;
 	}
 
 	public void addHistoryNameTemplate(String type, String item) {
