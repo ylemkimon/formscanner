@@ -183,7 +183,7 @@ import java.util.concurrent.ExecutionException;
  * @see Corners
  * @see CornerType
  */
-public final class FormTemplate {
+public class FormTemplate {
 
 	private HashMap<String, FormGroup> groups;
 	private HashMap<Corners, FormPoint> corners;
