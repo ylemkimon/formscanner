@@ -78,7 +78,7 @@ public class ImageFrame extends InternalFrame implements ScrollableView, ImageVi
 
 		setName(Frame.IMAGE_FRAME.name());
 		setTitle(FormScannerTranslation.getTranslationFor(FormScannerTranslationKeys.IMAGE_FRAME_TITLE));
-		setFrameIcon(FormScannerResources.getIconFor(FormScannerResourcesKeys.IMAGES_ICON));
+		setFrameIcon(FormScannerResources.getIconFor(FormScannerResourcesKeys.IMAGES_ICON, 16));
 
 		imagePanel = new ImagePanel(template.getImage());
 		scrollPane = new ImageScrollPane(imagePanel);

@@ -9,6 +9,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Locale;
@@ -121,6 +122,8 @@ public class FormScannerModel {
 	private HashMap<String, Integer> crop = new HashMap<>();
 	private String selectedFileName;
 	private String analyzedFileName;
+	private ArrayList<String> usedGroupNamesList = new ArrayList<>();
+	private int nextGroupIndex=1;
 
 	public FormScannerModel() throws UnsupportedEncodingException {
 		String path = FormScannerModel.class.getProtectionDomain().getCodeSource().getLocation().getPath();
@@ -1124,5 +1127,13 @@ public class FormScannerModel {
 
 	public void removeImages() {
 		openedFiles.clear();
+	}
+
+	public ArrayList<String> getUsedGroupNamesList() {
+		return usedGroupNamesList;
+	}
+
+	public int getLastGroupIndex() {
+		return nextGroupIndex;
 	}
 }
