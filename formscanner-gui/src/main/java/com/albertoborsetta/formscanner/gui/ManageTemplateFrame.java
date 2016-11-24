@@ -416,7 +416,7 @@ public class ManageTemplateFrame extends InternalFrame implements TabbedView {
 				previousBarcodeCount = barcodeCount;
 				
 				if (model.isGroupsEnabled() && model.isResetAutoNumberingQuestions()) {
-					rowsCount = model.lastIndexOfGroup((String) setOfQuestionsCombo.getSelectedItem());
+					previousRowsCount = model.lastIndexOfGroup((String) setOfQuestionsCombo.getSelectedItem());
 				}
 				JPanel fieldPositionPanel = getFieldPositionPanel();
 				tabbedPane.setComponentAt(nextTab, fieldPositionPanel);
