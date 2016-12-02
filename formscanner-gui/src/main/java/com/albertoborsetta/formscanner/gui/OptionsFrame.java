@@ -662,11 +662,9 @@ public class OptionsFrame extends InternalFrame implements TabbedView {
 				.getHistoryNameTemplate(FormScannerConstants.GROUP)
 				.containsAll(model.getHistoryNameTemplate(FormScannerConstants.GROUP)) || model
 				.getHistoryNameTemplate(FormScannerConstants.QUESTION)
-				.containsAll(
-						getHistoryNameTemplate(FormScannerConstants.QUESTION)) || model
+				.containsAll(model.getHistoryNameTemplate(FormScannerConstants.QUESTION)) || model
 				.getHistoryNameTemplate(FormScannerConstants.BARCODE)
-				.containsAll(
-						getHistoryNameTemplate(FormScannerConstants.BARCODE)));
+				.containsAll(model.getHistoryNameTemplate(FormScannerConstants.BARCODE)));
 	}
 
 	private boolean verifyGuiPanel() {
