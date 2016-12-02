@@ -239,7 +239,8 @@ public class FormScannerConstants extends Constants {
 		FONT_TYPE,
 		FONT_SIZE,
 		LOOK_AND_FEEL,
-		FIELD_TYPE;
+		FIELD_TYPE,
+		CORNER_TYPE;
 	}
 
 	public enum Mode {
