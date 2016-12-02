@@ -660,7 +660,7 @@ public class OptionsFrame extends InternalFrame implements TabbedView {
 		return ((groupsEnabled.isSelected() ^ model.isGroupsEnabled()) || (resetAutoNumberingQuestions
 				.isEnabled()) ^ model.isResetAutoNumberingQuestions() || model
 				.getHistoryNameTemplate(FormScannerConstants.GROUP)
-				.containsAll(getHistoryNameTemplate(FormScannerConstants.GROUP)) || model
+				.containsAll(model.getHistoryNameTemplate(FormScannerConstants.GROUP)) || model
 				.getHistoryNameTemplate(FormScannerConstants.QUESTION)
 				.containsAll(
 						getHistoryNameTemplate(FormScannerConstants.QUESTION)) || model
@@ -684,28 +684,28 @@ public class OptionsFrame extends InternalFrame implements TabbedView {
 				.getSelectedIndex() != model.getCornerType().getIndex());
 	}
 
-	public ArrayList<String> getHistoryNameTemplate(String type) {
-		ArrayList<String> items = new ArrayList<>();
-		switch (type) {
-		case FormScannerConstants.BARCODE:
-			for (int i = 0; i < barcodeNameTemplate.getItemCount(); i++) {
-				items.add(barcodeNameTemplate.getItemAt(i));
-			}
-			break;
-		case FormScannerConstants.GROUP:
-			for (int i = 0; i < groupsNameTemplate.getItemCount(); i++) {
-				items.add(groupsNameTemplate.getItemAt(i));
-			}
-			break;
-		case FormScannerConstants.QUESTION:
-		default:
-			for (int i = 0; i < questionsNameTemplate.getItemCount(); i++) {
-				items.add(questionsNameTemplate.getItemAt(i));
-			}
-			break;
-		}
-		return items;
-	}
+//	public ArrayList<String> getHistoryNameTemplate(String type) {
+//		ArrayList<String> items = new ArrayList<>();
+//		switch (type) {
+//		case FormScannerConstants.BARCODE:
+//			for (int i = 0; i < barcodeNameTemplate.getItemCount(); i++) {
+//				items.add(barcodeNameTemplate.getItemAt(i));
+//			}
+//			break;
+//		case FormScannerConstants.GROUP:
+//			for (int i = 0; i < groupsNameTemplate.getItemCount(); i++) {
+//				items.add(groupsNameTemplate.getItemAt(i));
+//			}
+//			break;
+//		case FormScannerConstants.QUESTION:
+//		default:
+//			for (int i = 0; i < questionsNameTemplate.getItemCount(); i++) {
+//				items.add(questionsNameTemplate.getItemAt(i));
+//			}
+//			break;
+//		}
+//		return items;
+//	}
 
 	public void enableGroups() {
 		resetAutoNumberingQuestions.setEnabled(groupsEnabled.isSelected());
@@ -720,8 +720,7 @@ public class OptionsFrame extends InternalFrame implements TabbedView {
 			item = (String) barcodeNameTemplate.getSelectedItem();
 			if (items.contains(item)) break;
 			barcodeNameTemplate.removeItemListener(optionsFrameController);
-			barcodeNameTemplate.insertItemAt(
-					(String) barcodeNameTemplate.getSelectedItem(), 0);
+			barcodeNameTemplate.insertItemAt((String) barcodeNameTemplate.getSelectedItem(), 0);
 			barcodeNameTemplate.addItemListener(optionsFrameController);
 			break;
 		case FormScannerConstants.GROUP:
@@ -748,13 +747,20 @@ public class OptionsFrame extends InternalFrame implements TabbedView {
 		HashMap<String, Integer> crop = new HashMap<>();
 		crop.put(FormScannerConstants.TOP, (Integer) cropFromTop.getValue());
 		crop.put(FormScannerConstants.LEFT, (Integer) cropFromLeft.getValue());
-		crop
-				.put(
-						FormScannerConstants.RIGHT,
-						(Integer) cropFromRight.getValue());
-		crop.put(
-				FormScannerConstants.BOTTOM,
-				(Integer) cropFromBottom.getValue());
+		crop.put(FormScannerConstants.RIGHT, (Integer) cropFromRight.getValue());
+		crop.put(FormScannerConstants.BOTTOM, (Integer) cropFromBottom.getValue());
 		return crop;
+	}
+
+	public String getGroupNameTemplate() {
+		return (String) groupsNameTemplate.getSelectedItem();
+	}
+
+	public String getQuestionNameTemplate() {
+		return (String) questionsNameTemplate.getSelectedItem();
+	}
+
+	public String getBarcodeNameTemplate() {
+		return (String) barcodeNameTemplate.getSelectedItem();
 	}
 }

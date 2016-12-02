@@ -904,12 +904,12 @@ public class FormScannerModel {
 		lookAndFeel = view.getLookAndFeel();
 		resetAutoNumbering = view.isResetAutoNumberingQuestions();
 		groupsEnabled = view.isGroupsEnabled();
-//		historyGroupNameTemplate = view.getHistoryNameTemplate(FormScannerConstants.GROUP);
-		groupNameTemplate = historyGroupNameTemplate.get(0);
-//		historyQuestionNameTemplate = view.getHistoryNameTemplate(FormScannerConstants.QUESTION);
-		questionNameTemplate = historyQuestionNameTemplate.get(0);
-//		historyBarcodeNameTemplate = view.getHistoryNameTemplate(FormScannerConstants.BARCODE);
-		barcodeNameTemplate = historyBarcodeNameTemplate.get(0);
+		groupNameTemplate = view.getGroupNameTemplate(); 
+//				historyGroupNameTemplate.get(0);
+		questionNameTemplate = view.getQuestionNameTemplate(); 
+//				historyQuestionNameTemplate.get(0);
+		barcodeNameTemplate = view.getBarcodeNameTemplate(); 
+//				historyBarcodeNameTemplate.get(0);
 		crop = view.getCrop();
 
 		configurations.setProperty(FormScannerConfigurationKeys.THRESHOLD, String.valueOf(threshold));
