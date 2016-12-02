@@ -193,7 +193,6 @@ public class ResultsGridFrame extends InternalFrame {
 		HashMap<String, FormGroup> groups = form.getGroups();
 		ArrayList<String> groupKeys = new ArrayList<>(groups.keySet());
 		Collections.sort(groupKeys);
-//		for (Entry<String, FormGroup> group : groups.entrySet()) {
 		for (String groupKey : groupKeys) {
 			FormGroup group = groups.get(groupKey);
 
