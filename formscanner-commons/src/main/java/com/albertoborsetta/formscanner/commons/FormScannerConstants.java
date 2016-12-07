@@ -38,6 +38,11 @@ public class FormScannerConstants extends Constants {
 	public static final String ABOUT = "ABOUT";
 	public static final String LANGUAGE = "LANGUAGE";
 	public static final String OPTIONS = "OPTIONS";
+	public static final String CORNER_TYPE = "CORNER_TYPE";
+	public static final String FONT_TYPE = "FONT_TYPE";
+	public static final String FONT_SIZE = "FONT_SIZE";
+	public static final String LOOK_AND_FEEL = "LOOK_AND_FEEL";
+	public static final String SHAPE_TYPE = "SHAPE_TYPE";
 
 	// Frames
 	public static final String RENAME_FILES_FRAME_NAME = "RENAME_FILES_FRAME_NAME";
@@ -88,6 +93,8 @@ public class FormScannerConstants extends Constants {
 	public static final String POLISH = "POLISH";
 	public static final String FARSI = "FARSI";
 	public static final String JAPANESE = "JAPANESE";
+	public static final String FRENCH = "FRENCH";
+	public static final String ARABIC = "ARABIC";
 
 	public static final String INSTALLATION_ARABIC = "Arabic";
 	public static final String INSTALLATION_CHINESE = "Chinese (Simplified)";
@@ -103,10 +110,8 @@ public class FormScannerConstants extends Constants {
 	public static final String INSTALLATION_RUSSIAN = "Russian";
 	public static final String INSTALLATION_TURKISH = "T�rk‡e";
 
-	public static final Set<String> ENGLISH_LANGUAGES = new HashSet<>(
-			Arrays.asList(new String[] { INSTALLATION_CHINESE, INSTALLATION_ENGLISH,
-					INSTALLATION_FRENCH, INSTALLATION_MAGYAR,
-					INSTALLATION_RUSSIAN, INSTALLATION_TURKISH }));
+	public static final Set<String> ENGLISH_LANGUAGES = new HashSet<>(Arrays.asList(new String[] { INSTALLATION_CHINESE,
+			INSTALLATION_ENGLISH, INSTALLATION_MAGYAR, INSTALLATION_RUSSIAN, INSTALLATION_TURKISH }));
 	public static final Set<String> ITALIAN_LANGUAGES = new HashSet<>(
 			Arrays.asList(new String[] { INSTALLATION_ITALIAN }));
 	public static final Set<String> PORTUGUES_LANGUAGES = new HashSet<>(
@@ -114,17 +119,15 @@ public class FormScannerConstants extends Constants {
 	public static final Set<String> SPANISH_LANGUAGES = new HashSet<>(
 			Arrays.asList(new String[] { INSTALLATION_SPANISH }));
 	public static final Set<String> GERMAN_LANGUAGES = new HashSet<>(
-			Arrays.asList(new String[] { INSTALLATION_GERMAN })); 
-	public static final Set<String> GREEK_LANGUAGES = new HashSet<>(
-			Arrays.asList(new String[] { INSTALLATION_GREEK }));
-	public static final Set<String> POLISH_LANGUAGES = new HashSet<>(
-			Arrays.asList(new String[] {}));
-	public static final Set<String> FARSI_LANGUAGES = new HashSet<>(
-			Arrays.asList(new String[] {}));
+			Arrays.asList(new String[] { INSTALLATION_GERMAN }));
+	public static final Set<String> GREEK_LANGUAGES = new HashSet<>(Arrays.asList(new String[] { INSTALLATION_GREEK }));
+	public static final Set<String> POLISH_LANGUAGES = new HashSet<>(Arrays.asList(new String[] {}));
+	public static final Set<String> FARSI_LANGUAGES = new HashSet<>(Arrays.asList(new String[] {}));
 	public static final Set<String> DUTCH_LANGUAGES = new HashSet<>(
 			Arrays.asList(new String[] { INSTALLATION_NEDERLANDS }));
-	public static final Set<String> JAPANESE_LANGUAGES = new HashSet<>(
-			Arrays.asList(new String[] {}));
+	public static final Set<String> JAPANESE_LANGUAGES = new HashSet<>(Arrays.asList(new String[] {}));
+	public static final Set<String> FRENCH_LANGUAGES = new HashSet<>(
+			Arrays.asList(new String[] { INSTALLATION_FRENCH }));
 	public static final Set<String> ARABIC_LANGUAGES = new HashSet<>(
 			Arrays.asList(new String[] { INSTALLATION_ARABIC }));
 
@@ -249,7 +252,13 @@ public class FormScannerConstants extends Constants {
 		GROUP, 
 		CLEAR_TEMPLATE,
 		OPEN_TEMPLATE_IMAGE,
-		CLEAR_IMAGES;
+		CLEAR_IMAGES,
+SHAPE_TYPE,
+		FONT_TYPE,
+		FONT_SIZE,
+		LOOK_AND_FEEL,
+		FIELD_TYPE,
+		CORNER_TYPE;
 	}
 
 	public enum Mode {
@@ -305,17 +314,23 @@ public class FormScannerConstants extends Constants {
 	// Languages
 	public enum Language {
 
-		ENGLISH("en", FormScannerTranslationKeys.ENGLISH, ENGLISH_LANGUAGES),
-		ITALIAN("it", FormScannerTranslationKeys.ITALIAN, ITALIAN_LANGUAGES),
-		PORTUGUES("pt_BR", FormScannerTranslationKeys.PORTUGUES, PORTUGUES_LANGUAGES),
-		SPANISH("es", FormScannerTranslationKeys.SPANISH, SPANISH_LANGUAGES),
-		GERMAN("de", FormScannerTranslationKeys.GERMAN, GERMAN_LANGUAGES),
-		FARSI("fa", FormScannerTranslationKeys.FARSI, FARSI_LANGUAGES),
-		POLISH("pl", FormScannerTranslationKeys.POLISH, POLISH_LANGUAGES),
-		GREEK("el", FormScannerTranslationKeys.GREEK, GREEK_LANGUAGES),
-		DUTCH("nl", FormScannerTranslationKeys.DUTCH, DUTCH_LANGUAGES),
-		JAPANESE("jp", FormScannerTranslationKeys.JAPANESE, JAPANESE_LANGUAGES),
-		ARABIC("ar", FormScannerTranslationKeys.ARABIC, ARABIC_LANGUAGES);
+		ENGLISH("en", FormScannerTranslationKeys.ENGLISH, ENGLISH_LANGUAGES), ITALIAN("it",
+				FormScannerTranslationKeys.ITALIAN, ITALIAN_LANGUAGES), PORTUGUES("pt_BR",
+						FormScannerTranslationKeys.PORTUGUES, PORTUGUES_LANGUAGES), SPANISH("es",
+								FormScannerTranslationKeys.SPANISH, SPANISH_LANGUAGES), GERMAN("de",
+										FormScannerTranslationKeys.GERMAN, GERMAN_LANGUAGES), FARSI("fa",
+												FormScannerTranslationKeys.FARSI,
+												FARSI_LANGUAGES), POLISH("pl", FormScannerTranslationKeys.POLISH,
+														POLISH_LANGUAGES), GREEK("el", FormScannerTranslationKeys.GREEK,
+																GREEK_LANGUAGES), DUTCH("nl",
+																		FormScannerTranslationKeys.DUTCH,
+																		DUTCH_LANGUAGES), JAPANESE("jp",
+																				FormScannerTranslationKeys.JAPANESE,
+																				JAPANESE_LANGUAGES), FRENCH("fr",
+																						FormScannerTranslationKeys.FRENCH,
+																						FRENCH_LANGUAGES), ARABIC("ar",
+																								FormScannerTranslationKeys.ARABIC,
+																								ARABIC_LANGUAGES);
 
 		private final String value;
 		private final String translation;

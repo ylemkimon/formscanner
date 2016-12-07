@@ -3,7 +3,6 @@ package com.albertoborsetta.formscanner.api;
 import com.albertoborsetta.formscanner.api.commons.Constants.CornerType;
 
 import java.awt.image.BufferedImage;
-import java.util.HashMap;
 import java.util.concurrent.Callable;
 
 import com.albertoborsetta.formscanner.api.commons.Constants.Corners;

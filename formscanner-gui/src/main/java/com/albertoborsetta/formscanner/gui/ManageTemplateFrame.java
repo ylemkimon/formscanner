@@ -280,9 +280,12 @@ public class ManageTemplateFrame extends InternalFrame implements WizardTabView 
 		case CONFIRM:
 			nextTab = (currTab + 1) % tabbedPane.getTabCount();
 
-			if (StringUtils.equals(fieldsType, FormScannerConstants.BARCODE) && !model
-					.isGroupsEnabled())
-				nextTab++;
+			if (currTab == 1) {
+				fieldsType=getFieldType().getName();
+				if (StringUtils.equals(fieldsType, FormScannerConstants.BARCODE) && !model
+						.isGroupsEnabled())
+					nextTab++;
+			}
 
 			switch (nextTab) {
 			case 0:
@@ -350,7 +353,10 @@ public class ManageTemplateFrame extends InternalFrame implements WizardTabView 
 				barcodeCount = previousBarcodeCount;
 								
 				model.resetPoints();
-//				model.disposeRelatedFrame(this);
+
+				if (StringUtils.equals(fieldsType, FormScannerConstants.BARCODE) && !model
+						.isGroupsEnabled()) 
+					nextTab--;
 				break;
 			default:
 				dispose();
@@ -517,6 +523,8 @@ public class ManageTemplateFrame extends InternalFrame implements WizardTabView 
 			isMultiple.setSelected(false);
 			rejectMultiple.setSelected(false);
 		}
+		if (model.isGroupsEnabled())
+			setOfQuestionsLabel.setText(StringUtils.EMPTY);
 	}
 
 	public FieldType getFieldType() {

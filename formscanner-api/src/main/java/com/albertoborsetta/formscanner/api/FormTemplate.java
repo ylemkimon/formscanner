@@ -212,6 +212,7 @@ public final class FormTemplate {
 	private Integer size;
 	private boolean isGroupsEnabled = false;
 	private HashMap<String, Integer> crop = new HashMap<>();
+	private ArrayList<String> usedGroupNames = new ArrayList<>();
 	private String imageName;
 	private BufferedImage image;
 
@@ -358,12 +359,15 @@ public final class FormTemplate {
 			NodeList groupsList = fieldsElement.getElementsByTagName("group");
 
 			if (groupsList.getLength() > 0) {
+				ArrayList<String> groupNamesList = new ArrayList<>();
 				for (int i = 0; i < groupsList.getLength(); i++) {
 					Element groupElement = (Element) groupsList.item(i);
+					groupNamesList.add(groupElement.getAttribute("name"));
 
 					addQuestions(template, groupElement);
 					addAreas(template, groupElement);
 				}
+				template.setUsedGroupNames(groupNamesList);
 			} else { // Version < 2.x
 				addQuestions(template, templateElement);
 				addAreas(template, templateElement);
@@ -514,6 +518,10 @@ public final class FormTemplate {
 	 */
 	public void setImageName(String name) {
 		this.imageName = name;
+	}
+
+	public void setUsedGroupNames(ArrayList<String> groupNamesList) {
+		usedGroupNames = groupNamesList;
 	}
 
 	/**
@@ -1025,8 +1033,9 @@ public final class FormTemplate {
 
 		int cores = Runtime.getRuntime().availableProcessors();
 
-		// Only for debug
-		// ExecutorService threadPool = Executors.newFixedThreadPool(1);
+		//		Only for debug
+		//		cores = 1;
+
 		ExecutorService threadPool = Executors.newFixedThreadPool(--cores <= 0 ? 1 : cores);
 		HashMap<Corners, Future<FormPoint>> cornerDetectorThreads = new HashMap<>();
 
@@ -1085,11 +1094,11 @@ public final class FormTemplate {
 		height = image.getHeight();
 		width = image.getWidth();
 		int cores = Runtime.getRuntime().availableProcessors();
+//		Only for debug
+//		cores = 1;
 
 		HashMap<String, FormGroup> templateGroups = template.getGroups();
 		for (Entry<String, FormGroup> templateGroup : templateGroups.entrySet()) {
-			// Only for debug
-			// ExecutorService threadPool = Executors.newFixedThreadPool(1);
 			ExecutorService threadPool = Executors.newFixedThreadPool(--cores <= 0 ? 1 : cores);
 			HashSet<Future<HashMap<String, FormQuestion>>> fieldDetectorThreads = new HashSet<>();
 
@@ -1278,6 +1287,8 @@ public final class FormTemplate {
 		height = image.getHeight();
 		width = image.getWidth();
 		int cores = Runtime.getRuntime().availableProcessors();
+//		Only for debug
+//		cores = 1;
 
 		HashMap<String, FormGroup> templateGroups = template.getGroups();
 		for (Entry<String, FormGroup> templateGroup : templateGroups.entrySet()) {

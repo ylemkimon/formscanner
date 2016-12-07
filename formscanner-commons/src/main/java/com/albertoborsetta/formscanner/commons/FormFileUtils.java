@@ -319,7 +319,9 @@ public class FormFileUtils extends JFileChooser {
 			FormGroup group = groupEntry.getValue();
 			HashMap<String, FormQuestion> fields = group.getFields();
 			for (Entry<String, FormQuestion> fieldEntry : fields.entrySet()) {
-				String headerKey = "[" + groupEntry.getKey() + "] " + fieldEntry.getKey();
+				String headerKey = fieldEntry.getKey();
+				if (!groupEntry.getKey().equals(FormScannerConstants.EMPTY_GROUP_NAME))
+					headerKey = "[" + groupEntry.getKey() + "] " + headerKey;
 				header.addHeaderKey(headerKey);
 				header.addGroupName(headerKey, groupEntry.getKey());
 				header.addFieldName(headerKey, fieldEntry.getKey());
@@ -329,7 +331,9 @@ public class FormFileUtils extends JFileChooser {
 			FormGroup group = groupEntry.getValue();
 			HashMap<String, FormArea> areas = group.getAreas();
 			for (Entry<String, FormArea> areaEntry : areas.entrySet()) {
-				String headerKey = "[" + groupEntry.getKey() + "] " + areaEntry.getKey();
+				String headerKey = areaEntry.getKey();
+				if (!groupEntry.getKey().equals(FormScannerConstants.EMPTY_GROUP_NAME))
+					headerKey = "[" + groupEntry.getKey() + "] " + headerKey;
 				header.addHeaderKey(headerKey);
 				header.addGroupName(headerKey, groupEntry.getKey());
 				header.addFieldName(headerKey, areaEntry.getKey());
