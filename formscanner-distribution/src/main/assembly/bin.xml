@@ -43,6 +43,26 @@
 						</includes>
 					</fileSet>
 					<fileSet>
+						<outputDirectory>/samples/questionnaire</outputDirectory>
+						<directory>src/main/resources/samples/questionnaire</directory>
+						<includes>
+							<include>*.jpg</include>
+							<include>*.xtmpl</include>
+							<include>*.docx</include>
+							<include>*.pdf</include>
+						</includes>
+					</fileSet>
+					<fileSet>
+						<outputDirectory>/samples/test</outputDirectory>
+						<directory>src/main/resources/samples/test</directory>
+						<includes>
+							<include>*.jpg</include>
+							<include>*.xtmpl</include>
+							<include>*.docx</include>
+							<include>*.pdf</include>
+						</includes>
+					</fileSet>
+					<fileSet>
 						<outputDirectory>/icons</outputDirectory>
 						<directory>src/main/resources/icons</directory>
 						<includes>
