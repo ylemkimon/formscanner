@@ -1,0 +1,899 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<template density="40" threshold="127" version="2.1">
+    <crop bottom="0" left="0" right="0" top="0"/>
+    <rotation angle="0.001421126471056031"/>
+    <corners type="ANGULAR">
+        <corner position="TOP_RIGHT">
+            <point x="2314.0" y="160.0"/>
+        </corner>
+        <corner position="TOP_LEFT">
+            <point x="203.0" y="163.0"/>
+        </corner>
+        <corner position="BOTTOM_LEFT">
+            <point x="202.0" y="3242.0"/>
+        </corner>
+        <corner position="BOTTOM_RIGHT">
+            <point x="2313.0" y="3237.0"/>
+        </corner>
+    </corners>
+    <fields groups="false" shape="CIRCLE" size="15">
+        <group name="EMPTY">
+            <question multiple="true" question="Question31" rejectMultiple="false" type="QUESTIONS_BY_ROWS">
+                <values>
+                    <value response="A">
+                        <point x="1866.0" y="1903.0"/>
+                    </value>
+                    <value response="B">
+                        <point x="1957.0" y="1903.0"/>
+                    </value>
+                    <value response="C">
+                        <point x="2048.0" y="1903.0"/>
+                    </value>
+                    <value response="D">
+                        <point x="2138.0" y="1903.0"/>
+                    </value>
+                </values>
+            </question>
+            <question multiple="true" question="Question10" rejectMultiple="false" type="QUESTIONS_BY_ROWS">
+                <values>
+                    <value response="A">
+                        <point x="1315.0" y="1822.0"/>
+                    </value>
+                    <value response="B">
+                        <point x="1406.0" y="1822.0"/>
+                    </value>
+                    <value response="C">
+                        <point x="1498.0" y="1822.0"/>
+                    </value>
+                    <value response="D">
+                        <point x="1589.0" y="1822.0"/>
+                    </value>
+                </values>
+            </question>
+            <question multiple="true" question="Question32" rejectMultiple="false" type="QUESTIONS_BY_ROWS">
+                <values>
+                    <value response="A">
+                        <point x="1866.0" y="1987.0"/>
+                    </value>
+                    <value response="B">
+                        <point x="1957.0" y="1987.0"/>
+                    </value>
+                    <value response="C">
+                        <point x="2048.0" y="1987.0"/>
+                    </value>
+                    <value response="D">
+                        <point x="2139.0" y="1986.0"/>
+                    </value>
+                </values>
+            </question>
+            <question multiple="true" question="Question11" rejectMultiple="false" type="QUESTIONS_BY_ROWS">
+                <values>
+                    <value response="A">
+                        <point x="1315.0" y="1905.0"/>
+                    </value>
+                    <value response="B">
+                        <point x="1406.0" y="1905.0"/>
+                    </value>
+                    <value response="C">
+                        <point x="1498.0" y="1905.0"/>
+                    </value>
+                    <value response="D">
+                        <point x="1589.0" y="1905.0"/>
+                    </value>
+                </values>
+            </question>
+            <question multiple="true" question="Question33" rejectMultiple="false" type="QUESTIONS_BY_ROWS">
+                <values>
+                    <value response="A">
+                        <point x="1866.0" y="2070.0"/>
+                    </value>
+                    <value response="B">
+                        <point x="1957.0" y="2070.0"/>
+                    </value>
+                    <value response="C">
+                        <point x="2048.0" y="2070.0"/>
+                    </value>
+                    <value response="D">
+                        <point x="2139.0" y="2070.0"/>
+                    </value>
+                </values>
+            </question>
+            <question multiple="true" question="Question12" rejectMultiple="false" type="QUESTIONS_BY_ROWS">
+                <values>
+                    <value response="A">
+                        <point x="1315.0" y="1989.0"/>
+                    </value>
+                    <value response="B">
+                        <point x="1406.0" y="1989.0"/>
+                    </value>
+                    <value response="C">
+                        <point x="1498.0" y="1989.0"/>
+                    </value>
+                    <value response="D">
+                        <point x="1590.0" y="1988.0"/>
+                    </value>
+                </values>
+            </question>
+            <question multiple="true" question="Question34" rejectMultiple="false" type="QUESTIONS_BY_ROWS">
+                <values>
+                    <value response="A">
+                        <point x="1866.0" y="2154.0"/>
+                    </value>
+                    <value response="B">
+                        <point x="1957.0" y="2153.0"/>
+                    </value>
+                    <value response="C">
+                        <point x="2048.0" y="2153.0"/>
+                    </value>
+                    <value response="D">
+                        <point x="2139.0" y="2153.0"/>
+                    </value>
+                </values>
+            </question>
+            <question multiple="true" question="Question30" rejectMultiple="false" type="QUESTIONS_BY_ROWS">
+                <values>
+                    <value response="A">
+                        <point x="1866.0" y="1820.0"/>
+                    </value>
+                    <value response="B">
+                        <point x="1956.0" y="1820.0"/>
+                    </value>
+                    <value response="C">
+                        <point x="2047.0" y="1820.0"/>
+                    </value>
+                    <value response="D">
+                        <point x="2138.0" y="1820.0"/>
+                    </value>
+                </values>
+            </question>
+            <question multiple="true" question="Question17" rejectMultiple="false" type="QUESTIONS_BY_ROWS">
+                <values>
+                    <value response="A">
+                        <point x="1315.0" y="2406.0"/>
+                    </value>
+                    <value response="B">
+                        <point x="1407.0" y="2406.0"/>
+                    </value>
+                    <value response="C">
+                        <point x="1499.0" y="2405.0"/>
+                    </value>
+                    <value response="D">
+                        <point x="1590.0" y="2405.0"/>
+                    </value>
+                </values>
+            </question>
+            <question multiple="true" question="Question39" rejectMultiple="false" type="QUESTIONS_BY_ROWS">
+                <values>
+                    <value response="A">
+                        <point x="1867.0" y="2570.0"/>
+                    </value>
+                    <value response="B">
+                        <point x="1958.0" y="2570.0"/>
+                    </value>
+                    <value response="C">
+                        <point x="2048.0" y="2570.0"/>
+                    </value>
+                    <value response="D">
+                        <point x="2139.0" y="2570.0"/>
+                    </value>
+                </values>
+            </question>
+            <question multiple="true" question="Question18" rejectMultiple="false" type="QUESTIONS_BY_ROWS">
+                <values>
+                    <value response="A">
+                        <point x="1316.0" y="2489.0"/>
+                    </value>
+                    <value response="B">
+                        <point x="1407.0" y="2489.0"/>
+                    </value>
+                    <value response="C">
+                        <point x="1499.0" y="2489.0"/>
+                    </value>
+                    <value response="D">
+                        <point x="1590.0" y="2489.0"/>
+                    </value>
+                </values>
+            </question>
+            <question multiple="true" question="Question19" rejectMultiple="false" type="QUESTIONS_BY_ROWS">
+                <values>
+                    <value response="A">
+                        <point x="1316.0" y="2572.0"/>
+                    </value>
+                    <value response="B">
+                        <point x="1407.0" y="2572.0"/>
+                    </value>
+                    <value response="C">
+                        <point x="1499.0" y="2572.0"/>
+                    </value>
+                    <value response="D">
+                        <point x="1590.0" y="2572.0"/>
+                    </value>
+                </values>
+            </question>
+            <question multiple="true" question="Question13" rejectMultiple="false" type="QUESTIONS_BY_ROWS">
+                <values>
+                    <value response="A">
+                        <point x="1315.0" y="2072.0"/>
+                    </value>
+                    <value response="B">
+                        <point x="1407.0" y="2072.0"/>
+                    </value>
+                    <value response="C">
+                        <point x="1498.0" y="2072.0"/>
+                    </value>
+                    <value response="D">
+                        <point x="1590.0" y="2072.0"/>
+                    </value>
+                </values>
+            </question>
+            <question multiple="true" question="Question35" rejectMultiple="false" type="QUESTIONS_BY_ROWS">
+                <values>
+                    <value response="A">
+                        <point x="1866.0" y="2237.0"/>
+                    </value>
+                    <value response="B">
+                        <point x="1957.0" y="2237.0"/>
+                    </value>
+                    <value response="C">
+                        <point x="2048.0" y="2237.0"/>
+                    </value>
+                    <value response="D">
+                        <point x="2139.0" y="2237.0"/>
+                    </value>
+                </values>
+            </question>
+            <question multiple="true" question="Question14" rejectMultiple="false" type="QUESTIONS_BY_ROWS">
+                <values>
+                    <value response="A">
+                        <point x="1315.0" y="2156.0"/>
+                    </value>
+                    <value response="B">
+                        <point x="1407.0" y="2155.0"/>
+                    </value>
+                    <value response="C">
+                        <point x="1498.0" y="2155.0"/>
+                    </value>
+                    <value response="D">
+                        <point x="1590.0" y="2155.0"/>
+                    </value>
+                </values>
+            </question>
+            <question multiple="true" question="Question36" rejectMultiple="false" type="QUESTIONS_BY_ROWS">
+                <values>
+                    <value response="A">
+                        <point x="1866.0" y="2320.0"/>
+                    </value>
+                    <value response="B">
+                        <point x="1957.0" y="2320.0"/>
+                    </value>
+                    <value response="C">
+                        <point x="2048.0" y="2320.0"/>
+                    </value>
+                    <value response="D">
+                        <point x="2139.0" y="2320.0"/>
+                    </value>
+                </values>
+            </question>
+            <question multiple="true" question="Question15" rejectMultiple="false" type="QUESTIONS_BY_ROWS">
+                <values>
+                    <value response="A">
+                        <point x="1315.0" y="2239.0"/>
+                    </value>
+                    <value response="B">
+                        <point x="1407.0" y="2239.0"/>
+                    </value>
+                    <value response="C">
+                        <point x="1498.0" y="2239.0"/>
+                    </value>
+                    <value response="D">
+                        <point x="1590.0" y="2239.0"/>
+                    </value>
+                </values>
+            </question>
+            <question multiple="true" question="Question37" rejectMultiple="false" type="QUESTIONS_BY_ROWS">
+                <values>
+                    <value response="A">
+                        <point x="1866.0" y="2404.0"/>
+                    </value>
+                    <value response="B">
+                        <point x="1957.0" y="2404.0"/>
+                    </value>
+                    <value response="C">
+                        <point x="2048.0" y="2403.0"/>
+                    </value>
+                    <value response="D">
+                        <point x="2139.0" y="2403.0"/>
+                    </value>
+                </values>
+            </question>
+            <question multiple="true" question="Question16" rejectMultiple="false" type="QUESTIONS_BY_ROWS">
+                <values>
+                    <value response="A">
+                        <point x="1315.0" y="2322.0"/>
+                    </value>
+                    <value response="B">
+                        <point x="1407.0" y="2322.0"/>
+                    </value>
+                    <value response="C">
+                        <point x="1498.0" y="2322.0"/>
+                    </value>
+                    <value response="D">
+                        <point x="1590.0" y="2322.0"/>
+                    </value>
+                </values>
+            </question>
+            <question multiple="true" question="Question38" rejectMultiple="false" type="QUESTIONS_BY_ROWS">
+                <values>
+                    <value response="A">
+                        <point x="1867.0" y="2487.0"/>
+                    </value>
+                    <value response="B">
+                        <point x="1957.0" y="2487.0"/>
+                    </value>
+                    <value response="C">
+                        <point x="2048.0" y="2487.0"/>
+                    </value>
+                    <value response="D">
+                        <point x="2139.0" y="2487.0"/>
+                    </value>
+                </values>
+            </question>
+            <question multiple="true" question="Question20" rejectMultiple="false" type="QUESTIONS_BY_ROWS">
+                <values>
+                    <value response="A">
+                        <point x="1316.0" y="2656.0"/>
+                    </value>
+                    <value response="B">
+                        <point x="1407.0" y="2656.0"/>
+                    </value>
+                    <value response="C">
+                        <point x="1499.0" y="2656.0"/>
+                    </value>
+                    <value response="D">
+                        <point x="1590.0" y="2655.0"/>
+                    </value>
+                </values>
+            </question>
+            <question multiple="true" question="Question21" rejectMultiple="false" type="QUESTIONS_BY_ROWS">
+                <values>
+                    <value response="A">
+                        <point x="1864.0" y="1069.0"/>
+                    </value>
+                    <value response="B">
+                        <point x="1955.0" y="1069.0"/>
+                    </value>
+                    <value response="C">
+                        <point x="2046.0" y="1069.0"/>
+                    </value>
+                    <value response="D">
+                        <point x="2137.0" y="1069.0"/>
+                    </value>
+                </values>
+            </question>
+            <question multiple="true" question="Question22" rejectMultiple="false" type="QUESTIONS_BY_ROWS">
+                <values>
+                    <value response="A">
+                        <point x="1865.0" y="1153.0"/>
+                    </value>
+                    <value response="B">
+                        <point x="1956.0" y="1153.0"/>
+                    </value>
+                    <value response="C">
+                        <point x="2046.0" y="1153.0"/>
+                    </value>
+                    <value response="D">
+                        <point x="2137.0" y="1152.0"/>
+                    </value>
+                </values>
+            </question>
+            <question multiple="true" question="Question01" rejectMultiple="false" type="QUESTIONS_BY_ROWS">
+                <values>
+                    <value response="A">
+                        <point x="1313.0" y="1071.0"/>
+                    </value>
+                    <value response="B">
+                        <point x="1405.0" y="1071.0"/>
+                    </value>
+                    <value response="C">
+                        <point x="1497.0" y="1071.0"/>
+                    </value>
+                    <value response="D">
+                        <point x="1588.0" y="1071.0"/>
+                    </value>
+                </values>
+            </question>
+            <question multiple="true" question="Question23" rejectMultiple="false" type="QUESTIONS_BY_ROWS">
+                <values>
+                    <value response="A">
+                        <point x="1865.0" y="1236.0"/>
+                    </value>
+                    <value response="B">
+                        <point x="1956.0" y="1236.0"/>
+                    </value>
+                    <value response="C">
+                        <point x="2047.0" y="1236.0"/>
+                    </value>
+                    <value response="D">
+                        <point x="2137.0" y="1236.0"/>
+                    </value>
+                </values>
+            </question>
+            <question multiple="false" question="id2" rejectMultiple="false" type="QUESTIONS_BY_COLS">
+                <values>
+                    <value response="0">
+                        <point x="582.0" y="1051.0"/>
+                    </value>
+                    <value response="1">
+                        <point x="582.0" y="1141.0"/>
+                    </value>
+                    <value response="2">
+                        <point x="582.0" y="1230.0"/>
+                    </value>
+                    <value response="3">
+                        <point x="582.0" y="1319.0"/>
+                    </value>
+                    <value response="4">
+                        <point x="583.0" y="1408.0"/>
+                    </value>
+                    <value response="5">
+                        <point x="583.0" y="1497.0"/>
+                    </value>
+                    <value response="6">
+                        <point x="583.0" y="1586.0"/>
+                    </value>
+                    <value response="7">
+                        <point x="583.0" y="1676.0"/>
+                    </value>
+                    <value response="8">
+                        <point x="583.0" y="1765.0"/>
+                    </value>
+                    <value response="9">
+                        <point x="583.0" y="1854.0"/>
+                    </value>
+                </values>
+            </question>
+            <question multiple="true" question="Question40" rejectMultiple="false" type="QUESTIONS_BY_ROWS">
+                <values>
+                    <value response="A">
+                        <point x="1867.0" y="2654.0"/>
+                    </value>
+                    <value response="B">
+                        <point x="1958.0" y="2654.0"/>
+                    </value>
+                    <value response="C">
+                        <point x="2049.0" y="2654.0"/>
+                    </value>
+                    <value response="D">
+                        <point x="2139.0" y="2653.0"/>
+                    </value>
+                </values>
+            </question>
+            <question multiple="false" question="id1" rejectMultiple="false" type="QUESTIONS_BY_COLS">
+                <values>
+                    <value response="0">
+                        <point x="491.0" y="1051.0"/>
+                    </value>
+                    <value response="1">
+                        <point x="492.0" y="1141.0"/>
+                    </value>
+                    <value response="2">
+                        <point x="492.0" y="1230.0"/>
+                    </value>
+                    <value response="3">
+                        <point x="492.0" y="1319.0"/>
+                    </value>
+                    <value response="4">
+                        <point x="492.0" y="1408.0"/>
+                    </value>
+                    <value response="5">
+                        <point x="492.0" y="1497.0"/>
+                    </value>
+                    <value response="6">
+                        <point x="492.0" y="1587.0"/>
+                    </value>
+                    <value response="7">
+                        <point x="492.0" y="1676.0"/>
+                    </value>
+                    <value response="8">
+                        <point x="493.0" y="1765.0"/>
+                    </value>
+                    <value response="9">
+                        <point x="493.0" y="1854.0"/>
+                    </value>
+                </values>
+            </question>
+            <question multiple="false" question="id4" rejectMultiple="false" type="QUESTIONS_BY_COLS">
+                <values>
+                    <value response="0">
+                        <point x="763.0" y="1051.0"/>
+                    </value>
+                    <value response="1">
+                        <point x="763.0" y="1140.0"/>
+                    </value>
+                    <value response="2">
+                        <point x="763.0" y="1229.0"/>
+                    </value>
+                    <value response="3">
+                        <point x="764.0" y="1319.0"/>
+                    </value>
+                    <value response="4">
+                        <point x="764.0" y="1408.0"/>
+                    </value>
+                    <value response="5">
+                        <point x="764.0" y="1497.0"/>
+                    </value>
+                    <value response="6">
+                        <point x="764.0" y="1586.0"/>
+                    </value>
+                    <value response="7">
+                        <point x="764.0" y="1675.0"/>
+                    </value>
+                    <value response="8">
+                        <point x="764.0" y="1765.0"/>
+                    </value>
+                    <value response="9">
+                        <point x="764.0" y="1854.0"/>
+                    </value>
+                </values>
+            </question>
+            <question multiple="true" question="Question06" rejectMultiple="false" type="QUESTIONS_BY_ROWS">
+                <values>
+                    <value response="A">
+                        <point x="1314.0" y="1488.0"/>
+                    </value>
+                    <value response="B">
+                        <point x="1406.0" y="1488.0"/>
+                    </value>
+                    <value response="C">
+                        <point x="1497.0" y="1488.0"/>
+                    </value>
+                    <value response="D">
+                        <point x="1589.0" y="1488.0"/>
+                    </value>
+                </values>
+            </question>
+            <question multiple="true" question="Question28" rejectMultiple="false" type="QUESTIONS_BY_ROWS">
+                <values>
+                    <value response="A">
+                        <point x="1865.0" y="1653.0"/>
+                    </value>
+                    <value response="B">
+                        <point x="1956.0" y="1653.0"/>
+                    </value>
+                    <value response="C">
+                        <point x="2047.0" y="1653.0"/>
+                    </value>
+                    <value response="D">
+                        <point x="2138.0" y="1653.0"/>
+                    </value>
+                </values>
+            </question>
+            <question multiple="false" question="id3" rejectMultiple="false" type="QUESTIONS_BY_COLS">
+                <values>
+                    <value response="0">
+                        <point x="673.0" y="1051.0"/>
+                    </value>
+                    <value response="1">
+                        <point x="673.0" y="1140.0"/>
+                    </value>
+                    <value response="2">
+                        <point x="673.0" y="1230.0"/>
+                    </value>
+                    <value response="3">
+                        <point x="673.0" y="1319.0"/>
+                    </value>
+                    <value response="4">
+                        <point x="673.0" y="1408.0"/>
+                    </value>
+                    <value response="5">
+                        <point x="673.0" y="1497.0"/>
+                    </value>
+                    <value response="6">
+                        <point x="673.0" y="1586.0"/>
+                    </value>
+                    <value response="7">
+                        <point x="674.0" y="1676.0"/>
+                    </value>
+                    <value response="8">
+                        <point x="674.0" y="1765.0"/>
+                    </value>
+                    <value response="9">
+                        <point x="674.0" y="1854.0"/>
+                    </value>
+                </values>
+            </question>
+            <question multiple="true" question="Question07" rejectMultiple="false" type="QUESTIONS_BY_ROWS">
+                <values>
+                    <value response="A">
+                        <point x="1314.0" y="1572.0"/>
+                    </value>
+                    <value response="B">
+                        <point x="1406.0" y="1572.0"/>
+                    </value>
+                    <value response="C">
+                        <point x="1497.0" y="1572.0"/>
+                    </value>
+                    <value response="D">
+                        <point x="1589.0" y="1571.0"/>
+                    </value>
+                </values>
+            </question>
+            <question multiple="true" question="Question29" rejectMultiple="false" type="QUESTIONS_BY_ROWS">
+                <values>
+                    <value response="A">
+                        <point x="1865.0" y="1737.0"/>
+                    </value>
+                    <value response="B">
+                        <point x="1956.0" y="1736.0"/>
+                    </value>
+                    <value response="C">
+                        <point x="2047.0" y="1736.0"/>
+                    </value>
+                    <value response="D">
+                        <point x="2138.0" y="1736.0"/>
+                    </value>
+                </values>
+            </question>
+            <question multiple="true" question="Question08" rejectMultiple="false" type="QUESTIONS_BY_ROWS">
+                <values>
+                    <value response="A">
+                        <point x="1314.0" y="1655.0"/>
+                    </value>
+                    <value response="B">
+                        <point x="1406.0" y="1655.0"/>
+                    </value>
+                    <value response="C">
+                        <point x="1497.0" y="1655.0"/>
+                    </value>
+                    <value response="D">
+                        <point x="1589.0" y="1655.0"/>
+                    </value>
+                </values>
+            </question>
+            <question multiple="false" question="id6" rejectMultiple="false" type="QUESTIONS_BY_COLS">
+                <values>
+                    <value response="0">
+                        <point x="944.0" y="1051.0"/>
+                    </value>
+                    <value response="1">
+                        <point x="944.0" y="1140.0"/>
+                    </value>
+                    <value response="2">
+                        <point x="945.0" y="1229.0"/>
+                    </value>
+                    <value response="3">
+                        <point x="945.0" y="1318.0"/>
+                    </value>
+                    <value response="4">
+                        <point x="945.0" y="1408.0"/>
+                    </value>
+                    <value response="5">
+                        <point x="945.0" y="1497.0"/>
+                    </value>
+                    <value response="6">
+                        <point x="945.0" y="1586.0"/>
+                    </value>
+                    <value response="7">
+                        <point x="945.0" y="1675.0"/>
+                    </value>
+                    <value response="8">
+                        <point x="945.0" y="1764.0"/>
+                    </value>
+                    <value response="9">
+                        <point x="945.0" y="1853.0"/>
+                    </value>
+                </values>
+            </question>
+            <question multiple="false" question="id5" rejectMultiple="false" type="QUESTIONS_BY_COLS">
+                <values>
+                    <value response="0">
+                        <point x="854.0" y="1051.0"/>
+                    </value>
+                    <value response="1">
+                        <point x="854.0" y="1140.0"/>
+                    </value>
+                    <value response="2">
+                        <point x="854.0" y="1229.0"/>
+                    </value>
+                    <value response="3">
+                        <point x="854.0" y="1319.0"/>
+                    </value>
+                    <value response="4">
+                        <point x="854.0" y="1408.0"/>
+                    </value>
+                    <value response="5">
+                        <point x="854.0" y="1497.0"/>
+                    </value>
+                    <value response="6">
+                        <point x="855.0" y="1586.0"/>
+                    </value>
+                    <value response="7">
+                        <point x="855.0" y="1675.0"/>
+                    </value>
+                    <value response="8">
+                        <point x="855.0" y="1764.0"/>
+                    </value>
+                    <value response="9">
+                        <point x="855.0" y="1854.0"/>
+                    </value>
+                </values>
+            </question>
+            <question multiple="true" question="Question09" rejectMultiple="false" type="QUESTIONS_BY_ROWS">
+                <values>
+                    <value response="A">
+                        <point x="1314.0" y="1739.0"/>
+                    </value>
+                    <value response="B">
+                        <point x="1406.0" y="1738.0"/>
+                    </value>
+                    <value response="C">
+                        <point x="1498.0" y="1738.0"/>
+                    </value>
+                    <value response="D">
+                        <point x="1589.0" y="1738.0"/>
+                    </value>
+                </values>
+            </question>
+            <question multiple="true" question="Question02" rejectMultiple="false" type="QUESTIONS_BY_ROWS">
+                <values>
+                    <value response="A">
+                        <point x="1314.0" y="1155.0"/>
+                    </value>
+                    <value response="B">
+                        <point x="1405.0" y="1155.0"/>
+                    </value>
+                    <value response="C">
+                        <point x="1497.0" y="1155.0"/>
+                    </value>
+                    <value response="D">
+                        <point x="1588.0" y="1154.0"/>
+                    </value>
+                </values>
+            </question>
+            <question multiple="true" question="Question24" rejectMultiple="false" type="QUESTIONS_BY_ROWS">
+                <values>
+                    <value response="A">
+                        <point x="1865.0" y="1320.0"/>
+                    </value>
+                    <value response="B">
+                        <point x="1956.0" y="1320.0"/>
+                    </value>
+                    <value response="C">
+                        <point x="2047.0" y="1319.0"/>
+                    </value>
+                    <value response="D">
+                        <point x="2138.0" y="1319.0"/>
+                    </value>
+                </values>
+            </question>
+            <question multiple="true" question="Question03" rejectMultiple="false" type="QUESTIONS_BY_ROWS">
+                <values>
+                    <value response="A">
+                        <point x="1314.0" y="1238.0"/>
+                    </value>
+                    <value response="B">
+                        <point x="1405.0" y="1238.0"/>
+                    </value>
+                    <value response="C">
+                        <point x="1497.0" y="1238.0"/>
+                    </value>
+                    <value response="D">
+                        <point x="1588.0" y="1238.0"/>
+                    </value>
+                </values>
+            </question>
+            <question multiple="true" question="Question25" rejectMultiple="false" type="QUESTIONS_BY_ROWS">
+                <values>
+                    <value response="A">
+                        <point x="1865.0" y="1403.0"/>
+                    </value>
+                    <value response="B">
+                        <point x="1956.0" y="1403.0"/>
+                    </value>
+                    <value response="C">
+                        <point x="2047.0" y="1403.0"/>
+                    </value>
+                    <value response="D">
+                        <point x="2138.0" y="1403.0"/>
+                    </value>
+                </values>
+            </question>
+            <question multiple="true" question="Question04" rejectMultiple="false" type="QUESTIONS_BY_ROWS">
+                <values>
+                    <value response="A">
+                        <point x="1314.0" y="1322.0"/>
+                    </value>
+                    <value response="B">
+                        <point x="1405.0" y="1322.0"/>
+                    </value>
+                    <value response="C">
+                        <point x="1497.0" y="1321.0"/>
+                    </value>
+                    <value response="D">
+                        <point x="1589.0" y="1321.0"/>
+                    </value>
+                </values>
+            </question>
+            <question multiple="true" question="Question26" rejectMultiple="false" type="QUESTIONS_BY_ROWS">
+                <values>
+                    <value response="A">
+                        <point x="1865.0" y="1486.0"/>
+                    </value>
+                    <value response="B">
+                        <point x="1956.0" y="1486.0"/>
+                    </value>
+                    <value response="C">
+                        <point x="2047.0" y="1486.0"/>
+                    </value>
+                    <value response="D">
+                        <point x="2138.0" y="1486.0"/>
+                    </value>
+                </values>
+            </question>
+            <question multiple="true" question="Question05" rejectMultiple="false" type="QUESTIONS_BY_ROWS">
+                <values>
+                    <value response="A">
+                        <point x="1314.0" y="1405.0"/>
+                    </value>
+                    <value response="B">
+                        <point x="1406.0" y="1405.0"/>
+                    </value>
+                    <value response="C">
+                        <point x="1497.0" y="1405.0"/>
+                    </value>
+                    <value response="D">
+                        <point x="1589.0" y="1405.0"/>
+                    </value>
+                </values>
+            </question>
+            <question multiple="true" question="Question27" rejectMultiple="false" type="QUESTIONS_BY_ROWS">
+                <values>
+                    <value response="A">
+                        <point x="1865.0" y="1570.0"/>
+                    </value>
+                    <value response="B">
+                        <point x="1956.0" y="1570.0"/>
+                    </value>
+                    <value response="C">
+                        <point x="2047.0" y="1570.0"/>
+                    </value>
+                    <value response="D">
+                        <point x="2138.0" y="1569.0"/>
+                    </value>
+                </values>
+            </question>
+            <area name="i.course" type="BARCODE">
+                <corners>
+                    <corner position="TOP_RIGHT">
+                        <point x="2095.0" y="2812.0"/>
+                    </corner>
+                    <corner position="BOTTOM_LEFT">
+                        <point x="1476.0" y="3076.0"/>
+                    </corner>
+                    <corner position="TOP_LEFT">
+                        <point x="1475.0" y="2812.0"/>
+                    </corner>
+                    <corner position="BOTTOM_RIGHT">
+                        <point x="2095.0" y="3075.0"/>
+                    </corner>
+                </corners>
+            </area>
+            <area name="i.university" type="BARCODE">
+                <corners>
+                    <corner position="TOP_RIGHT">
+                        <point x="1387.0" y="2810.0"/>
+                    </corner>
+                    <corner position="BOTTOM_LEFT">
+                        <point x="417.0" y="3071.0"/>
+                    </corner>
+                    <corner position="TOP_LEFT">
+                        <point x="416.0" y="2811.0"/>
+                    </corner>
+                    <corner position="BOTTOM_RIGHT">
+                        <point x="1387.0" y="3069.0"/>
+                    </corner>
+                </corners>
+            </area>
+        </group>
+    </fields>
+</template>
