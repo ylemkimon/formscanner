@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<template density="40" threshold="127" version="2.1">
+    <crop bottom="0" left="0" right="0" top="0"/>
+    <rotation angle="0.005109105568500313"/>
+    <corners type="ANGULAR">
+        <corner position="TOP_RIGHT">
+            <point x="2348.0" y="135.0"/>
+        </corner>
+        <corner position="TOP_LEFT">
+            <point x="195.0" y="146.0"/>
+        </corner>
+        <corner position="BOTTOM_LEFT">
+            <point x="205.0" y="3268.0"/>
+        </corner>
+        <corner position="BOTTOM_RIGHT">
+            <point x="2358.0" y="3255.0"/>
+        </corner>
+    </corners>
+    <fields groups="true" shape="CIRCLE" size="15">
+        <group name="Q1">
+            <question multiple="false" question="gender" rejectMultiple="false" type="QUESTIONS_BY_ROWS">
+                <values>
+                    <value response="F">
+                        <point x="1228.0" y="840.0"/>
+                    </value>
+                    <value response="M">
+                        <point x="1606.0" y="839.0"/>
+                    </value>
+                </values>
+            </question>
+        </group>
+        <group name="Q2">
+            <question multiple="false" question="age" rejectMultiple="false" type="QUESTIONS_BY_COLS">
+                <values>
+                    <value response="30-39">
+                        <point x="761.0" y="1309.0"/>
+                    </value>
+                    <value response="&gt;=60">
+                        <point x="763.0" y="1585.0"/>
+                    </value>
+                    <value response="40-49">
+                        <point x="762.0" y="1401.0"/>
+                    </value>
+                    <value response="50-59">
+                        <point x="762.0" y="1493.0"/>
+                    </value>
+                    <value response="25-29">
+                        <point x="761.0" y="1217.0"/>
+                    </value>
+                    <value response="&lt;25">
+                        <point x="760.0" y="1125.0"/>
+                    </value>
+                </values>
+            </question>
+        </group>
+        <group name="Q3">
+            <question multiple="false" question="restaurants" rejectMultiple="false" type="QUESTIONS_BY_COLS">
+                <values>
+                    <value response="&lt;1">
+                        <point x="1903.0" y="1122.0"/>
+                    </value>
+                    <value response="1-2">
+                        <point x="1904.0" y="1214.0"/>
+                    </value>
+                    <value response="7">
+                        <point x="1905.0" y="1490.0"/>
+                    </value>
+                    <value response="3-4">
+                        <point x="1904.0" y="1306.0"/>
+                    </value>
+                    <value response="5-6">
+                        <point x="1905.0" y="1398.0"/>
+                    </value>
+                </values>
+            </question>
+        </group>
+        <group name="Q4">
+            <question multiple="false" question="movies" rejectMultiple="false" type="QUESTIONS_BY_ROWS">
+                <values>
+                    <value response="strongly agree">
+                        <point x="1364.0" y="2003.0"/>
+                    </value>
+                    <value response="disagree">
+                        <point x="1817.0" y="2001.0"/>
+                    </value>
+                    <value response="agree">
+                        <point x="1591.0" y="2002.0"/>
+                    </value>
+                    <value response="strongly disagree">
+                        <point x="2044.0" y="2000.0"/>
+                    </value>
+                </values>
+            </question>
+            <question multiple="false" question="music" rejectMultiple="false" type="QUESTIONS_BY_ROWS">
+                <values>
+                    <value response="strongly agree">
+                        <point x="1365.0" y="2097.0"/>
+                    </value>
+                    <value response="disagree">
+                        <point x="1818.0" y="2095.0"/>
+                    </value>
+                    <value response="agree">
+                        <point x="1591.0" y="2096.0"/>
+                    </value>
+                    <value response="strongly disagree">
+                        <point x="2044.0" y="2094.0"/>
+                    </value>
+                </values>
+            </question>
+            <question multiple="false" question="reading" rejectMultiple="false" type="QUESTIONS_BY_ROWS">
+                <values>
+                    <value response="strongly agree">
+                        <point x="1365.0" y="2191.0"/>
+                    </value>
+                    <value response="disagree">
+                        <point x="1818.0" y="2189.0"/>
+                    </value>
+                    <value response="agree">
+                        <point x="1592.0" y="2190.0"/>
+                    </value>
+                    <value response="strongly disagree">
+                        <point x="2044.0" y="2187.0"/>
+                    </value>
+                </values>
+            </question>
+        </group>
+        <group name="Q5">
+            <question multiple="true" question="sources" rejectMultiple="false" type="RESPONSES_BY_GRID">
+                <values>
+                    <value response="TV">
+                        <point x="1317.0" y="2515.0"/>
+                    </value>
+                    <value response="books">
+                        <point x="1905.0" y="2617.0"/>
+                    </value>
+                    <value response="magazines">
+                        <point x="729.0" y="2623.0"/>
+                    </value>
+                    <value response="newspapers">
+                        <point x="728.0" y="2518.0"/>
+                    </value>
+                    <value response="internet">
+                        <point x="1317.0" y="2620.0"/>
+                    </value>
+                    <value response="radio">
+                        <point x="1905.0" y="2512.0"/>
+                    </value>
+                </values>
+            </question>
+        </group>
+        <group name="Q6">
+            <area name="interviewer" type="BARCODE">
+                <corners>
+                    <corner position="TOP_RIGHT">
+                        <point x="2313.0" y="2823.0"/>
+                    </corner>
+                    <corner position="BOTTOM_LEFT">
+                        <point x="1929.0" y="3181.0"/>
+                    </corner>
+                    <corner position="TOP_LEFT">
+                        <point x="1927.0" y="2825.0"/>
+                    </corner>
+                    <corner position="BOTTOM_RIGHT">
+                        <point x="2314.0" y="3179.0"/>
+                    </corner>
+                </corners>
+            </area>
+        </group>
+    </fields>
+</template>
